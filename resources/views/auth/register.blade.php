@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-7 my-md-5">
             <h1 class="offset-md-2 mb-4">{{ __('Register') }}</h1>
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('register') }}">
                 @csrf
 
                 <div class="row mb-3">
