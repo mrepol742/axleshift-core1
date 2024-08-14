@@ -8,6 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Freight extends Authenticatable
 {
+    /**
+     * The attributes that are mass encryptable.
+     *
+     * @var array<int, string>
+     */
     protected $encryptable = [
         // User
         'first_name',

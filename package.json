@@ -8,17 +8,15 @@
         "prettier": "node_modules/prettier/bin/prettier.cjs ./resources/js --write"
     },
     "devDependencies": {
+        "@fortawesome/fontawesome-free": "^6.6.0",
         "@popperjs/core": "^2.11.6",
         "axios": "^1.6.4",
         "bootstrap": "^5.2.3",
+        "javascript-obfuscator": "^4.1.1",
         "laravel-vite-plugin": "^1.0",
         "moment": "^2.30.1",
         "prettier": "^3.3.2",
         "sass": "^1.56.1",
         "vite": "^5.0"
-    },
-    "dependencies": {
-        "@fortawesome/fontawesome-free": "^6.6.0",
-        "javascript-obfuscator": "^4.1.1"
     }
 }
