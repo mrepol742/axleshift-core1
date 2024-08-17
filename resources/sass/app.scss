@@ -1,6 +1,6 @@
-@import 'variables';
+@import "variables";
 
-@import 'bootstrap/scss/bootstrap';
+@import "bootstrap/scss/bootstrap";
 @import "@fortawesome/fontawesome-free/css/all.css";
 
 /*
@@ -50,7 +50,7 @@ h1 {
     width: 60px;
     min-width: 70px;
     z-index: 1000;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     display: flex;
     flex-direction: column;
 }
@@ -61,7 +61,6 @@ h1 {
 }
 
 @media (max-width: 800px) {
-
     #sidebar {
         transition: none;
     }
@@ -69,9 +68,9 @@ h1 {
     #sidebar.expand {
         width: 250px;
         min-width: 250px;
-        height: 100%; 
-        position: absolute; 
-        transition: all .25s ease-in-out;
+        height: 100%;
+        position: absolute;
+        transition: all 0.25s ease-in-out;
     }
 }
 
@@ -100,7 +99,7 @@ h1 {
 }
 
 a.sidebar-link {
-    padding: .625rem 1.625rem;
+    padding: 0.625rem 1.625rem;
     color: #000;
     display: block;
     white-space: nowrap;
@@ -110,11 +109,13 @@ a.sidebar-link {
 .sidebar-link i {
     font-size: 0.8rem;
     color: #484848;
-    margin-right: .75rem;
+    margin-right: 0.75rem;
     transition: all 0.35s ease-in-out;
 }
 
-a.sidebar-link:hover, li.sidebar-item.active, a.sidebar-link.active {
+a.sidebar-link:hover,
+li.sidebar-item.active,
+a.sidebar-link.active {
     background-color: #4286f436;
     border-left: 3px solid #4285f4;
     border-top-right-radius: 10px;
@@ -136,7 +137,7 @@ a.sidebar-link:hover, li.sidebar-item.active, a.sidebar-link.active {
     display: none;
 }
 
-#sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
+#sidebar:not(.expand) .sidebar-item:hover .has-dropdown + .sidebar-dropdown {
     display: block;
     max-height: 15em;
     width: 100%;
@@ -145,7 +146,7 @@ a.sidebar-link:hover, li.sidebar-item.active, a.sidebar-link.active {
 
 #sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
     border: solid;
-    border-width: 0 .075rem .075rem 0;
+    border-width: 0 0.075rem 0.075rem 0;
     content: "";
     display: inline-block;
     padding: 2px;
@@ -153,12 +154,12 @@ a.sidebar-link:hover, li.sidebar-item.active, a.sidebar-link.active {
     right: 1.5rem;
     top: 1.4rem;
     transform: rotate(-135deg);
-    transition: all .2s ease-out;
+    transition: all 0.2s ease-out;
 }
 
 #sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
     transform: rotate(45deg);
-    transition: all .2s ease-out;
+    transition: all 0.2s ease-out;
 }
 
 /* for hamburger menu */
@@ -167,7 +168,6 @@ a.sidebar-link:hover, li.sidebar-item.active, a.sidebar-link.active {
     transform-origin: center;
     transition: transform 0.3s ease;
 }
-
 
 /* action button */
 .fab {
