@@ -47,3 +47,22 @@
 ```
   php artisan config:cache
 ```
+
+## Test Deployment
+```sh
+  # use apache not php artisan serve
+  # configure it on var/www
+
+  # bundle the resources
+  npm run build
+```
+
+## Note
+- Make sure to change the name in `composer.lock` to your system name.
+Example:
+```json
+{
+  "name": "freight/admin",
+}
+ ```
+- Don't forget to change the .env App Name too

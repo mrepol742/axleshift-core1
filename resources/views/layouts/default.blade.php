@@ -46,23 +46,17 @@
     <div id="app">
         {{-- top --}}
         @include('layouts.components.top')
-
+        
         {{-- Nav --}}
         @include('layouts.components.nav')
 
-        <div class="wrapper">
+        {{-- Content --}}
+        <main class="py-4">
+            @yield('content')
+        </main>
 
-            {{-- Sidebar --}}
-            @include('layouts.components.sidebar')
-
-            <div class="main">
-                <div class="px-2 px-md-5">
-
-                    @yield('content')
-                </div>
-            </div>
-        </div>
-
+        {{-- Footer --}}
+        @include('layouts.components.footer')
     </div>
 
 </body>

@@ -1,9 +1,14 @@
 @extends('layouts.app')
 
-@section('pageTitle', 'Overview')
+@section('pageTitle', 'Home')
 
 @section('content')
-<h1 class="border-bottom mb-4">Overview</h1>
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Test</li>
+  </ol>
+</nav>
 <div class="row row-cols-1 row-cols-md-3 g-4">
   <div class="col">
     <div class="shadow-lg p-3 rounded">

@@ -1,31 +1,26 @@
-<div class="wrap bg-primary text-white">
-    <div class="container">
-        <div class="row justify-content-between">
-            <div class="col">
-                <span class="fa fa-phone mx-2"></span> <a class="text-white" href="#">+00 1234 567</a>
-            </div>
-            <div class="col d-flex justify-content-end">
-                    <a class="text-white" href="#"><span class="fa-brands fa-facebook mx-1"><i class="sr-only">Facebook</i></span></a>
-                    <a class="text-white" href="#"><span class="fa-brands fa-github mx-1"><i class="sr-only">Github</i></span></a>
-                    <a class="text-white" href="#"><span class="fa-brands fa-linkedin mx-1"><i class="sr-only">LinkedIn</i></span></a>
-            </div>
-        </div>
-    </div>
-</div>
+<nav class="navbar navbar-expand-md navbar-light bg-white">
+    <div class="container-fluid">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="/">
-            <img src="/assets/main/icon.webp" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
-            Freight
-        </a>
+        <div class="navbar-brand">
+            @if (Auth::check())
+            <button class="toggle-btn mx-2" type="button">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            @endif
+            <span class="d-none d-md-inline">{{ config('app.name') }}</span>
+        </div>
+
+        {{--
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        --}}
+
+        <div class="" id="navbarSupportedContent">
 
             {{-- Left Side --}}
-            {{-- Edit this base on your system needs--}}
+            {{-- Edit this base on your system needs --}}
+            {{--
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
@@ -50,6 +45,7 @@
                     <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                 </li>
             </ul>
+            --}}
 
             {{-- Right Side --}}
             {{-- Edit this base on your system needs--}}
@@ -67,7 +63,21 @@
                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                 </li>
                 @endif
-                @else
+                @endguest
+            </ul>
+
+            {{-- Search --}}
+            {{--
+            <form class="d-flex" role="search" method='get' action='/search'>
+                <div class="input-group">
+                    <input type="search" class="form-control" name="q" placeholder="Search" aria-label="Search" aria-describedby="search-addon">
+                    <button class="btn btn-outline-primary" id="search-addon" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+            --}}
+
+            @if (Auth::check())
+            <ul class="navbar-nav mx-3">
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         {{ Auth::user()->first_name }}
@@ -84,15 +94,8 @@
                         </form>
                     </div>
                 </li>
-                @endguest
             </ul>
-
-            <form class="d-flex" role="search" method='get' action='/search'>
-                <div class="input-group">
-                    <input type="search" class="form-control" name="q" placeholder="Search" aria-label="Search" aria-describedby="search-addon">
-                    <button class="btn btn-outline-primary" id="search-addon" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-            </form>
+            @endif
         </div>
     </div>
 </nav>
