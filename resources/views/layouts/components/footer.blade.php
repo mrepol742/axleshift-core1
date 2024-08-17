@@ -5,7 +5,7 @@
                 <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
                     <img src="/assets/main/icon.webp" alt="Logo" width="60" height="60" class="d-inline-block align-text-top">
                 </a>
-                <p class="text-body-secondary mx-3">&copy; 2024</p>
+                <p class="text-body-secondary mx-3">&copy; {{ config('app.name') }} {{ date('Y') }}</p>
                 <ul class="list-unstyled d-flex">
                     <li class="ms-3"><a class="link-body-emphasis" href="#"><i class="fa-brands fa-facebook fa-lg"></i></a></li>
                     <li class="ms-3"><a class="link-body-emphasis" href="#"><i class="fa-brands fa-github fa-lg"></i></a></li>
