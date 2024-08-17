@@ -1,4 +1,4 @@
-# core1
+# core1 [![Laravel Test](https://github.com/freight-capstone/core1/actions/workflows/php.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/php.yml)
 Freight Management System: End-to-End Freight Order Management: Streamlining the Freight Lifecycle from Creation to Delivery
 
 ## Pre-requisites
@@ -52,7 +52,7 @@ Freight Management System: End-to-End Freight Order Management: Streamlining the
 ## Test Deployment
 ```sh
   php artisan test
-  
+
   # use apache not php artisan serve
   # configure it on var/www
 
