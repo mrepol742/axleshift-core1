@@ -7,7 +7,7 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
             @endif
-            <span class="d-none d-md-inline">{{ config('app.name') }}</span>
+            <a class="d-none d-md-inline" href="/" style="color: #000;">{{ config('app.name') }}</a>
         </div>
 
         {{--

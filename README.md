@@ -1,4 +1,5 @@
 # core1
+Freight Management System: End-to-End Freight Order Management: Streamlining the Freight Lifecycle from Creation to Delivery
 
 ## Pre-requisites
 - XAMPP or mysql cli
@@ -50,6 +51,8 @@
 
 ## Test Deployment
 ```sh
+  php artisan test
+  
   # use apache not php artisan serve
   # configure it on var/www
 

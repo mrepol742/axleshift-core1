@@ -57,8 +57,9 @@
 
             <div class="main">
                 <div class="px-2 px-md-5">
-
+<div class="border rounded-3 p-4">
                     @yield('content')
+</div>
                 </div>
             </div>
         </div>

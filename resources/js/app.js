@@ -44,5 +44,23 @@ import { setCookie, getCookie } from "./cookie";
     }
 
     initializeSidebar();
+    
+    // adding a bit of animation when hovered on sidebar items
+    const icons = document.querySelectorAll('i.fa-solid');
+    
+    icons.forEach(icon => {
+        const parent = icon.parentElement;
+        if (parent) {
+            parent.addEventListener('mouseover', function (event) {
+                icon.classList.add("fa-bounce");
+                icon.style = 'font-size: 1rem; color: #4285f4;';
+            });
+
+            parent.addEventListener('mouseout', function (event) {
+                icon.classList.remove("fa-bounce");
+                icon.style = 'font-size: 0.8rem; color: #484848;';
+            });
+        }
+    });
 })();
 

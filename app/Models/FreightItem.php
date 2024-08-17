@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
-class Freight extends App 
+class FreightItem extends App 
 {
     use HasFactory, Notifiable;
 
     protected $fillable = [
-         'from',
-         'type',
-         'mode',
-         'city',
-         'postal_code',
-         'is_residential_address'
+         'item_weight',
+         'item_length',
+         'item_width',
+         'item_height',
+         'item_quantity',
+         'size'
     ];
 }
