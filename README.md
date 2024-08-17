@@ -1,4 +1,4 @@
-# main
+# core1
 
 ## Pre-requisites
 - XAMPP or mysql cli
@@ -56,13 +56,3 @@
   # bundle the resources
   npm run build
 ```
-
-## Note
-- Make sure to change the name in `composer.lock` to your system name.
-Example:
-```json
-{
-  "name": "freight/admin",
-}
- ```
-- Don't forget to change the .env App Name too
