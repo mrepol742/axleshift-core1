@@ -1,4 +1,4 @@
-# core1 [![Laravel Test](https://github.com/freight-capstone/core1/actions/workflows/php.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/php.yml)
+# core1 [![Laravel Test](https://github.com/freight-capstone/core1/actions/workflows/php.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/php.yml) [![Lint](https://github.com/freight-capstone/core1/actions/workflows/lint.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/lint.yml)
 Freight Management System: End-to-End Freight Order Management: Streamlining the Freight Lifecycle from Creation to Delivery
 
 ## Pre-requisites
