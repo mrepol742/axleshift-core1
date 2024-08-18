@@ -53,7 +53,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('freight');
-        Schema::dropIfExists('freight_item');
+        Schema::dropIfExists('freights');
+        Schema::dropIfExists('freight_items');
     }
 };
