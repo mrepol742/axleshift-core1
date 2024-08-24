@@ -50,7 +50,7 @@ import { setCookie, getCookie } from "./cookie";
 
     icons.forEach((icon) => {
         const parent = icon.parentElement;
-        if (parent) {
+        if (parent && (parent.classList.contains('sidebar-item') || parent.classList.contains('sidebar-link'))) {
             parent.addEventListener("mouseover", function (event) {
                 icon.classList.add("fa-bounce");
                 icon.style = "font-size: 1rem; color: #4285f4;";

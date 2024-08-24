@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             User::create([
                 'first_name' => 'John',
                 'last_name' => 'User',
-                'email' => 'user@example.com',
+                'email' => 'user@google.com',
                 'login_method' => 'form',
                 'status' => 'active',
                 'type' => 'user',
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             User::create([
                 'first_name' => 'John',
                 'last_name' => 'Admin',
-                'email' => 'admin@example.com',
+                'email' => 'admin@google.com',
                 'login_method' => 'form',
                 'status' => 'active',
                 'type' => 'admin',

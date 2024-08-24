@@ -32,12 +32,6 @@
                 <span>Track Shipment</span>
             </a>
         </li>
-        <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-            <i class="fa-solid fa-house"></i>
-                <span>Item 3</span>
-            </a>
-        </li>
         <hr class="mx-4">
         <li class="sidebar-item">
             <a href="#" class="sidebar-link">
