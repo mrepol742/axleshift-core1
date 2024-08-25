@@ -37,15 +37,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcbAQopAAAAAPqiUSbgE4FWJrHdKfpFIK_s6rU-"></script>
+    
     {{-- Scripts --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
 <body>
     <div id="app">
-        {{-- top --}}
-        @include('layouts.components.top')
+  
 
         {{-- Nav --}}
         @include('layouts.components.nav')
@@ -56,10 +56,8 @@
             @include('layouts.components.sidebar')
 
             <div class="main">
-                <div class="px-2 px-md-5">
-                    <div class="border rounded-3 p-4">
-                        @yield('content')
-                    </div>
+                <div class="mx-2">
+                    @yield('content')
                 </div>
             </div>
         </div>

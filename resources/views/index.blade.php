@@ -3,6 +3,7 @@
 @section('pageTitle', 'Overview')
 
 @section('content')
+<div class="border border-4 rounded-4 p-4">
 <h1 class="border-bottom mb-4">Overview</h1>
 <div class="row row-cols-1 row-cols-md-3 g-4">
   <div class="col">
@@ -78,4 +79,5 @@
   </li>
 </ol>
 <h2 class="mt-4 text-center">Freight Management System</h2>
+</div>
 @endsection

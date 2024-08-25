@@ -48,18 +48,19 @@ h1 {
 
 #sidebar {
     width: 60px;
-    min-width: 70px;
     z-index: 1000;
     transition: all 0.25s ease-in-out;
     display: flex;
+    padding-right: 8px;
     flex-direction: column;
 }
-
+    
 #sidebar.expand {
     width: 260px;
     min-width: 260px;
 }
 
+ 
 @media (max-width: 800px) {
     #sidebar {
         transition: none;
@@ -97,7 +98,7 @@ h1 {
 }
 
 a.sidebar-link {
-    padding: 0.625rem 1.625rem;
+    padding: 0.625rem 1.5rem;
     color: #000;
     display: block;
     white-space: nowrap;
@@ -105,7 +106,7 @@ a.sidebar-link {
 }
 
 .sidebar-link i {
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: #484848;
     margin-right: 0.75rem;
     transition: all 0.35s ease-in-out;

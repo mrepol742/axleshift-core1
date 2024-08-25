@@ -3,8 +3,8 @@
 
         <div class="navbar-brand">
             @if (Auth::check())
-            <button class="toggle-btn mx-2" type="button">
-                <i class="fa-solid fa-bars"></i>
+            <button class="toggle-btn" type="button">
+                <i class="fa-solid fa-bars-staggered"></i>
             </button>
             @endif
             <a class="d-none d-md-inline" href="/" style="color: #000;">{{ config('app.name') }}</a>
@@ -74,7 +74,14 @@
                     <button class="btn btn-outline-primary" id="search-addon" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </form>
-            --}}
+                                --}}
+                    <div class="d-flex">
+            <li class="nav-item">
+            <div class="input-group m-1">
+                    <input type="text" class="form-control mw-25" placeholder="Track your shipment" aria-label="Track your shipment" aria-describedby="basic-addon1">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
+                </div>
+            </li>
 
             @if (Auth::check())
             <li class="nav-item dropdown">
@@ -94,6 +101,8 @@
                 </div>
             </li>
             @endif
+
+</div>
         </div>
     </div>
 </nav>

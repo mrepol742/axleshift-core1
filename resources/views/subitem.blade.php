@@ -3,6 +3,7 @@
 @section('pageTitle', 'Home')
 
 @section('content')
+<div class="border border-4 rounded-4 p-4">
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -83,4 +84,5 @@
   </li>
 </ol>
 <h2 class="mt-4 text-center">Freight Management System</h2>
+</div>
 @endsection

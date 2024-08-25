@@ -37,6 +37,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcbAQopAAAAAPqiUSbgE4FWJrHdKfpFIK_s6rU-"></script>
 
     {{-- Scripts --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
