@@ -45,19 +45,10 @@
 
 <body>
     <div id="app">
-        {{-- top --}}
-        @include('layouts.components.top')
-        
-        {{-- Nav --}}
-        @include('layouts.components.nav')
-
         {{-- Content --}}
         <main class="py-4">
             @yield('content')
         </main>
-
-        {{-- Footer --}}
-        @include('layouts.components.footer')
     </div>
 
 </body>
