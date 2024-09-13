@@ -1,25 +1,22 @@
 import dotenv from "dotenv";
 dotenv.config();
-import logger from '../logger';
-import { MongoClient, ServerApiVersion } from "mongodb";
+import logger from "../logger.js";
+import { MongoClient } from "mongodb";
 
-const client = new MongoClient(process.env.MONGODB_ATLAS_URI, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    },
-});
+let dbInstance = null;
 
-try {
+async function connectToDatabase() {
+    if (dbInstance) {
+        return dbInstance;
+    }
+
+    const client = new MongoClient(process.env.MONGO_URL);
+
     await client.connect();
+    logger.info("Connected successfully to server");
 
-    await client.db(process.env.MONGODB_DATABASE_NAME).command({ ping: 1 });
-    logger.info('Successfully connected to MongoDB!');
-} catch (err) {
-    logger.error(err);
+    dbInstance = client.db(process.env.MONGO_DB);
+    return dbInstance;
 }
 
-let db = client.db(process.env.MONGODB_DATABASE_NAME);
-
-export default db;
+export default connectToDatabase;

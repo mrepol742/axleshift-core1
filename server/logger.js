@@ -2,9 +2,9 @@ import pino from "pino";
 
 let logger;
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
     logger = pino({
-        level: 'debug',
+        level: "debug",
         transport: {
             target: "pino-pretty",
         },
@@ -13,4 +13,4 @@ if (process.env.NODE_ENV !== 'production') {
     logger = pino();
 }
 
-module.exports = logger;
+export default logger;

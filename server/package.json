@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "production": "node index",
-        "dev": "nodemon node index",
+        "dev": "nodemon index",
         "prettier": "node_modules/prettier/bin/prettier.cjs ./ --write"
     },
     "keywords": [],
@@ -20,10 +20,13 @@
         "csrf": "^3.1.0",
         "dotenv": "^16.4.5",
         "express": "^4.19.2",
+        "express-session": "^1.18.0",
         "express-validator": "^7.2.0",
         "jsonwebtoken": "^9.0.2",
         "mongodb": "^6.8.0",
-        "pino": "^9.3.2"
+        "pino": "^9.3.2",
+        "pino-http": "^10.3.0",
+        "pino-pretty": "^11.2.2"
     },
     "devDependencies": {
         "nodemon": "^3.1.4",
