@@ -12,39 +12,39 @@ const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 const Login = React.lazy(() => import('./views/pages/Login'))
 
 const App = () => {
-  const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
-  const storedTheme = useSelector((state) => state.theme)
+    const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
+    const storedTheme = useSelector((state) => state.theme)
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.href.split('?')[1])
-    const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
-    if (theme) {
-      setColorMode(theme)
-    }
-
-    if (isColorModeSet()) {
-      return
-    }
-
-    setColorMode(storedTheme)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  return (
-    <Router>
-      <Suspense
-        fallback={
-          <div className="pt-3 text-center">
-            <CSpinner color="primary" variant="grow" />
-          </div>
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.href.split('?')[1])
+        const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
+        if (theme) {
+            setColorMode(theme)
         }
-      >
-        <Routes>
-          <Route exact path="/login" name="Login Page" element={<Login />} />
-          <Route path="*" name="Home" element={<DefaultLayout />} />
-        </Routes>
-      </Suspense>
-    </Router>
-  )
+
+        if (isColorModeSet()) {
+            return
+        }
+
+        setColorMode(storedTheme)
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    return (
+        <Router>
+            <Suspense
+                fallback={
+                    <div className="pt-3 text-center">
+                        <CSpinner color="primary" variant="grow" />
+                    </div>
+                }
+            >
+                <Routes>
+                    <Route exact path="/login" name="Login Page" element={<Login />} />
+                    <Route path="*" name="Home" element={<DefaultLayout />} />
+                </Routes>
+            </Suspense>
+        </Router>
+    )
 }
 
 export default App

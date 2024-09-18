@@ -1,17 +1,22 @@
 {
-    "name": "server",
-    "private": true,
+    "name": "@freight-capstone/core1-server",
     "version": "1.0.0",
     "main": "index.js",
     "type": "module",
+    "bugs": {
+        "url": "https://github.com/freight-capstone/core1/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:freight-capstone/core1.git"
+    },
     "scripts": {
         "production": "node index",
         "dev": "nodemon index",
-        "prettier": "node_modules/prettier/bin/prettier.cjs ./ --write"
+        "lint": "eslint \"src/**/*.js\""
     },
-    "keywords": [],
-    "author": "https://github.com/freight-capstone/core1/graphs/contributors",
-    "license": "CC-BY-NC-4.0",
+    "author": "The Freight Capstone Team (https://github.com/orgs/freight-capstone/people)",
+    "license": "MIT",
     "description": "",
     "dependencies": {
         "bcryptjs": "^2.4.3",
@@ -29,6 +34,9 @@
         "pino-pretty": "^11.2.2"
     },
     "devDependencies": {
+        "eslint": "^9.10.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.2.1",
         "nodemon": "^3.1.4",
         "prettier": "^3.3.3"
     }
