@@ -10,7 +10,7 @@
         "url": "git@github.com:freight-capstone/core1.git"
     },
     "license": "MIT",
-    "author": "The Freight Capstone Team (https://github.com/orgs/freight-capstone/people)",
+    "author": "The Freight Capstone Core 1",
     "scripts": {
         "build": "vite build",
         "lint": "eslint \"src/**/*.js\"",

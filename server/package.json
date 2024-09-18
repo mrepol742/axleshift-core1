@@ -15,7 +15,7 @@
         "dev": "nodemon index",
         "lint": "eslint \"src/**/*.js\""
     },
-    "author": "The Freight Capstone Team (https://github.com/orgs/freight-capstone/people)",
+    "author": "The Freight Capstone Core 1",
     "license": "MIT",
     "description": "",
     "dependencies": {
