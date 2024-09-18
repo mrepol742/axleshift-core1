@@ -12,48 +12,34 @@ import {
     CInputGroupText,
     CRow,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 
 const Login = () => {
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
                 <CRow className="justify-content-center">
-                    <CCol md={8}>
+                    <CCol md={8} lg={6} xl={5}>
                         <CCard className="p-4">
                             <CCardBody>
                                 <CForm>
-                                    <h1>Login</h1>
-                                    <p className="text-body-secondary">Sign In to your account</p>
+                                    <h1>Forgot Password</h1>
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
-                                            <CIcon icon={cilUser} />
+                                            <FontAwesomeIcon icon={faEnvelope} />
                                         </CInputGroupText>
-                                        <CFormInput
-                                            placeholder="Username"
-                                            autoComplete="username"
-                                        />
-                                    </CInputGroup>
-                                    <CInputGroup className="mb-4">
-                                        <CInputGroupText>
-                                            <CIcon icon={cilLockLocked} />
-                                        </CInputGroupText>
-                                        <CFormInput
-                                            type="password"
-                                            placeholder="Password"
-                                            autoComplete="current-password"
-                                        />
+                                        <CFormInput placeholder="Email" autoComplete="email" />
                                     </CInputGroup>
                                     <CRow>
                                         <CCol xs={6}>
                                             <CButton color="primary" className="px-4">
-                                                Login
+                                                Submit
                                             </CButton>
                                         </CCol>
                                         <CCol xs={6} className="text-right">
-                                            <CButton color="link" className="px-0">
-                                                Forgot password?
+                                            <CButton color="link" className="px-0" href="/login">
+                                                Login
                                             </CButton>
                                         </CCol>
                                     </CRow>

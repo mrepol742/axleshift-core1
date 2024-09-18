@@ -8,12 +8,12 @@ import {
     CInputGroupText,
     CRow,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilMagnifyingGlass } from '@coreui/icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 const Page404 = () => {
     return (
-        <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+        <div className="min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
                 <CRow className="justify-content-center">
                     <CCol md={6}>
@@ -26,7 +26,7 @@ const Page404 = () => {
                         </div>
                         <CInputGroup className="input-prepend">
                             <CInputGroupText>
-                                <CIcon icon={cilMagnifyingGlass} />
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
                             </CInputGroupText>
                             <CFormInput type="text" placeholder="What are you looking for?" />
                             <CButton color="info">Search</CButton>

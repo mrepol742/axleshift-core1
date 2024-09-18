@@ -59,15 +59,7 @@ const WidgetsDropdown = (props) => {
                                 color="transparent"
                                 caret={false}
                                 className="text-white p-0"
-                            >
-                                <CIcon icon={cilOptions} />
-                            </CDropdownToggle>
-                            <CDropdownMenu>
-                                <CDropdownItem>Action</CDropdownItem>
-                                <CDropdownItem>Another action</CDropdownItem>
-                                <CDropdownItem>Something else here...</CDropdownItem>
-                                <CDropdownItem disabled>Disabled action</CDropdownItem>
-                            </CDropdownMenu>
+                            ></CDropdownToggle>
                         </CDropdown>
                     }
                     chart={
@@ -161,15 +153,7 @@ const WidgetsDropdown = (props) => {
                                 color="transparent"
                                 caret={false}
                                 className="text-white p-0"
-                            >
-                                <CIcon icon={cilOptions} />
-                            </CDropdownToggle>
-                            <CDropdownMenu>
-                                <CDropdownItem>Action</CDropdownItem>
-                                <CDropdownItem>Another action</CDropdownItem>
-                                <CDropdownItem>Something else here...</CDropdownItem>
-                                <CDropdownItem disabled>Disabled action</CDropdownItem>
-                            </CDropdownMenu>
+                            ></CDropdownToggle>
                         </CDropdown>
                     }
                     chart={
@@ -249,7 +233,7 @@ const WidgetsDropdown = (props) => {
                     color="warning"
                     value={
                         <>
-                            2.49%{' '}
+                            500M{' '}
                             <span className="fs-6 fw-normal">
                                 (84.7% <CIcon icon={cilArrowTop} />)
                             </span>
@@ -262,15 +246,7 @@ const WidgetsDropdown = (props) => {
                                 color="transparent"
                                 caret={false}
                                 className="text-white p-0"
-                            >
-                                <CIcon icon={cilOptions} />
-                            </CDropdownToggle>
-                            <CDropdownMenu>
-                                <CDropdownItem>Action</CDropdownItem>
-                                <CDropdownItem>Another action</CDropdownItem>
-                                <CDropdownItem>Something else here...</CDropdownItem>
-                                <CDropdownItem disabled>Disabled action</CDropdownItem>
-                            </CDropdownMenu>
+                            ></CDropdownToggle>
                         </CDropdown>
                     }
                     chart={
@@ -333,28 +309,20 @@ const WidgetsDropdown = (props) => {
                     color="danger"
                     value={
                         <>
-                            44K{' '}
+                            2K{' '}
                             <span className="fs-6 fw-normal">
                                 (-23.6% <CIcon icon={cilArrowBottom} />)
                             </span>
                         </>
                     }
-                    title="Sessions"
+                    title="Customers"
                     action={
                         <CDropdown alignment="end">
                             <CDropdownToggle
                                 color="transparent"
                                 caret={false}
                                 className="text-white p-0"
-                            >
-                                <CIcon icon={cilOptions} />
-                            </CDropdownToggle>
-                            <CDropdownMenu>
-                                <CDropdownItem>Action</CDropdownItem>
-                                <CDropdownItem>Another action</CDropdownItem>
-                                <CDropdownItem>Something else here...</CDropdownItem>
-                                <CDropdownItem disabled>Disabled action</CDropdownItem>
-                            </CDropdownMenu>
+                            ></CDropdownToggle>
                         </CDropdown>
                     }
                     chart={

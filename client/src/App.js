@@ -8,8 +8,8 @@ import './scss/style.scss'
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
-// Pages
-const Login = React.lazy(() => import('./views/pages/Login'))
+const Login = React.lazy(() => import('./views/login/index'))
+const ForgotPassword = React.lazy(() => import('./views/forgot-password/index'))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -39,7 +39,13 @@ const App = () => {
                 }
             >
                 <Routes>
-                    <Route exact path="/login" name="Login Page" element={<Login />} />
+                    <Route exact path="/login" name="Login" element={<Login />} />
+                    <Route
+                        exact
+                        path="/forgot-password"
+                        name="Forgot Password"
+                        element={<ForgotPassword />}
+                    />
                     <Route path="*" name="Home" element={<DefaultLayout />} />
                 </Routes>
             </Suspense>

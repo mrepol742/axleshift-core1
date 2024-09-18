@@ -13,7 +13,7 @@ const ThreatManagement = React.lazy(() => import('./views/threat/threat-manageme
 
 const Tracking = React.lazy(() => import('./views/tracking/index'))
 
-const Page404 = React.lazy(() => import('./views/pages/404'))
+const Err404 = React.lazy(() => import('./views/errors/404'))
 
 const routes = [
     { path: '/', name: 'Overview', element: Overview },
@@ -29,7 +29,7 @@ const routes = [
 
     { path: '/tracking', name: 'Tracking', element: Tracking },
 
-    { path: '*', name: '404', element: Page404 },
+    { path: '*', name: '404', element: Err404 },
 ]
 
 export default routes
