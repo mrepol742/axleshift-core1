@@ -4,12 +4,14 @@ import { useSelector } from 'react-redux'
 
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
+import AppTitle from './components/AppTitle'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 const Login = React.lazy(() => import('./views/login/index'))
 const ForgotPassword = React.lazy(() => import('./views/forgot-password/index'))
+const Logout = React.lazy(() => import('./views/logout/index'))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -38,16 +40,19 @@ const App = () => {
                     </div>
                 }
             >
-                <Routes>
-                    <Route exact path="/login" name="Login" element={<Login />} />
-                    <Route
-                        exact
-                        path="/forgot-password"
-                        name="Forgot Password"
-                        element={<ForgotPassword />}
-                    />
-                    <Route path="*" name="Home" element={<DefaultLayout />} />
-                </Routes>
+                <AppTitle>
+                    <Routes>
+                        <Route exact path="/login" name="Login" element={<Login />} />
+                        <Route
+                            exact
+                            path="/forgot-password"
+                            name="Forgot Password"
+                            element={<ForgotPassword />}
+                        />
+                        <Route exact path="/logout" name="Logout" element={<Logout />} />
+                        <Route path="*" name="Home" element={<DefaultLayout />} />
+                    </Routes>
+                </AppTitle>
             </Suspense>
         </Router>
     )

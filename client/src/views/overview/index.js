@@ -19,6 +19,7 @@ import {
     CTableHeaderCell,
     CTableRow,
 } from '@coreui/react'
+//TODO replace
 import CIcon from '@coreui/icons-react'
 import {
     cibCcAmex,
@@ -43,7 +44,7 @@ import {
     cilUserFemale,
 } from '@coreui/icons'
 
-import WidgetsDropdown from '../widgets/WidgetsDropdown'
+import WidgetsDropdown from './widgets/WidgetsDropdown'
 import MainChart from './MainChart'
 
 const Dashboard = () => {

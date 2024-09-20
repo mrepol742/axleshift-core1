@@ -5,10 +5,7 @@ const AppFooter = () => {
     return (
         <CFooter className="px-4">
             <div>
-                <a href="/" target="_blank" rel="noopener noreferrer">
-                    Freight Core 1
-                </a>
-                <span className="ms-1">&copy; 2024.</span>
+                Freight Core 1<span className="ms-1">&copy; 2024</span>
             </div>
         </CFooter>
     )

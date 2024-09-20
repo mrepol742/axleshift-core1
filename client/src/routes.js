@@ -2,6 +2,9 @@ import React from 'react'
 
 const Overview = React.lazy(() => import('./views/overview/index'))
 
+const Account = React.lazy(() => import('./views/account/index'))
+const AccountSecurity = React.lazy(() => import('./views/account/security/index'))
+
 const Freight = React.lazy(() => import('./views/freight/index'))
 const FreightAir = React.lazy(() => import('./views/freight/air/index'))
 const FreightLand = React.lazy(() => import('./views/freight/land/index'))
@@ -18,6 +21,9 @@ const Err404 = React.lazy(() => import('./views/errors/404'))
 const routes = [
     { path: '/', name: 'Overview', element: Overview },
 
+    { path: '/account', name: 'Account', element: Account },
+    { path: '/account/security', name: 'Security', element: AccountSecurity },
+
     { path: '/freight', name: 'Freight', element: Freight },
     { path: '/freight/air', name: 'Air', element: FreightAir },
     { path: '/freight/land', name: 'Land', element: FreightLand },
@@ -27,7 +33,7 @@ const routes = [
     { path: '/threat/detection', name: 'Detection', element: ThreatDetection },
     { path: '/threat/management', name: 'Management', element: ThreatManagement },
 
-    { path: '/tracking', name: 'Tracking', element: Tracking },
+    { path: '/track', name: 'Tracking', element: Tracking },
 
     { path: '*', name: '404', element: Err404 },
 ]
