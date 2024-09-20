@@ -14,7 +14,7 @@ const _nav = [
         component: CNavItem,
         name: 'Overview',
         to: '/',
-        icon: <FontAwesomeIcon icon={faHouse} class="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faHouse} className="nav-icon" />,
     },
     {
         component: CNavTitle,
@@ -23,7 +23,7 @@ const _nav = [
     {
         component: CNavGroup,
         name: 'Freight',
-        icon: <FontAwesomeIcon icon={faShip} class="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faShip} className="nav-icon" />,
         items: [
             {
                 component: CNavItem,
@@ -44,9 +44,9 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Tracking',
-        to: '/tracking',
-        icon: <FontAwesomeIcon icon={faLocationDot} class="nav-icon" />,
+        name: 'Track',
+        to: '/track',
+        icon: <FontAwesomeIcon icon={faLocationDot} className="nav-icon" />,
     },
     {
         component: CNavTitle,
@@ -55,7 +55,7 @@ const _nav = [
     {
         component: CNavGroup,
         name: 'Threat',
-        icon: <FontAwesomeIcon icon={faShieldHalved} class="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faShieldHalved} className="nav-icon" />,
         items: [
             {
                 component: CNavItem,
@@ -77,13 +77,13 @@ const _nav = [
         component: CNavItem,
         name: 'Lorem ipsum',
         to: '/lorem',
-        icon: <FontAwesomeIcon icon={faFileWord} class="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
     },
     {
         component: CNavItem,
         name: 'Lorem ipsum',
         to: '/lorem',
-        icon: <FontAwesomeIcon icon={faFileWord} class="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
     },
 ]
 
