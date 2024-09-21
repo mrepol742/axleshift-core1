@@ -9,11 +9,12 @@ const AppTitle = ({ children }) => {
 
     const getRouteName = (pathname, routes) => {
         const currentRoute = routes.find((route) => route.path === pathname)
-        return currentRoute ? currentRoute.name : ''
+        return currentRoute ? currentRoute.name : false
     }
 
     useEffect(() => {
-        document.title = getRouteName(currentLocation, routes) + ' | Freight Core1'
+        var routeName = getRouteName(currentLocation, routes)
+        if (routeName) document.title = routeName + ' | Freight Core1'
     }, [currentLocation, routes])
 
     return <>{children}</>

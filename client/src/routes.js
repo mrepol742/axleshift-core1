@@ -1,22 +1,25 @@
 import React from 'react'
+import Auth from './components/middleware/Auth'
 
-const Overview = React.lazy(() => import('./views/overview/index'))
+const Overview = Auth(React.lazy(() => import('./views/overview/index')))
 
-const Account = React.lazy(() => import('./views/account/index'))
-const AccountSecurity = React.lazy(() => import('./views/account/security/index'))
+const Account = Auth(React.lazy(() => import('./views/account/index')))
+const AccountSecurity = Auth(React.lazy(() => import('./views/account/security/index')))
 
-const Freight = React.lazy(() => import('./views/freight/index'))
-const FreightAir = React.lazy(() => import('./views/freight/air/index'))
-const FreightLand = React.lazy(() => import('./views/freight/land/index'))
-const FreightSea = React.lazy(() => import('./views/freight/sea/index'))
+const Freight = Auth(React.lazy(() => import('./views/freight/index')))
+const FreightAir = Auth(React.lazy(() => import('./views/freight/air/index')))
+const FreightLand = Auth(React.lazy(() => import('./views/freight/land/index')))
+const FreightSea = Auth(React.lazy(() => import('./views/freight/sea/index')))
 
-const Threat = React.lazy(() => import('./views/threat/index'))
-const ThreatDetection = React.lazy(() => import('./views/threat/threat-detection/index'))
-const ThreatManagement = React.lazy(() => import('./views/threat/threat-management/index'))
+const Pricing = Auth(React.lazy(() => import('./views/pricing/index')))
 
-const Tracking = React.lazy(() => import('./views/tracking/index'))
+const Threat = Auth(React.lazy(() => import('./views/threat/index')))
+const ThreatDetection = Auth(React.lazy(() => import('./views/threat/threat-detection/index')))
+const ThreatManagement = Auth(React.lazy(() => import('./views/threat/threat-management/index')))
 
-const Err404 = React.lazy(() => import('./views/errors/404'))
+const Track = Auth(React.lazy(() => import('./views/track/index')))
+
+const Err404 = Auth(React.lazy(() => import('./views/errors/404')))
 
 const routes = [
     { path: '/', name: 'Overview', element: Overview },
@@ -29,11 +32,13 @@ const routes = [
     { path: '/freight/land', name: 'Land', element: FreightLand },
     { path: '/freight/sea', name: 'Sea', element: FreightSea },
 
+    { path: '/pricing', name: 'Pricing', element: Pricing },
+
     { path: '/threat', name: 'Threat', element: Threat },
     { path: '/threat/detection', name: 'Detection', element: ThreatDetection },
     { path: '/threat/management', name: 'Management', element: ThreatManagement },
 
-    { path: '/track', name: 'Tracking', element: Tracking },
+    { path: '/track', name: 'Track', element: Track },
 
     { path: '*', name: '404', element: Err404 },
 ]

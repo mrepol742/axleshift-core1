@@ -13,7 +13,9 @@
     "scripts": {
         "production": "node index",
         "dev": "nodemon index",
-        "lint": "eslint \"src/**/*.js\""
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write ."
     },
     "author": "The Freight Capstone Core 1",
     "license": "MIT",
@@ -34,9 +36,11 @@
         "pino-pretty": "^11.2.2"
     },
     "devDependencies": {
-        "eslint": "^9.10.0",
+        "@eslint/js": "^9.11.0",
+        "eslint": "^9.11.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.2.1",
+        "globals": "^15.9.0",
         "nodemon": "^3.1.4",
         "prettier": "^3.3.3"
     }

@@ -7,6 +7,7 @@ import {
     faShip,
     faShieldHalved,
     faFileWord,
+    faPesoSign,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -47,6 +48,12 @@ const _nav = [
         name: 'Track',
         to: '/track',
         icon: <FontAwesomeIcon icon={faLocationDot} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Pricing',
+        to: '/pricing',
+        icon: <FontAwesomeIcon icon={faPesoSign} className="nav-icon" />,
     },
     {
         component: CNavTitle,
