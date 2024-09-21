@@ -1,13 +1,14 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import express from 'express'
-import jwt from 'jsonwebtoken'
 import bcryptjs from 'bcryptjs'
 import connectToDatabase from '../models/db.js'
 import logger from '../logger.js'
-import { validationResult } from 'express-validator'
+import crypto from 'crypto'
 
 const router = express.Router()
-const JWT_SECRET = `${process.env.JWT_SECRET}`
 
+/*
 router.post('/register', async (req, res) => {
     try {
         const email = req.body.email
@@ -19,8 +20,7 @@ router.post('/register', async (req, res) => {
             logger.error('Email id already exists')
             return res.status(400).json({ error: 'Email id already exists' })
         }
-        const salt = await bcryptjs.genSalt(10)
-        const hash = await bcryptjs.hash(req.body.password, salt)
+        const hash = await bcryptjs.hash(element.password, process.env.BCRYPT_SECRET);
         await collection.insertOne({
             email: req.body.email,
             firstName: req.body.firstName,
@@ -37,88 +37,95 @@ router.post('/register', async (req, res) => {
         return res.status(500).send('Internal server error')
     }
 })
+*/
 
+/*
+  Url: /api/auth/login
+  Params:
+     email
+     password
+*/
 router.post('/login', async (req, res) => {
     try {
         const db = await connectToDatabase()
         const collection = db.collection('users')
-        const sessionCollection = db.collection('sessions')
-        const theUser = await collection.findOne({ email: req.body.email })
+        const theUser = await collection.findOne({ email: req.query.email })
 
-        if (theUser) {
-            const result = await bcryptjs.compare(req.body.password, theUser.password)
-            if (!result) {
-                logger.error('Passwords do not match')
-                return res.status(404).json({ error: 'Wrong password' })
-            }
+        if (!theUser) res.json({'status':404})
+ 
+        const hash = await bcryptjs.hash(req.query.password, process.env.BCRYPT_SECRET);
 
-            const newUser = await sessionCollection.insertOne({
-                user_id: theUser._id.toString(),
-                ip_address: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-                user_agent: req.headers['user-agent'],
-                lastActivity: new Date(),
-            })
+        if (hash != theUser.password) res.json({'status':401})
+        if (!req.session.sessionIds) req.session.sessionIds = {};
+        if (!req.session.sessionIds[theUser.email]) req.session.sessionIds[theUser.email] = {};
+        if (!req.session.sessionIds[theUser.email]['profile']) req.session.sessionIds[theUser.email]['profile'] = theUser;
 
-            const payload = {
-                user: {
-                    id: newUser.insertedId,
-                },
-            }
-            let authToken = jwt.sign(payload, JWT_SECRET)
+        const session_token = crypto.createHash('sha256').update(theUser._id + Date.now()).digest('hex');
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-            await sessionCollection.updateOne({ _id: newUser.insertedId }, { $set: { authToken } })
-
-            res.json({ authToken })
-        } else {
-            logger.error('User not found')
-            return res.status(404).json({ error: 'User not found' })
+        req.session.sessionIds[theUser.email][session_token] = {
+            active: true,
+            ip_address: ip,
+            user_agent: req.headers['user-agent'],
+            last_accessed: Date.now()
         }
+
+        res.json({'status':200, 'token': session_token})
+        // finally the end :(
     } catch (e) {
         logger.error(e)
-        return res.status(500).send('Internal server error')
+        res.json({'status':500})
     }
 })
 
-router.put('/update', async (req, res) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        logger.error('Validation errors in update request', errors.array())
-        return res.status(400).json({ errors: errors.array() })
+/*
+  Url: /api/auth/verify
+  Params:
+     session_token
+*/
+router.post('/verify', function (req, res, next) {
+    const session_token = req.query.session_token;
+
+    if (!session_token) return res.json({'status': 401});
+
+    const email = Object.keys(req.session.sessionIds).find(email => 
+        req.session.sessionIds[email][session_token]
+    );
+
+    if (email) {
+        const sessionEntry = req.session.sessionIds[email][session_token];
+        if (sessionEntry) return res.json({'status': 200, 'user': req.session.sessionIds[email].profile});
     }
-    try {
-        const email = req.headers.email
+    
+    res.json({'status': 401});
+});
 
-        if (!email) {
-            logger.error('Email not found in the request headers')
-            return res.status(400).json({ error: 'Email not found in the request headers' })
-        }
-        const db = await connectToDatabase()
-        const collection = db.collection('users')
-        const existingUser = await collection.findOne({ email })
-        if (!existingUser) {
-            logger.error('User not found')
-            return res.status(404).json({ error: 'User not found' })
-        }
-        existingUser.firstName = req.body.name
-        existingUser.updatedAt = new Date()
-        const updatedUser = await collection.findOneAndUpdate(
-            { email },
-            { $set: existingUser },
-            { returnDocument: 'after' },
-        )
+/*
+  Url: /api/auth/logout
+  Params:
+     session_token
+*/
+router.post('/logout', function (req, res, next) {
+    const session_token = req.query.session_token;
 
-        const payload = {
-            user: {
-                id: updatedUser._id.toString(),
-            },
-        }
+    if (!session_token) return res.json({'status': 401});
 
-        const authtoken = jwt.sign(payload, JWT_SECRET)
-        res.json({ authtoken })
-    } catch (e) {
-        logger.error(e)
-        return res.status(500).send('Internal server error')
+    const email = Object.keys(req.session.sessionIds).find(email => 
+        req.session.sessionIds[email][session_token]
+    );
+
+    if (email) {
+        const sessionEntry = req.session.sessionIds[email][session_token];
+        if (sessionEntry) {
+            sessionEntry.active = false;
+            return res.json({'status': 200});
+        }
     }
-})
+    
+    res.json({'status': 401});
+});
+
+  
+  
 
 export default router
