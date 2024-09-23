@@ -16,9 +16,15 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 const Login = () => {
     const navigate = useNavigate()
+    const recaptchaRef = React.useRef()
+
+    const forgotPassword = () => {
+        navigate('/forgot-password')
+    }
 
     useEffect(() => {
         if (Cookies.get('RCTSESSION') !== undefined) navigate('/')
@@ -29,10 +35,13 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        const recaptchaRef = await recaptchaRef.current.executeAsync()
+
         try {
             const formData = new FormData()
             formData.append('email', email)
             formData.append('password', password)
+            formData.append('recaptchaRef', recaptchaRef)
 
             const response = await axios.post('http://localhost:5050/api/auth/login', formData, {
                 headers: {},
@@ -59,15 +68,22 @@ const Login = () => {
                                 <CForm onSubmit={handleSubmit}>
                                     <h1>Login</h1>
                                     <p className="text-body-secondary">Sign In to your account</p>
+                                    <ReCAPTCHA
+                                        ref={recaptchaRef}
+                                        size="invisible"
+                                        sitekey="6LcbAQopAAAAAPqiUSbgE4FWJrHdKfpFIK_s6rU-"
+                                    />
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
                                             <FontAwesomeIcon icon={faEnvelope} />
                                         </CInputGroupText>
                                         <CFormInput
+                                            type="email"
                                             placeholder="Email"
                                             autoComplete="email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
+                                            required
                                         />
                                     </CInputGroup>
                                     <CInputGroup className="mb-4">
@@ -80,6 +96,7 @@ const Login = () => {
                                             autoComplete="current-password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
+                                            required
                                         />
                                     </CInputGroup>
                                     <CRow>
@@ -92,7 +109,7 @@ const Login = () => {
                                             <CButton
                                                 color="link"
                                                 className="px-0"
-                                                href="/forgot-password"
+                                                onClick={forgotPassword}
                                             >
                                                 Forgot password?
                                             </CButton>

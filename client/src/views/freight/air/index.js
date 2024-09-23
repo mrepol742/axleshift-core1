@@ -37,8 +37,9 @@ const FAir = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:5050/api/freight/add', formData)
-            alert(JSON.stringify(response.data))
+            alert(JSON.stringify(formData))
+            //const response = await axios.post('http://localhost:5050/api/freight/add', formData)
+            //alert(JSON.stringify(response.data))
         } catch (error) {
             console.error(error)
         }
@@ -71,6 +72,7 @@ const FAir = () => {
                         type="text"
                         id="shipper_company_name"
                         onChange={(e) => handleInputChange(e, 'shipper')}
+                        required
                     />
 
                     <CFormLabel htmlFor="shipper_contact_name">Contact Name</CFormLabel>
@@ -78,6 +80,7 @@ const FAir = () => {
                         type="text"
                         id="shipper_contact_name"
                         onChange={(e) => handleInputChange(e, 'shipper')}
+                        required
                     />
 
                     <CFormLabel htmlFor="shipper_contact_email_address">Email Address</CFormLabel>
@@ -85,6 +88,7 @@ const FAir = () => {
                         type="text"
                         id="shipper_contact_email_address"
                         onChange={(e) => handleInputChange(e, 'shipper')}
+                        required
                     />
 
                     <CFormLabel htmlFor="shipper_contact_phone_number">Phone Number</CFormLabel>
@@ -92,6 +96,7 @@ const FAir = () => {
                         type="text"
                         id="shipper_contact_phone_number"
                         onChange={(e) => handleInputChange(e, 'shipper')}
+                        required
                     />
 
                     <CFormLabel htmlFor="shipper_company_address">Address</CFormLabel>
@@ -99,6 +104,7 @@ const FAir = () => {
                         type="text"
                         id="shipper_company_address"
                         onChange={(e) => handleInputChange(e, 'shipper')}
+                        required
                     />
 
                     <CButton color="primary" onClick={handleConsigneeInfo}>
@@ -116,6 +122,7 @@ const FAir = () => {
                         type="text"
                         id="consignee_company_name"
                         onChange={(e) => handleInputChange(e, 'consignee')}
+                        required
                     />
 
                     <CFormLabel htmlFor="consignee_contact_name">Contact Name</CFormLabel>
@@ -123,6 +130,7 @@ const FAir = () => {
                         type="text"
                         id="consignee_contact_name"
                         onChange={(e) => handleInputChange(e, 'consignee')}
+                        required
                     />
 
                     <CFormLabel htmlFor="consignee_contact_email_address">Email Address</CFormLabel>
@@ -130,6 +138,7 @@ const FAir = () => {
                         type="text"
                         id="consignee_contact_email_address"
                         onChange={(e) => handleInputChange(e, 'consignee')}
+                        required
                     />
 
                     <CFormLabel htmlFor="consignee_contact_phone_number">Phone Number</CFormLabel>
@@ -137,6 +146,7 @@ const FAir = () => {
                         type="text"
                         id="consignee_contact_phone_number"
                         onChange={(e) => handleInputChange(e, 'consignee')}
+                        required
                     />
 
                     <CFormLabel htmlFor="consignee_company_address">Address</CFormLabel>
@@ -144,6 +154,7 @@ const FAir = () => {
                         type="text"
                         id="consignee_company_address"
                         onChange={(e) => handleInputChange(e, 'consignee')}
+                        required
                     />
 
                     <CButton color="secondary" onClick={handleShipperInformation}>
@@ -164,6 +175,7 @@ const FAir = () => {
                         type="text"
                         id="description"
                         onChange={(e) => handleInputChange(e, 'shipment')}
+                        required
                     />
 
                     <CFormLabel htmlFor="weight">Weight (kg)</CFormLabel>
@@ -171,6 +183,7 @@ const FAir = () => {
                         type="number"
                         id="weight"
                         onChange={(e) => handleInputChange(e, 'shipment')}
+                        required
                     />
 
                     <CRow>
@@ -181,6 +194,7 @@ const FAir = () => {
                                 type="number"
                                 id="length"
                                 onChange={(e) => handleInputChange(e, 'shipment')}
+                                required
                             />
                         </CCol>
                         <CCol xs>
@@ -189,6 +203,7 @@ const FAir = () => {
                                 type="number"
                                 id="width"
                                 onChange={(e) => handleInputChange(e, 'shipment')}
+                                required
                             />
                         </CCol>
                         <CCol xs>
@@ -197,6 +212,7 @@ const FAir = () => {
                                 type="number"
                                 id="height"
                                 onChange={(e) => handleInputChange(e, 'shipment')}
+                                required
                             />
                         </CCol>
                     </CRow>
@@ -213,6 +229,7 @@ const FAir = () => {
                         type="number"
                         id="value"
                         onChange={(e) => handleInputChange(e, 'shipment')}
+                        required
                     />
 
                     <CFormLabel htmlFor="instructions">
@@ -242,6 +259,7 @@ const FAir = () => {
                         type="text"
                         id="origin_airport"
                         onChange={(e) => handleInputChange(e, 'shipping')}
+                        required
                     />
 
                     <CFormLabel htmlFor="destination_airport">Destination Airport</CFormLabel>
@@ -249,6 +267,7 @@ const FAir = () => {
                         type="text"
                         id="destination_airport"
                         onChange={(e) => handleInputChange(e, 'shipping')}
+                        required
                     />
 
                     <CFormLabel htmlFor="preferred_departure_date">
@@ -258,6 +277,7 @@ const FAir = () => {
                         type="date"
                         id="preferred_departure_date"
                         onChange={(e) => handleInputChange(e, 'shipping')}
+                        required
                     />
 
                     <CFormLabel htmlFor="preferred_arrival_date">Preferred Arrival Date</CFormLabel>
@@ -265,6 +285,7 @@ const FAir = () => {
                         type="date"
                         id="preferred_arrival_date"
                         onChange={(e) => handleInputChange(e, 'shipping')}
+                        required
                     />
 
                     <CFormLabel htmlFor="flight_type">Flight Type</CFormLabel>
@@ -275,6 +296,7 @@ const FAir = () => {
                             { label: 'Direct', value: '1' },
                             { label: 'Multi-stop', value: '2' },
                         ]}
+                        required
                     />
                     <CButton color="secondary" onClick={handleShipmentDetails}>
                         Back
