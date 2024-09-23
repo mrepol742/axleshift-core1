@@ -44,7 +44,7 @@ const Freight = () => {
                         onClick={freightLand}
                         style={{ cursor: 'pointer' }}
                     >
-                        <CCardImage src={FreightLand}/>
+                        <CCardImage src={FreightLand} />
                         <CCardImageOverlay style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}>
                             <CCardTitle>Land Freight</CCardTitle>
                             <CCardText>

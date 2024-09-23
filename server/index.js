@@ -5,6 +5,7 @@ import cors from 'cors'
 import pinoHttp from 'pino-http'
 import multer from 'multer'
 import auth from './routes/auth.js'
+import freight from './routes/freight.js'
 import logger from './logger.js'
 import connectToDatabase from './models/db.js'
 
@@ -18,6 +19,7 @@ app.use(express.json())
 app.use(pinoHttp({ logger }))
 
 app.use('/api/auth', auth)
+app.use('/api/freight', freight)
 
 app.use((err, req, res, next) => {
     logger.error(err)
