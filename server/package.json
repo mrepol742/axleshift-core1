@@ -27,10 +27,9 @@
         "csrf": "^3.1.0",
         "dotenv": "^16.4.5",
         "express": "^4.19.2",
-        "express-session": "^1.18.0",
-        "express-validator": "^7.2.0",
-        "jsonwebtoken": "^9.0.2",
         "mongodb": "^6.8.0",
+        "multer": "^1.4.5-lts.1",
+        "node-cron": "^3.0.3",
         "pino": "^9.3.2",
         "pino-http": "^10.3.0",
         "pino-pretty": "^11.2.2"

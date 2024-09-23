@@ -14,7 +14,7 @@ async function connectToDatabase() {
     const client = new MongoClient(process.env.MONGO_URL)
 
     await client.connect()
-    await updatePasswordHash();
+    await updatePasswordHash()
     
     logger.info('Connected successfully to server')
 
@@ -33,11 +33,11 @@ async function connectToDatabase() {
 }
 
 async function updatePasswordHash() {
-    for (const element of data) { 
+    for (const element of data) {
         element.password = await bcryptjs.hash(element.password, process.env.BCRYPT_SECRET);
     }
 }
 
-updatePasswordHash();
+updatePasswordHash()
 
 export default connectToDatabase
