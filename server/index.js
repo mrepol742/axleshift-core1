@@ -1,22 +1,19 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
-import session from 'express-session'
 import cors from 'cors'
+import pinoHttp from 'pino-http'
+import multer from 'multer'
 import auth from './routes/auth.js'
 import logger from './logger.js'
-import pinoHttp from 'pino-http'
 import connectToDatabase from './models/db.js'
 
 const app = express()
+const upload = multer()
 const port = 5050
 
-app.use(session({
-    secret: process.env.ESESSION_SECRET,
-    resave: false,
-    saveUninitialized: true
-  }))
-app.use('*', cors())
+app.use(upload.none());
+app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
 app.use(express.json())
 app.use(pinoHttp({ logger }))
 
@@ -28,7 +25,7 @@ app.use((err, req, res, next) => {
 })
 
 app.get('/', (req, res) => {
-    res.send('Inside the server')
+    res.send('Freight Core 1')
 })
 
 app.listen(port, async () => {

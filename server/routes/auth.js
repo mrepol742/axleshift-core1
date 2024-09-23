@@ -5,8 +5,19 @@ import bcryptjs from 'bcryptjs'
 import connectToDatabase from '../models/db.js'
 import logger from '../logger.js'
 import crypto from 'crypto'
+import fs from 'fs'
+import cron from 'node-cron'
 
 const router = express.Router()
+let sessions
+init()
+
+cron.schedule('0 * * * *', () => {
+    fs.writeFile('./sessions/sessions.json', JSON.stringify(sessions), (err) => {
+        if (err) throw err
+        logger.info('Sessions save')
+    })
+})
 
 /*
 router.post('/register', async (req, res) => {
@@ -47,28 +58,34 @@ router.post('/register', async (req, res) => {
 */
 router.post('/login', async (req, res) => {
     try {
+        const email = req.body.email
+        const password = req.body.password
+
+        if (!email && !password) return res.json({'status': 401})
+
         const db = await connectToDatabase()
         const collection = db.collection('users')
-        const theUser = await collection.findOne({ email: req.query.email })
+        const theUser = await collection.findOne({ email: email })
 
         if (!theUser) res.json({'status':404})
  
-        const hash = await bcryptjs.hash(req.query.password, process.env.BCRYPT_SECRET);
+        const hash = await bcryptjs.hash(password, process.env.BCRYPT_SECRET);
 
         if (hash != theUser.password) res.json({'status':401})
-        if (!req.session.sessionIds) req.session.sessionIds = {};
-        if (!req.session.sessionIds[theUser.email]) req.session.sessionIds[theUser.email] = {};
-        if (!req.session.sessionIds[theUser.email]['profile']) req.session.sessionIds[theUser.email]['profile'] = theUser;
+        if (!sessions[theUser.email]) sessions[theUser.email] = {}
+        if (!sessions[theUser.email]['profile']) sessions[theUser.email]['profile'] = theUser
 
-        const session_token = crypto.createHash('sha256').update(theUser._id + Date.now()).digest('hex');
-        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        const session_token = crypto.createHash('sha256').update(theUser._id + Date.now()).digest('hex')
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 
-        req.session.sessionIds[theUser.email][session_token] = {
+        sessions[theUser.email][session_token] = {
             active: true,
             ip_address: ip,
             user_agent: req.headers['user-agent'],
             last_accessed: Date.now()
         }
+
+        logger.info(JSON.stringify(sessions))
 
         res.json({'status':200, 'token': session_token})
         // finally the end :(
@@ -81,51 +98,71 @@ router.post('/login', async (req, res) => {
 /*
   Url: /api/auth/verify
   Params:
-     session_token
+     token
 */
 router.post('/verify', function (req, res, next) {
-    const session_token = req.query.session_token;
+    const token = req.body.token
 
-    if (!session_token) return res.json({'status': 401});
+    if (!token && !/^[0-9a-f]{64}$/.test(token)) return res.json({'status': 401})
 
-    const email = Object.keys(req.session.sessionIds).find(email => 
-        req.session.sessionIds[email][session_token]
+    const email = Object.keys(sessions).find(email => 
+        sessions[email][token]
     );
 
     if (email) {
-        const sessionEntry = req.session.sessionIds[email][session_token];
-        if (sessionEntry) return res.json({'status': 200, 'user': req.session.sessionIds[email].profile});
+        const sessionEntry = sessions[email][token]
+        if (sessionEntry) return res.json({'status': 200, 'user': sessions[email].profile})
     }
     
-    res.json({'status': 401});
+    res.json({'status': 401})
 });
 
 /*
   Url: /api/auth/logout
   Params:
-     session_token
+     token
 */
 router.post('/logout', function (req, res, next) {
-    const session_token = req.query.session_token;
+    const token = req.body.token
 
-    if (!session_token) return res.json({'status': 401});
-
-    const email = Object.keys(req.session.sessionIds).find(email => 
-        req.session.sessionIds[email][session_token]
+    if (!token && !/^[0-9a-f]{64}$/.test(token)) return res.json({'status': 401})
+    
+    const email = Object.keys(sessions).find(email => 
+        sessions[email][token]
     );
 
+    logger.info(token)
+    logger.info(email)
+    
     if (email) {
-        const sessionEntry = req.session.sessionIds[email][session_token];
+        const sessionEntry = sessions[email][token]
         if (sessionEntry) {
-            sessionEntry.active = false;
-            return res.json({'status': 200});
+            sessionEntry.active = false
+            return res.json({'status': 200})
         }
     }
     
-    res.json({'status': 401});
+    res.json({'status': 401})
 });
 
-  
+
+function init() {
+    fs.mkdir('./sessions', { recursive: true }, (err) => {
+        if (err) throw err
+    })
+
+    try {
+        sessions = JSON.parse(fs.readFileSync('./sessions/sessions.json', 'utf8'))
+        logger.info('Sessions retrieved')
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            sessions = {}
+            logger.info('New session created')
+        } else {
+          throw err
+        }
+    }
+}
   
 
 export default router

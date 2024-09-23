@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
     CButton,
     CCard,
@@ -16,6 +16,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 
 const Login = () => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (Cookies.get('RCTSESSION') !== undefined) navigate('/')
+    }, [])
+
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
