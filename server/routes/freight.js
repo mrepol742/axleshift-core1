@@ -11,6 +11,11 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
+    const {shipper, consignee, shipment, shipping} = req.body
+    if (!shipper && !consignee && !shipment && !shipping) return res.json({'status': 401})
+
+    const db = await connectToDatabase()
+    const collection = db.collection('freight')
 });
 
 

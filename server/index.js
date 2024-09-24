@@ -6,6 +6,8 @@ import pinoHttp from 'pino-http'
 import multer from 'multer'
 import auth from './routes/auth.js'
 import freight from './routes/freight.js'
+import track from './routes/track.js'
+import threat from './routes/threat.js'
 import logger from './logger.js'
 import connectToDatabase from './models/db.js'
 
@@ -20,6 +22,9 @@ app.use(pinoHttp({ logger }))
 
 app.use('/api/auth', auth)
 app.use('/api/freight', freight)
+app.use('/api/track', track)
+app.use('/api/threat', threat)
+
 
 app.use((err, req, res, next) => {
     logger.error(err)

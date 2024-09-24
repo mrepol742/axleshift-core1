@@ -35,13 +35,13 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const recaptchaRef = await recaptchaRef.current.executeAsync()
+        const recaptcha = await recaptchaRef.current.executeAsync()
 
         try {
             const formData = new FormData()
             formData.append('email', email)
             formData.append('password', password)
-            formData.append('recaptchaRef', recaptchaRef)
+            formData.append('recaptchaRef', recaptcha)
 
             const response = await axios.post('http://localhost:5050/api/auth/login', formData, {
                 headers: {},
