@@ -55,13 +55,12 @@ router.post('/register', async (req, res) => {
   Params:
      email
      password
+     recaptchaRef
 */
 router.post('/login', async (req, res) => {
     try {
-        const email = req.body.email
-        const password = req.body.password
-
-        if (!email && !password) return res.json({'status': 401})
+        const { email, password, recaptchaRef} = req.body
+        if (!email && !password && !recaptchaRef) return res.json({'status': 401})
 
         const db = await connectToDatabase()
         const collection = db.collection('users')

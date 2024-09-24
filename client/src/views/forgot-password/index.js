@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     CButton,
@@ -14,13 +14,26 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
+import Cookies from 'js-cookie'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 const Login = () => {
     const navigate = useNavigate()
+    const recaptchaRef = React.useRef()
+
+    const login = () => {
+        navigate('/login')
+    }
 
     useEffect(() => {
         if (Cookies.get('RCTSESSION') !== undefined) navigate('/')
     }, [])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const token = await recaptchaRef.current.executeAsync()
+        alert(token)
+    }
 
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
@@ -29,22 +42,32 @@ const Login = () => {
                     <CCol md={8} lg={6} xl={5}>
                         <CCard className="p-4">
                             <CCardBody>
-                                <CForm>
+                                <CForm onSubmit={handleSubmit}>
                                     <h1>Forgot Password</h1>
+                                    <ReCAPTCHA
+                                        ref={recaptchaRef}
+                                        size="invisible"
+                                        sitekey="6LcbAQopAAAAAPqiUSbgE4FWJrHdKfpFIK_s6rU-"
+                                    />
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
                                             <FontAwesomeIcon icon={faEnvelope} />
                                         </CInputGroupText>
-                                        <CFormInput placeholder="Email" autoComplete="email" />
+                                        <CFormInput
+                                            type="email"
+                                            placeholder="Email"
+                                            autoComplete="email"
+                                            required
+                                        />
                                     </CInputGroup>
                                     <CRow>
                                         <CCol xs={6}>
-                                            <CButton color="primary" className="px-4">
+                                            <CButton type="submit" color="primary" className="px-4">
                                                 Submit
                                             </CButton>
                                         </CCol>
                                         <CCol xs={6} className="text-right">
-                                            <CButton color="link" className="px-0" href="/login">
+                                            <CButton color="link" className="px-0" onClick={login}>
                                                 Login
                                             </CButton>
                                         </CCol>

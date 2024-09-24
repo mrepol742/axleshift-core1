@@ -14,14 +14,44 @@ import {
     CProgress,
     CFormSelect,
 } from '@coreui/react'
+import ShipperForm from '../../../components/freight/ShipperForm'
+import ConsineeForm from '../../../components/freight/ConsineeForm'
+import ShipmentForm from '../../../components/freight/ShipmentForm'
 
 const FAir = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [formData, setFormData] = useState({
-        shipper: {},
-        consignee: {},
-        shipment: {},
-        shipping: {},
+        shipper: {
+            shipper_company_name: '',
+            shipper_contact_name: '',
+            shipper_contact_email_address: '',
+            shipper_contact_phone_number: '',
+            shipper_company_address: '',
+        },
+        consignee: {
+            consignee_company_name: '',
+            consignee_contact_name: '',
+            consignee_contact_email_address: '',
+            consignee_contact_phone_number: '',
+            consignee_company_address: '',
+        },
+        shipment: {
+            shipment_description: '',
+            shipment_weight: '',
+            shipment_dimension_length: '',
+            shipment_dimension_width: '',
+            shipment_dimension_height: '',
+            shipment_volume: '',
+            shipment_value: '',
+            shipment_instructions: '',
+        },
+        shipping: {
+            shipping_origin_airport: '',
+            shipping_destination_airport: '',
+            shipping_preferred_departure_date: '',
+            shipping_preferred_arrival_date: '',
+            shipping_flight_type: '',
+        },
     })
 
     const handleInputChange = (e, section) => {
@@ -37,8 +67,9 @@ const FAir = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:5050/api/freight/add', formData)
-            alert(JSON.stringify(response.data))
+            alert(JSON.stringify(formData))
+            //const response = await axios.post('http://localhost:5050/api/freight/add', formData)
+            //alert(JSON.stringify(response.data))
         } catch (error) {
             console.error(error)
         }
@@ -49,232 +80,107 @@ const FAir = () => {
     }
 
     const handleConsigneeInfo = () => {
-        setCurrentPage(2)
+        const { shipper } = formData
+        if (Object.values(shipper).every((field) => field.trim() !== '')) return setCurrentPage(2)
+        alert('Please fill in all required fields in Shipper Information.')
     }
 
     const handleShipmentDetails = () => {
-        setCurrentPage(3)
+        const { consignee } = formData
+        if (Object.values(consignee).every((field) => field.trim() !== '')) return setCurrentPage(3)
+        alert('Please fill in all required fields in Consignee Information.')
     }
 
     const handleShippingInformation = () => {
-        setCurrentPage(4)
+        const { shipment } = formData
+        if (Object.values(shipment).every((field) => field.trim() !== '')) return setCurrentPage(4)
+        alert('Please fill in all required fields in Shipment Details.')
     }
 
     return (
         <>
             {currentPage === 1 && (
-                <CForm>
-                    <CProgress value={25} />
-                    <h3>Shipper Information</h3>
-                    <CFormLabel htmlFor="shipper_company_name">Company Name</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipper_company_name"
-                        onChange={(e) => handleInputChange(e, 'shipper')}
-                    />
-
-                    <CFormLabel htmlFor="shipper_contact_name">Contact Name</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipper_contact_name"
-                        onChange={(e) => handleInputChange(e, 'shipper')}
-                    />
-
-                    <CFormLabel htmlFor="shipper_contact_email_address">Email Address</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipper_contact_email_address"
-                        onChange={(e) => handleInputChange(e, 'shipper')}
-                    />
-
-                    <CFormLabel htmlFor="shipper_contact_phone_number">Phone Number</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipper_contact_phone_number"
-                        onChange={(e) => handleInputChange(e, 'shipper')}
-                    />
-
-                    <CFormLabel htmlFor="shipper_company_address">Address</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipper_company_address"
-                        onChange={(e) => handleInputChange(e, 'shipper')}
-                    />
-
-                    <CButton color="primary" onClick={handleConsigneeInfo}>
-                        Next
-                    </CButton>
-                </CForm>
+                <ShipperForm
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleConsigneeInfo={handleConsigneeInfo}
+                />
             )}
 
             {currentPage === 2 && (
-                <CForm>
-                    <CProgress value={50} />
-                    <h3>Consignee Information</h3>
-                    <CFormLabel htmlFor="consignee_company_name">Company Name</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="consignee_company_name"
-                        onChange={(e) => handleInputChange(e, 'consignee')}
-                    />
-
-                    <CFormLabel htmlFor="consignee_contact_name">Contact Name</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="consignee_contact_name"
-                        onChange={(e) => handleInputChange(e, 'consignee')}
-                    />
-
-                    <CFormLabel htmlFor="consignee_contact_email_address">Email Address</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="consignee_contact_email_address"
-                        onChange={(e) => handleInputChange(e, 'consignee')}
-                    />
-
-                    <CFormLabel htmlFor="consignee_contact_phone_number">Phone Number</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="consignee_contact_phone_number"
-                        onChange={(e) => handleInputChange(e, 'consignee')}
-                    />
-
-                    <CFormLabel htmlFor="consignee_company_address">Address</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="consignee_company_address"
-                        onChange={(e) => handleInputChange(e, 'consignee')}
-                    />
-
-                    <CButton color="secondary" onClick={handleShipperInformation}>
-                        Back
-                    </CButton>
-                    <CButton color="primary" onClick={handleShipmentDetails}>
-                        Next
-                    </CButton>
-                </CForm>
+                <ConsineeForm
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleShipperInformation={handleShipperInformation}
+                    handleShipmentDetails={handleShipmentDetails}
+                />
             )}
 
             {currentPage === 3 && (
-                <CForm>
-                    <CProgress value={75} />
-                    <h3>Shipment Details</h3>
-                    <CFormLabel htmlFor="description">Description of Goods</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="description"
-                        onChange={(e) => handleInputChange(e, 'shipment')}
-                    />
-
-                    <CFormLabel htmlFor="weight">Weight (kg)</CFormLabel>
-                    <CFormInput
-                        type="number"
-                        id="weight"
-                        onChange={(e) => handleInputChange(e, 'shipment')}
-                    />
-
-                    <CRow>
-                        <h5>Dimensions (cm)</h5>
-                        <CCol xs>
-                            <CFormLabel htmlFor="length">Length</CFormLabel>
-                            <CFormInput
-                                type="number"
-                                id="length"
-                                onChange={(e) => handleInputChange(e, 'shipment')}
-                            />
-                        </CCol>
-                        <CCol xs>
-                            <CFormLabel htmlFor="width">Width</CFormLabel>
-                            <CFormInput
-                                type="number"
-                                id="width"
-                                onChange={(e) => handleInputChange(e, 'shipment')}
-                            />
-                        </CCol>
-                        <CCol xs>
-                            <CFormLabel htmlFor="height">Height</CFormLabel>
-                            <CFormInput
-                                type="number"
-                                id="height"
-                                onChange={(e) => handleInputChange(e, 'shipment')}
-                            />
-                        </CCol>
-                    </CRow>
-
-                    <CFormLabel htmlFor="volume">Total Volume (if applicable)</CFormLabel>
-                    <CFormInput
-                        type="number"
-                        id="volume"
-                        onChange={(e) => handleInputChange(e, 'shipment')}
-                    />
-
-                    <CFormLabel htmlFor="value">Value of Goods</CFormLabel>
-                    <CFormInput
-                        type="number"
-                        id="value"
-                        onChange={(e) => handleInputChange(e, 'shipment')}
-                    />
-
-                    <CFormLabel htmlFor="instructions">
-                        Special Handling Instructions (if any)
-                    </CFormLabel>
-                    <CFormTextarea
-                        id="instructions"
-                        rows={3}
-                        onChange={(e) => handleInputChange(e, 'shipment')}
-                    ></CFormTextarea>
-
-                    <CButton color="secondary" onClick={handleConsigneeInfo}>
-                        Back
-                    </CButton>
-                    <CButton color="primary" onClick={handleShippingInformation}>
-                        Next
-                    </CButton>
-                </CForm>
+                <ShipmentForm
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleConsigneeInfo={handleConsigneeInfo}
+                    handleShippingInformation={handleShippingInformation}
+                />
             )}
 
             {currentPage === 4 && (
                 <CForm>
                     <CProgress value={100} />
                     <h3>Shipping Information</h3>
-                    <CFormLabel htmlFor="origin_airport">Origin Airport</CFormLabel>
+                    <CFormLabel htmlFor="shipping_origin_airport">Origin Airport</CFormLabel>
                     <CFormInput
                         type="text"
-                        id="origin_airport"
+                        id="shipping_origin_airport"
+                        value={formData.shipping.shipping_origin_airport}
                         onChange={(e) => handleInputChange(e, 'shipping')}
+                        required
                     />
 
-                    <CFormLabel htmlFor="destination_airport">Destination Airport</CFormLabel>
+                    <CFormLabel htmlFor="shipping_destination_airport">
+                        Destination Airport
+                    </CFormLabel>
                     <CFormInput
                         type="text"
-                        id="destination_airport"
+                        id="shipping_destination_airport"
+                        value={formData.shipping.shipping_destination_airport}
                         onChange={(e) => handleInputChange(e, 'shipping')}
+                        required
                     />
 
-                    <CFormLabel htmlFor="preferred_departure_date">
+                    <CFormLabel htmlFor="shipping_preferred_departure_date">
                         Preferred Departure Date
                     </CFormLabel>
                     <CFormInput
                         type="date"
-                        id="preferred_departure_date"
+                        id="shipping_preferred_departure_date"
+                        value={formData.shipping.shipping_preferred_departure_date}
                         onChange={(e) => handleInputChange(e, 'shipping')}
+                        required
                     />
 
-                    <CFormLabel htmlFor="preferred_arrival_date">Preferred Arrival Date</CFormLabel>
+                    <CFormLabel htmlFor="shipping_preferred_arrival_date">
+                        Preferred Arrival Date
+                    </CFormLabel>
                     <CFormInput
                         type="date"
-                        id="preferred_arrival_date"
+                        id="shipping_preferred_arrival_date"
+                        value={formData.shipping.shipping_preferred_arrival_date}
                         onChange={(e) => handleInputChange(e, 'shipping')}
+                        required
                     />
 
-                    <CFormLabel htmlFor="flight_type">Flight Type</CFormLabel>
+                    <CFormLabel htmlFor="shipping_flight_type">Flight Type</CFormLabel>
                     <CFormSelect
-                        id="flight_type"
+                        id="shipping_flight_type"
+                        value={formData.shipping.shipping_flight_type}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         options={[
                             { label: 'Direct', value: '1' },
                             { label: 'Multi-stop', value: '2' },
                         ]}
+                        required
                     />
                     <CButton color="secondary" onClick={handleShipmentDetails}>
                         Back
