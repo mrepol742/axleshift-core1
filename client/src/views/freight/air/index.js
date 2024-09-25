@@ -50,7 +50,7 @@ const FAir = () => {
             shipping_destination_airport: '',
             shipping_preferred_departure_date: '',
             shipping_preferred_arrival_date: '',
-            shipping_flight_type: '',
+            shipping_flight_type: '1',
         },
     })
 
@@ -68,7 +68,7 @@ const FAir = () => {
     const handleSubmit = async () => {
         try {
             alert(JSON.stringify(formData))
-            //const response = await axios.post('http://localhost:5050/api/freight/add', formData)
+            //const response = await axios.post('http://localhost:5050/api/freight', formData)
             //alert(JSON.stringify(response.data))
         } catch (error) {
             console.error(error)

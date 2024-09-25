@@ -7,5 +7,4 @@ import logger from '../logger.js'
 
 const router = express.Router()
 
-
 export default router

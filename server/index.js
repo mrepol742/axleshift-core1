@@ -15,8 +15,33 @@ const app = express()
 const upload = multer()
 const port = 5050
 
-app.use(upload.none());
-app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
+process.on('SIGHUP', function () {
+    process.exit(0)
+})
+
+process.on('SIGTERM', function () {
+    process.exit(0)
+})
+
+process.on('SIGINT', function () {
+    process.kill(process.pid)
+    process.exit(0)
+})
+
+process.on('uncaughtException', (err, origin) => {
+    logger.error(err)
+})
+
+process.on('unhandledRejection', (reason, promise) => {
+    logger.error(reason)
+})
+
+process.on('beforeExit', (code) => {
+    logger.info('Process before exit code ' + code)
+})
+
+app.use(upload.none())
+app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }))
 app.use(express.json())
 app.use(pinoHttp({ logger }))
 
@@ -24,7 +49,6 @@ app.use('/api/auth', auth)
 app.use('/api/freight', freight)
 app.use('/api/track', track)
 app.use('/api/threat', threat)
-
 
 app.use((err, req, res, next) => {
     logger.error(err)
