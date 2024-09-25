@@ -74,8 +74,6 @@ router.post('/login', async (req, res) => {
 
         addSession(theUser, session_token, ip, req.headers['user-agent'])
 
-        logger.info(JSON.stringify(sessions))
-
         res.json({ status: 200, token: session_token })
         // finally the end :(
     } catch (e) {
@@ -89,19 +87,8 @@ router.post('/login', async (req, res) => {
   Params:
      token
 */
-router.post('/verify', function (req, res, next) {
-    const token = req.body.token
-
-    if (!token && !/^[0-9a-f]{64}$/.test(token)) return res.json({ status: 401 })
-
-    const email = Object.keys(sessions).find((email) => sessions[email][token])
-
-    if (email) {
-        const sessionEntry = sessions[email][token]
-        if (sessionEntry) return res.json({ status: 200, user: sessions[email].profile })
-    }
-
-    res.json({ status: 401 })
+router.post('/verify', auth, function (req, res, next) {
+    res.json({ status: 200 })
 })
 
 /*

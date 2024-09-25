@@ -1,42 +1,15 @@
 import fs from 'fs'
-import cron from 'node-cron'
 import logger from '../logger.js'
 
-let sessions
+let sessions = {}
 
-init()
-
-process.on('exit', (code) => {
-    fs.writeFile('./sessions/sessions.json', JSON.stringify(sessions), (err) => {
-        if (err) throw err
-        logger.info('Sessions save')
-    })
-    logger.info('Server offline')
+fs.mkdir('./sessions', { recursive: true }, (err) => {
+    if (err) throw err
 })
 
-cron.schedule('0 * * * *', () => {
-    fs.writeFile('./sessions/sessions.json', JSON.stringify(sessions), (err) => {
-        if (err) throw err
-        logger.info('Sessions save')
-    })
-})
-
-function init() {
-    fs.mkdir('./sessions', { recursive: true }, (err) => {
-        if (err) throw err
-    })
-
-    try {
-        sessions = JSON.parse(fs.readFileSync('./sessions/sessions.json', 'utf8'))
-        logger.info('Sessions retrieved')
-    } catch (err) {
-        if (err.code === 'ENOENT') {
-            sessions = {}
-            logger.info('New session created')
-        } else {
-            throw err
-        }
-    }
+if (fs.existsSync('./sessions/sessions.json')) {
+    sessions = JSON.parse(fs.readFileSync('./sessions/sessions.json', 'utf8'))
+    logger.info('Sessions retrieved')
 }
 
 export const addUserProfileToSession = (theUser) => {

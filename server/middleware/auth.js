@@ -9,7 +9,7 @@ const auth = (req, res, next) => {
     
         if (email) {
             const sessionEntry = sessions[email][token]
-            if (sessionEntry) return next()
+            if (sessionEntry && sessionEntry.active) return next()
         }
         return res.json({ status: 401 })
 }

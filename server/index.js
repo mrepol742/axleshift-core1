@@ -4,12 +4,14 @@ import express from 'express'
 import cors from 'cors'
 import pinoHttp from 'pino-http'
 import multer from 'multer'
+import cron from 'node-cron'
 import auth from './routes/auth.js'
 import freight from './routes/freight.js'
 import track from './routes/track.js'
 import threat from './routes/threat.js'
 import logger from './logger.js'
 import connectToDatabase from './models/db.js'
+import sessions from './src/sessions.js'
 
 const app = express()
 const upload = multer()
@@ -38,6 +40,21 @@ process.on('unhandledRejection', (reason, promise) => {
 
 process.on('beforeExit', (code) => {
     logger.info('Process before exit code ' + code)
+})
+
+process.on('exit', (code) => {
+    fs.writeFileSync('./sessions/sessions.json', JSON.stringify(sessions), (err) => {
+        if (err) throw err
+        logger.info('Sessions save')
+    })
+    logger.info('Server offline')
+})
+
+cron.schedule('0 * * * *', () => {
+    fs.writeFileSync('./sessions/sessions.json', JSON.stringify(sessions), (err) => {
+        if (err) throw err
+        logger.info('Sessions save')
+    })
 })
 
 app.use(upload.none())

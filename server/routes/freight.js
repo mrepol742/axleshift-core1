@@ -4,17 +4,17 @@ import express from 'express'
 import bcryptjs from 'bcryptjs'
 import connectToDatabase from '../models/db.js'
 import logger from '../logger.js'
+import auth from '../middleware/auth.js'
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {})
+router.get('/', auth, async (req, res) => {})
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     const { shipper, consignee, shipment, shipping } = req.body
     if (!shipper && !consignee && !shipment && !shipping) return res.json({ status: 401 })
 
-    const db = await connectToDatabase()
-    const collection = db.collection('freight')
+   logger.info(shipper)
 })
 
 export default router
