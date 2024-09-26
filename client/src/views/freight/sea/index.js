@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import {
     CForm,
@@ -14,12 +15,15 @@ import {
     CProgress,
     CFormSelect,
 } from '@coreui/react'
+import Cookies from 'js-cookie'
 import ShipperForm from '../../../components/freight/ShipperForm'
 import ConsineeForm from '../../../components/freight/ConsineeForm'
 import ShipmentForm from '../../../components/freight/ShipmentForm'
 
-const FSea = () => {
+const Sea = () => {
+    const navigate = useNavigate()
     const [currentPage, setCurrentPage] = useState(1)
+    const [disableSubmit, setDisableSubmit] = useState(false)
     const [formData, setFormData] = useState({
         shipper: {
             shipper_company_name: '',
@@ -37,13 +41,12 @@ const FSea = () => {
         },
         shipment: {
             shipment_description: '',
-            shipment_weight: '',
-            shipment_dimension_length: '',
-            shipment_dimension_width: '',
-            shipment_dimension_height: '',
-            shipment_volume: '',
-            shipment_value: '',
-            shipment_container_size: '',
+            shipment_weight: 0,
+            shipment_dimension_length: 0,
+            shipment_dimension_width: 0,
+            shipment_dimension_height: 0,
+            shipment_volume: 0,
+            shipment_value: 0,
             shipment_instructions: '',
         },
         shipping: {
@@ -51,7 +54,7 @@ const FSea = () => {
             shipping_discharge_port: '',
             shipping_sailing_date: '',
             shipping_estimated_arrival_date: '',
-            shipping_cargo_type: '',
+            shipping_cargo_type: 1,
         },
     })
 
@@ -68,9 +71,16 @@ const FSea = () => {
 
     const handleSubmit = async () => {
         try {
-            alert(JSON.stringify(formData))
-            //const response = await axios.post('http://localhost:5050/api/freight/add', formData)
-            //alert(JSON.stringify(response.data))
+            setDisableSubmit(true)
+            const response = await axios.post('http://localhost:5050/api/freight/b/sea', formData, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('RCTSESSION')}`,
+                },
+            })
+            if (response.data.status == 201) {
+                alert('Data has been created')
+                navigate('/')
+            }
         } catch (error) {
             console.error(error)
         }
@@ -129,64 +139,72 @@ const FSea = () => {
             {currentPage === 4 && (
                 <CForm>
                     <CProgress value={100} />
-                    <h3>Shipping Information</h3>
-                    <CFormLabel htmlFor="shipping_origin_airport">Origin Airport</CFormLabel>
+                    <h3 className="mb-4">Shipping Information</h3>
+
+                    <CFormLabel htmlFor="shipping_loading_port">Loading Port</CFormLabel>
                     <CFormInput
                         type="text"
-                        id="shipping_origin_airport"
-                        value={formData.shipping.shipping_origin_airport}
+                        id="shipping_loading_port"
+                        value={formData.shipping.shipping_loading_port}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         required
+                        className="mb-4"
                     />
 
-                    <CFormLabel htmlFor="shipping_destination_airport">
-                        Destination Airport
-                    </CFormLabel>
+                    <CFormLabel htmlFor="shipping_discharge_port">Discharge Port</CFormLabel>
                     <CFormInput
                         type="text"
-                        id="shipping_destination_airport"
-                        value={formData.shipping.shipping_destination_airport}
+                        id="shipping_discharge_port"
+                        value={formData.shipping.shipping_discharge_port}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         required
+                        className="mb-4"
                     />
 
-                    <CFormLabel htmlFor="shipping_preferred_departure_date">
-                        Preferred Departure Date
+                    <CFormLabel htmlFor="shipping_sailing_date">Sailing Date</CFormLabel>
+                    <CFormInput
+                        type="date"
+                        id="shipping_sailing_date"
+                        value={formData.shipping.shipping_sailing_date}
+                        onChange={(e) => handleInputChange(e, 'shipping')}
+                        required
+                        className="mb-4"
+                    />
+
+                    <CFormLabel htmlFor="shipping_estimated_arrival_date">
+                        Estimated Arrival Date
                     </CFormLabel>
                     <CFormInput
                         type="date"
-                        id="shipping_preferred_departure_date"
-                        value={formData.shipping.shipping_preferred_departure_date}
+                        id="shipping_estimated_arrival_date"
+                        value={formData.shipping.shipping_estimated_arrival_date}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         required
+                        className="mb-4"
                     />
 
-                    <CFormLabel htmlFor="shipping_preferred_arrival_date">
-                        Preferred Arrival Date
-                    </CFormLabel>
-                    <CFormInput
-                        type="date"
-                        id="shipping_preferred_arrival_date"
-                        value={formData.shipping.shipping_preferred_arrival_date}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                    />
-
-                    <CFormLabel htmlFor="shipping_flight_type">Flight Type</CFormLabel>
+                    <CFormLabel htmlFor="shipping_cargo_type">Flight Type</CFormLabel>
                     <CFormSelect
-                        id="shipping_flight_type"
-                        value={formData.shipping.shipping_flight_type}
+                        id="shipping_cargo_type"
+                        value={formData.shipping.shipping_cargo_type}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         options={[
-                            { label: 'Direct', value: '1' },
-                            { label: 'Multi-stop', value: '2' },
+                            { label: 'Containerized Cargo', value: '1' },
+                            { label: 'Bulk Cargo', value: '2' },
+                            { label: 'Breakbulk Cargo', value: '3' },
+                            { label: 'Reefer Cargo', value: '4' },
+                            { label: 'RORO Cargo', value: '5' },
+                            { label: 'Heavy Lift Cargo', value: '6' },
+                            { label: 'Dangerous Goods', value: '7' },
                         ]}
                         required
+                        className="mb-4"
                     />
+
                     <CButton color="secondary" onClick={handleShipmentDetails}>
                         Back
                     </CButton>
-                    <CButton color="primary" onClick={handleSubmit}>
+                    <CButton color="primary" onClick={handleSubmit} disabled={disableSubmit}>
                         Submit
                     </CButton>
                 </CForm>
@@ -195,4 +213,4 @@ const FSea = () => {
     )
 }
 
-export default FSea
+export default Sea

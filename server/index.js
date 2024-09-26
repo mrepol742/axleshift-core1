@@ -58,7 +58,10 @@ cron.schedule('0 * * * *', () => {
 })
 
 app.use(upload.none())
-app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }))
+app.use(cors({ 
+    origin: process.env.CLIENT_ORIGIN, 
+    credentials: true
+}))
 app.use(express.json())
 app.use(pinoHttp({ logger }))
 

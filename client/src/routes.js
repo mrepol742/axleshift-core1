@@ -2,6 +2,7 @@ import React from 'react'
 import Auth from './components/middleware/Auth'
 
 const Overview = Auth(React.lazy(() => import('./views/overview/index')))
+const FreightInfo = Auth(React.lazy(() => import('./views/overview/info/index')))
 
 const Account = Auth(React.lazy(() => import('./views/account/index')))
 const AccountSecurity = Auth(React.lazy(() => import('./views/account/security/index')))
@@ -23,6 +24,7 @@ const Err404 = Auth(React.lazy(() => import('./views/errors/404')))
 
 const routes = [
     { path: '/', name: 'Overview', element: Overview },
+    { path: '/v/:id', name: 'Freight Info', element: FreightInfo },
 
     { path: '/account', name: 'Account', element: Account },
     { path: '/account/security', name: 'Security', element: AccountSecurity },

@@ -1,4 +1,5 @@
 import fs from 'fs'
+import connectToDatabase from '../models/db.js'
 import logger from '../logger.js'
 
 let sessions = {}
@@ -33,6 +34,27 @@ export const addSession = (theUser, sessionToken, ip, userAgent) => {
         user_agent: userAgent,
         last_accessed: Date.now(),
     }
+
+    if (process.env.DEBUG) {
+            fs.writeFileSync('./sessions/sessions.json', JSON.stringify(sessions), (err) => {
+            if (err) throw err
+            logger.info('Sessions save')
+        })
+    }
+}
+
+export const getEmailAddress = (sessionToken) => {
+   return Object.keys(sessions).find((email) => sessions[email][sessionToken])
+}
+
+export const getUserId = async (sessionToken) => {
+    const email = getEmailAddress(sessionToken)
+    const db = await connectToDatabase()
+
+    const useCollection = db.collection('users')
+    const theUser = await useCollection.findOne({ email: email })
+    logger.info(theUser)
+    return theUser._id;
 }
 
 export const removeSession = (sessionToken) => {

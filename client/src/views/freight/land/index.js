@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import {
     CForm,
@@ -14,12 +15,15 @@ import {
     CProgress,
     CFormSelect,
 } from '@coreui/react'
+import Cookies from 'js-cookie'
 import ShipperForm from '../../../components/freight/ShipperForm'
 import ConsineeForm from '../../../components/freight/ConsineeForm'
 import ShipmentForm from '../../../components/freight/ShipmentForm'
 
-const FLand = () => {
+const Land = () => {
+    const navigate = useNavigate()
     const [currentPage, setCurrentPage] = useState(1)
+    const [disableSubmit, setDisableSubmit] = useState(false)
     const [formData, setFormData] = useState({
         shipper: {
             shipper_company_name: '',
@@ -37,12 +41,12 @@ const FLand = () => {
         },
         shipment: {
             shipment_description: '',
-            shipment_weight: '',
-            shipment_dimension_length: '',
-            shipment_dimension_width: '',
-            shipment_dimension_height: '',
-            shipment_volume: '',
-            shipment_value: '',
+            shipment_weight: 0,
+            shipment_dimension_length: 0,
+            shipment_dimension_width: 0,
+            shipment_dimension_height: 0,
+            shipment_volume: 0,
+            shipment_value: 0,
             shipment_instructions: '',
         },
         shipping: {
@@ -50,7 +54,7 @@ const FLand = () => {
             shipping_destination_address: '',
             shipping_pickup_date: '',
             shipping_delivery_date: '',
-            shipping_vehicle_type: '',
+            shipping_vehicle_type: 0,
         },
     })
 
@@ -67,14 +71,24 @@ const FLand = () => {
 
     const handleSubmit = async () => {
         try {
-            alert(JSON.stringify(formData))
-            //const response = await axios.post('http://localhost:5050/api/freight/add', formData)
-            //alert(JSON.stringify(response.data))
+            setDisableSubmit(true)
+            const response = await axios.post(
+                'http://localhost:5050/api/freight/b/land',
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get('RCTSESSION')}`,
+                    },
+                },
+            )
+            if (response.data.status == 201) {
+                alert('Data has been created')
+                navigate('/')
+            }
         } catch (error) {
             console.error(error)
         }
     }
-
     const handleShipperInformation = () => {
         setCurrentPage(1)
     }
@@ -128,64 +142,69 @@ const FLand = () => {
             {currentPage === 4 && (
                 <CForm>
                     <CProgress value={100} />
-                    <h3>Shipping Information</h3>
-                    <CFormLabel htmlFor="shipping_origin_airport">Origin Airport</CFormLabel>
+                    <h3 className="mb-4">Shipping Information</h3>
+
+                    <CFormLabel htmlFor="shipping_origin_addresss">Origin Address</CFormLabel>
                     <CFormInput
                         type="text"
-                        id="shipping_origin_airport"
-                        value={formData.shipping.shipping_origin_airport}
+                        id="shipping_origin_addresss"
+                        value={formData.shipping.shipping_origin_addresss}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         required
+                        className="mb-3"
                     />
 
-                    <CFormLabel htmlFor="shipping_destination_airport">
-                        Destination Airport
+                    <CFormLabel htmlFor="shipping_destination_address">
+                        Destination Address
                     </CFormLabel>
                     <CFormInput
                         type="text"
-                        id="shipping_destination_airport"
-                        value={formData.shipping.shipping_destination_airport}
+                        id="shipping_destination_address"
+                        value={formData.shipping.shipping_destination_address}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         required
+                        className="mb-3"
                     />
 
-                    <CFormLabel htmlFor="shipping_preferred_departure_date">
-                        Preferred Departure Date
-                    </CFormLabel>
+                    <CFormLabel htmlFor="shipping_pickup_date">Pickup Date</CFormLabel>
                     <CFormInput
                         type="date"
-                        id="shipping_preferred_departure_date"
-                        value={formData.shipping.shipping_preferred_departure_date}
+                        id="shipping_pickup_date"
+                        value={formData.shipping.shipping_pickup_date}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         required
+                        className="mb-3"
                     />
 
-                    <CFormLabel htmlFor="shipping_preferred_arrival_date">
-                        Preferred Arrival Date
-                    </CFormLabel>
+                    <CFormLabel htmlFor="shipping_delivery_date">Delivery Date</CFormLabel>
                     <CFormInput
                         type="date"
-                        id="shipping_preferred_arrival_date"
-                        value={formData.shipping.shipping_preferred_arrival_date}
+                        id="shipping_delivery_date"
+                        value={formData.shipping.shipping_delivery_date}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         required
+                        className="mb-3"
                     />
 
-                    <CFormLabel htmlFor="shipping_flight_type">Flight Type</CFormLabel>
+                    <CFormLabel htmlFor="shipping_vehicle_type">Vehicle Type</CFormLabel>
                     <CFormSelect
-                        id="shipping_flight_type"
-                        value={formData.shipping.shipping_flight_type}
+                        id="shipping_vehicle_type"
+                        value={formData.shipping.shipping_vehicle_type}
                         onChange={(e) => handleInputChange(e, 'shipping')}
                         options={[
-                            { label: 'Direct', value: '1' },
-                            { label: 'Multi-stop', value: '2' },
+                            { label: 'Truck', value: '1' },
+                            { label: 'Van', value: '2' },
+                            { label: 'Trailers', value: '3' },
+                            { label: 'Buses', value: '4' },
+                            { label: 'Motorcycles', value: '5' },
                         ]}
                         required
+                        className="mb-4"
                     />
                     <CButton color="secondary" onClick={handleShipmentDetails}>
                         Back
                     </CButton>
-                    <CButton color="primary" onClick={handleSubmit}>
+                    <CButton color="primary" onClick={handleSubmit} disabled={disableSubmit}>
                         Submit
                     </CButton>
                 </CForm>
@@ -194,4 +213,4 @@ const FLand = () => {
     )
 }
 
-export default FLand
+export default Land

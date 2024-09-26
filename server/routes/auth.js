@@ -3,11 +3,9 @@ dotenv.config()
 import express from 'express'
 import bcryptjs from 'bcryptjs'
 import crypto from 'crypto'
-import fs from 'fs'
-import cron from 'node-cron'
 import connectToDatabase from '../models/db.js'
 import logger from '../logger.js'
-import sessions, { addSession, addUserProfileToSession, removeSession } from '../src/sessions.js'
+import { addSession, addUserProfileToSession, removeSession } from '../src/sessions.js'
 import auth from '../middleware/auth.js'
 
 const router = express.Router()
@@ -53,7 +51,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password, recaptchaRef } = req.body
-        if (!email && !password && !recaptchaRef) return res.json({ status: 401 })
+        if (!email || !password || !recaptchaRef) return res.json({ status: 401 })
 
         const db = await connectToDatabase()
         const collection = db.collection('users')
@@ -97,8 +95,7 @@ router.post('/verify', auth, function (req, res, next) {
      token
 */
 router.post('/logout', auth, function (req, res, next) {
-    const token = req.body.token
-    removeSession(token)
+    removeSession(req.token)
 
     res.json({ status: 200 })
 })
