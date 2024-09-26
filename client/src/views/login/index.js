@@ -49,7 +49,12 @@ const Login = () => {
             const status = response.data.status
             if (status == 200) {
                 Cookies.set('RCTSESSION', response.data.token)
-                window.location.href = '/'
+                const urlParams = new URLSearchParams(window.location.search)
+                let url = '/'
+                if (urlParams.has('n')) {
+                    url = urlParams.get('n')
+                }
+                navigate(url)
             } else {
                 alert(status)
             }

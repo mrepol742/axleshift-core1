@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { formatDistanceToNow, parseISO } from 'date-fns'
 import Cookies from 'js-cookie'
 import {
     CCard,
@@ -65,10 +66,23 @@ const Overview = () => {
                         style={{ cursor: 'pointer' }}
                     >
                         <CCard>
-                            <CCardHeader>#{item._id}</CCardHeader>
+                            <CCardHeader
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <span></span>
+                                <span>
+                                    {formatDistanceToNow(parseISO(item.created_at), {
+                                        addSuffix: true,
+                                    })}
+                                </span>
+                            </CCardHeader>
                             <CCardBody>
                                 <blockquote className="blockquote mb-0">
-                                    <p>{item.created_at}</p>
+                                    <p>{JSON.stringify(item.data.shipment)}</p>
                                     <footer className="blockquote-footer">{item.type}</footer>
                                 </blockquote>
                             </CCardBody>
