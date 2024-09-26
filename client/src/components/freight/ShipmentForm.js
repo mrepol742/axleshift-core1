@@ -20,7 +20,8 @@ const ShipmentForm = ({
     return (
         <CForm>
             <CProgress value={75} />
-            <h3>Shipment Details</h3>
+            <h3 className="mb-4">Shipment Details</h3>
+
             <CFormLabel htmlFor="shipment_description">Description of Goods</CFormLabel>
             <CFormInput
                 type="text"
@@ -28,6 +29,7 @@ const ShipmentForm = ({
                 value={formData.shipment.shipment_description}
                 onChange={(e) => handleInputChange(e, 'shipment')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="shipment_weight">Weight (kg)</CFormLabel>
@@ -37,9 +39,10 @@ const ShipmentForm = ({
                 value={formData.shipment.shipment_weight}
                 onChange={(e) => handleInputChange(e, 'shipment')}
                 required
+                className="mb-3"
             />
 
-            <CRow>
+            <CRow className="mb-3">
                 <h5>Dimensions (cm)</h5>
                 <CCol xs>
                     <CFormLabel htmlFor="shipment_dimension_length">Length</CFormLabel>
@@ -79,6 +82,7 @@ const ShipmentForm = ({
                 id="shipment_volume"
                 value={formData.shipment.shipment_volume}
                 onChange={(e) => handleInputChange(e, 'shipment')}
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="shipment_value">Value of Goods</CFormLabel>
@@ -88,6 +92,7 @@ const ShipmentForm = ({
                 value={formData.shipment.shipment_value}
                 onChange={(e) => handleInputChange(e, 'shipment')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="shipment_instructions">
@@ -98,6 +103,7 @@ const ShipmentForm = ({
                 rows={3}
                 value={formData.shipment.shipment_instructions}
                 onChange={(e) => handleInputChange(e, 'shipment')}
+                className="mb-3"
             ></CFormTextarea>
 
             <CButton color="secondary" onClick={handleConsigneeInfo}>

@@ -6,8 +6,9 @@ import axios from 'axios'
 const Logout = () => {
     const [account] = useState('')
     const navigate = useNavigate()
+    const token = Cookies.get('RCTSESSION')
 
-    if (Cookies.get('RCTSESSION') === undefined) navigate('/')
+    if (token === undefined) navigate('/')
 
     useEffect(() => {
         logout()
@@ -17,12 +18,15 @@ const Logout = () => {
 
     async function logout() {
         try {
-            const formData = new FormData()
-            formData.append('token', Cookies.get('RCTSESSION'))
-
-            await axios.post('http://localhost:5050/api/auth/logout', formData, {
-                headers: {},
-            })
+            await axios.post(
+                'http://localhost:5050/api/auth/logout',
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            )
         } catch (error) {
             console.error(error)
         }

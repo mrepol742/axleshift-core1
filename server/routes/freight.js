@@ -1,22 +1,49 @@
 import dotenv from 'dotenv'
 dotenv.config()
+import { ObjectId } from 'mongodb'
 import express from 'express'
-import bcryptjs from 'bcryptjs'
 import connectToDatabase from '../models/db.js'
-import logger from '../logger.js'
+import auth from '../middleware/auth.js'
+import { getUserId } from  '../src/sessions.js'
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-});
+router.post('/', auth, async (req, res) => {
+    const token = req.token
+    console.log(token)
+    const user_id = await getUserId(token)
 
-router.post('/add', async (req, res) => {
-    const {shipper, consignee, shipment, shipping} = req.body
-    if (!shipper && !consignee && !shipment && !shipping) return res.json({'status': 401})
+    const db = await connectToDatabase();
+    const freightCollection = db.collection('freight')
 
-    const db = await connectToDatabase()
-    const collection = db.collection('freight')
-});
+    const items = await freightCollection.find({ user_id: new ObjectId(user_id) }).toArray();
+    res.json({ status: 200, data: items})
+})
 
+router.post('/b/:type', auth, async (req, res) => {
+    const { shipper, consignee, shipment, shipping } = req.body
+    const type = req.params.type
+    if (!shipper || !consignee || !shipment || !shipping || !type) return res.json({ status: 401 })
+    if (!['air', 'land', 'sea'].includes(type)) return res.json({ status: 401 })
+
+    console.log(JSON.stringify(shipper))
+    const user_id = await getUserId(req.token)
+    const db = await connectToDatabase();
+
+    const freightCollection = db.collection('freight')
+    await freightCollection.insertOne({
+        user_id: user_id,
+        data: {
+            shipper: shipper,
+            consignee: consignee,
+            shipment: shipment,
+            shipping: shipping,
+        },
+        type: type,
+        created_at: new Date(),
+        updated_at: new Date(),
+    })
+    res.json({ status: 201 })
+})
 
 export default router

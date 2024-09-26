@@ -11,7 +11,8 @@ const ConsineeForm = ({
     return (
         <CForm>
             <CProgress value={50} />
-            <h3>Consignee Information</h3>
+            <h3 className="mb-4">Consignee Information</h3>
+
             <CFormLabel htmlFor="consignee_company_name">Company Name</CFormLabel>
             <CFormInput
                 type="text"
@@ -19,6 +20,7 @@ const ConsineeForm = ({
                 value={formData.consignee.consignee_company_name}
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="consignee_contact_name">Contact Name</CFormLabel>
@@ -28,6 +30,7 @@ const ConsineeForm = ({
                 value={formData.consignee.consignee_contact_name}
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="consignee_contact_email_address">Email Address</CFormLabel>
@@ -37,6 +40,7 @@ const ConsineeForm = ({
                 value={formData.consignee.consignee_contact_email_address}
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="consignee_contact_phone_number">Phone Number</CFormLabel>
@@ -46,6 +50,7 @@ const ConsineeForm = ({
                 value={formData.consignee.consignee_contact_phone_number}
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="consignee_company_address">Address</CFormLabel>
@@ -55,6 +60,7 @@ const ConsineeForm = ({
                 value={formData.consignee.consignee_company_address}
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
+                className="mb-3"
             />
 
             <CButton color="secondary" onClick={handleShipperInformation}>

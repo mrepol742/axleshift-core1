@@ -6,7 +6,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo }) => {
     return (
         <CForm>
             <CProgress value={25} />
-            <h3>Shipper Information</h3>
+            <h3 className="mb-4">Shipper Information</h3>
 
             <CFormLabel htmlFor="shipper_company_name">Company Name</CFormLabel>
             <CFormInput
@@ -15,6 +15,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo }) => {
                 value={formData.shipper.shipper_company_name}
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="shipper_contact_name">Contact Name</CFormLabel>
@@ -24,6 +25,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo }) => {
                 value={formData.shipper.shipper_contact_name}
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="shipper_contact_email_address">Email Address</CFormLabel>
@@ -33,6 +35,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo }) => {
                 value={formData.shipper.shipper_contact_email_address}
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="shipper_contact_phone_number">Phone Number</CFormLabel>
@@ -42,6 +45,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo }) => {
                 value={formData.shipper.shipper_contact_phone_number}
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
+                className="mb-3"
             />
 
             <CFormLabel htmlFor="shipper_company_address">Address</CFormLabel>
@@ -51,6 +55,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo }) => {
                 value={formData.shipper.shipper_company_address}
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
+                className="mb-3"
             />
 
             <CButton color="primary" onClick={handleConsigneeInfo}>
