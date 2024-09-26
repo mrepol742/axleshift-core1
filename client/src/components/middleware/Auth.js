@@ -7,6 +7,9 @@ const Auth = (WrappedComponent) => {
     const AuthComponent = (props) => {
         const navigate = useNavigate()
         const [isAuth, setIsAuth] = useState(null)
+        let loc = `/login`
+        if (window.location.pathname != '/')
+            loc = `/login?n=${window.location.pathname}${window.location.search}`
 
         useEffect(() => {
             const checkAuthentication = async () => {
@@ -27,7 +30,7 @@ const Auth = (WrappedComponent) => {
                     if (response.data.status !== 200) {
                         Cookies.remove('RCTSESSION')
                         setIsAuth(false)
-                        navigate('/login')
+                        navigate(loc)
                     } else {
                         setIsAuth(true)
                     }
@@ -45,7 +48,7 @@ const Auth = (WrappedComponent) => {
         }
 
         if (!isAuth) {
-            return <Navigate to="/login" />
+            return <Navigate to={loc} />
         }
 
         return <WrappedComponent {...props} />
