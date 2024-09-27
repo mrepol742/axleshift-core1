@@ -39,7 +39,7 @@ process.on('unhandledRejection', (reason, promise) => {
 })
 
 process.on('beforeExit', (code) => {
-    logger.info('Process before exit code ' + code)
+    logger.info(`Process before exit code ${code}`)
 })
 
 process.on('exit', (code) => {

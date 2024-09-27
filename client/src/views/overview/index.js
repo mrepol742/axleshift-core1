@@ -32,11 +32,11 @@ const Overview = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.post(
-                    'http://localhost:5050/api/freight',
+                    `${import.meta.env.VITE_API_URL}/api/freight`,
                     {},
                     {
                         headers: {
-                            Authorization: `Bearer ${Cookies.get('RCTSESSION')}`,
+                            Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_SESSION)}`,
                         },
                     },
                 )

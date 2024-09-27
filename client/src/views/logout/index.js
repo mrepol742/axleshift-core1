@@ -6,20 +6,20 @@ import axios from 'axios'
 const Logout = () => {
     const [account] = useState('')
     const navigate = useNavigate()
-    const token = Cookies.get('RCTSESSION')
+    const token = Cookies.get(import.meta.env.VITE_SESSION)
 
     if (token === undefined) navigate('/')
 
     useEffect(() => {
         logout()
-        Cookies.remove('RCTSESSION')
+        Cookies.remove(import.meta.env.VITE_SESSION)
         navigate('/')
     }, [])
 
     async function logout() {
         try {
             await axios.post(
-                'http://localhost:5050/api/auth/logout',
+                `${import.meta.env.VITE_API_URL}/api/auth/logout`,
                 {},
                 {
                     headers: {

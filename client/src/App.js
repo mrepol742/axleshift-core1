@@ -10,6 +10,7 @@ import AppTitle from './components/AppTitle'
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 const Login = React.lazy(() => import('./views/login/index'))
+const Register = React.lazy(() => import('./views/register/index'))
 const ForgotPassword = React.lazy(() => import('./views/forgot-password/index'))
 const Logout = React.lazy(() => import('./views/logout/index'))
 
@@ -43,6 +44,7 @@ const App = () => {
                 <AppTitle>
                     <Routes>
                         <Route exact path="/login" name="Login" element={<Login />} />
+                        <Route exact path="/register" name="register" element={<Register />} />
                         <Route
                             exact
                             path="/forgot-password"

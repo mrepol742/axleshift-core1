@@ -11,35 +11,44 @@ import auth from '../middleware/auth.js'
 const router = express.Router()
 
 /*
+  Url: /api/auth/register
+  Params:
+     email
+     firstName
+     lastName
+     password
+     recaptchaRef
+*/
 router.post('/register', async (req, res) => {
     try {
-        const email = req.body.email
+        const { email, firstName, lastName, password, recaptchaRef } = req.body
+        if (!email || !password || !firstName || !lastName || !recaptchaRef) return res.json({ status: 401 })
+
         const db = await connectToDatabase()
         const collection = db.collection('users')
-        const existingEmail = await collection.findOne({ email: req.body.email })
+        const existingEmail = await collection.findOne({ email: email })
 
         if (existingEmail) {
             logger.error('Email id already exists')
-            return res.status(400).json({ error: 'Email id already exists' })
+            return res.json({ status: 409 })
         }
-        const hash = await bcryptjs.hash(element.password, process.env.BCRYPT_SECRET);
+        const hash = await bcryptjs.hash(password, process.env.BCRYPT_SECRET);
         await collection.insertOne({
-            email: req.body.email,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
             password: hash,
             emailVerifiedAt: null,
             createdAt: new Date(),
             updatedAt: new Date(),
         })
 
-        res.json({ register: true })
+        return res.json({ status: 201 })
     } catch (e) {
         logger.error(e)
-        return res.status(500).send('Internal server error')
+        res.json({ status: 500 })
     }
 })
-*/
 
 /*
   Url: /api/auth/login
