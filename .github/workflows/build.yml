@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Build
+      - name: Build Client
         run: |
           cd client
           npm i
@@ -25,7 +25,17 @@ jobs:
           cd ..
           mkdir release
           mv client/build release/client
-          mv server release/server
+          
+      - name: Build Server
+        run: |
+          cp server server-build -r
+          cd server
+          npm i
+          cd ../server-build
+          rm -rf eslint.config.js obfuscate.js
+          cd ..
+          node server/obfuscate.js
+          mv server-build release/server
 
       - name: Upload
         id: push_directory
