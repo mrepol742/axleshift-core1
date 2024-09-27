@@ -2,7 +2,7 @@ import js from 'javascript-obfuscator'
 import fs from 'fs'
 import logger from './logger.js'
 
-main("build/");
+main("./server-build");
 
 function main(location) {
     fs.readdir(location, function (err, files) {
