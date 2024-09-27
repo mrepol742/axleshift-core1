@@ -72,11 +72,15 @@ const Sea = () => {
     const handleSubmit = async () => {
         try {
             setDisableSubmit(true)
-            const response = await axios.post('http://localhost:5050/api/freight/b/sea', formData, {
-                headers: {
-                    Authorization: `Bearer ${Cookies.get('RCTSESSION')}`,
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/freight/b/sea`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_SESSION)}`,
+                    },
                 },
-            })
+            )
             if (response.data.status == 201) {
                 alert('Data has been created')
                 navigate('/')

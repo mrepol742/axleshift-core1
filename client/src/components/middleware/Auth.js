@@ -13,12 +13,12 @@ const Auth = (WrappedComponent) => {
 
         useEffect(() => {
             const checkAuthentication = async () => {
-                const token = Cookies.get('RCTSESSION')
+                const token = Cookies.get(import.meta.env.VITE_SESSION)
                 if (token === undefined) return setIsAuth(false)
 
                 try {
                     const response = await axios.post(
-                        'http://localhost:5050/api/auth/verify',
+                        `${import.meta.env.VITE_API_URL}/api/auth/verify`,
                         {},
                         {
                             headers: {
@@ -28,7 +28,7 @@ const Auth = (WrappedComponent) => {
                     )
 
                     if (response.data.status !== 200) {
-                        Cookies.remove('RCTSESSION')
+                        Cookies.remove(import.meta.env.VITE_SESSION)
                         setIsAuth(false)
                         navigate(loc)
                     } else {

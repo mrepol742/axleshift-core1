@@ -13,12 +13,14 @@ import {
     CInputGroup,
     CInputGroupText,
     CRow,
+    CButtonGroup,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 
 const Login = () => {
+    const VITE_RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
 
@@ -26,8 +28,12 @@ const Login = () => {
         navigate('/forgot-password')
     }
 
+    const signup = () => {
+        navigate('/register')
+    }
+
     useEffect(() => {
-        if (Cookies.get('RCTSESSION') !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.VITE_SESSION) !== undefined) navigate('/')
     }, [])
 
     const [email, setEmail] = useState('')
@@ -43,12 +49,16 @@ const Login = () => {
             formData.append('password', password)
             formData.append('recaptchaRef', recaptcha)
 
-            const response = await axios.post('http://localhost:5050/api/auth/login', formData, {
-                headers: {},
-            })
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/auth/login`,
+                formData,
+                {
+                    headers: {},
+                },
+            )
             const status = response.data.status
             if (status == 200) {
-                Cookies.set('RCTSESSION', response.data.token)
+                Cookies.set(import.meta.env.VITE_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
                 let url = '/'
                 if (urlParams.has('n')) {
@@ -76,7 +86,7 @@ const Login = () => {
                                     <ReCAPTCHA
                                         ref={recaptchaRef}
                                         size="invisible"
-                                        sitekey="6LcbAQopAAAAAPqiUSbgE4FWJrHdKfpFIK_s6rU-"
+                                        sitekey={VITE_RECAPTCHA_SITE_KEY}
                                     />
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
@@ -104,22 +114,27 @@ const Login = () => {
                                             required
                                         />
                                     </CInputGroup>
-                                    <CRow>
-                                        <CCol xs={6}>
-                                            <CButton type="submit" color="primary" className="px-4">
+                                    <div className="d-grid">
+                                        <CButtonGroup>
+                                            <CButton
+                                                type="submit"
+                                                color="primary"
+                                                className="me-2 rounded"
+                                            >
                                                 Login
                                             </CButton>
-                                        </CCol>
-                                        <CCol xs={6} className="text-right">
                                             <CButton
-                                                color="link"
-                                                className="px-0"
-                                                onClick={forgotPassword}
+                                                color="success"
+                                                className="me-2 rounded"
+                                                onClick={signup}
                                             >
-                                                Forgot password?
+                                                Signup
                                             </CButton>
-                                        </CCol>
-                                    </CRow>
+                                        </CButtonGroup>
+                                    </div>
+                                    <CButton color="link" className="px-0" onClick={forgotPassword}>
+                                        Forgot password?
+                                    </CButton>
                                 </CForm>
                             </CCardBody>
                         </CCard>

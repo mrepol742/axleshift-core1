@@ -26,7 +26,7 @@ async function connectToDatabase() {
 
     if (documents.length == 0) {
         const insertResult = await collection.insertMany(data)
-        logger.info('Inserted documents: ' + insertResult.insertedCount)
+        logger.info(`Inserted documents: ${insertResult.insertedCount}`)
     }
 
     return dbInstance
