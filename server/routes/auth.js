@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
-import bcryptjs from 'bcryptjs'
+import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import connectToDatabase from '../models/db.js'
 import logger from '../logger.js'
@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => {
             logger.error('Email id already exists')
             return res.json({ status: 409 })
         }
-        const hash = await bcryptjs.hash(password, process.env.BCRYPT_SECRET);
+        const hash = await bcrypt.hashSync(password, parseInt(process.env.BCRYPT_ROUND))
         await collection.insertOne({
             email: email,
             firstName: firstName,
@@ -66,11 +66,11 @@ router.post('/login', async (req, res) => {
         const collection = db.collection('users')
         const theUser = await collection.findOne({ email: email })
 
-        if (!theUser) res.json({ status: 404 })
+        if (!theUser) return res.json({ status: 404 })
 
-        const hash = await bcryptjs.hash(password, process.env.BCRYPT_SECRET)
+        const hash = await bcrypt.hashSync(password, parseInt(process.env.BCRYPT_ROUND))
 
-        if (hash != theUser.password) res.json({ status: 401 })
+        if (hash != theUser.password) return res.json({ status: 401 })
         addUserProfileToSession(theUser)
 
         const session_token = crypto

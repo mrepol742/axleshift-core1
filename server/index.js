@@ -41,7 +41,7 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('beforeExit', (code) => {
     logger.info(`Process before exit code ${code}`)
 })
-
+ 
 process.on('exit', (code) => {
     fs.writeFileSync('./sessions/sessions.json', JSON.stringify(sessions), (err) => {
         if (err) throw err

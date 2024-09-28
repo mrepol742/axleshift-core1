@@ -34,7 +34,7 @@ async function connectToDatabase() {
 
 async function updatePasswordHash() {
     for (const element of data) {
-        element.password = await bcryptjs.hash(element.password, process.env.BCRYPT_SECRET)
+        element.password = bcryptjs.hashSync(element.password, parseInt(process.env.BCRYPT_ROUND))
     }
 }
 

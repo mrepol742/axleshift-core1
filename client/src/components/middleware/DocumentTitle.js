@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import routes from '../routes'
+import PropTypes from 'prop-types'
+import routes from '../../routes'
 
-// eslint-disable-next-line react/prop-types
-const AppTitle = ({ children }) => {
+const DocumentTitle = ({ children }) => {
     var currentLocation = useLocation().pathname
     if (currentLocation != '/') currentLocation = currentLocation.replace(/\/$/, '')
 
@@ -20,4 +20,8 @@ const AppTitle = ({ children }) => {
     return <>{children}</>
 }
 
-export default AppTitle
+export default DocumentTitle
+
+DocumentTitle.propTypes = {
+    children: PropTypes.node.isRequired,
+}

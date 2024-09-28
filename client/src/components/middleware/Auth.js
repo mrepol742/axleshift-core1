@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import { CSpinner } from '@coreui/react'
+import MaintenancePage from '../../views/errors/500'
 
 const Auth = (WrappedComponent) => {
     const AuthComponent = (props) => {
@@ -44,7 +46,11 @@ const Auth = (WrappedComponent) => {
         }, [navigate])
 
         if (isAuth === null) {
-            return <div>Loading...</div>
+            return (
+                <div className="pt-3 text-center">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            )
         }
 
         if (!isAuth) {

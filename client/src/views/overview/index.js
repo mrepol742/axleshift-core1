@@ -22,7 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 import WidgetsDropdown from './widgets/WidgetsDropdown'
-import Search from '../../components/overview/Search.js'
+import Search from '../../components/overview/Search'
 
 const Overview = () => {
     const [data, setData] = useState([])

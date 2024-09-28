@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import Cookies from 'js-cookie'
+import axios from 'axios'
 
 const Register = () => {
     const VITE_RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
@@ -95,7 +96,7 @@ const Register = () => {
                                         <CFormInput
                                             placeholder="Email"
                                             autoComplete="email"
-                                            value={formData.email}
+                                   //          value={formData.email}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -107,7 +108,7 @@ const Register = () => {
                                         <CFormInput
                                             placeholder="First Name"
                                             autoComplete="given-name"
-                                            value={formData.firstName}
+                                       //     value={formData.firstName}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -119,7 +120,7 @@ const Register = () => {
                                         <CFormInput
                                             placeholder="Last Name"
                                             autoComplete="family-name"
-                                            value={formData.lastName}
+                                       //     value={formData.lastName}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -132,7 +133,7 @@ const Register = () => {
                                             type="password"
                                             placeholder="Password"
                                             autoComplete="new-password"
-                                            value={formData.password}
+                                           // value={formData.password}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -145,7 +146,7 @@ const Register = () => {
                                             type="password"
                                             placeholder="Repeat password"
                                             autoComplete="new-password"
-                                            value={formData.repeatPassword}
+                                         //   value={formData.repeatPassword}
                                             onChange={handleInputChange}
                                             required
                                         />
