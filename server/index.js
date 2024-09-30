@@ -6,6 +6,7 @@ import pinoHttp from 'pino-http'
 import multer from 'multer'
 import cron from 'node-cron'
 import sanitize from './middleware/sanitize.js'
+import rateLimiter from './middleware/rateLimiter.s'
 import auth from './routes/auth.js'
 import freight from './routes/freight.js'
 import track from './routes/track.js'
@@ -64,7 +65,8 @@ app.use(cors({
     credentials: true
 }))
 app.use(express.json())
-// app.use(pinoHttp({ logger }))
+if (process.env.NODE_ENV !== 'production') app.use(pinoHttp({ logger }))
+app.use(rateLimiter)
 app.use(sanitize)
 
 app.use('/api/auth', auth)
