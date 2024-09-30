@@ -1,0 +1,19 @@
+{
+  "name": "@freight-capstone/core1-crowdstrike",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "The Freight Capstone Core 1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freight-capstone/core1.git"
+  },
+  "bugs": {
+    "url": "https://github.com/freight-capstone/core1/issues"
+  },
+  "homepage": "https://github.com/freight-capstone/core1#readme",
+  "description": ""
+}
