@@ -24,7 +24,7 @@ const views = {
     Err404: './views/errors/404',
 }
 
-const AuthLazy = (path) => Auth(React.lazy(() => /* @vite-ignore */ import(path)))
+const AuthLazy = (path) => Auth(React.lazy(() => import(/* @vite-ignore */ path)))
 
 const components = Object.fromEntries(
     Object.entries(views).map(([key, path]) => [key, AuthLazy(path)]),

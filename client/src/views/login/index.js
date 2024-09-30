@@ -47,7 +47,7 @@ const Login = () => {
             const formData = new FormData()
             formData.append('email', email)
             formData.append('password', password)
-            formData.append('recaptchaRef', recaptcha)
+            formData.append('recaptcha_ref', recaptcha)
 
             const response = await axios.post(
                 `${import.meta.env.VITE_API_URL}/api/auth/login`,
