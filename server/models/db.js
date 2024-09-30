@@ -1,9 +1,10 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import fs from 'fs'
-import logger from '../logger.js'
 import { MongoClient } from 'mongodb'
 import bcryptjs from 'bcryptjs'
+import logger from '../logger.js'
+import passwordHash from '../src/password.js'
 
 const data = JSON.parse(fs.readFileSync(import.meta.dirname + '/users.json', 'utf8')).docs
 let dbInstance = null
@@ -14,30 +15,31 @@ async function connectToDatabase() {
     const client = new MongoClient(process.env.MONGO_URL)
 
     await client.connect()
-    await updatePasswordHash()
 
     logger.info('Connected successfully to server')
 
     dbInstance = client.db(process.env.MONGO_DB)
+
+    const collections = await dbInstance.listCollections().toArray();
+    const collectionNames = collections.map(c => c.name);
+
+    if (!collectionNames.includes('users')) await dbInstance.createCollection('users');
+    if (!collectionNames.includes('freight')) await dbInstance.createCollection('freight');
+
 
     const collection = dbInstance.collection('users')
     let cursor = await collection.find({})
     let documents = await cursor.toArray()
 
     if (documents.length == 0) {
+        for (const element of data) {
+            element.password = passwordHash(element.password)
+        }
         const insertResult = await collection.insertMany(data)
         logger.info(`Inserted documents: ${insertResult.insertedCount}`)
     }
 
     return dbInstance
 }
-
-async function updatePasswordHash() {
-    for (const element of data) {
-        element.password = await bcryptjs.hash(element.password, process.env.BCRYPT_SECRET)
-    }
-}
-
-updatePasswordHash()
 
 export default connectToDatabase

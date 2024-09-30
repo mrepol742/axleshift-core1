@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import Cookies from 'js-cookie'
+import axios from 'axios'
 
 const Register = () => {
     const VITE_RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
@@ -24,11 +25,11 @@ const Register = () => {
     const recaptchaRef = React.useRef()
     const [formData, setFormData] = useState({
         email: '',
-        firstName: '',
-        lastName: '',
+        first_name: '',
+        last_name: '',
         password: '',
-        repeatPassword: '',
-        recaptchaRef: '',
+        repeat_password: '',
+        recaptcha_ref: '',
     })
 
     const login = () => {
@@ -49,18 +50,25 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (formData.password !== formData.repeatPassword) return alert('Passwords do not match')
+        if (formData.password !== formData.repeat_password) return alert('Passwords do not match')
 
         const recaptcha = await recaptchaRef.current.executeAsync()
-        setFormData((prevData) => ({
-            ...prevData,
-            recaptchaRef: recaptcha,
+        //TODO: this thing doesnt not yet work i dont know why?
+        setFormData((prev) => ({
+            ...prev,
+            recaptcha_ref: recaptcha,
         }))
 
         try {
+            const formDataToSend = new FormData()
+
+            for (const key in formData) {
+                formDataToSend.append(key, formData[key])
+            }
+
             const response = await axios.post(
                 `${import.meta.env.VITE_API_URL}/api/auth/register`,
-                formData,
+                formDataToSend,
                 {
                     headers: {},
                 },
@@ -93,9 +101,10 @@ const Register = () => {
                                             <FontAwesomeIcon icon={faEnvelope} />
                                         </CInputGroupText>
                                         <CFormInput
+                                            id="email"
                                             placeholder="Email"
                                             autoComplete="email"
-                                            value={formData.email}
+                                            //          value={formData.email}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -105,9 +114,10 @@ const Register = () => {
                                             <FontAwesomeIcon icon={faUser} />
                                         </CInputGroupText>
                                         <CFormInput
+                                            id="first_name"
                                             placeholder="First Name"
                                             autoComplete="given-name"
-                                            value={formData.firstName}
+                                            //     value={formData.first_name}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -117,9 +127,10 @@ const Register = () => {
                                             <FontAwesomeIcon icon={faUser} />
                                         </CInputGroupText>
                                         <CFormInput
+                                            id="last_name"
                                             placeholder="Last Name"
                                             autoComplete="family-name"
-                                            value={formData.lastName}
+                                            //     value={formData.last_name}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -129,10 +140,11 @@ const Register = () => {
                                             <FontAwesomeIcon icon={faLock} />
                                         </CInputGroupText>
                                         <CFormInput
+                                            id="password"
                                             type="password"
                                             placeholder="Password"
                                             autoComplete="new-password"
-                                            value={formData.password}
+                                            // value={formData.password}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -142,10 +154,11 @@ const Register = () => {
                                             <FontAwesomeIcon icon={faLock} />
                                         </CInputGroupText>
                                         <CFormInput
+                                            id="repeat_password"
                                             type="password"
                                             placeholder="Repeat password"
                                             autoComplete="new-password"
-                                            value={formData.repeatPassword}
+                                            //   value={formData.repeat_password}
                                             onChange={handleInputChange}
                                             required
                                         />

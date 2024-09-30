@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
-import AppTitle from './components/AppTitle'
+import DocumentTitle from './components/middleware/DocumentTitle'
+import Maintenance from './components/middleware/Maintenance'
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -41,20 +42,22 @@ const App = () => {
                     </div>
                 }
             >
-                <AppTitle>
-                    <Routes>
-                        <Route exact path="/login" name="Login" element={<Login />} />
-                        <Route exact path="/register" name="register" element={<Register />} />
-                        <Route
-                            exact
-                            path="/forgot-password"
-                            name="Forgot Password"
-                            element={<ForgotPassword />}
-                        />
-                        <Route exact path="/logout" name="Logout" element={<Logout />} />
-                        <Route path="*" name="Home" element={<DefaultLayout />} />
-                    </Routes>
-                </AppTitle>
+                <Maintenance>
+                    <DocumentTitle>
+                        <Routes>
+                            <Route exact path="/login" name="Login" element={<Login />} />
+                            <Route exact path="/register" name="register" element={<Register />} />
+                            <Route
+                                exact
+                                path="/forgot-password"
+                                name="Forgot Password"
+                                element={<ForgotPassword />}
+                            />
+                            <Route exact path="/logout" name="Logout" element={<Logout />} />
+                            <Route path="*" name="Home" element={<DefaultLayout />} />
+                        </Routes>
+                    </DocumentTitle>
+                </Maintenance>
             </Suspense>
         </Router>
     )

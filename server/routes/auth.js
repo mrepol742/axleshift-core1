@@ -1,12 +1,13 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
-import bcryptjs from 'bcryptjs'
+import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import connectToDatabase from '../models/db.js'
 import logger from '../logger.js'
 import { addSession, addUserProfileToSession, removeSession } from '../src/sessions.js'
 import auth from '../middleware/auth.js'
+import passwordHash, { generateUniqueId } from '../src/password.js'
 
 const router = express.Router()
 
@@ -21,8 +22,8 @@ const router = express.Router()
 */
 router.post('/register', async (req, res) => {
     try {
-        const { email, firstName, lastName, password, recaptchaRef } = req.body
-        if (!email || !password || !firstName || !lastName || !recaptchaRef) return res.json({ status: 401 })
+        const { email, first_name, last_name, password, recaptcha_ref } = req.body
+        if (!email || !first_name || !last_name || !password || !recaptcha_ref) return res.json({ status: 401 })
 
         const db = await connectToDatabase()
         const collection = db.collection('users')
@@ -32,15 +33,16 @@ router.post('/register', async (req, res) => {
             logger.error('Email id already exists')
             return res.json({ status: 409 })
         }
-        const hash = await bcryptjs.hash(password, process.env.BCRYPT_SECRET);
+
         await collection.insertOne({
             email: email,
-            firstName: firstName,
-            lastName: lastName,
-            password: hash,
-            emailVerifiedAt: null,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            first_name: first_name,
+            last_name: last_name,
+            role: 'user',
+            password: passwordHash(password),
+            email_verify_at: '',
+            created_at: new Date(),
+            update_at: new Date(),
         })
 
         return res.json({ status: 201 })
@@ -59,23 +61,21 @@ router.post('/register', async (req, res) => {
 */
 router.post('/login', async (req, res) => {
     try {
-        const { email, password, recaptchaRef } = req.body
-        if (!email || !password || !recaptchaRef) return res.json({ status: 401 })
+        const { email, password, recaptcha_ref } = req.body
+        if (!email || !password || !recaptcha_ref) return res.json({ status: 401 })
 
         const db = await connectToDatabase()
         const collection = db.collection('users')
         const theUser = await collection.findOne({ email: email })
 
-        if (!theUser) res.json({ status: 404 })
+        if (!theUser) return res.json({ status: 404 })
 
-        const hash = await bcryptjs.hash(password, process.env.BCRYPT_SECRET)
-
-        if (hash != theUser.password) res.json({ status: 401 })
+        if (passwordHash(password) != theUser.password) return res.json({ status: 401 })
         addUserProfileToSession(theUser)
 
         const session_token = crypto
             .createHash('sha256')
-            .update(theUser._id + Date.now())
+            .update(generateUniqueId())
             .digest('hex')
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 

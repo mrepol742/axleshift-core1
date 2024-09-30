@@ -3,21 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "bugs": {
-      "url": "https://github.com/freight-capstone/core1/issues"
+    "url": "https://github.com/freight-capstone/core1/issues"
   },
   "repository": {
-      "type": "git",
-      "url": "git@github.com:freight-capstone/core1.git"
+    "type": "git",
+    "url": "git@github.com:freight-capstone/core1.git"
   },
   "license": "MIT",
   "author": "The Freight Capstone Core 1",
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && npm run dev", 
+    "server": "cd server && npm run dev",
     "client": "cd client && npm run start",
     "setup": "concurrently \"npm run server-install\" \"npm run client-install\"",
-    "server-install": "cd server && npm i", 
-    "client-install": "cd client && npm i"
+    "server-install": "cd server && npm i && cp .env.example .env",
+    "client-install": "cd client && npm i && cp .env.example .env"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
