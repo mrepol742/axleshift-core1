@@ -7,6 +7,7 @@ import connectToDatabase from '../models/db.js'
 import logger from '../logger.js'
 import { addSession, addUserProfileToSession, removeSession } from '../src/sessions.js'
 import auth from '../middleware/auth.js'
+import recaptcha from '../middleware/recaptcha.js'
 import passwordHash, { generateUniqueId } from '../src/password.js'
 
 const router = express.Router()
@@ -22,10 +23,10 @@ const router = express.Router()
   Returns:
      status
 */
-router.post('/register', async (req, res) => {
+router.post('/register', recaptcha, async (req, res) => {
     try {
-        const { email, first_name, last_name, password, recaptcha_ref } = req.body
-        if (!email || !first_name || !last_name || !password || !recaptcha_ref) return res.json({ status: 401 })
+        const { email, first_name, last_name, password } = req.body
+        if (!email || !first_name || !last_name || !password) return res.json({ status: 401 })
 
         const db = await connectToDatabase()
         const collection = db.collection('users')
@@ -64,10 +65,10 @@ router.post('/register', async (req, res) => {
      status
      token
 */
-router.post('/login', async (req, res) => {
+router.post('/login', recaptcha, async (req, res) => {
     try {
-        const { email, password, recaptcha_ref } = req.body
-        if (!email || !password || !recaptcha_ref) return res.json({ status: 401 })
+        const { email, password } = req.body
+        if (!email || !password) return res.json({ status: 401 })
 
         const db = await connectToDatabase()
         const collection = db.collection('users')
@@ -82,7 +83,7 @@ router.post('/login', async (req, res) => {
             .createHash('sha256')
             .update(generateUniqueId())
             .digest('hex')
-        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
 
         addSession(theUser, session_token, ip, req.headers['user-agent'])
 
