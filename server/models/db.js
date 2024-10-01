@@ -2,14 +2,13 @@ import dotenv from 'dotenv'
 dotenv.config()
 import fs from 'fs'
 import { MongoClient } from 'mongodb'
-import bcryptjs from 'bcryptjs'
 import logger from '../logger.js'
 import passwordHash from '../src/password.js'
 
 const data = JSON.parse(fs.readFileSync(import.meta.dirname + '/users.json', 'utf8')).docs
 let dbInstance = null
 
-async function connectToDatabase() {
+const connectToDatabase = async () => {
     if (dbInstance) return dbInstance
 
     const client = new MongoClient(process.env.MONGO_URL)
