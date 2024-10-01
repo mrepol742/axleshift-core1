@@ -12,12 +12,14 @@
   "license": "MIT",
   "author": "The Freight Capstone Core 1",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "concurrently \"npm run server\" \"npm run client\" \"npm run crownstrike\"",
     "server": "cd server && npm run dev",
     "client": "cd client && npm run start",
-    "setup": "concurrently \"npm run server-install\" \"npm run client-install\"",
+    "crowdstrike": "cd crowdstrike && npm run dev",
+    "setup": "concurrently \"npm run server-install\" \"npm run client-install\" \"npm run client-crowdstrike\"",
     "server-install": "cd server && npm i && cp .env.example .env",
-    "client-install": "cd client && npm i && cp .env.example .env"
+    "client-install": "cd client && npm i && cp .env.example .env",
+    "crowdstrike-install": "cd crowdstrike && npm i"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
