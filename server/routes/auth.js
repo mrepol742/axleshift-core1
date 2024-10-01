@@ -13,13 +13,15 @@ import passwordHash, { generateUniqueId } from '../src/password.js'
 const router = express.Router()
 
 /*
-  Url: /api/auth/register
+  Url: POST /api/auth/register
   Params:
      email
      firstName
      lastName
      password
      recaptchaRef
+  Returns:
+     status
 */
 router.post('/register', recaptcha, async (req, res) => {
     try {
@@ -54,11 +56,14 @@ router.post('/register', recaptcha, async (req, res) => {
 })
 
 /*
-  Url: /api/auth/login
+  Url: POST /api/auth/login
   Params:
      email
      password
      recaptchaRef
+  Returns:
+     status
+     token
 */
 router.post('/login', recaptcha, async (req, res) => {
     try {
@@ -91,18 +96,22 @@ router.post('/login', recaptcha, async (req, res) => {
 })
 
 /*
-  Url: /api/auth/verify
+  Url: POST /api/auth/verify
   Params:
      token
+  Returns:
+     status
 */
 router.post('/verify', auth, function (req, res, next) {
     res.json({ status: 200 })
 })
 
 /*
-  Url: /api/auth/logout
+  Url: POST /api/auth/logout
   Params:
      token
+  Returns:
+     status
 */
 router.post('/logout', auth, function (req, res, next) {
     removeSession(req.token)
