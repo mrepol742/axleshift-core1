@@ -27,4 +27,4 @@ jobs:
         run: |
           cd server
           npm i
-          npm run prettier
+          npm run lint
