@@ -20,10 +20,10 @@ jobs:
       - name: Setup FrontEnd Env
         run: |
           cd client
-          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
-          echo "VITE_RECAPTCHA_SITE_KEY=${{ secrets.VITE_RECAPTCHA_SITE_KEY }}" >> .env
-          echo "VITE_SESSION=${{ secrets.VITE_SESSION }}" >> .env
-          echo "VITE_MAINTENANCE=${{ secrets.VITE_MAINTENANCE }}" >> .env
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+          echo "REACT_APP_RECAPTCHA_SITE_KEY=${{ secrets.REACT_APP_RECAPTCHA_SITE_KEY }}" >> .env
+          echo "REACT_APP_SESSION=${{ secrets.REACT_APP_SESSION }}" >> .env
+          echo "REACT_APP_MAINTENANCE=${{ secrets.REACT_APP_MAINTENANCE }}" >> .env
           cd ..
       
       - name: Setup BackEnd Env
