@@ -16,21 +16,11 @@ import {
     faShieldHalved,
     faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons'
+import { useSelector } from 'react-redux'
 
 const AppHeaderDropdown = () => {
     const navigate = useNavigate()
-
-    const logout = () => {
-        navigate('/logout')
-    }
-
-    const account = () => {
-        navigate('/account')
-    }
-
-    const security = () => {
-        navigate('/account/security')
-    }
+    const email = useSelector((state) => state.email)
 
     return (
         <CDropdown variant="nav-item">
@@ -39,18 +29,18 @@ const AppHeaderDropdown = () => {
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
                 <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">
-                    Account
+                    {email}
                 </CDropdownHeader>
-                <CDropdownItem onClick={account}>
+                <CDropdownItem onClick={() => navigate('/account')}>
                     <FontAwesomeIcon icon={faCircleInfo} className="me-2" />
                     About
                 </CDropdownItem>
-                <CDropdownItem onClick={security}>
+                <CDropdownItem onClick={() => navigate('/account/security')}>
                     <FontAwesomeIcon icon={faShieldHalved} className="me-2" />
                     Security
                 </CDropdownItem>
                 <CDropdownDivider />
-                <CDropdownItem onClick={logout}>
+                <CDropdownItem onClick={() => navigate('/logout')}>
                     <FontAwesomeIcon icon={faArrowRightFromBracket} className="me-2" />
                     Logout
                 </CDropdownItem>

@@ -5,7 +5,7 @@ import cors from "cors";
 import pinoHttp from "pino-http";
 import multer from "multer";
 import cron from "node-cron";
-import fs from 'fs';
+import fs from "fs";
 import sanitize from "express-mongo-sanitize";
 import rateLimiter from "./middleware/rateLimiter.js";
 import auth from "./routes/auth.js";
@@ -62,12 +62,12 @@ cron.schedule("0 * * * *", () => {
 
 app.use(
     sanitize({
-      onSanitize: ({ req, key }) => {
-        logger.warn(`This request[${key}] is sanitized`);
-        logger.warn(req);
-      },
-    }),
-  );
+        onSanitize: ({ req, key }) => {
+            logger.warn(`This request[${key}] is sanitized`);
+            logger.warn(req);
+        },
+    })
+);
 app.use(upload.none());
 app.use(
     cors({

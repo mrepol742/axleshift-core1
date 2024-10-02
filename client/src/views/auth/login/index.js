@@ -18,19 +18,13 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { useDispatch } from 'react-redux'
 
 const Login = () => {
     const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
-
-    const forgotPassword = () => {
-        navigate('/forgot-password')
-    }
-
-    const signup = () => {
-        navigate('/register')
-    }
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
@@ -64,6 +58,7 @@ const Login = () => {
                 if (urlParams.has('n')) {
                     url = urlParams.get('n')
                 }
+                dispatch({ type: 'set', email: email })
                 navigate(url)
             } else {
                 alert(status)
@@ -126,13 +121,17 @@ const Login = () => {
                                             <CButton
                                                 color="success"
                                                 className="me-2 rounded"
-                                                onClick={signup}
+                                                onClick={() => navigate('/register')}
                                             >
                                                 Signup
                                             </CButton>
                                         </CButtonGroup>
                                     </div>
-                                    <CButton color="link" className="px-0" onClick={forgotPassword}>
+                                    <CButton
+                                        color="link"
+                                        className="px-0"
+                                        onClick={() => navigate('/forgot-password')}
+                                    >
                                         Forgot password?
                                     </CButton>
                                 </CForm>

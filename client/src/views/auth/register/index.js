@@ -32,10 +32,6 @@ const Register = () => {
         recaptcha_ref: '',
     })
 
-    const login = () => {
-        navigate('/login')
-    }
-
     useEffect(() => {
         if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
     }, [])
@@ -175,7 +171,7 @@ const Register = () => {
                                             <CButton
                                                 color="primary"
                                                 className="me-2 rounded"
-                                                onClick={login}
+                                                onClick={() => navigate('/login')}
                                             >
                                                 Login
                                             </CButton>

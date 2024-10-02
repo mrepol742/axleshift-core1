@@ -22,10 +22,6 @@ const Login = () => {
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
 
-    const login = () => {
-        navigate('/login')
-    }
-
     useEffect(() => {
         if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
     }, [])
@@ -68,7 +64,11 @@ const Login = () => {
                                             </CButton>
                                         </CCol>
                                         <CCol xs={6} className="text-right">
-                                            <CButton color="link" className="px-0" onClick={login}>
+                                            <CButton
+                                                color="link"
+                                                className="px-0"
+                                                onClick={() => navigate('/login')}
+                                            >
                                                 Login
                                             </CButton>
                                         </CCol>

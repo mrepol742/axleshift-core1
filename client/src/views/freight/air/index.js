@@ -82,7 +82,6 @@ const Air = () => {
                 },
             )
             if (response.data.status == 201) {
-                alert('Data has been created')
                 navigate('/')
             }
         } catch (error) {

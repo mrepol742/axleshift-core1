@@ -1,27 +1,26 @@
 import React, { lazy } from 'react'
 import withAuth from './components/middleware/Auth'
 
-const Overview = withAuth(lazy(() => import('./views/overview/index')));
-const FreightInfo = withAuth(lazy(() => import('./views/overview/info/index')));
+const Overview = withAuth(lazy(() => import('./views/overview/index')))
+const FreightInfo = withAuth(lazy(() => import('./views/overview/info/index')))
 
-const Account = withAuth(lazy(() => import('./views/account/index')));
-const AccountSecurity = withAuth(lazy(() => import('./views/account/security/index')));
+const Account = withAuth(lazy(() => import('./views/account/index')))
+const AccountSecurity = withAuth(lazy(() => import('./views/account/security/index')))
 
-const Freight = withAuth(lazy(() => import('./views/freight/index')));
-const FreightAir = withAuth(lazy(() => import('./views/freight/air/index')));
-const FreightLand = withAuth(lazy(() => import('./views/freight/land/index')));
-const FreightSea = withAuth(lazy(() => import('./views/freight/sea/index')));
+const Freight = withAuth(lazy(() => import('./views/freight/index')))
+const FreightAir = withAuth(lazy(() => import('./views/freight/air/index')))
+const FreightLand = withAuth(lazy(() => import('./views/freight/land/index')))
+const FreightSea = withAuth(lazy(() => import('./views/freight/sea/index')))
 
-const Pricing = withAuth(lazy(() => import('./views/pricing/index')));
+const Pricing = withAuth(lazy(() => import('./views/pricing/index')))
 
-const Threat = withAuth(lazy(() => import('./views/threat/index')));
-const ThreatDetection = withAuth(lazy(() => import('./views/threat/threat-detection/index')));
-const ThreatManagement = withAuth(lazy(() => import('./views/threat/threat-management/index')));
+const Threat = withAuth(lazy(() => import('./views/threat/index')))
+const ThreatDetection = withAuth(lazy(() => import('./views/threat/threat-detection/index')))
+const ThreatManagement = withAuth(lazy(() => import('./views/threat/threat-management/index')))
 
-const Track = withAuth(lazy(() => import('./views/track/index')));
+const Track = withAuth(lazy(() => import('./views/track/index')))
 
-const Err404 = withAuth(lazy(() => import('./views/errors/404')));
-
+const Err404 = withAuth(lazy(() => import('./views/errors/404')))
 
 const routes = [
     { path: '/', name: 'Overview', element: Overview },
