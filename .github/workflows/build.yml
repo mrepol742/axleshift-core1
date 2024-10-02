@@ -17,16 +17,32 @@ jobs:
         with:
           node-version: 22
 
-      - name: Build Client
+      - name: Setup FrontEnd Env
+        run: |
+          cd client
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
+          echo "VITE_RECAPTCHA_SITE_KEY=${{ secrets.VITE_RECAPTCHA_SITE_KEY }}" >> .env
+          echo "VITE_SESSION=${{ secrets.VITE_SESSION }}" >> .env
+          echo "VITE_MAINTENANCE=${{ secrets.VITE_MAINTENANCE }}" >> .env
+          cd ..
+      
+      - name: Setup BackEnd Env
+        run: |
+          cd server
+          cp .env.example .env
+          cd ..
+
+      - name: Build FrontEnd
         run: |
           cd client
           npm i
+          cp .env.example .env
           npm run build
           cd ..
           mkdir release
           mv client/build release/client
           
-      - name: Build Server
+      - name: Build BackEnd
         run: |
           cp server server-build -r
           cd server

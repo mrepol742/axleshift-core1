@@ -12,7 +12,7 @@
     "license": "MIT",
     "author": "The Freight Capstone Core 1",
     "scripts": {
-        "build": "vite build --mode=production",
+        "build": "env-cmd -f ./.env vite build",
         "lint": "eslint \"src/**/*.js\"",
         "serve": "vite preview",
         "start": "vite --host",
@@ -50,6 +50,7 @@
     "devDependencies": {
         "@vitejs/plugin-react": "^4.3.1",
         "autoprefixer": "^10.4.19",
+        "env-cmd": "^10.1.0",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.1.3",
