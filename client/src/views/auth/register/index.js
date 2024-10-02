@@ -20,7 +20,7 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 
 const Register = () => {
-    const REACT_APP_RECAPTCHA_SITE_KEY = import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY
+    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const [formData, setFormData] = useState({
@@ -32,12 +32,8 @@ const Register = () => {
         recaptcha_ref: '',
     })
 
-    const login = () => {
-        navigate('/login')
-    }
-
     useEffect(() => {
-        if (Cookies.get(import.meta.env.REACT_APP_SESSION) !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
     }, [])
 
     const handleInputChange = (e) => {
@@ -67,7 +63,7 @@ const Register = () => {
             }
 
             const response = await axios.post(
-                `${import.meta.env.REACT_APP_API_URL}/api/auth/register`,
+                `${import.meta.env.VITE_APP_API_URL}/api/auth/register`,
                 formDataToSend,
                 {
                     headers: {},
@@ -94,7 +90,7 @@ const Register = () => {
                                     <ReCAPTCHA
                                         ref={recaptchaRef}
                                         size="invisible"
-                                        sitekey={REACT_APP_RECAPTCHA_SITE_KEY}
+                                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
                                     />
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
@@ -175,7 +171,7 @@ const Register = () => {
                                             <CButton
                                                 color="primary"
                                                 className="me-2 rounded"
-                                                onClick={login}
+                                                onClick={() => navigate('/login')}
                                             >
                                                 Login
                                             </CButton>

@@ -81,7 +81,6 @@ router.post("/login", recaptcha, async (req, res) => {
 
         const session_token = crypto.createHash("sha256").update(generateUniqueId()).digest("hex");
         const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-
         addSession(theUser, session_token, ip, req.headers["user-agent"]);
 
         res.json({ status: 200, token: session_token });
@@ -98,9 +97,32 @@ router.post("/login", recaptcha, async (req, res) => {
      token
   Returns:
      status
+     email
 */
 router.post("/verify", auth, function (req, res, next) {
-    res.json({ status: 200 });
+    res.json({ status: 200, email: req.email });
+});
+
+/*
+  Url: POST /api/auth/user
+  Params:
+     token
+  Returns:
+     status
+     user
+*/
+router.post("/user", auth, async function (req, res, next) {
+    const db = await connectToDatabase();
+    const collection = db.collection("users");
+    const theUser = await collection.findOne({ email: req.email });
+    res.json({
+        status: 200,
+        user: {
+            email: theUser.email,
+            first_name: theUser.first_name,
+            last_name: theUser.last_name,
+        },
+    });
 });
 
 /*

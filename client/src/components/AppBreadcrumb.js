@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import routes from '../routes'
 
@@ -7,6 +7,7 @@ import { CBreadcrumb, CBreadcrumbItem } from '@coreui/react'
 
 const AppBreadcrumb = () => {
     const currentLocation = useLocation().pathname
+    const navigate = useNavigate()
 
     const getRouteName = (pathname, routes) => {
         const currentRoute = routes.find((route) => route.path === pathname)
@@ -33,12 +34,15 @@ const AppBreadcrumb = () => {
 
     return (
         <CBreadcrumb className="my-0">
-            <CBreadcrumbItem href="/">Home</CBreadcrumbItem>
+            <CBreadcrumbItem onClick={() => navigate('/')}>Home</CBreadcrumbItem>
             {breadcrumbs.map((breadcrumb, index) => {
                 return (
                     <CBreadcrumbItem
-                        {...(breadcrumb.active ? { active: true } : { href: breadcrumb.pathname })}
+                        {...(breadcrumb.active
+                            ? { active: true }
+                            : { onClick: () => navigate(breadcrumb.pathname) })}
                         key={index}
+                        style={{ cursor: breadcrumb.active ? 'default' : 'pointer' }}
                     >
                         {breadcrumb.name}
                     </CBreadcrumbItem>

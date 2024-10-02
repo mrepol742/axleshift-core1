@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
     CAvatar,
     CBadge,
@@ -15,8 +16,12 @@ import {
     faShieldHalved,
     faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons'
+import { useSelector } from 'react-redux'
 
 const AppHeaderDropdown = () => {
+    const navigate = useNavigate()
+    const email = useSelector((state) => state.email)
+
     return (
         <CDropdown variant="nav-item">
             <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
@@ -24,18 +29,18 @@ const AppHeaderDropdown = () => {
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
                 <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">
-                    Account
+                    {email}
                 </CDropdownHeader>
-                <CDropdownItem href="/account/">
+                <CDropdownItem onClick={() => navigate('/account')}>
                     <FontAwesomeIcon icon={faCircleInfo} className="me-2" />
                     About
                 </CDropdownItem>
-                <CDropdownItem href="/account/security">
+                <CDropdownItem onClick={() => navigate('/account/security')}>
                     <FontAwesomeIcon icon={faShieldHalved} className="me-2" />
                     Security
                 </CDropdownItem>
                 <CDropdownDivider />
-                <CDropdownItem href="/logout">
+                <CDropdownItem onClick={() => navigate('/logout')}>
                     <FontAwesomeIcon icon={faArrowRightFromBracket} className="me-2" />
                     Logout
                 </CDropdownItem>

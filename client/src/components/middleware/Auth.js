@@ -3,24 +3,27 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import { CSpinner } from '@coreui/react'
+import { useDispatch } from 'react-redux'
 import MaintenancePage from '../../views/errors/500'
 
 const Auth = (WrappedComponent) => {
     const AuthComponent = (props) => {
         const navigate = useNavigate()
         const [isAuth, setIsAuth] = useState(null)
+        const dispatch = useDispatch()
+
         let loc = `/login`
         if (window.location.pathname != '/')
             loc = `/login?n=${window.location.pathname}${window.location.search}`
 
         useEffect(() => {
             const checkAuthentication = async () => {
-                const token = Cookies.get(import.meta.env.REACT_APP_SESSION)
+                const token = Cookies.get(import.meta.env.VITE_APP_SESSION)
                 if (token === undefined) return setIsAuth(false)
 
                 try {
                     const response = await axios.post(
-                        `${import.meta.env.REACT_APP_API_URL}/api/auth/verify`,
+                        `${import.meta.env.VITE_APP_API_URL}/api/auth/verify`,
                         {},
                         {
                             headers: {
@@ -30,10 +33,11 @@ const Auth = (WrappedComponent) => {
                     )
 
                     if (response.data.status !== 200) {
-                        Cookies.remove(import.meta.env.REACT_APP_SESSION)
+                        Cookies.remove(import.meta.env.VITE_APP_SESSION)
                         setIsAuth(false)
                         navigate(loc)
                     } else {
+                        dispatch({ type: 'set', email: response.data.email })
                         setIsAuth(true)
                     }
                 } catch (error) {

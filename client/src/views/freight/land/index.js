@@ -73,16 +73,15 @@ const Land = () => {
         try {
             setDisableSubmit(true)
             const response = await axios.post(
-                `${import.meta.env.REACT_APP_API_URL}/api/freight/b/land`,
+                `${import.meta.env.VITE_APP_API_URL}/api/freight/b/land`,
                 formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get(import.meta.env.REACT_APP_SESSION)}`,
+                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                     },
                 },
             )
             if (response.data.status == 201) {
-                alert('Data has been created')
                 navigate('/')
             }
         } catch (error) {

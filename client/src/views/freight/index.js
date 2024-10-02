@@ -19,18 +19,6 @@ import FreightSea from '../../assets/images/freight-sea.jpg'
 const Freight = () => {
     const navigate = useNavigate()
 
-    const freightLand = () => {
-        navigate('/freight/land')
-    }
-
-    const freightAir = () => {
-        navigate('/freight/air')
-    }
-
-    const freightSea = () => {
-        navigate('/freight/sea')
-    }
-
     return (
         <>
             <CRow
@@ -41,7 +29,7 @@ const Freight = () => {
                 <CCol>
                     <CCard
                         className="mb-3 bg-dark text-white"
-                        onClick={freightLand}
+                        onClick={() => navigate('/freight/land')}
                         style={{ cursor: 'pointer' }}
                     >
                         <CCardImage src={FreightLand} />
@@ -57,7 +45,7 @@ const Freight = () => {
                 <CCol>
                     <CCard
                         className="mb-3 bg-dark text-white"
-                        onClick={freightAir}
+                        onClick={() => navigate('/freight/air')}
                         style={{ cursor: 'pointer' }}
                     >
                         <CCardImage src={FreightAir} />
@@ -73,7 +61,7 @@ const Freight = () => {
                 <CCol>
                     <CCard
                         className="mb-3 bg-dark text-white"
-                        onClick={freightSea}
+                        onClick={() => navigate('/freight/sea')}
                         style={{ cursor: 'pointer' }}
                     >
                         <CCardImage src={FreightSea} />

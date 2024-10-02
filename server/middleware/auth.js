@@ -13,6 +13,7 @@ const auth = (req, res, next) => {
         const sessionEntry = sessions[email][token];
         if (sessionEntry && sessionEntry.active) {
             req.token = token;
+            req.email = email;
             next();
             return;
         }

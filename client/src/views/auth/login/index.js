@@ -18,22 +18,16 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { useDispatch } from 'react-redux'
 
 const Login = () => {
-    const REACT_APP_RECAPTCHA_SITE_KEY = import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY
+    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
-
-    const forgotPassword = () => {
-        navigate('/forgot-password')
-    }
-
-    const signup = () => {
-        navigate('/register')
-    }
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.REACT_APP_SESSION) !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
     }, [])
 
     const [email, setEmail] = useState('')
@@ -50,7 +44,7 @@ const Login = () => {
             formData.append('recaptcha_ref', recaptcha)
 
             const response = await axios.post(
-                `${import.meta.env.REACT_APP_API_URL}/api/auth/login`,
+                `${import.meta.env.VITE_APP_API_URL}/api/auth/login`,
                 formData,
                 {
                     headers: {},
@@ -58,12 +52,13 @@ const Login = () => {
             )
             const status = response.data.status
             if (status == 200) {
-                Cookies.set(import.meta.env.REACT_APP_SESSION, response.data.token)
+                Cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
                 let url = '/'
                 if (urlParams.has('n')) {
                     url = urlParams.get('n')
                 }
+                dispatch({ type: 'set', email: email })
                 navigate(url)
             } else {
                 alert(status)
@@ -86,7 +81,7 @@ const Login = () => {
                                     <ReCAPTCHA
                                         ref={recaptchaRef}
                                         size="invisible"
-                                        sitekey={REACT_APP_RECAPTCHA_SITE_KEY}
+                                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
                                     />
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
@@ -126,13 +121,17 @@ const Login = () => {
                                             <CButton
                                                 color="success"
                                                 className="me-2 rounded"
-                                                onClick={signup}
+                                                onClick={() => navigate('/register')}
                                             >
                                                 Signup
                                             </CButton>
                                         </CButtonGroup>
                                     </div>
-                                    <CButton color="link" className="px-0" onClick={forgotPassword}>
+                                    <CButton
+                                        color="link"
+                                        className="px-0"
+                                        onClick={() => navigate('/forgot-password')}
+                                    >
                                         Forgot password?
                                     </CButton>
                                 </CForm>

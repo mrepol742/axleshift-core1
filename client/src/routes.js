@@ -1,56 +1,48 @@
-import React from 'react'
-import Auth from './components/middleware/Auth'
+import React, { lazy } from 'react'
+import withAuth from './components/middleware/Auth'
 
-const views = {
-    Overview: './views/overview/index',
-    FreightInfo: './views/overview/info/index',
+const Overview = withAuth(lazy(() => import('./views/overview/index')))
+const FreightInfo = withAuth(lazy(() => import('./views/overview/info/index')))
 
-    Account: './views/account/index',
-    AccountSecurity: './views/account/security/index',
+const Account = withAuth(lazy(() => import('./views/account/index')))
+const AccountSecurity = withAuth(lazy(() => import('./views/account/security/index')))
 
-    Freight: './views/freight/index',
-    FreightAir: './views/freight/air/index',
-    FreightLand: './views/freight/land/index',
-    FreightSea: './views/freight/sea/index',
+const Freight = withAuth(lazy(() => import('./views/freight/index')))
+const FreightAir = withAuth(lazy(() => import('./views/freight/air/index')))
+const FreightLand = withAuth(lazy(() => import('./views/freight/land/index')))
+const FreightSea = withAuth(lazy(() => import('./views/freight/sea/index')))
 
-    Pricing: './views/pricing/index',
+const Pricing = withAuth(lazy(() => import('./views/pricing/index')))
 
-    Threat: './views/threat/index',
-    ThreatDetection: './views/threat/threat-detection/index',
-    ThreatManagement: './views/threat/threat-management/index',
+const Threat = withAuth(lazy(() => import('./views/threat/index')))
+const ThreatDetection = withAuth(lazy(() => import('./views/threat/threat-detection/index')))
+const ThreatManagement = withAuth(lazy(() => import('./views/threat/threat-management/index')))
 
-    Track: './views/track/index',
+const Track = withAuth(lazy(() => import('./views/track/index')))
 
-    Err404: './views/errors/404',
-}
-
-const AuthLazy = (path) => Auth(React.lazy(() => import(/* @vite-ignore */ path)))
-
-const components = Object.fromEntries(
-    Object.entries(views).map(([key, path]) => [key, AuthLazy(path)]),
-)
+const Err404 = withAuth(lazy(() => import('./views/errors/404')))
 
 const routes = [
-    { path: '/', name: 'Overview', element: components.Overview },
-    { path: '/v/:id', name: 'Freight Info', element: components.FreightInfo },
+    { path: '/', name: 'Overview', element: Overview },
+    { path: '/v/:id', name: 'Freight Info', element: FreightInfo },
 
-    { path: '/account', name: 'Account', element: components.Account },
-    { path: '/account/security', name: 'Security', element: components.AccountSecurity },
+    { path: '/account', name: 'Account', element: Account },
+    { path: '/account/security', name: 'Security', element: AccountSecurity },
 
-    { path: '/freight', name: 'Freight', element: components.Freight },
-    { path: '/freight/air', name: 'Air', element: components.FreightAir },
-    { path: '/freight/land', name: 'Land', element: components.FreightLand },
-    { path: '/freight/sea', name: 'Sea', element: components.FreightSea },
+    { path: '/freight', name: 'Freight', element: Freight },
+    { path: '/freight/air', name: 'Air', element: FreightAir },
+    { path: '/freight/land', name: 'Land', element: FreightLand },
+    { path: '/freight/sea', name: 'Sea', element: FreightSea },
 
-    { path: '/pricing', name: 'Pricing', element: components.Pricing },
+    { path: '/pricing', name: 'Pricing', element: Pricing },
 
-    { path: '/threat', name: 'Threat', element: components.Threat },
-    { path: '/threat/detection', name: 'Detection', element: components.ThreatDetection },
-    { path: '/threat/management', name: 'Management', element: components.ThreatManagement },
+    { path: '/threat', name: 'Threat', element: Threat },
+    { path: '/threat/detection', name: 'Detection', element: ThreatDetection },
+    { path: '/threat/management', name: 'Management', element: ThreatManagement },
 
-    { path: '/track', name: 'Track', element: components.Track },
+    { path: '/track', name: 'Track', element: Track },
 
-    { path: '*', name: '404', element: components.Err404 },
+    { path: '*', name: '404', element: Err404 },
 ]
 
 export default routes
