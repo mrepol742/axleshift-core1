@@ -17,7 +17,9 @@
     "client": "cd client && npm run start",
     "setup": "concurrently \"npm run server-install\" \"npm run client-install\"",
     "server-install": "cd server && npm i && cp .env.example .env",
-    "client-install": "cd client && npm i && cp .env.example .env"
+    "client-install": "cd client && npm i && cp .env.example .env",
+    "post-production": "concurrently \"npm run server\" \"npm run client-post\"",
+    "client-post": "cd client && npm run build && cd build && python3 -m http.server"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"

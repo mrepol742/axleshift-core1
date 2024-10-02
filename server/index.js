@@ -5,7 +5,8 @@ import cors from "cors";
 import pinoHttp from "pino-http";
 import multer from "multer";
 import cron from "node-cron";
-import sanitize from "./middleware/sanitize.js";
+import fs from 'fs';
+import sanitize from "express-mongo-sanitize";
 import rateLimiter from "./middleware/rateLimiter.js";
 import auth from "./routes/auth.js";
 import freight from "./routes/freight.js";
@@ -59,6 +60,14 @@ cron.schedule("0 * * * *", () => {
     });
 });
 
+app.use(
+    sanitize({
+      onSanitize: ({ req, key }) => {
+        logger.warn(`This request[${key}] is sanitized`);
+        logger.warn(req);
+      },
+    }),
+  );
 app.use(upload.none());
 app.use(
     cors({
@@ -67,9 +76,8 @@ app.use(
     })
 );
 app.use(express.json());
-if (process.env.NODE_ENV !== "production") app.use(pinoHttp({ logger }));
+app.use(pinoHttp({ logger }));
 app.use(rateLimiter);
-app.use(sanitize);
 
 app.use("/api/auth", auth);
 app.use("/api/freight", freight);

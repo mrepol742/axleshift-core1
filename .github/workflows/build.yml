@@ -10,20 +10,20 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: Clone repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - name: Setup FrontEnd Env
         run: |
           cd client
-          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
-          echo "REACT_APP_RECAPTCHA_SITE_KEY=${{ secrets.REACT_APP_RECAPTCHA_SITE_KEY }}" >> .env
-          echo "REACT_APP_SESSION=${{ secrets.REACT_APP_SESSION }}" >> .env
-          echo "REACT_APP_MAINTENANCE=${{ secrets.REACT_APP_MAINTENANCE }}" >> .env
+          echo "VITE_APP_API_URL=${{ secrets.APP_API_URL }}" >> .env
+          echo "VITE_APP_RECAPTCHA_SITE_KEY=${{ secrets.APP_RECAPTCHA_SITE_KEY }}" >> .env
+          echo "VITE_APP_SESSION=${{ secrets.APP_SESSION }}" >> .env
+          echo "VITE_APP_MAINTENANCE=${{ secrets.APP_MAINTENANCE }}" >> .env
           cd ..
       
       - name: Setup BackEnd Env
