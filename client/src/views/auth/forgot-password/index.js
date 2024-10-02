@@ -18,7 +18,7 @@ import Cookies from 'js-cookie'
 import ReCAPTCHA from 'react-google-recaptcha'
 
 const Login = () => {
-    const VITE_RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+    const REACT_APP_RECAPTCHA_SITE_KEY = import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
 
@@ -27,7 +27,7 @@ const Login = () => {
     }
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_SESSION) !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.REACT_APP_SESSION) !== undefined) navigate('/')
     }, [])
 
     const handleSubmit = async (e) => {
@@ -48,7 +48,7 @@ const Login = () => {
                                     <ReCAPTCHA
                                         ref={recaptchaRef}
                                         size="invisible"
-                                        sitekey={VITE_RECAPTCHA_SITE_KEY}
+                                        sitekey={REACT_APP_RECAPTCHA_SITE_KEY}
                                     />
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>

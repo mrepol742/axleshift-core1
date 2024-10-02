@@ -20,7 +20,7 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 
 const Register = () => {
-    const VITE_RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+    const REACT_APP_RECAPTCHA_SITE_KEY = import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const [formData, setFormData] = useState({
@@ -37,7 +37,7 @@ const Register = () => {
     }
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_SESSION) !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.REACT_APP_SESSION) !== undefined) navigate('/')
     }, [])
 
     const handleInputChange = (e) => {
@@ -67,7 +67,7 @@ const Register = () => {
             }
 
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/auth/register`,
+                `${import.meta.env.REACT_APP_API_URL}/api/auth/register`,
                 formDataToSend,
                 {
                     headers: {},
@@ -94,7 +94,7 @@ const Register = () => {
                                     <ReCAPTCHA
                                         ref={recaptchaRef}
                                         size="invisible"
-                                        sitekey={VITE_RECAPTCHA_SITE_KEY}
+                                        sitekey={REACT_APP_RECAPTCHA_SITE_KEY}
                                     />
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>

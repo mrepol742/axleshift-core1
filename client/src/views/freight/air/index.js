@@ -73,11 +73,11 @@ const Air = () => {
         try {
             setDisableSubmit(true)
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/freight/b/air`,
+                `${import.meta.env.REACT_APP_API_URL}/api/freight/b/air`,
                 formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_SESSION)}`,
+                        Authorization: `Bearer ${Cookies.get(import.meta.env.REACT_APP_SESSION)}`,
                     },
                 },
             )

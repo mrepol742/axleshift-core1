@@ -6,7 +6,7 @@ import pinoHttp from "pino-http";
 import multer from "multer";
 import cron from "node-cron";
 import sanitize from "./middleware/sanitize.js";
-import rateLimiter from "./middleware/rateLimiter.s";
+import rateLimiter from "./middleware/rateLimiter.js";
 import auth from "./routes/auth.js";
 import freight from "./routes/freight.js";
 import track from "./routes/track.js";

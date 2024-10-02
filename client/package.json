@@ -12,10 +12,11 @@
     "license": "MIT",
     "author": "The Freight Capstone Core 1",
     "scripts": {
-        "build": "vite build",
+        "build": "vite build --mode=production",
         "lint": "eslint \"src/**/*.js\"",
         "serve": "vite preview",
-        "start": "vite --host"
+        "start": "vite --host",
+        "imagemin": "imagemin build/assets/* --out-dir=build/assets"
     },
     "dependencies": {
         "@coreui/chartjs": "^4.0.0",

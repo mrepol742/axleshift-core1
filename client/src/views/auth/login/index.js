@@ -20,7 +20,7 @@ import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 
 const Login = () => {
-    const VITE_RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+    const REACT_APP_RECAPTCHA_SITE_KEY = import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
 
@@ -33,7 +33,7 @@ const Login = () => {
     }
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_SESSION) !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.REACT_APP_SESSION) !== undefined) navigate('/')
     }, [])
 
     const [email, setEmail] = useState('')
@@ -50,7 +50,7 @@ const Login = () => {
             formData.append('recaptcha_ref', recaptcha)
 
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/auth/login`,
+                `${import.meta.env.REACT_APP_API_URL}/api/auth/login`,
                 formData,
                 {
                     headers: {},
@@ -58,7 +58,7 @@ const Login = () => {
             )
             const status = response.data.status
             if (status == 200) {
-                Cookies.set(import.meta.env.VITE_SESSION, response.data.token)
+                Cookies.set(import.meta.env.REACT_APP_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
                 let url = '/'
                 if (urlParams.has('n')) {
@@ -86,7 +86,7 @@ const Login = () => {
                                     <ReCAPTCHA
                                         ref={recaptchaRef}
                                         size="invisible"
-                                        sitekey={VITE_RECAPTCHA_SITE_KEY}
+                                        sitekey={REACT_APP_RECAPTCHA_SITE_KEY}
                                     />
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
