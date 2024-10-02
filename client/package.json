@@ -15,7 +15,8 @@
         "build": "env-cmd -f ./.env vite build",
         "lint": "eslint \"src/**/*.js\"",
         "serve": "vite preview",
-        "start": "vite --host"
+        "start": "vite --host",
+        "imagemin": "imagemin build/assets/* --out-dir=build/assets"
     },
     "dependencies": {
         "@coreui/chartjs": "^4.0.0",

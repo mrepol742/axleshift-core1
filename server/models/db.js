@@ -1,44 +1,43 @@
-import dotenv from 'dotenv'
-dotenv.config()
-import fs from 'fs'
-import { MongoClient } from 'mongodb'
-import logger from '../logger.js'
-import passwordHash from '../src/password.js'
+import dotenv from "dotenv";
+dotenv.config();
+import fs from "fs";
+import { MongoClient } from "mongodb";
+import logger from "../logger.js";
+import passwordHash from "../src/password.js";
 
-const data = JSON.parse(fs.readFileSync(import.meta.dirname + '/users.json', 'utf8')).docs
-let dbInstance = null
+const data = JSON.parse(fs.readFileSync(import.meta.dirname + "/users.json", "utf8")).docs;
+let dbInstance = null;
 
 const connectToDatabase = async () => {
-    if (dbInstance) return dbInstance
+    if (dbInstance) return dbInstance;
 
-    const client = new MongoClient(process.env.MONGO_URL)
+    const client = new MongoClient(process.env.MONGO_URL);
 
-    await client.connect()
+    await client.connect();
 
-    logger.info('Connected successfully to server')
+    logger.info("Connected successfully to server");
 
-    dbInstance = client.db(process.env.MONGO_DB)
+    dbInstance = client.db(process.env.MONGO_DB);
 
     const collections = await dbInstance.listCollections().toArray();
-    const collectionNames = collections.map(c => c.name);
+    const collectionNames = collections.map((c) => c.name);
 
-    if (!collectionNames.includes('users')) await dbInstance.createCollection('users');
-    if (!collectionNames.includes('freight')) await dbInstance.createCollection('freight');
+    if (!collectionNames.includes("users")) await dbInstance.createCollection("users");
+    if (!collectionNames.includes("freight")) await dbInstance.createCollection("freight");
 
-
-    const collection = dbInstance.collection('users')
-    let cursor = await collection.find({})
-    let documents = await cursor.toArray()
+    const collection = dbInstance.collection("users");
+    let cursor = await collection.find({});
+    let documents = await cursor.toArray();
 
     if (documents.length == 0) {
         for (const element of data) {
-            element.password = passwordHash(element.password)
+            element.password = passwordHash(element.password);
         }
-        const insertResult = await collection.insertMany(data)
-        logger.info(`Inserted documents: ${insertResult.insertedCount}`)
+        const insertResult = await collection.insertMany(data);
+        logger.info(`Inserted documents: ${insertResult.insertedCount}`);
     }
 
-    return dbInstance
-}
+    return dbInstance;
+};
 
-export default connectToDatabase
+export default connectToDatabase;

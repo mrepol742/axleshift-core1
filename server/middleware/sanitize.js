@@ -1,4 +1,4 @@
-import ems from 'express-mongo-sanitize'
+import ems from "express-mongo-sanitize";
 
 const sanitize = (req, res, next) => {
     req.body = ems.sanitize(req.body);
@@ -6,5 +6,4 @@ const sanitize = (req, res, next) => {
     next();
 };
 
-export default sanitize
-
+export default sanitize;

@@ -25,7 +25,6 @@ const FreightInfo = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-               
             } catch (err) {
                 console.error(err)
             }
@@ -34,11 +33,7 @@ const FreightInfo = () => {
         fetchData()
     }, [])
 
-    return (
-        <>
-            This is a test
-        </>
-    )
+    return <>This is a test</>
 }
 
 export default FreightInfo

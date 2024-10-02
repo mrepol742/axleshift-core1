@@ -1,13 +1,13 @@
-import js from 'javascript-obfuscator'
-import fs from 'fs'
-import logger from './logger.js'
+import js from "javascript-obfuscator";
+import fs from "fs";
+import logger from "./logger.js";
 
 main("./server-build");
 
 function main(location) {
     fs.readdir(location, function (err, files) {
         if (err) return logger.error(err);
-        
+
         for (let i = 0; i < files.length; i++) {
             const file = location + "/" + files[i];
             fs.stat(file, async (err, stats) => {
