@@ -6,8 +6,9 @@ import pinoHttp from "pino-http";
 import multer from "multer";
 import cron from "node-cron";
 import fs from "fs";
-import sanitize from "express-mongo-sanitize";
+import mongoSanitize from 'express-mongo-sanitize';
 import rateLimiter from "./middleware/rateLimiter.js";
+import sanitize from "./middleware/sanitize.js";
 import auth from "./routes/auth.js";
 import freight from "./routes/freight.js";
 import track from "./routes/track.js";
@@ -19,6 +20,7 @@ import sessions from "./src/sessions.js";
 const app = express();
 const upload = multer();
 const port = 5050;
+const origin = process.env.CLIENT_ORIGIN;
 
 process.on("SIGHUP", function () {
     process.exit(0);
@@ -60,24 +62,25 @@ cron.schedule("0 * * * *", () => {
     });
 });
 
+app.use(upload.none());
+app.use(express.json());
+app.use(pinoHttp({ logger }));
+app.use(rateLimiter);
 app.use(
-    sanitize({
+    cors({
+        origin: JSON.parse(origin.replace(/'/g, '"')),
+        credentials: true,
+    })
+);
+app.use(sanitize);
+app.use(
+    mongoSanitize({
         onSanitize: ({ req, key }) => {
             logger.warn(`This request[${key}] is sanitized`);
             logger.warn(req);
         },
     })
 );
-app.use(upload.none());
-app.use(
-    cors({
-        origin: process.env.CLIENT_ORIGIN,
-        credentials: true,
-    })
-);
-app.use(express.json());
-app.use(pinoHttp({ logger }));
-app.use(rateLimiter);
 
 app.use("/api/auth", auth);
 app.use("/api/freight", freight);
