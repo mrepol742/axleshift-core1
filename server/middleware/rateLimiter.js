@@ -1,18 +1,21 @@
 const TIME_WINDOW = 60 * 1000;
-
 const requestCounts = {};
 
 const rateLimiter = (req, res, next) => {
+    const path = req.path;
+    if (['/api/auth/verify'].includes(path)) return next();
+
     const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    const key = `${ip}-${path}`;
 
     const currentTime = Date.now();
-    if (!requestCounts[ip]) requestCounts[ip] = [];
+    if (!requestCounts[key]) requestCounts[key] = [];
 
-    requestCounts[ip] = requestCounts[ip].filter((timestamp) => currentTime - timestamp < TIME_WINDOW);
+    requestCounts[key] = requestCounts[key].filter((timestamp) => currentTime - timestamp < TIME_WINDOW);
 
-    if (requestCounts[ip].length >= process.env.API_RATE_LIMIT) return res.status(429).json({ error: "Too many requests" });
+    if (requestCounts[key].length >= process.env.API_RATE_LIMIT) return res.status(429).json({ error: "Too many requests" });
 
-    requestCounts[ip].push(currentTime);
+    requestCounts[key].push(currentTime);
     next();
 };
 
