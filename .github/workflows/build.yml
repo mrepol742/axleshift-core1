@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Setup FrontEnd Env
+      - name: Setup frontend env
         run: |
           cd client
           echo "VITE_APP_API_URL=${{ secrets.APP_API_URL }}" >> .env
@@ -26,23 +26,34 @@ jobs:
           echo "VITE_APP_MAINTENANCE=${{ secrets.APP_MAINTENANCE }}" >> .env
           cd ..
       
-      - name: Setup BackEnd Env
-        run: |
-          cd server
-          cp .env.example .env
-          cd ..
-
-      - name: Build FrontEnd
+      - name: Build frontend
         run: |
           cd client
           npm i
           cp .env.example .env
           npm run build
           cd ..
-          mkdir release
-          mv client/build release/client
+
+      - name: Upload frontend
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: client/build
+          destination-github-username: 'freight-capstone'
+          destination-repository-name: 'core1'
+          user-email: mrepol742@gmail.com
+          commit-message: Production
+          target-branch: core1-frontend
+
+      - name: Setup backend env
+        run: |
+          cd server
+          cp .env.example .env
+          cd ..
           
-      - name: Build BackEnd
+      - name: Build backend
         run: |
           cp server server-build -r
           cd server
@@ -51,17 +62,16 @@ jobs:
           rm -rf eslint.config.js obfuscate.js
           cd ..
           node server/obfuscate.js
-          mv server-build release/server
 
-      - name: Upload
+      - name: Upload backend
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: release/
+          source-directory: server-build/
           destination-github-username: 'freight-capstone'
           destination-repository-name: 'core1'
           user-email: mrepol742@gmail.com
           commit-message: Production
-          target-branch: build
+          target-branch: core1-backend
