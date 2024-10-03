@@ -35,7 +35,7 @@ jobs:
           cd ..
 
       - name: Upload frontend
-        id: push_directory
+        id: push_directory_frontend
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
@@ -64,7 +64,7 @@ jobs:
           node server/obfuscate.js
 
       - name: Upload backend
-        id: push_directory
+        id: push_directory_backend
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
