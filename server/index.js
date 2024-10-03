@@ -21,7 +21,6 @@ import log from "./src/log.js";
 const app = express();
 const upload = multer();
 const port = 5050;
-const origin = process.env.CLIENT_ORIGIN;
 
 process.on("SIGHUP", function () {
     process.exit(0);
@@ -73,7 +72,7 @@ app.use(pinoHttp({ logger }));
 app.use(rateLimiter);
 app.use(
     cors({
-        origin: JSON.parse(origin.replace(/'/g, '"')),
+        origin: process.env.CLIENT_ORIGIN,
         credentials: true,
     })
 );
