@@ -16,6 +16,7 @@ import threat from "./routes/threat.js";
 import logger from "./logger.js";
 import connectToDatabase from "./models/db.js";
 import sessions from "./src/sessions.js";
+import log from "./src/log.js";
 
 const app = express();
 const upload = multer();
@@ -31,20 +32,22 @@ process.on("SIGTERM", function () {
 });
 
 process.on("SIGINT", function () {
-    process.kill(process.pid);
     process.exit(0);
 });
 
 process.on("uncaughtException", (err, origin) => {
     logger.error(err);
+    log(err);
+    //haysssssssssssssssssssssssssssssssssss
 });
 
 process.on("unhandledRejection", (reason, promise) => {
     logger.error(reason);
+    log(reason);
 });
 
 process.on("beforeExit", (code) => {
-    logger.info(`Process before exit code ${code}`);
+    process.exit(code);
 });
 
 process.on("exit", (code) => {
@@ -52,7 +55,9 @@ process.on("exit", (code) => {
         if (err) throw err;
         logger.info("Sessions save");
     });
+    log(`Server exited with code ${code}`);
     logger.info("Server offline");
+    process.kill(process.pid);
 });
 
 cron.schedule("0 * * * *", () => {
@@ -98,5 +103,6 @@ app.get("/", (req, res) => {
 
 app.listen(port, async () => {
     await connectToDatabase();
+    log(`Server running on port ${port}`)
     logger.info(`Server running on port ${port}`);
 });
