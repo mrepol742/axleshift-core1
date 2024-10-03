@@ -30,7 +30,6 @@ jobs:
         run: |
           cd client
           npm i
-          cp .env.example .env
           npm run build
           cd ..
 
@@ -46,12 +45,6 @@ jobs:
           user-email: mrepol742@gmail.com
           commit-message: Production
           target-branch: core1-frontend
-
-      - name: Setup backend env
-        run: |
-          cd server
-          cp .env.example .env
-          cd ..
           
       - name: Build backend
         run: |
