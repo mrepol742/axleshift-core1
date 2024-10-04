@@ -8,17 +8,15 @@ const auth = (req, res, next) => {
     if (!token && !/^[0-9a-f]{64}$/.test(token)) return res.json({ status: 401 });
 
     const email = Object.keys(sessions).find((email) => sessions[email][token]);
+    if (!email) return res.json({ status: 401 });
 
-    if (email) {
-        const sessionEntry = sessions[email][token];
-        if (sessionEntry && sessionEntry.active) {
-            req.token = token;
-            req.email = email;
-            next();
-            return;
-        }
-    }
-    return res.json({ status: 401 });
+    const sessionEntry = sessions[email][token];
+    if (!sessionEntry && !sessionEntry.active) return res.json({ status: 401 });
+
+    req.token = token;
+    req.email = email;
+    next();
+    return;
 };
 
 export default auth;

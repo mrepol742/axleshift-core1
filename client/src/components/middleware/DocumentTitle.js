@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import routes from '../../routes'
 
 const DocumentTitle = ({ children }) => {
-    var currentLocation = useLocation().pathname
+    let currentLocation = useLocation().pathname
     if (currentLocation != '/') currentLocation = currentLocation.replace(/\/$/, '')
 
     const getRouteName = (pathname, routes) => {
@@ -13,7 +13,7 @@ const DocumentTitle = ({ children }) => {
     }
 
     useEffect(() => {
-        var routeName = getRouteName(currentLocation, routes)
+        let routeName = getRouteName(currentLocation, routes)
         if (routeName) document.title = routeName + ' | Freight Core1'
     }, [currentLocation, routes])
 

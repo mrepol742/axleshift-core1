@@ -49,17 +49,14 @@ const Auth = (WrappedComponent) => {
             checkAuthentication()
         }, [navigate])
 
-        if (isAuth === null) {
+        if (isAuth === null)
             return (
-                <div className="pt-3 text-center">
+                <div className="loading-overlay">
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )
-        }
 
-        if (!isAuth) {
-            return <Navigate to={loc} />
-        }
+        if (!isAuth) return <Navigate to={loc} />
 
         return <WrappedComponent {...props} />
     }

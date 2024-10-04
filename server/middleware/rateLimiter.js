@@ -3,7 +3,7 @@ const requestCounts = {};
 
 const rateLimiter = (req, res, next) => {
     const path = req.path;
-    if (['/api/auth/verify'].includes(path)) return next();
+    if (["/api/auth/verify"].includes(path)) return next();
 
     const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     const key = `${ip}-${path}`;

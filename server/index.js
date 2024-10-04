@@ -6,7 +6,7 @@ import pinoHttp from "pino-http";
 import multer from "multer";
 import cron from "node-cron";
 import fs from "fs";
-import mongoSanitize from 'express-mongo-sanitize';
+import mongoSanitize from "express-mongo-sanitize";
 import rateLimiter from "./middleware/rateLimiter.js";
 import sanitize from "./middleware/sanitize.js";
 import auth from "./routes/auth.js";
@@ -102,6 +102,6 @@ app.get("/", (req, res) => {
 
 app.listen(port, async () => {
     await connectToDatabase();
-    log(`Server running on port ${port}`)
+    log(`Server running on port ${port}`);
     logger.info(`Server running on port ${port}`);
 });

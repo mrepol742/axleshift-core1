@@ -12,6 +12,7 @@ import {
     CInputGroupText,
     CRow,
     CButtonGroup,
+    CSpinner,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons'
@@ -31,6 +32,7 @@ const Register = () => {
         repeat_password: '',
         recaptcha_ref: '',
     })
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
@@ -46,6 +48,7 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setLoading(true)
         if (formData.password !== formData.repeat_password) return alert('Passwords do not match')
 
         const recaptcha = await recaptchaRef.current.executeAsync()
@@ -74,12 +77,19 @@ const Register = () => {
             alert(status)
         } catch (error) {
             console.error(error)
+        } finally {
+            setLoading(false)
         }
     }
 
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
+                {loading && (
+                    <div className="loading-overlay">
+                        <CSpinner color="primary" variant="grow" />
+                    </div>
+                )}
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
                         <CCard className="mx-4">
