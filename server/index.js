@@ -20,7 +20,7 @@ import log from "./src/log.js";
 
 const app = express();
 const upload = multer();
-const port = 5050;
+const port = 5051;
 
 process.on("SIGHUP", function () {
     process.exit(0);
