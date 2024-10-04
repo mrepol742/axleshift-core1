@@ -14,6 +14,7 @@ import {
     CButton,
     CProgress,
     CFormSelect,
+    CSpinner,
 } from '@coreui/react'
 import Cookies from 'js-cookie'
 import ShipperForm from '../../../components/freight/ShipperForm'
@@ -23,7 +24,7 @@ import ShipmentForm from '../../../components/freight/ShipmentForm'
 const Sea = () => {
     const navigate = useNavigate()
     const [currentPage, setCurrentPage] = useState(1)
-    const [disableSubmit, setDisableSubmit] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
         shipper: {
             shipper_company_name: '',
@@ -71,7 +72,7 @@ const Sea = () => {
 
     const handleSubmit = async () => {
         try {
-            setDisableSubmit(true)
+            setLoading(true)
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_API_URL}/api/freight/b/sea`,
                 formData,
@@ -81,11 +82,11 @@ const Sea = () => {
                     },
                 },
             )
-            if (response.data.status == 201) {
-                navigate('/')
-            }
+            if (response.status == 201) navigate('/')
         } catch (error) {
             console.error(error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -113,6 +114,12 @@ const Sea = () => {
 
     return (
         <>
+            {loading && (
+                <div className="loading-overlay">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            )}
+
             {currentPage === 1 && (
                 <ShipperForm
                     formData={formData}

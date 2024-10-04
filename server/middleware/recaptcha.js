@@ -3,8 +3,7 @@ import logger from "../logger.js";
 
 const recaptcha = async (req, res, next) => {
     const { recaptcha_ref } = req.body;
-
-    if (!recaptcha_ref) return res.status(401);
+    if (!recaptcha_ref) return res.status(401).send();
 
     try {
         const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
@@ -15,13 +14,14 @@ const recaptcha = async (req, res, next) => {
         });
 
         const { success, score } = response.data;
-
-        if (!success || score < 0.5) return res.status(401);
+        logger.info(response.data)
+        logger.info(`Recaptcha score: ${score}`)
+        if (!success || score < 0.5) return res.status(401).send();
 
         next();
     } catch (error) {
         logger.info(`reCAPTCHA verification failed: ${error}`);
-        return res.status(500);
+        return res.status(500).send();
     }
 };
 

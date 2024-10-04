@@ -32,7 +32,7 @@ const Auth = (WrappedComponent) => {
                         },
                     )
 
-                    if (response.data.status !== 200) {
+                    if (response.status !== 200) {
                         Cookies.remove(import.meta.env.VITE_APP_SESSION)
                         setIsAuth(false)
                         navigate(loc)

@@ -20,7 +20,7 @@ const Account = () => {
                         },
                     },
                 )
-                const status = response.data.status
+                const status = response.status
                 if (status == 200) setUser(response.data.user)
             } catch (err) {
                 console.error(err)

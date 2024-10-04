@@ -40,7 +40,7 @@ const Overview = () => {
                         },
                     },
                 )
-                if (response.data.status == 200) setData(response.data.data)
+                if (response.status == 200) setData(response.data.data)
             } catch (err) {
                 console.error(err)
             }

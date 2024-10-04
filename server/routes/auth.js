@@ -19,14 +19,25 @@ const router = express.Router();
      firstName
      lastName
      password
-     recaptchaRef
-  Returns:
-     status
+     recaptcha_ref
 */
-router.post("/register", recaptcha, async (req, res) => {
+// TODO: recaptcha in this route is not working properly
+// router.post("/register", recaptcha, async (req, res) => {
+    /*
+       [0] [11:58:31.335] INFO (49191):
+[0]     success: false
+[0]     error-codes: [
+[0]       "invalid-input-response"
+[0]     ]
+    */
+router.post("/register", async (req, res) => {
     try {
-        const { email, first_name, last_name, password } = req.body;
-        if (!email || !first_name || !last_name || !password) return res.json({ status: 401 });
+        const { email, first_name, last_name, password, repeat_password } = req.body;
+        if (!email || !first_name || !last_name || !password || !repeat_password) return res.status(204).send();
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(200).json({ error: 'Invalid email address' });
+        if (password.length < 8) return res.status(200).json({ error: 'Password must be greater than 8 digit' });
+        if (password != repeat_password) return res.status(200).json({ error: 'Password does not match' });
 
         const db = await connectToDatabase();
         const collection = db.collection("users");
@@ -34,7 +45,7 @@ router.post("/register", recaptcha, async (req, res) => {
 
         if (existingEmail) {
             logger.error("Email id already exists");
-            return res.json({ status: 409 });
+            return res.status(409).send();
         }
 
         await collection.insertOne({
@@ -48,11 +59,11 @@ router.post("/register", recaptcha, async (req, res) => {
             update_at: new Date(),
         });
 
-        return res.json({ status: 201 });
+        return res.status(201).send();
     } catch (e) {
         logger.error(e);
-        res.json({ status: 500 });
     }
+    return res.status(500).send();
 });
 
 /*
@@ -60,35 +71,36 @@ router.post("/register", recaptcha, async (req, res) => {
   Params:
      email
      password
-     recaptchaRef
+     recaptcha_ref
   Returns:
-     status
      token
 */
 router.post("/login", recaptcha, async (req, res) => {
     try {
         const { email, password } = req.body;
-        if (!email || !password) return res.json({ status: 401 });
+        if (!email || !password) return res.status(204).send();
 
         const db = await connectToDatabase();
         const collection = db.collection("users");
         const theUser = await collection.findOne({ email: email });
 
-        if (!theUser) return res.json({ status: 404 });
+        if (!theUser) return res.status(404).send();
 
-        if (passwordHash(password) != theUser.password) return res.json({ status: 401 });
+        if (passwordHash(password) != theUser.password) return res.status(401).send();
         addUserProfileToSession(theUser);
 
         const session_token = crypto.createHash("sha256").update(generateUniqueId()).digest("hex");
         const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
         addSession(theUser, session_token, ip, req.headers["user-agent"]);
 
-        res.json({ status: 200, token: session_token });
+        return res.status(200).json({
+            token: session_token
+          });
         // finally the end :(
     } catch (e) {
         logger.error(e);
-        res.json({ status: 500 });
     }
+    return res.status(500).send();
 });
 
 /*
@@ -96,11 +108,12 @@ router.post("/login", recaptcha, async (req, res) => {
   Params:
      token
   Returns:
-     status
      email
 */
 router.post("/verify", auth, function (req, res, next) {
-    res.json({ status: 200, email: req.email });
+    return res.status(200).json({
+        email: req.email 
+      });
 });
 
 /*
@@ -108,34 +121,36 @@ router.post("/verify", auth, function (req, res, next) {
   Params:
      token
   Returns:
-     status
      user
 */
 router.post("/user", auth, async function (req, res, next) {
+    try {
     const db = await connectToDatabase();
     const collection = db.collection("users");
     const theUser = await collection.findOne({ email: req.email });
-    res.json({
-        status: 200,
+
+    return res.status(200).json({
         user: {
             email: theUser.email,
             first_name: theUser.first_name,
             last_name: theUser.last_name,
         },
-    });
+      });
+    } catch (e) {
+        logger.error(e);
+    }
+    return res.status(500).send();
 });
 
 /*
   Url: POST /api/auth/logout
   Params:
      token
-  Returns:
-     status
 */
 router.post("/logout", auth, function (req, res, next) {
     removeSession(req.token);
 
-    res.json({ status: 200 });
+    return res.status(200).send();
 });
 
 export default router;
