@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { formatDistanceToNow, parseISO } from 'date-fns'
@@ -21,43 +22,54 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './widgets/WidgetsDropdown'
-import Search from '../../components/overview/Search'
+import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'
 
 const Overview = () => {
     const [data, setData] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
+    const [query, setQuery] = useState('')
     const navigate = useNavigate()
 
-    const fetchData = async (page) => {
+    const handleSearchSubmit = (e) => {
+        e.preventDefault()
+        fetchData(0, query)
+    }
+
+    const fetchData = async (page, query) => {
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_APP_API_URL}/api/v1/freight`,
-                { page },
+                { page, q: query },
                 {
                     headers: {
                         Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                     },
                 },
             )
-            if (response.status === 200) {
-                setData(response.data.data)
-                setTotalPages(response.data.totalPages)
-            }
+
+            if (response.status !== 200) return
+            setData(response.data.data)
+            setTotalPages(response.data.totalPages)
         } catch (err) {
             console.error(err)
         }
     }
 
     useEffect(() => {
-        fetchData(currentPage)
+        fetchData(currentPage, query)
     }, [currentPage])
 
     return (
         <>
             <WidgetsDropdown className="mb-4" />
-            <Search className="mb-4" />
+            <AppSearch
+                className="mb-4"
+                handleSearchSubmit={handleSearchSubmit}
+                query={query}
+                setQuery={setQuery}
+            />
 
             <CRow>
                 {data.map((item) => (

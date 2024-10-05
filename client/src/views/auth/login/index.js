@@ -43,7 +43,7 @@ const Login = () => {
     }
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleSubmit = async (e) => {
@@ -64,8 +64,7 @@ const Login = () => {
                 setLoading(false)
                 Cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
-                let url = '/'
-                if (urlParams.has('n')) url = urlParams.get('n')
+                const url = urlParams.get('n') ? urlParams.get('n') : '/'
                 dispatch({ type: 'set', email: email })
                 navigate(url)
             })

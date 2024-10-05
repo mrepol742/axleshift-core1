@@ -23,7 +23,7 @@ const router = express.Router();
 */
 // TODO: recaptcha in this route is not working properly
 // router.post("/register", recaptcha, async (req, res) => {
-    /*
+/*
        [0] [11:58:31.335] INFO (49191):
 [0]     success: false
 [0]     error-codes: [
@@ -35,9 +35,9 @@ router.post("/register", async (req, res) => {
         const { email, first_name, last_name, password, repeat_password } = req.body;
         if (!email || !first_name || !last_name || !password || !repeat_password) return res.status(400).send();
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(200).json({ error: 'Invalid email address' });
-        if (password.length < 8) return res.status(200).json({ error: 'Password must be greater than 8 digit' });
-        if (password != repeat_password) return res.status(200).json({ error: 'Password does not match' });
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(200).json({ error: "Invalid email address" });
+        if (password.length < 8) return res.status(200).json({ error: "Password must be greater than 8 digit" });
+        if (password != repeat_password) return res.status(200).json({ error: "Password does not match" });
 
         const db = await connectToDatabase();
         const collection = db.collection("users");
@@ -94,8 +94,8 @@ router.post("/login", recaptcha, async (req, res) => {
         addSession(theUser, session_token, ip, req.headers["user-agent"]);
 
         return res.status(200).json({
-            token: session_token
-          });
+            token: session_token,
+        });
         // finally the end :(
     } catch (e) {
         logger.error(e);
@@ -105,37 +105,37 @@ router.post("/login", recaptcha, async (req, res) => {
 
 /*
   Url: POST /api/v1/auth/verify
-  Params:
-     token
+  Header:
+     Authentication
   Returns:
      email
 */
 router.post("/verify", auth, function (req, res, next) {
     return res.status(200).json({
-        email: req.email 
-      });
+        email: req.email,
+    });
 });
 
 /*
   Url: POST /api/v1/auth/user
-  Params:
-     token
+  Header:
+     Authentication
   Returns:
      user
 */
 router.post("/user", auth, async function (req, res, next) {
     try {
-    const db = await connectToDatabase();
-    const collection = db.collection("users");
-    const theUser = await collection.findOne({ email: req.email });
+        const db = await connectToDatabase();
+        const collection = db.collection("users");
+        const theUser = await collection.findOne({ email: req.email });
 
-    return res.status(200).json({
-        user: {
-            email: theUser.email,
-            first_name: theUser.first_name,
-            last_name: theUser.last_name,
-        },
-      });
+        return res.status(200).json({
+            user: {
+                email: theUser.email,
+                first_name: theUser.first_name,
+                last_name: theUser.last_name,
+            },
+        });
     } catch (e) {
         logger.error(e);
     }
@@ -144,8 +144,8 @@ router.post("/user", auth, async function (req, res, next) {
 
 /*
   Url: POST /api/v1/auth/logout
-  Params:
-     token
+  Header:
+     Authentication
 */
 router.post("/logout", auth, function (req, res, next) {
     removeSession(req.token);

@@ -46,7 +46,7 @@ const Register = () => {
     }
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleInputChange = (e) => {

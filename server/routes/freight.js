@@ -2,26 +2,28 @@ import dotenv from "dotenv";
 dotenv.config();
 import { ObjectId } from "mongodb";
 import express from "express";
+import logger from "../logger.js";
 import connectToDatabase from "../models/db.js";
 import auth from "../middleware/auth.js";
 import recaptcha from "../middleware/recaptcha.js";
 import { getUserId } from "../src/sessions.js";
 
 const router = express.Router();
-const limit = 2;
+const limit = 20;
 
 /*
   Url: POST /api/v1/freight
   Params:
-     token
      page
+  Header:
+     Authentication
   Returns:
      data
 */
+// TODO: integrate search function here!
 router.post("/", auth, async (req, res) => {
     try {
-        const token = req.token;
-        const user_id = await getUserId(token);
+        const user_id = await getUserId(req.token);
         const page = parseInt(req.body.page) || 1;
         const skip = (page - 1) * limit;
 
@@ -29,7 +31,8 @@ router.post("/", auth, async (req, res) => {
         const freightCollection = db.collection("freight");
 
         const totalItems = await freightCollection.countDocuments({ user_id: new ObjectId(user_id) });
-        const items = await freightCollection.find({ user_id: new ObjectId(user_id) })
+        const items = await freightCollection
+            .find({ user_id: new ObjectId(user_id) })
             .skip(skip)
             .limit(limit)
             .toArray();
@@ -45,6 +48,32 @@ router.post("/", auth, async (req, res) => {
     return res.status(500).send();
 });
 
+/*
+  Url: POST /api/v1/freight/:id
+  Header:
+     Authentication
+  Returns:
+     data
+*/
+router.get("/:id", auth, async (req, res) => {
+    try {
+        const user_id = await getUserId(req.token);
+        const id = req.params.id;
+        if (!id) return res.status(400).send();
+
+        const db = await connectToDatabase();
+        const freightCollection = db.collection("freight");
+        const items = await freightCollection.find({ user_id: new ObjectId(user_id) }).toArray();
+
+        if (!items.length) return res.status(404).send();
+        return res.status(200).json({
+            data: items,
+        });
+    } catch (e) {
+        logger.error(e);
+    }
+    return res.status(500).send();
+});
 
 /*
   Url: POST /api/v1/freight/b/:type
@@ -55,8 +84,9 @@ router.post("/", auth, async (req, res) => {
      consignee
      shipment
      shipping
-     token
      recaptcha_ref
+  Header:
+     Authentication
 */
 router.post("/b/:type", [auth, recaptcha], async (req, res) => {
     try {

@@ -17,7 +17,7 @@ const AppPagination = ({ currentPage, setCurrentPage, totalPages, setTotalPages 
 
             {(() => {
                 const items = []
-                const maxVisiblePages = 3
+                const maxVisiblePages = 5
 
                 const startPage = Math.max(1, currentPage - 2)
                 const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
