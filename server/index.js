@@ -6,7 +6,7 @@ import pinoHttp from "pino-http";
 import multer from "multer";
 import cron from "node-cron";
 import fs from "fs";
-import mongoSanitize from 'express-mongo-sanitize';
+import mongoSanitize from "express-mongo-sanitize";
 import rateLimiter from "./middleware/rateLimiter.js";
 import sanitize from "./middleware/sanitize.js";
 import auth from "./routes/auth.js";
@@ -16,10 +16,11 @@ import threat from "./routes/threat.js";
 import logger from "./logger.js";
 import connectToDatabase from "./models/db.js";
 import sessions from "./src/sessions.js";
+import log from "./src/log.js";
 
 const app = express();
 const upload = multer();
-const port = 5050;
+const port = process.env.PORT;
 
 process.on("SIGHUP", function () {
     process.exit(0);
@@ -30,20 +31,22 @@ process.on("SIGTERM", function () {
 });
 
 process.on("SIGINT", function () {
-    process.kill(process.pid);
     process.exit(0);
 });
 
 process.on("uncaughtException", (err, origin) => {
     logger.error(err);
+    log(err);
+    //haysssssssssssssssssssssssssssssssssss
 });
 
 process.on("unhandledRejection", (reason, promise) => {
     logger.error(reason);
+    log(reason);
 });
 
 process.on("beforeExit", (code) => {
-    logger.info(`Process before exit code ${code}`);
+    process.exit(code);
 });
 
 process.on("exit", (code) => {
@@ -51,7 +54,9 @@ process.on("exit", (code) => {
         if (err) throw err;
         logger.info("Sessions save");
     });
+    log(`Server exited with code ${code}`);
     logger.info("Server offline");
+    process.kill(process.pid);
 });
 
 cron.schedule("0 * * * *", () => {
@@ -65,6 +70,7 @@ app.use(upload.none());
 app.use(express.json());
 app.use(pinoHttp({ logger }));
 app.use(rateLimiter);
+// TODO: accept multiple origin
 app.use(
     cors({
         origin: process.env.CLIENT_ORIGIN,
@@ -81,10 +87,10 @@ app.use(
     })
 );
 
-app.use("/api/auth", auth);
-app.use("/api/freight", freight);
-app.use("/api/track", track);
-app.use("/api/threat", threat);
+app.use("/api/v1/auth", auth);
+app.use("/api/v1/freight", freight);
+app.use("/api/v1/track", track);
+app.use("/api/v1/threat", threat);
 
 app.use((err, req, res, next) => {
     logger.error(err);
@@ -92,10 +98,11 @@ app.use((err, req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-    res.send("Freight Core 1");
+    res.send("Backend Core 1");
 });
 
 app.listen(port, async () => {
     await connectToDatabase();
+    log(`Server running on port ${port}`);
     logger.info(`Server running on port ${port}`);
 });

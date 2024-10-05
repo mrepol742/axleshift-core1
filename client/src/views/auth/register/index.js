@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
+    CAlert,
     CButton,
     CCard,
     CCardBody,
@@ -12,9 +13,10 @@ import {
     CInputGroupText,
     CRow,
     CButtonGroup,
+    CSpinner,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import Cookies from 'js-cookie'
 import axios from 'axios'
@@ -31,9 +33,20 @@ const Register = () => {
         repeat_password: '',
         recaptcha_ref: '',
     })
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState({
+        error: false,
+        message: '',
+    })
+    const errorMessages = {
+        401: 'You failed the robot test',
+        429: 'Too many attempts',
+        409: 'Email is already registered',
+        500: 'Internal server error',
+    }
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleInputChange = (e) => {
@@ -46,44 +59,60 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (formData.password !== formData.repeat_password) return alert('Passwords do not match')
-
+        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        //TODO: this thing doesnt not yet work i dont know why?
-        setFormData((prev) => ({
-            ...prev,
-            recaptcha_ref: recaptcha,
-        }))
 
-        try {
-            const formDataToSend = new FormData()
-
-            for (const key in formData) {
-                formDataToSend.append(key, formData[key])
-            }
-
-            const response = await axios.post(
-                `${import.meta.env.VITE_APP_API_URL}/api/auth/register`,
-                formDataToSend,
-                {
-                    headers: {},
-                },
-            )
-            const status = response.data.status
-            if (status == 201) return navigate('/')
-            alert(status)
-        } catch (error) {
-            console.error(error)
+        const formDataToSend = new FormData()
+        for (const key in formData) {
+            formDataToSend.append(key, formData[key])
         }
+        formDataToSend.append('recaptcha_ref', recaptcha)
+
+        await axios
+            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/register`, formDataToSend, {
+                headers: {},
+            })
+            .then((response) => {
+                setLoading(false)
+                if (!response.data.error) navigate('/login')
+                setError({
+                    error: true,
+                    message: response.data.error,
+                })
+            })
+            .catch((error) => {
+                setLoading(false)
+                const message = errorMessages[error.status] || 'An unexpected error occurred'
+
+                setError({
+                    error: true,
+                    message,
+                })
+            })
     }
 
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
+                {loading && (
+                    <div className="loading-overlay">
+                        <CSpinner color="primary" variant="grow" />
+                    </div>
+                )}
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
                         <CCard className="mx-4">
                             <CCardBody className="p-4">
+                                {error.error && (
+                                    <CAlert color="danger" className="d-flex align-items-center">
+                                        <FontAwesomeIcon
+                                            className="flex-shrink-0 me-2"
+                                            icon={faXmark}
+                                            size="xl"
+                                        />
+                                        <div>{error.message}</div>
+                                    </CAlert>
+                                )}
                                 <CForm onSubmit={handleSubmit}>
                                     <h1>Register</h1>
                                     <p className="text-body-secondary">Create your account</p>

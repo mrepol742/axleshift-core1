@@ -23,13 +23,12 @@ const Login = () => {
     const recaptchaRef = React.useRef()
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
+        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         const token = await recaptchaRef.current.executeAsync()
-        alert(token)
     }
 
     return (

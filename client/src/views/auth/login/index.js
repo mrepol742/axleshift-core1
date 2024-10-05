@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import {
+    CAlert,
     CButton,
     CCard,
     CCardBody,
@@ -14,9 +15,10 @@ import {
     CInputGroupText,
     CRow,
     CButtonGroup,
+    CSpinner,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { useDispatch } from 'react-redux'
 
@@ -25,55 +27,79 @@ const Login = () => {
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) navigate('/')
-    }, [])
-
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState({
+        error: false,
+        message: '',
+    })
+    const errorMessages = {
+        401: 'You failed the robot test',
+        429: 'Too many attempts',
+        401: 'Invalid password',
+        404: 'Email address not found',
+        500: 'Internal server error',
+    }
+
+    useEffect(() => {
+        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
 
-        try {
-            const formData = new FormData()
-            formData.append('email', email)
-            formData.append('password', password)
-            formData.append('recaptcha_ref', recaptcha)
+        const formData = new FormData()
+        formData.append('email', email)
+        formData.append('password', password)
+        formData.append('recaptcha_ref', recaptcha)
 
-            const response = await axios.post(
-                `${import.meta.env.VITE_APP_API_URL}/api/auth/login`,
-                formData,
-                {
-                    headers: {},
-                },
-            )
-            const status = response.data.status
-            if (status == 200) {
+        await axios
+            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/login`, formData, {
+                headers: {},
+            })
+            .then((response) => {
+                setLoading(false)
                 Cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
-                let url = '/'
-                if (urlParams.has('n')) {
-                    url = urlParams.get('n')
-                }
+                const url = urlParams.get('n') ? urlParams.get('n') : '/'
                 dispatch({ type: 'set', email: email })
                 navigate(url)
-            } else {
-                alert(status)
-            }
-        } catch (error) {
-            console.error(error)
-        }
+            })
+            .catch((error) => {
+                setLoading(false)
+                const message = errorMessages[error.status] || 'An unexpected error occurred'
+
+                setError({
+                    error: true,
+                    message,
+                })
+            })
     }
 
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
+                {loading && (
+                    <div className="loading-overlay">
+                        <CSpinner color="primary" variant="grow" />
+                    </div>
+                )}
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
                         <CCard className="p-4">
+                            {error.error && (
+                                <CAlert color="danger" className="d-flex align-items-center">
+                                    <FontAwesomeIcon
+                                        className="flex-shrink-0 me-2"
+                                        icon={faXmark}
+                                        size="xl"
+                                    />
+                                    <div>{error.message}</div>
+                                </CAlert>
+                            )}
                             <CCardBody>
                                 <CForm onSubmit={handleSubmit}>
                                     <h1>Login</h1>

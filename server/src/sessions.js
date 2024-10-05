@@ -14,19 +14,12 @@ if (fs.existsSync("./sessions/sessions.json")) {
 }
 
 export const addUserProfileToSession = (theUser) => {
-    if (!sessions[theUser.email]) {
-        sessions[theUser.email] = {};
-    }
-
-    if (!sessions[theUser.email]["profile"]) {
-        sessions[theUser.email]["profile"] = theUser;
-    }
+    if (!sessions[theUser.email]) sessions[theUser.email] = {};
+    if (!sessions[theUser.email]["profile"]) sessions[theUser.email]["profile"] = theUser;
 };
 
 export const addSession = (theUser, sessionToken, ip, userAgent) => {
-    if (!sessions[theUser.email]) {
-        sessions[theUser.email] = {};
-    }
+    if (!sessions[theUser.email]) sessions[theUser.email] = {};
 
     sessions[theUser.email][sessionToken] = {
         active: true,

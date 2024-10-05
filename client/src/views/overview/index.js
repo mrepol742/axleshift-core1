@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { formatDistanceToNow, parseISO } from 'date-fns'
@@ -20,39 +21,55 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-
 import WidgetsDropdown from './widgets/WidgetsDropdown'
-import Search from '../../components/overview/Search'
+import AppSearch from '../../components/AppSearch'
+import AppPagination from '../../components/AppPagination'
 
 const Overview = () => {
     const [data, setData] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0)
+    const [query, setQuery] = useState('')
     const navigate = useNavigate()
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.post(
-                    `${import.meta.env.VITE_APP_API_URL}/api/freight`,
-                    {},
-                    {
-                        headers: {
-                            Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
-                        },
-                    },
-                )
-                if (response.data.status == 200) setData(response.data.data)
-            } catch (err) {
-                console.error(err)
-            }
-        }
+    const handleSearchSubmit = (e) => {
+        e.preventDefault()
+        fetchData(0, query)
+    }
 
-        fetchData()
-    }, [])
+    const fetchData = async (page, query) => {
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight`,
+                { page, q: query },
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    },
+                },
+            )
+
+            if (response.status !== 200) return
+            setData(response.data.data)
+            setTotalPages(response.data.totalPages)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    useEffect(() => {
+        fetchData(currentPage, query)
+    }, [currentPage])
 
     return (
         <>
             <WidgetsDropdown className="mb-4" />
-            <Search className="mb-4" />
+            <AppSearch
+                className="mb-4"
+                handleSearchSubmit={handleSearchSubmit}
+                query={query}
+                setQuery={setQuery}
+            />
 
             <CRow>
                 {data.map((item) => (
@@ -82,7 +99,7 @@ const Overview = () => {
                             </CCardHeader>
                             <CCardBody>
                                 <blockquote className="blockquote mb-0">
-                                    <p>{JSON.stringify(item.data.shipment)}</p>
+                                    <p>{item.data.shipment.shipment_description}</p>
                                     <footer className="blockquote-footer">{item.type}</footer>
                                 </blockquote>
                             </CCardBody>
@@ -91,13 +108,12 @@ const Overview = () => {
                 ))}
             </CRow>
 
-            <CPagination aria-label="Page navigation example">
-                <CPaginationItem>Previous</CPaginationItem>
-                <CPaginationItem>1</CPaginationItem>
-                <CPaginationItem>2</CPaginationItem>
-                <CPaginationItem>3</CPaginationItem>
-                <CPaginationItem>Next</CPaginationItem>
-            </CPagination>
+            <AppPagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+                setTotalPages={setTotalPages}
+            />
         </>
     )
 }

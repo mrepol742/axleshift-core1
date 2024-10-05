@@ -8,18 +8,15 @@ const Logout = () => {
     const navigate = useNavigate()
     const token = Cookies.get(import.meta.env.VITE_APP_SESSION)
 
-    if (token === undefined) navigate('/')
-
     useEffect(() => {
+        if (token === undefined) return navigate('/')
         logout()
-        Cookies.remove(import.meta.env.VITE_APP_SESSION)
-        navigate('/')
     }, [])
 
-    async function logout() {
-        try {
-            await axios.post(
-                `${import.meta.env.VITE_APP_API_URL}/api/auth/logout`,
+    const logout = async () => {
+        await axios
+            .post(
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/logout`,
                 {},
                 {
                     headers: {
@@ -27,9 +24,13 @@ const Logout = () => {
                     },
                 },
             )
-        } catch (error) {
-            console.error(error)
-        }
+            .then((response) => {
+                Cookies.remove(import.meta.env.VITE_APP_SESSION)
+                navigate('/')
+            })
+            .catch((err) => {
+                console.error(err)
+            })
     }
 
     return null

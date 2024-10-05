@@ -12,7 +12,7 @@ const Account = () => {
             try {
                 const token = Cookies.get(import.meta.env.VITE_APP_SESSION)
                 const response = await axios.post(
-                    `${import.meta.env.VITE_APP_API_URL}/api/auth/user`,
+                    `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/user`,
                     {},
                     {
                         headers: {
@@ -20,10 +20,8 @@ const Account = () => {
                         },
                     },
                 )
-                const status = response.data.status
-                if (status == 200) {
-                    setUser(response.data.user)
-                }
+                const status = response.status
+                if (status == 200) setUser(response.data.user)
             } catch (err) {
                 console.error(err)
             } finally {
@@ -34,13 +32,12 @@ const Account = () => {
         fetchUserData()
     }, [])
 
-    if (loading) {
+    if (loading)
         return (
-            <div className="pt-3 text-center">
+            <div className="loading-overlay">
                 <CSpinner color="primary" variant="grow" />
             </div>
         )
-    }
 
     return (
         <div>

@@ -16,8 +16,7 @@
         "lint": "eslint \"src/**/*.js\"",
         "lint-fix": "eslint \"src/**/*.js\" --fix",
         "serve": "vite preview",
-        "start": "vite --host",
-        "imagemin": "imagemin build/assets/* --out-dir=build/assets"
+        "start": "vite --host"
     },
     "dependencies": {
         "@coreui/chartjs": "^4.0.0",
