@@ -57,7 +57,7 @@ const Login = () => {
         formData.append('recaptcha_ref', recaptcha)
 
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/auth/login`, formData, {
+            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/login`, formData, {
                 headers: {},
             })
             .then((response) => {

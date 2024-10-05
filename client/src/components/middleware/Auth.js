@@ -23,7 +23,7 @@ const Auth = (WrappedComponent) => {
 
                 try {
                     const response = await axios.post(
-                        `${import.meta.env.VITE_APP_API_URL}/api/auth/verify`,
+                        `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/verify`,
                         {},
                         {
                             headers: {

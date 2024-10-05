@@ -70,6 +70,7 @@ app.use(upload.none());
 app.use(express.json());
 app.use(pinoHttp({ logger }));
 app.use(rateLimiter);
+// TODO: accept multiple origin
 app.use(
     cors({
         origin: process.env.CLIENT_ORIGIN,
@@ -86,10 +87,10 @@ app.use(
     })
 );
 
-app.use("/api/auth", auth);
-app.use("/api/freight", freight);
-app.use("/api/track", track);
-app.use("/api/threat", threat);
+app.use("/api/v1/auth", auth);
+app.use("/api/v1/freight", freight);
+app.use("/api/v1/track", track);
+app.use("/api/v1/threat", threat);
 
 app.use((err, req, res, next) => {
     logger.error(err);
@@ -97,7 +98,7 @@ app.use((err, req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-    res.send("Freight Core 1");
+    res.send("Backend Core 1");
 });
 
 app.listen(port, async () => {

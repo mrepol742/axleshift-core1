@@ -74,7 +74,7 @@ const Air = () => {
         try {
             setLoading(true)
             const response = await axios.post(
-                `${import.meta.env.VITE_APP_API_URL}/api/freight/b/air`,
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/air`,
                 formData,
                 {
                     headers: {

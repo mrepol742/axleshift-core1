@@ -13,7 +13,7 @@ import passwordHash, { generateUniqueId } from "../src/password.js";
 const router = express.Router();
 
 /*
-  Url: POST /api/auth/register
+  Url: POST /api/v1/auth/register
   Params:
      email
      firstName
@@ -33,7 +33,7 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
     try {
         const { email, first_name, last_name, password, repeat_password } = req.body;
-        if (!email || !first_name || !last_name || !password || !repeat_password) return res.status(204).send();
+        if (!email || !first_name || !last_name || !password || !repeat_password) return res.status(400).send();
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(200).json({ error: 'Invalid email address' });
         if (password.length < 8) return res.status(200).json({ error: 'Password must be greater than 8 digit' });
@@ -67,7 +67,7 @@ router.post("/register", async (req, res) => {
 });
 
 /*
-  Url: POST /api/auth/login
+  Url: POST /api/v1/auth/login
   Params:
      email
      password
@@ -78,7 +78,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", recaptcha, async (req, res) => {
     try {
         const { email, password } = req.body;
-        if (!email || !password) return res.status(204).send();
+        if (!email || !password) return res.status(400).send();
 
         const db = await connectToDatabase();
         const collection = db.collection("users");
@@ -104,7 +104,7 @@ router.post("/login", recaptcha, async (req, res) => {
 });
 
 /*
-  Url: POST /api/auth/verify
+  Url: POST /api/v1/auth/verify
   Params:
      token
   Returns:
@@ -117,7 +117,7 @@ router.post("/verify", auth, function (req, res, next) {
 });
 
 /*
-  Url: POST /api/auth/user
+  Url: POST /api/v1/auth/user
   Params:
      token
   Returns:
@@ -143,7 +143,7 @@ router.post("/user", auth, async function (req, res, next) {
 });
 
 /*
-  Url: POST /api/auth/logout
+  Url: POST /api/v1/auth/logout
   Params:
      token
 */

@@ -74,7 +74,7 @@ const Land = () => {
         try {
             setLoading(true)
             const response = await axios.post(
-                `${import.meta.env.VITE_APP_API_URL}/api/freight/b/land`,
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/land`,
                 formData,
                 {
                     headers: {
