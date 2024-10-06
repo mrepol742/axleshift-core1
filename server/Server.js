@@ -6,9 +6,11 @@ import pinoHttp from "pino-http";
 import multer from "multer";
 import mongoSanitize from "express-mongo-sanitize";
 import * as Sentry from "@sentry/node";
+import helmet from "helmet";
 
 import rateLimiter from "./middleware/rateLimiter.js";
 import sanitize from "./middleware/sanitize.js";
+import corsOptions from "./middleware/cors.js";
 
 import db from "./models/db.js";
 
@@ -21,16 +23,11 @@ const upload = multer();
 const port = process.env.PORT;
 
 app.use(upload.none());
+app.use(helmet());
 app.use(express.json());
 app.use(pinoHttp({ logger }));
 app.use(rateLimiter);
-// TODO: accept multiple origin
-app.use(
-    cors({
-        origin: process.env.CLIENT_ORIGIN,
-        credentials: true,
-    })
-);
+app.use(cors(corsOptions));
 app.use(sanitize);
 app.use(
     mongoSanitize({

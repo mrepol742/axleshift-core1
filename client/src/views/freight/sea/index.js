@@ -20,6 +20,7 @@ import Cookies from 'js-cookie'
 import ShipperForm from '../../../components/freight/ShipperForm'
 import ConsineeForm from '../../../components/freight/ConsineeForm'
 import ShipmentForm from '../../../components/freight/ShipmentForm'
+import SeaForm from '../../../components/freight/shipping/SeaForm'
 
 const Sea = () => {
     const navigate = useNavigate()
@@ -147,77 +148,12 @@ const Sea = () => {
             )}
 
             {currentPage === 4 && (
-                <CForm>
-                    <CProgress value={100} />
-                    <h3 className="mb-4">Shipping Information</h3>
-
-                    <CFormLabel htmlFor="shipping_loading_port">Loading Port</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipping_loading_port"
-                        value={formData.shipping.shipping_loading_port}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-4"
-                    />
-
-                    <CFormLabel htmlFor="shipping_discharge_port">Discharge Port</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipping_discharge_port"
-                        value={formData.shipping.shipping_discharge_port}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-4"
-                    />
-
-                    <CFormLabel htmlFor="shipping_sailing_date">Sailing Date</CFormLabel>
-                    <CFormInput
-                        type="date"
-                        id="shipping_sailing_date"
-                        value={formData.shipping.shipping_sailing_date}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-4"
-                    />
-
-                    <CFormLabel htmlFor="shipping_estimated_arrival_date">
-                        Estimated Arrival Date
-                    </CFormLabel>
-                    <CFormInput
-                        type="date"
-                        id="shipping_estimated_arrival_date"
-                        value={formData.shipping.shipping_estimated_arrival_date}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-4"
-                    />
-
-                    <CFormLabel htmlFor="shipping_cargo_type">Flight Type</CFormLabel>
-                    <CFormSelect
-                        id="shipping_cargo_type"
-                        value={formData.shipping.shipping_cargo_type}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        options={[
-                            { label: 'Containerized Cargo', value: '1' },
-                            { label: 'Bulk Cargo', value: '2' },
-                            { label: 'Breakbulk Cargo', value: '3' },
-                            { label: 'Reefer Cargo', value: '4' },
-                            { label: 'RORO Cargo', value: '5' },
-                            { label: 'Heavy Lift Cargo', value: '6' },
-                            { label: 'Dangerous Goods', value: '7' },
-                        ]}
-                        required
-                        className="mb-4"
-                    />
-
-                    <CButton color="secondary" onClick={handleShipmentDetails}>
-                        Back
-                    </CButton>
-                    <CButton color="primary" onClick={handleSubmit} disabled={disableSubmit}>
-                        Submit
-                    </CButton>
-                </CForm>
+                <SeaForm
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleShipmentDetails={handleShipmentDetails}
+                    handleSubmit={handleSubmit}
+                />
             )}
         </>
     )

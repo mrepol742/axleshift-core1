@@ -20,6 +20,7 @@ import Cookies from 'js-cookie'
 import ShipperForm from '../../../components/freight/ShipperForm'
 import ConsineeForm from '../../../components/freight/ConsineeForm'
 import ShipmentForm from '../../../components/freight/ShipmentForm'
+import LandForm from '../../../components/freight/shipping/LandForm'
 
 const Land = () => {
     const navigate = useNavigate()
@@ -146,74 +147,12 @@ const Land = () => {
             )}
 
             {currentPage === 4 && (
-                <CForm>
-                    <CProgress value={100} />
-                    <h3 className="mb-4">Shipping Information</h3>
-
-                    <CFormLabel htmlFor="shipping_origin_addresss">Origin Address</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipping_origin_addresss"
-                        value={formData.shipping.shipping_origin_addresss}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-3"
-                    />
-
-                    <CFormLabel htmlFor="shipping_destination_address">
-                        Destination Address
-                    </CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipping_destination_address"
-                        value={formData.shipping.shipping_destination_address}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-3"
-                    />
-
-                    <CFormLabel htmlFor="shipping_pickup_date">Pickup Date</CFormLabel>
-                    <CFormInput
-                        type="date"
-                        id="shipping_pickup_date"
-                        value={formData.shipping.shipping_pickup_date}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-3"
-                    />
-
-                    <CFormLabel htmlFor="shipping_delivery_date">Delivery Date</CFormLabel>
-                    <CFormInput
-                        type="date"
-                        id="shipping_delivery_date"
-                        value={formData.shipping.shipping_delivery_date}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-3"
-                    />
-
-                    <CFormLabel htmlFor="shipping_vehicle_type">Vehicle Type</CFormLabel>
-                    <CFormSelect
-                        id="shipping_vehicle_type"
-                        value={formData.shipping.shipping_vehicle_type}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        options={[
-                            { label: 'Truck', value: '1' },
-                            { label: 'Van', value: '2' },
-                            { label: 'Trailers', value: '3' },
-                            { label: 'Buses', value: '4' },
-                            { label: 'Motorcycles', value: '5' },
-                        ]}
-                        required
-                        className="mb-4"
-                    />
-                    <CButton color="secondary" onClick={handleShipmentDetails}>
-                        Back
-                    </CButton>
-                    <CButton color="primary" onClick={handleSubmit} disabled={disableSubmit}>
-                        Submit
-                    </CButton>
-                </CForm>
+                <LandForm
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleShipmentDetails={handleShipmentDetails}
+                    handleSubmit={handleSubmit}
+                />
             )}
         </>
     )

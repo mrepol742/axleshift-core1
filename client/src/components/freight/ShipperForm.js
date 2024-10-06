@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { CForm, CProgress, CFormLabel, CFormInput, CButton } from '@coreui/react'
 
-const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo }) => {
+const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo }) => {
     return (
         <CForm>
-            <CProgress value={25} />
+            {!isInfo && <CProgress value={25} />}
             <h3 className="mb-4">Shipper Information</h3>
 
             <CFormLabel htmlFor="shipper_company_name">Company Name</CFormLabel>
@@ -58,9 +58,11 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo }) => {
                 className="mb-3"
             />
 
-            <CButton color="primary" onClick={handleConsigneeInfo}>
-                Next
-            </CButton>
+            {!isInfo && (
+                <CButton color="primary" onClick={handleConsigneeInfo}>
+                    Next
+                </CButton>
+            )}
         </CForm>
     )
 }
@@ -75,8 +77,9 @@ ShipperForm.propTypes = {
             shipper_company_address: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,
-    handleInputChange: PropTypes.func.isRequired,
-    handleConsigneeInfo: PropTypes.func.isRequired,
+    handleInputChange: PropTypes.func,
+    handleConsigneeInfo: PropTypes.func,
+    isInfo: PropTypes.bool,
 }
 
 export default ShipperForm
