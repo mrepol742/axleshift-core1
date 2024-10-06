@@ -1,5 +1,5 @@
 import axios from "axios";
-import logger from "../logger.js";
+import logger from "../src/logger.js";
 
 const recaptcha = async (req, res, next) => {
     const { recaptcha_ref } = req.body;
