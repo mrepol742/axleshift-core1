@@ -1,5 +1,5 @@
 import fs from "fs";
-import db from "../models/db.js";
+import database from "../models/db.js";
 import logger from "../src/logger.js";
 
 let sessions = {};
@@ -42,7 +42,7 @@ export const getEmailAddress = (sessionToken) => {
 
 export const getUserId = async (sessionToken) => {
     const email = getEmailAddress(sessionToken);
-    const db = await db();
+    const db = await database();
 
     const useCollection = db.collection("users");
     const theUser = await useCollection.findOne({ email: email });
