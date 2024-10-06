@@ -11,6 +11,7 @@ import {
     CInputGroup,
     CInputGroupText,
     CRow,
+    CButtonGroup,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
@@ -56,25 +57,36 @@ const Login = () => {
                                             required
                                         />
                                     </CInputGroup>
-                                    <CRow>
-                                        <CCol xs={6}>
-                                            <CButton type="submit" color="primary" className="px-4">
+                                    <div className="d-grid">
+                                        <CButtonGroup>
+                                            <CButton
+                                                type="submit"
+                                                color="success"
+                                                className="me-2 rounded"
+                                            >
                                                 Submit
                                             </CButton>
-                                        </CCol>
-                                        <CCol xs={6} className="text-right">
                                             <CButton
-                                                color="link"
-                                                className="px-0"
+                                                color="primary"
+                                                className="me-2 rounded"
                                                 onClick={() => navigate('/login')}
                                             >
                                                 Login
                                             </CButton>
-                                        </CCol>
-                                    </CRow>
+                                        </CButtonGroup>
+                                    </div>
                                 </CForm>
                             </CCardBody>
                         </CCard>
+                        <div className="ms-auto">
+                            <a
+                                href="https://stats.uptimerobot.com/5l58Mua0Wi"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                System Status
+                            </a>
+                        </div>
                     </CCol>
                 </CRow>
             </CContainer>

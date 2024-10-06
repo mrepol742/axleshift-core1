@@ -20,6 +20,7 @@ import Cookies from 'js-cookie'
 import ShipperForm from '../../../components/freight/ShipperForm'
 import ConsineeForm from '../../../components/freight/ConsineeForm'
 import ShipmentForm from '../../../components/freight/ShipmentForm'
+import AirForm from '../../../components/freight/shipping/AirForm'
 
 const Air = () => {
     const navigate = useNavigate()
@@ -147,77 +148,12 @@ const Air = () => {
             )}
 
             {currentPage === 4 && (
-                <CForm>
-                    <CProgress value={100} />
-                    <h3 className="mb-4">Shipping Information</h3>
-
-                    <CFormLabel htmlFor="shipping_origin_airport">Origin Airport</CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipping_origin_airport"
-                        value={formData.shipping.shipping_origin_airport}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-3"
-                    />
-
-                    <CFormLabel htmlFor="shipping_destination_airport">
-                        Destination Airport
-                    </CFormLabel>
-                    <CFormInput
-                        type="text"
-                        id="shipping_destination_airport"
-                        value={formData.shipping.shipping_destination_airport}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-3"
-                    />
-
-                    <CFormLabel htmlFor="shipping_preferred_departure_date">
-                        Preferred Departure Date
-                    </CFormLabel>
-                    <CFormInput
-                        type="date"
-                        id="shipping_preferred_departure_date"
-                        value={formData.shipping.shipping_preferred_departure_date}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-3"
-                    />
-
-                    <CFormLabel htmlFor="shipping_preferred_arrival_date">
-                        Preferred Arrival Date
-                    </CFormLabel>
-                    <CFormInput
-                        type="date"
-                        id="shipping_preferred_arrival_date"
-                        value={formData.shipping.shipping_preferred_arrival_date}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        required
-                        className="mb-3"
-                    />
-
-                    <CFormLabel htmlFor="shipping_flight_type">Flight Type</CFormLabel>
-                    <CFormSelect
-                        id="shipping_flight_type"
-                        value={formData.shipping.shipping_flight_type}
-                        onChange={(e) => handleInputChange(e, 'shipping')}
-                        options={[
-                            { label: 'Cargo-Only Flights', value: '1' },
-                            { label: 'Passenger Flights with Cargo Holds', value: '2' },
-                            { label: 'Charter Flights', value: '3' },
-                            { label: 'Express Service', value: '4' },
-                        ]}
-                        required
-                        className="mb-3"
-                    />
-                    <CButton color="secondary" onClick={handleShipmentDetails}>
-                        Back
-                    </CButton>
-                    <CButton color="primary" onClick={handleSubmit} disabled={disableSubmit}>
-                        Submit
-                    </CButton>
-                </CForm>
+                <AirForm
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleShipmentDetails={handleShipmentDetails}
+                    handleSubmit={handleSubmit}
+                />
             )}
         </>
     )

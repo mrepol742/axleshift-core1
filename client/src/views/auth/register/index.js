@@ -209,6 +209,15 @@ const Register = () => {
                                 </CForm>
                             </CCardBody>
                         </CCard>
+                        <div className="ms-auto">
+                            <a
+                                href="https://stats.uptimerobot.com/5l58Mua0Wi"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                System Status
+                            </a>
+                        </div>
                     </CCol>
                 </CRow>
             </CContainer>

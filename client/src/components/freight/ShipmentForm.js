@@ -16,10 +16,11 @@ const ShipmentForm = ({
     handleInputChange,
     handleConsigneeInfo,
     handleShippingInformation,
+    isInfo,
 }) => {
     return (
         <CForm>
-            <CProgress value={75} />
+            {!isInfo && <CProgress value={75} />}
             <h3 className="mb-4">Shipment Details</h3>
 
             <CFormLabel htmlFor="shipment_description">Description of Goods</CFormLabel>
@@ -106,12 +107,16 @@ const ShipmentForm = ({
                 className="mb-3"
             ></CFormTextarea>
 
-            <CButton color="secondary" onClick={handleConsigneeInfo}>
-                Back
-            </CButton>
-            <CButton color="primary" onClick={handleShippingInformation}>
-                Next
-            </CButton>
+            {!isInfo && (
+                <>
+                    <CButton color="secondary" onClick={handleConsigneeInfo}>
+                        Back
+                    </CButton>
+                    <CButton color="primary" onClick={handleShippingInformation}>
+                        Next
+                    </CButton>
+                </>
+            )}
         </CForm>
     )
 }
@@ -129,9 +134,10 @@ ShipmentForm.propTypes = {
             shipment_instructions: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,
-    handleInputChange: PropTypes.func.isRequired,
-    handleConsigneeInfo: PropTypes.func.isRequired,
-    handleShippingInformation: PropTypes.func.isRequired,
+    handleInputChange: PropTypes.func,
+    handleConsigneeInfo: PropTypes.func,
+    handleShippingInformation: PropTypes.func,
+    isInfo: PropTypes.bool,
 }
 
 export default ShipmentForm

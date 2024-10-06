@@ -7,10 +7,11 @@ const ConsineeForm = ({
     handleInputChange,
     handleShipperInformation,
     handleShipmentDetails,
+    isInfo,
 }) => {
     return (
         <CForm>
-            <CProgress value={50} />
+            {!isInfo && <CProgress value={50} />}
             <h3 className="mb-4">Consignee Information</h3>
 
             <CFormLabel htmlFor="consignee_company_name">Company Name</CFormLabel>
@@ -63,12 +64,16 @@ const ConsineeForm = ({
                 className="mb-3"
             />
 
-            <CButton color="secondary" onClick={handleShipperInformation}>
-                Back
-            </CButton>
-            <CButton color="primary" onClick={handleShipmentDetails}>
-                Next
-            </CButton>
+            {!isInfo && (
+                <>
+                    <CButton color="secondary" onClick={handleShipperInformation}>
+                        Back
+                    </CButton>
+                    <CButton color="primary" onClick={handleShipmentDetails}>
+                        Next
+                    </CButton>
+                </>
+            )}
         </CForm>
     )
 }
@@ -83,9 +88,10 @@ ConsineeForm.propTypes = {
             consignee_company_address: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,
-    handleInputChange: PropTypes.func.isRequired,
-    handleShipperInformation: PropTypes.func.isRequired,
-    handleShipmentDetails: PropTypes.func.isRequired,
+    handleInputChange: PropTypes.func,
+    handleShipperInformation: PropTypes.func,
+    handleShipmentDetails: PropTypes.func,
+    isInfo: PropTypes.bool,
 }
 
 export default ConsineeForm

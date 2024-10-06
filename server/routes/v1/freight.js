@@ -63,7 +63,7 @@ router.get("/:id", auth, async (req, res) => {
 
         const db = await connectToDatabase();
         const freightCollection = db.collection("freight");
-        const items = await freightCollection.find({ user_id: new ObjectId(user_id) }).toArray();
+        const items = await freightCollection.find({ user_id: new ObjectId(user_id), _id: new ObjectId(id) }).toArray();
 
         if (!items.length) return res.status(404).send();
         return res.status(200).json({
