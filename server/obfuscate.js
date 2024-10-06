@@ -1,6 +1,6 @@
 import js from "javascript-obfuscator";
 import fs from "fs";
-import logger from "./logger.js";
+import logger from "./src/logger.js";
 
 main("./server-build");
 

@@ -3,12 +3,12 @@ dotenv.config();
 import express from "express";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import connectToDatabase from "../models/db.js";
-import logger from "../logger.js";
-import { addSession, addUserProfileToSession, removeSession } from "../src/sessions.js";
-import auth from "../middleware/auth.js";
-import recaptcha from "../middleware/recaptcha.js";
-import passwordHash, { generateUniqueId } from "../src/password.js";
+import connectToDatabase from "../../models/db.js";
+import logger from "../../src/logger.js";
+import { addSession, addUserProfileToSession, removeSession } from "../../src/sessions.js";
+import auth from "../../middleware/auth.js";
+import recaptcha from "../../middleware/recaptcha.js";
+import passwordHash, { generateUniqueId } from "../../src/password.js";
 
 const router = express.Router();
 

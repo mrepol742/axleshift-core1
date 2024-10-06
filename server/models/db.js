@@ -2,17 +2,16 @@ import dotenv from "dotenv";
 dotenv.config();
 import fs from "fs";
 import { MongoClient } from "mongodb";
-import logger from "../logger.js";
+import logger from "../src/logger.js";
 import passwordHash from "../src/password.js";
 
 const data = JSON.parse(fs.readFileSync(import.meta.dirname + "/users.json", "utf8")).docs;
 let dbInstance = null;
 
-const connectToDatabase = async () => {
+const db = async () => {
     if (dbInstance) return dbInstance;
 
     const client = new MongoClient(process.env.MONGO_URL);
-
     await client.connect();
 
     logger.info("Connected successfully to server");
@@ -29,15 +28,14 @@ const connectToDatabase = async () => {
     let cursor = await collection.find({});
     let documents = await cursor.toArray();
 
-    if (documents.length == 0) {
-        for (const element of data) {
-            element.password = passwordHash(element.password);
-        }
-        const insertResult = await collection.insertMany(data);
-        logger.info(`Inserted documents: ${insertResult.insertedCount}`);
-    }
+    if (documents.length != 0) return dbInstance;
 
+    for (const element of data) {
+        element.password = passwordHash(element.password);
+    }
+    const insertResult = await collection.insertMany(data);
+    logger.info(`Inserted documents: ${insertResult.insertedCount}`);
     return dbInstance;
 };
 
-export default connectToDatabase;
+export default db;

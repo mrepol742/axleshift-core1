@@ -78,6 +78,22 @@ const _nav = [
     },
     {
         component: CNavTitle,
+        name: 'Payments',
+    },
+    {
+        component: CNavItem,
+        name: 'Payments Info',
+        to: '/lorem',
+        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'History',
+        to: '/lorem',
+        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+    },
+    {
+        component: CNavTitle,
         name: 'Documents',
     },
     {

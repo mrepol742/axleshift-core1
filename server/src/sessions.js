@@ -1,6 +1,6 @@
 import fs from "fs";
-import connectToDatabase from "../models/db.js";
-import logger from "../logger.js";
+import db from "../models/db.js";
+import logger from "../src/logger.js";
 
 let sessions = {};
 
@@ -28,7 +28,7 @@ export const addSession = (theUser, sessionToken, ip, userAgent) => {
         last_accessed: Date.now(),
     };
 
-    if (process.env.DEBUG) {
+    if (process.env.NODE_ENV !== "production") {
         fs.writeFileSync("./sessions/sessions.json", JSON.stringify(sessions), (err) => {
             if (err) throw err;
             logger.info("Sessions save");
@@ -42,11 +42,10 @@ export const getEmailAddress = (sessionToken) => {
 
 export const getUserId = async (sessionToken) => {
     const email = getEmailAddress(sessionToken);
-    const db = await connectToDatabase();
+    const db = await db();
 
     const useCollection = db.collection("users");
     const theUser = await useCollection.findOne({ email: email });
-    logger.info(theUser);
     return theUser._id;
 };
 

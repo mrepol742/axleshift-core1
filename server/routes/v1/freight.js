@@ -2,11 +2,11 @@ import dotenv from "dotenv";
 dotenv.config();
 import { ObjectId } from "mongodb";
 import express from "express";
-import logger from "../logger.js";
-import connectToDatabase from "../models/db.js";
-import auth from "../middleware/auth.js";
-import recaptcha from "../middleware/recaptcha.js";
-import { getUserId } from "../src/sessions.js";
+import logger from "../../src/logger.js";
+import connectToDatabase from "../../models/db.js";
+import auth from "../../middleware/auth.js";
+import recaptcha from "../../middleware/recaptcha.js";
+import { getUserId } from "../../src/sessions.js";
 
 const router = express.Router();
 const limit = 20;
