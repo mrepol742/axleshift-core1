@@ -12,7 +12,14 @@ import {
     CFormSelect,
 } from '@coreui/react'
 
-const LandForm = ({ formData, handleInputChange, handleShipmentDetails, handleSubmit, isInfo }) => {
+const LandForm = ({
+    formData,
+    handleInputChange,
+    handleShipmentDetails,
+    handleSubmit,
+    isInfo,
+    isDisabled,
+}) => {
     return (
         <CForm>
             {!isInfo && <CProgress value={100} />}
@@ -26,6 +33,7 @@ const LandForm = ({ formData, handleInputChange, handleShipmentDetails, handleSu
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_destination_address">Destination Address</CFormLabel>
@@ -36,6 +44,7 @@ const LandForm = ({ formData, handleInputChange, handleShipmentDetails, handleSu
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_pickup_date">Pickup Date</CFormLabel>
@@ -46,6 +55,7 @@ const LandForm = ({ formData, handleInputChange, handleShipmentDetails, handleSu
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_delivery_date">Delivery Date</CFormLabel>
@@ -56,6 +66,7 @@ const LandForm = ({ formData, handleInputChange, handleShipmentDetails, handleSu
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_vehicle_type">Vehicle Type</CFormLabel>
@@ -72,6 +83,7 @@ const LandForm = ({ formData, handleInputChange, handleShipmentDetails, handleSu
                 ]}
                 required
                 className="mb-4"
+                disabled={isDisabled}
             />
             {!isInfo && (
                 <>
@@ -101,6 +113,7 @@ LandForm.propTypes = {
     handleShipmentDetails: PropTypes.func,
     handleSubmit: PropTypes.func,
     isInfo: PropTypes.bool,
+    isDisabled: PropTypes.bool,
 }
 
 export default LandForm

@@ -12,7 +12,14 @@ import {
     CFormSelect,
 } from '@coreui/react'
 
-const AirForm = ({ formData, handleInputChange, handleShipmentDetails, handleSubmit, isInfo }) => {
+const AirForm = ({
+    formData,
+    handleInputChange,
+    handleShipmentDetails,
+    handleSubmit,
+    isInfo,
+    isDisabled,
+}) => {
     return (
         <CForm>
             {!isInfo && <CProgress value={100} />}
@@ -26,6 +33,7 @@ const AirForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_destination_airport">Destination Airport</CFormLabel>
@@ -36,6 +44,7 @@ const AirForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_preferred_departure_date">
@@ -48,6 +57,7 @@ const AirForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_preferred_arrival_date">
@@ -60,6 +70,7 @@ const AirForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_flight_type">Flight Type</CFormLabel>
@@ -75,6 +86,7 @@ const AirForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 ]}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
             {!isInfo && (
                 <>
@@ -104,6 +116,7 @@ AirForm.propTypes = {
     handleShipmentDetails: PropTypes.func,
     handleSubmit: PropTypes.func,
     isInfo: PropTypes.bool,
+    isDisabled: PropTypes.bool,
 }
 
 export default AirForm

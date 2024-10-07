@@ -19,7 +19,10 @@
     "server-install": "cd server && npm i && cp .env.example .env",
     "client-install": "cd client && npm i && cp .env.example .env",
     "post-production": "concurrently \"npm run server\" \"npm run client-post\"",
-    "client-post": "cd client && npm run build && cd build && python3 -m http.server"
+    "client-post": "cd client && npm run build && cd build && python3 -m http.server",
+    "lint": "concurrently \"npm run server-lint\" \"npm run client-lint\"",
+    "server-lint": "cd server && npm run lint",
+    "client-lint": "cd client && npm run lint"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"

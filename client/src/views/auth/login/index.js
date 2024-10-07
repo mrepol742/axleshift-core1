@@ -61,7 +61,6 @@ const Login = () => {
                 headers: {},
             })
             .then((response) => {
-                setLoading(false)
                 Cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
                 const url = urlParams.get('n') ? urlParams.get('n') : '/'
@@ -69,7 +68,7 @@ const Login = () => {
                 navigate(url)
             })
             .catch((error) => {
-                setLoading(false)
+                console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
 
                 setError({
@@ -77,10 +76,26 @@ const Login = () => {
                     message,
                 })
             })
+            .finally(() => {
+                setLoading(false)
+            })
+    }
+
+    const backgroundStyle = {
+        backgroundImage: 'url(/images/background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        opacity: 0.5,
     }
 
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+            <div style={backgroundStyle} />
             <CContainer>
                 {loading && (
                     <div className="loading-overlay">
@@ -89,7 +104,7 @@ const Login = () => {
                 )}
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
-                        <CCard className="p-4">
+                        <CCard className="p-1 p-md-4">
                             {error.error && (
                                 <CAlert color="danger" className="d-flex align-items-center">
                                     <FontAwesomeIcon
@@ -155,23 +170,24 @@ const Login = () => {
                                     </div>
                                     <CButton
                                         color="link"
-                                        className="px-0"
+                                        className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                         onClick={() => navigate('/forgot-password')}
                                     >
                                         Forgot password?
                                     </CButton>
                                 </CForm>
                             </CCardBody>
+                            <div className="ms-auto">
+                                <a
+                                    href="https://stats.uptimerobot.com/5l58Mua0Wi"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                >
+                                    System Status
+                                </a>
+                            </div>
                         </CCard>
-                        <div className="ms-auto">
-                            <a
-                                href="https://stats.uptimerobot.com/5l58Mua0Wi"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                System Status
-                            </a>
-                        </div>
                     </CCol>
                 </CRow>
             </CContainer>

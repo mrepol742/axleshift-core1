@@ -57,6 +57,18 @@ const Register = () => {
         }))
     }
 
+    const backgroundStyle = {
+        backgroundImage: 'url(/images/background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        opacity: 0.5,
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
@@ -73,7 +85,6 @@ const Register = () => {
                 headers: {},
             })
             .then((response) => {
-                setLoading(false)
                 if (!response.data.error) navigate('/login')
                 setError({
                     error: true,
@@ -81,7 +92,7 @@ const Register = () => {
                 })
             })
             .catch((error) => {
-                setLoading(false)
+                console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
 
                 setError({
@@ -89,10 +100,14 @@ const Register = () => {
                     message,
                 })
             })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+            <div style={backgroundStyle} />
             <CContainer>
                 {loading && (
                     <div className="loading-overlay">
@@ -101,8 +116,8 @@ const Register = () => {
                 )}
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
-                        <CCard className="mx-4">
-                            <CCardBody className="p-4">
+                        <CCard className="p-1 p-md-4">
+                            <CCardBody>
                                 {error.error && (
                                     <CAlert color="danger" className="d-flex align-items-center">
                                         <FontAwesomeIcon
@@ -208,16 +223,17 @@ const Register = () => {
                                     </div>
                                 </CForm>
                             </CCardBody>
+                            <div className="ms-auto">
+                                <a
+                                    href="https://stats.uptimerobot.com/5l58Mua0Wi"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                >
+                                    System Status
+                                </a>
+                            </div>
                         </CCard>
-                        <div className="ms-auto">
-                            <a
-                                href="https://stats.uptimerobot.com/5l58Mua0Wi"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                System Status
-                            </a>
-                        </div>
                     </CCol>
                 </CRow>
             </CContainer>

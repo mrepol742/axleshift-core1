@@ -12,7 +12,14 @@ import {
     CFormSelect,
 } from '@coreui/react'
 
-const SeaForm = ({ formData, handleInputChange, handleShipmentDetails, handleSubmit, isInfo }) => {
+const SeaForm = ({
+    formData,
+    handleInputChange,
+    handleShipmentDetails,
+    handleSubmit,
+    isInfo,
+    isDisabled,
+}) => {
     return (
         <CForm>
             {!isInfo && <CProgress value={100} />}
@@ -26,6 +33,7 @@ const SeaForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-4"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_discharge_port">Discharge Port</CFormLabel>
@@ -36,6 +44,7 @@ const SeaForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-4"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_sailing_date">Sailing Date</CFormLabel>
@@ -46,6 +55,7 @@ const SeaForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-4"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_estimated_arrival_date">
@@ -58,6 +68,7 @@ const SeaForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 onChange={(e) => handleInputChange(e, 'shipping')}
                 required
                 className="mb-4"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_cargo_type">Flight Type</CFormLabel>
@@ -76,6 +87,7 @@ const SeaForm = ({ formData, handleInputChange, handleShipmentDetails, handleSub
                 ]}
                 required
                 className="mb-4"
+                disabled={isDisabled}
             />
 
             {!isInfo && (
@@ -106,6 +118,7 @@ SeaForm.propTypes = {
     handleShipmentDetails: PropTypes.func,
     handleSubmit: PropTypes.func,
     isInfo: PropTypes.bool,
+    isDisabled: PropTypes.bool,
 }
 
 export default SeaForm

@@ -28,8 +28,8 @@ const Logout = () => {
                 Cookies.remove(import.meta.env.VITE_APP_SESSION)
                 navigate('/')
             })
-            .catch((err) => {
-                console.error(err)
+            .catch((error) => {
+                console.error(error)
             })
     }
 

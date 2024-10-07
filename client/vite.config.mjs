@@ -11,8 +11,12 @@ export default defineConfig(() => {
             chunkSizeWarningLimit: 600,
             rollupOptions: {
                 output: {
+                    entryFileNames: 'assets/[hash].js',
+                    chunkFileNames: 'assets/[hash].js',
+                    assetFileNames: 'assets/[name].[ext]',
                     manualChunks(id) {
-                        if (id.includes('node_modules')) {
+                        // this thing fixes issues with vite build minif of sentry
+                        if (id.includes('node_modules') && !id.includes('sentry')) {
                             return id.toString().split('node_modules/')[1].split('/')[0]
                         }
                     },

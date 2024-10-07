@@ -16,6 +16,8 @@ import {
     CPagination,
     CPaginationItem,
     CSpinner,
+    CButton,
+    CButtonGroup,
 } from '@coreui/react'
 import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -56,12 +58,17 @@ const FreightInfo = () => {
     })
     const [type, setType] = useState('')
     const [loading, setLoading] = useState(false)
+    const [isDisabled, setIsDisabled] = useState(true)
     const navigate = useNavigate()
     const { id } = useParams()
 
     const handleTypeChange = (newType) => {
         setType(newType)
 
+        /*
+         * This thing doenst look like complicated
+i need coffee rn.
+         */
         const updatedShippingData = {
             ...(newType === 'air'
                 ? {
@@ -108,25 +115,68 @@ const FreightInfo = () => {
     }
 
     const fetchData = async () => {
-        try {
-            setLoading(true)
-            const response = await axios.get(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/${id}`,
+        setLoading(true)
+        await axios
+            .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                },
+            })
+            .then((response) => {
+                handleTypeChange(response.data.data[0].type)
+                setFormData(response.data.data[0].data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
+    }
+
+    const handleEditButton = async () => {
+        if (isDisabled) return setIsDisabled(false)
+        setLoading(true)
+        await axios
+            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                },
+            })
+            .then((response) => {
+                alert('save')
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+            .finally(() => {
+                setLoading(false)
+                setIsDisabled(true)
+            })
+    }
+
+    const handleDeleteButton = async () => {
+        if (!isDisabled) return setIsDisabled(true)
+        setLoading(true)
+        await axios
+            .post(
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/d/${id}`,
+                {},
                 {
                     headers: {
                         Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                     },
                 },
             )
-
-            if (response.status !== 200) return setError(true)
-            handleTypeChange(response.data.data[0].type)
-            setFormData(response.data.data[0].data)
-        } catch (err) {
-            console.error(err)
-        } finally {
-            setLoading(false)
-        }
+            .then((response) => {
+                navigate('/')
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     const renderForm = () => {
@@ -137,6 +187,7 @@ const FreightInfo = () => {
                         isInfo={true}
                         formData={formData}
                         handleInputChange={handleInputChange}
+                        isDisabled={isDisabled}
                     />
                 )
             case 'land':
@@ -145,6 +196,7 @@ const FreightInfo = () => {
                         isInfo={true}
                         formData={formData}
                         handleInputChange={handleInputChange}
+                        isDisabled={isDisabled}
                     />
                 )
             case 'sea':
@@ -153,6 +205,7 @@ const FreightInfo = () => {
                         isInfo={true}
                         formData={formData}
                         handleInputChange={handleInputChange}
+                        isDisabled={isDisabled}
                     />
                 )
             default:
@@ -164,6 +217,7 @@ const FreightInfo = () => {
         fetchData()
     }, [])
 
+    // i tried to resuse them like how she re--use u
     return (
         <div>
             {loading && (
@@ -172,13 +226,28 @@ const FreightInfo = () => {
                 </div>
             )}
 
-            <h3>#{id}</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>#{id}</span>
+                <CButtonGroup>
+                    <CButton color="primary" className="me-2 rounded" onClick={handleEditButton}>
+                        {!isDisabled ? 'Save' : 'Edit'}
+                    </CButton>
+                    <CButton
+                        color={!isDisabled ? 'secondary' : 'danger'}
+                        className="me-2 rounded"
+                        onClick={handleDeleteButton}
+                    >
+                        {!isDisabled ? 'Cancel' : 'Delete'}
+                    </CButton>
+                </CButtonGroup>
+            </div>
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol>
                     <ShipperForm
                         isInfo={true}
                         formData={formData}
                         handleInputChange={handleInputChange}
+                        isDisabled={isDisabled}
                     />
                 </CCol>
                 <CCol>
@@ -186,6 +255,7 @@ const FreightInfo = () => {
                         isInfo={true}
                         formData={formData}
                         handleInputChange={handleInputChange}
+                        isDisabled={isDisabled}
                     />
                 </CCol>
             </CRow>
@@ -195,6 +265,7 @@ const FreightInfo = () => {
                         isInfo={true}
                         formData={formData}
                         handleInputChange={handleInputChange}
+                        isDisabled={isDisabled}
                     />
                 </CCol>
                 <CCol>{renderForm()}</CCol>
