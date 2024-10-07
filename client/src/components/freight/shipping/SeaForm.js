@@ -22,7 +22,7 @@ const SeaForm = ({
 }) => {
     return (
         <CForm>
-            {!isInfo && <CProgress value={100} />}
+            {!isInfo && <CProgress value={100} className="mb-3" variant="striped" animated />}
             <h3 className="mb-4">Shipping Information</h3>
 
             <CFormLabel htmlFor="shipping_loading_port">Loading Port</CFormLabel>
@@ -83,7 +83,6 @@ const SeaForm = ({
                     { label: 'Reefer Cargo', value: '4' },
                     { label: 'RORO Cargo', value: '5' },
                     { label: 'Heavy Lift Cargo', value: '6' },
-                    { label: 'Dangerous Goods', value: '7' },
                 ]}
                 required
                 className="mb-4"

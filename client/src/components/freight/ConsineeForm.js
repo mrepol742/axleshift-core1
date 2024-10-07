@@ -12,7 +12,7 @@ const ConsineeForm = ({
 }) => {
     return (
         <CForm>
-            {!isInfo && <CProgress value={50} />}
+            {!isInfo && <CProgress value={50} className="mb-3" variant="striped" animated />}
             <h3 className="mb-4">Consignee Information</h3>
 
             <CFormLabel htmlFor="consignee_company_name">Company Name</CFormLabel>

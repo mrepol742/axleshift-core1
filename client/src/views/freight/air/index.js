@@ -15,6 +15,7 @@ import {
     CProgress,
     CFormSelect,
     CSpinner,
+    CImage,
 } from '@coreui/react'
 import Cookies from 'js-cookie'
 import ShipperForm from '../../../components/freight/ShipperForm'
@@ -120,41 +121,47 @@ const Air = () => {
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )}
+            <CRow className="mb-4">
+                <CCol xs={3} className="image-container d-none d-md-flex">
+                    <CImage fluid rounded src="/images/freight-air.jpg" className="custom-image" />
+                </CCol>
+                <CCol md={7}>
+                    {currentPage === 1 && (
+                        <ShipperForm
+                            formData={formData}
+                            handleInputChange={handleInputChange}
+                            handleConsigneeInfo={handleConsigneeInfo}
+                        />
+                    )}
 
-            {currentPage === 1 && (
-                <ShipperForm
-                    formData={formData}
-                    handleInputChange={handleInputChange}
-                    handleConsigneeInfo={handleConsigneeInfo}
-                />
-            )}
+                    {currentPage === 2 && (
+                        <ConsineeForm
+                            formData={formData}
+                            handleInputChange={handleInputChange}
+                            handleShipperInformation={handleShipperInformation}
+                            handleShipmentDetails={handleShipmentDetails}
+                        />
+                    )}
 
-            {currentPage === 2 && (
-                <ConsineeForm
-                    formData={formData}
-                    handleInputChange={handleInputChange}
-                    handleShipperInformation={handleShipperInformation}
-                    handleShipmentDetails={handleShipmentDetails}
-                />
-            )}
+                    {currentPage === 3 && (
+                        <ShipmentForm
+                            formData={formData}
+                            handleInputChange={handleInputChange}
+                            handleConsigneeInfo={handleConsigneeInfo}
+                            handleShippingInformation={handleShippingInformation}
+                        />
+                    )}
 
-            {currentPage === 3 && (
-                <ShipmentForm
-                    formData={formData}
-                    handleInputChange={handleInputChange}
-                    handleConsigneeInfo={handleConsigneeInfo}
-                    handleShippingInformation={handleShippingInformation}
-                />
-            )}
-
-            {currentPage === 4 && (
-                <AirForm
-                    formData={formData}
-                    handleInputChange={handleInputChange}
-                    handleShipmentDetails={handleShipmentDetails}
-                    handleSubmit={handleSubmit}
-                />
-            )}
+                    {currentPage === 4 && (
+                        <AirForm
+                            formData={formData}
+                            handleInputChange={handleInputChange}
+                            handleShipmentDetails={handleShipmentDetails}
+                            handleSubmit={handleSubmit}
+                        />
+                    )}
+                </CCol>
+            </CRow>
         </>
     )
 }

@@ -22,7 +22,7 @@ const LandForm = ({
 }) => {
     return (
         <CForm>
-            {!isInfo && <CProgress value={100} />}
+            {!isInfo && <CProgress value={100} className="mb-3" variant="striped" animated />}
             <h3 className="mb-4">Shipping Information</h3>
 
             <CFormLabel htmlFor="shipping_origin_addresss">Origin Address</CFormLabel>

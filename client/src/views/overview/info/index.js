@@ -62,47 +62,6 @@ const FreightInfo = () => {
     const navigate = useNavigate()
     const { id } = useParams()
 
-    const handleTypeChange = (newType) => {
-        setType(newType)
-
-        /*
-         * This thing doenst look like complicated
-i need coffee rn.
-         */
-        const updatedShippingData = {
-            ...(newType === 'air'
-                ? {
-                      shipping_origin_airport: '',
-                      shipping_destination_airport: '',
-                      shipping_preferred_departure_date: '',
-                      shipping_preferred_arrival_date: '',
-                      shipping_flight_type: '1',
-                  }
-                : newType === 'land'
-                  ? {
-                        shipping_origin_addresss: '',
-                        shipping_destination_address: '',
-                        shipping_pickup_date: '',
-                        shipping_delivery_date: '',
-                        shipping_vehicle_type: 0,
-                    }
-                  : newType === 'sea'
-                    ? {
-                          shipping_loading_port: '',
-                          shipping_discharge_port: '',
-                          shipping_sailing_date: '',
-                          shipping_estimated_arrival_date: '',
-                          shipping_cargo_type: '',
-                      }
-                    : {}),
-        }
-
-        setFormData((prevData) => ({
-            ...prevData,
-            shipping: updatedShippingData,
-        }))
-    }
-
     const handleInputChange = (e, section) => {
         const { id, value } = e.target
         setFormData((prev) => ({
@@ -123,7 +82,7 @@ i need coffee rn.
                 },
             })
             .then((response) => {
-                handleTypeChange(response.data.data[0].type)
+                setType(response.data.data[0].type)
                 setFormData(response.data.data[0].data)
             })
             .catch((error) => {
@@ -182,32 +141,11 @@ i need coffee rn.
     const renderForm = () => {
         switch (type) {
             case 'air':
-                return (
-                    <AirForm
-                        isInfo={true}
-                        formData={formData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={isDisabled}
-                    />
-                )
+                return <AirForm isInfo={true} formData={formData} isDisabled={true} />
             case 'land':
-                return (
-                    <LandForm
-                        isInfo={true}
-                        formData={formData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={isDisabled}
-                    />
-                )
+                return <LandForm isInfo={true} formData={formData} isDisabled={true} />
             case 'sea':
-                return (
-                    <SeaForm
-                        isInfo={true}
-                        formData={formData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={isDisabled}
-                    />
-                )
+                return <SeaForm isInfo={true} formData={formData} isDisabled={true} />
             default:
                 return null
         }

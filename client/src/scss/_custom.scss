@@ -30,3 +30,16 @@
 ::-webkit-scrollbar-thumb:hover {
     background-color: #323a49;
 }
+
+
+.image-container {
+    height: auto;
+    display: flex;
+    align-items: stretch;
+}
+
+.custom-image {
+    height: auto;
+    width: auto;
+    object-fit: cover;
+}

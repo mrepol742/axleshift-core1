@@ -26,6 +26,7 @@ jobs:
           echo "VITE_APP_MAINTENANCE=${{ secrets.APP_MAINTENANCE }}" >> .env
           echo "VITE_APP_SENTRY_DNS=${{ secrets.APP_SENTRY_DNS }}" >> .env
           echo "VITE_APP_GOOGLE_ANALYTICS=${{ secrets.APP_GOOGLE_ANALYTICS }}" >> .env
+          echo "VITE_APP_GOOGLE_MAP=${{ secrets.APP_GOOGLE_MAP }}" >> .env
       
       - name: Build frontend
         run: |
@@ -51,6 +52,7 @@ jobs:
           cp server server-build -r
           cd server
           npm i
+          npm run lint
           cd ../server-build
           rm -rf eslint.config.js obfuscate.js
           cd ..
