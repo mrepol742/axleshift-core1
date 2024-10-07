@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, lazy } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { CSpinner, useColorModes } from '@coreui/react'
+import ReactGA from 'react-ga4'
 import './scss/style.scss'
 import DocumentTitle from './components/middleware/DocumentTitle'
 import Maintenance from './components/middleware/Maintenance'
@@ -17,6 +18,7 @@ const Logout = lazy(() => import('./views/auth/logout/index'))
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
     const storedTheme = useSelector((state) => state.theme)
+    ReactGA.initialize(import.meta.env.VITE_APP_GOOGLE_ANALYTICS)
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.href.split('?')[1])
@@ -26,6 +28,8 @@ const App = () => {
         if (isColorModeSet()) return
 
         setColorMode(storedTheme)
+
+        ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
     }, [])
 
     return (

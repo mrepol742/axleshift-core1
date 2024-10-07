@@ -25,6 +25,7 @@ jobs:
           echo "VITE_APP_SESSION=${{ secrets.APP_SESSION }}" >> .env
           echo "VITE_APP_MAINTENANCE=${{ secrets.APP_MAINTENANCE }}" >> .env
           echo "VITE_APP_SENTRY_DNS=${{ secrets.APP_SENTRY_DNS }}" >> .env
+          echo "VITE_APP_GOOGLE_ANALYTICS=${{ secrets.APP_GOOGLE_ANALYTICS }}" >> .env
       
       - name: Build frontend
         run: |
