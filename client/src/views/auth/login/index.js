@@ -21,7 +21,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { useDispatch } from 'react-redux'
-import background from '../../../assets/brand/background.png'
 
 const Login = () => {
     const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
@@ -81,7 +80,7 @@ const Login = () => {
     }
 
     const backgroundStyle = {
-        backgroundImage: `url(${background})`,
+        backgroundImage: 'url(/images/background.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         position: 'absolute',

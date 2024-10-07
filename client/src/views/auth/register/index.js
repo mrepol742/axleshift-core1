@@ -20,7 +20,6 @@ import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg
 import ReCAPTCHA from 'react-google-recaptcha'
 import Cookies from 'js-cookie'
 import axios from 'axios'
-import background from '../../../assets/brand/background.png'
 
 const Register = () => {
     const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
@@ -59,7 +58,7 @@ const Register = () => {
     }
 
     const backgroundStyle = {
-        backgroundImage: `url(${background})`,
+        backgroundImage: 'url(/images/background.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         position: 'absolute',

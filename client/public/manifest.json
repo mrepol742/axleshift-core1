@@ -3,13 +3,11 @@
     "name": "Axleshift Core 1",
     "icons": [
         {
-            "src": "./assets/img/favicon.png",
-            "sizes": "100x100",
+            "src": "./favicon.png",
+            "sizes": "500x500",
             "type": "image/png"
         }
     ],
-    "start_url": ".",
     "display": "standalone",
-    "theme_color": "#000000",
-    "background_color": "#ffffff"
+    "start_url": "."
 }

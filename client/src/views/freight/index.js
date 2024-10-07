@@ -12,9 +12,6 @@ import {
     CCardImage,
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
-import FreightAir from '../../assets/images/freight-air.jpg'
-import FreightLand from '../../assets/images/freight-land.jpg'
-import FreightSea from '../../assets/images/freight-sea.jpg'
 
 const Freight = () => {
     const navigate = useNavigate()
@@ -32,7 +29,7 @@ const Freight = () => {
                         onClick={() => navigate('/freight/land')}
                         style={{ cursor: 'pointer' }}
                     >
-                        <CCardImage src={FreightLand} />
+                        <CCardImage src="/images/freight-land.jpg" />
                         <CCardImageOverlay style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}>
                             <CCardTitle>Land Freight</CCardTitle>
                             <CCardText>
@@ -48,7 +45,7 @@ const Freight = () => {
                         onClick={() => navigate('/freight/air')}
                         style={{ cursor: 'pointer' }}
                     >
-                        <CCardImage src={FreightAir} />
+                        <CCardImage src="/images/freight-air.jpg" />
                         <CCardImageOverlay style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}>
                             <CCardTitle>Air Freight</CCardTitle>
                             <CCardText>
@@ -64,7 +61,7 @@ const Freight = () => {
                         onClick={() => navigate('/freight/sea')}
                         style={{ cursor: 'pointer' }}
                     >
-                        <CCardImage src={FreightSea} />
+                        <CCardImage src="/images/freight-sea.jpg" />
                         <CCardImageOverlay style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}>
                             <CCardTitle>Sea Freight</CCardTitle>
                             <CCardText>
