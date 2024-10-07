@@ -12,7 +12,8 @@ export default defineConfig(() => {
             rollupOptions: {
                 output: {
                     manualChunks(id) {
-                        if (id.includes('node_modules')) {
+                        // this thing fixes issues with vite build minif of sentry
+                        if (id.includes('node_modules') && !id.includes('sentry')) {
                             return id.toString().split('node_modules/')[1].split('/')[0]
                         }
                     },
