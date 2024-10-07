@@ -83,7 +83,6 @@ const SeaForm = ({
                     { label: 'Reefer Cargo', value: '4' },
                     { label: 'RORO Cargo', value: '5' },
                     { label: 'Heavy Lift Cargo', value: '6' },
-                    { label: 'Dangerous Goods', value: '7' },
                 ]}
                 required
                 className="mb-4"

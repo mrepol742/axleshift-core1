@@ -87,15 +87,14 @@ router.get("/:id", auth, async (req, res) => {
      shipper
      consignee
      shipment
-     shipping
   Header:
      Authentication
 */
 router.post("/b/:type", auth, async (req, res) => {
     try {
-        const { shipper, consignee, shipment, shipping } = req.body;
+        const { shipper, consignee, shipment } = req.body;
         const type = req.params.type;
-        if (!shipper || !consignee || !shipment || !shipping || !type) return res.status(400).send();
+        if (!shipper || !consignee || !shipment || !type) return res.status(400).send();
         if (!["air", "land", "sea"].includes(type)) return res.status(400).send();
 
         const user_id = await getUserId(req.token);
@@ -108,7 +107,6 @@ router.post("/b/:type", auth, async (req, res) => {
                 shipper: shipper,
                 consignee: consignee,
                 shipment: shipment,
-                shipping: shipping,
             },
             type: type,
             created_at: new Date(),
