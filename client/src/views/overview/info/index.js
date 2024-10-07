@@ -30,7 +30,7 @@ import LandForm from '../../../components/freight/shipping/LandForm'
 import SeaForm from '../../../components/freight/shipping/SeaForm'
 
 const FreightInfo = () => {
-    const [formData, setFormData] = useState({
+    const dataF = {
         shipper: {
             shipper_company_name: '',
             shipper_contact_name: '',
@@ -55,7 +55,9 @@ const FreightInfo = () => {
             shipment_value: 0,
             shipment_instructions: '',
         },
-    })
+    }
+    const [formData, setFormData] = useState(dataF)
+    const [editedFormData, setEditedFormData] = useState(dataF)
     const [type, setType] = useState('')
     const [loading, setLoading] = useState(false)
     const [isDisabled, setIsDisabled] = useState(true)
@@ -64,7 +66,7 @@ const FreightInfo = () => {
 
     const handleInputChange = (e, section) => {
         const { id, value } = e.target
-        setFormData((prev) => ({
+        setEditedFormData((prev) => ({
             ...prev,
             [section]: {
                 ...prev[section],
@@ -84,6 +86,7 @@ const FreightInfo = () => {
             .then((response) => {
                 setType(response.data.data[0].type)
                 setFormData(response.data.data[0].data)
+                setEditedFormData(response.data.data[0].data)
             })
             .catch((error) => {
                 console.error(error)
@@ -97,11 +100,15 @@ const FreightInfo = () => {
         if (isDisabled) return setIsDisabled(false)
         setLoading(true)
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`, formData, {
-                headers: {
-                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+            .post(
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`,
+                editedFormData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    },
                 },
-            })
+            )
             .then((response) => {
                 alert('save')
             })
@@ -115,7 +122,11 @@ const FreightInfo = () => {
     }
 
     const handleDeleteButton = async () => {
-        if (!isDisabled) return setIsDisabled(true)
+        if (!isDisabled) {
+            setIsDisabled(true)
+            setEditedFormData(formData)
+            return
+        }
         setLoading(true)
         await axios
             .post(
@@ -183,7 +194,7 @@ const FreightInfo = () => {
                 <CCol>
                     <ShipperForm
                         isInfo={true}
-                        formData={formData}
+                        formData={editedFormData}
                         handleInputChange={handleInputChange}
                         isDisabled={isDisabled}
                     />
@@ -191,7 +202,7 @@ const FreightInfo = () => {
                 <CCol>
                     <ConsineeForm
                         isInfo={true}
-                        formData={formData}
+                        formData={editedFormData}
                         handleInputChange={handleInputChange}
                         isDisabled={isDisabled}
                     />
@@ -201,7 +212,7 @@ const FreightInfo = () => {
                 <CCol>
                     <ShipmentForm
                         isInfo={true}
-                        formData={formData}
+                        formData={editedFormData}
                         handleInputChange={handleInputChange}
                         isDisabled={isDisabled}
                     />
