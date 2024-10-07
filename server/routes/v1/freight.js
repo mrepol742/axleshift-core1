@@ -34,6 +34,7 @@ router.post("/", auth, async (req, res) => {
         const totalItems = await freightCollection.countDocuments({ user_id: new ObjectId(user_id) });
         const items = await freightCollection
             .find({ user_id: new ObjectId(user_id) })
+            .sort({ created_at: -1 })
             .skip(skip)
             .limit(limit)
             .toArray();

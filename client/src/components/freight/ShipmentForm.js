@@ -21,7 +21,7 @@ const ShipmentForm = ({
 }) => {
     return (
         <CForm>
-            {!isInfo && <CProgress value={75} />}
+            {!isInfo && <CProgress value={75} className="mb-3" variant="striped" animated />}
             <h3 className="mb-4">Shipment Details</h3>
 
             <CFormLabel htmlFor="shipment_description">Description of Goods</CFormLabel>

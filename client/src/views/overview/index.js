@@ -21,6 +21,7 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+
 import WidgetsDropdown from './widgets/WidgetsDropdown'
 import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'

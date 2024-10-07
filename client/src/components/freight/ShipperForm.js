@@ -5,7 +5,7 @@ import { CForm, CProgress, CFormLabel, CFormInput, CButton } from '@coreui/react
 const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo, isDisabled }) => {
     return (
         <CForm>
-            {!isInfo && <CProgress value={25} />}
+            {!isInfo && <CProgress value={25} className="mb-3" variant="striped" animated />}
             <h3 className="mb-4">Shipper Information</h3>
 
             <CFormLabel htmlFor="shipper_company_name">Company Name</CFormLabel>
