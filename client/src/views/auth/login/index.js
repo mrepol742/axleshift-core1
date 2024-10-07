@@ -61,7 +61,6 @@ const Login = () => {
                 headers: {},
             })
             .then((response) => {
-                setLoading(false)
                 Cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
                 const url = urlParams.get('n') ? urlParams.get('n') : '/'
@@ -69,13 +68,16 @@ const Login = () => {
                 navigate(url)
             })
             .catch((error) => {
-                setLoading(false)
+                console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
 
                 setError({
                     error: true,
                     message,
                 })
+            })
+            .finally(() => {
+                setLoading(false)
             })
     }
 

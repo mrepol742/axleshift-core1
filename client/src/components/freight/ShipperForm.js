@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { CForm, CProgress, CFormLabel, CFormInput, CButton } from '@coreui/react'
 
-const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo }) => {
+const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo, isDisabled }) => {
     return (
         <CForm>
             {!isInfo && <CProgress value={25} />}
@@ -16,6 +16,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo 
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipper_contact_name">Contact Name</CFormLabel>
@@ -26,6 +27,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo 
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipper_contact_email_address">Email Address</CFormLabel>
@@ -36,6 +38,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo 
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipper_contact_phone_number">Phone Number</CFormLabel>
@@ -46,6 +49,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo 
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipper_company_address">Address</CFormLabel>
@@ -56,6 +60,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo 
                 onChange={(e) => handleInputChange(e, 'shipper')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             {!isInfo && (
@@ -80,6 +85,7 @@ ShipperForm.propTypes = {
     handleInputChange: PropTypes.func,
     handleConsigneeInfo: PropTypes.func,
     isInfo: PropTypes.bool,
+    isDisabled: PropTypes.bool,
 }
 
 export default ShipperForm

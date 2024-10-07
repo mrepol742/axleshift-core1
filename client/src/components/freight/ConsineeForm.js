@@ -8,6 +8,7 @@ const ConsineeForm = ({
     handleShipperInformation,
     handleShipmentDetails,
     isInfo,
+    isDisabled,
 }) => {
     return (
         <CForm>
@@ -22,6 +23,7 @@ const ConsineeForm = ({
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="consignee_contact_name">Contact Name</CFormLabel>
@@ -32,6 +34,7 @@ const ConsineeForm = ({
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="consignee_contact_email_address">Email Address</CFormLabel>
@@ -42,6 +45,7 @@ const ConsineeForm = ({
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="consignee_contact_phone_number">Phone Number</CFormLabel>
@@ -52,6 +56,7 @@ const ConsineeForm = ({
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="consignee_company_address">Address</CFormLabel>
@@ -62,6 +67,7 @@ const ConsineeForm = ({
                 onChange={(e) => handleInputChange(e, 'consignee')}
                 required
                 className="mb-3"
+                disabled={isDisabled}
             />
 
             {!isInfo && (
@@ -92,6 +98,7 @@ ConsineeForm.propTypes = {
     handleShipperInformation: PropTypes.func,
     handleShipmentDetails: PropTypes.func,
     isInfo: PropTypes.bool,
+    isDisabled: PropTypes.bool,
 }
 
 export default ConsineeForm

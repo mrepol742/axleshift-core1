@@ -44,14 +44,49 @@
   "consignee": "object",
   "shipment": "object",
   "shipping": "object",
-  "recaptcha_ref": "string",
 }
 ```
 
 #### Response
 - **Status 200**: Process successfully
+- **Status 404**: Shipment not found
+
+### 3. Updating of Shipment
+
+- **Endpoint:** `/freight/u/:type/:id`
+- **Method:** `POST`
+- **Type**: Internal
+
+#### Headers
+- **Authorization:** `Bearer <token>`
+
+#### Type
+- air
+- land
+- sea
+
+#### Request Body
 ```json
-  "data": "object",
-  "totalPages": "number",
-  "currentPage": "number",
+{
+  "shipper": "object",
+  "consignee": "object",
+  "shipment": "object",
+  "shipping": "object",
+}
 ```
+
+#### Response
+- **Status 200**: Process successfully
+
+### 3. Deleting of Shipment
+
+- **Endpoint:** `/freight/d/:id`
+- **Method:** `POST`
+- **Type**: Internal
+
+#### Headers
+- **Authorization:** `Bearer <token>`
+
+#### Response
+- **Status 200**: Process successfully
+- **Status 404**: Shipment not found

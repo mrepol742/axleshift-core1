@@ -38,8 +38,8 @@ const Overview = () => {
     }
 
     const fetchData = async (page, query) => {
-        try {
-            const response = await axios.post(
+        await axios
+            .post(
                 `${import.meta.env.VITE_APP_API_URL}/api/v1/freight`,
                 { page, q: query },
                 {
@@ -48,13 +48,13 @@ const Overview = () => {
                     },
                 },
             )
-
-            if (response.status !== 200) return
-            setData(response.data.data)
-            setTotalPages(response.data.totalPages)
-        } catch (err) {
-            console.error(err)
-        }
+            .then((response) => {
+                setData(response.data.data)
+                setTotalPages(response.data.totalPages)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
     }
 
     useEffect(() => {

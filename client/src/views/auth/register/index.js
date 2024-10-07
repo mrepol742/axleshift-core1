@@ -85,7 +85,6 @@ const Register = () => {
                 headers: {},
             })
             .then((response) => {
-                setLoading(false)
                 if (!response.data.error) navigate('/login')
                 setError({
                     error: true,
@@ -93,13 +92,16 @@ const Register = () => {
                 })
             })
             .catch((error) => {
-                setLoading(false)
+                console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
 
                 setError({
                     error: true,
                     message,
                 })
+            })
+            .finally(() => {
+                setLoading(false)
             })
     }
 

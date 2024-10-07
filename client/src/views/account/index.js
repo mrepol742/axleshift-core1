@@ -7,28 +7,29 @@ const Account = () => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const token = Cookies.get(import.meta.env.VITE_APP_SESSION)
-                const response = await axios.post(
-                    `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/user`,
-                    {},
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
+    const fetchUserData = async () => {
+        await axios
+            .post(
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/user`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                     },
-                )
-                const status = response.status
-                if (status == 200) setUser(response.data.user)
-            } catch (err) {
-                console.error(err)
-            } finally {
+                },
+            )
+            .then((response) => {
+                setUser(response.data.user)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+            .finally(() => {
                 setLoading(false)
-            }
-        }
+            })
+    }
 
+    useEffect(() => {
         fetchUserData()
     }, [])
 
