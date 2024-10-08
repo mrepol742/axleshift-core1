@@ -3,7 +3,7 @@ dotenv.config();
 import { ObjectId } from "mongodb";
 import express from "express";
 import logger from "../../src/logger.js";
-import connectToDatabase from "../../models/db.js";
+import database from "../../models/db.js";
 import auth from "../../middleware/auth.js";
 import recaptcha from "../../middleware/recaptcha.js";
 import { getUser } from "../../src/sessions.js";
@@ -30,7 +30,7 @@ router.post("/", auth, async (req, res) => {
         const page = parseInt(req.body.page) || 1;
         const skip = (page - 1) * limit;
 
-        const db = await connectToDatabase();
+        const db = await database();
         const freightCollection = db.collection("freight");
 
         const totalItems = await freightCollection.countDocuments({ user_id: new ObjectId(theUser._id) });
@@ -68,7 +68,7 @@ router.get("/:id", auth, async (req, res) => {
         const id = req.params.id;
         if (!id) return res.status(400).send();
 
-        const db = await connectToDatabase();
+        const db = await database();
         const freightCollection = db.collection("freight");
         const query = theUser.role !== "admin" ? { user_id: new ObjectId(theUser._id), _id: new ObjectId(id) } : { _id: new ObjectId(id) };
         const items = await freightCollection.find(query).toArray();
@@ -104,7 +104,7 @@ router.post("/b/:type", auth, async (req, res) => {
         if (!["air", "land", "sea"].includes(type)) return res.status(400).send();
 
         const theUser = await getUser(req.token);
-        const db = await connectToDatabase();
+        const db = await database();
 
         const freightCollection = db.collection("freight");
         await freightCollection.insertOne({
@@ -147,7 +147,7 @@ router.post("/u/:type/:id", auth, async (req, res) => {
         if (!["air", "land", "sea"].includes(type)) return res.status(400).send();
 
         const theUser = await getUser(req.token);
-        const db = await connectToDatabase();
+        const db = await database();
 
         const freightCollection = db.collection("freight");
         const items = await freightCollection.find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) }).toArray();
@@ -185,7 +185,7 @@ router.post("/d/:id", auth, async (req, res) => {
     try {
         const id = req.params.id;
         const theUser = await getUser(req.token);
-        const db = await connectToDatabase();
+        const db = await database();
 
         const freightCollection = db.collection("freight");
         const items = await freightCollection.find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) }).toArray();

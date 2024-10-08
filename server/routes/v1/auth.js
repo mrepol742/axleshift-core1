@@ -3,9 +3,9 @@ dotenv.config();
 import express from "express";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import connectToDatabase from "../../models/db.js";
+import database from "../../models/db.js";
 import logger from "../../src/logger.js";
-import { addSession, addUserProfileToSession, removeSession, getUser } from "../../src/sessions.js";
+import { addSession, removeSession, getUser } from "../../src/sessions.js";
 import auth from "../../middleware/auth.js";
 import recaptcha from "../../middleware/recaptcha.js";
 import passwordHash, { generateUniqueId } from "../../src/password.js";
@@ -41,7 +41,7 @@ router.post("/register", async (req, res) => {
         if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password)) return res.status(200).json({ error: "Password must be at least 8 characters long and contain letters, numbers, and symbols." });
         if (password != repeat_password) return res.status(200).json({ error: "Password does not match" });
 
-        const db = await connectToDatabase();
+        const db = await database();
         const collection = db.collection("users");
         const existingEmail = await collection.findOne({ email: email });
 
@@ -82,14 +82,13 @@ router.post("/login", recaptcha, async (req, res) => {
         const { email, password } = req.body;
         if (!email || !password) return res.status(400).send();
 
-        const db = await connectToDatabase();
+        const db = await database();
         const collection = db.collection("users");
         const theUser = await collection.findOne({ email: email });
 
         if (!theUser) return res.status(404).send();
 
         if (passwordHash(password) != theUser.password) return res.status(401).send();
-        addUserProfileToSession(theUser);
 
         const session_token = crypto.createHash("sha256").update(generateUniqueId()).digest("hex");
         const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;

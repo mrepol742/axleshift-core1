@@ -23,6 +23,7 @@ const db = async () => {
 
     if (!collectionNames.includes("users")) await dbInstance.createCollection("users");
     if (!collectionNames.includes("freight")) await dbInstance.createCollection("freight");
+    if (!collectionNames.includes("sessions")) await dbInstance.createCollection("sessions");
 
     const collection = dbInstance.collection("users");
     let cursor = await collection.find({});
