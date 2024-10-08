@@ -6,7 +6,7 @@ import logger from "../../src/logger.js";
 import connectToDatabase from "../../models/db.js";
 import auth from "../../middleware/auth.js";
 import recaptcha from "../../middleware/recaptcha.js";
-import { getUserId } from "../../src/sessions.js";
+import { getUser } from "../../src/sessions.js";
 
 const router = express.Router();
 const limit = 20;
@@ -26,16 +26,16 @@ const limit = 20;
 // TODO: integrate search function here!
 router.post("/", auth, async (req, res) => {
     try {
-        const user_id = await getUserId(req.token);
+        const theUser = await getUser(req.token);
         const page = parseInt(req.body.page) || 1;
         const skip = (page - 1) * limit;
 
         const db = await connectToDatabase();
         const freightCollection = db.collection("freight");
 
-        const totalItems = await freightCollection.countDocuments({ user_id: new ObjectId(user_id) });
+        const totalItems = await freightCollection.countDocuments({ user_id: new ObjectId(theUser._id) });
         const items = await freightCollection
-            .find({ user_id: new ObjectId(user_id) })
+            .find(theUser.role !== "admin" ? { user_id: new ObjectId(theUser._id) } : {})
             .sort({ created_at: -1 })
             .skip(skip)
             .limit(limit)
@@ -64,13 +64,14 @@ router.post("/", auth, async (req, res) => {
 */
 router.get("/:id", auth, async (req, res) => {
     try {
-        const user_id = await getUserId(req.token);
+        const theUser = await getUser(req.token);
         const id = req.params.id;
         if (!id) return res.status(400).send();
 
         const db = await connectToDatabase();
         const freightCollection = db.collection("freight");
-        const items = await freightCollection.find({ user_id: new ObjectId(user_id), _id: new ObjectId(id) }).toArray();
+        const query = theUser.role !== "admin" ? { user_id: new ObjectId(theUser._id), _id: new ObjectId(id) } : { _id: new ObjectId(id) };
+        const items = await freightCollection.find(query).toArray();
 
         if (!items.length) return res.status(404).send();
         return res.status(200).json({
@@ -102,12 +103,12 @@ router.post("/b/:type", auth, async (req, res) => {
         if (!shipper || !consignee || !shipment || !type || !shipping) return res.status(400).send();
         if (!["air", "land", "sea"].includes(type)) return res.status(400).send();
 
-        const user_id = await getUserId(req.token);
+        const theUser = await getUser(req.token);
         const db = await connectToDatabase();
 
         const freightCollection = db.collection("freight");
         await freightCollection.insertOne({
-            user_id: user_id,
+            user_id: theUser._id,
             data: {
                 shipper: shipper,
                 consignee: consignee,
@@ -145,22 +146,20 @@ router.post("/u/:type/:id", auth, async (req, res) => {
         if (!shipper || !consignee || !shipment) return res.status(400).send();
         if (!["air", "land", "sea"].includes(type)) return res.status(400).send();
 
-        const user_id = await getUserId(req.token);
+        const theUser = await getUser(req.token);
         const db = await connectToDatabase();
 
         const freightCollection = db.collection("freight");
-        const items = await freightCollection.find({ user_id: new ObjectId(user_id), _id: new ObjectId(id) }).toArray();
+        const items = await freightCollection.find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) }).toArray();
         if (!items.length) return res.status(404).send();
 
         await freightCollection.updateOne(
             { _id: new ObjectId(id) },
             {
                 $set: {
-                    data: {
-                        shipper: shipper,
-                        consignee: consignee,
-                        shipment: shipment,
-                    },
+                    "data.shipper": shipper,
+                    "data.consignee": consignee,
+                    "data.shipment": shipment,
                     updated_at: new Date(),
                 },
             }
@@ -185,11 +184,11 @@ router.post("/u/:type/:id", auth, async (req, res) => {
 router.post("/d/:id", auth, async (req, res) => {
     try {
         const id = req.params.id;
-        const user_id = await getUserId(req.token);
+        const theUser = await getUser(req.token);
         const db = await connectToDatabase();
 
         const freightCollection = db.collection("freight");
-        const items = await freightCollection.find({ user_id: new ObjectId(user_id), _id: new ObjectId(id) }).toArray();
+        const items = await freightCollection.find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) }).toArray();
         if (!items.length) return res.status(404).send();
 
         await freightCollection.deleteOne({ _id: new ObjectId(id) });

@@ -6,7 +6,7 @@ import logger from "../../src/logger.js";
 import connectToDatabase from "../../models/db.js";
 import auth from "../../middleware/auth.js";
 import recaptcha from "../../middleware/recaptcha.js";
-import { getUserId } from "../../src/sessions.js";
+import { getUser } from "../../src/sessions.js";
 
 const router = express.Router();
 
@@ -25,13 +25,13 @@ const router = express.Router();
 */
 router.get("/:id", auth, async (req, res) => {
     try {
-        const user_id = await getUserId(req.token);
+        const theUser = await getUser(req.token);
         const id = req.params.id;
         if (!id) return res.status(400).send();
 
         const db = await connectToDatabase();
         const freightCollection = db.collection("freight");
-        const items = await freightCollection.find({ user_id: new ObjectId(user_id), _id: new ObjectId(id) }).toArray();
+        const items = await freightCollection.find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) }).toArray();
 
         if (!items.length) return res.status(404).send();
 
