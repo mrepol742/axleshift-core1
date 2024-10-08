@@ -38,26 +38,26 @@ router.get("/:id", auth, async (req, res) => {
         const events = [];
         events.push({
             date: items[0].created_at,
-            description: 'Freight is placed'
+            description: "Freight is placed",
         });
         if (items.created_at !== items.updated_at)
             events.push({
                 data: items[0].updated_at,
-                description: 'Freight info was updated'
+                description: "Freight info was updated",
             });
-        
+
         /*-----------------------------------*/
         /*   THIS IS A TEST                  */
         /*-----------------------------------*/
         events.push({
             date: items[0].created_at,
-            description: 'We are preparing to ship your shipment'
+            description: "We are preparing to ship your shipment",
         });
         events.push({
             date: items[0].created_at,
-            description: 'Freight has arrived on our ports in China'
+            description: "Freight has arrived on our ports in China",
         });
-        
+
         const markerPositions = [
             // very big bridge?
             { lat: 37.7749, lng: -122.4194 },
@@ -65,13 +65,13 @@ router.get("/:id", auth, async (req, res) => {
             { lat: 34.0522, lng: -118.2437 },
             // the concrete jungle hehe
             { lat: 40.7128, lng: -74.006 },
-        ]
+        ];
 
         return res.status(200).json({
             events: events,
             origin: items[0].data.shipping.shipping_origin_addresss,
             destination: items[0].data.shipping.shipping_destination_address,
-            status: 'on route',
+            status: "on route",
             markerPositions: markerPositions,
         });
     } catch (e) {

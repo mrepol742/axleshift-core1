@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -27,6 +27,7 @@ import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { QRCodeSVG } from 'qrcode.react'
+import html2canvas from 'html2canvas'
 
 import ShipperForm from '../../../components/freight/ShipperForm'
 import ConsineeForm from '../../../components/freight/ConsineeForm'
@@ -71,6 +72,7 @@ const FreightInfo = () => {
     const [disabled, setDisabled] = useState(true)
     const [error, setError] = useState(false)
     const [showQR, setShowQR] = useState(false)
+    const svgRef = useRef(null)
     const navigate = useNavigate()
     const { id } = useParams()
 
@@ -160,6 +162,20 @@ const FreightInfo = () => {
             })
     }
 
+    const handleQRDownload = () => {
+        setShowQR(false)
+        html2canvas(svgRef.current, { useCORS: true }).then((canvas) => {
+            const imageURL = canvas.toDataURL('image/png')
+
+            const link = document.createElement('a')
+            link.href = imageURL
+            link.download = 'qrcode.png'
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+        })
+    }
+
     const renderForm = () => {
         switch (type) {
             case 'air':
@@ -191,14 +207,23 @@ const FreightInfo = () => {
             {!error && (
                 <>
                     {showQR && (
-                        <CModal visible={showQR} onClose={() => setShowQR(false)}>
+                        <CModal
+                            visible={showQR}
+                            onClose={() => setShowQR(false)}
+                            alignment="center"
+                            scrollable
+                        >
                             <CModalHeader closeButton>Freight QRCode</CModalHeader>
                             <CModalBody>
-                                <QRCodeSVG value={id} />
+                                <div className="d-flex justify-content-center align-items-center">
+                                    <div ref={svgRef} className="d-inline-block">
+                                        <QRCodeSVG value={id} />
+                                    </div>
+                                </div>
                             </CModalBody>
                             <CModalFooter>
-                                <CButton color="secondary" onClick={() => setShowQR(false)}>
-                                    Close
+                                <CButton color="primary" onClick={handleQRDownload}>
+                                    Download
                                 </CButton>
                             </CModalFooter>
                         </CModal>

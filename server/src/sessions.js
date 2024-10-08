@@ -9,8 +9,11 @@ fs.mkdir("./sessions", { recursive: true }, (err) => {
 });
 
 if (fs.existsSync("./sessions/sessions.json")) {
-    sessions = JSON.parse(fs.readFileSync("./sessions/sessions.json", "utf8"));
-    logger.info("Sessions retrieved");
+    const sessionFile = fs.readFileSync("./sessions/sessions.json", "utf8");
+    if (sessionFile) {
+        sessions = JSON.parse(sessionFile);
+        logger.info("Sessions retrieved");
+    }
 }
 
 export const addUserProfileToSession = (theUser) => {
