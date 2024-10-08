@@ -19,6 +19,7 @@ const ThreatDetection = withAuth(lazy(() => import('./views/threat/threat-detect
 const ThreatManagement = withAuth(lazy(() => import('./views/threat/threat-management/index')))
 
 const Track = withAuth(lazy(() => import('./views/track/index')))
+const TrackInfo = withAuth(lazy(() => import('./views/track/info/index')))
 
 const Err404 = withAuth(lazy(() => import('./views/errors/404')))
 
@@ -41,6 +42,7 @@ const routes = [
     { path: '/threat/management', name: 'Management', element: ThreatManagement },
 
     { path: '/track', name: 'Track', element: Track },
+    { path: '/track/:id', name: 'Track', element: TrackInfo },
 
     { path: '*', name: '404', element: Err404 },
 ]

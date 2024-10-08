@@ -14,12 +14,13 @@ const router = express.Router();
 
 /*
   Url: POST /api/v1/auth/register
-  Params:
-     email
-     firstName
-     lastName
-     password
-     recaptcha_ref
+  Request Body:
+     Email
+     First name
+     Last name
+     Password
+     Repeat password
+     Recaptcha ref
 */
 // TODO: recaptcha in this route is not working properly
 // router.post("/register", recaptcha, async (req, res) => {
@@ -37,6 +38,7 @@ router.post("/register", async (req, res) => {
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(200).json({ error: "Invalid email address" });
         if (password.length < 8) return res.status(200).json({ error: "Password must be greater than 8 digit" });
+        if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password)) return res.status(200).json({ error: "Password must be at least 8 characters long and contain letters, numbers, and symbols." });
         if (password != repeat_password) return res.status(200).json({ error: "Password does not match" });
 
         const db = await connectToDatabase();
@@ -68,12 +70,12 @@ router.post("/register", async (req, res) => {
 
 /*
   Url: POST /api/v1/auth/login
-  Params:
-     email
-     password
-     recaptcha_ref
+  Request Body:
+     Email
+     Password
+     Recaptcha ref
   Returns:
-     token
+     Session token
 */
 router.post("/login", recaptcha, async (req, res) => {
     try {
@@ -121,7 +123,7 @@ router.post("/verify", auth, function (req, res, next) {
   Header:
      Authentication
   Returns:
-     user
+     User info
 */
 router.post("/user", auth, async function (req, res, next) {
     try {

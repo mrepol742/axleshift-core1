@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { formatDistanceToNow, parseISO } from 'date-fns'
@@ -92,11 +91,11 @@ const Overview = () => {
                                 }}
                             >
                                 <span></span>
-                                <span>
+                                <div>
                                     {formatDistanceToNow(parseISO(item.created_at), {
                                         addSuffix: true,
                                     })}
-                                </span>
+                                </div>
                             </CCardHeader>
                             <CCardBody>
                                 <blockquote className="blockquote mb-0">

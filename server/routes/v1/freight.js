@@ -14,12 +14,14 @@ const limit = 20;
 /*
   Get all freight shipment
   Url: POST /api/v1/freight
-  Params:
-     page
   Header:
      Authentication
+  Request Body:
+     Page
   Returns:
-     data
+     Data
+     Total pages
+     Current page
 */
 // TODO: integrate search function here!
 router.post("/", auth, async (req, res) => {
@@ -55,8 +57,10 @@ router.post("/", auth, async (req, res) => {
   Url: POST /api/v1/freight/:id
   Header:
      Authentication
+  Params:
+     Freight id
   Returns:
-     data
+     Data
 */
 router.get("/:id", auth, async (req, res) => {
     try {
@@ -81,20 +85,21 @@ router.get("/:id", auth, async (req, res) => {
 /*
   Book a shipment
   Url: POST /api/v1/freight/b/:type
-  Type:
-     [air, land, sea]
-  Params:
-     shipper
-     consignee
-     shipment
   Header:
      Authentication
+  Params:
+     Freight type
+  Request Body:
+     Shipper
+     Consignee
+     Shipment
+     Shipping
 */
 router.post("/b/:type", auth, async (req, res) => {
     try {
-        const { shipper, consignee, shipment } = req.body;
+        const { shipper, consignee, shipment, shipping } = req.body;
         const type = req.params.type;
-        if (!shipper || !consignee || !shipment || !type) return res.status(400).send();
+        if (!shipper || !consignee || !shipment || !type || !shipping) return res.status(400).send();
         if (!["air", "land", "sea"].includes(type)) return res.status(400).send();
 
         const user_id = await getUserId(req.token);
@@ -107,6 +112,7 @@ router.post("/b/:type", auth, async (req, res) => {
                 shipper: shipper,
                 consignee: consignee,
                 shipment: shipment,
+                shipping: shipping,
             },
             type: type,
             created_at: new Date(),
@@ -122,21 +128,21 @@ router.post("/b/:type", auth, async (req, res) => {
 /*
   Update a shipment
   Url: POST /api/v1/freight/u/:type/:id
-  Type:
-     [air, land, sea]
-  Params:
-     shipper
-     consignee
-     shipment
-     shipping
   Header:
      Authentication
+  Params:
+     Freight type
+     Freight id
+  Request Body:
+     Shipper
+     Consignee
+     Shipment
 */
 router.post("/u/:type/:id", auth, async (req, res) => {
     try {
-        const { shipper, consignee, shipment, shipping } = req.body;
+        const { shipper, consignee, shipment } = req.body;
         const { type, id } = req.params;
-        if (!shipper || !consignee || !shipment || !shipping) return res.status(400).send();
+        if (!shipper || !consignee || !shipment) return res.status(400).send();
         if (!["air", "land", "sea"].includes(type)) return res.status(400).send();
 
         const user_id = await getUserId(req.token);
@@ -154,7 +160,6 @@ router.post("/u/:type/:id", auth, async (req, res) => {
                         shipper: shipper,
                         consignee: consignee,
                         shipment: shipment,
-                        shipping: shipping,
                     },
                     updated_at: new Date(),
                 },
@@ -171,6 +176,9 @@ router.post("/u/:type/:id", auth, async (req, res) => {
 /*
   Delete a shipment
   Url: POST /api/v1/freight/u/:type/:id
+  Params:
+     Freight type
+     Freight id
   Header:
      Authentication
 */

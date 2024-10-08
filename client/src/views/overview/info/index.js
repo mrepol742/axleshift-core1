@@ -18,9 +18,15 @@ import {
     CSpinner,
     CButton,
     CButtonGroup,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalFooter,
 } from '@coreui/react'
 import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQrcode } from '@fortawesome/free-solid-svg-icons'
+import { QRCodeSVG } from 'qrcode.react'
 
 import ShipperForm from '../../../components/freight/ShipperForm'
 import ConsineeForm from '../../../components/freight/ConsineeForm'
@@ -29,8 +35,10 @@ import AirForm from '../../../components/freight/shipping/AirForm'
 import LandForm from '../../../components/freight/shipping/LandForm'
 import SeaForm from '../../../components/freight/shipping/SeaForm'
 
+import Page404 from '../../errors/404'
+
 const FreightInfo = () => {
-    const [formData, setFormData] = useState({
+    const dataF = {
         shipper: {
             shipper_company_name: '',
             shipper_contact_name: '',
@@ -55,16 +63,20 @@ const FreightInfo = () => {
             shipment_value: 0,
             shipment_instructions: '',
         },
-    })
+    }
+    const [formData, setFormData] = useState(dataF)
+    const [editedFormData, setEditedFormData] = useState(dataF)
     const [type, setType] = useState('')
     const [loading, setLoading] = useState(false)
-    const [isDisabled, setIsDisabled] = useState(true)
+    const [disabled, setDisabled] = useState(true)
+    const [error, setError] = useState(false)
+    const [showQR, setShowQR] = useState(false)
     const navigate = useNavigate()
     const { id } = useParams()
 
     const handleInputChange = (e, section) => {
         const { id, value } = e.target
-        setFormData((prev) => ({
+        setEditedFormData((prev) => ({
             ...prev,
             [section]: {
                 ...prev[section],
@@ -84,9 +96,11 @@ const FreightInfo = () => {
             .then((response) => {
                 setType(response.data.data[0].type)
                 setFormData(response.data.data[0].data)
+                setEditedFormData(response.data.data[0].data)
             })
             .catch((error) => {
                 console.error(error)
+                setError(true)
             })
             .finally(() => {
                 setLoading(false)
@@ -94,14 +108,18 @@ const FreightInfo = () => {
     }
 
     const handleEditButton = async () => {
-        if (isDisabled) return setIsDisabled(false)
+        if (disabled) return setDisabled(false)
         setLoading(true)
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`, formData, {
-                headers: {
-                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+            .post(
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`,
+                editedFormData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    },
                 },
-            })
+            )
             .then((response) => {
                 alert('save')
             })
@@ -110,12 +128,16 @@ const FreightInfo = () => {
             })
             .finally(() => {
                 setLoading(false)
-                setIsDisabled(true)
+                setDisabled(true)
             })
     }
 
     const handleDeleteButton = async () => {
-        if (!isDisabled) return setIsDisabled(true)
+        if (!disabled) {
+            setDisabled(true)
+            setEditedFormData(formData)
+            return
+        }
         setLoading(true)
         await axios
             .post(
@@ -164,50 +186,80 @@ const FreightInfo = () => {
                 </div>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>#{id}</span>
-                <CButtonGroup>
-                    <CButton color="primary" className="me-2 rounded" onClick={handleEditButton}>
-                        {!isDisabled ? 'Save' : 'Edit'}
-                    </CButton>
-                    <CButton
-                        color={!isDisabled ? 'secondary' : 'danger'}
-                        className="me-2 rounded"
-                        onClick={handleDeleteButton}
-                    >
-                        {!isDisabled ? 'Cancel' : 'Delete'}
-                    </CButton>
-                </CButtonGroup>
-            </div>
-            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                <CCol>
-                    <ShipperForm
-                        isInfo={true}
-                        formData={formData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={isDisabled}
-                    />
-                </CCol>
-                <CCol>
-                    <ConsineeForm
-                        isInfo={true}
-                        formData={formData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={isDisabled}
-                    />
-                </CCol>
-            </CRow>
-            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                <CCol>
-                    <ShipmentForm
-                        isInfo={true}
-                        formData={formData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={isDisabled}
-                    />
-                </CCol>
-                <CCol>{renderForm()}</CCol>
-            </CRow>
+            {error && <Page404 />}
+
+            {!error && (
+                <>
+                    {showQR && (
+                        <CModal visible={showQR} onClose={() => setShowQR(false)}>
+                            <CModalHeader closeButton>Freight QRCode</CModalHeader>
+                            <CModalBody>
+                                <QRCodeSVG value={id} />
+                            </CModalBody>
+                            <CModalFooter>
+                                <CButton color="secondary" onClick={() => setShowQR(false)}>
+                                    Close
+                                </CButton>
+                            </CModalFooter>
+                        </CModal>
+                    )}
+                    <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                        <span className="d-block">#{id}</span>
+                        <CButtonGroup className="mb-2 mb-sm-0">
+                            <CButton
+                                color="primary"
+                                className="me-2 rounded"
+                                onClick={(e) => setShowQR(true)}
+                            >
+                                <FontAwesomeIcon icon={faQrcode} />
+                            </CButton>
+                            <CButton
+                                color="primary"
+                                className="me-2 rounded"
+                                onClick={handleEditButton}
+                            >
+                                {!disabled ? 'Save' : 'Edit'}
+                            </CButton>
+                            <CButton
+                                color={!disabled ? 'secondary' : 'danger'}
+                                className="me-2 rounded"
+                                onClick={handleDeleteButton}
+                            >
+                                {!disabled ? 'Cancel' : 'Delete'}
+                            </CButton>
+                        </CButtonGroup>
+                    </div>
+                    <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                        <CCol>
+                            <ShipperForm
+                                isInfo={true}
+                                formData={editedFormData}
+                                handleInputChange={handleInputChange}
+                                isDisabled={disabled}
+                            />
+                        </CCol>
+                        <CCol>
+                            <ConsineeForm
+                                isInfo={true}
+                                formData={editedFormData}
+                                handleInputChange={handleInputChange}
+                                isDisabled={disabled}
+                            />
+                        </CCol>
+                    </CRow>
+                    <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                        <CCol>
+                            <ShipmentForm
+                                isInfo={true}
+                                formData={editedFormData}
+                                handleInputChange={handleInputChange}
+                                isDisabled={disabled}
+                            />
+                        </CCol>
+                        <CCol>{renderForm()}</CCol>
+                    </CRow>
+                </>
+            )}
         </div>
     )
 }

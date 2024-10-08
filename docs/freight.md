@@ -27,15 +27,13 @@
 
 - **Endpoint:** `/freight/b/:type`
 - **Method:** `POST`
-- **Type**: Internal
+- **Type**: `Internal`
 
 #### Headers
 - **Authorization:** `Bearer <token>`
 
-#### Type
-- air
-- land
-- sea
+#### Params
+- Freight type
 
 #### Request Body
 ```json
@@ -49,21 +47,20 @@
 
 #### Response
 - **Status 200**: Process successfully
-- **Status 404**: Shipment not found
+- **Status 404**: Freight id not found
 
 ### 3. Updating of Shipment
 
 - **Endpoint:** `/freight/u/:type/:id`
 - **Method:** `POST`
-- **Type**: Internal
+- **Type**: `Internal`
 
 #### Headers
 - **Authorization:** `Bearer <token>`
 
-#### Type
-- air
-- land
-- sea
+#### Params
+- Freight type
+- Freight id
 
 #### Request Body
 ```json
@@ -82,11 +79,32 @@
 
 - **Endpoint:** `/freight/d/:id`
 - **Method:** `POST`
-- **Type**: Internal
+- **Type**: `Internal`
+
+#### Params
+- Freight id
 
 #### Headers
 - **Authorization:** `Bearer <token>`
 
 #### Response
 - **Status 200**: Process successfully
-- **Status 404**: Shipment not found
+- **Status 404**: Freight id not found
+
+### 4. Get info of freight using id
+
+- **Endpoint:** `/:id`
+- **Method:** `GET`
+
+#### Params
+- Freight id
+
+#### Headers
+- **Authorization:** `Bearer <token>`
+
+#### Response
+- **Status 200**: Process successfully
+```json
+  "data": "object",
+```
+- **Status 404**: Freight id not found
