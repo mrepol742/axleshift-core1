@@ -91,12 +91,14 @@
 #### Response
 - **Status 200**: User profile
 ```json
-user: {
-  "email": "string",
-  "first_name": "string",
-  "last_name": "string",
-  "created_at": "date",
+{
+  "user": {
+    "email": "string",
+    "first_name": "string",
+    "last_name": "string",
+    "created_at": "date",
 },
+}
 ```
 - **Status 401**: Unauthorized
 

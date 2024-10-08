@@ -19,5 +19,6 @@
   "origin": "string",
   "destination": "string",
   "status": "string",
+  "markerPositions": "object",
 ```
 - **Status 404**: Freight id not found
