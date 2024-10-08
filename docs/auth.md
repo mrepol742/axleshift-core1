@@ -74,7 +74,8 @@
 - **Status 200**: Session has been verify successfully
 ```json
 {
-  "email": "string"
+  "email": "string",
+  "role": "string",
 }
 ```
 - **Status 401**: Unauthorized

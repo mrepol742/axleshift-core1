@@ -21,7 +21,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
-import WidgetsDropdown from './widgets/WidgetsDropdown'
+import WidgetsDropdown from './widgets/index'
 import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'
 

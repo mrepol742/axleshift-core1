@@ -3,7 +3,7 @@ dotenv.config();
 import { ObjectId } from "mongodb";
 import express from "express";
 import logger from "../../src/logger.js";
-import connectToDatabase from "../../models/db.js";
+import database from "../../models/db.js";
 import auth from "../../middleware/auth.js";
 import recaptcha from "../../middleware/recaptcha.js";
 import { getUser } from "../../src/sessions.js";
@@ -29,9 +29,11 @@ router.get("/:id", auth, async (req, res) => {
         const id = req.params.id;
         if (!id) return res.status(400).send();
 
-        const db = await connectToDatabase();
-        const freightCollection = db.collection("freight");
-        const items = await freightCollection.find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) }).toArray();
+        const db = await database();
+        const items = await db
+            .collection("freight")
+            .find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) })
+            .toArray();
 
         if (!items.length) return res.status(404).send();
 

@@ -69,9 +69,8 @@ router.get("/:id", auth, async (req, res) => {
         if (!id) return res.status(400).send();
 
         const db = await database();
-        const freightCollection = db.collection("freight");
         const query = theUser.role !== "admin" ? { user_id: new ObjectId(theUser._id), _id: new ObjectId(id) } : { _id: new ObjectId(id) };
-        const items = await freightCollection.find(query).toArray();
+        const items = await db.collection("freight").find(query).toArray();
 
         if (!items.length) return res.status(404).send();
         return res.status(200).json({
@@ -106,8 +105,7 @@ router.post("/b/:type", auth, async (req, res) => {
         const theUser = await getUser(req.token);
         const db = await database();
 
-        const freightCollection = db.collection("freight");
-        await freightCollection.insertOne({
+        await db.collection("freight").insertOne({
             user_id: theUser._id,
             data: {
                 shipper: shipper,

@@ -17,11 +17,11 @@ const recaptcha = async (req, res, next) => {
         logger.info(`Recaptcha score: ${score}`);
         if (!success || score < 0.5) return res.status(401).send();
 
-        next();
+        return next();
     } catch (error) {
         logger.info(`reCAPTCHA verification failed: ${error}`);
-        return res.status(500).send();
     }
+    return res.status(500).send();
 };
 
 export default recaptcha;

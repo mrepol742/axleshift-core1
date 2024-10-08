@@ -60,5 +60,3 @@ app.listen(port, async () => {
 });
 
 Sentry.setupExpressErrorHandler(app);
-
-export default null;

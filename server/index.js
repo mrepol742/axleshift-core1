@@ -11,19 +11,7 @@ Sentry.init({
 });
 
 import logger from "./src/logger.js";
-import server from "./Server.js";
-
-process.on("SIGHUP", function () {
-    process.exit(0);
-});
-
-process.on("SIGTERM", function () {
-    process.exit(0);
-});
-
-process.on("SIGINT", function () {
-    process.exit(0);
-});
+import "./Server.js";
 
 process.on("uncaughtException", (err, origin) => {
     logger.error(err);
@@ -32,13 +20,4 @@ process.on("uncaughtException", (err, origin) => {
 
 process.on("unhandledRejection", (reason, promise) => {
     logger.error(reason);
-});
-
-process.on("beforeExit", (code) => {
-    process.exit(code);
-});
-
-process.on("exit", (code) => {
-    logger.info("Server offline");
-    process.kill(process.pid);
 });

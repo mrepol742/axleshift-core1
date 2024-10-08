@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-
 import {
     CRow,
     CCol,
@@ -12,8 +11,8 @@ import {
 } from '@coreui/react'
 import { getStyle } from '@coreui/utils'
 import { CChartBar, CChartLine } from '@coreui/react-chartjs'
-import CIcon from '@coreui/icons-react'
-import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUpLong, faArrowDownLong } from '@fortawesome/free-solid-svg-icons'
 
 const WidgetsDropdown = (props) => {
     const widgetChartRef1 = useRef(null)
@@ -46,13 +45,13 @@ const WidgetsDropdown = (props) => {
                     color="primary"
                     value={
                         <>
-                            26K{' '}
+                            26Hrs{' '}
                             <span className="fs-6 fw-normal">
-                                (-12.4% <CIcon icon={cilArrowBottom} />)
+                                (-12.4% <FontAwesomeIcon icon={faArrowDownLong} />)
                             </span>
                         </>
                     }
-                    title="Loads"
+                    title="Route Optimization"
                     action={
                         <CDropdown alignment="end">
                             <CDropdownToggle
@@ -79,7 +78,7 @@ const WidgetsDropdown = (props) => {
                                 ],
                                 datasets: [
                                     {
-                                        label: 'My First dataset',
+                                        label: 'Hours',
                                         backgroundColor: 'transparent',
                                         borderColor: 'rgba(255,255,255,.55)',
                                         pointBackgroundColor: getStyle('--cui-primary'),
@@ -142,11 +141,11 @@ const WidgetsDropdown = (props) => {
                         <>
                             $6.200{' '}
                             <span className="fs-6 fw-normal">
-                                (40.9% <CIcon icon={cilArrowTop} />)
+                                (40.9% <FontAwesomeIcon icon={faArrowUpLong} />)
                             </span>
                         </>
                     }
-                    title="Savings"
+                    title="Freight Cost"
                     action={
                         <CDropdown alignment="end">
                             <CDropdownToggle
@@ -173,11 +172,11 @@ const WidgetsDropdown = (props) => {
                                 ],
                                 datasets: [
                                     {
-                                        label: 'My First dataset',
+                                        label: 'Costs',
                                         backgroundColor: 'transparent',
                                         borderColor: 'rgba(255,255,255,.55)',
                                         pointBackgroundColor: getStyle('--cui-info'),
-                                        data: [1, 18, 9, 17, 34, 22, 11],
+                                        data: [1334, 18545, 9454, 1447, 34444, 2442, 1441],
                                     },
                                 ],
                             }}
@@ -233,13 +232,13 @@ const WidgetsDropdown = (props) => {
                     color="warning"
                     value={
                         <>
-                            500M{' '}
+                            92%{' '}
                             <span className="fs-6 fw-normal">
-                                (84.7% <CIcon icon={cilArrowTop} />)
+                                (84.7% <FontAwesomeIcon icon={faArrowUpLong} />)
                             </span>
                         </>
                     }
-                    title="Spending"
+                    title="Performance"
                     action={
                         <CDropdown alignment="end">
                             <CDropdownToggle
@@ -265,7 +264,7 @@ const WidgetsDropdown = (props) => {
                                 ],
                                 datasets: [
                                     {
-                                        label: 'My First dataset',
+                                        label: 'Score',
                                         backgroundColor: 'rgba(255,255,255,.2)',
                                         borderColor: 'rgba(255,255,255,.55)',
                                         data: [78, 81, 80, 45, 34, 12, 40],
@@ -309,13 +308,13 @@ const WidgetsDropdown = (props) => {
                     color="danger"
                     value={
                         <>
-                            2K{' '}
+                            6 Times per year{' '}
                             <span className="fs-6 fw-normal">
-                                (-23.6% <CIcon icon={cilArrowBottom} />)
+                                (-2% <FontAwesomeIcon icon={faArrowDownLong} />)
                             </span>
                         </>
                     }
-                    title="Customers"
+                    title="Inventory Turnover"
                     action={
                         <CDropdown alignment="end">
                             <CDropdownToggle
@@ -350,7 +349,7 @@ const WidgetsDropdown = (props) => {
                                 ],
                                 datasets: [
                                     {
-                                        label: 'My First dataset',
+                                        label: 'Rate',
                                         backgroundColor: 'rgba(255,255,255,.2)',
                                         borderColor: 'rgba(255,255,255,.55)',
                                         data: [
