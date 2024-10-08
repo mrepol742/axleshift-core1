@@ -10,10 +10,7 @@ Sentry.init({
     profilesSampleRate: 1.0,
 });
 
-import cron from "node-cron";
-import fs from "fs";
 import logger from "./src/logger.js";
-import sessions from "./src/sessions.js";
 import server from "./Server.js";
 
 process.on("SIGHUP", function () {
@@ -42,17 +39,6 @@ process.on("beforeExit", (code) => {
 });
 
 process.on("exit", (code) => {
-    fs.writeFileSync("./sessions/sessions.json", JSON.stringify(sessions), (err) => {
-        if (err) throw err;
-        logger.info("Sessions save");
-    });
     logger.info("Server offline");
     process.kill(process.pid);
-});
-
-cron.schedule("0 * * * *", () => {
-    fs.writeFileSync("./sessions/sessions.json", JSON.stringify(sessions), (err) => {
-        if (err) throw err;
-        logger.info("Sessions save");
-    });
 });

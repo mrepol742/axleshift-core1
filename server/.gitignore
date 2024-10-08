@@ -25,6 +25,5 @@ dist-ssr
 
 .env
 
-/sessions
 /build
 /log

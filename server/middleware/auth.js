@@ -1,4 +1,4 @@
-import sessions, { getUser } from "../src/sessions.js";
+import { getUser, isActiveToken } from "../src/sessions.js";
 
 const auth = async (req, res, next) => {
     const authHeader = req.headers["authorization"];
@@ -10,8 +10,8 @@ const auth = async (req, res, next) => {
     const theUser = await getUser(token);
     if (!theUser) return res.status(401).send();
 
-    const sessionEntry = sessions[theUser._id][token];
-    if (!sessionEntry && !sessionEntry.active) return res.status(401).send();
+    const status = await isActiveToken(token);
+    if (!status) return res.status(401).send();
 
     req.token = token;
     req.email = theUser.email;
