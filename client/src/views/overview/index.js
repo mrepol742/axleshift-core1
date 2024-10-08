@@ -91,11 +91,11 @@ const Overview = () => {
                                 }}
                             >
                                 <span></span>
-                                <span>
+                                <div>
                                     {formatDistanceToNow(parseISO(item.created_at), {
                                         addSuffix: true,
                                     })}
-                                </span>
+                                </div>
                             </CCardHeader>
                             <CCardBody>
                                 <blockquote className="blockquote mb-0">

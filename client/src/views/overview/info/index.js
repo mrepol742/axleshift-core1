@@ -18,9 +18,15 @@ import {
     CSpinner,
     CButton,
     CButtonGroup,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalFooter,
 } from '@coreui/react'
 import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQrcode } from '@fortawesome/free-solid-svg-icons'
+import { QRCodeSVG } from 'qrcode.react'
 
 import ShipperForm from '../../../components/freight/ShipperForm'
 import ConsineeForm from '../../../components/freight/ConsineeForm'
@@ -64,6 +70,7 @@ const FreightInfo = () => {
     const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(true)
     const [error, setError] = useState(false)
+    const [showQR, setShowQR] = useState(false)
     const navigate = useNavigate()
     const { id } = useParams()
 
@@ -156,11 +163,11 @@ const FreightInfo = () => {
     const renderForm = () => {
         switch (type) {
             case 'air':
-                return <AirForm isInfo={true} formData={formData} disabled={true} />
+                return <AirForm isInfo={true} formData={formData} isDisabled={true} />
             case 'land':
-                return <LandForm isInfo={true} formData={formData} disabled={true} />
+                return <LandForm isInfo={true} formData={formData} isDisabled={true} />
             case 'sea':
-                return <SeaForm isInfo={true} formData={formData} disabled={true} />
+                return <SeaForm isInfo={true} formData={formData} isDisabled={true} />
             default:
                 return null
         }
@@ -183,15 +190,29 @@ const FreightInfo = () => {
 
             {!error && (
                 <>
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <span>#{id}</span>
-                        <CButtonGroup>
+                    {showQR && (
+                        <CModal visible={showQR} onClose={() => setShowQR(false)}>
+                            <CModalHeader closeButton>Freight QRCode</CModalHeader>
+                            <CModalBody>
+                                <QRCodeSVG value={id} />
+                            </CModalBody>
+                            <CModalFooter>
+                                <CButton color="secondary" onClick={() => setShowQR(false)}>
+                                    Close
+                                </CButton>
+                            </CModalFooter>
+                        </CModal>
+                    )}
+                    <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                        <span className="d-block">#{id}</span>
+                        <CButtonGroup className="mb-2 mb-sm-0">
+                            <CButton
+                                color="primary"
+                                className="me-2 rounded"
+                                onClick={(e) => setShowQR(true)}
+                            >
+                                <FontAwesomeIcon icon={faQrcode} />
+                            </CButton>
                             <CButton
                                 color="primary"
                                 className="me-2 rounded"
@@ -214,7 +235,7 @@ const FreightInfo = () => {
                                 isInfo={true}
                                 formData={editedFormData}
                                 handleInputChange={handleInputChange}
-                                disabled={disabled}
+                                isDisabled={disabled}
                             />
                         </CCol>
                         <CCol>
@@ -222,7 +243,7 @@ const FreightInfo = () => {
                                 isInfo={true}
                                 formData={editedFormData}
                                 handleInputChange={handleInputChange}
-                                disabled={disabled}
+                                isDisabled={disabled}
                             />
                         </CCol>
                     </CRow>
@@ -232,7 +253,7 @@ const FreightInfo = () => {
                                 isInfo={true}
                                 formData={editedFormData}
                                 handleInputChange={handleInputChange}
-                                disabled={disabled}
+                                isDisabled={disabled}
                             />
                         </CCol>
                         <CCol>{renderForm()}</CCol>

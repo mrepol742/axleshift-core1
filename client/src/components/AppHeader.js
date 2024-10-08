@@ -23,8 +23,7 @@ import {
     faCircleHalfStroke,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { AppBreadcrumb } from './index'
-import { AppHeaderDropdown } from './header/index'
+import { AppBreadcrumb, AppHeaderDropdown } from './index'
 
 const AppHeader = () => {
     const headerRef = useRef()
