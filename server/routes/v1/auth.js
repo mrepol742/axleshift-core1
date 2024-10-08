@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import connectToDatabase from "../../models/db.js";
 import logger from "../../src/logger.js";
-import { addSession, addUserProfileToSession, removeSession } from "../../src/sessions.js";
+import { addSession, addUserProfileToSession, removeSession, getUser } from "../../src/sessions.js";
 import auth from "../../middleware/auth.js";
 import recaptcha from "../../middleware/recaptcha.js";
 import passwordHash, { generateUniqueId } from "../../src/password.js";
@@ -127,9 +127,7 @@ router.post("/verify", auth, function (req, res, next) {
 */
 router.post("/user", auth, async function (req, res, next) {
     try {
-        const db = await connectToDatabase();
-        const collection = db.collection("users");
-        const theUser = await collection.findOne({ email: req.email });
+        const theUser = await getUser(req.token);
 
         return res.status(200).json({
             user: {

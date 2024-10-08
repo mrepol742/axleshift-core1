@@ -1,4 +1,5 @@
 import fs from "fs";
+import { ObjectId } from "mongodb";
 import database from "../models/db.js";
 import logger from "../src/logger.js";
 
@@ -9,19 +10,22 @@ fs.mkdir("./sessions", { recursive: true }, (err) => {
 });
 
 if (fs.existsSync("./sessions/sessions.json")) {
-    sessions = JSON.parse(fs.readFileSync("./sessions/sessions.json", "utf8"));
-    logger.info("Sessions retrieved");
+    const sessionFile = fs.readFileSync("./sessions/sessions.json", "utf8");
+    if (sessionFile) {
+        sessions = JSON.parse(sessionFile);
+        logger.info("Sessions retrieved");
+    }
 }
 
 export const addUserProfileToSession = (theUser) => {
-    if (!sessions[theUser.email]) sessions[theUser.email] = {};
-    if (!sessions[theUser.email]["profile"]) sessions[theUser.email]["profile"] = theUser;
+    if (!sessions[theUser._id]) sessions[theUser._id] = {};
+    if (!sessions[theUser._id]["profile"]) sessions[theUser._id]["profile"] = theUser;
 };
 
 export const addSession = (theUser, sessionToken, ip, userAgent) => {
-    if (!sessions[theUser.email]) sessions[theUser.email] = {};
+    if (!sessions[theUser._id]) sessions[theUser._id] = {};
 
-    sessions[theUser.email][sessionToken] = {
+    sessions[theUser._id][sessionToken] = {
         active: true,
         ip_address: ip,
         user_agent: userAgent,
@@ -36,21 +40,29 @@ export const addSession = (theUser, sessionToken, ip, userAgent) => {
     }
 };
 
-export const getEmailAddress = (sessionToken) => {
-    return Object.keys(sessions).find((email) => sessions[email][sessionToken]);
+export const getId = (sessionToken) => {
+    return Object.keys(sessions).find((_id) => sessions[_id][sessionToken]);
 };
 
-export const getUserId = async (sessionToken) => {
-    const email = getEmailAddress(sessionToken);
-    const db = await database();
+export const getUser = async (sessionToken) => {
+    const _id = getId(sessionToken);
+    const theUser = sessions[_id]["profile"];
+    return {
+        _id: theUser._id,
+        email: theUser.email,
+        first_name: theUser.first_name,
+        last_name: theUser.last_name,
+        role: theUser.role,
+    };
+};
 
-    const useCollection = db.collection("users");
-    const theUser = await useCollection.findOne({ email: email });
-    return theUser._id;
+export const setUser = async (sessionToken, theUser) => {
+    const _id = getId(sessionToken);
+    sessions[_id]["profile"] = theUser;
 };
 
 export const removeSession = (sessionToken) => {
-    const s = Object.keys(sessions).find((email) => sessions[email][sessionToken]);
+    const s = Object.keys(sessions).find((_id) => sessions[_id][sessionToken]);
 
     if (s) {
         const sessionEntry = sessions[s][sessionToken];
