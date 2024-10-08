@@ -83,8 +83,7 @@ router.post("/login", recaptcha, async (req, res) => {
         if (!email || !password) return res.status(400).send();
 
         const db = await database();
-        const collection = db.collection("users");
-        const theUser = await collection.findOne({ email: email });
+        const theUser = await db.collection("users").findOne({ email: email });
 
         if (!theUser) return res.status(404).send();
 
@@ -114,6 +113,7 @@ router.post("/login", recaptcha, async (req, res) => {
 router.post("/verify", auth, function (req, res, next) {
     return res.status(200).json({
         email: req.email,
+        role: req.role,
     });
 });
 

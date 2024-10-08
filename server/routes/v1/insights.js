@@ -7,10 +7,16 @@ import auth from "../../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/", auth, async (req, res) => {
+router.post("/route-optimization", auth, async (req, res) => {
 });
 
-router.post("/scan", auth, async (req, res) => {
+router.post("/freight-cost", auth, async (req, res) => {
+});
+
+router.post("/performance", auth, async (req, res) => {
+});
+
+router.post("/inventory-turnover", auth, async (req, res) => {
 });
 
 export default router;

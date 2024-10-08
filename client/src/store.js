@@ -4,6 +4,7 @@ const initialState = {
     sidebarShow: true,
     theme: 'light',
     email: '',
+    role: '',
 }
 
 const changeState = (state = initialState, { type, ...rest }) => {

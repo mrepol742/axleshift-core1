@@ -5,12 +5,14 @@ import logger from "../src/logger.js";
 
 let mailInstance = null;
 
-const connectToMailProvider = async () => {
+const mail = async () => {
     if (mailInstance) return mailInstance;
 
     try {
         mailInstance = nodemailer.createTransport({
-            service: process.env.MAIL_SERVICE,
+            host: process.env.MAIL_HOST,
+            port: process.env.MAIL_PORT,
+            secure: false, 
             auth: {
                 user: process.env.MAIL_USERNAME,
                 pass: process.env.MAIL_PASSWORD,
@@ -21,9 +23,10 @@ const connectToMailProvider = async () => {
     } catch (err) {
         logger.error(err);
     }
+    return mailInstance;
 };
 
-export const sendMail = async (options) => {
+export const send = async (options) => {
     options.from = process.env.MAIL_FROM_ADDRESS;
 
     mailInstance.sendMail(options, (error, info) => {
@@ -32,4 +35,4 @@ export const sendMail = async (options) => {
     });
 };
 
-export default connectToMailProvider;
+export default mail;

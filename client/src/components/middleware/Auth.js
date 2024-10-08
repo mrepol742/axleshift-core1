@@ -31,7 +31,12 @@ const Auth = (WrappedComponent) => {
                     },
                 )
                 .then((response) => {
-                    dispatch({ type: 'set', email: response.data.email })
+                    dispatch({
+                        type: 'set',
+                        email: response.data.email,
+                        role: response.data.role,
+                    })
+
                     setIsAuth(true)
                 })
                 .catch((err) => {

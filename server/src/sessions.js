@@ -6,8 +6,7 @@ import logger from "../src/logger.js";
 export const addSession = async (theUser, sessionToken, ip, userAgent) => {
     try {
         const db = await database();
-        const collection = db.collection("sessions");
-        await collection.insertOne({
+        await db.collection("sessions").insertOne({
             user_id: theUser._id,
             token: sessionToken,
             active: true,
@@ -23,11 +22,9 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
 export const getUser = async (sessionToken) => {
     try {
         const db = await database();
-        const collection = db.collection("sessions");
-        const session = await collection.findOne({ token: sessionToken });
+        const session = await db.collection("sessions").findOne({ token: sessionToken });
         if (!session) return null;
-        const userCollection = db.collection("users");
-        const theUser = await userCollection.findOne({ _id: session.user_id });
+        const theUser = await db.collection("users").findOne({ _id: session.user_id });
         return {
             _id: theUser._id,
             email: theUser.email,
@@ -44,8 +41,7 @@ export const getUser = async (sessionToken) => {
 export const removeSession = async (sessionToken) => {
     try {
         const db = await database();
-        const collection = db.collection("sessions");
-        await collection.updateOne(
+        await db.collection("sessions").updateOne(
             { token: sessionToken },
             {
                 $set: {
@@ -62,11 +58,10 @@ export const removeSession = async (sessionToken) => {
 export const isActiveToken = async (sessionToken) => {
     try {
         const db = await database();
-        const collection = db.collection("sessions");
-        const session = await collection.findOne({ token: sessionToken });
+        const session = await db.collection("sessions").findOne({ token: sessionToken });
         return session.active;
     } catch (e) {
         logger.error(e);
     }
     return false;
-}
+};
