@@ -9,6 +9,7 @@ https://backend-core1.axleshift.com/api/v1/
 
 - [/auth](./auth.md)
 - [/freight](./freight.md)
+- [/track](./track.md)
 
 ## Error Codes
 | Code | Description                      |

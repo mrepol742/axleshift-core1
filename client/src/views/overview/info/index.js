@@ -29,6 +29,8 @@ import AirForm from '../../../components/freight/shipping/AirForm'
 import LandForm from '../../../components/freight/shipping/LandForm'
 import SeaForm from '../../../components/freight/shipping/SeaForm'
 
+import Page404 from '../../errors/404'
+
 const FreightInfo = () => {
     const dataF = {
         shipper: {
@@ -60,7 +62,8 @@ const FreightInfo = () => {
     const [editedFormData, setEditedFormData] = useState(dataF)
     const [type, setType] = useState('')
     const [loading, setLoading] = useState(false)
-    const [isDisabled, setIsDisabled] = useState(true)
+    const [disabled, setDisabled] = useState(true)
+    const [error, setError] = useState(false)
     const navigate = useNavigate()
     const { id } = useParams()
 
@@ -90,6 +93,7 @@ const FreightInfo = () => {
             })
             .catch((error) => {
                 console.error(error)
+                setError(true)
             })
             .finally(() => {
                 setLoading(false)
@@ -97,7 +101,7 @@ const FreightInfo = () => {
     }
 
     const handleEditButton = async () => {
-        if (isDisabled) return setIsDisabled(false)
+        if (disabled) return setDisabled(false)
         setLoading(true)
         await axios
             .post(
@@ -117,13 +121,13 @@ const FreightInfo = () => {
             })
             .finally(() => {
                 setLoading(false)
-                setIsDisabled(true)
+                setDisabled(true)
             })
     }
 
     const handleDeleteButton = async () => {
-        if (!isDisabled) {
-            setIsDisabled(true)
+        if (!disabled) {
+            setDisabled(true)
             setEditedFormData(formData)
             return
         }
@@ -152,11 +156,11 @@ const FreightInfo = () => {
     const renderForm = () => {
         switch (type) {
             case 'air':
-                return <AirForm isInfo={true} formData={formData} isDisabled={true} />
+                return <AirForm isInfo={true} formData={formData} disabled={true} />
             case 'land':
-                return <LandForm isInfo={true} formData={formData} isDisabled={true} />
+                return <LandForm isInfo={true} formData={formData} disabled={true} />
             case 'sea':
-                return <SeaForm isInfo={true} formData={formData} isDisabled={true} />
+                return <SeaForm isInfo={true} formData={formData} disabled={true} />
             default:
                 return null
         }
@@ -175,50 +179,66 @@ const FreightInfo = () => {
                 </div>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>#{id}</span>
-                <CButtonGroup>
-                    <CButton color="primary" className="me-2 rounded" onClick={handleEditButton}>
-                        {!isDisabled ? 'Save' : 'Edit'}
-                    </CButton>
-                    <CButton
-                        color={!isDisabled ? 'secondary' : 'danger'}
-                        className="me-2 rounded"
-                        onClick={handleDeleteButton}
+            {error && <Page404 />}
+
+            {!error && (
+                <>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
                     >
-                        {!isDisabled ? 'Cancel' : 'Delete'}
-                    </CButton>
-                </CButtonGroup>
-            </div>
-            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                <CCol>
-                    <ShipperForm
-                        isInfo={true}
-                        formData={editedFormData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={isDisabled}
-                    />
-                </CCol>
-                <CCol>
-                    <ConsineeForm
-                        isInfo={true}
-                        formData={editedFormData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={isDisabled}
-                    />
-                </CCol>
-            </CRow>
-            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                <CCol>
-                    <ShipmentForm
-                        isInfo={true}
-                        formData={editedFormData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={isDisabled}
-                    />
-                </CCol>
-                <CCol>{renderForm()}</CCol>
-            </CRow>
+                        <span>#{id}</span>
+                        <CButtonGroup>
+                            <CButton
+                                color="primary"
+                                className="me-2 rounded"
+                                onClick={handleEditButton}
+                            >
+                                {!disabled ? 'Save' : 'Edit'}
+                            </CButton>
+                            <CButton
+                                color={!disabled ? 'secondary' : 'danger'}
+                                className="me-2 rounded"
+                                onClick={handleDeleteButton}
+                            >
+                                {!disabled ? 'Cancel' : 'Delete'}
+                            </CButton>
+                        </CButtonGroup>
+                    </div>
+                    <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                        <CCol>
+                            <ShipperForm
+                                isInfo={true}
+                                formData={editedFormData}
+                                handleInputChange={handleInputChange}
+                                disabled={disabled}
+                            />
+                        </CCol>
+                        <CCol>
+                            <ConsineeForm
+                                isInfo={true}
+                                formData={editedFormData}
+                                handleInputChange={handleInputChange}
+                                disabled={disabled}
+                            />
+                        </CCol>
+                    </CRow>
+                    <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                        <CCol>
+                            <ShipmentForm
+                                isInfo={true}
+                                formData={editedFormData}
+                                handleInputChange={handleInputChange}
+                                disabled={disabled}
+                            />
+                        </CCol>
+                        <CCol>{renderForm()}</CCol>
+                    </CRow>
+                </>
+            )}
         </div>
     )
 }
