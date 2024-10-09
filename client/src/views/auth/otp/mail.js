@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     CCard,
@@ -16,16 +16,22 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
+import Cookies from 'js-cookie'
+import axios from 'axios'
+import Profile from '../../../components/Profile'
 
 const MailOTP = () => {
     const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
-    const navigate = useNavigate()
-    const recaptchaRef = React.useRef()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState({
         error: false,
         message: '',
     })
+    const [otp, setOtp] = useState(['', '', '', '', '', ''])
+    const token = Cookies.get(import.meta.env.VITE_APP_SESSION)
+    const navigate = useNavigate()
+    const recaptchaRef = React.useRef()
+    const user = Profile()
     const errorMessages = {
         401: 'You failed the robot test',
         429: 'Too many attempts',
@@ -33,16 +39,13 @@ const MailOTP = () => {
         404: 'Email address not found',
         500: 'Internal server error',
     }
-    const [otp, setOtp] = useState(['', '', '', '', '', ''])
 
-    /*
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (user) navigate('/')
     }, [])
-    */
 
     const handleChange = (e, index) => {
-        const value = e.target.value.replace(/[^0-9]/g, '') // Allow only numbers
+        const value = e.target.value.replace(/[^0-9]/g, '')
         if (value.length <= 1) {
             const newOtp = [...otp]
             newOtp[index] = value
@@ -71,10 +74,16 @@ const MailOTP = () => {
         formData.append('recaptcha_ref', recaptcha)
 
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/otp`, formData, {
-                headers: {},
+            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/verify/otp`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             })
-            .then((response) => {})
+            .then((response) => {
+                const urlParams = new URLSearchParams(window.location.search)
+                const url = urlParams.get('n') ? urlParams.get('n') : '/'
+                navigate(url)
+            })
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'

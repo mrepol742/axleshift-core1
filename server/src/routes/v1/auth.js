@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
+import { ObjectId } from "mongodb";
 import express from "express";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
@@ -58,8 +59,8 @@ router.post("/register", async (req, res) => {
             role: "user",
             password: passwordHash(password),
             email_verify_at: "",
-            created_at: new Date(),
-            update_at: new Date(),
+            created_at: Date.now(),
+            update_at: Date.now(),
         });
 
         return res.status(201).send();
@@ -112,29 +113,36 @@ router.post("/login", recaptcha, async (req, res) => {
      email
 */
 router.post("/verify", auth, async function (req, res, next) {
-    if (req.user.email_verify_at === "") {
-        const db = await database();
-        const otp = Math.floor(100000 + Math.random() * 900000);
+    if (req.user.email_verify_at !== "") return res.status(200).json(req.user);
 
-        await db.collection("otp").insertOne({
-            user_id: req.user._id,
-            token: req.token,
-            code: otp,
-            verified: false,
-            created_at: Date.now(),
-            updated_at: Date.now(),
-        });
+    const db = await database();
+    const collection = await db.collection("otp");
+    const theOtp = await collection.findOne({ token: req.token, verified: false });
+    if (theOtp) {
+        const past = new Date(theOtp.created_at);
+        const ten = 10 * 60 * 1000;
 
-        send({
-            to: req.user.email,
-            subject: "One Time Password - Axleshift Core 1",
-            text: `Your otp is ${otp}.`,
-            html: `<h1>Your otp is ${otp}.</h1>`,
-        });
-
-        return res.status(200).json({ otp: true });
+        if (!(Date.now() - past > ten)) return res.status(200).json({ otp: true });
     }
-    return res.status(200).json(req.user);
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    await collection.insertOne({
+        user_id: req.user._id,
+        token: req.token,
+        code: otp,
+        verified: false,
+        created_at: Date.now(),
+        updated_at: Date.now(),
+    });
+
+    send({
+        to: req.user.email,
+        subject: "One Time Password - Axleshift Core 1",
+        text: `Your otp is ${otp}.`,
+        html: `<h1>Your otp is ${otp}.</h1>`,
+    });
+
+    return res.status(200).json({ otp: true });
 });
 
 /*
@@ -172,15 +180,50 @@ router.post("/logout", auth, function (req, res, next) {
     return res.status(200).send();
 });
 
-router.post("/verify/otp", recaptcha, function (req, res, next) {
+router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
     try {
-        const { otp, token } = req.body.otp;
-        if (!otp || !token) return res.status(400).send();
+        const otp = req.body.otp;
+        if (!otp) return res.status(400).send();
 
+        const db = await database();
+        const collection = await db.collection("otp");
+        const theOtp = await collection.findOne({ token: req.token, verified: false });
+        if (theOtp) {
+            const past = new Date(theOtp.created_at);
+            const ten = 10 * 60 * 1000;
+
+            if (Date.now() - past > ten) return res.status(200).json({ error: "Expired OTP" });
+        }
+
+        if (theOtp.code !== parseInt(otp.replace(/[^0-9]/g, ''))) return res.status(200).json({ error: "Invalid OTP" });
+
+        // mark the otp
+        await collection.updateOne(
+            { _id: new ObjectId(theOtp._id) },
+            {
+                $set: {
+                    verified: true,
+                    updated_at: Date.now(),
+                },
+            }
+        );
+
+        await db.collection("users").updateOne(
+            { _id: new ObjectId(req.user._id) },
+            {
+                $set: {
+                    email_verify_at: Date.now(),
+                    updated_at: Date.now(),
+                },
+            }
+        );
+        // oh god its 21:51!
         return res.status(200).send();
     } catch (e) {
         logger.error(e);
     }
+    return res.status(500).send();
 });
+// means 9:51 pm
 
 export default router;

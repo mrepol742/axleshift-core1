@@ -31,9 +31,9 @@ const AppHeaderDropdown = () => {
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
                 <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">
-                    <h6>
+                    <div>
                         {user.first_name} {user.last_name}
-                    </h6>
+                    </div>
                     {user.email}
                 </CDropdownHeader>
                 <CDropdownItem onClick={() => navigate('/account')}>

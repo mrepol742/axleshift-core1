@@ -16,10 +16,7 @@ const auth = async (req, res, next) => {
     if (!status) return res.status(401).send();
 
     req.token = token;
-    if (["/api/v1/auth/verify", "/api/v1/auth/user"].includes(req.originalUrl)) {
-        const { _id, ...userWithoutId } = theUser;
-        req.user = userWithoutId;
-    }
+    req.user = theUser;
     return next();
 };
 

@@ -81,7 +81,7 @@ const Security = () => {
     }
 
     useEffect(() => {
-        // fetchData()
+        fetchData()
     }, [])
 
     return (

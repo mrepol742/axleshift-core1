@@ -158,7 +158,7 @@ router.post("/u/:type/:id", auth, async (req, res) => {
                     "data.shipper": shipper,
                     "data.consignee": consignee,
                     "data.shipment": shipment,
-                    updated_at: new Date(),
+                    updated_at: Date.now(),
                 },
             }
         );
