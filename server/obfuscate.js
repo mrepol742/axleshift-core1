@@ -1,6 +1,6 @@
 import js from "javascript-obfuscator";
 import fs from "fs";
-import logger from "./src/logger.js";
+import logger from "./src/components/logger.js";
 
 main("./server-build");
 
@@ -16,7 +16,7 @@ function main(location) {
                 if (stats.isFile()) {
                     const fileContent = fs.readFileSync(file, "utf8");
                     if (files[i].endsWith(".js")) {
-                        logger.info("[Encrypting] " + files[i]);
+                        logger.info("[Found] " + files[i]);
                         let result = js.obfuscate(fileContent, {
                             compact: true,
                             controlFlowFlattening: true,

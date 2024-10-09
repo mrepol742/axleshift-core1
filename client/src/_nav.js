@@ -60,21 +60,16 @@ const _nav = [
         name: 'Security',
     },
     {
-        component: CNavGroup,
+        component: CNavItem,
         name: 'Threat',
+        to: '/threat',
         icon: <FontAwesomeIcon icon={faShieldHalved} className="nav-icon" />,
-        items: [
-            {
-                component: CNavItem,
-                name: 'Threat Management',
-                to: '/threat/management',
-            },
-            {
-                component: CNavItem,
-                name: 'Threat Detection',
-                to: '/threat/detection',
-            },
-        ],
+    },
+    {
+        component: CNavItem,
+        name: 'Threat Detection',
+        to: '/threat/detection',
+        icon: <FontAwesomeIcon icon={faShieldHalved} className="nav-icon" />,
     },
     {
         component: CNavTitle,

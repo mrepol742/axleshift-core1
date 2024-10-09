@@ -4,11 +4,11 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import database from "../../models/db.js";
-import logger from "../../src/logger.js";
-import { addSession, removeSession, getUser } from "../../src/sessions.js";
+import logger from "../../components/logger.js";
+import { addSession, removeSession, getUser } from "../../components/sessions.js";
 import auth from "../../middleware/auth.js";
 import recaptcha from "../../middleware/recaptcha.js";
-import passwordHash, { generateUniqueId } from "../../src/password.js";
+import passwordHash, { generateUniqueId } from "../../components/password.js";
 
 const router = express.Router();
 

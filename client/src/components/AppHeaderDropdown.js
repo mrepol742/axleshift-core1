@@ -35,10 +35,6 @@ const AppHeaderDropdown = () => {
                     <FontAwesomeIcon icon={faCircleInfo} className="me-2" />
                     About
                 </CDropdownItem>
-                <CDropdownItem onClick={() => navigate('/account/security')}>
-                    <FontAwesomeIcon icon={faShieldHalved} className="me-2" />
-                    Security
-                </CDropdownItem>
                 <CDropdownDivider />
                 <CDropdownItem onClick={() => navigate('/logout')}>
                     <FontAwesomeIcon icon={faArrowRightFromBracket} className="me-2" />

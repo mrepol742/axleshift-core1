@@ -11,8 +11,8 @@
         "url": "git@github.com:freight-capstone/core1.git"
     },
     "scripts": {
-        "production": "node index",
-        "dev": "nodemon --ext js --ignore '*.json' index",
+        "production": "node src/index",
+        "dev": "nodemon --ext js --ignore '*.json' src/index",
         "lint": "prettier --write ."
     },
     "author": "The Freight Capstone Core 1",

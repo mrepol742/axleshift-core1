@@ -1,4 +1,4 @@
-import { getUser, isActiveToken } from "../src/sessions.js";
+import { getUser, isActiveToken } from "../components/sessions.js";
 
 const adminRoute = [];
 
@@ -10,7 +10,7 @@ const auth = async (req, res, next) => {
     if (!token && !/^[0-9a-f]{64}$/.test(token)) return res.status(401).send();
 
     const theUser = await getUser(token);
-    if (!theUser || (adminRoute.includes(req.path) && theUser.role !== 'admin')) return res.status(401).send();
+    if (!theUser || (adminRoute.includes(req.path) && theUser.role !== "admin")) return res.status(401).send();
 
     const status = await isActiveToken(token);
     if (!status) return res.status(401).send();

@@ -10,8 +10,8 @@ Sentry.init({
     profilesSampleRate: 1.0,
 });
 
-import logger from "./src/logger.js";
-import "./Server.js";
+import logger from "./components/logger.js";
+import app from "./Server.js";
 
 process.on("uncaughtException", (err, origin) => {
     logger.error(err);
@@ -21,3 +21,5 @@ process.on("uncaughtException", (err, origin) => {
 process.on("unhandledRejection", (reason, promise) => {
     logger.error(reason);
 });
+
+export const viteNodeApp = app;
