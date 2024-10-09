@@ -61,14 +61,20 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Threat',
-        to: '/threat',
+        name: 'Management',
+        to: '/security',
         icon: <FontAwesomeIcon icon={faShieldHalved} className="nav-icon" />,
     },
     {
         component: CNavItem,
-        name: 'Threat Detection',
-        to: '/threat/detection',
+        name: 'Analysis',
+        to: '/security/analysis',
+        icon: <FontAwesomeIcon icon={faShieldHalved} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Device Lock',
+        to: '/security/device',
         icon: <FontAwesomeIcon icon={faShieldHalved} className="nav-icon" />,
     },
     {
@@ -77,14 +83,14 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Payments Info',
-        to: '/lorem',
+        name: 'Payment Info',
+        to: '/payment/info',
         icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
     },
     {
         component: CNavItem,
         name: 'History',
-        to: '/lorem',
+        to: '/payment',
         icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
     },
     {
@@ -93,14 +99,8 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Lorem ipsum',
-        to: '/lorem',
-        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
-    },
-    {
-        component: CNavItem,
-        name: 'Lorem ipsum',
-        to: '/lorem',
+        name: 'Freight Documents',
+        to: '/documents',
         icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
     },
 ]

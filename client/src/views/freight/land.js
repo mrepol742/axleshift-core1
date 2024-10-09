@@ -18,10 +18,10 @@ import {
     CImage,
 } from '@coreui/react'
 import Cookies from 'js-cookie'
-import ShipperForm from '../../../components/freight/ShipperForm'
-import ConsineeForm from '../../../components/freight/ConsineeForm'
-import ShipmentForm from '../../../components/freight/ShipmentForm'
-import LandForm from '../../../components/freight/shipping/LandForm'
+import ShipperForm from '../../components/forms/ShipperForm'
+import ConsineeForm from '../../components/forms/ConsineeForm'
+import ShipmentForm from '../../components/forms/ShipmentForm'
+import LandForm from '../../components/forms/shipping/LandForm'
 
 const Land = () => {
     const navigate = useNavigate()

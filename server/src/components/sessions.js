@@ -59,6 +59,15 @@ export const isActiveToken = async (sessionToken) => {
     try {
         const db = await database();
         const session = await db.collection("sessions").findOne({ token: sessionToken });
+        if (session.active)
+            await db.collection("sessions").updateOne(
+                { token: sessionToken },
+                {
+                    $set: {
+                        last_accessed: Date.now(),
+                    },
+                }
+            );
         return session.active;
     } catch (e) {
         logger.error(e);

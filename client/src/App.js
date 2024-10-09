@@ -10,10 +10,10 @@ import Maintenance from './components/middleware/Maintenance'
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
-const Login = lazy(() => import('./views/auth/login/index'))
-const Register = lazy(() => import('./views/auth/register/index'))
-const ForgotPassword = lazy(() => import('./views/auth/forgot-password/index'))
-const Logout = lazy(() => import('./views/auth/logout/index'))
+const Login = lazy(() => import('./views/auth/login'))
+const Register = lazy(() => import('./views/auth/register'))
+const ForgotPassword = lazy(() => import('./views/auth/forgotpassword'))
+const Logout = lazy(() => import('./views/auth/logout'))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')

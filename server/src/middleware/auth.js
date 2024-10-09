@@ -16,8 +16,10 @@ const auth = async (req, res, next) => {
     if (!status) return res.status(401).send();
 
     req.token = token;
-    req.email = theUser.email;
-    req.role = theUser.role;
+    if (["/api/v1/auth/verify", "/api/v1/auth/user"].includes(req.originalUrl)) {
+        const { _id, ...userWithoutId } = theUser;
+        req.user = userWithoutId;
+    }
     return next();
 };
 

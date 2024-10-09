@@ -18,12 +18,12 @@ import {
     CImage,
 } from '@coreui/react'
 import Cookies from 'js-cookie'
-import ShipperForm from '../../../components/freight/ShipperForm'
-import ConsineeForm from '../../../components/freight/ConsineeForm'
-import ShipmentForm from '../../../components/freight/ShipmentForm'
-import SeaForm from '../../../components/freight/shipping/SeaForm'
+import ShipperForm from '../../components/forms/ShipperForm'
+import ConsineeForm from '../../components/forms/ConsineeForm'
+import ShipmentForm from '../../components/forms/ShipmentForm'
+import AirForm from '../../components/forms/shipping/AirForm'
 
-const Sea = () => {
+const Air = () => {
     const navigate = useNavigate()
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(false)
@@ -53,11 +53,11 @@ const Sea = () => {
             shipment_instructions: '',
         },
         shipping: {
-            shipping_loading_port: '',
-            shipping_discharge_port: '',
-            shipping_sailing_date: '',
-            shipping_estimated_arrival_date: '',
-            shipping_cargo_type: 1,
+            shipping_origin_airport: '',
+            shipping_destination_airport: '',
+            shipping_preferred_departure_date: '',
+            shipping_preferred_arrival_date: '',
+            shipping_flight_type: '1',
         },
     })
 
@@ -76,7 +76,7 @@ const Sea = () => {
         try {
             setLoading(true)
             const response = await axios.post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/sea`,
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/air`,
                 formData,
                 {
                     headers: {
@@ -123,7 +123,7 @@ const Sea = () => {
             )}
             <CRow className="mb-4">
                 <CCol xs={3} className="image-container d-none d-md-flex">
-                    <CImage fluid rounded src="/images/freight-sea.jpg" className="custom-image" />
+                    <CImage fluid rounded src="/images/freight-air.jpg" className="custom-image" />
                 </CCol>
                 <CCol md={7}>
                     {currentPage === 1 && (
@@ -153,7 +153,7 @@ const Sea = () => {
                     )}
 
                     {currentPage === 4 && (
-                        <SeaForm
+                        <AirForm
                             formData={formData}
                             handleInputChange={handleInputChange}
                             handleShipmentDetails={handleShipmentDetails}
@@ -166,4 +166,4 @@ const Sea = () => {
     )
 }
 
-export default Sea
+export default Air

@@ -111,10 +111,7 @@ router.post("/login", recaptcha, async (req, res) => {
      email
 */
 router.post("/verify", auth, function (req, res, next) {
-    return res.status(200).json({
-        email: req.email,
-        role: req.role,
-    });
+    return res.status(200).json(req.user);
 });
 
 /*

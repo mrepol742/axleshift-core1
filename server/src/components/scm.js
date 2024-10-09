@@ -13,19 +13,19 @@ const scm = async () => {
         });
 
         if (response.data.length === 0) return [];
-        
-        const alerts = response.data.map(alert => ({
+
+        const alerts = response.data.map((alert) => ({
             number: alert.number,
             state: alert.state,
             scope: alert.dependency.scope,
             manifest: alert.dependency.manifest_path,
             cve: alert.security_advisory.cve_id ?? null,
-            summary: alert.security_advisory.summary, 
+            summary: alert.security_advisory.summary,
             severity: alert.security_advisory.severity,
             created_at: alert.security_advisory.created_at,
             updated_at: alert.security_advisory.updated_at ?? null,
         }));
-    
+
         return alerts;
     } catch (err) {
         logger.error(err);
