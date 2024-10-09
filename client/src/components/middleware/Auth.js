@@ -40,7 +40,7 @@ const Auth = (WrappedComponent) => {
                     setIsAuth(true)
                 })
                 .catch((err) => {
-                    console.error(err)
+                    if (!err.response) return console.error(err)
                     Cookies.remove(import.meta.env.VITE_APP_SESSION)
                     setIsAuth(false)
                     navigate(loc)
