@@ -14,7 +14,7 @@ import corsOptions from "./middleware/cors.js";
 
 import db from "./models/db.js";
 
-import logger from "./src/logger.js";
+import logger from "./components/logger.js";
 
 import APIv1 from "./routes/v1/index.js";
 
@@ -60,3 +60,5 @@ app.listen(port, async () => {
 });
 
 Sentry.setupExpressErrorHandler(app);
+
+export default app;

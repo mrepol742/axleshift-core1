@@ -1,7 +1,7 @@
 import fs from "fs";
 import { ObjectId } from "mongodb";
 import database from "../models/db.js";
-import logger from "../src/logger.js";
+import logger from "./logger.js";
 
 export const addSession = async (theUser, sessionToken, ip, userAgent) => {
     try {

@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import nodemailer from "nodemailer";
-import logger from "../src/logger.js";
+import logger from "./logger.js";
 
 let mailInstance = null;
 

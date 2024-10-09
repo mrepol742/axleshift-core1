@@ -1,4 +1,4 @@
-import { getUser, isActiveToken } from "../src/sessions.js";
+import { getUser, isActiveToken } from "../components/sessions.js";
 
 const adminRoute = [];
 

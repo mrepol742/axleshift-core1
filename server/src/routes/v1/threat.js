@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import database from "../../models/db.js";
-import logger from "../../src/logger.js";
+import logger from "../../components/logger.js";
 import auth from "../../middleware/auth.js";
 
 const router = express.Router();

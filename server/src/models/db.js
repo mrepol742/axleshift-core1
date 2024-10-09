@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import fs from "fs";
 import { MongoClient } from "mongodb";
-import logger from "../src/logger.js";
-import passwordHash from "../src/password.js";
+import logger from "../components/logger.js";
+import passwordHash from "../components/password.js";
 
 const data = JSON.parse(fs.readFileSync(import.meta.dirname + "/users.json", "utf8")).docs;
 let dbInstance = null;
