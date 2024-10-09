@@ -17,7 +17,7 @@ import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
-import Page404 from '../../errors/404'
+import Page404 from '../errors/404'
 
 const TrackInfo = () => {
     const [loading, setLoading] = useState(false)
