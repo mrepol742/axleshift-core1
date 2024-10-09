@@ -14,6 +14,7 @@ const Login = lazy(() => import('./views/auth/login'))
 const Register = lazy(() => import('./views/auth/register'))
 const ForgotPassword = lazy(() => import('./views/auth/forgotpassword'))
 const Logout = lazy(() => import('./views/auth/logout'))
+const MailOTP = lazy(() => import('./views/auth/otp/mail.js'))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -45,7 +46,8 @@ const App = () => {
                     <DocumentTitle>
                         <Routes>
                             <Route exact path="/login" name="Login" element={<Login />} />
-                            <Route exact path="/register" name="register" element={<Register />} />
+                            <Route exact path="/register" name="Register" element={<Register />} />
+                            <Route exact path="/otp" name="OTP" element={<MailOTP />} />
                             <Route
                                 exact
                                 path="/forgot-password"

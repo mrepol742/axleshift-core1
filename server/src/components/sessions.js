@@ -31,6 +31,7 @@ export const getUser = async (sessionToken) => {
             first_name: theUser.first_name,
             last_name: theUser.last_name,
             role: theUser.role,
+            email_verify_at: theUser.email_verify_at,
         };
     } catch (e) {
         logger.error(e);

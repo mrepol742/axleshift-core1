@@ -10,6 +10,7 @@ const Auth = (WrappedComponent) => {
     const AuthComponent = (props) => {
         const navigate = useNavigate()
         const [isAuth, setIsAuth] = useState(null)
+        const [otp, setOtp] = useState(false)
         const dispatch = useDispatch()
 
         let loc = `/login`
@@ -31,6 +32,11 @@ const Auth = (WrappedComponent) => {
                     },
                 )
                 .then((response) => {
+                    if (response.data.otp) {
+                        setOtp(true)
+                        setIsAuth(false)
+                        return
+                    }
                     dispatch({
                         type: 'set',
                         user: response.data,
@@ -56,6 +62,7 @@ const Auth = (WrappedComponent) => {
                 </div>
             )
 
+        if (otp) return <Navigate to={loc.replace('/login', '/otp')} />
         if (!isAuth) return <Navigate to={loc} />
 
         return <WrappedComponent {...props} />

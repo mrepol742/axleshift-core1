@@ -103,6 +103,28 @@ const _nav = [
         to: '/documents',
         icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
     },
+    {
+        component: CNavTitle,
+        name: 'Support',
+    },
+    {
+        component: CNavItem,
+        name: 'Contact',
+        to: '/contact',
+        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'FAQ',
+        to: '/faq',
+        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Network Status',
+        to: 'https://stats.uptimerobot.com/5l58Mua0Wi',
+        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+    },
 ]
 
 export default _nav

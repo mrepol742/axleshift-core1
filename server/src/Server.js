@@ -13,6 +13,7 @@ import sanitize from "./middleware/sanitize.js";
 import corsOptions from "./middleware/cors.js";
 
 import db from "./models/db.js";
+import mail from "./components/mail.js";
 
 import logger from "./components/logger.js";
 
@@ -56,6 +57,7 @@ if (process.env.NODE_ENV !== "production")
 
 app.listen(port, async () => {
     await db();
+    await mail();
     logger.info(`Server running on port ${port}`);
 });
 

@@ -31,7 +31,6 @@ export const send = async (options) => {
 
     mailInstance.sendMail(options, (error, info) => {
         if (error) return logger.error(error);
-        logger.info(`Email has been sent: ${info.response}`);
     });
 };
 

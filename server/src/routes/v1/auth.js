@@ -9,6 +9,7 @@ import { addSession, removeSession, getUser } from "../../components/sessions.js
 import auth from "../../middleware/auth.js";
 import recaptcha from "../../middleware/recaptcha.js";
 import passwordHash, { generateUniqueId } from "../../components/password.js";
+import { send } from "../../components/mail.js";
 
 const router = express.Router();
 
@@ -110,7 +111,29 @@ router.post("/login", recaptcha, async (req, res) => {
   Returns:
      email
 */
-router.post("/verify", auth, function (req, res, next) {
+router.post("/verify", auth, async function (req, res, next) {
+    if (req.user.email_verify_at === "") {
+        const db = await database();
+        const otp = Math.floor(100000 + Math.random() * 900000);
+
+        await db.collection("otp").insertOne({
+            user_id: req.user._id,
+            token: req.token,
+            code: otp,
+            verified: false,
+            created_at: Date.now(),
+            updated_at: Date.now(),
+        });
+
+        send({
+            to: req.user.email,
+            subject: "One Time Password - Axleshift Core 1",
+            text: `Your otp is ${otp}.`,
+            html: `<h1>Your otp is ${otp}.</h1>`,
+        });
+
+        return res.status(200).json({ otp: true });
+    }
     return res.status(200).json(req.user);
 });
 
@@ -147,6 +170,17 @@ router.post("/logout", auth, function (req, res, next) {
     removeSession(req.token);
 
     return res.status(200).send();
+});
+
+router.post("/verify/otp", recaptcha, function (req, res, next) {
+    try {
+        const { otp, token } = req.body.otp;
+        if (!otp || !token) return res.status(400).send();
+
+        return res.status(200).send();
+    } catch (e) {
+        logger.error(e);
+    }
 });
 
 export default router;
