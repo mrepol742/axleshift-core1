@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
     CContainer,
     CInputGroup,
@@ -24,61 +24,36 @@ import {
     CTableDataCell,
     CTableBody,
     CTableHeaderCell,
+    CTabs,
+    CTabList,
+    CTab,
+    CTabContent,
+    CTabPanel,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 
-const Threat = () => {
-    const [loading, setLoading] = useState(false)
-    const [state, setState] = useState('2')
-    const [priority, setPriority] = useState('1')
-    const [order, setOrder] = useState('1')
-    const [query, setQuery] = useState('')
-    const [result, setResult] = useState({ scm: [] })
-    const navigate = useNavigate()
-
-    const fetchData = async () => {
-        setLoading(true)
-        await axios
-            .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/threat/`, {
-                headers: {
-                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
-                },
-            })
-            .then((response) => {
-                setResult(response.data)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
-
+const Dependabot = ({
+    query,
+    setQuery,
+    state,
+    setState,
+    priority,
+    setPriority,
+    order,
+    setOrder,
+    result,
+}) => {
     return (
-        <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
+        <>
             {result.scm.length === 0 && (
-                <>
-                    <div className="text-center border rounded">
-                        <div className="p-0 p-md-5 my-5 my-md-0">
-                            <CImage src="/images/threat.png" fluid width="50%" />
-                            <h1>We couldn&apos;t find any threats.</h1>
-                            <p>Should we add one? :)</p>
-                        </div>
+                <div className="text-center border rounded">
+                    <div className="p-0 p-md-5 my-5 my-md-0">
+                        <CImage src="/images/threat.png" fluid width="50%" />
+                        <h1>We couldn&apos;t find any threats.</h1>
+                        <p>Should we add one? :)</p>
                     </div>
-                </>
+                </div>
             )}
             {result.scm.length !== 0 && (
                 <>
@@ -165,8 +140,34 @@ const Threat = () => {
                     </CTable>
                 </>
             )}
-        </div>
+        </>
     )
 }
 
-export default Threat
+Dependabot.propTypes = {
+    query: PropTypes.string.isRequired,
+    setQuery: PropTypes.func.isRequired,
+    state: PropTypes.string.isRequired,
+    setState: PropTypes.func.isRequired,
+    priority: PropTypes.string.isRequired,
+    setPriority: PropTypes.func.isRequired,
+    order: PropTypes.string.isRequired,
+    setOrder: PropTypes.func.isRequired,
+    result: PropTypes.shape({
+        scm: PropTypes.arrayOf(
+            PropTypes.shape({
+                number: PropTypes.number.isRequired,
+                state: PropTypes.string.isRequired,
+                scope: PropTypes.string.isRequired,
+                manifest: PropTypes.string.isRequired,
+                cve: PropTypes.string.isRequired,
+                summary: PropTypes.string.isRequired,
+                severity: PropTypes.string.isRequired,
+                created_at: PropTypes.string.isRequired,
+                updated_at: PropTypes.string.isRequired,
+            }),
+        ).isRequired,
+    }).isRequired,
+}
+
+export default Dependabot

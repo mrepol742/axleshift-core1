@@ -57,18 +57,6 @@ const Register = () => {
         }))
     }
 
-    const backgroundStyle = {
-        backgroundImage: 'url(/images/background.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        opacity: 0.5,
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
@@ -107,7 +95,7 @@ const Register = () => {
 
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
-            <div style={backgroundStyle} />
+            <div className="auth-bg" />
             <CContainer>
                 {loading && (
                     <div className="loading-overlay">

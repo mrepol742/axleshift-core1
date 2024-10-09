@@ -29,14 +29,14 @@ import { faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { QRCodeSVG } from 'qrcode.react'
 import html2canvas from 'html2canvas'
 
-import ShipperForm from '../../../components/freight/ShipperForm'
-import ConsineeForm from '../../../components/freight/ConsineeForm'
-import ShipmentForm from '../../../components/freight/ShipmentForm'
-import AirForm from '../../../components/freight/shipping/AirForm'
-import LandForm from '../../../components/freight/shipping/LandForm'
-import SeaForm from '../../../components/freight/shipping/SeaForm'
+import ShipperForm from '../../components/forms/ShipperForm'
+import ConsineeForm from '../../components/forms/ConsineeForm'
+import ShipmentForm from '../../components/forms/ShipmentForm'
+import AirForm from '../../components/forms/shipping/AirForm'
+import LandForm from '../../components/forms/shipping/LandForm'
+import SeaForm from '../../components/forms/shipping/SeaForm'
 
-import Page404 from '../../errors/404'
+import Page404 from '../errors/404'
 
 const FreightInfo = () => {
     const dataF = {
@@ -228,7 +228,7 @@ const FreightInfo = () => {
                             </CModalFooter>
                         </CModal>
                     )}
-                    <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                    <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
                         <span className="d-block">#{id}</span>
                         <CButtonGroup className="mb-2 mb-sm-0">
                             <CButton

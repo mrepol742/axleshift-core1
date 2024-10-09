@@ -1,4 +1,7 @@
 // Here you can add other styles
+/*
+ * THE Loading Overlay
+ */
 .loading-overlay {
     position: fixed;
     top: 0;
@@ -9,10 +12,12 @@
     display: flex;
     justify-content: center;
     padding-top: 3%;
-    z-index: 999;
+    z-index: 100000;
 }
 
-
+/*
+ * customize scrollbar
+ */
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -31,7 +36,9 @@
     background-color: #323a49;
 }
 
-
+/*
+ * image for freight
+ */
 .image-container {
     height: auto;
     display: flex;
@@ -44,7 +51,9 @@
     object-fit: cover;
 }
 
-
+/*
+ * timeline for tracking page
+ */
 .timeline {
     position: relative;
     padding: 20px;
@@ -85,4 +94,31 @@
 
 .timeline-content p {
     margin: 5px 0 0;
+}
+
+/*
+ * OTP that an O with TP
+ */
+ .otp-input {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 24px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/*
+ * auth background
+ */
+.auth-bg {
+    background-image: url(/images/background.png);
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.5;
 }

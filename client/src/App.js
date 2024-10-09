@@ -6,14 +6,16 @@ import ReactGA from 'react-ga4'
 import './scss/style.scss'
 import DocumentTitle from './components/middleware/DocumentTitle'
 import Maintenance from './components/middleware/Maintenance'
+import withAuth from './components/middleware/Auth'
 
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
-const Login = lazy(() => import('./views/auth/login/index'))
-const Register = lazy(() => import('./views/auth/register/index'))
-const ForgotPassword = lazy(() => import('./views/auth/forgot-password/index'))
-const Logout = lazy(() => import('./views/auth/logout/index'))
+const Login = lazy(() => import('./views/auth/login'))
+const Register = lazy(() => import('./views/auth/register'))
+const ForgotPassword = lazy(() => import('./views/auth/forgotpassword'))
+const Logout = lazy(() => import('./views/auth/logout'))
+const MailOTP = withAuth(lazy(() => import('./views/auth/otp/mail.js')))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -45,7 +47,8 @@ const App = () => {
                     <DocumentTitle>
                         <Routes>
                             <Route exact path="/login" name="Login" element={<Login />} />
-                            <Route exact path="/register" name="register" element={<Register />} />
+                            <Route exact path="/register" name="Register" element={<Register />} />
+                            <Route exact path="/otp" name="OTP" element={<MailOTP />} />
                             <Route
                                 exact
                                 path="/forgot-password"

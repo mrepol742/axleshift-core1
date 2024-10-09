@@ -31,6 +31,7 @@ export const getUser = async (sessionToken) => {
             first_name: theUser.first_name,
             last_name: theUser.last_name,
             role: theUser.role,
+            email_verify_at: theUser.email_verify_at,
         };
     } catch (e) {
         logger.error(e);
@@ -59,6 +60,15 @@ export const isActiveToken = async (sessionToken) => {
     try {
         const db = await database();
         const session = await db.collection("sessions").findOne({ token: sessionToken });
+        if (session.active)
+            await db.collection("sessions").updateOne(
+                { token: sessionToken },
+                {
+                    $set: {
+                        last_accessed: Date.now(),
+                    },
+                }
+            );
         return session.active;
     } catch (e) {
         logger.error(e);

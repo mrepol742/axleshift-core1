@@ -18,9 +18,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
 
+import Profile from '../components/Profile'
+
 const AppHeaderDropdown = () => {
     const navigate = useNavigate()
-    const email = useSelector((state) => state.email)
+    const user = Profile()
 
     return (
         <CDropdown variant="nav-item">
@@ -29,7 +31,10 @@ const AppHeaderDropdown = () => {
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
                 <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">
-                    {email}
+                    <div>
+                        {user.first_name} {user.last_name}
+                    </div>
+                    {user.email}
                 </CDropdownHeader>
                 <CDropdownItem onClick={() => navigate('/account')}>
                     <FontAwesomeIcon icon={faCircleInfo} className="me-2" />

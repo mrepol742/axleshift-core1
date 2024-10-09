@@ -16,8 +16,7 @@ const auth = async (req, res, next) => {
     if (!status) return res.status(401).send();
 
     req.token = token;
-    req.email = theUser.email;
-    req.role = theUser.role;
+    req.user = theUser;
     return next();
 };
 

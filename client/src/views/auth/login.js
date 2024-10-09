@@ -20,13 +20,11 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { useDispatch } from 'react-redux'
 
 const Login = () => {
     const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
-    const dispatch = useDispatch()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -64,7 +62,6 @@ const Login = () => {
                 Cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
                 const url = urlParams.get('n') ? urlParams.get('n') : '/'
-                dispatch({ type: 'set', email: email })
                 navigate(url)
             })
             .catch((error) => {
@@ -81,21 +78,9 @@ const Login = () => {
             })
     }
 
-    const backgroundStyle = {
-        backgroundImage: 'url(/images/background.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        opacity: 0.5,
-    }
-
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
-            <div style={backgroundStyle} />
+            <div className="auth-bg" />
             <CContainer>
                 {loading && (
                     <div className="loading-overlay">

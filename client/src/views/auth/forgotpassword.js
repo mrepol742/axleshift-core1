@@ -32,21 +32,9 @@ const Login = () => {
         const token = await recaptchaRef.current.executeAsync()
     }
 
-    const backgroundStyle = {
-        backgroundImage: 'url(/images/background.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        opacity: 0.5,
-    }
-
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
-            <div style={backgroundStyle} />
+            <div className="auth-bg" />
             <CContainer>
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
