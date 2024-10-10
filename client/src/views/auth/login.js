@@ -20,6 +20,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
+import errorMessages from '../../components/http/ErrorMessages'
 
 const Login = () => {
     const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
@@ -32,13 +33,6 @@ const Login = () => {
         error: false,
         message: '',
     })
-    const errorMessages = {
-        401: 'You failed the robot test',
-        429: 'Too many attempts',
-        401: 'Invalid password',
-        404: 'Email address not found',
-        500: 'Internal server error',
-    }
 
     useEffect(() => {
         if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')

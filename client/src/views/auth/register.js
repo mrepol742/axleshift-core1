@@ -20,6 +20,7 @@ import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg
 import ReCAPTCHA from 'react-google-recaptcha'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import errorMessages from '../../components/http/ErrorMessages'
 
 const Register = () => {
     const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
@@ -38,12 +39,6 @@ const Register = () => {
         error: false,
         message: '',
     })
-    const errorMessages = {
-        401: 'You failed the robot test',
-        429: 'Too many attempts',
-        409: 'Email is already registered',
-        500: 'Internal server error',
-    }
 
     useEffect(() => {
         if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
