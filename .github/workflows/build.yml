@@ -37,7 +37,6 @@ jobs:
           npm i
           npm run lint
           npm audit
-          npm outdated
           npm run build
 
       - name: Upload frontend
