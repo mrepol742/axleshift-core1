@@ -9,13 +9,18 @@ import auth from "../../middleware/auth.js";
 const router = express.Router();
 
 router.get("/", auth, async (req, res) => {
-    const gds_advisory = await scm();
+
+    const [gds_advisory] = await Promise.all([
+        scm(),
+    ]);
 
     return res.status(200).json({ scm: gds_advisory });
 });
 
 router.get("/scan", auth, async (req, res) => {
-    const gds_advisory = await scm();
+    const [gds_advisory] = await Promise.all([
+        scm(),
+    ]);
 
     return res.status(200).json({ scm: gds_advisory });
 });
