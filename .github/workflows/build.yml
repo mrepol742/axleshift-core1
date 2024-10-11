@@ -16,22 +16,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Setup frontend env
+        
+      - name: Build frontend
         run: |
           cd client
           echo "VITE_APP_API_URL=${{ secrets.APP_API_URL }}" >> .env
           echo "VITE_APP_RECAPTCHA_SITE_KEY=${{ secrets.APP_RECAPTCHA_SITE_KEY }}" >> .env
           echo "VITE_APP_SESSION=${{ secrets.APP_SESSION }}" >> .env
-          echo "VITE_APP_MAINTENANCE=${{ secrets.APP_MAINTENANCE }}" >> .env
+          echo "VITE_APP_NODE_ENV=${{ secrets.APP_NODE_ENV }}" >> .env
           echo "VITE_APP_SENTRY_DNS=${{ secrets.APP_SENTRY_DNS }}" >> .env
           echo "VITE_APP_GOOGLE_ANALYTICS=${{ secrets.APP_GOOGLE_ANALYTICS }}" >> .env
           echo "VITE_APP_GOOGLE_MAP=${{ secrets.APP_GOOGLE_MAP }}" >> .env
-      
-      - name: Build frontend
-        run: |
-          cd client
+          echo "VITE_APP_FIREBASE_API_KEY=${{ secrets.APP_FIREBASE_API_KEY }}" >> .env
+          echo "VITE_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.APP_FIREBASE_AUTH_DOMAIN }}" >> .env
+          echo "VITE_APP_FIREBASE_PROJECT_ID=${{ secrets.APP_FIREBASE_PROJECT_ID }}" >> .env
+          echo "VITE_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.APP_FIREBASE_STORAGE_BUCKET }}" >> .env
+          echo "VITE_APP_FIREBASE_MESSAGING_SENDING_ID=${{ secrets.APP_FIREBASE_MESSAGING_SENDING_ID }}" >> .env
+          echo "VITE_APP_FIREBASE_APP_ID=${{ secrets.APP_FIREBASE_APP_ID }}" >> .env
+          echo "VITE_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.APP_FIREBASE_MEASUREMENT_ID }}" >> .env
           npm i
+          npm run lint
+          npm audit
+          npm outdated
           npm run build
 
       - name: Upload frontend
@@ -53,6 +59,8 @@ jobs:
           cd server
           npm i
           npm run lint
+          npm audit
+          npm outdated
           cd ../server-build
           rm -rf eslint.config.js obfuscate.js
           cd ..
