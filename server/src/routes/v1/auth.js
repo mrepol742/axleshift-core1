@@ -110,10 +110,13 @@ router.post("/login", recaptcha, async (req, res) => {
   Header:
      Authentication
   Returns:
-     email
+     User info
+     Otp
 */
 router.post("/verify", auth, async function (req, res, next) {
-    if (req.user.email_verify_at !== "") return res.status(200).json(req.user);
+    const { _id, email_verify_at, ...filter } = req.user;
+    filter.is_email_verified = email_verify_at !== "";
+    if (req.user.email_verify_at !== "") return res.status(200).json(filter);
 
     const db = await database();
     const collection = await db.collection("otp");
@@ -124,26 +127,32 @@ router.post("/verify", auth, async function (req, res, next) {
 
         if (!(Date.now() - past > ten)) return res.status(200).json({ otp: true });
     }
+    sendOTPEmail(req, collection);
 
+    return res.status(200).json({ otp: true });
+});
+
+const sendOTPEmail = async (req, collection) => {
     const otp = Math.floor(100000 + Math.random() * 900000);
     await collection.insertOne({
         user_id: req.user._id,
         token: req.token,
         code: otp,
         verified: false,
+        expired: false,
         created_at: Date.now(),
         updated_at: Date.now(),
     });
 
-    send({
-        to: req.user.email,
-        subject: "One Time Password - Axleshift Core 1",
-        text: `Your otp is ${otp}.`,
-        html: `<h1>Your otp is ${otp}.</h1>`,
-    });
-
-    return res.status(200).json({ otp: true });
-});
+    send(
+        {
+            to: req.user.email,
+            subject: "One Time Password (OTP)",
+            text: `Your otp is ${otp}, valid for 10 minutes only.`,
+        },
+        req.user.first_name
+    );
+};
 
 /*
   Url: POST /api/v1/auth/user
@@ -180,6 +189,51 @@ router.post("/logout", auth, function (req, res, next) {
     return res.status(200).send();
 });
 
+/*
+  Url: POST /api/v1/auth/verify/otp/new
+  Header:
+     Authentication
+  Request Body:
+     Recaptcha ref
+*/
+router.post("/verify/otp/new", [auth, recaptcha], async function (req, res, next) {
+    try {
+        const db = await database();
+        const collection = await db.collection("otp");
+        const theOtp = await collection.findOne({ token: req.token, verified: false, expired: false });
+        if (theOtp) {
+            const past = new Date(theOtp.created_at);
+            const ten = 10 * 60 * 1000;
+
+            if (Date.now() - past > ten) {
+                await collection.updateOne(
+                    { _id: new ObjectId(theOtp._id) },
+                    {
+                        $set: {
+                            verified: false,
+                            expired: true,
+                            updated_at: Date.now(),
+                        },
+                    }
+                );
+
+                sendOTPEmail(req, collection);
+            }
+        }
+    } catch (e) {
+        logger.error(e);
+    }
+    return res.status(500).send();
+});
+
+/*
+  Url: POST /api/v1/auth/verify/otp
+  Header:
+     Authentication
+  Request Body:
+     Otp
+     Recaptcha ref
+*/
 router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
     try {
         const otp = req.body.otp;
@@ -187,7 +241,7 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
 
         const db = await database();
         const collection = await db.collection("otp");
-        const theOtp = await collection.findOne({ token: req.token, verified: false });
+        const theOtp = await collection.findOne({ token: req.token, verified: false, expired: false });
         if (theOtp) {
             const past = new Date(theOtp.created_at);
             const ten = 10 * 60 * 1000;
@@ -195,7 +249,7 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
             if (Date.now() - past > ten) return res.status(200).json({ error: "Expired OTP" });
         }
 
-        if (theOtp.code !== parseInt(otp.replace(/[^0-9]/g, ''))) return res.status(200).json({ error: "Invalid OTP" });
+        if (theOtp.code !== parseInt(otp.replace(/[^0-9]/g, ""))) return res.status(200).json({ error: "Invalid OTP" });
 
         // mark the otp
         await collection.updateOne(
@@ -225,5 +279,4 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
     return res.status(500).send();
 });
 // means 9:51 pm
-
 export default router;

@@ -17,8 +17,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import Cookies from 'js-cookie'
+import { useDispatch } from 'react-redux'
 import axios from 'axios'
-import Profile from '../../../components/Profile'
+import errorMessages from '../../../components/http/ErrorMessages'
 
 const MailOTP = () => {
     const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
@@ -31,18 +32,34 @@ const MailOTP = () => {
     const token = Cookies.get(import.meta.env.VITE_APP_SESSION)
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
-    const user = Profile()
-    const errorMessages = {
-        401: 'You failed the robot test',
-        429: 'Too many attempts',
-        401: 'Invalid password',
-        404: 'Email address not found',
-        500: 'Internal server error',
+    const dispatch = useDispatch()
+
+    const checkAuthentication = async () => {
+        if (token === undefined) return navigate('/login')
+
+        await axios
+            .post(
+                `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/verify`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            )
+            .then((response) => {
+                if (response.data.is_email_verified) return navigate('/')
+            })
+            .catch((err) => {
+                if (!err.response) return console.error(err)
+                Cookies.remove(import.meta.env.VITE_APP_SESSION)
+                navigate('/login')
+            })
     }
 
     useEffect(() => {
-        if (user) navigate('/')
-    }, [])
+        checkAuthentication()
+    }, [navigate])
 
     const handleChange = (e, index) => {
         const value = e.target.value.replace(/[^0-9]/g, '')

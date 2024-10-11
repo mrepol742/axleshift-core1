@@ -6,7 +6,6 @@ import ReactGA from 'react-ga4'
 import './scss/style.scss'
 import DocumentTitle from './components/middleware/DocumentTitle'
 import Maintenance from './components/middleware/Maintenance'
-import withAuth from './components/middleware/Auth'
 
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
@@ -15,7 +14,7 @@ const Login = lazy(() => import('./views/auth/login'))
 const Register = lazy(() => import('./views/auth/register'))
 const ForgotPassword = lazy(() => import('./views/auth/forgotpassword'))
 const Logout = lazy(() => import('./views/auth/logout'))
-const MailOTP = withAuth(lazy(() => import('./views/auth/otp/mail.js')))
+const MailOTP = lazy(() => import('./views/auth/otp/mail'))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')

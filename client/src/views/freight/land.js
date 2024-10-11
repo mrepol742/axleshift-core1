@@ -73,23 +73,21 @@ const Land = () => {
     }
 
     const handleSubmit = async () => {
-        try {
-            setLoading(true)
-            const response = await axios.post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/land`,
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
-                    },
+        await axios
+            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/land`, formData, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                 },
-            )
-            if (response.status == 201) navigate('/')
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setLoading(false)
-        }
+            })
+            .then((response) => {
+                navigate('/')
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }
     const handleShipperInformation = () => {
         setCurrentPage(1)
