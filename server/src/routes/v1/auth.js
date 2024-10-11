@@ -132,26 +132,27 @@ router.post("/verify", auth, async function (req, res, next) {
     return res.status(200).json({ otp: true });
 });
 
-const sendOTPEmail = async (req, collection) => {
+const sendOTPEmail = (req, collection) => {
     const otp = Math.floor(100000 + Math.random() * 900000);
-    await collection.insertOne({
-        user_id: req.user._id,
-        token: req.token,
-        code: otp,
-        verified: false,
-        expired: false,
-        created_at: Date.now(),
-        updated_at: Date.now(),
-    });
-
-    send(
-        {
-            to: req.user.email,
-            subject: "One Time Password (OTP)",
-            text: `Your otp is ${otp}, valid for 10 minutes only.`,
-        },
-        req.user.first_name
-    );
+    Promise.all([
+        collection.insertOne({
+            user_id: req.user._id,
+            token: req.token,
+            code: otp,
+            verified: false,
+            expired: false,
+            created_at: Date.now(),
+            updated_at: Date.now(),
+        }),
+        send(
+            {
+                to: req.user.email,
+                subject: "One Time Password (OTP)",
+                text: `Your otp is ${otp}, valid for 10 minutes only.`,
+            },
+            req.user.first_name
+        )
+    ]);
 };
 
 /*
@@ -252,25 +253,26 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
         if (theOtp.code !== parseInt(otp.replace(/[^0-9]/g, ""))) return res.status(200).json({ error: "Invalid OTP" });
 
         // mark the otp
-        await collection.updateOne(
-            { _id: new ObjectId(theOtp._id) },
-            {
-                $set: {
-                    verified: true,
-                    updated_at: Date.now(),
-                },
-            }
-        );
-
-        await db.collection("users").updateOne(
-            { _id: new ObjectId(req.user._id) },
-            {
-                $set: {
-                    email_verify_at: Date.now(),
-                    updated_at: Date.now(),
-                },
-            }
-        );
+        await Promise.all([
+            collection.updateOne(
+                { _id: new ObjectId(theOtp._id) },
+                {
+                    $set: {
+                        verified: true,
+                        updated_at: Date.now(),
+                    },
+                }
+            ),
+            db.collection("users").updateOne(
+                { _id: new ObjectId(req.user._id) },
+                {
+                    $set: {
+                        email_verify_at: Date.now(),
+                        updated_at: Date.now(),
+                    },
+                }
+            )
+        ]);
         // oh god its 21:51!
         return res.status(200).send();
     } catch (e) {

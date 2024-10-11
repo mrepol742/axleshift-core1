@@ -109,8 +109,8 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Contact',
-        to: '/contact',
+        name: 'Customer Service',
+        to: '/customer',
         icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
     },
     {

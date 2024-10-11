@@ -9,7 +9,7 @@ const mail = async () => {
     if (mailInstance) return mailInstance;
 
     try {
-        mailInstance = nodemailer.createTransport({
+        mailInstance = await nodemailer.createTransport({
             host: process.env.MAIL_HOST,
             port: process.env.MAIL_PORT,
             secure: false,
@@ -26,7 +26,7 @@ const mail = async () => {
     return mailInstance;
 };
 
-export const send = async (options, name) => {
+export const send = (options, name) => {
     options.from = process.env.MAIL_FROM_ADDRESS;
     options.html = body(options.subject, name, options.text);
 

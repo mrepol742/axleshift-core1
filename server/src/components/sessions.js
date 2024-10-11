@@ -6,7 +6,7 @@ import logger from "./logger.js";
 export const addSession = async (theUser, sessionToken, ip, userAgent) => {
     try {
         const db = await database();
-        await db.collection("sessions").insertOne({
+        db.collection("sessions").insertOne({
             user_id: theUser._id,
             token: sessionToken,
             active: true,
@@ -25,6 +25,7 @@ export const getUser = async (sessionToken) => {
         const session = await db.collection("sessions").findOne({ token: sessionToken });
         if (!session) return null;
         const theUser = await db.collection("users").findOne({ _id: session.user_id });
+
         return {
             _id: theUser._id,
             email: theUser.email,
@@ -61,7 +62,7 @@ export const isActiveToken = async (sessionToken) => {
         const db = await database();
         const session = await db.collection("sessions").findOne({ token: sessionToken });
         if (session.active)
-            await db.collection("sessions").updateOne(
+            db.collection("sessions").updateOne(
                 { token: sessionToken },
                 {
                     $set: {

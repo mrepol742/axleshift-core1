@@ -31,15 +31,17 @@ router.post("/", auth, async (req, res) => {
         const skip = (page - 1) * limit;
 
         const db = await database();
-        const freightCollection = db.collection("freight");
+        const freightCollection = await db.collection("freight");
 
-        const totalItems = await freightCollection.countDocuments({ user_id: new ObjectId(theUser._id) });
-        const items = await freightCollection
-            .find(theUser.role !== "admin" ? { user_id: new ObjectId(theUser._id) } : {})
-            .sort({ created_at: -1 })
-            .skip(skip)
-            .limit(limit)
-            .toArray();
+        const [totalItems, items] = await Promise.all([
+            freightCollection.countDocuments({ user_id: new ObjectId(theUser._id) }),
+            freightCollection
+                .find(theUser.role !== "admin" ? { user_id: new ObjectId(theUser._id) } : {})
+                .sort({ created_at: -1 })
+                .skip(skip)
+                .limit(limit)
+                .toArray()
+        ]);
 
         return res.status(200).json({
             data: items,

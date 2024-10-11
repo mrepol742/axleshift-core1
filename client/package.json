@@ -39,6 +39,7 @@
         "core-js": "^3.37.1",
         "date-fns": "^4.1.0",
         "dotenv": "^16.4.5",
+        "firebase": "^10.14.1",
         "html2canvas": "^1.4.1",
         "js-cookie": "^3.0.5",
         "jsqr": "^1.4.0",
