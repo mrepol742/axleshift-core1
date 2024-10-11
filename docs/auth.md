@@ -105,4 +105,3 @@
 
 ## Notes
 - Passwords must be at least 8 characters long and contain a mix of letters, numbers, and symbols.
-- All requests and responses are in JSON format.
