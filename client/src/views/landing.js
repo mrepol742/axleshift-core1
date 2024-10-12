@@ -38,7 +38,7 @@ const Landing = () => {
                                 </h1>
                                 <p
                                     className="lead text-white"
-                                    data-aos="fade-right"
+                                    data-aos="fade-up"
                                     data-aos-duration="1000"
                                 >
                                     Our cutting-edge platform empowers businesses to improve their
@@ -49,7 +49,7 @@ const Landing = () => {
                                     to="/register"
                                     as={NavLink}
                                     className="rounded-1 btn-warning fs-6 px-5"
-                                    data-aos="fade-up-right"
+                                    data-aos="fade-up"
                                     data-aos-duration="1000"
                                 >
                                     Register now

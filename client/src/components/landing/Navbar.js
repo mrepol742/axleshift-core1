@@ -26,23 +26,15 @@ import {
     faSun,
     faCircleHalfStroke,
 } from '@fortawesome/free-solid-svg-icons'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 
 const Navbar = () => {
     const [visible, setVisible] = useState(false)
     const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
-    AOS.init()
 
     return (
         <CNavbar expand="sm" colorScheme={colorMode}>
             <CContainer fluid>
-                <CNavbarBrand
-                    to="/"
-                    as={NavLink}
-                    data-aos="fade-down-right"
-                    data-aos-duration="1000"
-                >
+                <CNavbarBrand to="/" as={NavLink} data-aos="fade-down" data-aos-duration="1000">
                     <CImage src="/images/logo.png" width="150px" />
                 </CNavbarBrand>
                 <CNavbarToggler

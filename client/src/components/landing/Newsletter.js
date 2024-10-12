@@ -1,11 +1,7 @@
 import React from 'react'
 import { CContainer, CRow, CCol, CImage, CForm, CFormInput } from '@coreui/react'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 
 const Newsletter = () => {
-    AOS.init()
-
     return (
         <CContainer fluid className="h-100" data-aos="fade-up">
             <div className="bg-primary m-2 m-md-5">

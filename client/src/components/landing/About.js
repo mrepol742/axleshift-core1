@@ -1,11 +1,7 @@
 import React from 'react'
 import { CContainer, CRow, CCol, CImage } from '@coreui/react'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 
 const About = () => {
-    AOS.init()
-
     return (
         <CContainer fluid className="h-100 p-5 bg-primary" data-aos="fade-up">
             <CRow className="h-100 justify-content-start align-items-center">
