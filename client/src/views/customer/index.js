@@ -40,7 +40,7 @@ const Customer = () => {
 
     const sendMessage = async () => {
         if (message.trim() === '') return
-        await addDoc(messagesRef, { text: message, sender: 'user', timestamp: new Date() })
+        await addDoc(messagesRef, { text: message, sender: 'admin', timestamp: new Date() })
         setMessage('')
         setRows(1)
     }
@@ -78,9 +78,9 @@ const Customer = () => {
                         {messages.map((message, index) => (
                             <div
                                 key={index}
-                                className={`d-flex flex-row ${message.sender === 'user' ? 'justify-content-end' : 'justify-content-start'}`}
+                                className={`d-flex flex-row ${message.sender === 'user' ? 'justify-content-start' : 'justify-content-end'}`}
                             >
-                                {message.sender === 'admin' && (
+                                {message.sender === 'user' && (
                                     <CImage
                                         className="rounded-5"
                                         src="https://avatars.githubusercontent.com/u/62317165?v=4"
@@ -90,7 +90,7 @@ const Customer = () => {
                                 <div>
                                     <p
                                         className={`small p-2 mb-1 rounded ${
-                                            message.sender === 'user'
+                                            message.sender !== 'user'
                                                 ? 'bg-primary text-white me-3'
                                                 : 'bg-body-tertiary ms-3'
                                         }`}
@@ -103,7 +103,7 @@ const Customer = () => {
                                         {index + 6}min
                                     </p>
                                 </div>
-                                {message.sender === 'user' && (
+                                {message.sender === 'admin' && (
                                     <CImage
                                         className="rounded-5"
                                         src="https://avatars.githubusercontent.com/u/62317165?v=4"
