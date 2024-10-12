@@ -11,15 +11,11 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShip, faRoute, faUser, faUserShield } from '@fortawesome/free-solid-svg-icons'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 
 const Services = () => {
-    AOS.init()
-
     return (
-        <CContainer fluid className="h-100 p-5">
-            <CRow className="h-100 justify-content-center align-items-center">
+        <CContainer fluid className="h-100">
+            <CRow className="h-100 justify-content-center align-items-center p-5">
                 <CCol xs={12} lg={5} className="order-md-1 mb-4">
                     <span data-aos="fade-up">OUR SERVICES</span>
                     <h1 className="text-primary" data-aos="fade-up">
@@ -34,7 +30,7 @@ const Services = () => {
                 </CCol>
                 <CCol xs={12} lg={7} className="order-md-2 mb-4">
                     <CRow xs={{ cols: 1, gutter: 4 }} md={{ cols: 2 }}>
-                        <CCol xs data-aos="fade-up-left">
+                        <CCol xs data-aos="zoom-out-up">
                             <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3 my-1">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
@@ -49,7 +45,7 @@ const Services = () => {
                                 shipments in real-time to enhance visibility and efficiency.
                             </p>
                         </CCol>
-                        <CCol xs data-aos="fade-left">
+                        <CCol xs data-aos="zoom-out-up">
                             <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3 my-1">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
@@ -64,7 +60,7 @@ const Services = () => {
                                 to real-time conditions for optimal performance.
                             </p>
                         </CCol>
-                        <CCol xs data-aos="fade-up-left">
+                        <CCol xs data-aos="zoom-out-up">
                             <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3 my-1">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
@@ -79,7 +75,7 @@ const Services = () => {
                                 customer satisfaction through prompt and efficient communication.
                             </p>
                         </CCol>
-                        <CCol xs data-aos="fade-left">
+                        <CCol xs data-aos="zoom-out-up">
                             <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3 my-1">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}

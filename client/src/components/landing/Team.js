@@ -12,11 +12,8 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShip, faRoute, faUser, faUserShield } from '@fortawesome/free-solid-svg-icons'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 
 const Team = () => {
-    AOS.init()
     const teamMembers = [
         {
             name: 'Melvin Jones Repol',
@@ -53,7 +50,7 @@ const Team = () => {
             </div>
             <CRow>
                 {teamMembers.map((member, index) => (
-                    <CCol key={index} xs={12} md={4} className="mb-4" data-aos="fade-up-left">
+                    <CCol key={index} xs={12} md={4} className="mb-4" data-aos="fade-up ">
                         <div className="text-center d-flex flex-column justify-content-center">
                             <CImage
                                 src={member.image}
