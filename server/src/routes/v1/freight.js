@@ -40,7 +40,7 @@ router.post("/", auth, async (req, res) => {
                 .sort({ created_at: -1 })
                 .skip(skip)
                 .limit(limit)
-                .toArray()
+                .toArray(),
         ]);
 
         return res.status(200).json({

@@ -1,7 +1,9 @@
 import React, { Suspense, useEffect, lazy } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { CSpinner, useColorModes } from '@coreui/react'
+import Cookies from 'js-cookie'
 import ReactGA from 'react-ga4'
 import './scss/style.scss'
 import DocumentTitle from './components/middleware/DocumentTitle'
@@ -10,6 +12,7 @@ import Maintenance from './components/middleware/Maintenance'
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
+const Landing = lazy(() => import('./views/landing'))
 const Login = lazy(() => import('./views/auth/login'))
 const Register = lazy(() => import('./views/auth/register'))
 const ForgotPassword = lazy(() => import('./views/auth/forgotpassword'))
@@ -20,6 +23,7 @@ const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
     const storedTheme = useSelector((state) => state.theme)
     ReactGA.initialize(import.meta.env.VITE_APP_GOOGLE_ANALYTICS)
+    let token = Cookies.get(import.meta.env.VITE_APP_SESSION)
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.href.split('?')[1])
@@ -33,6 +37,10 @@ const App = () => {
         ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
     }, [])
 
+    useEffect(() => {
+        token = Cookies.get(import.meta.env.VITE_APP_SESSION)
+    }, [useNavigate])
+
     return (
         <Router>
             <Suspense
@@ -45,6 +53,9 @@ const App = () => {
                 <Maintenance>
                     <DocumentTitle>
                         <Routes>
+                            {!token && (
+                                <Route exact path="/" name="Landing Page" element={<Landing />} />
+                            )}
                             <Route exact path="/login" name="Login" element={<Login />} />
                             <Route exact path="/register" name="Register" element={<Register />} />
                             <Route exact path="/otp" name="OTP" element={<MailOTP />} />

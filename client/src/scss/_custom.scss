@@ -122,3 +122,36 @@
     bottom: 0;
     opacity: 0.5;
 }
+
+.landing-page {
+    position: relative;
+    background-image: url(/images/freight-sea.jpg); 
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(39, 39, 39, 0.508);
+    filter: blur(10px);
+    z-index: 1;
+}
+
+.landing-page > * {
+    position: relative;
+    z-index: 99;
+}
+
+  .landing-page h1,
+  .landing-page p {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  }

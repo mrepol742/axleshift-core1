@@ -39,7 +39,7 @@ const Sessions = ({ result }) => {
                 <CTableHead>
                     <CTableRow>
                         <CTableHeaderCell>#</CTableHeaderCell>
-                        {isAdmin() && <CTableHeaderCell>User</CTableHeaderCell>}
+                        {isAdmin && <CTableHeaderCell>User</CTableHeaderCell>}
                         <CTableHeaderCell>Location</CTableHeaderCell>
                         <CTableHeaderCell>Device</CTableHeaderCell>
                         <CTableHeaderCell>Status</CTableHeaderCell>
@@ -47,13 +47,13 @@ const Sessions = ({ result }) => {
                     </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                    {result.sessions.map((session) => (
-                        <CTableRow key={session.id}>
-                            <CTableDataCell>{session.id}</CTableDataCell>
-                            {isAdmin() && <CTableDataCell>{session.user}</CTableDataCell>}
-                            <CTableDataCell>{session.location}</CTableDataCell>
-                            <CTableDataCell>{session.device}</CTableDataCell>
-                            <CTableDataCell>{session.status}</CTableDataCell>
+                    {result.sessions.map((session, index) => (
+                        <CTableRow key={index}>
+                            <CTableDataCell>{index + 1}</CTableDataCell>
+                            {isAdmin && <CTableDataCell>{session.user_id}</CTableDataCell>}
+                            <CTableDataCell>{session.ip_address}</CTableDataCell>
+                            <CTableDataCell>{session.user_agent}</CTableDataCell>
+                            <CTableDataCell>{session.active}</CTableDataCell>
                             <CTableDataCell>{session.last_accessed}</CTableDataCell>
                         </CTableRow>
                     ))}
@@ -67,11 +67,11 @@ Sessions.propTypes = {
     result: PropTypes.shape({
         sessions: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.number.isRequired,
-                user: PropTypes.string,
-                location: PropTypes.string.isRequired,
-                device: PropTypes.string.isRequired,
-                status: PropTypes.string.isRequired,
+                _id: PropTypes.string.isRequired,
+                user_id: PropTypes.string,
+                ip_address: PropTypes.string.isRequired,
+                user_agent: PropTypes.string.isRequired,
+                active: PropTypes.string.isRequired,
                 last_accessed: PropTypes.string.isRequired,
             }),
         ).isRequired,

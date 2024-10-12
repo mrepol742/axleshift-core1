@@ -151,7 +151,7 @@ const sendOTPEmail = (req, collection) => {
                 text: `Your otp is ${otp}, valid for 10 minutes only.`,
             },
             req.user.first_name
-        )
+        ),
     ]);
 };
 
@@ -271,7 +271,7 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
                         updated_at: Date.now(),
                     },
                 }
-            )
+            ),
         ]);
         // oh god its 21:51!
         return res.status(200).send();

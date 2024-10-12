@@ -56,10 +56,7 @@ if (process.env.NODE_ENV !== "production")
     });
 
 app.listen(port, async () => {
-    Promise.all([
-        db(),
-        mail()
-    ]);
+    Promise.all([db(), mail()]);
     logger.info(`Server running on port ${port}`);
 });
 

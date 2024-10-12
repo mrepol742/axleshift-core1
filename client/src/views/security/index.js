@@ -45,13 +45,13 @@ const Security = () => {
     const [priority, setPriority] = useState('1')
     const [order, setOrder] = useState('1')
     const [query, setQuery] = useState('')
-    const [result, setResult] = useState({ scm: [] })
+    const [result, setResult] = useState({ scm: [], sessions: [] })
     const navigate = useNavigate()
 
     const sessionResultMock = {
         sessions: [
             {
-                id: 1,
+                _id: 1,
                 user: 'test',
                 location: 'Philippines',
                 device: 'Linux',
@@ -106,7 +106,7 @@ const Security = () => {
                 </CTabList>
                 <CTabContent>
                     <CTabPanel className="py-3" aria-labelledby="home-tab-pane" itemKey={1}>
-                        <Sessions result={sessionResultMock} />
+                        <Sessions result={result} />
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="profile-tab-pane" itemKey={2}>
                         <Dependabot
