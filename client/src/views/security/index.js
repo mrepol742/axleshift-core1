@@ -32,8 +32,6 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 
 import Dependabot from './panel/dependabot'
 import Sessions from './panel/sessions'
@@ -66,7 +64,7 @@ const Security = () => {
         await axios
             .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/threat/`, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {

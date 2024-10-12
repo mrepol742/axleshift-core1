@@ -33,7 +33,7 @@ router.get("/", auth, async (req, res) => {
 
             return sessions.map((session) => {
                 const newUserAgent = parseUserAgent(session.user_agent);
-                const newActive = session.status ? "Active" : "Inactive";
+                const newActive = session.active ? "Active" : "Inactive";
                 const newLastaccessed = moment(session.last_accessed).fromNow();
 
                 return {

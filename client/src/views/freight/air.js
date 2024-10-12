@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import {
     CForm,
     CFormLabel,
@@ -17,7 +16,6 @@ import {
     CSpinner,
     CImage,
 } from '@coreui/react'
-import Cookies from 'js-cookie'
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
@@ -77,7 +75,7 @@ const Air = () => {
         await axios
             .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/air`, formData, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {

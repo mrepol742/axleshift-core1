@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { CSpinner } from '@coreui/react'
-import Cookies from 'js-cookie'
 
 const Account = () => {
     const [user, setUser] = useState(null)
@@ -14,7 +12,7 @@ const Account = () => {
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                     },
                 },
             )

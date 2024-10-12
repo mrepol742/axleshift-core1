@@ -12,8 +12,6 @@ import {
     CSpinner,
 } from '@coreui/react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
-import axios from 'axios'
-import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
@@ -36,7 +34,7 @@ const TrackInfo = () => {
         await axios
             .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/track/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {

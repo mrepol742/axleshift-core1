@@ -1,6 +1,5 @@
 import React, { lazy } from 'react'
 import auth from './components/middleware/Auth'
-import Cookies from 'js-cookie'
 
 const Overview = auth(lazy(() => import('./views/overview/index')))
 const FreightInfo = auth(lazy(() => import('./views/overview/info')))
