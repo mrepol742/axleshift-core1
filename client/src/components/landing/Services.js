@@ -31,7 +31,7 @@ const Services = () => {
                 <CCol xs={12} lg={7} className="order-md-2 mb-4">
                     <CRow xs={{ cols: 1, gutter: 4 }} md={{ cols: 2 }}>
                         <CCol xs data-aos="zoom-out-up">
-                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3 my-1">
+                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
                                     icon={faShip}
@@ -46,7 +46,7 @@ const Services = () => {
                             </p>
                         </CCol>
                         <CCol xs data-aos="zoom-out-up">
-                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3 my-1">
+                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
                                     icon={faRoute}
@@ -61,7 +61,7 @@ const Services = () => {
                             </p>
                         </CCol>
                         <CCol xs data-aos="zoom-out-up">
-                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3 my-1">
+                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
                                     icon={faUser}
@@ -76,7 +76,7 @@ const Services = () => {
                             </p>
                         </CCol>
                         <CCol xs data-aos="zoom-out-up">
-                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3 my-1">
+                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
                                     icon={faUserShield}
