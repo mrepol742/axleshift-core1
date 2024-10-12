@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
     CNavbar,
@@ -13,18 +13,35 @@ import {
 } from '@coreui/react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
-import Navbar from '../components/landing/Navbar'
-import Services from '../components/landing/Services'
-import About from '../components/landing/About'
-import Team from '../components/landing/Team'
-import Newsletter from '../components/landing/Newsletter'
+
+import { Navbar, Services, About, Team, Newsletter } from '../components/landing/index'
 
 const Landing = () => {
     AOS.init()
+    const images = [
+        '/images/freight-land.jpg',
+        '/images/freight-sea.jpg',
+        '/images/freight-air.jpg',
+    ]
+
+    const [backgroundImage, setBackgroundImage] = useState('')
+
+    useEffect(() => {
+        const randomImage = () => {
+            const randomIndex = Math.floor(Math.random() * images.length)
+            setBackgroundImage(images[randomIndex])
+        }
+
+        randomImage()
+    }, [])
+
     return (
         <div className="wrapper d-flex flex-column min-vh-100">
             <div className="body flex-grow-1">
-                <div className="landing-page">
+                <div
+                    className="landing-page"
+                    style={{ backgroundImage: `url(${backgroundImage})` }}
+                >
                     <CContainer fluid className="h-100">
                         <Navbar />
                         <CRow className="h-100 justify-content-start align-items-center">

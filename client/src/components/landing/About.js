@@ -5,8 +5,8 @@ const About = () => {
     return (
         <CContainer fluid className="h-100 p-5 bg-primary" data-aos="fade-up">
             <CRow className="h-100 justify-content-start align-items-center">
-                <CCol xs={12} md={5} className="mb-4 p-2" data-aos="zoom-in">
-                    <CImage width="350px" src="/images/about.svg" />
+                <CCol xs={12} md={5} className="mb-4" data-aos="zoom-in">
+                    <CImage fluid src="/images/about.svg" />
                 </CCol>
                 <CCol xs={12} md={7} lg={6} xl={5} className="mb-4 p-2">
                     <span className="text-white" data-aos="zoom-out-up">
