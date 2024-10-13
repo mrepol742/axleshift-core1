@@ -85,7 +85,7 @@ const Landing = () => {
                     <div className="mt-5" />
                     <h1 className="text-white">SPECIAL THANKS TO</h1>
                     <p className="lead text-white">We cant do it without you as our inspiration.</p>
-                    <h1>Beyoncé</h1>
+                    <h1 className="text-white">Beyoncé</h1>
                     <div className="mb-5" />
                 </CContainer>
 

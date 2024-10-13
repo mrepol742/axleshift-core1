@@ -34,7 +34,7 @@ const Newsletter = () => {
                                     onChange={(e) => setEmailAddress(e.target.value)}
                                 />
                                 <CInputGroupText id="basic-addon" type="submit">
-                                    <FontAwesomeIcon icon={faPaperPlane} />
+                                    <FontAwesomeIcon icon={faPaperPlane} className="text-white" />
                                 </CInputGroupText>
                             </CInputGroup>
                         </CForm>
