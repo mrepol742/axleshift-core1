@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie'
-import axios from 'axios'
 import {
     CAlert,
     CButton,
@@ -35,7 +33,7 @@ const Login = () => {
     })
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleSubmit = async (e) => {
@@ -53,10 +51,10 @@ const Login = () => {
                 headers: {},
             })
             .then((response) => {
-                Cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
+                cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
                 const url = urlParams.get('n') ? urlParams.get('n') : '/'
-                navigate(url)
+                window.location.href = url
             })
             .catch((error) => {
                 console.error(error)

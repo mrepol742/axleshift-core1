@@ -16,9 +16,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import Cookies from 'js-cookie'
 import { useDispatch } from 'react-redux'
-import axios from 'axios'
 import errorMessages from '../../../components/http/ErrorMessages'
 
 const MailOTP = () => {
@@ -29,7 +27,7 @@ const MailOTP = () => {
         message: '',
     })
     const [otp, setOtp] = useState(['', '', '', '', '', ''])
-    const token = Cookies.get(import.meta.env.VITE_APP_SESSION)
+    const token = cookies.get(import.meta.env.VITE_APP_SESSION)
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const dispatch = useDispatch()
@@ -52,7 +50,7 @@ const MailOTP = () => {
             })
             .catch((err) => {
                 if (!err.response) return console.error(err)
-                Cookies.remove(import.meta.env.VITE_APP_SESSION)
+                cookies.remove(import.meta.env.VITE_APP_SESSION)
                 navigate('/login')
             })
     }

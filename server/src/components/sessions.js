@@ -57,7 +57,7 @@ export const removeSession = async (sessionToken) => {
     }
 };
 
-export const isActiveToken = async (sessionToken) => {
+export const getSession = async (sessionToken) => {
     try {
         const db = await database();
         const session = await db.collection("sessions").findOne({ token: sessionToken });
@@ -70,9 +70,9 @@ export const isActiveToken = async (sessionToken) => {
                     },
                 }
             );
-        return session.active;
+        return session;
     } catch (e) {
         logger.error(e);
     }
-    return false;
+    return null;
 };

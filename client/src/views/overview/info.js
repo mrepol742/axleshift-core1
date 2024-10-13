@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react'
-import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
     CCard,
@@ -23,7 +22,6 @@ import {
     CModalBody,
     CModalFooter,
 } from '@coreui/react'
-import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { QRCodeSVG } from 'qrcode.react'
@@ -92,7 +90,7 @@ const FreightInfo = () => {
         await axios
             .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {
@@ -118,7 +116,7 @@ const FreightInfo = () => {
                 editedFormData,
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                     },
                 },
             )
@@ -147,7 +145,7 @@ const FreightInfo = () => {
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                     },
                 },
             )

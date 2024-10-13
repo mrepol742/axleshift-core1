@@ -14,6 +14,7 @@ import corsOptions from "./middleware/cors.js";
 
 import db from "./models/db.js";
 import mail from "./components/mail.js";
+import cron from "./components/cron.js";
 
 import logger from "./components/logger.js";
 
@@ -56,7 +57,7 @@ if (process.env.NODE_ENV !== "production")
     });
 
 app.listen(port, async () => {
-    Promise.all([db(), mail()]);
+    Promise.all([db(), mail(), cron()]);
     logger.info(`Server running on port ${port}`);
 });
 

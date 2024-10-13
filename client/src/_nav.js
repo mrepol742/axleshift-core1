@@ -8,6 +8,15 @@ import {
     faShieldHalved,
     faFileWord,
     faPesoSign,
+    faBarsProgress,
+    faCircleNotch,
+    faLock,
+    faFileInvoice,
+    faCircleInfo,
+    faFile,
+    faHeadset,
+    faServer,
+    faCircleQuestion,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -63,19 +72,19 @@ const _nav = [
         component: CNavItem,
         name: 'Management',
         to: '/security',
-        icon: <FontAwesomeIcon icon={faShieldHalved} className="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faBarsProgress} className="nav-icon" />,
     },
     {
         component: CNavItem,
         name: 'Analysis',
         to: '/security/analysis',
-        icon: <FontAwesomeIcon icon={faShieldHalved} className="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faCircleNotch} className="nav-icon" />,
     },
     {
         component: CNavItem,
         name: 'Device Lock',
         to: '/security/device',
-        icon: <FontAwesomeIcon icon={faShieldHalved} className="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faLock} className="nav-icon" />,
     },
     {
         component: CNavTitle,
@@ -85,13 +94,13 @@ const _nav = [
         component: CNavItem,
         name: 'Payment Info',
         to: '/payment/info',
-        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faCircleInfo} className="nav-icon" />,
     },
     {
         component: CNavItem,
-        name: 'History',
+        name: 'Invoice',
         to: '/payment',
-        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
     },
     {
         component: CNavTitle,
@@ -101,7 +110,7 @@ const _nav = [
         component: CNavItem,
         name: 'Freight Documents',
         to: '/documents',
-        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faFile} className="nav-icon" />,
     },
     {
         component: CNavTitle,
@@ -111,19 +120,19 @@ const _nav = [
         component: CNavItem,
         name: 'Customer Service',
         to: '/customer',
-        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faHeadset} className="nav-icon" />,
     },
     {
         component: CNavItem,
         name: 'FAQ',
         to: '/faq',
-        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faCircleQuestion} className="nav-icon" />,
     },
     {
         component: CNavItem,
         name: 'Network Status',
         to: 'https://stats.uptimerobot.com/5l58Mua0Wi',
-        icon: <FontAwesomeIcon icon={faFileWord} className="nav-icon" />,
+        icon: <FontAwesomeIcon icon={faServer} className="nav-icon" />,
     },
 ]
 

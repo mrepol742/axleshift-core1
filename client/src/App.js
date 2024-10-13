@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { CSpinner, useColorModes } from '@coreui/react'
-import Cookies from 'js-cookie'
 import ReactGA from 'react-ga4'
 import './scss/style.scss'
+import './bootstrap'
 import DocumentTitle from './components/middleware/DocumentTitle'
 import Maintenance from './components/middleware/Maintenance'
 
@@ -23,9 +23,31 @@ const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
     const storedTheme = useSelector((state) => state.theme)
     ReactGA.initialize(import.meta.env.VITE_APP_GOOGLE_ANALYTICS)
-    let token = Cookies.get(import.meta.env.VITE_APP_SESSION)
+    let token = cookies.get(import.meta.env.VITE_APP_SESSION)
 
     useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('/sw.js')
+                .then((reg) => {
+                    self.addEventListener('activate', (event) => {
+                        event.waitUntil(
+                            (async () => {
+                                const keys = await caches.keys()
+                                return keys.map(async (cache) => {
+                                    if (cache !== cacheName) {
+                                        return await caches.delete(cache)
+                                    }
+                                })
+                            })(),
+                        )
+                    })
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        }
+
         const urlParams = new URLSearchParams(window.location.href.split('?')[1])
         const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
         if (theme) setColorMode(theme)
@@ -38,7 +60,7 @@ const App = () => {
     }, [])
 
     useEffect(() => {
-        token = Cookies.get(import.meta.env.VITE_APP_SESSION)
+        token = cookies.get(import.meta.env.VITE_APP_SESSION)
     }, [useNavigate])
 
     return (

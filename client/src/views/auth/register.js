@@ -18,8 +18,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import Cookies from 'js-cookie'
-import axios from 'axios'
 import errorMessages from '../../components/http/ErrorMessages'
 
 const Register = () => {
@@ -41,7 +39,7 @@ const Register = () => {
     })
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleInputChange = (e) => {

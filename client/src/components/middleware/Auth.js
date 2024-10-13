@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie'
-import axios from 'axios'
 import { CSpinner } from '@coreui/react'
 import { useDispatch } from 'react-redux'
 import MaintenancePage from '../../views/errors/500'
@@ -13,12 +11,12 @@ const Auth = (WrappedComponent) => {
         const [otp, setOtp] = useState(false)
         const dispatch = useDispatch()
 
-        let loc = `/login`
+        let loc = `/`
         if (window.location.pathname != '/')
             loc = `/login?n=${window.location.pathname}${window.location.search}`
 
         const checkAuthentication = async () => {
-            const token = Cookies.get(import.meta.env.VITE_APP_SESSION)
+            const token = cookies.get(import.meta.env.VITE_APP_SESSION)
             if (token === undefined) return setIsAuth(false)
 
             await axios
@@ -45,7 +43,7 @@ const Auth = (WrappedComponent) => {
                 })
                 .catch((err) => {
                     if (!err.response) return console.error(err)
-                    Cookies.remove(import.meta.env.VITE_APP_SESSION)
+                    cookies.remove(import.meta.env.VITE_APP_SESSION)
                     setIsAuth(false)
                     navigate(loc)
                 })

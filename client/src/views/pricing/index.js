@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
     CCard,
@@ -26,7 +25,6 @@ import {
     CTableBody,
     CTableDataCell,
 } from '@coreui/react'
-import Cookies from 'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Pricing = () => {

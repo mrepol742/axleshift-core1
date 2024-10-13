@@ -15,7 +15,6 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
-import Cookies from 'js-cookie'
 import ReCAPTCHA from 'react-google-recaptcha'
 import errorMessages from '../../components/http/ErrorMessages'
 
@@ -25,7 +24,7 @@ const Login = () => {
     const recaptchaRef = React.useRef()
 
     useEffect(() => {
-        if (Cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleSubmit = async (e) => {
