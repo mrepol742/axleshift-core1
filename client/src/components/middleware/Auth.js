@@ -11,7 +11,7 @@ const Auth = (WrappedComponent) => {
         const [otp, setOtp] = useState(false)
         const dispatch = useDispatch()
 
-        let loc = `/login`
+        let loc = `/`
         if (window.location.pathname != '/')
             loc = `/login?n=${window.location.pathname}${window.location.search}`
 

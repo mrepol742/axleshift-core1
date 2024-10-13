@@ -81,6 +81,12 @@ const Landing = () => {
                 <Team />
                 <Newsletter />
 
+                <CContainer fluid className="h-100 text-center bg-secondary p-5" data-aos="fade-up">
+                    <h1 className="text-white">SPECIAL THANKS TO</h1>
+                    <p className="lead text-white">We cant do it without you as our inspiration.</p>
+                    <h1>Beyoncé</h1>
+                </CContainer>
+
                 <div className="m-5">
                     <CContainer fluid className="text-center">
                         <span>Copyright &copy;2024 Axleshift Core 1</span>

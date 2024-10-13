@@ -54,7 +54,7 @@ const Login = () => {
                 cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
                 const urlParams = new URLSearchParams(window.location.search)
                 const url = urlParams.get('n') ? urlParams.get('n') : '/'
-                navigate(url)
+                window.location.href = url
             })
             .catch((error) => {
                 console.error(error)

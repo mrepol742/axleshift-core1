@@ -24,7 +24,7 @@ const Logout = () => {
             )
             .then((response) => {
                 cookies.remove(import.meta.env.VITE_APP_SESSION)
-                navigate('/')
+                window.location.href = '/'
             })
             .catch((error) => {
                 console.error(error)
