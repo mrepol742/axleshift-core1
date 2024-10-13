@@ -7,6 +7,7 @@ import passwordHash from "../components/password.js";
 
 const data = JSON.parse(fs.readFileSync(import.meta.dirname + "/users.json", "utf8")).docs;
 let dbInstance = null;
+const requiredCollections = ["users", "freight", "sessions", "threats", "otp", "newsletter"];
 
 const db = async () => {
     if (dbInstance) return dbInstance;
@@ -21,23 +22,27 @@ const db = async () => {
     const collections = await dbInstance.listCollections().toArray();
     const collectionNames = collections.map((c) => c.name);
 
-    if (!collectionNames.includes("users")) await dbInstance.createCollection("users");
-    if (!collectionNames.includes("freight")) await dbInstance.createCollection("freight");
-    if (!collectionNames.includes("sessions")) await dbInstance.createCollection("sessions");
-    if (!collectionNames.includes("threats")) await dbInstance.createCollection("threats");
-    if (!collectionNames.includes("otp")) await dbInstance.createCollection("otp");
+    const requiredCollections = ["users", "freight", "sessions", "threats", "otp", "newsletter"];
 
-    const collection = dbInstance.collection("users");
-    let cursor = await collection.find({});
-    let documents = await cursor.toArray();
+    const creationPromises = requiredCollections.filter((name) => !collectionNames.includes(name)).map((name) => dbInstance.createCollection(name));
 
-    if (documents.length != 0) return dbInstance;
+    await Promise.all(creationPromises);
 
-    for (const element of data) {
-        element.password = passwordHash(element.password);
-    }
-    const insertResult = await collection.insertMany(data);
-    logger.info(`Inserted documents: ${insertResult.insertedCount}`);
+    Promise.all([
+        (async () => {
+            const collection = dbInstance.collection("users");
+            let cursor = await collection.find({});
+            let documents = await cursor.toArray();
+
+            if (documents.length != 0) return dbInstance;
+
+            for (const element of data) {
+                element.password = passwordHash(element.password);
+            }
+            const insertResult = await collection.insertMany(data);
+            logger.info(`Inserted documents: ${insertResult.insertedCount}`);
+        })(),
+    ]);
     return dbInstance;
 };
 

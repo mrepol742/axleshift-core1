@@ -1,4 +1,3 @@
-import fs from "fs";
 import { ObjectId } from "mongodb";
 import database from "../models/db.js";
 import logger from "./logger.js";

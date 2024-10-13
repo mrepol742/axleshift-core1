@@ -24,21 +24,24 @@ const auth = async (req, res, next) => {
     // a week has pass so change the ip to 0
     // thus triggering the protocol down below!
     // hacky aint it?
-    console.log('week')
     if (diff >= week) ip = 0;
 
     Promise.all([
         (async () => {
-            const db = await database();
-            db.collection("sessions").updateOne(
-                { token: token },
-                {
-                    $set: {
-                        active: session.ip_address === ip,
-                        last_accessed: Date.now(),
-                    },
-                }
-            );
+            try {
+                const db = await database();
+                db.collection("sessions").updateOne(
+                    { token: token },
+                    {
+                        $set: {
+                            active: session.ip_address === ip,
+                            last_accessed: Date.now(),
+                        },
+                    }
+                );
+            } catch (e) {
+                logger.error(e);
+            }
         })(),
     ]);
 

@@ -35,8 +35,8 @@ const router = express.Router();
     */
 router.post("/register", async (req, res) => {
     try {
-        const { email, first_name, last_name, password, repeat_password } = req.body;
-        if (!email || !first_name || !last_name || !password || !repeat_password) return res.status(400).send();
+        const { email, first_name, last_name, password, repeat_password, newsletter } = req.body;
+        if (!email || !first_name || !last_name || !password || !repeat_password || !newsletter) return res.status(400).send();
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(200).json({ error: "Invalid email address" });
         if (password.length < 8) return res.status(200).json({ error: "Password must be greater than 8 digit" });
@@ -44,15 +44,15 @@ router.post("/register", async (req, res) => {
         if (password != repeat_password) return res.status(200).json({ error: "Password does not match" });
 
         const db = await database();
-        const collection = db.collection("users");
-        const existingEmail = await collection.findOne({ email: email });
+        const usersCollection = await db.collection("users");
+        const existingUser = await collection.findOne({ email: email });
 
-        if (existingEmail) {
+        if (existingUser) {
             logger.error("Email id already exists");
             return res.status(409).send();
         }
 
-        await collection.insertOne({
+        await usersCollection.insertOne({
             email: email,
             first_name: first_name,
             last_name: last_name,
@@ -62,6 +62,18 @@ router.post("/register", async (req, res) => {
             created_at: Date.now(),
             update_at: Date.now(),
         });
+
+        if (newsletter === 'true') {
+            const newsletterCollection = await db.collection('newsletter');
+            const existingSubscriber = await newsletter.findOne({ email: email });
+            if (!existingSubscriber) {
+                newsletterCollection.insertOne({
+            email: email,
+            created_at: Date.now(),
+            update_at: Date.now(),
+        });
+            }
+        }
 
         return res.status(201).send();
     } catch (e) {
@@ -214,6 +226,7 @@ router.post("/verify/otp/new", [auth, recaptcha], async function (req, res, next
                             verified: false,
                             expired: true,
                             updated_at: Date.now(),
+                            modified_by: 'system',
                         },
                     }
                 );
@@ -260,6 +273,7 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
                     $set: {
                         verified: true,
                         updated_at: Date.now(),
+                        modified_by: 'system',
                     },
                 }
             ),

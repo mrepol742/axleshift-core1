@@ -24,6 +24,8 @@ const TrackInfo = auth(lazy(() => import('./views/track/info')))
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 const Err500 = auth(lazy(() => import('./views/errors/500')))
 
+const Logout = auth(lazy(() => import('./views/auth/logout')))
+
 const routes = [
     { path: '/', name: 'Overview', element: Overview },
     { path: '/v/:id', name: 'Freight Info', element: FreightInfo },
@@ -49,6 +51,8 @@ const routes = [
 
     { path: '/track', name: 'Track', element: Track },
     { path: '/track/:id', name: 'Track', element: TrackInfo },
+
+    { path: '/logout', name: 'Logout', element: Logout },
 
     { path: '*', name: '404', element: Err404 },
 ]

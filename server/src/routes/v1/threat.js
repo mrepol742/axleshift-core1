@@ -18,9 +18,8 @@ router.get("/", auth, async (req, res) => {
         (async () => {
             const theUser = await getUser(req.token);
             const db = await database();
-            const collection = await db.collection("sessions");
 
-            const sessions = await collection
+            const sessions = await db.collection("sessions")
                 .find(theUser.role !== "admin" ? { user_id: new ObjectId(theUser._id) } : {})
                 .sort({ last_accessed: -1 })
                 .toArray();

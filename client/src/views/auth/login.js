@@ -51,7 +51,7 @@ const Login = () => {
                 headers: {},
             })
             .then((response) => {
-                cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token)
+                cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token, { expires: 30 })
                 const urlParams = new URLSearchParams(window.location.search)
                 const url = urlParams.get('n') ? urlParams.get('n') : '/'
                 window.location.href = url

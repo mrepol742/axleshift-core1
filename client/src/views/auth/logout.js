@@ -1,13 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
 
 const Logout = () => {
-    const [account] = useState('')
-    const navigate = useNavigate()
-    const token = cookies.get(import.meta.env.VITE_APP_SESSION)
-
     useEffect(() => {
-        if (token === undefined) return navigate('/')
         logout()
     }, [])
 
@@ -18,7 +12,7 @@ const Logout = () => {
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
                     },
                 },
             )
