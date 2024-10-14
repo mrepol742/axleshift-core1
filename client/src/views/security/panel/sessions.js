@@ -30,9 +30,17 @@ import {
     CTabContent,
     CTabPanel,
 } from '@coreui/react'
+import UAParser from 'ua-parser-js'
 import { isAdmin } from '../../../components/Profile'
+import { parseTimestamp } from '../../../components/Timestamp'
 
 const Sessions = ({ result }) => {
+    const getDevice = (userAgent) => {
+        const parser = new UAParser(userAgent)
+        const result = parser.getResult()
+        return `${result.browser.name} ${result.os.name}`
+    }
+
     return (
         <>
             <CTable striped>
@@ -52,9 +60,11 @@ const Sessions = ({ result }) => {
                             <CTableDataCell>{index + 1}</CTableDataCell>
                             {isAdmin && <CTableDataCell>{session.user_id}</CTableDataCell>}
                             <CTableDataCell>{session.ip_address}</CTableDataCell>
-                            <CTableDataCell>{session.user_agent}</CTableDataCell>
-                            <CTableDataCell>{session.active}</CTableDataCell>
-                            <CTableDataCell>{session.last_accessed}</CTableDataCell>
+                            <CTableDataCell>{getDevice(session.user_agent)}</CTableDataCell>
+                            <CTableDataCell>
+                                {session.active ? 'Active' : 'Inactive'}
+                            </CTableDataCell>
+                            <CTableDataCell>{parseTimestamp(session.last_accessed)}</CTableDataCell>
                         </CTableRow>
                     ))}
                 </CTableBody>
@@ -65,6 +75,8 @@ const Sessions = ({ result }) => {
 
 Sessions.propTypes = {
     result: PropTypes.shape({
+        browser: PropTypes.string.isRequired,
+        os: PropTypes.string.isRequired,
         sessions: PropTypes.arrayOf(
             PropTypes.shape({
                 _id: PropTypes.string.isRequired,

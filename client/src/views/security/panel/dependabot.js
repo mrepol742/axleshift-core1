@@ -33,6 +33,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
+import { parseTimestamp } from '../../../components/Timestamp'
+
 const Dependabot = ({
     query,
     setQuery,
@@ -132,7 +134,7 @@ const Dependabot = ({
                                     <CTableDataCell>{alert.summary}</CTableDataCell>
                                     <CTableDataCell>{alert.severity}</CTableDataCell>
                                     <CTableDataCell>
-                                        {new Date(alert.updated_at).toLocaleString()}
+                                        {parseTimestamp(new Date(alert.updated_at).getTime())}
                                     </CTableDataCell>
                                 </CTableRow>
                             ))}

@@ -116,8 +116,8 @@ router.post("/b/:type", auth, async (req, res) => {
                 shipping: shipping,
             },
             type: type,
-            created_at: new Date(),
-            updated_at: new Date(),
+            created_at: Date.now(),
+            updated_at: Date.now(),
         });
         return res.status(201).send();
     } catch (e) {
@@ -161,6 +161,7 @@ router.post("/u/:type/:id", auth, async (req, res) => {
                     "data.consignee": consignee,
                     "data.shipment": shipment,
                     updated_at: Date.now(),
+                    modified_by: theUser._id,
                 },
             }
         );

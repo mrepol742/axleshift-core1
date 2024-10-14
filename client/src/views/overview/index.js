@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { formatDistanceToNow, parseISO } from 'date-fns'
 import {
     CCard,
     CCardGroup,
@@ -22,6 +21,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './widgets'
 import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'
+import { parseTimestamp } from '../../components/Timestamp'
 
 const Overview = () => {
     const [data, setData] = useState([])
@@ -89,11 +89,7 @@ const Overview = () => {
                                 }}
                             >
                                 <span></span>
-                                <div>
-                                    {formatDistanceToNow(parseISO(item.created_at), {
-                                        addSuffix: true,
-                                    })}
-                                </div>
+                                <div>{parseTimestamp(item.created_at)}</div>
                             </CCardHeader>
                             <CCardBody>
                                 <blockquote className="blockquote mb-0">

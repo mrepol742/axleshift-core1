@@ -5,12 +5,16 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import database from '../../firebase'
 import { collection, addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
 
+import Profile from '../../components/Profile'
+import { parseTimestamp } from '../../components/Timestamp'
+
 const Customer = () => {
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState('')
     const endOfMessagesRef = useRef(null)
     const [rows, setRows] = useState(1)
     const messagesRef = collection(database, 'messages')
+    const user = Profile()
 
     useEffect(() => {
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
@@ -40,7 +44,7 @@ const Customer = () => {
 
     const sendMessage = async () => {
         if (message.trim() === '') return
-        await addDoc(messagesRef, { text: message, sender: 'admin', timestamp: new Date() })
+        await addDoc(messagesRef, { text: message, sender: user.role, timestamp: Date.now() })
         setMessage('')
         setRows(1)
     }
@@ -78,11 +82,11 @@ const Customer = () => {
                         {messages.map((message, index) => (
                             <div
                                 key={index}
-                                className={`d-flex flex-row ${message.sender === 'user' ? 'justify-content-start' : 'justify-content-end'}`}
+                                className={`d-flex flex-row ${message.sender === (user.role === 'user' ? 'admin' : 'user') ? 'justify-content-start' : 'justify-content-end'}`}
                             >
-                                {message.sender === 'user' && (
+                                {message.sender === (user.role === 'admin' ? 'user' : 'admin') && (
                                     <CImage
-                                        className="rounded-5"
+                                        className="rounded-5 me-2"
                                         src="https://avatars.githubusercontent.com/u/62317165?v=4"
                                         style={{ width: '45px', height: '100%' }}
                                     />
@@ -90,7 +94,8 @@ const Customer = () => {
                                 <div>
                                     <p
                                         className={`small p-2 mb-1 rounded ${
-                                            message.sender !== 'user'
+                                            message.sender !==
+                                            (user.role === 'user' ? 'user' : 'admin')
                                                 ? 'bg-primary text-white me-3'
                                                 : 'bg-body-tertiary ms-3'
                                         }`}
@@ -98,14 +103,14 @@ const Customer = () => {
                                         {renderMessage(message.text)}
                                     </p>
                                     <p
-                                        className={`small ms-3 mb-3 text-muted ${message.sender === 'user' ? 'me-3' : ''}`}
+                                        className={`small ms-3 mb-3 text-muted ${message.sender === (user.role === 'user' ? 'user' : 'admin') ? 'me-3' : ''}`}
                                     >
-                                        {index + 6}min
+                                        {parseTimestamp(message.timestamp)}
                                     </p>
                                 </div>
-                                {message.sender === 'admin' && (
+                                {message.sender === (user.role === 'user' ? 'user' : 'admin') && (
                                     <CImage
-                                        className="rounded-5"
+                                        className="rounded-5 ms-2"
                                         src="https://avatars.githubusercontent.com/u/62317165?v=4"
                                         style={{ width: '45px', height: '100%' }}
                                     />

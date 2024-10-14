@@ -11,6 +11,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
             active: true,
             ip_address: ip,
             user_agent: userAgent,
+            compromised: false,
             last_accessed: Date.now(),
         });
     } catch (e) {
@@ -48,6 +49,7 @@ export const removeSession = async (sessionToken) => {
                 $set: {
                     active: false,
                     last_accessed: Date.now(),
+                    modified_by: 'system',
                 },
             }
         );
