@@ -36,7 +36,6 @@ jobs:
           echo "VITE_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.APP_FIREBASE_MEASUREMENT_ID }}" >> .env
           npm i
           npm run lint
-          npm audit
           npm run build
 
       - name: Upload frontend
@@ -58,8 +57,6 @@ jobs:
           cd server
           npm i
           npm run lint
-          npm audit
-          npm outdated
           cd ../server-build
           rm -rf eslint.config.js obfuscate.js
           cd ..

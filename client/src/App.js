@@ -16,7 +16,6 @@ const Landing = lazy(() => import('./views/landing'))
 const Login = lazy(() => import('./views/auth/login'))
 const Register = lazy(() => import('./views/auth/register'))
 const ForgotPassword = lazy(() => import('./views/auth/forgotpassword'))
-const Logout = lazy(() => import('./views/auth/logout'))
 const MailOTP = lazy(() => import('./views/auth/otp/mail'))
 
 const App = () => {
@@ -87,7 +86,6 @@ const App = () => {
                                 name="Forgot Password"
                                 element={<ForgotPassword />}
                             />
-                            <Route exact path="/logout" name="Logout" element={<Logout />} />
                             <Route path="*" name="Home" element={<DefaultLayout />} />
                         </Routes>
                     </DocumentTitle>

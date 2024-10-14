@@ -2,8 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import { ObjectId } from "mongodb";
 import express from "express";
-import moment from "moment";
-import UAParser from "ua-parser-js";
 import database from "../../models/db.js";
 import logger from "../../components/logger.js";
 import scm from "../../components/scm.js";
@@ -18,31 +16,13 @@ router.get("/", auth, async (req, res) => {
         (async () => {
             const theUser = await getUser(req.token);
             const db = await database();
-            const collection = await db.collection("sessions");
 
-            const sessions = await collection
+            const sessions = await db.collection("sessions")
                 .find(theUser.role !== "admin" ? { user_id: new ObjectId(theUser._id) } : {})
                 .sort({ last_accessed: -1 })
                 .toArray();
 
-            const parseUserAgent = (user_agent) => {
-                const parser = new UAParser(user_agent);
-                const result = parser.getResult();
-                return `${result.browser.name} ${result.os.name} ${result.cpu.architecture}`;
-            };
-
-            return sessions.map((session) => {
-                const newUserAgent = parseUserAgent(session.user_agent);
-                const newActive = session.active ? "Active" : "Inactive";
-                const newLastaccessed = moment(session.last_accessed).fromNow();
-
-                return {
-                    ...session,
-                    user_agent: newUserAgent,
-                    active: newActive,
-                    last_accessed: newLastaccessed,
-                };
-            });
+            return sessions;
         })(),
     ]);
 

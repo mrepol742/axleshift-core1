@@ -14,7 +14,7 @@ import {
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
-import { Navbar, Services, About, Team, Newsletter } from '../components/landing/index'
+import { Navbar, Services, About, Team, Newsletter, Footer } from '../components/landing/index'
 
 const Landing = () => {
     AOS.init()
@@ -82,16 +82,14 @@ const Landing = () => {
                 <Newsletter />
 
                 <CContainer fluid className="h-100 text-center bg-secondary p-5" data-aos="fade-up">
+                    <div className="mt-5" />
                     <h1 className="text-white">SPECIAL THANKS TO</h1>
                     <p className="lead text-white">We cant do it without you as our inspiration.</p>
-                    <h1>Beyoncé</h1>
+                    <h1 className="text-white">Beyoncé</h1>
+                    <div className="mb-5" />
                 </CContainer>
 
-                <div className="m-5">
-                    <CContainer fluid className="text-center">
-                        <span>Copyright &copy;2024 Axleshift Core 1</span>
-                    </CContainer>
-                </div>
+                <Footer />
             </div>
         </div>
     )

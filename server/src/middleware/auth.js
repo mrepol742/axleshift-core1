@@ -17,6 +17,7 @@ const auth = async (req, res, next) => {
 
     if (!session.active) return res.status(401).send();
     let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    const user_a = req.headers["user-agent"];
 
     const last_accessed = new Date(session.last_accessed);
     const diff = Date.now() - last_accessed;
@@ -24,25 +25,31 @@ const auth = async (req, res, next) => {
     // a week has pass so change the ip to 0
     // thus triggering the protocol down below!
     // hacky aint it?
-    console.log('week')
     if (diff >= week) ip = 0;
 
     Promise.all([
         (async () => {
-            const db = await database();
-            db.collection("sessions").updateOne(
-                { token: token },
-                {
-                    $set: {
-                        active: session.ip_address === ip,
-                        last_accessed: Date.now(),
-                    },
-                }
-            );
+            try {
+                const db = await database();
+                const value = (session.ip_address === ip && session.user_agent === user_a);
+                db.collection("sessions").updateOne(
+                    { token: token },
+                    {
+                        $set: {
+                            active: value,
+                            compromised: value,
+                            last_accessed: Date.now(),
+                            modified_by: 'system',
+                        },
+                    }
+                );
+            } catch (e) {
+                logger.error(e);
+            }
         })(),
     ]);
 
-    if (session.ip_address !== ip) return res.status(401).send();
+    if (session.ip_address !== ip || session.user_agent !== user_a) return res.status(401).send();
 
     req.token = token;
     req.user = theUser;

@@ -39,7 +39,6 @@
         "axios": "^1.7.7",
         "chart.js": "^4.4.3",
         "core-js": "^3.37.1",
-        "date-fns": "^4.1.0",
         "dotenv": "^16.4.5",
         "firebase": "^10.14.1",
         "html2canvas": "^1.4.1",
@@ -57,7 +56,8 @@
         "react-router-dom": "^6.23.1",
         "redux": "^5.0.1",
         "redux-persist": "^6.0.0",
-        "simplebar-react": "^3.2.5"
+        "simplebar-react": "^3.2.5",
+        "ua-parser-js": "^1.0.39"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^4.3.1",

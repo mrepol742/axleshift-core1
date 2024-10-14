@@ -45,7 +45,7 @@ const Auth = (WrappedComponent) => {
                     if (!err.response) return console.error(err)
                     cookies.remove(import.meta.env.VITE_APP_SESSION)
                     setIsAuth(false)
-                    navigate(loc)
+                    window.location.href = loc
                 })
         }
 

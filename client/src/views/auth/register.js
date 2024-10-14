@@ -14,6 +14,7 @@ import {
     CRow,
     CButtonGroup,
     CSpinner,
+    CFormCheck,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
@@ -33,6 +34,7 @@ const Register = () => {
         recaptcha_ref: '',
     })
     const [loading, setLoading] = useState(false)
+    const [isChecked, setIsChecked] = useState(false)
     const [error, setError] = useState({
         error: false,
         message: '',
@@ -57,9 +59,11 @@ const Register = () => {
 
         const formDataToSend = new FormData()
         for (const key in formData) {
+            if (key == 'newsletter') return alert(formData[key])
             formDataToSend.append(key, formData[key])
         }
         formDataToSend.append('recaptcha_ref', recaptcha)
+        if (isChecked) formDataToSend.append('newsletter', 'true')
 
         await axios
             .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/register`, formDataToSend, {
@@ -170,7 +174,7 @@ const Register = () => {
                                             required
                                         />
                                     </CInputGroup>
-                                    <CInputGroup className="mb-4">
+                                    <CInputGroup className="mb-3">
                                         <CInputGroupText>
                                             <FontAwesomeIcon icon={faLock} />
                                         </CInputGroupText>
@@ -184,6 +188,13 @@ const Register = () => {
                                             required
                                         />
                                     </CInputGroup>
+                                    <CFormCheck
+                                        id="newsletter"
+                                        className="mb-4"
+                                        checked={isChecked}
+                                        onChange={(e) => setIsChecked(event.target.checked)}
+                                        label="Subscribe to our newsletter"
+                                    />
                                     <div className="d-grid">
                                         <CButtonGroup>
                                             <CButton

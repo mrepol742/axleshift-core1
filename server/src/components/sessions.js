@@ -1,4 +1,3 @@
-import fs from "fs";
 import { ObjectId } from "mongodb";
 import database from "../models/db.js";
 import logger from "./logger.js";
@@ -12,6 +11,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
             active: true,
             ip_address: ip,
             user_agent: userAgent,
+            compromised: false,
             last_accessed: Date.now(),
         });
     } catch (e) {
@@ -49,6 +49,7 @@ export const removeSession = async (sessionToken) => {
                 $set: {
                     active: false,
                     last_accessed: Date.now(),
+                    modified_by: 'system',
                 },
             }
         );
