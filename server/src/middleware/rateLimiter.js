@@ -1,7 +1,7 @@
 const TIME_WINDOW = 60 * 1000;
 const requestCounts = {};
 const exludeRoute = ["/api/v1/auth/verify"];
-const limitedRequestRoute = ["/api/v1/auth/login", "/api/v1/auth/register"];
+const limitedRequestRoute = ["/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/newsletter"];
 
 const rateLimiter = (req, res, next) => {
     const path = req.path;

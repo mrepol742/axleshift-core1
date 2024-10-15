@@ -50,7 +50,8 @@ const ConsineeForm = ({
             </CFormLabel>
             <CFormInput
                 type="email"
-                autocomplete="email"
+                name="email"
+                autoComplete="email"
                 id="consignee_contact_email_address"
                 value={formData.consignee.consignee_contact_email_address}
                 onChange={(e) => handleInputChange(e, 'consignee')}
@@ -64,7 +65,7 @@ const ConsineeForm = ({
             </CFormLabel>
             <CFormInput
                 type="id"
-                autocomplete="tel"
+                autoComplete="tel"
                 id="consignee_contact_phone_number"
                 value={formData.consignee.consignee_contact_phone_number}
                 onChange={(e) => handleInputChange(e, 'consignee')}

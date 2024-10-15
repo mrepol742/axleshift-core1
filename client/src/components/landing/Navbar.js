@@ -50,7 +50,7 @@ const Navbar = () => {
                             data-aos="fade-down"
                             data-aos-duration="1000"
                         >
-                            <CDropdownToggle caret={false}>
+                            <CDropdownToggle caret={false}  className="text-white">
                                 {colorMode === 'dark' ? (
                                     <FontAwesomeIcon icon={faMoon} />
                                 ) : colorMode === 'auto' ? (
@@ -93,6 +93,7 @@ const Navbar = () => {
                         </CDropdown>
                         <CNavItem>
                             <CNavLink
+                             className="text-white"
                                 to="/login"
                                 as={NavLink}
                                 data-aos="fade-down"
@@ -103,6 +104,7 @@ const Navbar = () => {
                         </CNavItem>
                         <CNavItem>
                             <CNavLink
+                             className="text-white"
                                 to="/register"
                                 as={NavLink}
                                 data-aos="fade-down"

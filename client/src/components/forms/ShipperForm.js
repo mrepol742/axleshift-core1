@@ -41,7 +41,8 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo,
             </CFormLabel>
             <CFormInput
                 type="email"
-                autocomplete="email"
+                name="email"
+                autoComplete="email"
                 id="shipper_contact_email_address"
                 value={formData.shipper.shipper_contact_email_address}
                 onChange={(e) => handleInputChange(e, 'shipper')}
@@ -55,7 +56,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo,
             </CFormLabel>
             <CFormInput
                 type="tel"
-                autocomplete="tel"
+                autoComplete="tel"
                 id="shipper_contact_phone_number"
                 value={formData.shipper.shipper_contact_phone_number}
                 onChange={(e) => handleInputChange(e, 'shipper')}

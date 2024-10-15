@@ -45,10 +45,10 @@ router.post("/register", async (req, res) => {
 
         const db = await database();
         const usersCollection = db.collection("users");
-        const existingUser = await collection.findOne({ email: email });
+        const existingUser = await usersCollection.findOne({ email: email });
 
         if (existingUser) {
-            logger.error("Email id already exists");
+            logger.error("Email already exists");
             return res.status(409).send();
         }
 
@@ -65,10 +65,11 @@ router.post("/register", async (req, res) => {
 
         if (newsletter === "true") {
             const newsletterCollection = db.collection("newsletter");
-            const existingSubscriber = await newsletter.findOne({ email: email });
+            const existingSubscriber = await newsletterCollection.findOne({ email: email });
             if (!existingSubscriber) {
                 newsletterCollection.insertOne({
                     email: email,
+                    is_subsribe: true,
                     created_at: Date.now(),
                     update_at: Date.now(),
                 });
@@ -98,9 +99,7 @@ router.post("/login", recaptcha, async (req, res) => {
 
         const db = await database();
         const theUser = await db.collection("users").findOne({ email: email });
-
         if (!theUser) return res.status(404).send();
-
         if (passwordHash(password) != theUser.password) return res.status(401).send();
 
         const session_token = crypto.createHash("sha256").update(generateUniqueId()).digest("hex");
@@ -131,23 +130,23 @@ router.post("/verify", auth, async function (req, res, next) {
     if (req.user.email_verify_at !== "") return res.status(200).json(filter);
 
     const db = await database();
-    const collection = db.collection("otp");
-    const theOtp = await collection.findOne({ token: req.token, verified: false });
+    const otpCollection = db.collection("otp");
+    const theOtp = await otpCollection.findOne({ token: req.token, verified: false });
     if (theOtp) {
         const past = new Date(theOtp.created_at);
         const ten = 10 * 60 * 1000;
 
         if (!(Date.now() - past > ten)) return res.status(200).json({ otp: true });
     }
-    sendOTPEmail(req, collection);
+    sendOTPEmail(req, otpCollection);
 
     return res.status(200).json({ otp: true });
 });
 
-const sendOTPEmail = (req, collection) => {
+const sendOTPEmail = (req, otpCollection) => {
     const otp = Math.floor(100000 + Math.random() * 900000);
     Promise.all([
-        collection.insertOne({
+        otpCollection.insertOne({
             user_id: req.user._id,
             token: req.token,
             code: otp,
@@ -212,14 +211,14 @@ router.post("/logout", auth, function (req, res, next) {
 router.post("/verify/otp/new", [auth, recaptcha], async function (req, res, next) {
     try {
         const db = await database();
-        const collection = db.collection("otp");
-        const theOtp = await collection.findOne({ token: req.token, verified: false, expired: false });
+        const otpCollection = db.collection("otp");
+        const theOtp = await otpCollection.findOne({ token: req.token, verified: false, expired: false });
         if (theOtp) {
             const past = new Date(theOtp.created_at);
             const ten = 10 * 60 * 1000;
 
             if (Date.now() - past > ten) {
-                await collection.updateOne(
+                await otpCollection.updateOne(
                     { _id: new ObjectId(theOtp._id) },
                     {
                         $set: {
@@ -231,7 +230,7 @@ router.post("/verify/otp/new", [auth, recaptcha], async function (req, res, next
                     }
                 );
 
-                sendOTPEmail(req, collection);
+                sendOTPEmail(req, otpCollection);
             }
         }
     } catch (e) {
@@ -254,8 +253,8 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
         if (!otp) return res.status(400).send();
 
         const db = await database();
-        const collection = db.collection("otp");
-        const theOtp = await collection.findOne({ token: req.token, verified: false, expired: false });
+        const otpCollection = db.collection("otp");
+        const theOtp = await otpCollection.findOne({ token: req.token, verified: false, expired: false });
         if (theOtp) {
             const past = new Date(theOtp.created_at);
             const ten = 10 * 60 * 1000;
@@ -267,7 +266,7 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
 
         // mark the otp
         await Promise.all([
-            collection.updateOne(
+            otpCollection.updateOne(
                 { _id: new ObjectId(theOtp._id) },
                 {
                     $set: {
