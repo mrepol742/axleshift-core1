@@ -63,15 +63,15 @@ router.post("/register", async (req, res) => {
             update_at: Date.now(),
         });
 
-        if (newsletter === 'true') {
-            const newsletterCollection = await db.collection('newsletter');
+        if (newsletter === "true") {
+            const newsletterCollection = await db.collection("newsletter");
             const existingSubscriber = await newsletter.findOne({ email: email });
             if (!existingSubscriber) {
                 newsletterCollection.insertOne({
-            email: email,
-            created_at: Date.now(),
-            update_at: Date.now(),
-        });
+                    email: email,
+                    created_at: Date.now(),
+                    update_at: Date.now(),
+                });
             }
         }
 
@@ -226,7 +226,7 @@ router.post("/verify/otp/new", [auth, recaptcha], async function (req, res, next
                             verified: false,
                             expired: true,
                             updated_at: Date.now(),
-                            modified_by: 'system',
+                            modified_by: "system",
                         },
                     }
                 );
@@ -273,7 +273,7 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
                     $set: {
                         verified: true,
                         updated_at: Date.now(),
-                        modified_by: 'system',
+                        modified_by: "system",
                     },
                 }
             ),

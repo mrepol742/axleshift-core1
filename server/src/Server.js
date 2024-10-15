@@ -22,7 +22,7 @@ import APIv1 from "./routes/v1/index.js";
 
 const app = express();
 const upload = multer();
-const port = process.env.PORT;
+const port = process.env.PORT || 5051;
 
 app.use(upload.none());
 app.use(helmet());
@@ -56,11 +56,10 @@ if (process.env.NODE_ENV !== "production")
         throw new Error("This is a test");
     });
 
-app.listen(port, async () => {
+app.listen(port, (err) => {
+    if (err) return logger.error("Unable to start server", err);
     Promise.all([db(), mail(), cron()]);
     logger.info(`Server running on port ${port}`);
 });
 
 Sentry.setupExpressErrorHandler(app);
-
-export default app;

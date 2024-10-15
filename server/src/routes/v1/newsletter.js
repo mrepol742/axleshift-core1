@@ -9,13 +9,10 @@ import recaptcha from "../../middleware/recaptcha.js";
 const router = express.Router();
 
 router.post("/", recaptcha, async (req, res) => {
-   try {
-
-    
-
-   } catch (e) {
-    logger.error(e)
-   }
+    try {
+    } catch (e) {
+        logger.error(e);
+    }
     return res.status(500).send();
 });
 

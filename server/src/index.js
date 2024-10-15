@@ -21,5 +21,3 @@ process.on("uncaughtException", (err, origin) => {
 process.on("unhandledRejection", (reason, promise) => {
     logger.error(reason);
 });
-
-export const viteNodeApp = app;

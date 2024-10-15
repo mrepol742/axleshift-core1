@@ -19,9 +19,9 @@ const mail = async () => {
             },
         });
 
-        logger.info("Connected successfully to mail server");
+        logger.info("Successfully connected to Google SMTP");
     } catch (err) {
-        logger.error(err);
+        logger.error("Failed connecting to Google SMTP", err);
     }
     return mailInstance;
 };

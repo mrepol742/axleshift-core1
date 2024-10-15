@@ -3,7 +3,7 @@ import sessionTask from "../tasks/sessions.js";
 import otpTask from "../tasks/otp.js";
 import logger from "./logger.js";
 
-const hour = '0 * * * *';
+const hour = "0 * * * *";
 
 const _cron = () => {
     cron.schedule(hour, sessionTask).start();

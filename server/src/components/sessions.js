@@ -49,7 +49,7 @@ export const removeSession = async (sessionToken) => {
                 $set: {
                     active: false,
                     last_accessed: Date.now(),
-                    modified_by: 'system',
+                    modified_by: "system",
                 },
             }
         );

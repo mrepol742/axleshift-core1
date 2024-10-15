@@ -24,7 +24,7 @@ const sessions = () => {
                                 $set: {
                                     active: false,
                                     last_accessed: Date.now(),
-                                    modified_by: 'system',
+                                    modified_by: "system",
                                 },
                             }
                         );
