@@ -36,14 +36,15 @@ import { parseTimestamp } from '../../../components/Timestamp'
 
 const Sessions = ({ result }) => {
     const getDevice = (userAgent) => {
-        const parser = new UAParser(userAgent)
+        const parser = new UAParser()
+        parser.setUA(userAgent)
         const result = parser.getResult()
-        return `${result.browser.name} ${result.os.name}`
+        return userAgent
     }
 
     return (
         <>
-            <CTable striped>
+            <CTable hover responsive className="rounded">
                 <CTableHead>
                     <CTableRow>
                         <CTableHeaderCell>#</CTableHeaderCell>
@@ -75,16 +76,16 @@ const Sessions = ({ result }) => {
 
 Sessions.propTypes = {
     result: PropTypes.shape({
-        browser: PropTypes.string.isRequired,
-        os: PropTypes.string.isRequired,
+        browser: PropTypes.string,
+        os: PropTypes.string,
         sessions: PropTypes.arrayOf(
             PropTypes.shape({
                 _id: PropTypes.string.isRequired,
                 user_id: PropTypes.string,
                 ip_address: PropTypes.string.isRequired,
                 user_agent: PropTypes.string.isRequired,
-                active: PropTypes.string.isRequired,
-                last_accessed: PropTypes.string.isRequired,
+                active: PropTypes.bool.isRequired,
+                last_accessed: PropTypes.number.isRequired,
             }),
         ).isRequired,
     }).isRequired,

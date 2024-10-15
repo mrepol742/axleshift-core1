@@ -3,6 +3,8 @@ dotenv.config();
 import { ObjectId } from "mongodb";
 import express from "express";
 import bcrypt from "bcryptjs";
+import fs from "fs";
+import path from "path";
 import crypto from "crypto";
 import database from "../../models/db.js";
 import logger from "../../components/logger.js";

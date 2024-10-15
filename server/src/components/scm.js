@@ -4,15 +4,15 @@ import logger from "./logger.js";
 import axios from "axios";
 
 let last_fetch;
-let response = [];
+let res = [];
 
 const scm = async () => {
-    if (!last_fetch || response.length === 0) return await fetch();
+    if (!last_fetch || res.length === 0) return await fetch();
 
     const past = new Date(last_fetch);
     const ten = 10 * 60 * 1000;
 
-    if (!(Date.now() - past > ten)) return response;
+    if (!(Date.now() - past > ten)) return res;
     return await fetch();
 };
 
@@ -35,12 +35,11 @@ const fetch = async () => {
             cve: alert.security_advisory.cve_id ?? null,
             summary: alert.security_advisory.summary,
             severity: alert.security_advisory.severity,
-            created_at: alert.security_advisory.created_at,
             updated_at: alert.security_advisory.updated_at ?? null,
         }));
 
         last_fetch = Date.now();
-        response = alerts;
+        res = alerts;
 
         return alerts;
     } catch (err) {
