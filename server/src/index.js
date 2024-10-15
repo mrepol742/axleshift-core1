@@ -11,7 +11,7 @@ Sentry.init({
 });
 
 import logger from "./components/logger.js";
-import app from "./Server.js";
+import "./Server.js";
 
 process.on("uncaughtException", (err, origin) => {
     logger.error(err);
