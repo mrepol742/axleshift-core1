@@ -25,6 +25,8 @@ const App = () => {
     let token = cookies.get(import.meta.env.VITE_APP_SESSION)
 
     useEffect(() => {
+        window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {}
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker
                 .register('/sw.js')

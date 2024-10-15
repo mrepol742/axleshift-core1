@@ -93,21 +93,15 @@ const Sea = () => {
     }
 
     const handleConsigneeInfo = () => {
-        const { shipper } = formData
-        if (Object.values(shipper).every((field) => field.trim() !== '')) return setCurrentPage(2)
-        alert('Please fill in all required fields in Shipper Information.')
+        setCurrentPage(2)
     }
 
     const handleShipmentDetails = () => {
-        const { consignee } = formData
-        if (Object.values(consignee).every((field) => field.trim() !== '')) return setCurrentPage(3)
-        alert('Please fill in all required fields in Consignee Information.')
+        setCurrentPage(3)
     }
 
     const handleShippingInformation = () => {
-        const { shipment } = formData
-        if (Object.values(shipment).every((field) => field.trim() !== '')) return setCurrentPage(4)
-        alert('Please fill in all required fields in Shipment Details.')
+        setCurrentPage(4)
     }
 
     return (
@@ -118,7 +112,7 @@ const Sea = () => {
                 </div>
             )}
             <CRow className="mb-4">
-                <CCol xs={3} className="image-container d-none d-md-flex">
+                <CCol xs={3} md={5} xl={3} className="image-container d-none d-md-flex">
                     <CImage fluid rounded src="/images/freight-sea.jpg" className="custom-image" />
                 </CCol>
                 <CCol md={7}>

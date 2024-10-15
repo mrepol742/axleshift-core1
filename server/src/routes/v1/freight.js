@@ -31,7 +31,7 @@ router.post("/", auth, async (req, res) => {
         const skip = (page - 1) * limit;
 
         const db = await database();
-        const freightCollection = await db.collection("freight");
+        const freightCollection = db.collection("freight");
 
         const [totalItems, items] = await Promise.all([
             freightCollection.countDocuments({ user_id: new ObjectId(theUser._id) }),
@@ -149,7 +149,7 @@ router.post("/u/:type/:id", auth, async (req, res) => {
         const theUser = await getUser(req.token);
         const db = await database();
 
-        const freightCollection = await db.collection("freight");
+        const freightCollection = db.collection("freight");
         const items = await freightCollection.find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) }).toArray();
         if (!items.length) return res.status(404).send();
 
@@ -188,7 +188,7 @@ router.post("/d/:id", auth, async (req, res) => {
         const theUser = await getUser(req.token);
         const db = await database();
 
-        const freightCollection = await db.collection("freight");
+        const freightCollection = db.collection("freight");
         const items = await freightCollection.find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) }).toArray();
         if (!items.length) return res.status(404).send();
 

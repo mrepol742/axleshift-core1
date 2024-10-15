@@ -31,7 +31,7 @@ const auth = async (req, res, next) => {
         (async () => {
             try {
                 const db = await database();
-                const value = (session.ip_address === ip && session.user_agent === user_a);
+                const value = session.ip_address === ip && session.user_agent === user_a;
                 db.collection("sessions").updateOne(
                     { token: token },
                     {
@@ -39,7 +39,7 @@ const auth = async (req, res, next) => {
                             active: value,
                             compromised: value,
                             last_accessed: Date.now(),
-                            modified_by: 'system',
+                            modified_by: "system",
                         },
                     }
                 );

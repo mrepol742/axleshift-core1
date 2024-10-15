@@ -11,7 +11,7 @@ const Auth = (WrappedComponent) => {
         const [otp, setOtp] = useState(false)
         const dispatch = useDispatch()
 
-        let loc = `/`
+        let loc = `/login`
         if (window.location.pathname != '/')
             loc = `/login?n=${window.location.pathname}${window.location.search}`
 
@@ -53,6 +53,8 @@ const Auth = (WrappedComponent) => {
             checkAuthentication()
         }, [navigate])
 
+        if (otp) return <Navigate to={loc.replace('/login', '/otp')} />
+
         if (isAuth === null)
             return (
                 <div className="loading-overlay">
@@ -60,7 +62,6 @@ const Auth = (WrappedComponent) => {
                 </div>
             )
 
-        if (otp) return <Navigate to={loc.replace('/login', '/otp')} />
         if (!isAuth) return <Navigate to={loc} />
 
         return <WrappedComponent {...props} />

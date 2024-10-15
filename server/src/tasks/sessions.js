@@ -7,7 +7,7 @@ const sessions = () => {
         (async () => {
             try {
                 const db = await database();
-                const sessionsCollection = await db.collection("sessions");
+                const sessionsCollection = db.collection("sessions");
                 const sessions = await sessionsCollection.find({ active: false }).toArray();
 
                 if (sessions.length === 0) return;
@@ -24,7 +24,7 @@ const sessions = () => {
                                 $set: {
                                     active: false,
                                     last_accessed: Date.now(),
-                                    modified_by: 'system',
+                                    modified_by: "system",
                                 },
                             }
                         );

@@ -11,9 +11,12 @@ export const parseTimestamp = (timestamp) => {
     } else if (seconds < 86400) {
         const hours = Math.floor(seconds / 3600)
         return `${hours} hr`
-    } else if (seconds < 31536000) {
+    } else if (seconds < 2592000) {
         const days = Math.floor(seconds / 86400)
         return `${days} day`
+    } else if (seconds < 31536000) {
+        const months = Math.floor(seconds / 2592000)
+        return `${months} mo`
     }
     const years = Math.floor(seconds / 31536000)
     return `${years} yr`

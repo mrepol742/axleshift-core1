@@ -53,14 +53,11 @@ jobs:
           
       - name: Build backend
         run: |
-          cp server server-build -r
           cd server
           npm i
           npm run lint
-          cd ../server-build
-          rm -rf eslint.config.js obfuscate.js
-          cd ..
-          node server/obfuscate.js
+          rm -rf node_modules
+
 
       - name: Upload backend
         id: push_directory_backend
@@ -68,7 +65,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: server-build/
+          source-directory: server/
           destination-github-username: 'freight-capstone'
           destination-repository-name: 'core1'
           user-email: mrepol742@gmail.com

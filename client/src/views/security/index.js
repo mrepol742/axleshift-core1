@@ -35,6 +35,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 import Dependabot from './panel/dependabot'
 import Sessions from './panel/sessions'
+import Sentry from './panel/sentry'
 import OTP from './panel/otp'
 
 const Security = () => {
@@ -43,7 +44,7 @@ const Security = () => {
     const [priority, setPriority] = useState('1')
     const [order, setOrder] = useState('1')
     const [query, setQuery] = useState('')
-    const [result, setResult] = useState({ scm: [], sessions: [] })
+    const [result, setResult] = useState({ scm: [], sessions: [], sentry: [] })
     const navigate = useNavigate()
 
     const sessionResultMock = {
@@ -101,6 +102,9 @@ const Security = () => {
                     <CTab aria-controls="profile-tab-pane" itemKey={3}>
                         OTP
                     </CTab>
+                    <CTab aria-controls="profile-tab-pane" itemKey={4}>
+                        Sentry
+                    </CTab>
                 </CTabList>
                 <CTabContent>
                     <CTabPanel className="py-3" aria-labelledby="home-tab-pane" itemKey={1}>
@@ -121,6 +125,19 @@ const Security = () => {
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="profile-tab-pane" itemKey={3}>
                         <OTP />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="profile-tab-pane" itemKey={4}>
+                        <Sentry
+                            query={query}
+                            setQuery={setQuery}
+                            state={state}
+                            setState={setState}
+                            priority={priority}
+                            setPriority={setPriority}
+                            order={order}
+                            setOrder={setOrder}
+                            result={result}
+                        />
                     </CTabPanel>
                 </CTabContent>
             </CTabs>

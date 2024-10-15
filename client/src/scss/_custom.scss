@@ -40,7 +40,7 @@
  * image for freight
  */
 .image-container {
-    height: auto;
+    height: 555px;
     display: flex;
     align-items: stretch;
 }
@@ -123,6 +123,9 @@
     opacity: 0.5;
 }
 
+/*
+ * landing page
+ */
 .landing-page {
     position: relative;
     // background-image: url(/images/freight-land.jpg); 
@@ -146,12 +149,12 @@
     z-index: 1;
 }
 
-.landing-page > * {
+.landing-page>* {
     position: relative;
     z-index: 99;
 }
 
-  .landing-page h1,
-  .landing-page p {
+.landing-page h1,
+.landing-page p {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-  }
+}

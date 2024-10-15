@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
     CForm,
@@ -11,6 +11,8 @@ import {
     CFormTextarea,
     CFormSelect,
 } from '@coreui/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 
 const AirForm = ({
     formData,
@@ -20,12 +22,16 @@ const AirForm = ({
     isInfo,
     isDisabled,
 }) => {
+    const formRef = useRef(null)
+
     return (
-        <CForm>
+        <CForm ref={formRef}>
             {!isInfo && <CProgress value={100} className="mb-3" variant="striped" animated />}
             <h3 className="mb-4">Shipping Information</h3>
 
-            <CFormLabel htmlFor="shipping_origin_airport">Origin Airport</CFormLabel>
+            <CFormLabel htmlFor="shipping_origin_airport">
+                Origin Airport<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="text"
                 id="shipping_origin_airport"
@@ -36,7 +42,9 @@ const AirForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_destination_airport">Destination Airport</CFormLabel>
+            <CFormLabel htmlFor="shipping_destination_airport">
+                Destination Airport<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="text"
                 id="shipping_destination_airport"
@@ -48,7 +56,7 @@ const AirForm = ({
             />
 
             <CFormLabel htmlFor="shipping_preferred_departure_date">
-                Preferred Departure Date
+                Preferred Departure Date<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
                 type="date"
@@ -61,7 +69,7 @@ const AirForm = ({
             />
 
             <CFormLabel htmlFor="shipping_preferred_arrival_date">
-                Preferred Arrival Date
+                Preferred Arrival Date<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
                 type="date"
@@ -73,7 +81,9 @@ const AirForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_flight_type">Flight Type</CFormLabel>
+            <CFormLabel htmlFor="shipping_flight_type">
+                Flight Type<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormSelect
                 id="shipping_flight_type"
                 value={formData.shipping.shipping_flight_type}
@@ -90,10 +100,20 @@ const AirForm = ({
             />
             {!isInfo && (
                 <>
-                    <CButton color="secondary" onClick={handleShipmentDetails}>
-                        Back
+                    <CButton color="primary" onClick={handleShipmentDetails}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
                     </CButton>
-                    <CButton color="primary" onClick={handleSubmit}>
+                    <CButton
+                        className="ms-2"
+                        color="primary"
+                        onClick={() => {
+                            if (formRef.current.checkValidity()) {
+                                handleSubmit()
+                            } else {
+                                formRef.current.reportValidity()
+                            }
+                        }}
+                    >
                         Submit
                     </CButton>
                 </>

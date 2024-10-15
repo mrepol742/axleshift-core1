@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
     CForm,
@@ -10,6 +10,8 @@ import {
     CCol,
     CFormTextarea,
 } from '@coreui/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 
 const ShipmentForm = ({
     formData,
@@ -19,12 +21,16 @@ const ShipmentForm = ({
     isInfo,
     isDisabled,
 }) => {
+    const formRef = useRef(null)
+
     return (
-        <CForm>
+        <CForm ref={formRef}>
             {!isInfo && <CProgress value={75} className="mb-3" variant="striped" animated />}
             <h3 className="mb-4">Shipment Details</h3>
 
-            <CFormLabel htmlFor="shipment_description">Description of Goods</CFormLabel>
+            <CFormLabel htmlFor="shipment_description">
+                Description of Goods<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="text"
                 id="shipment_description"
@@ -35,21 +41,12 @@ const ShipmentForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipment_weight">Weight (kg)</CFormLabel>
-            <CFormInput
-                type="number"
-                id="shipment_weight"
-                value={formData.shipment.shipment_weight}
-                onChange={(e) => handleInputChange(e, 'shipment')}
-                required
-                className="mb-3"
-                disabled={isDisabled}
-            />
-
             <CRow className="mb-3">
                 <h5>Dimensions (cm)</h5>
                 <CCol xs>
-                    <CFormLabel htmlFor="shipment_dimension_length">Length</CFormLabel>
+                    <CFormLabel htmlFor="shipment_dimension_length">
+                        Length<span className="text-danger ms-1">*</span>
+                    </CFormLabel>
                     <CFormInput
                         type="number"
                         id="shipment_dimension_length"
@@ -60,7 +57,9 @@ const ShipmentForm = ({
                     />
                 </CCol>
                 <CCol xs>
-                    <CFormLabel htmlFor="shipment_dimension_width">Width</CFormLabel>
+                    <CFormLabel htmlFor="shipment_dimension_width">
+                        Width<span className="text-danger ms-1">*</span>
+                    </CFormLabel>
                     <CFormInput
                         type="number"
                         id="shipment_dimension_width"
@@ -71,7 +70,9 @@ const ShipmentForm = ({
                     />
                 </CCol>
                 <CCol xs>
-                    <CFormLabel htmlFor="shipment_dimension_height">Height</CFormLabel>
+                    <CFormLabel htmlFor="shipment_dimension_height">
+                        Height<span className="text-danger ms-1">*</span>
+                    </CFormLabel>
                     <CFormInput
                         type="number"
                         id="shipment_dimension_height"
@@ -82,31 +83,51 @@ const ShipmentForm = ({
                     />
                 </CCol>
             </CRow>
+            <CRow className="mb-3">
+                <CCol xs>
+                    <CFormLabel htmlFor="shipment_weight">
+                        Weight (kg)<span className="text-danger ms-1">*</span>
+                    </CFormLabel>
+                    <CFormInput
+                        type="number"
+                        id="shipment_weight"
+                        value={formData.shipment.shipment_weight}
+                        onChange={(e) => handleInputChange(e, 'shipment')}
+                        required
+                        className="mb-3"
+                        disabled={isDisabled}
+                    />
+                </CCol>
+                <CCol xs>
+                    <CFormLabel htmlFor="shipment_volume">
+                        Total Volume<span className="text-danger ms-1">*</span>
+                    </CFormLabel>
+                    <CFormInput
+                        type="number"
+                        id="shipment_volume"
+                        value={formData.shipment.shipment_volume}
+                        onChange={(e) => handleInputChange(e, 'shipment')}
+                        className="mb-3"
+                        disabled={isDisabled}
+                    />
+                </CCol>
+                <CCol xs>
+                    <CFormLabel htmlFor="shipment_value">
+                        Value of Goods<span className="text-danger ms-1">*</span>
+                    </CFormLabel>
+                    <CFormInput
+                        type="number"
+                        id="shipment_value"
+                        value={formData.shipment.shipment_value}
+                        onChange={(e) => handleInputChange(e, 'shipment')}
+                        required
+                        className="mb-3"
+                        disabled={isDisabled}
+                    />
+                </CCol>
+            </CRow>
 
-            <CFormLabel htmlFor="shipment_volume">Total Volume (if applicable)</CFormLabel>
-            <CFormInput
-                type="number"
-                id="shipment_volume"
-                value={formData.shipment.shipment_volume}
-                onChange={(e) => handleInputChange(e, 'shipment')}
-                className="mb-3"
-                disabled={isDisabled}
-            />
-
-            <CFormLabel htmlFor="shipment_value">Value of Goods</CFormLabel>
-            <CFormInput
-                type="number"
-                id="shipment_value"
-                value={formData.shipment.shipment_value}
-                onChange={(e) => handleInputChange(e, 'shipment')}
-                required
-                className="mb-3"
-                disabled={isDisabled}
-            />
-
-            <CFormLabel htmlFor="shipment_instructions">
-                Special Handling Instructions (if any)
-            </CFormLabel>
+            <CFormLabel htmlFor="shipment_instructions">Special Handling Instructions</CFormLabel>
             <CFormTextarea
                 id="shipment_instructions"
                 rows={3}
@@ -118,10 +139,20 @@ const ShipmentForm = ({
 
             {!isInfo && (
                 <>
-                    <CButton color="secondary" onClick={handleConsigneeInfo}>
-                        Back
+                    <CButton color="primary" onClick={handleConsigneeInfo}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
                     </CButton>
-                    <CButton color="primary" onClick={handleShippingInformation}>
+                    <CButton
+                        className="ms-2"
+                        color="primary"
+                        onClick={() => {
+                            if (formRef.current.checkValidity()) {
+                                handleShippingInformation()
+                            } else {
+                                formRef.current.reportValidity()
+                            }
+                        }}
+                    >
                         Next
                     </CButton>
                 </>

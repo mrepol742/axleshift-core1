@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
     CForm,
@@ -11,6 +11,8 @@ import {
     CFormTextarea,
     CFormSelect,
 } from '@coreui/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 
 const SeaForm = ({
     formData,
@@ -20,12 +22,16 @@ const SeaForm = ({
     isInfo,
     isDisabled,
 }) => {
+    const formRef = useRef(null)
+
     return (
-        <CForm>
+        <CForm ref={formRef}>
             {!isInfo && <CProgress value={100} className="mb-3" variant="striped" animated />}
             <h3 className="mb-4">Shipping Information</h3>
 
-            <CFormLabel htmlFor="shipping_loading_port">Loading Port</CFormLabel>
+            <CFormLabel htmlFor="shipping_loading_port">
+                Loading Port<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="text"
                 id="shipping_loading_port"
@@ -36,7 +42,9 @@ const SeaForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_discharge_port">Discharge Port</CFormLabel>
+            <CFormLabel htmlFor="shipping_discharge_port">
+                Discharge Port<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="text"
                 id="shipping_discharge_port"
@@ -47,7 +55,9 @@ const SeaForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_sailing_date">Sailing Date</CFormLabel>
+            <CFormLabel htmlFor="shipping_sailing_date">
+                Sailing Date<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="date"
                 id="shipping_sailing_date"
@@ -59,7 +69,7 @@ const SeaForm = ({
             />
 
             <CFormLabel htmlFor="shipping_estimated_arrival_date">
-                Estimated Arrival Date
+                Estimated Arrival Date<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
                 type="date"
@@ -71,7 +81,9 @@ const SeaForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_cargo_type">Flight Type</CFormLabel>
+            <CFormLabel htmlFor="shipping_cargo_type">
+                Flight Type<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormSelect
                 id="shipping_cargo_type"
                 value={formData.shipping.shipping_cargo_type}
@@ -91,10 +103,20 @@ const SeaForm = ({
 
             {!isInfo && (
                 <>
-                    <CButton color="secondary" onClick={handleShipmentDetails}>
-                        Back
+                    <CButton color="primary" onClick={handleShipmentDetails}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
                     </CButton>
-                    <CButton color="primary" onClick={handleSubmit}>
+                    <CButton
+                        className="ms-2"
+                        color="primary"
+                        onClick={() => {
+                            if (formRef.current.checkValidity()) {
+                                handleSubmit()
+                            } else {
+                                formRef.current.reportValidity()
+                            }
+                        }}
+                    >
                         Submit
                     </CButton>
                 </>

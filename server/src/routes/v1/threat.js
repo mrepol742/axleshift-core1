@@ -5,19 +5,22 @@ import express from "express";
 import database from "../../models/db.js";
 import logger from "../../components/logger.js";
 import scm from "../../components/scm.js";
+import sentry from "../../components/sentry.js";
 import auth from "../../middleware/auth.js";
 import { getUser } from "../../components/sessions.js";
 
 const router = express.Router();
 
 router.get("/", auth, async (req, res) => {
-    const [gds_advisory, updatedSessions] = await Promise.all([
+    const [gds_advisory, sentry_issues_monitoring, updatedSessions] = await Promise.all([
         scm(),
+        sentry(),
         (async () => {
             const theUser = await getUser(req.token);
             const db = await database();
 
-            const sessions = await db.collection("sessions")
+            const sessions = await db
+                .collection("sessions")
                 .find(theUser.role !== "admin" ? { user_id: new ObjectId(theUser._id) } : {})
                 .sort({ last_accessed: -1 })
                 .toArray();
@@ -26,7 +29,7 @@ router.get("/", auth, async (req, res) => {
         })(),
     ]);
 
-    return res.status(200).json({ scm: gds_advisory, sessions: updatedSessions });
+    return res.status(200).json({ scm: gds_advisory, sentry: sentry_issues_monitoring, sessions: updatedSessions });
 });
 
 router.get("/scan", auth, async (req, res) => {

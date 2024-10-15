@@ -35,7 +35,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 import { parseTimestamp } from '../../../components/Timestamp'
 
-const Dependabot = ({
+const Sentry = ({
     query,
     setQuery,
     state,
@@ -48,16 +48,16 @@ const Dependabot = ({
 }) => {
     return (
         <>
-            {result.scm.length === 0 && (
+            {result.sentry.length === 0 && (
                 <div className="text-center border rounded">
                     <div className="p-0 p-md-5 my-5 my-md-0">
                         <CImage src="/images/threat.png" fluid width="50%" />
-                        <h1>We couldn&apos;t find any threats.</h1>
+                        <h1>We couldn&apos;t find any issues.</h1>
                         <p>Should we add one? :)</p>
                     </div>
                 </div>
             )}
-            {result.scm.length !== 0 && (
+            {result.sentry.length !== 0 && (
                 <>
                     <CForm className="d-flex justify-content-left my-2 my-lg-0">
                         <CInputGroup className="mb-3">
@@ -114,27 +114,27 @@ const Dependabot = ({
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell>#</CTableHeaderCell>
-                                <CTableHeaderCell>State</CTableHeaderCell>
-                                <CTableHeaderCell>Scope</CTableHeaderCell>
-                                <CTableHeaderCell>Manifest</CTableHeaderCell>
-                                <CTableHeaderCell>CVE</CTableHeaderCell>
-                                <CTableHeaderCell>Summary</CTableHeaderCell>
-                                <CTableHeaderCell>Severity</CTableHeaderCell>
+                                <CTableHeaderCell>Title</CTableHeaderCell>
+                                <CTableHeaderCell>Culprit</CTableHeaderCell>
+                                <CTableHeaderCell>Level</CTableHeaderCell>
+                                <CTableHeaderCell>Status</CTableHeaderCell>
+                                <CTableHeaderCell>Priority</CTableHeaderCell>
+                                <CTableHeaderCell>Count</CTableHeaderCell>
                                 <CTableHeaderCell>Last Updated</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {result.scm.map((alert) => (
-                                <CTableRow key={alert.number}>
-                                    <CTableDataCell>{alert.number}</CTableDataCell>
-                                    <CTableDataCell>{alert.state}</CTableDataCell>
-                                    <CTableDataCell>{alert.scope}</CTableDataCell>
-                                    <CTableDataCell>{alert.manifest}</CTableDataCell>
-                                    <CTableDataCell>{alert.cve}</CTableDataCell>
-                                    <CTableDataCell>{alert.summary}</CTableDataCell>
-                                    <CTableDataCell>{alert.severity}</CTableDataCell>
+                            {result.sentry.map((issue) => (
+                                <CTableRow key={issue.id}>
+                                    <CTableDataCell>{issue.id}</CTableDataCell>
+                                    <CTableDataCell>{issue.title}</CTableDataCell>
+                                    <CTableDataCell>{issue.culprit}</CTableDataCell>
+                                    <CTableDataCell>{issue.level}</CTableDataCell>
+                                    <CTableDataCell>{issue.status}</CTableDataCell>
+                                    <CTableDataCell>{issue.priority}</CTableDataCell>
+                                    <CTableDataCell>{issue.count}</CTableDataCell>
                                     <CTableDataCell>
-                                        {parseTimestamp(new Date(alert.updated_at).getTime())}
+                                        {parseTimestamp(new Date(issue.updated_at).getTime())}
                                     </CTableDataCell>
                                 </CTableRow>
                             ))}
@@ -146,7 +146,7 @@ const Dependabot = ({
     )
 }
 
-Dependabot.propTypes = {
+Sentry.propTypes = {
     query: PropTypes.string.isRequired,
     setQuery: PropTypes.func.isRequired,
     state: PropTypes.string.isRequired,
@@ -156,19 +156,19 @@ Dependabot.propTypes = {
     order: PropTypes.string.isRequired,
     setOrder: PropTypes.func.isRequired,
     result: PropTypes.shape({
-        scm: PropTypes.arrayOf(
+        sentry: PropTypes.arrayOf(
             PropTypes.shape({
-                number: PropTypes.number.isRequired,
-                state: PropTypes.string.isRequired,
-                scope: PropTypes.string.isRequired,
-                manifest: PropTypes.string.isRequired,
-                cve: PropTypes.string.isRequired,
-                summary: PropTypes.string.isRequired,
-                severity: PropTypes.string.isRequired,
+                id: PropTypes.string.isRequired,
+                title: PropTypes.string.isRequired,
+                culprit: PropTypes.string.isRequired,
+                level: PropTypes.string.isRequired,
+                status: PropTypes.string.isRequired,
+                priority: PropTypes.string.isRequired,
+                count: PropTypes.string.isRequired,
                 updated_at: PropTypes.string.isRequired,
             }),
         ).isRequired,
     }).isRequired,
 }
 
-export default Dependabot
+export default Sentry

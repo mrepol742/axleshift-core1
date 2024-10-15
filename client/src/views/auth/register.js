@@ -127,6 +127,7 @@ const Register = () => {
                                         </CInputGroupText>
                                         <CFormInput
                                             id="email"
+                                            name="email"
                                             placeholder="Email"
                                             autoComplete="email"
                                             //          value={formData.email}
