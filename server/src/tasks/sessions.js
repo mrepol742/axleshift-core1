@@ -7,7 +7,7 @@ const sessions = () => {
         (async () => {
             try {
                 const db = await database();
-                const sessionsCollection = await db.collection("sessions");
+                const sessionsCollection = db.collection("sessions");
                 const sessions = await sessionsCollection.find({ active: false }).toArray();
 
                 if (sessions.length === 0) return;

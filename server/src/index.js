@@ -8,6 +8,7 @@ Sentry.init({
     integrations: [nodeProfilingIntegration()],
     tracesSampleRate: 1.0,
     profilesSampleRate: 1.0,
+    disableInstrumentationWarnings: true,
 });
 
 import logger from "./components/logger.js";

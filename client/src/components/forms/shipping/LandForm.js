@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
     CForm,
@@ -11,6 +11,8 @@ import {
     CFormTextarea,
     CFormSelect,
 } from '@coreui/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 
 const LandForm = ({
     formData,
@@ -20,12 +22,16 @@ const LandForm = ({
     isInfo,
     isDisabled,
 }) => {
+    const formRef = useRef(null)
+
     return (
-        <CForm>
+        <CForm ref={formRef}>
             {!isInfo && <CProgress value={100} className="mb-3" variant="striped" animated />}
             <h3 className="mb-4">Shipping Information</h3>
 
-            <CFormLabel htmlFor="shipping_origin_addresss">Origin Address</CFormLabel>
+            <CFormLabel htmlFor="shipping_origin_addresss">
+                Origin Address<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="text"
                 id="shipping_origin_addresss"
@@ -36,7 +42,9 @@ const LandForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_destination_address">Destination Address</CFormLabel>
+            <CFormLabel htmlFor="shipping_destination_address">
+                Destination Address<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="text"
                 id="shipping_destination_address"
@@ -47,7 +55,9 @@ const LandForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_pickup_date">Pickup Date</CFormLabel>
+            <CFormLabel htmlFor="shipping_pickup_date">
+                Pickup Date<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="date"
                 id="shipping_pickup_date"
@@ -58,7 +68,9 @@ const LandForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_delivery_date">Delivery Date</CFormLabel>
+            <CFormLabel htmlFor="shipping_delivery_date">
+                Delivery Date<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormInput
                 type="date"
                 id="shipping_delivery_date"
@@ -69,7 +81,9 @@ const LandForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_vehicle_type">Vehicle Type</CFormLabel>
+            <CFormLabel htmlFor="shipping_vehicle_type">
+                Vehicle Type<span className="text-danger ms-1">*</span>
+            </CFormLabel>
             <CFormSelect
                 id="shipping_vehicle_type"
                 value={formData.shipping.shipping_vehicle_type}
@@ -87,10 +101,20 @@ const LandForm = ({
             />
             {!isInfo && (
                 <>
-                    <CButton color="secondary" onClick={handleShipmentDetails}>
-                        Back
+                    <CButton color="primary" onClick={handleShipmentDetails}>
+                        <FontAwesomeIcon icon={faChevronLeft} />
                     </CButton>
-                    <CButton color="primary" onClick={handleSubmit}>
+                    <CButton
+                        className="ms-2"
+                        color="primary"
+                        onClick={() => {
+                            if (formRef.current.checkValidity()) {
+                                handleSubmit()
+                            } else {
+                                formRef.current.reportValidity()
+                            }
+                        }}
+                    >
                         Submit
                     </CButton>
                 </>

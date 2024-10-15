@@ -44,7 +44,7 @@ router.post("/register", async (req, res) => {
         if (password != repeat_password) return res.status(200).json({ error: "Password does not match" });
 
         const db = await database();
-        const usersCollection = await db.collection("users");
+        const usersCollection = db.collection("users");
         const existingUser = await collection.findOne({ email: email });
 
         if (existingUser) {
@@ -64,7 +64,7 @@ router.post("/register", async (req, res) => {
         });
 
         if (newsletter === "true") {
-            const newsletterCollection = await db.collection("newsletter");
+            const newsletterCollection = db.collection("newsletter");
             const existingSubscriber = await newsletter.findOne({ email: email });
             if (!existingSubscriber) {
                 newsletterCollection.insertOne({
@@ -131,7 +131,7 @@ router.post("/verify", auth, async function (req, res, next) {
     if (req.user.email_verify_at !== "") return res.status(200).json(filter);
 
     const db = await database();
-    const collection = await db.collection("otp");
+    const collection = db.collection("otp");
     const theOtp = await collection.findOne({ token: req.token, verified: false });
     if (theOtp) {
         const past = new Date(theOtp.created_at);
@@ -212,7 +212,7 @@ router.post("/logout", auth, function (req, res, next) {
 router.post("/verify/otp/new", [auth, recaptcha], async function (req, res, next) {
     try {
         const db = await database();
-        const collection = await db.collection("otp");
+        const collection = db.collection("otp");
         const theOtp = await collection.findOne({ token: req.token, verified: false, expired: false });
         if (theOtp) {
             const past = new Date(theOtp.created_at);
@@ -254,7 +254,7 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
         if (!otp) return res.status(400).send();
 
         const db = await database();
-        const collection = await db.collection("otp");
+        const collection = db.collection("otp");
         const theOtp = await collection.findOne({ token: req.token, verified: false, expired: false });
         if (theOtp) {
             const past = new Date(theOtp.created_at);

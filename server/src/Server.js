@@ -42,12 +42,12 @@ app.use((err, req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-    res.send("Backend Core 1");
+    res.send("If you can read this means this server is working.");
 });
 
 if (process.env.NODE_ENV !== "production")
     app.get("/debug-sentry", (req, res) => {
-        throw new Error("This is a test");
+        throw new Error("This is a test DON't PaNICCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
     });
 
 export default app;

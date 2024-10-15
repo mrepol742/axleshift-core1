@@ -45,7 +45,8 @@ const db = async () => {
             })(),
         ]);
     } catch (e) {
-        logger.error("Failed connecting to mongodb atlas", e);
+        logger.error("Failed connecting to mongodb atlas");
+        logger.error(e);
     }
     return dbInstance;
 };

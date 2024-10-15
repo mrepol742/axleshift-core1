@@ -14,12 +14,12 @@ const recaptcha = async (req, res, next) => {
         });
 
         const { success, score } = response.data;
-        logger.info(`Recaptcha score: ${score}`);
         if (!success || score < 0.5) return res.status(401).send();
 
         return next();
     } catch (error) {
-        logger.info(`reCAPTCHA verification failed: ${error}`);
+        logger.error("reCAPTCHA verification failed");
+        logger.error(error);
     }
     return res.status(500).send();
 };
