@@ -11,7 +11,12 @@ Sentry.init({
 });
 
 import logger from "./components/logger.js";
-import "./Server.js";
+import app from "./Server.js";
+import db from "./models/db.js";
+import mail from "./components/mail.js";
+import cron from "./components/cron.js";
+
+const port = process.env.PORT || 5051;
 
 process.on("uncaughtException", (err, origin) => {
     logger.error(err);
@@ -21,3 +26,11 @@ process.on("uncaughtException", (err, origin) => {
 process.on("unhandledRejection", (reason, promise) => {
     logger.error(reason);
 });
+
+app.listen(port, (err) => {
+    if (err) return logger.error("Unable to start server", err);
+    Promise.all([db(), mail(), cron()]);
+    logger.info(`Server running on port ${port}`);
+});
+
+Sentry.setupExpressErrorHandler(app);

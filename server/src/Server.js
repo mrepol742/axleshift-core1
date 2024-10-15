@@ -5,16 +5,11 @@ import cors from "cors";
 import pinoHttp from "pino-http";
 import multer from "multer";
 import mongoSanitize from "express-mongo-sanitize";
-import * as Sentry from "@sentry/node";
 import helmet from "helmet";
 
 import rateLimiter from "./middleware/rateLimiter.js";
 import sanitize from "./middleware/sanitize.js";
 import corsOptions from "./middleware/cors.js";
-
-import db from "./models/db.js";
-import mail from "./components/mail.js";
-import cron from "./components/cron.js";
 
 import logger from "./components/logger.js";
 
@@ -22,7 +17,6 @@ import APIv1 from "./routes/v1/index.js";
 
 const app = express();
 const upload = multer();
-const port = process.env.PORT || 5051;
 
 app.use(upload.none());
 app.use(helmet());
@@ -56,10 +50,4 @@ if (process.env.NODE_ENV !== "production")
         throw new Error("This is a test");
     });
 
-app.listen(port, (err) => {
-    if (err) return logger.error("Unable to start server", err);
-    Promise.all([db(), mail(), cron()]);
-    logger.info(`Server running on port ${port}`);
-});
-
-Sentry.setupExpressErrorHandler(app);
+export default app;
