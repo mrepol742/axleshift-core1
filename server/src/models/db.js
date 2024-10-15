@@ -11,7 +11,8 @@ const requiredCollections = ["users", "freight", "sessions", "threats", "otp", "
 
 const db = async () => {
     if (dbInstance) return dbInstance;
-
+    
+    try {
     const client = new MongoClient(process.env.MONGO_URL);
     await client.connect();
 
@@ -43,6 +44,9 @@ const db = async () => {
             logger.info(`Inserted documents: ${insertResult.insertedCount}`);
         })(),
     ]);
+} catch (e) {
+    logger.error(e);
+}
     return dbInstance;
 };
 
