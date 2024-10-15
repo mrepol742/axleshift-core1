@@ -8,7 +8,7 @@ const otp = () => {
             try {
                 const db = await database();
                 const otpCollection = await db.collection("otp");
-                const otp = otpCollection.find({ verified: false, expired: false }).toArray();
+                const otp = await otpCollection.find({ verified: false, expired: false }).toArray();
 
                 if (otp.length === 0) return;
 
