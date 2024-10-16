@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import logger from "./logger.js";
 import axios from "axios";
+import { parseRateLimit } from "ratelimit-header-parser";
 
 let last_fetch;
 let res = [];
@@ -10,7 +11,7 @@ const scm = async () => {
     if (!last_fetch || res.length === 0) return await fetch();
 
     const past = new Date(last_fetch);
-    const ten = 10 * 60 * 1000;
+    const ten = 5 * 60 * 1000;
 
     if (!(Date.now() - past > ten)) return res;
     return await fetch();
@@ -41,6 +42,7 @@ const fetch = async () => {
         last_fetch = Date.now();
         res = alerts;
 
+        logger.info(`github ratelimit: ${JSON.stringify(parseRateLimit(response))}`);
         return alerts;
     } catch (err) {
         logger.error(err);

@@ -22,6 +22,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
 export const getUser = async (sessionToken) => {
     try {
         const db = await database();
+        // add apitoken validation
         const session = await db.collection("sessions").findOne({ token: sessionToken });
         if (!session) return null;
         const theUser = await db.collection("users").findOne({ _id: session.user_id });

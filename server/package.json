@@ -38,7 +38,8 @@
         "nodemailer": "^6.9.15",
         "pino": "^9.3.2",
         "pino-http": "^10.3.0",
-        "pino-pretty": "^11.2.2"
+        "pino-pretty": "^11.2.2",
+        "ratelimit-header-parser": "^0.1.0"
     },
     "devDependencies": {
         "nodemon": "^3.1.4",

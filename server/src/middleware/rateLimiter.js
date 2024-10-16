@@ -15,7 +15,15 @@ const rateLimiter = (req, res, next) => {
 
     requestCounts[key] = requestCounts[key].filter((timestamp) => currentTime - timestamp < TIME_WINDOW);
 
-    if (requestCounts[key].length >= getRateLimit(path)) return res.status(429).send();
+    const limit = getRateLimit(path);
+    const remainingRequests = limit - requestCounts[key].length;
+
+    // Set rate limit headers
+    res.setHeader("X-RateLimit-Limit", limit);
+    res.setHeader("X-RateLimit-Remaining", remainingRequests);
+    res.setHeader("X-RateLimit-Reset", Math.ceil((TIME_WINDOW - (currentTime - requestCounts[key][0] || currentTime)) / 1000)); // Reset time in seconds
+
+    if (remainingRequests <= 0) return res.status(429).send();
 
     requestCounts[key].push(currentTime);
     next();
