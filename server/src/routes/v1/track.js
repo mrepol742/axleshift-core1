@@ -23,28 +23,22 @@ const router = express.Router();
      Destination
      Status
 */
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id", auth, async (req, res, next) => {
     try {
-        const theUser = await getUser(req.token);
         const id = req.params.id;
-        if (!id) return res.status(400).send();
 
         const db = await database();
-        const items = await db
-            .collection("freight")
-            .find({ user_id: new ObjectId(theUser._id), _id: new ObjectId(id) })
-            .toArray();
-
-        if (!items.length) return res.status(404).send();
+        const freight = await db.collection("freight").findOne({ _id: new ObjectId(id) });
+        if (!freight) return res.status(404).send();
 
         const events = [];
         events.push({
-            date: items[0].created_at,
+            date: freight.created_at,
             description: "Freight is placed",
         });
-        if (items.created_at !== items.updated_at)
+        if (freight.created_at !== freight.updated_at)
             events.push({
-                data: items[0].updated_at,
+                data: freight.updated_at,
                 description: "Freight info was updated",
             });
 
@@ -52,11 +46,11 @@ router.get("/:id", auth, async (req, res) => {
         /*   THIS IS A TEST                  */
         /*-----------------------------------*/
         events.push({
-            date: items[0].created_at,
+            date: freight.created_at,
             description: "We are preparing to ship your shipment",
         });
         events.push({
-            date: items[0].created_at,
+            date: freight.created_at,
             description: "Freight has arrived on our ports in China",
         });
 
@@ -71,8 +65,8 @@ router.get("/:id", auth, async (req, res) => {
 
         return res.status(200).json({
             events: events,
-            origin: items[0].data.shipping.shipping_origin_addresss,
-            destination: items[0].data.shipping.shipping_destination_address,
+            origin: freight.data.shipping.shipping_origin_addresss,
+            destination: freight.data.shipping.shipping_destination_address,
             status: "on route",
             markerPositions: markerPositions,
         });

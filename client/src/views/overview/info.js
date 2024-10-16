@@ -94,9 +94,9 @@ const FreightInfo = () => {
                 },
             })
             .then((response) => {
-                setType(response.data.data[0].type)
-                setFormData(response.data.data[0].data)
-                setEditedFormData(response.data.data[0].data)
+                setType(response.data.data.type)
+                setFormData(response.data.data.data)
+                setEditedFormData(response.data.data.data)
             })
             .catch((error) => {
                 console.error(error)

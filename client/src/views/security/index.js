@@ -36,7 +36,8 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import Dependabot from './panel/dependabot'
 import Sessions from './panel/sessions'
 import Sentry from './panel/sentry'
-import OTP from './panel/otp'
+import Dashboard from './panel/dashboard'
+import API from './panel/api'
 
 const Security = () => {
     const [loading, setLoading] = useState(false)
@@ -44,7 +45,7 @@ const Security = () => {
     const [priority, setPriority] = useState('1')
     const [order, setOrder] = useState('1')
     const [query, setQuery] = useState('')
-    const [result, setResult] = useState({ scm: [], sessions: [], sentry: [] })
+    const [result, setResult] = useState({ scm: [], sessions: [], sentry: [], apiToken: {} })
     const navigate = useNavigate()
 
     const sessionResultMock = {
@@ -91,26 +92,32 @@ const Security = () => {
                 </div>
             )}
 
-            <CTabs activeItemKey={1} className="mb-4">
+            <CTabs activeItemKey={0} className="mb-4">
                 <CTabList variant="underline-border">
-                    <CTab aria-controls="home-tab-pane" itemKey={1}>
+                    <CTab aria-controls="dashboard-tab-pane" itemKey={0}>
+                        Dashboard
+                    </CTab>
+                    <CTab aria-controls="sessions-tab-pane" itemKey={1}>
                         Sessions
                     </CTab>
-                    <CTab aria-controls="profile-tab-pane" itemKey={2}>
+                    <CTab aria-controls="dependabot-tab-pane" itemKey={2}>
                         Dependabot
                     </CTab>
-                    <CTab aria-controls="profile-tab-pane" itemKey={3}>
-                        OTP
-                    </CTab>
-                    <CTab aria-controls="profile-tab-pane" itemKey={4}>
+                    <CTab aria-controls="sentry-tab-pane" itemKey={3}>
                         Sentry
+                    </CTab>
+                    <CTab aria-controls="api-tab-pane" itemKey={4}>
+                        API Key
                     </CTab>
                 </CTabList>
                 <CTabContent>
-                    <CTabPanel className="py-3" aria-labelledby="home-tab-pane" itemKey={1}>
+                    <CTabPanel className="py-3" aria-labelledby="dashboard-tab-pane" itemKey={0}>
+                        <Dashboard />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="sessions-tab-pane" itemKey={1}>
                         <Sessions result={result} />
                     </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="profile-tab-pane" itemKey={2}>
+                    <CTabPanel className="py-3" aria-labelledby="dependabot-tab-pane" itemKey={2}>
                         <Dependabot
                             query={query}
                             setQuery={setQuery}
@@ -123,10 +130,7 @@ const Security = () => {
                             result={result}
                         />
                     </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="profile-tab-pane" itemKey={3}>
-                        <OTP />
-                    </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="profile-tab-pane" itemKey={4}>
+                    <CTabPanel className="py-3" aria-labelledby="sentry-tab-pane" itemKey={3}>
                         <Sentry
                             query={query}
                             setQuery={setQuery}
@@ -138,6 +142,9 @@ const Security = () => {
                             setOrder={setOrder}
                             result={result}
                         />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={4}>
+                        <API setLoading={setLoading} result={result} />
                     </CTabPanel>
                 </CTabContent>
             </CTabs>

@@ -22,9 +22,11 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
 export const getUser = async (sessionToken) => {
     try {
         const db = await database();
-        const session = await db.collection("sessions").findOne({ token: sessionToken });
-        if (!session) return null;
-        const theUser = await db.collection("users").findOne({ _id: session.user_id });
+        const isApiToken = /^core1_[0-9a-f]{64}$/.test(sessionToken);
+        const endpoint = isApiToken ? "apiToken" : "sessions";
+        const tokenCollection = await db.collection(endpoint).findOne({ token: sessionToken, active: true });
+        if (!tokenCollection) return null;
+        const theUser = await db.collection("users").findOne({ _id: tokenCollection.user_id });
 
         return {
             _id: theUser._id,

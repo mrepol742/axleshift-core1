@@ -177,13 +177,11 @@ const sendOTPEmail = (req, otpCollection) => {
 */
 router.post("/user", auth, async function (req, res, next) {
     try {
-        const theUser = await getUser(req.token);
-
         return res.status(200).json({
             user: {
-                email: theUser.email,
-                first_name: theUser.first_name,
-                last_name: theUser.last_name,
+                email: req.user.email,
+                first_name: req.user.first_name,
+                last_name: req.user.last_name,
             },
         });
     } catch (e) {
@@ -215,26 +213,27 @@ router.post("/verify/otp/new", [auth, recaptcha], async function (req, res, next
         const db = await database();
         const otpCollection = db.collection("otp");
         const theOtp = await otpCollection.findOne({ token: req.token, verified: false, expired: false });
-        if (theOtp) {
-            const past = new Date(theOtp.created_at);
-            const ten = 10 * 60 * 1000;
+        if (!theOtp) return res.status(401).send();
 
-            if (Date.now() - past > ten) {
-                await otpCollection.updateOne(
-                    { _id: new ObjectId(theOtp._id) },
-                    {
-                        $set: {
-                            verified: false,
-                            expired: true,
-                            updated_at: Date.now(),
-                            modified_by: "system",
-                        },
-                    }
-                );
+        const past = new Date(theOtp.created_at);
+        const ten = 10 * 60 * 1000;
 
-                sendOTPEmail(req, otpCollection);
-            }
+        if (Date.now() - past > ten) {
+            await otpCollection.updateOne(
+                { _id: new ObjectId(theOtp._id) },
+                {
+                    $set: {
+                        verified: false,
+                        expired: true,
+                        updated_at: Date.now(),
+                        modified_by: "system",
+                    },
+                }
+            );
+
+            sendOTPEmail(req, otpCollection);
         }
+        return res.status(200).send();
     } catch (e) {
         logger.error(e);
     }
@@ -295,5 +294,55 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
     }
     return res.status(500).send();
 });
+
+router.get("/token", auth, async function (req, res, next) {
+    try {
+        const db = await database();
+        const apiToken = await db.collection("apiToken").findOne({ user_id: req.user._id });
+        return res.status(200).json({ token: apiToken.token });
+    } catch (e) {
+        logger.error(e);
+    }
+    return res.status(500).send();
+});
+
+router.post("/token/new", [auth, recaptcha], async function (req, res, next) {
+    try {
+        const db = await database();
+        const apiTokenCollection = db.collection("apiToken");
+        const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id });
+        const apiT = `core1_${passwordHash((Date.now() * 2) / 7)}`;
+
+        if (apiToken) {
+            await apiTokenCollection.updateOne(
+                { _id: new ObjectId(apiToken._id) },
+                {
+                    $set: {
+                        active: true,
+                        token: apiT,
+                        compromised: false,
+                        updated_at: Date.now(),
+                        modified_by: 'system',
+                    },
+                }
+            );
+            return res.status(200).json({ token: apiT });
+        }
+        await apiTokenCollection.insertOne({
+            user_id: req.user._id,
+            active: true,
+            compromised: false,
+            token: apiT,
+            created_at: Date.now(),
+            updated_at: Date.now(),
+        });
+
+        return res.status(200).json({ token: apiT });
+    } catch (e) {
+        logger.error(e);
+    }
+    return res.status(500).send();
+});
+
 // means 9:51 pm
 export default router;

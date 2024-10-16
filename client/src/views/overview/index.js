@@ -14,6 +14,7 @@ import {
     CInputGroupText,
     CPagination,
     CPaginationItem,
+    CSpinner,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
@@ -28,6 +29,7 @@ const Overview = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
     const [query, setQuery] = useState('')
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     const handleSearchSubmit = (e) => {
@@ -36,6 +38,7 @@ const Overview = () => {
     }
 
     const fetchData = async (page, query) => {
+        setLoading(true)
         await axios
             .post(
                 `${import.meta.env.VITE_APP_API_URL}/api/v1/freight`,
@@ -53,6 +56,9 @@ const Overview = () => {
             .catch((error) => {
                 console.error(error)
             })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     useEffect(() => {
@@ -61,6 +67,12 @@ const Overview = () => {
 
     return (
         <>
+            {loading && (
+                <div className="loading-overlay">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            )}
+
             <WidgetsDropdown className="mb-4" />
             <AppSearch
                 className="mb-4"
