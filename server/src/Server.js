@@ -6,6 +6,7 @@ import pinoHttp from "pino-http";
 import multer from "multer";
 import mongoSanitize from "express-mongo-sanitize";
 import helmet from "helmet";
+import statusMonitor from "express-status-monitor";
 
 import rateLimiter from "./middleware/rateLimiter.js";
 import sanitize from "./middleware/sanitize.js";
@@ -18,12 +19,17 @@ import APIv1 from "./routes/v1/index.js";
 const app = express();
 const upload = multer();
 
+app.use(cors(corsOptions));
+app.use(
+    statusMonitor({
+        title: "Server",
+    })
+);
 app.use(upload.none());
 app.use(helmet());
 app.use(express.json());
 app.use(pinoHttp({ logger }));
 app.use(rateLimiter);
-app.use(cors(corsOptions));
 app.use(sanitize);
 app.use(
     mongoSanitize({

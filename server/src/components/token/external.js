@@ -17,7 +17,6 @@ const external = async (req, res, next) => {
         return res.status(429).send();
     }
 
-    const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     Promise.all([
         (async () => {
             try {

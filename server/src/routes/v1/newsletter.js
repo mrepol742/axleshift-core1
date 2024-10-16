@@ -8,7 +8,7 @@ import recaptcha from "../../middleware/recaptcha.js";
 
 const router = express.Router();
 
-router.post("/", recaptcha, async (req, res) => {
+router.post("/", recaptcha, async (req, res, next) => {
     try {
         const email = req.body.email;
         if (!email) return res.status(400).send();

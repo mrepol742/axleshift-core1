@@ -7,7 +7,7 @@ import passwordHash from "../components/password.js";
 
 const data = JSON.parse(fs.readFileSync(import.meta.dirname + "/users.json", "utf8")).docs;
 let dbInstance = null;
-const requiredCollections = ["users", "freight", "sessions", "threats", "otp", "newsletter"];
+const requiredCollections = ["users", "freight", "sessions", "threats", "otp", "newsletter", "apiToken"];
 
 const db = async () => {
     if (dbInstance) return dbInstance;
@@ -22,8 +22,6 @@ const db = async () => {
 
         const collections = await dbInstance.listCollections().toArray();
         const collectionNames = collections.map((c) => c.name);
-
-        const requiredCollections = ["users", "freight", "sessions", "threats", "otp", "newsletter"];
 
         const creationPromises = requiredCollections.filter((name) => !collectionNames.includes(name)).map((name) => dbInstance.createCollection(name));
 
