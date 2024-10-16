@@ -295,28 +295,54 @@ router.post("/verify/otp", [auth, recaptcha], async function (req, res, next) {
     return res.status(500).send();
 });
 
-router.post("/token/new", [auth, recaptcha], async function (req, res, next) {
+router.get("/token", auth, async function (req, res, next) {
     try {
         const db = await database();
-        const apiTokenCollection = db.collection("apiToken");
-        const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id });
-        const apiT = passwordHash((Date.now() * 2) / 7);
-
-        if (apiToken) {
-            //return res.status(200).send();
-        }
-        await apiTokenCollection.insertOne({
-            user_id: req.user._id,
-            token: apiT,
-            created_at: Date.now(),
-            updated_at: Date.now(),
-        });
-
-        return res.status(200).send();
+        const apiToken = await db.collection("apiToken").findOne({ user_id: req.user._id });
+        return res.status(200).json({ token: apiToken.token });
     } catch (e) {
         logger.error(e);
     }
     return res.status(500).send();
 });
+
+router.post("/token/new", [auth, recaptcha], async function (req, res, next) {
+    try {
+        const db = await database();
+        const apiTokenCollection = db.collection("apiToken");
+        const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id });
+        const apiT = `core1_${passwordHash((Date.now() * 2) / 7)}`;
+
+        if (apiToken) {
+            await apiTokenCollection.updateOne(
+                { _id: new ObjectId(apiToken._id) },
+                {
+                    $set: {
+                        active: true,
+                        token: apiT,
+                        compromised: false,
+                        updated_at: Date.now(),
+                        modified_by: 'system',
+                    },
+                }
+            );
+            return res.status(200).json({ token: apiT });
+        }
+        await apiTokenCollection.insertOne({
+            user_id: req.user._id,
+            active: true,
+            compromised: false,
+            token: apiT,
+            created_at: Date.now(),
+            updated_at: Date.now(),
+        });
+
+        return res.status(200).json({ token: apiT });
+    } catch (e) {
+        logger.error(e);
+    }
+    return res.status(500).send();
+});
+
 // means 9:51 pm
 export default router;

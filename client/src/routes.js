@@ -17,6 +17,7 @@ const Pricing = auth(lazy(() => import('./views/pricing/index')))
 const SecurityManagement = auth(lazy(() => import('./views/security/index')))
 const SecurityAnalysis = auth(lazy(() => import('./views/security/analysis')))
 const DeviceLock = auth(lazy(() => import('./views/security/device')))
+const APIKey = auth(lazy(() => import('./views/security/api')))
 
 const Track = auth(lazy(() => import('./views/track/index')))
 const TrackInfo = auth(lazy(() => import('./views/track/info')))
@@ -45,9 +46,10 @@ const routes = [
 
     { path: '/pricing', name: 'Pricing', element: Pricing },
 
-    { path: '/security', name: 'Security Management', element: SecurityManagement },
+    { path: '/security/management', name: 'Security Management', element: SecurityManagement },
     { path: '/security/analysis', name: 'Security Analysis', element: SecurityAnalysis },
     { path: '/security/device', name: 'Device Lock', element: DeviceLock },
+    { path: '/security/apikey', name: 'API Key', element: APIKey },
 
     { path: '/track', name: 'Track', element: Track },
     { path: '/track/:id', name: 'Track', element: TrackInfo },

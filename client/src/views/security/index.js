@@ -107,7 +107,7 @@ const Security = () => {
                         Sentry
                     </CTab>
                     <CTab aria-controls="api-tab-pane" itemKey={4}>
-                        API key
+                        API Key
                     </CTab>
                 </CTabList>
                 <CTabContent>

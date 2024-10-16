@@ -1,14 +1,16 @@
 import React from 'react'
+import { CContainer } from '@coreui/react'
 
 const Dashboard = () => {
     return (
         <>
-            <iframe
-                className="rounded"
-                src={`${import.meta.env.VITE_APP_API_URL}/status`}
-                width="100%"
-                height="430px"
-            ></iframe>
+            <CContainer fluid style={{ height: '100vh' }}>
+                <iframe
+                    src={`${import.meta.env.VITE_APP_API_URL}/status`}
+                    className="rounded"
+                    style={{ width: '100%', height: '100%', border: 'none' }}
+                />
+            </CContainer>
         </>
     )
 }
