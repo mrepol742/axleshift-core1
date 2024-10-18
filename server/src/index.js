@@ -17,7 +17,7 @@ import db from "./models/db.js";
 import mail from "./components/mail.js";
 import cron from "./components/cron.js";
 
-const port = process.env.PORT || 5051;
+const port = process.env.EXPRESS_PORT || 5051;
 
 process.on("uncaughtException", (err, origin) => {
     logger.error(err);

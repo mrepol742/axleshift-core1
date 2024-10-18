@@ -26,6 +26,7 @@ const limit = 20;
 // TODO: integrate search function here!
 router.post("/", auth, async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send();
         const page = parseInt(req.body.page) || 1;
         const skip = (page - 1) * limit;
 
@@ -62,6 +63,9 @@ router.post("/", auth, async (req, res, next) => {
      Freight id
   Returns:
      Data
+
+  Example:
+     curl -H "Authorization: Bearer apiKey" http://{base-url}/api/v1/freight/{tracking-id}
 */
 router.get("/:id", auth, async (req, res, next) => {
     try {
