@@ -22,10 +22,10 @@ const external = async (req, res, next) => {
 
     const db = await database();
     const apiTokenCollection = db.collection("apiToken");
-    const existingApiToken = await apiTokenCollection.findOne({ token: token, active: true });
+    const existingApiToken = await apiTokenCollection.findOne({ token: token, active: true, compromised: false });
 
     if (!existingApiToken) {
-        logger.error(`Invalid or denied api token: ${token}`);
+        logger.error(`invalid or denied api token: ${token}`);
         return res.status(429).send();
     }
 
@@ -55,7 +55,7 @@ const external = async (req, res, next) => {
 
     setTimeout(() => {
         return next();
-    }, process.env.API_RATE_DELAY);
+    }, process.env.API_EXTERNAL_RATE_DELAY);
 };
 
 export default external;

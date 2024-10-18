@@ -21,7 +21,7 @@ const recaptcha = async (req, res, next) => {
         logger.error("reCAPTCHA verification failed");
         logger.error(error);
     }
-    return res.status(500).send();
+    return res.status(401).send();
 };
 
 export default recaptcha;

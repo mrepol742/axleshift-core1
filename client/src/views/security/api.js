@@ -118,9 +118,9 @@ const API = () => {
             )}
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-
+            <h3>Auth token</h3>
             {!result && (
-                <div className="text-center border rounded">
+                <div className="text-center border rounded mb-4">
                     <div className="p-0 p-md-5 my-5 my-md-0">
                         <CImage src="/images/threat.png" fluid width="50%" />
                         <h1>There was no API Token</h1>
@@ -133,7 +133,7 @@ const API = () => {
             )}
             {result && (
                 <>
-                    <div className="text-center border rounded">
+                    <div className="text-center border rounded mb-4">
                         <div className="p-2 p-md-5 my-5 my-md-0">
                             <CInputGroup className="mb-3">
                                 <CFormInput
@@ -144,8 +144,8 @@ const API = () => {
                                 <CInputGroupText id="basic-addon" onClick={handleIconClick}>
                                     <FontAwesomeIcon icon={faEyeSlash} />
                                 </CInputGroupText>
-                                <CInputGroupText id="basic-addon">
-                                    <FontAwesomeIcon icon={faCopy} onClick={copyToClipboard} />
+                                <CInputGroupText id="basic-addon" onClick={copyToClipboard}>
+                                    <FontAwesomeIcon icon={faCopy} />
                                 </CInputGroupText>
                             </CInputGroup>
                             <CButton color="secondary" onClick={gen}>
@@ -156,6 +156,8 @@ const API = () => {
                     </div>
                 </>
             )}
+
+            <h3>Whitelisted IP address</h3>
         </div>
     )
 }

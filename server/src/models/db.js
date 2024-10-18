@@ -16,7 +16,7 @@ const db = async () => {
         const client = new MongoClient(process.env.MONGO_URL);
         await client.connect();
 
-        logger.info("Successfully connected to MongoDB Atlas");
+        logger.info("successfully connected to MongoDB Atlas");
 
         dbInstance = client.db(process.env.MONGO_DB);
 
@@ -39,11 +39,11 @@ const db = async () => {
                     element.password = passwordHash(element.password);
                 }
                 const insertResult = await collection.insertMany(data);
-                logger.info(`Inserted documents: ${insertResult.insertedCount}`);
+                logger.info(`inserted documents: ${insertResult.insertedCount}`);
             })(),
         ]);
     } catch (e) {
-        logger.error("Failed connecting to mongodb atlas");
+        logger.error("failed connecting to mongodb atlas");
         logger.error(e);
     }
     return dbInstance;

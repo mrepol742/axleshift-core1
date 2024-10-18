@@ -100,7 +100,7 @@ const _nav = [
     {
         component: CNavItem,
         name: 'Payment Info',
-        to: '/payment/info',
+        to: '/payment/',
         icon: <FontAwesomeIcon icon={faCircleInfo} className="nav-icon" />,
     },
     {

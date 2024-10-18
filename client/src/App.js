@@ -7,7 +7,6 @@ import ReactGA from 'react-ga4'
 import './scss/style.scss'
 import './bootstrap'
 import DocumentTitle from './components/middleware/DocumentTitle'
-import Maintenance from './components/middleware/Maintenance'
 
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
@@ -71,25 +70,23 @@ const App = () => {
                     </div>
                 }
             >
-                <Maintenance>
-                    <DocumentTitle>
-                        <Routes>
-                            {!token && (
-                                <Route exact path="/" name="Landing Page" element={<Landing />} />
-                            )}
-                            <Route exact path="/login" name="Login" element={<Login />} />
-                            <Route exact path="/register" name="Register" element={<Register />} />
-                            <Route exact path="/otp" name="OTP" element={<MailOTP />} />
-                            <Route
-                                exact
-                                path="/forgot-password"
-                                name="Forgot Password"
-                                element={<ForgotPassword />}
-                            />
-                            <Route path="*" name="Home" element={<DefaultLayout />} />
-                        </Routes>
-                    </DocumentTitle>
-                </Maintenance>
+                <DocumentTitle>
+                    <Routes>
+                        {!token && (
+                            <Route exact path="/" name="Landing Page" element={<Landing />} />
+                        )}
+                        <Route exact path="/login" name="Login" element={<Login />} />
+                        <Route exact path="/register" name="Register" element={<Register />} />
+                        <Route exact path="/otp" name="OTP" element={<MailOTP />} />
+                        <Route
+                            exact
+                            path="/forgot-password"
+                            name="Forgot Password"
+                            element={<ForgotPassword />}
+                        />
+                        <Route path="*" name="Home" element={<DefaultLayout />} />
+                    </Routes>
+                </DocumentTitle>
             </Suspense>
         </Router>
     )

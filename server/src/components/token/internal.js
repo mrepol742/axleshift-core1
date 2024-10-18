@@ -22,13 +22,17 @@ const internal = async (req, res, next) => {
     if (!session.active) return res.status(401).send();
     const user_a = req.headers["user-agent"];
 
-    const last_accessed = new Date(session.last_accessed);
-    const diff = Date.now() - last_accessed;
+    const diff = Date.now() - session.last_accessed;
     const week = 7 * 24 * 60 * 60 * 1000;
     // a week has pass so change the ip to 0
     // thus triggering the protocol down below!
     // hacky aint it?
-    if (diff >= week) ip = 0;
+    if (diff >= week) {
+        ip = 0;
+        logger.info(week);
+        logger.info(diff);
+        logger.info(session.last_accessed);
+    }
 
     Promise.all([
         (async () => {

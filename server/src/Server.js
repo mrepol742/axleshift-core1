@@ -10,7 +10,6 @@ import statusMonitor from "express-status-monitor";
 
 import rateLimiter from "./middleware/rateLimiter.js";
 import sanitize from "./middleware/sanitize.js";
-import corsOptions from "./middleware/cors.js";
 
 import logger from "./components/logger.js";
 
@@ -34,7 +33,7 @@ app.use(sanitize);
 app.use(
     mongoSanitize({
         onSanitize: ({ req, key }) => {
-            logger.warn(`This request[${key}] is sanitized`);
+            logger.warn(`this request[${key}] is sanitized`);
             logger.warn(req);
         },
     })
