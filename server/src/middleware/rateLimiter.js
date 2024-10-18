@@ -1,4 +1,4 @@
-const TIME_WINDOW = 60 * 3 *  1000;
+const TIME_WINDOW = 60 * 3 * 1000;
 const requestCounts = {};
 const exludeRoute = ["/api/v1/auth/verify"];
 const limitedRequestRoute = ["/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/newsletter", "/api/v1/auth/token/new", "/api/v1/auth/verify/otp/new", "/api/v1/auth/verify/otp"];
@@ -30,7 +30,7 @@ const rateLimiter = (req, res, next) => {
 };
 
 const getRateLimit = (path) => {
-    path = path.endsWith('/') ? path.slice(0, -1) : path;
+    path = path.endsWith("/") ? path.slice(0, -1) : path;
     if (limitedRequestRoute.includes(path)) return 5;
     return process.env.API_RATE_LIMIT;
 };

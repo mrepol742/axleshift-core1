@@ -4,10 +4,14 @@ import { ObjectId } from "mongodb";
 import logger from "../logger.js";
 import { getUser, getSession } from "../sessions.js";
 import database from "../../models/db.js";
+import { getClientIp } from "../ip.js";
 
 const adminRoute = [];
 
 const internal = async (req, res, next) => {
+    let ip = getClientIp(req);
+    if (process.env.REACT_APP_ORIGIN !== ip) return res.status(403).send();
+
     const authHeader = req.headers["authorization"];
     const token = authHeader.split(" ")[1];
 
@@ -16,7 +20,6 @@ const internal = async (req, res, next) => {
     if (!theUser || (adminRoute.includes(req.path) && theUser.role !== "admin")) return res.status(401).send();
 
     if (!session.active) return res.status(401).send();
-    let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     const user_a = req.headers["user-agent"];
 
     const last_accessed = new Date(session.last_accessed);

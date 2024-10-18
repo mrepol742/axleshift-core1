@@ -19,14 +19,14 @@ import APIv1 from "./routes/v1/index.js";
 const app = express();
 const upload = multer();
 
-app.use(cors(corsOptions));
+app.use(cors({ origin: "*" }));
 app.use(
     statusMonitor({
         title: "Server",
     })
 );
-app.use(upload.none());
 app.use(helmet());
+app.use(upload.none());
 app.use(express.json());
 app.use(pinoHttp({ logger }));
 app.use(rateLimiter);

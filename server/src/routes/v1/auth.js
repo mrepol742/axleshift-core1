@@ -306,6 +306,17 @@ router.get("/token", auth, async function (req, res, next) {
     return res.status(500).send();
 });
 
+router.get("/token/whitelist-ip", [auth, recaptcha], async function (req, res, next) {
+    try {
+        const db = await database();
+        const apiToken = await db.collection("apiToken").findOne({ user_id: req.user._id });
+        return res.status(200).json({ token: apiToken.token });
+    } catch (e) {
+        logger.error(e);
+    }
+    return res.status(500).send();
+});
+
 router.post("/token/new", [auth, recaptcha], async function (req, res, next) {
     try {
         const db = await database();
@@ -322,7 +333,7 @@ router.post("/token/new", [auth, recaptcha], async function (req, res, next) {
                         token: apiT,
                         compromised: false,
                         updated_at: Date.now(),
-                        modified_by: 'system',
+                        modified_by: "system",
                     },
                 }
             );
@@ -333,6 +344,7 @@ router.post("/token/new", [auth, recaptcha], async function (req, res, next) {
             active: true,
             compromised: false,
             token: apiT,
+            whitelist_ip: [],
             created_at: Date.now(),
             updated_at: Date.now(),
         });
