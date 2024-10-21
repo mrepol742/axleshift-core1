@@ -36,6 +36,7 @@ jobs:
           echo "VITE_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.APP_FIREBASE_MEASUREMENT_ID }}" >> .env
           npm i
           npm run lint
+          npm run test
           npm run build
 
       - name: Upload frontend
@@ -56,8 +57,7 @@ jobs:
           cd server
           npm i
           npm run lint
-          rm -rf node_modules
-
+          rm -rf node_modules .dockerignore Dockerfile docs test
 
       - name: Upload backend
         id: push_directory_backend
