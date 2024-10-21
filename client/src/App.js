@@ -11,6 +11,8 @@ import DocumentTitle from './components/middleware/DocumentTitle'
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
+const Privacy = lazy(() => import('./views/legal-agreements/privacy-policy'))
+const Terms = lazy(() => import('./views/legal-agreements/terms-of-service.js'))
 const Landing = lazy(() => import('./views/landing'))
 const Login = lazy(() => import('./views/auth/login'))
 const Register = lazy(() => import('./views/auth/register'))
@@ -74,6 +76,18 @@ const App = () => {
                         {!token && (
                             <Route exact path="/" name="Landing Page" element={<Landing />} />
                         )}
+                        <Route
+                            exact
+                            path="/privacy-policy"
+                            name="Privacy Policy"
+                            element={<Privacy />}
+                        />
+                        <Route
+                            exact
+                            path="/terms-of-service"
+                            name="Terms of Service"
+                            element={<Terms />}
+                        />
                         <Route exact path="/login" name="Login" element={<Login />} />
                         <Route exact path="/register" name="Register" element={<Register />} />
                         <Route exact path="/otp" name="OTP" element={<MailOTP />} />

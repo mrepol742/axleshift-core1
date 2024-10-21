@@ -35,6 +35,7 @@
         "@fortawesome/react-fontawesome": "^0.2.2",
         "@popperjs/core": "^2.11.8",
         "@react-google-maps/api": "^2.19.3",
+        "@react-oauth/google": "^0.12.1",
         "@sentry/react": "^8.33.1",
         "aos": "^2.3.4",
         "axios": "^1.7.7",
