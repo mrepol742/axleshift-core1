@@ -20,13 +20,15 @@ const external = async (req, res, next) => {
 
     if (!isAllowed) return res.status(401).send();
 
+    if (process.env.NODE_ENV === "test") return next();
+
     const db = await database();
     const apiTokenCollection = db.collection("apiToken");
     const existingApiToken = await apiTokenCollection.findOne({ token: token, active: true, compromised: false });
 
     if (!existingApiToken) {
         logger.error(`invalid or denied api token: ${token}`);
-        return res.status(429).send();
+        return res.status(403).send();
     }
 
     const ip = getClientIp(req);

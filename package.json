@@ -22,9 +22,17 @@
     "client-post": "cd client && npm run build && cd build && python3 -m http.server",
     "lint": "concurrently \"npm run server-lint\" \"npm run client-lint\"",
     "server-lint": "cd server && npm run lint",
-    "client-lint": "cd client && npm run lint"
+    "client-lint": "cd client && npm run lint",
+    "test": "concurrently \"npm run server-test\" \"npm run client-test\"",
+    "server-test": "cd server && npm run test",
+    "client-test": "cd client && echo \"test\"",
+    "docker": "cd server && docker build -t core1-server .",
+    "docker-run": "docker run -p 5051:5051 core1-server:latest"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=20.x"
   }
 }

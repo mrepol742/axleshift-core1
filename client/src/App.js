@@ -24,7 +24,7 @@ const App = () => {
     let token = cookies.get(import.meta.env.VITE_APP_SESSION)
 
     useEffect(() => {
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && import.meta.env.NODE_ENV === 'production') {
             navigator.serviceWorker
                 .register('/sw.js')
                 .then((reg) => {
@@ -33,7 +33,7 @@ const App = () => {
                             (async () => {
                                 const keys = await caches.keys()
                                 return keys.map(async (cache) => {
-                                    if (cache !== cacheName) {
+                                    if (cache !== 'core1_1.0.0') {
                                         return await caches.delete(cache)
                                     }
                                 })
@@ -45,7 +45,6 @@ const App = () => {
                     console.error(err)
                 })
         }
-
         const urlParams = new URLSearchParams(window.location.href.split('?')[1])
         const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
         if (theme) setColorMode(theme)

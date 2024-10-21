@@ -13,7 +13,7 @@ import {
     CSpinner,
 } from '@coreui/react'
 import AOS from 'aos'
-import 'aos/dist/aos.css'
+// import 'aos/dist/aos.css'
 
 import { Navbar, Services, About, Team, Newsletter, Footer } from '../components/landing/index'
 
