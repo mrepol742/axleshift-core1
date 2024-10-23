@@ -8,6 +8,17 @@ on:
 jobs:
   build:
     runs-on: 'ubuntu-latest'
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongo --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
@@ -16,6 +27,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Wait for MongoDB to start
+        run: |
+          echo "Waiting for MongoDB..."
+          until nc -z localhost 27017; do sleep 1; done
         
       - name: Set up environment
         run: |
@@ -35,8 +51,8 @@ jobs:
           echo "VITE_APP_FIREBASE_APP_ID=${{ secrets.APP_FIREBASE_APP_ID }}" >> .env
           echo "VITE_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.APP_FIREBASE_MEASUREMENT_ID }}" >> .env
           cd ../server
-          echo "MONGO_DB=${{ secrets.MONGO_DB }}" >> .env
-          echo "MONGO_URL=${{ secrets.MONGO_URL }}" >> .env
+          echo "MONGO_DB=core1" >> .env
+          echo "MONGO_URL=mongodb://localhost:27017" >> .env
           echo "RECAPTCHA_SECRET=${{ secrets.RECAPTCHA_SECRET }}" >> .env
           echo "NODE_ENV=development" >> .env
           echo "EXPRESS_PORT=5051" >> .env
