@@ -32,10 +32,10 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import errorMessages from '../../components/http/ErrorMessages'
 
 const API = () => {
-    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const [loading, setLoading] = useState(false)
     const recaptchaRef = React.useRef()
     const [isBlurred, setIsBlurred] = useState(true)
@@ -64,9 +64,9 @@ const API = () => {
         formData.append('recaptcha_ref', recaptcha)
 
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/token/new`, formData, {
+            .post(`${VITE_APP_API_URL}/api/v1/auth/token/new`, formData, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {
@@ -86,9 +86,9 @@ const API = () => {
     const fetchData = async () => {
         setLoading(true)
         await axios
-            .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/token/`, {
+            .get(`${VITE_APP_API_URL}/api/v1/auth/token/`, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {

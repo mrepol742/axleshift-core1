@@ -19,10 +19,10 @@ import { GoogleLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION, VITE_APP_API_URL } from '../../config'
 import errorMessages from '../../components/http/ErrorMessages'
 
 const Login = () => {
-    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const [email, setEmail] = useState('')
@@ -34,7 +34,7 @@ const Login = () => {
     })
 
     useEffect(() => {
-        if (cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleSubmit = async (e) => {
@@ -48,11 +48,11 @@ const Login = () => {
         formData.append('recaptcha_ref', recaptcha)
 
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/login`, formData, {
+            .post(`${VITE_APP_API_URL}/api/v1/auth/login`, formData, {
                 headers: {},
             })
             .then((response) => {
-                cookies.set(import.meta.env.VITE_APP_SESSION, response.data.token, { expires: 30 })
+                cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })
                 const urlParams = new URLSearchParams(window.location.search)
                 const url = urlParams.get('n') ? urlParams.get('n') : '/'
                 window.location.href = url

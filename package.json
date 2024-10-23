@@ -25,7 +25,7 @@
     "client-lint": "cd client && npm run lint",
     "test": "concurrently \"npm run server-test\" \"npm run client-test\"",
     "server-test": "cd server && npm run test",
-    "client-test": "cd client && echo \"test\"",
+    "client-test": "cd client && npm run test",
     "docker": "cd server && docker build -t core1-server .",
     "docker-run": "docker run -p 5051:5051 core1-server:latest"
   },

@@ -17,13 +17,13 @@ import {
     CImage,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
 import AirForm from '../../components/forms/shipping/AirForm'
 
 const Air = () => {
-    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const [currentPage, setCurrentPage] = useState(1)
@@ -86,9 +86,9 @@ const Air = () => {
             console.log(key, formDataToSend[key])
         }
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/air`, formDataToSend, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/b/air`, formDataToSend, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {

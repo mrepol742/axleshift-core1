@@ -19,7 +19,7 @@ const auth = () => {
         request(app)
             .post("/api/v1/auth/login")
             .send({ email: "test@example.com", password: "test", recaptcha_ref: "test" })
-            .expect(404)
+            .expect(401)
             .end((err, res) => {
                 if (err) return done(err);
                 done();
@@ -75,7 +75,7 @@ const auth = () => {
             .post("/api/v1/auth/otp/new")
             .set("Authorization", `Bearer ${TOKEN}`)
             .send({ recaptcha_ref: "test" })
-            .expect(403)
+            .expect(404)
             .end((err, res) => {
                 if (err) return done(err);
                 done();
@@ -87,7 +87,7 @@ const auth = () => {
             .post("/api/v1/auth/otp/")
             .set("Authorization", `Bearer ${TOKEN}`)
             .send({ recaptcha_ref: "test" })
-            .expect(403)
+            .expect(404)
             .end((err, res) => {
                 if (err) return done(err);
                 done();

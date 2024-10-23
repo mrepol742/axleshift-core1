@@ -2,18 +2,22 @@
 
 ### 1. Track
 
-- **Endpoint:** `/track/:id`
-- **Method:** `GET`
-- **Type:** `Internal`
+-   **Endpoint:** `/track/:id`
+-   **Method:** `GET`
+-   **Type:** `Internal`
 
 #### Headers
-- **Authorization:** `Bearer <token>`
+
+-   **Authorization:** `Bearer <token>`
 
 #### Params
-- Freight id
+
+-   Freight id
 
 #### Response
-- **Status 200**: Process successfully
+
+-   **Status 200**: Process successfully
+
 ```json
   "events": "object",
   "origin": "string",
@@ -21,4 +25,5 @@
   "status": "string",
   "markerPositions": "object",
 ```
-- **Status 404**: Freight id not found
+
+-   **Status 404**: Freight id not found

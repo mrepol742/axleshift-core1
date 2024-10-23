@@ -14,7 +14,7 @@ import {
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-
+import { VITE_APP_API_URL, VITE_APP_SESSION, VITE_APP_GOOGLE_MAP } from '../../config'
 import Page404 from '../errors/404'
 
 const TrackInfo = () => {
@@ -32,9 +32,9 @@ const TrackInfo = () => {
     const fetchData = async () => {
         setLoading(true)
         await axios
-            .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/track/${id}`, {
+            .get(`${VITE_APP_API_URL}/api/v1/track/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {
@@ -73,7 +73,7 @@ const TrackInfo = () => {
                                     Origin: {responseData.origin} | Destination:{' '}
                                     {responseData.destination} | Status: {responseData.status}
                                 </CCard>
-                                <LoadScript googleMapsApiKey={import.meta.env.VITE_APP_GOOGLE_MAP}>
+                                <LoadScript googleMapsApiKey={VITE_APP_GOOGLE_MAP}>
                                     <GoogleMap
                                         mapContainerStyle={{
                                             height: '400px',

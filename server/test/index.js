@@ -1,7 +1,9 @@
 import request from "supertest";
 import { expect } from "chai";
+import { close } from "../src/models/db.js";
 import app from "../src/Server.js";
 import { auth } from "./v1/index.js";
+
 
 describe("App Tests", () => {
     it("GET /", (done) => {
@@ -15,6 +17,6 @@ describe("App Tests", () => {
                 done();
             });
     });
-
-    auth();
+ 
+    auth()
 });

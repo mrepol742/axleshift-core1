@@ -20,10 +20,10 @@ import { useGoogleOneTapLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import errorMessages from '../../components/http/ErrorMessages'
 
 const Register = () => {
-    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const [formData, setFormData] = useState({
@@ -51,7 +51,7 @@ const Register = () => {
     })
 
     useEffect(() => {
-        if (cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleInputChange = (e) => {
@@ -76,7 +76,7 @@ const Register = () => {
         if (isChecked) formDataToSend.append('newsletter', 'true')
 
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/register`, formDataToSend, {
+            .post(`${VITE_APP_API_URL}/api/v1/auth/register`, formDataToSend, {
                 headers: {},
             })
             .then((response) => {

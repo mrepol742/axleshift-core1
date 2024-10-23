@@ -6,14 +6,20 @@ import logger from "../components/logger.js";
 import passwordHash from "../components/password.js";
 
 const data = JSON.parse(fs.readFileSync(import.meta.dirname + "/users.json", "utf8")).docs;
-let dbInstance = null;
 const requiredCollections = ["users", "freight", "sessions", "threats", "otp", "newsletter", "apiToken"];
+let dbInstance;
+let client;
+
+
+export const close = async () => {
+    await client.close();
+}
 
 const db = async () => {
     if (dbInstance) return dbInstance;
 
     try {
-        const client = new MongoClient(process.env.MONGO_URL);
+        client = new MongoClient(process.env.MONGO_URL);
         await client.connect();
 
         logger.info("successfully connected to MongoDB Atlas");
@@ -33,7 +39,7 @@ const db = async () => {
                 let cursor = await collection.find({});
                 let documents = await cursor.toArray();
 
-                if (documents.length != 0) return dbInstance;
+                if (documents.length != 0) return;
 
                 for (const element of data) {
                     element.password = passwordHash(element.password);

@@ -13,7 +13,6 @@ import {
     CSpinner,
 } from '@coreui/react'
 import AOS from 'aos'
-// import 'aos/dist/aos.css'
 
 import { Navbar, Services, About, Team, Newsletter, Footer } from '../components/landing/index'
 
@@ -54,7 +53,7 @@ const Landing = () => {
                         <CRow className="h-100 justify-content-start align-items-center">
                             <CCol xs={12} md={6} className="px-4 mx-0 mx-md-4">
                                 <h1
-                                    className="display-4 text-white"
+                                    className="display-6 text-white"
                                     data-aos="fade-right"
                                     data-aos-duration="1000"
                                 >
@@ -88,7 +87,11 @@ const Landing = () => {
                 <Team />
                 <Newsletter setLoading={setLoading} />
 
-                <CContainer fluid className="h-100 text-center bg-secondary p-5" data-aos="fade-up">
+                <CContainer
+                    fluid
+                    className="h-100 text-center bg-secondary p-5 shadow"
+                    data-aos="fade-up"
+                >
                     <div className="mt-5" />
                     <h1 className="text-white">SPECIAL THANKS TO</h1>
                     <p className="lead text-white">We cant do it without you as our inspiration.</p>

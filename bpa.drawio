@@ -1,0 +1,114 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.8.0">
+  <diagram name="Page-1" id="n72ECPnv3BkmL42Iqbjx">
+    <mxGraphModel dx="1048" dy="465" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="MjfuHSj2xqx2umkEId21-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="MjfuHSj2xqx2umkEId21-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="220" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-3" value="ORDER&lt;br&gt;MANAGEMENT" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#99CCFF;strokeColor=#1A3561;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="MjfuHSj2xqx2umkEId21-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-5" value="SHIPMENT PLANNING &amp;amp; SCHEDULING" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#1A3561;fillColor=#99CCFF;" vertex="1" parent="1">
+          <mxGeometry x="220" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="MjfuHSj2xqx2umkEId21-7">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="580" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-7" value="INVOICING &amp;amp; BILLING" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#1A3561;fillColor=#99CCFF;" vertex="1" parent="1">
+          <mxGeometry x="400" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="MjfuHSj2xqx2umkEId21-9">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="760" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-9" value="COMPLIANCE &amp;amp; REPORTING" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#99CCFF;strokeColor=#1A3561;" vertex="1" parent="1">
+          <mxGeometry x="580" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="MjfuHSj2xqx2umkEId21-11">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="940" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-11" value="SHIPMENT VISIBILITY &amp;amp; ALERTS" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#1A3561;fillColor=#99CCFF;" vertex="1" parent="1">
+          <mxGeometry x="760" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-13" value="CUSTOMER SERVICE" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#1A3561;fillColor=#99CCFF;" vertex="1" parent="1">
+          <mxGeometry x="940" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-14" value="&lt;b&gt;BUSINESS PROCESS ARCHITECTURE DIAGRAM TOP LVL 1&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="25" y="30" width="370" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-16" value="&lt;b&gt;BUSINESS PROCESS ARCHITECTURE DIAGRAM TOP LVL 2&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="25" y="203" width="370" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="MjfuHSj2xqx2umkEId21-17" target="MjfuHSj2xqx2umkEId21-27">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="320" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-29" value="Shipment&lt;div&gt;Details&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="MjfuHSj2xqx2umkEId21-28">
+          <mxGeometry x="-0.1841" relative="1" as="geometry">
+            <mxPoint x="3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-17" value="ORDER MANAGEMENT" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-18" value="CUSTOMER" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="488" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-19" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.79;exitY=-0.003;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.794;entryY=1.035;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="MjfuHSj2xqx2umkEId21-18" target="MjfuHSj2xqx2umkEId21-17">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="390" as="sourcePoint" />
+            <mxPoint x="360" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-20" value="Order Entry" style="edgeLabel;resizable=0;html=1;;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="MjfuHSj2xqx2umkEId21-19">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="18" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-22" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.199;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.199;entryY=0.044;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="MjfuHSj2xqx2umkEId21-17" target="MjfuHSj2xqx2umkEId21-18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="430" as="sourcePoint" />
+            <mxPoint x="250" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-23" value="Order&lt;br&gt;Confirmation" style="edgeLabel;resizable=0;html=1;;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="MjfuHSj2xqx2umkEId21-22">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-19" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="MjfuHSj2xqx2umkEId21-27" target="MjfuHSj2xqx2umkEId21-31">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-27" value="SHIPMENT PLANNING &amp;amp; SCHEDULING" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="382" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-31" value="COMPLIANCE &amp;amp; REPORTING" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-33" value="SHIPMENT VISIBILITY &amp;amp; ALERTS" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="850" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MjfuHSj2xqx2umkEId21-34" value="CUSTOMER SERVICE" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

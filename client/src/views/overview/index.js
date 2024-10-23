@@ -26,6 +26,7 @@ import {
     faLocationDot,
 } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './widgets'
+import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
@@ -47,11 +48,11 @@ const Overview = () => {
         setLoading(true)
         await axios
             .post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight`,
+                `${VITE_APP_API_URL}/api/v1/freight`,
                 { page, q: query },
                 {
                     headers: {
-                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                     },
                 },
             )

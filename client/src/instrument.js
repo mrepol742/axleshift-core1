@@ -6,9 +6,10 @@ import {
     useNavigation,
     useNavigationType,
 } from 'react-router-dom'
+import { VITE_APP_SENTRY_DNS } from './config'
 
 Sentry.init({
-    dsn: import.meta.env.VITE_APP_SENTRY_DNS,
+    dsn: VITE_APP_SENTRY_DNS,
     integrations: [
         // See docs for support of different versions of variation of react router
         // https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/

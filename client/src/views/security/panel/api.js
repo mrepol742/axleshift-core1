@@ -32,6 +32,7 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
 
 const API = ({ setLoading, result }) => {
     const [apiToken, setApiToken] = useState('')
@@ -40,11 +41,11 @@ const API = ({ setLoading, result }) => {
         setLoading(true)
         await axios
             .post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/token/new/`,
+                `${VITE_APP_API_URL}/api/v1/auth/token/new/`,
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                     },
                 },
             )

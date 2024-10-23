@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { CSpinner, useColorModes } from '@coreui/react'
 import ReactGA from 'react-ga4'
+import { VITE_APP_GOOGLE_ANALYTICS, VITE_APP_SESSION, VITE_APP_NODE_ENV } from './config'
 import './scss/style.scss'
 import './bootstrap'
 import DocumentTitle from './components/middleware/DocumentTitle'
@@ -22,11 +23,11 @@ const MailOTP = lazy(() => import('./views/auth/otp/mail'))
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
     const storedTheme = useSelector((state) => state.theme)
-    ReactGA.initialize(import.meta.env.VITE_APP_GOOGLE_ANALYTICS)
-    let token = cookies.get(import.meta.env.VITE_APP_SESSION)
+    ReactGA.initialize(VITE_APP_GOOGLE_ANALYTICS)
+    let token = cookies.get(VITE_APP_SESSION)
 
     useEffect(() => {
-        if ('serviceWorker' in navigator && import.meta.env.NODE_ENV === 'production') {
+        if ('serviceWorker' in navigator && VITE_APP_NODE_ENV === 'production') {
             navigator.serviceWorker
                 .register('/sw.js')
                 .then((reg) => {
@@ -59,7 +60,7 @@ const App = () => {
     }, [])
 
     useEffect(() => {
-        token = cookies.get(import.meta.env.VITE_APP_SESSION)
+        token = cookies.get(VITE_APP_SESSION)
     }, [useNavigate])
 
     return (

@@ -12,7 +12,7 @@
     },
     "scripts": {
         "production": "node src/index",
-        "test": "mocha --reporter spec --timeout 10000",
+        "test": "mocha --exit",
         "dev": "nodemon --ext js --ignore '*.json' src/index",
         "lint": "prettier --write ."
     },

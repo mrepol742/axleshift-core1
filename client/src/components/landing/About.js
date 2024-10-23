@@ -3,7 +3,7 @@ import { CContainer, CRow, CCol, CImage } from '@coreui/react'
 
 const About = () => {
     return (
-        <CContainer fluid className="h-100 p-5 bg-primary" data-aos="fade-up">
+        <CContainer fluid className="h-100 p-5 bg-primary shadow" data-aos="fade-up">
             <CRow className="h-100 justify-content-start align-items-center">
                 <CCol xs={12} md={5} className="mb-4" data-aos="zoom-in">
                     <CImage fluid src="/images/about.svg" />

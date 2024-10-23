@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { CSpinner } from '@coreui/react'
+import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 
 const Account = () => {
     const [user, setUser] = useState(null)
@@ -8,11 +9,11 @@ const Account = () => {
     const fetchUserData = async () => {
         await axios
             .post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/user`,
+                `${VITE_APP_API_URL}/api/v1/auth/user`,
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                     },
                 },
             )
