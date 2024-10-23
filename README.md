@@ -13,7 +13,7 @@ Api docs here [/server/docs/README.md](/server/docs/README.md)
 
 ## Setting up
 ```sh
- npm i && npm run setup
+ npm i && npm run setup && npm run setup-env
 ```
 
 ## Script commands
