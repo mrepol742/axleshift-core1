@@ -1,7 +1,8 @@
 # Freight Core 1
-[![Build](https://github.com/mrepol742/core1/actions/workflows/build.yml/badge.svg)](https://github.com/mrepol742/core1/actions/workflows/build.yml)
-[![Docker](https://github.com/freight-capstone/core1/actions/workflows/docker.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/docker.yml)
+[![Build CI](https://github.com/mrepol742/core1/actions/workflows/build.yml/badge.svg)](https://github.com/mrepol742/core1/actions/workflows/build.yml)
+[![Docker CI](https://github.com/freight-capstone/core1/actions/workflows/docker.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/docker.yml)
 [![Dependabot Updates](https://github.com/freight-capstone/core1/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/dependabot/dependabot-updates)
+[![Terraform CI](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml)
 ![](https://wakatime.com/badge/user/8ad4afa2-1a56-40d1-a949-4663473915b6/project/db9d6547-2999-475a-83e2-9355e84a7fcd.svg?style=flat-square)
 ![](https://wakatime.com/badge/user/8ad4afa2-1a56-40d1-a949-4663473915b6/project/73db9967-f0f0-4322-a0a0-dc4905b18d18.svg?style=flat-square)
 <br>
