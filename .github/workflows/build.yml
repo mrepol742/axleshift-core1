@@ -28,6 +28,11 @@ jobs:
         with:
           node-version: 22
 
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: 'latest'
+
       - name: Wait for MongoDB to start
         run: |
           echo "Waiting for MongoDB..."
