@@ -15,8 +15,6 @@ const internal = async (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader.split(" ")[1];
 
-    if (process.env.NODE_ENV === "test") return next();
-
     const [theUser, session] = await Promise.all([getUser(token), getSession(token)]);
 
     if (!theUser || (adminRoute.includes(req.path) && theUser.role !== "admin")) return res.status(401).send();

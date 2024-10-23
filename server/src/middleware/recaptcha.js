@@ -7,7 +7,6 @@ const recaptcha = async (req, res, next) => {
     const { recaptcha_ref } = req.body;
     if (!recaptcha_ref) return res.status(400).send();
 
-    if (process.env.NODE_ENV === "test") return next();
     try {
         const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
             params: {
