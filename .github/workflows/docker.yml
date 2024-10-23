@@ -1,13 +1,14 @@
-name: Docker
+name: Docker CI
 
 on:
-    push:
-        branches: ["core1-backend"]
-    workflow_dispatch:
+  push:
+    branches: ["core1-backend"]
+  workflow_dispatch:
 
 jobs:
-  build:
+  docker:
     runs-on: 'ubuntu-latest'
+
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
