@@ -28,3 +28,24 @@ dist-ssr
 
 /build
 /log
+
+# Local Terraform files
+*.tfstate
+*.tfstate.backup
+
+# Terraform plan files
+*tfplan
+
+# .terraform directory
+.terraform/
+
+# Terraform CLI configuration files
+terraform.tfvars
+*.tfvars.json
+
+# Crash log files
+crash.log
+
+# Other local configuration files
+*.override.tf
+*.override.tf.json
