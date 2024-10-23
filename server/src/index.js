@@ -29,9 +29,9 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 app.listen(port, (err) => {
-    if (err) return logger.error("Unable to start server", err);
+    if (err) return logger.error("unable to start server", err);
     Promise.all([db(), mail(), cron()]);
-    logger.info(`Server running on port ${port}`);
+    logger.info(`server running on port ${port}`);
 });
 
 Sentry.setupExpressErrorHandler(app);

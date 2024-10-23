@@ -16,6 +16,8 @@ import {
     CSpinner,
     CImage,
 } from '@coreui/react'
+import ReCAPTCHA from 'react-google-recaptcha'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
@@ -23,6 +25,7 @@ import AirForm from '../../components/forms/shipping/AirForm'
 
 const Air = () => {
     const navigate = useNavigate()
+    const recaptchaRef = React.useRef()
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -55,8 +58,9 @@ const Air = () => {
             shipping_destination_airport: '',
             shipping_preferred_departure_date: '',
             shipping_preferred_arrival_date: '',
-            shipping_flight_type: '1',
+            shipping_flight_type: 1,
         },
+        recaptcha_ref: '',
     })
 
     const handleInputChange = (e, section) => {
@@ -72,10 +76,19 @@ const Air = () => {
 
     const handleSubmit = async () => {
         setLoading(true)
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        const formDataToSend = new FormData()
+        for (const key in formData) {
+            formDataToSend.append(key, formData[key])
+        }
+        formDataToSend.append('recaptcha_ref', recaptcha)
+        for (const key in formDataToSend) {
+            console.log(key, formDataToSend[key])
+        }
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/air`, formData, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/b/air`, formDataToSend, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {
@@ -102,7 +115,7 @@ const Air = () => {
     }
 
     const handleShippingInformation = () => {
-        setCurrentPage(3)
+        setCurrentPage(4)
     }
 
     return (
@@ -112,6 +125,7 @@ const Air = () => {
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )}
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <CRow className="mb-4">
                 <CCol xs={3} md={5} xl={3} className="image-container d-none d-md-flex">
                     <CImage fluid rounded src="/images/freight-air.jpg" className="custom-image" />

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
     CContainer,
     CRow,
@@ -11,12 +12,31 @@ import {
 } from '@coreui/react'
 
 const Footer = () => {
+    const navigate = useNavigate()
+
     return (
-        <CContainer fluid className="bg-secondary">
-            <footer className="d-flex flex-wrap justify-content-between align-items-center p-5 border-top">
-                <div className="col-md-4 text-white">
-                    <CImage src="/images/logo.png" fluid width="200px" alt="Axleshift Core 1" />
-                    <p className="mb-3 me-2 mb-md-0">&copy; 2024 core1.axleshift.com</p>
+        <CContainer fluid>
+            <footer className="p-2 p-md-5 ">
+                <div className="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+                    <p>&copy; 2024 Axleshift Core 1. All Rights Reserved</p>
+                    <ul className="list-unstyled d-flex">
+                        <li className="ms-3">
+                            <span
+                                className="link-body-emphasis"
+                                onClick={() => navigate('/privacy-policy')}
+                            >
+                                Privacy Policy
+                            </span>
+                        </li>
+                        <li className="ms-3">
+                            <span
+                                className="link-body-emphasis"
+                                onClick={() => navigate('/terms-of-service')}
+                            >
+                                Terms of Service
+                            </span>
+                        </li>
+                    </ul>
                 </div>
             </footer>
         </CContainer>

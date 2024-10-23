@@ -32,10 +32,10 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import errorMessages from '../../components/http/ErrorMessages'
 
 const API = () => {
-    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const [loading, setLoading] = useState(false)
     const recaptchaRef = React.useRef()
     const [isBlurred, setIsBlurred] = useState(true)
@@ -64,9 +64,9 @@ const API = () => {
         formData.append('recaptcha_ref', recaptcha)
 
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/token/new`, formData, {
+            .post(`${VITE_APP_API_URL}/api/v1/auth/token/new`, formData, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {
@@ -86,9 +86,9 @@ const API = () => {
     const fetchData = async () => {
         setLoading(true)
         await axios
-            .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/token/`, {
+            .get(`${VITE_APP_API_URL}/api/v1/auth/token/`, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {
@@ -118,9 +118,9 @@ const API = () => {
             )}
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-
+            <h3>Auth token</h3>
             {!result && (
-                <div className="text-center border rounded">
+                <div className="text-center border rounded mb-4">
                     <div className="p-0 p-md-5 my-5 my-md-0">
                         <CImage src="/images/threat.png" fluid width="50%" />
                         <h1>There was no API Token</h1>
@@ -133,7 +133,7 @@ const API = () => {
             )}
             {result && (
                 <>
-                    <div className="text-center border rounded">
+                    <div className="text-center border rounded mb-4">
                         <div className="p-2 p-md-5 my-5 my-md-0">
                             <CInputGroup className="mb-3">
                                 <CFormInput
@@ -144,8 +144,8 @@ const API = () => {
                                 <CInputGroupText id="basic-addon" onClick={handleIconClick}>
                                     <FontAwesomeIcon icon={faEyeSlash} />
                                 </CInputGroupText>
-                                <CInputGroupText id="basic-addon">
-                                    <FontAwesomeIcon icon={faCopy} onClick={copyToClipboard} />
+                                <CInputGroupText id="basic-addon" onClick={copyToClipboard}>
+                                    <FontAwesomeIcon icon={faCopy} />
                                 </CInputGroupText>
                             </CInputGroup>
                             <CButton color="secondary" onClick={gen}>
@@ -156,6 +156,8 @@ const API = () => {
                     </div>
                 </>
             )}
+
+            <h3>Whitelisted IP address</h3>
         </div>
     )
 }

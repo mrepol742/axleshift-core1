@@ -4,14 +4,16 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { CSpinner, useColorModes } from '@coreui/react'
 import ReactGA from 'react-ga4'
+import { VITE_APP_GOOGLE_ANALYTICS, VITE_APP_SESSION, VITE_APP_NODE_ENV } from './config'
 import './scss/style.scss'
 import './bootstrap'
 import DocumentTitle from './components/middleware/DocumentTitle'
-import Maintenance from './components/middleware/Maintenance'
 
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
+const Privacy = lazy(() => import('./views/legal-agreements/privacy-policy'))
+const Terms = lazy(() => import('./views/legal-agreements/terms-of-service.js'))
 const Landing = lazy(() => import('./views/landing'))
 const Login = lazy(() => import('./views/auth/login'))
 const Register = lazy(() => import('./views/auth/register'))
@@ -21,11 +23,11 @@ const MailOTP = lazy(() => import('./views/auth/otp/mail'))
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
     const storedTheme = useSelector((state) => state.theme)
-    ReactGA.initialize(import.meta.env.VITE_APP_GOOGLE_ANALYTICS)
-    let token = cookies.get(import.meta.env.VITE_APP_SESSION)
+    ReactGA.initialize(VITE_APP_GOOGLE_ANALYTICS)
+    let token = cookies.get(VITE_APP_SESSION)
 
     useEffect(() => {
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && VITE_APP_NODE_ENV === 'production') {
             navigator.serviceWorker
                 .register('/sw.js')
                 .then((reg) => {
@@ -34,7 +36,7 @@ const App = () => {
                             (async () => {
                                 const keys = await caches.keys()
                                 return keys.map(async (cache) => {
-                                    if (cache !== cacheName) {
+                                    if (cache !== 'core1_1.0.0') {
                                         return await caches.delete(cache)
                                     }
                                 })
@@ -46,7 +48,6 @@ const App = () => {
                     console.error(err)
                 })
         }
-
         const urlParams = new URLSearchParams(window.location.href.split('?')[1])
         const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
         if (theme) setColorMode(theme)
@@ -59,7 +60,7 @@ const App = () => {
     }, [])
 
     useEffect(() => {
-        token = cookies.get(import.meta.env.VITE_APP_SESSION)
+        token = cookies.get(VITE_APP_SESSION)
     }, [useNavigate])
 
     return (
@@ -71,25 +72,35 @@ const App = () => {
                     </div>
                 }
             >
-                <Maintenance>
-                    <DocumentTitle>
-                        <Routes>
-                            {!token && (
-                                <Route exact path="/" name="Landing Page" element={<Landing />} />
-                            )}
-                            <Route exact path="/login" name="Login" element={<Login />} />
-                            <Route exact path="/register" name="Register" element={<Register />} />
-                            <Route exact path="/otp" name="OTP" element={<MailOTP />} />
-                            <Route
-                                exact
-                                path="/forgot-password"
-                                name="Forgot Password"
-                                element={<ForgotPassword />}
-                            />
-                            <Route path="*" name="Home" element={<DefaultLayout />} />
-                        </Routes>
-                    </DocumentTitle>
-                </Maintenance>
+                <DocumentTitle>
+                    <Routes>
+                        {!token && (
+                            <Route exact path="/" name="Landing Page" element={<Landing />} />
+                        )}
+                        <Route
+                            exact
+                            path="/privacy-policy"
+                            name="Privacy Policy"
+                            element={<Privacy />}
+                        />
+                        <Route
+                            exact
+                            path="/terms-of-service"
+                            name="Terms of Service"
+                            element={<Terms />}
+                        />
+                        <Route exact path="/login" name="Login" element={<Login />} />
+                        <Route exact path="/register" name="Register" element={<Register />} />
+                        <Route exact path="/otp" name="OTP" element={<MailOTP />} />
+                        <Route
+                            exact
+                            path="/forgot-password"
+                            name="Forgot Password"
+                            element={<ForgotPassword />}
+                        />
+                        <Route path="*" name="Home" element={<DefaultLayout />} />
+                    </Routes>
+                </DocumentTitle>
             </Suspense>
         </Router>
     )

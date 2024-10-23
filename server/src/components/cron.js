@@ -8,7 +8,7 @@ const hour = "0 * * * *";
 const _cron = () => {
     cron.schedule(hour, sessionTask).start();
     cron.schedule(hour, otpTask).start();
-    logger.info("Cron tasks started.");
+    logger.info("cron tasks started.");
 };
 
 export default _cron;

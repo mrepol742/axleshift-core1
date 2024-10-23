@@ -16,13 +16,14 @@ import {
     CSpinner,
     CFormCheck,
 } from '@coreui/react'
+import { useGoogleOneTapLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import errorMessages from '../../components/http/ErrorMessages'
 
 const Register = () => {
-    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const [formData, setFormData] = useState({
@@ -40,8 +41,17 @@ const Register = () => {
         message: '',
     })
 
+    useGoogleOneTapLogin({
+        onSuccess: (credentialResponse) => {
+            console.log(credentialResponse)
+        },
+        onError: () => {
+            console.log('Login Failed')
+        },
+    })
+
     useEffect(() => {
-        if (cookies.get(import.meta.env.VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
     const handleInputChange = (e) => {
@@ -66,7 +76,7 @@ const Register = () => {
         if (isChecked) formDataToSend.append('newsletter', 'true')
 
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/register`, formDataToSend, {
+            .post(`${VITE_APP_API_URL}/api/v1/auth/register`, formDataToSend, {
                 headers: {},
             })
             .then((response) => {
@@ -101,7 +111,7 @@ const Register = () => {
                 )}
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
-                        <CCard className="p-1 p-md-4">
+                        <CCard className="p-1 p-md-4 shadow">
                             <CCardBody>
                                 {error.error && (
                                     <CAlert color="danger" className="d-flex align-items-center">
@@ -137,6 +147,7 @@ const Register = () => {
                                     </CInputGroup>
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
+                                            {' '}
                                             <FontAwesomeIcon icon={faUser} />
                                         </CInputGroupText>
                                         <CFormInput
@@ -147,9 +158,8 @@ const Register = () => {
                                             onChange={handleInputChange}
                                             required
                                         />
-                                    </CInputGroup>
-                                    <CInputGroup className="mb-3">
                                         <CInputGroupText>
+                                            {' '}
                                             <FontAwesomeIcon icon={faUser} />
                                         </CInputGroupText>
                                         <CFormInput
@@ -196,18 +206,36 @@ const Register = () => {
                                         onChange={(e) => setIsChecked(event.target.checked)}
                                         label="Subscribe to our newsletter"
                                     />
+                                    <p>
+                                        <small>
+                                            By continuing, you agree to our{' '}
+                                            <a
+                                                className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                                onClick={() => navigate('/privacy-policy')}
+                                            >
+                                                Privacy Policy
+                                            </a>{' '}
+                                            and{' '}
+                                            <a
+                                                className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                                onClick={() => navigate('/terms-of-service')}
+                                            >
+                                                Terms of Service
+                                            </a>
+                                            .
+                                        </small>
+                                    </p>
                                     <div className="d-grid">
                                         <CButtonGroup>
                                             <CButton
                                                 type="submit"
-                                                color="success"
+                                                color="primary"
                                                 className="me-2 rounded"
                                             >
                                                 Create Account
                                             </CButton>
                                             <CButton
-                                                color="primary"
-                                                className="me-2 rounded"
+                                                className="me-2 rounded border-2 border-primary text-primary"
                                                 onClick={() => navigate('/login')}
                                             >
                                                 Login

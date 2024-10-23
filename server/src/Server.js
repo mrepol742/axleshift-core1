@@ -2,15 +2,16 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import cors from "cors";
+import path from "path";
 import pinoHttp from "pino-http";
 import multer from "multer";
 import mongoSanitize from "express-mongo-sanitize";
 import helmet from "helmet";
 import statusMonitor from "express-status-monitor";
+import compression from "compression";
 
 import rateLimiter from "./middleware/rateLimiter.js";
 import sanitize from "./middleware/sanitize.js";
-import corsOptions from "./middleware/cors.js";
 
 import logger from "./components/logger.js";
 
@@ -19,6 +20,7 @@ import APIv1 from "./routes/v1/index.js";
 const app = express();
 const upload = multer();
 
+app.use(compression());
 app.use(cors({ origin: "*" }));
 app.use(
     statusMonitor({
@@ -34,12 +36,13 @@ app.use(sanitize);
 app.use(
     mongoSanitize({
         onSanitize: ({ req, key }) => {
-            logger.warn(`This request[${key}] is sanitized`);
+            logger.warn(`this request[${key}] is sanitized`);
             logger.warn(req);
         },
     })
 );
 
+app.use(express.static(path.join(process.cwd(), "public")));
 app.use("/api/v1/", APIv1);
 
 app.use((err, req, res, next) => {

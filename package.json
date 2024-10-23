@@ -16,15 +16,26 @@
     "server": "cd server && npm run dev",
     "client": "cd client && npm run start",
     "setup": "concurrently \"npm run server-install\" \"npm run client-install\"",
-    "server-install": "cd server && npm i && [ ! -f .env ] && cp .env.example .env",
-    "client-install": "cd client && npm i &&  [ ! -f .env ] && cp .env.example .env",
+    "server-install": "cd server && npm i",
+    "client-install": "cd client && npm i",
+    "setup-env": "concurrently \"npm run server-env\" \"npm run client-env\"",
+    "server-env": "cd server && [ ! -f .env ] && cp .env.example .env",
+    "client-env": "cd client && [ ! -f .env ] && cp .env.example .env",
     "post-production": "concurrently \"npm run server\" \"npm run client-post\"",
     "client-post": "cd client && npm run build && cd build && python3 -m http.server",
     "lint": "concurrently \"npm run server-lint\" \"npm run client-lint\"",
     "server-lint": "cd server && npm run lint",
-    "client-lint": "cd client && npm run lint"
+    "client-lint": "cd client && npm run lint",
+    "test": "concurrently \"npm run server-test\" \"npm run client-test\"",
+    "server-test": "cd server && npm run test",
+    "client-test": "cd client && npm run test",
+    "docker": "cd server && docker build -t core1-server .",
+    "docker-run": "docker run -p 5051:5051 core1-server:latest"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=20.x"
   }
 }

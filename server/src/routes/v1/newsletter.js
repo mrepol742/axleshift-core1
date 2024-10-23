@@ -18,10 +18,7 @@ router.post("/", recaptcha, async (req, res, next) => {
         const db = await database();
         const newsletterCollection = db.collection("newsletter");
         const existingSubscriber = await newsletterCollection.findOne({ email: email });
-        if (existingSubscriber) {
-            logger.error("Email already exists (newsletter)");
-            return res.status(200).json({ message: "The email is already subcribe to our newsletter" });
-        }
+        if (existingSubscriber) return res.status(200).json({ message: "The email is already subcribe to our newsletter" });
 
         await newsletterCollection.insertOne({
             email: email,

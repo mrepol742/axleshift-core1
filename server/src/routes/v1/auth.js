@@ -49,10 +49,7 @@ router.post("/register", async (req, res) => {
         const usersCollection = db.collection("users");
         const existingUser = await usersCollection.findOne({ email: email });
 
-        if (existingUser) {
-            logger.error("Email already exists");
-            return res.status(409).send();
-        }
+        if (existingUser) return res.status(409).send();
 
         await usersCollection.insertOne({
             email: email,

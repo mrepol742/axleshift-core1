@@ -14,9 +14,9 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import errorMessages from '../../components/http/ErrorMessages'
+import { VITE_APP_API_URL, VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 
 const Newsletter = ({ setLoading }) => {
-    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const [emailAddress, setEmailAddress] = useState('')
     const recaptchaRef = React.useRef()
     const [message, setMessage] = useState('')
@@ -31,7 +31,7 @@ const Newsletter = ({ setLoading }) => {
         formData.append('recaptcha_ref', recaptcha)
 
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/newsletter`, formData, {
+            .post(`${VITE_APP_API_URL}/api/v1/newsletter`, formData, {
                 headers: {},
             })
             .then((response) => {
@@ -49,7 +49,7 @@ const Newsletter = ({ setLoading }) => {
 
     return (
         <CContainer fluid className="h-100" data-aos="fade-up">
-            <div className="bg-primary m-2 m-md-5">
+            <div className="bg-primary m-2 m-md-5 shadow">
                 <CRow className="h-100 justify-content-start align-items-center p-5">
                     <CCol xs={12} md={7} lg={6} xl={5} className="mb-4 p-2" data-aos="zoom-in-down">
                         <h1 className="text-white">Newsletter - Stay tune</h1>

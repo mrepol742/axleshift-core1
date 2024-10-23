@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { CSpinner } from '@coreui/react'
 import { useDispatch } from 'react-redux'
+import { VITE_APP_SESSION, VITE_APP_API_URL } from '../../config'
 import MaintenancePage from '../../views/errors/500'
 
 const Auth = (WrappedComponent) => {
@@ -16,12 +17,12 @@ const Auth = (WrappedComponent) => {
             loc = `/login?n=${window.location.pathname}${window.location.search}`
 
         const checkAuthentication = async () => {
-            const token = cookies.get(import.meta.env.VITE_APP_SESSION)
+            const token = cookies.get(VITE_APP_SESSION)
             if (token === undefined) return setIsAuth(false)
 
             await axios
                 .post(
-                    `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/verify`,
+                    `${VITE_APP_API_URL}/api/v1/auth/verify`,
                     {},
                     {
                         headers: {
@@ -43,7 +44,7 @@ const Auth = (WrappedComponent) => {
                 })
                 .catch((err) => {
                     if (!err.response) return console.error(err)
-                    cookies.remove(import.meta.env.VITE_APP_SESSION)
+                    cookies.remove(VITE_APP_SESSION)
                     setIsAuth(false)
                     window.location.href = loc
                 })

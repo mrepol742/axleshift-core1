@@ -16,8 +16,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-        
-      - name: Build frontend
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: 'latest'
+
+      - name: Set up environment
         run: |
           cd client
           echo "VITE_APP_API_URL=${{ secrets.APP_API_URL }}" >> .env
@@ -34,11 +39,33 @@ jobs:
           echo "VITE_APP_FIREBASE_MESSAGING_SENDING_ID=${{ secrets.APP_FIREBASE_MESSAGING_SENDING_ID }}" >> .env
           echo "VITE_APP_FIREBASE_APP_ID=${{ secrets.APP_FIREBASE_APP_ID }}" >> .env
           echo "VITE_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.APP_FIREBASE_MEASUREMENT_ID }}" >> .env
+          cd ../server
+          echo "MONGO_DB=core1" >> .env
+          echo "MONGO_URL=mongodb://localhost:27017" >> .env
+          echo "RECAPTCHA_SECRET=${{ secrets.RECAPTCHA_SECRET }}" >> .env
+          echo "NODE_ENV=development" >> .env
+          echo "EXPRESS_PORT=5051" >> .env
+          echo "REACT_APP_ORIGIN=::1" >> .env
+          echo "API_RATE_LIMIT=30" >> .env
+          echo "API_RATE_DELAY=600" >> .env
+          echo "API_EXTERNAL_RATE_LIMIT=1000}" >> .env
+          echo "API_EXTERNAL_RATE_DELAY=600}" >> .env
+        
+      - name: Install dependencies
+        run: |
           npm i
-          npm run lint
-          npm run build
+          npm run setup
 
-      - name: Upload frontend
+      - name: Executing lint test
+        run: npm run lint
+      
+      - name: Executing jest & mocha
+        run: npm run test
+
+      - name: Build frontend
+        run: cd client && npm run build
+
+      - name: Push frontend
         id: push_directory_frontend
         uses: cpina/github-action-push-to-another-repository@main
         env:
@@ -50,16 +77,8 @@ jobs:
           user-email: mrepol742@gmail.com
           commit-message: Production
           target-branch: core1-frontend
-          
-      - name: Build backend
-        run: |
-          cd server
-          npm i
-          npm run lint
-          rm -rf node_modules
 
-
-      - name: Upload backend
+      - name: Push backend
         id: push_directory_backend
         uses: cpina/github-action-push-to-another-repository@main
         env:

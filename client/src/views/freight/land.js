@@ -16,6 +16,7 @@ import {
     CSpinner,
     CImage,
 } from '@coreui/react'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
@@ -72,9 +73,9 @@ const Land = () => {
 
     const handleSubmit = async () => {
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/b/land`, formData, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/b/land`, formData, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {

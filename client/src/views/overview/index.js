@@ -15,11 +15,18 @@ import {
     CPagination,
     CPaginationItem,
     CSpinner,
+    CCardText,
+    CFormSelect,
 } from '@coreui/react'
+import Masonry from 'react-masonry-css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-
+import {
+    faMagnifyingGlass,
+    faEllipsisVertical,
+    faLocationDot,
+} from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './widgets'
+import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
@@ -41,11 +48,11 @@ const Overview = () => {
         setLoading(true)
         await axios
             .post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight`,
+                `${VITE_APP_API_URL}/api/v1/freight`,
                 { page, q: query },
                 {
                     headers: {
-                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                     },
                 },
             )
@@ -74,45 +81,77 @@ const Overview = () => {
             )}
 
             <WidgetsDropdown className="mb-4" />
-            <AppSearch
-                className="mb-4"
-                handleSearchSubmit={handleSearchSubmit}
-                query={query}
-                setQuery={setQuery}
-            />
 
-            <CRow>
+            <CForm className="d-flex justify-content-left my-2 my-lg-0">
+                <CInputGroup className="mb-3">
+                    <CFormInput
+                        aria-label="tracking id"
+                        aria-describedby="basic-addon"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    <CInputGroupText id="basic-addon">
+                        <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </CInputGroupText>
+                </CInputGroup>
+                <div className="mx-2"></div>
+                <CFormSelect
+                    options={[
+                        { label: 'All', value: '0' },
+                        { label: 'On Route', value: '1' },
+                        { label: 'Canceled', value: '2' },
+                        { label: 'Shipped', value: '3' },
+                    ]}
+                    required
+                    className="mb-3"
+                />
+                <div className="mx-2"></div>
+                <CFormSelect
+                    options={[
+                        { label: 'Newer', value: '1' },
+                        { label: 'Older', value: '2' },
+                    ]}
+                    required
+                    className="mb-3"
+                />
+            </CForm>
+
+            <Masonry
+                breakpointCols={{
+                    default: 4,
+                    1100: 3,
+                    700: 2,
+                    500: 1,
+                }}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+            >
                 {data.map((item) => (
-                    <CCol
-                        key={item._id}
-                        sm={6}
-                        xl={4}
-                        xxl={3}
+                    <CCard
                         className="mb-3"
+                        key={item._id}
                         onClick={() => navigate(`/v/${item._id}`)}
                         style={{ cursor: 'pointer' }}
                     >
-                        <CCard>
-                            <CCardHeader
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <span></span>
-                                <div>{parseTimestamp(item.created_at)}</div>
-                            </CCardHeader>
-                            <CCardBody>
-                                <blockquote className="blockquote mb-0">
-                                    <p>{item.data.shipment.shipment_description}</p>
-                                    <footer className="blockquote-footer">{item.type}</footer>
-                                </blockquote>
-                            </CCardBody>
-                        </CCard>
-                    </CCol>
+                        <CCardHeader
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <div></div>
+                            <div>{parseTimestamp(item.created_at)}</div>
+                        </CCardHeader>
+                        <CCardBody>
+                            <CCardText>{item.data.shipment.shipment_description}</CCardText>
+                        </CCardBody>
+                        <CCardFooter className="bg-dark text-white border-0">
+                            Status: On route
+                        </CCardFooter>
+                    </CCard>
                 ))}
-            </CRow>
+            </Masonry>
 
             <AppPagination
                 currentPage={currentPage}

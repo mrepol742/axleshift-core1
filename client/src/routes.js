@@ -14,7 +14,8 @@ const FreightSea = auth(lazy(() => import('./views/freight/sea')))
 
 const Pricing = auth(lazy(() => import('./views/pricing/index')))
 
-const SecurityManagement = auth(lazy(() => import('./views/security/index')))
+const Security = auth(lazy(() => import('./views/security/index')))
+const SecurityManagement = auth(lazy(() => import('./views/security/management')))
 const SecurityAnalysis = auth(lazy(() => import('./views/security/analysis')))
 const DeviceLock = auth(lazy(() => import('./views/security/device')))
 const APIKey = auth(lazy(() => import('./views/security/api')))
@@ -41,11 +42,12 @@ const routes = [
     { path: '/freight/land', name: 'Land', element: FreightLand },
     { path: '/freight/sea', name: 'Sea', element: FreightSea },
 
-    { path: '/payment', name: 'Payment History', element: Err500 },
-    { path: '/payment/info', name: 'Payment Info', element: Err500 },
+    { path: '/payment', name: 'Payment Info', element: Err500 },
+    { path: '/payment/invoice', name: 'Invoice', element: Err500 },
 
     { path: '/pricing', name: 'Pricing', element: Pricing },
 
+    { path: '/security', name: 'Security', element: Security },
     { path: '/security/management', name: 'Security Management', element: SecurityManagement },
     { path: '/security/analysis', name: 'Security Analysis', element: SecurityAnalysis },
     { path: '/security/device', name: 'Device Lock', element: DeviceLock },

@@ -97,7 +97,7 @@ router.get("/:id", auth, async (req, res, next) => {
      Shipment
      Shipping
 */
-router.post("/b/:type", auth, async (req, res, next) => {
+router.post("/b/:type", [auth, recaptcha], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment, shipping } = req.body;
         const type = req.params.type;

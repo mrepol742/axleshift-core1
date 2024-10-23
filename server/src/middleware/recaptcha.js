@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import axios from "axios";
 import logger from "../components/logger.js";
 
@@ -21,7 +23,7 @@ const recaptcha = async (req, res, next) => {
         logger.error("reCAPTCHA verification failed");
         logger.error(error);
     }
-    return res.status(500).send();
+    return res.status(401).send();
 };
 
 export default recaptcha;

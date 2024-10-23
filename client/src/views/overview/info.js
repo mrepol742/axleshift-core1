@@ -26,7 +26,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { QRCodeSVG } from 'qrcode.react'
 import html2canvas from 'html2canvas'
-
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
@@ -88,9 +88,9 @@ const FreightInfo = () => {
     const fetchData = async () => {
         setLoading(true)
         await axios
-            .get(`${import.meta.env.VITE_APP_API_URL}/api/v1/freight/${id}`, {
+            .get(`${VITE_APP_API_URL}/api/v1/freight/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
             .then((response) => {
@@ -111,15 +111,11 @@ const FreightInfo = () => {
         if (disabled) return setDisabled(false)
         setLoading(true)
         await axios
-            .post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`,
-                editedFormData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
-                    },
+            .post(`${VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`, editedFormData, {
+                headers: {
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
-            )
+            })
             .then((response) => {
                 alert('save')
             })
@@ -141,11 +137,11 @@ const FreightInfo = () => {
         setLoading(true)
         await axios
             .post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/freight/d/${id}`,
+                `${VITE_APP_API_URL}/api/v1/freight/d/${id}`,
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${cookies.get(import.meta.env.VITE_APP_SESSION)}`,
+                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                     },
                 },
             )

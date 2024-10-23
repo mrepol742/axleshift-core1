@@ -17,17 +17,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { useDispatch } from 'react-redux'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
 import errorMessages from '../../../components/http/ErrorMessages'
 
 const MailOTP = () => {
-    const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState({
         error: false,
         message: '',
     })
     const [otp, setOtp] = useState(['', '', '', '', '', ''])
-    const token = cookies.get(import.meta.env.VITE_APP_SESSION)
+    const token = cookies.get(VITE_APP_SESSION)
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const dispatch = useDispatch()
@@ -37,7 +37,7 @@ const MailOTP = () => {
 
         await axios
             .post(
-                `${import.meta.env.VITE_APP_API_URL}/api/v1/auth/verify`,
+                `${VITE_APP_API_URL}/api/v1/auth/verify`,
                 {},
                 {
                     headers: {
@@ -50,7 +50,7 @@ const MailOTP = () => {
             })
             .catch((err) => {
                 if (!err.response) return console.error(err)
-                cookies.remove(import.meta.env.VITE_APP_SESSION)
+                cookies.remove(VITE_APP_SESSION)
                 navigate('/login')
             })
     }
@@ -89,7 +89,7 @@ const MailOTP = () => {
         formData.append('recaptcha_ref', recaptcha)
 
         await axios
-            .post(`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/verify/otp`, formData, {
+            .post(`${VITE_APP_API_URL}/api/v1/auth/verify/otp`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -124,7 +124,7 @@ const MailOTP = () => {
                 )}
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
-                        <CCard className="p-1 p-md-4">
+                        <CCard className="p-1 p-md-4 shadow">
                             {error.error && (
                                 <CAlert color="danger" className="d-flex align-items-center">
                                     <FontAwesomeIcon
