@@ -1,0 +1,30 @@
+bug:
+  - "bug"
+  - "fix"
+  - "solve"
+  - "address"
+feature:
+  - "feature"
+  - "enhancement"
+  - "works"
+  - "added"
+documentation:
+  - "*.md"
+workflow:
+  - "*.yml"
+npm:
+  - "package.json"
+  - "package-lock.json"
+test:
+  - "*.test.js"
+  - changed-files:
+        - any-glob-to-any-file:
+            - server/test/**
+server:
+    - changed-files:
+        - any-glob-to-any-file:
+            - server/**
+client:
+    - changed-files:
+        - any-glob-to-any-file:
+            - client/**
