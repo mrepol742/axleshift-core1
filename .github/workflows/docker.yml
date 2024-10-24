@@ -3,6 +3,7 @@ name: Docker CI
 on:
   push:
     branches: ["core1-backend"]
+  workflow_call:
   workflow_dispatch:
 
 jobs:
