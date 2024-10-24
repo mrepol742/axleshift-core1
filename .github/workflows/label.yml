@@ -10,6 +10,10 @@ jobs:
       pull-requests: write
 
     steps:
-    - uses: actions/labeler@v4
+    - uses: actions/checkout@v4
+      with:
+        repository: "freight-capstone/core1"
+    - uses: actions/labeler@v5
       with:
         repo-token: "${{ secrets.API_TOKEN_GITHUB }}"
+        configuration-path: '.github/labeler.yml'
