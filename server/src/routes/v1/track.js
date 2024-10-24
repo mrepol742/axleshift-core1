@@ -1,14 +1,14 @@
-import dotenv from "dotenv";
-dotenv.config();
-import { ObjectId } from "mongodb";
-import express from "express";
-import logger from "../../components/logger.js";
-import database from "../../models/db.js";
-import auth from "../../middleware/auth.js";
-import recaptcha from "../../middleware/recaptcha.js";
-import { getUser } from "../../components/sessions.js";
+import dotenv from 'dotenv'
+dotenv.config()
+import { ObjectId } from 'mongodb'
+import express from 'express'
+import logger from '../../components/logger.js'
+import database from '../../models/db.js'
+import auth from '../../middleware/auth.js'
+import recaptcha from '../../middleware/recaptcha.js'
+import { getUser } from '../../components/sessions.js'
 
-const router = express.Router();
+const router = express.Router()
 
 /*
   Get tracking status of shipment
@@ -23,36 +23,36 @@ const router = express.Router();
      Destination
      Status
 */
-router.get("/:id", auth, async (req, res, next) => {
+router.get('/:id', auth, async (req, res, next) => {
     try {
-        const id = req.params.id;
+        const id = req.params.id
 
-        const db = await database();
-        const freight = await db.collection("freight").findOne({ _id: new ObjectId(id) });
-        if (!freight) return res.status(404).send();
+        const db = await database()
+        const freight = await db.collection('freight').findOne({ _id: new ObjectId(id) })
+        if (!freight) return res.status(404).send()
 
-        const events = [];
+        const events = []
         events.push({
             date: freight.created_at,
-            description: "Freight is placed",
-        });
+            description: 'Freight is placed',
+        })
         if (freight.created_at !== freight.updated_at)
             events.push({
                 data: freight.updated_at,
-                description: "Freight info was updated",
-            });
+                description: 'Freight info was updated',
+            })
 
         /*-----------------------------------*/
         /*   THIS IS A TEST                  */
         /*-----------------------------------*/
         events.push({
             date: freight.created_at,
-            description: "We are preparing to ship your shipment",
-        });
+            description: 'We are preparing to ship your shipment',
+        })
         events.push({
             date: freight.created_at,
-            description: "Freight has arrived on our ports in China",
-        });
+            description: 'Freight has arrived on our ports in China',
+        })
 
         const markerPositions = [
             // very big bridge?
@@ -61,19 +61,19 @@ router.get("/:id", auth, async (req, res, next) => {
             { lat: 34.0522, lng: -118.2437 },
             // the concrete jungle hehe
             { lat: 40.7128, lng: -74.006 },
-        ];
+        ]
 
         return res.status(200).json({
             events: events,
             origin: freight.data.shipping.shipping_origin_addresss,
             destination: freight.data.shipping.shipping_destination_address,
-            status: "on route",
+            status: 'on route',
             markerPositions: markerPositions,
-        });
+        })
     } catch (e) {
-        logger.error(e);
+        logger.error(e)
     }
-    return res.status(500).send();
-});
+    return res.status(500).send()
+})
 
-export default router;
+export default router

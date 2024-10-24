@@ -65,6 +65,12 @@ jobs:
       - name: Build frontend
         run: cd client && npm run build
 
+      - name: Build backend
+        run: |
+          mkdir -p server/.github/workflows
+          cp .github/workflows/docker.yml server/.github/workflows/
+          cp .github/workflows/terraform.yml server/.github/workflows/
+
       - name: Push frontend
         id: push_directory_frontend
         uses: cpina/github-action-push-to-another-repository@main

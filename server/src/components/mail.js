@@ -1,12 +1,12 @@
-import dotenv from "dotenv";
-dotenv.config();
-import nodemailer from "nodemailer";
-import logger from "./logger.js";
+import dotenv from 'dotenv'
+dotenv.config()
+import nodemailer from 'nodemailer'
+import logger from './logger.js'
 
-let mailInstance = null;
+let mailInstance = null
 
 const mail = async () => {
-    if (mailInstance) return mailInstance;
+    if (mailInstance) return mailInstance
 
     try {
         mailInstance = await nodemailer.createTransport({
@@ -17,24 +17,24 @@ const mail = async () => {
                 user: process.env.MAIL_USERNAME,
                 pass: process.env.MAIL_PASSWORD,
             },
-        });
+        })
 
-        logger.info("successfully connected to Google SMTP");
+        logger.info('successfully connected to Google SMTP')
     } catch (err) {
-        logger.error("failed connecting to Google SMTP");
-        logger.error(err);
+        logger.error('failed connecting to Google SMTP')
+        logger.error(err)
     }
-    return mailInstance;
-};
+    return mailInstance
+}
 
 export const send = (options, name) => {
-    options.from = process.env.MAIL_FROM_ADDRESS;
-    options.html = body(options.subject, name, options.text);
+    options.from = process.env.MAIL_FROM_ADDRESS
+    options.html = body(options.subject, name, options.text)
 
     mailInstance.sendMail(options, (error, info) => {
-        if (error) return logger.error(error);
-    });
-};
+        if (error) return logger.error(error)
+    })
+}
 
 const body = (subject, name, message) => {
     return `
@@ -100,7 +100,7 @@ const body = (subject, name, message) => {
     </div>
 </body>
 </html>
-    `;
-};
+    `
+}
 
-export default mail;
+export default mail

@@ -33,6 +33,15 @@ npm run test
 
 # test production
 npm run post-production
+
+# build docker
+npm run docker
+
+# run docker
+npm run docker-run
+
+# terraform
+npm run terraform
 ```
 
 ## License
