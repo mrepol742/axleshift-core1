@@ -1,11 +1,11 @@
-import crypto from "crypto";
+import crypto from 'crypto'
 
 const hash = (password) => {
-    return crypto.createHash("sha256").update(`!_${password}%%`).digest("hex");
-};
+    return crypto.createHash('sha256').update(`!_${password}%%`).digest('hex')
+}
 
 export const generateUniqueId = () => {
-    return crypto.randomUUID();
-};
+    return crypto.randomUUID()
+}
 
-export default hash;
+export default hash

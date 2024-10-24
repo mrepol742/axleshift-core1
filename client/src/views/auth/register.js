@@ -43,10 +43,13 @@ const Register = () => {
 
     useGoogleOneTapLogin({
         onSuccess: (credentialResponse) => {
-            console.log(credentialResponse)
+            handleSubmit(null, 'google', credentialResponse.credential)
         },
         onError: () => {
-            console.log('Login Failed')
+            setError({
+                error: true,
+                message: 'Register Failed',
+            })
         },
     })
 
@@ -62,16 +65,29 @@ const Register = () => {
         }))
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleSubmit = async (e, type, credential) => {
+        if (e) e.preventDefault()
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
 
         const formDataToSend = new FormData()
-        for (const key in formData) {
-            if (key == 'newsletter') return alert(formData[key])
-            formDataToSend.append(key, formData[key])
+        if (type === 'form') {
+            for (const key in formData) {
+                // this is just a test
+                if (key == 'newsletter') return alert(formData[key])
+                formDataToSend.append(key, formData[key])
+            }
+        } else if (type === 'google') {
+            formDataToSend.append('credential', credential)
+        } else {
+            setLoading(false)
+            setError({
+                error: true,
+                message: 'An unexpected error occurred',
+            })
+            return
         }
+        formDataToSend.append('type', type)
         formDataToSend.append('recaptcha_ref', recaptcha)
         if (isChecked) formDataToSend.append('newsletter', 'true')
 
@@ -123,7 +139,7 @@ const Register = () => {
                                         <div>{error.message}</div>
                                     </CAlert>
                                 )}
-                                <CForm onSubmit={handleSubmit}>
+                                <CForm onSubmit={(e) => handleSubmit(e, 'form', null)}>
                                     <h1>Register</h1>
                                     <p className="text-body-secondary">Create your account</p>
                                     <ReCAPTCHA
@@ -208,14 +224,14 @@ const Register = () => {
                                     />
                                     <p>
                                         <small>
-                                            By continuing, you agree to our{' '}
+                                            By continuing, you agree to our
                                             <a
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/privacy-policy')}
                                             >
                                                 Privacy Policy
-                                            </a>{' '}
-                                            and{' '}
+                                            </a>
+                                            and
                                             <a
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/terms-of-service')}

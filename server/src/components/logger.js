@@ -1,18 +1,18 @@
-import dotenv from "dotenv";
-dotenv.config();
-import pino from "pino";
+import dotenv from 'dotenv'
+dotenv.config()
+import pino from 'pino'
 
-let logger;
+let logger
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
     logger = pino({
-        level: "debug",
+        level: 'debug',
         transport: {
-            target: "pino-pretty",
+            target: 'pino-pretty',
         },
-    });
+    })
 } else {
-    logger = pino();
+    logger = pino()
 }
 
-export default logger;
+export default logger

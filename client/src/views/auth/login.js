@@ -37,14 +37,26 @@ const Login = () => {
         if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/')
     }, [])
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleSubmit = async (e, type, credential) => {
+        if (e) e.preventDefault()
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
 
         const formData = new FormData()
-        formData.append('email', email)
-        formData.append('password', password)
+        if (type === 'form') {
+            formData.append('email', email)
+            formData.append('password', password)
+        } else if (type === 'google') {
+            formData.append('credential', credential)
+        } else {
+            setLoading(false)
+            setError({
+                error: true,
+                message: 'An unexpected error occurred',
+            })
+            return
+        }
+        formData.append('type', type)
         formData.append('recaptcha_ref', recaptcha)
 
         await axios
@@ -94,7 +106,7 @@ const Login = () => {
                                 </CAlert>
                             )}
                             <CCardBody>
-                                <CForm onSubmit={handleSubmit}>
+                                <CForm onSubmit={(e) => handleSubmit(e, 'form', null)}>
                                     <h1>Login</h1>
                                     <p className="text-body-secondary">Sign In to your account</p>
                                     <ReCAPTCHA
@@ -130,14 +142,14 @@ const Login = () => {
                                     </CInputGroup>
                                     <p>
                                         <small>
-                                            By continuing, you agree to our{' '}
+                                            By continuing, you agree to our
                                             <a
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/privacy-policy')}
                                             >
                                                 Privacy Policy
-                                            </a>{' '}
-                                            and{' '}
+                                            </a>
+                                            and
                                             <a
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/terms-of-service')}
@@ -167,10 +179,17 @@ const Login = () => {
                                     <div className="d-flex justify-content-center mb-3">
                                         <GoogleLogin
                                             onSuccess={(credentialResponse) => {
-                                                console.log(credentialResponse)
+                                                handleSubmit(
+                                                    null,
+                                                    'google',
+                                                    credentialResponse.credential,
+                                                )
                                             }}
                                             onError={() => {
-                                                console.log('Login Failed')
+                                                setError({
+                                                    error: true,
+                                                    message: 'Login Failed',
+                                                })
                                             }}
                                             useOneTap
                                         />

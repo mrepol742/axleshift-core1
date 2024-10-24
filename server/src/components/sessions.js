@@ -1,11 +1,11 @@
-import { ObjectId } from "mongodb";
-import database from "../models/db.js";
-import logger from "./logger.js";
+import { ObjectId } from 'mongodb'
+import database from '../models/db.js'
+import logger from './logger.js'
 
 export const addSession = async (theUser, sessionToken, ip, userAgent) => {
     try {
-        const db = await database();
-        db.collection("sessions").insertOne({
+        const db = await database()
+        db.collection('sessions').insertOne({
             user_id: theUser._id,
             token: sessionToken,
             active: true,
@@ -13,20 +13,22 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
             user_agent: userAgent,
             compromised: false,
             last_accessed: Date.now(),
-        });
+        })
     } catch (e) {
-        logger.error(e);
+        logger.error(e)
     }
-};
+}
 
 export const getUser = async (sessionToken) => {
     try {
-        const db = await database();
-        const isApiToken = /^core1_[0-9a-f]{64}$/.test(sessionToken);
-        const endpoint = isApiToken ? "apiToken" : "sessions";
-        const tokenCollection = await db.collection(endpoint).findOne({ token: sessionToken, active: true });
-        if (!tokenCollection) return null;
-        const theUser = await db.collection("users").findOne({ _id: tokenCollection.user_id });
+        const db = await database()
+        const isApiToken = /^core1_[0-9a-f]{64}$/.test(sessionToken)
+        const endpoint = isApiToken ? 'apiToken' : 'sessions'
+        const tokenCollection = await db
+            .collection(endpoint)
+            .findOne({ token: sessionToken, active: true })
+        if (!tokenCollection) return null
+        const theUser = await db.collection('users').findOne({ _id: tokenCollection.user_id })
 
         return {
             _id: theUser._id,
@@ -35,47 +37,47 @@ export const getUser = async (sessionToken) => {
             last_name: theUser.last_name,
             role: theUser.role,
             email_verify_at: theUser.email_verify_at,
-        };
+        }
     } catch (e) {
-        logger.error(e);
+        logger.error(e)
     }
-    return null;
-};
+    return null
+}
 
 export const removeSession = async (sessionToken) => {
     try {
-        const db = await database();
-        await db.collection("sessions").updateOne(
+        const db = await database()
+        await db.collection('sessions').updateOne(
             { token: sessionToken },
             {
                 $set: {
                     active: false,
                     last_accessed: Date.now(),
-                    modified_by: "system",
+                    modified_by: 'system',
                 },
-            }
-        );
+            },
+        )
     } catch (e) {
-        logger.error(e);
+        logger.error(e)
     }
-};
+}
 
 export const getSession = async (sessionToken) => {
     try {
-        const db = await database();
-        const session = await db.collection("sessions").findOne({ token: sessionToken });
+        const db = await database()
+        const session = await db.collection('sessions').findOne({ token: sessionToken })
         if (session.active)
-            db.collection("sessions").updateOne(
+            db.collection('sessions').updateOne(
                 { token: sessionToken },
                 {
                     $set: {
                         last_accessed: Date.now(),
                     },
-                }
-            );
-        return session;
+                },
+            )
+        return session
     } catch (e) {
-        logger.error(e);
+        logger.error(e)
     }
-    return null;
-};
+    return null
+}

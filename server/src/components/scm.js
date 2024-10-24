@@ -1,32 +1,35 @@
-import dotenv from "dotenv";
-dotenv.config();
-import logger from "./logger.js";
-import axios from "axios";
-import { parseRateLimit } from "ratelimit-header-parser";
+import dotenv from 'dotenv'
+dotenv.config()
+import logger from './logger.js'
+import axios from 'axios'
+import { parseRateLimit } from 'ratelimit-header-parser'
 
-let last_fetch;
-let res = [];
+let last_fetch
+let res = []
 
 const scm = async () => {
-    if (!last_fetch || res.length === 0) return await fetch();
+    if (!last_fetch || res.length === 0) return await fetch()
 
-    const past = new Date(last_fetch);
-    const ten = 5 * 60 * 1000;
+    const past = new Date(last_fetch)
+    const ten = 5 * 60 * 1000
 
-    if (!(Date.now() - past > ten)) return res;
-    return await fetch();
-};
+    if (!(Date.now() - past > ten)) return res
+    return await fetch()
+}
 
 const fetch = async () => {
     try {
-        const response = await axios.get(`https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/dependabot/alerts`, {
-            headers: {
-                Authorization: `token ${process.env.GITHUB_AUTH_TOKEN}`,
-                Accept: "application/vnd.github.v3+json",
+        const response = await axios.get(
+            `https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/dependabot/alerts`,
+            {
+                headers: {
+                    Authorization: `token ${process.env.GITHUB_AUTH_TOKEN}`,
+                    Accept: 'application/vnd.github.v3+json',
+                },
             },
-        });
+        )
 
-        if (response.data.length === 0) return [];
+        if (response.data.length === 0) return []
 
         const alerts = response.data.map((alert) => ({
             number: alert.number,
@@ -37,17 +40,17 @@ const fetch = async () => {
             summary: alert.security_advisory.summary,
             severity: alert.security_advisory.severity,
             updated_at: alert.security_advisory.updated_at ?? null,
-        }));
+        }))
 
-        last_fetch = Date.now();
-        res = alerts;
+        last_fetch = Date.now()
+        res = alerts
 
-        logger.info(`github ratelimit: ${JSON.stringify(parseRateLimit(response))}`);
-        return alerts;
+        logger.info(`github ratelimit: ${JSON.stringify(parseRateLimit(response))}`)
+        return alerts
     } catch (err) {
-        logger.error(err);
+        logger.error(err)
     }
-    return [];
-};
+    return []
+}
 
-export default scm;
+export default scm

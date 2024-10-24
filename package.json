@@ -12,6 +12,7 @@
   "license": "MIT",
   "author": "The Freight Capstone Core 1",
   "scripts": {
+    "echo": "echo \"im just lazy\"",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && npm run dev",
     "client": "cd client && npm run start",
@@ -30,7 +31,10 @@
     "server-test": "cd server && npm run test",
     "client-test": "cd client && npm run test",
     "docker": "cd server && docker build -t core1-server .",
-    "docker-run": "docker run -p 5051:5051 core1-server:latest"
+    "docker-run": "docker run -p 5051:5051 --env-file .env core1-server:latest",
+    "terraform": "cd server && terraform init && terraform plan -out=tfplan && terraform apply -auto-approve tfplan",
+    "pm2": "pm2 start src/index.js --name core1",
+    "pm2-restart": "pm2 restart all --update-env"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
