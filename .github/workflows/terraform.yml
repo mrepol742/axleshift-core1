@@ -8,6 +8,7 @@ on:
 jobs:
   docker:
     uses: ./.github/workflows/docker.yml
+    secrets: inherit
 
   terraform:
     runs-on: ubuntu-latest
