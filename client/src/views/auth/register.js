@@ -229,13 +229,15 @@ const Register = () => {
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/privacy-policy')}
                                             >
-                                                Privacy Policy
+                                                {' '}
+                                                Privacy Policy{' '}
                                             </a>
                                             and
                                             <a
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/terms-of-service')}
                                             >
+                                                {' '}
                                                 Terms of Service
                                             </a>
                                             .

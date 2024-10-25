@@ -64,6 +64,12 @@ const Login = () => {
                 headers: {},
             })
             .then((response) => {
+                if (response.data.error)
+                    return setError({
+                        error: true,
+                        message: response.data.error,
+                    })
+
                 cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })
                 const urlParams = new URLSearchParams(window.location.search)
                 const url = urlParams.get('n') ? urlParams.get('n') : '/'
@@ -147,13 +153,15 @@ const Login = () => {
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/privacy-policy')}
                                             >
-                                                Privacy Policy
+                                                {' '}
+                                                Privacy Policy{' '}
                                             </a>
                                             and
                                             <a
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/terms-of-service')}
                                             >
+                                                {' '}
                                                 Terms of Service
                                             </a>
                                             .

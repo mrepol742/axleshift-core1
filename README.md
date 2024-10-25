@@ -22,6 +22,9 @@ Api docs here [/server/docs/README.md](/server/docs/README.md)
 # install necessary dependencies
 npm run setup
 
+# setup environments
+npm run setup-env
+
 # start app
 npm run start
 
@@ -47,3 +50,6 @@ npm run terraform
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+# Freight Management System - Level 1 Overview

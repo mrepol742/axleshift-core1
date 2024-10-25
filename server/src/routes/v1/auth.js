@@ -139,12 +139,20 @@ router.post('/login', recaptcha, async (req, res) => {
 const formOauth2 = async (req, res) => {
     try {
         const credential = jwtDecode(req.body.credential)
+        const provider = getProvider(credential)
+        //TODO: verify credential here FIRST
 
         const db = await database()
         const usersCollection = db.collection('users')
-        if (req.url === '/login') {
+        if (/^\/login$/.test(req.url)) {
             const theUser = await usersCollection.findOne({ email: credential.email })
             if (!theUser) return res.status(404).send()
+            if (
+                !theUser.oauth2 ||
+                !theUser.oauth2[provider] ||
+                theUser.oauth2[provider].email !== credential.email
+            )
+                return res.status(200).json({ error: 'Please Login using your account password' })
 
             const session_token = crypto
                 .createHash('sha256')
@@ -157,24 +165,51 @@ const formOauth2 = async (req, res) => {
         }
 
         const existingUser = await usersCollection.findOne({ email: credential.email })
-        if (existingUser) return res.status(409).send()
+        if (existingUser)
+            return res.status(200).json({ error: 'This Email address is already registred' })
 
-        await usersCollection.insertOne({
-            email: credential.email,
-            first_name: credential.given_name,
-            last_name: credential.family_name,
-            role: 'user',
-            registration_type: 'google',
-            password: null,
-            email_verify_at: Date.now(),
-            created_at: Date.now(),
-            update_at: Date.now(),
-        })
+        await Promise.all([
+            usersCollection.insertOne({
+                email: credential.email,
+                first_name: credential.given_name,
+                last_name: credential.family_name,
+                role: 'user',
+                registration_type: provider,
+                oauth2: {
+                    [provider]: {
+                        email: credential.email,
+                        created_at: Date.now(),
+                        update_at: Date.now(),
+                    },
+                },
+                password: null,
+                email_verify_at: Date.now(),
+                created_at: Date.now(),
+                update_at: Date.now(),
+            }),
+            send(
+                {
+                    to: credential.email,
+                    subject: 'Welcome to Core 1 at Axleshift',
+                    text: `<h2>We're excited to have you on board.</h2><p>Our platform is designed to streamline your management and enhance your shipping experience. With tools to manage shipments, track deliveries, and optimize routes, you'll have everything you need at your fingertips.</p><p>If you have any questions or need assistance getting started, don't hesitate to reach out. We're here to help!</p><p>Looking forward to a successful journey together!</p><br/><p>Best regards,</p>Melvin Jones Repol<br/>The Developer<br/>Core 1 Axleshift`,
+                },
+                credential.given_name,
+            ),
+        ])
         return res.status(201).send()
     } catch (e) {
         logger.error(e)
     }
     return res.status(500).send()
+}
+
+const getProvider = (credential) => {
+    // will run to identify information
+    // present in the credential
+    // to identify which service this oauth2 belongs
+    // just incase we added service like github or something
+    if (/^([a-zA-Z0-9._%+-]+)@gmail\.com$/.test(credential.email)) return 'google'
+    return null
 }
 
 const formLogin = async (req, res) => {
