@@ -87,16 +87,14 @@ const body = (subject, name, message) => {
 </head>
 <body>
     <div class="container">
-            <img src="https://mrepol742.github.io/assets/images/core1.png" alt="Logo" class="logo">
-            <h2>${subject}</h2>
-        </div>
-        <div class="content">
-            <p>Hi ${name},</p>
-            <p>${message}</p>
-        </div>
-        <div class="footer">
-            <p>&copy; 2024 Axleshift Core 1. All rights reserved.</p>
-        </div>
+        <img src="https://mrepol742.github.io/assets/images/core1.png" alt="Logo" class="logo">
+    </div>
+    <div class="content">
+        <p>Hi ${name},</p>
+        <p>${message}</p>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Axleshift Core 1. All rights reserved.</p>
     </div>
 </body>
 </html>

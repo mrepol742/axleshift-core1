@@ -17,55 +17,59 @@ import { faEnvelope, faUser, faClock } from '@fortawesome/free-solid-svg-icons'
 import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
+import Profile from '../../components/Profile'
 
 const Account = () => {
+    const user = Profile()
     const recaptchaRef = React.useRef()
     const timezones = Intl.supportedValuesOf('timeZone')
-    const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
+    const [accountDetails, setAccountDetails] = useState({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        timezone: user.timezone,
+    })
+    const [contactInfo, setContactInfo] = useState({
+        email: user.email,
+    })
+    const [loading, setLoading] = useState(false)
 
-    const fetchUserData = async () => {
-        await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/auth/user`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                    },
-                },
-            )
-            .then((response) => {
-                setUser(response.data.user)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-            .finally(() => {
-                setLoading(false)
-            })
+    const handleInputChange = (e, type) => {
+        const { id, value } = e.target
+        if (type === 'accountDetails')
+            return setAccountDetails((prev) => ({
+                ...prev,
+                [id]: value,
+            }))
+        setContactInfo((prev) => ({
+            ...prev,
+            [id]: value,
+        }))
     }
 
-    useEffect(() => {
-        fetchUserData()
-    }, [])
+    const handleAccountDetails = (e) => {
+        e.preventDefault()
+        alert('test')
+    }
 
-    if (loading)
-        return (
-            <div className="loading-overlay">
-                <CSpinner color="primary" variant="grow" />
-            </div>
-        )
+    const handleContactInfo = (e) => {
+        e.preventDefault()
+        alert('test')
+    }
 
     return (
         <div>
+            {loading && (
+                <div className="loading-overlay">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            )}
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol>
                     <h4>Account details</h4>
                     <CCard className="mb-3">
                         <CCardBody>
-                            <CForm>
+                            <CForm onSubmit={handleAccountDetails}>
                                 <CRow>
                                     <CCol md={6} className="mb-3">
                                         <CInputGroup>
@@ -74,10 +78,13 @@ const Account = () => {
                                             </CInputGroupText>
                                             <CFormInput
                                                 id="first_name"
+                                                type="text"
                                                 placeholder="First Name"
                                                 autoComplete="given-name"
-                                                value={user.first_name}
-                                                required
+                                                value={accountDetails.first_name}
+                                                onChange={(e) =>
+                                                    handleInputChange(e, 'accountDetails')
+                                                }
                                             />
                                         </CInputGroup>
                                     </CCol>
@@ -88,10 +95,13 @@ const Account = () => {
                                             </CInputGroupText>
                                             <CFormInput
                                                 id="last_name"
+                                                type="text"
                                                 placeholder="Last Name"
                                                 autoComplete="family-name"
-                                                value={user.last_name}
-                                                required
+                                                value={accountDetails.last_name}
+                                                onChange={(e) =>
+                                                    handleInputChange(e, 'accountDetails')
+                                                }
                                             />
                                         </CInputGroup>
                                     </CCol>
@@ -102,10 +112,11 @@ const Account = () => {
                                     </CInputGroupText>
                                     <CFormInput
                                         type="text"
-                                        name="timezone"
+                                        id="timezone"
                                         placeholder="Timezone"
                                         list="timezone-options"
-                                        required
+                                        value={accountDetails.timezone}
+                                        onChange={(e) => handleInputChange(e, 'accountDetails')}
                                     />
                                     <datalist id="timezone-options">
                                         {timezones.map((tz) => (
@@ -145,7 +156,7 @@ const Account = () => {
                     <h4>Contact info</h4>
                     <CCard className="mb-3">
                         <CCardBody>
-                            <CForm>
+                            <CForm onSubmit={handleContactInfo}>
                                 <h6>Email</h6>
                                 <CInputGroup className="mb-3">
                                     <CInputGroupText>
@@ -153,11 +164,11 @@ const Account = () => {
                                     </CInputGroupText>
                                     <CFormInput
                                         type="email"
-                                        name="email"
+                                        id="email"
                                         placeholder="Email"
                                         autoComplete="email"
-                                        value={user.email}
-                                        required
+                                        value={contactInfo.email}
+                                        onChange={(e) => handleInputChange(e, 'contactInfo')}
                                     />
                                 </CInputGroup>
                                 <CButton

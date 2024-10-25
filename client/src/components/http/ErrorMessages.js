@@ -1,7 +1,7 @@
 const ErrorMessages = {
-    401: 'You failed the robot test',
     429: 'Slowwww down tooo many request',
     401: 'Invalid password',
+    403: "You failed the robot test, you robot ain't you?",
     404: 'Email address not found',
     500: 'Internal server error',
 }

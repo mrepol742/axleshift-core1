@@ -32,6 +32,8 @@ jobs:
           echo "VITE_APP_SENTRY_DNS=${{ secrets.APP_SENTRY_DNS }}" >> .env
           echo "VITE_APP_GOOGLE_ANALYTICS=${{ secrets.APP_GOOGLE_ANALYTICS }}" >> .env
           echo "VITE_APP_GOOGLE_MAP=${{ secrets.APP_GOOGLE_MAP }}" >> .env
+          echo "VITE_APP_GOOGLE_OAUTH_CLIENT_ID=${{ secrets.APP_GOOGLE_OAUTH_CLIENT_ID }}" >> .env
+          echo "VITE_APP_GITHUB_OAUTH_CLIENT_ID=${{ secrets.APP_GITHUB_OAUTH_CLIENT_ID }}" >> .env
           echo "VITE_APP_FIREBASE_API_KEY=${{ secrets.APP_FIREBASE_API_KEY }}" >> .env
           echo "VITE_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.APP_FIREBASE_AUTH_DOMAIN }}" >> .env
           echo "VITE_APP_FIREBASE_PROJECT_ID=${{ secrets.APP_FIREBASE_PROJECT_ID }}" >> .env
@@ -42,7 +44,7 @@ jobs:
           cd ../server
           echo "MONGO_DB=core1" >> .env
           echo "MONGO_URL=mongodb://localhost:27017" >> .env
-          echo "RECAPTCHA_SECRET=${{ secrets.RECAPTCHA_SECRET }}" >> .env
+          echo "RECAPTCHA_SECRET=${{ secrets.EXPRESS_RECAPTCHA_SECRET }}" >> .env
           echo "NODE_ENV=development" >> .env
           echo "EXPRESS_PORT=5051" >> .env
           echo "REACT_APP_ORIGIN=::1" >> .env

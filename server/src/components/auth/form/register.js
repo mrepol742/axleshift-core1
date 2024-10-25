@@ -6,11 +6,15 @@ import { addSession } from '../../../components/sessions.js'
 
 const FormRegister = async (req, res) => {
     try {
+        const { email, first_name, last_name, password, newsletter } = req.body
         const db = await database()
         const usersCollection = db.collection('users')
         const existingUser = await usersCollection.findOne({ email: email })
 
-        if (existingUser) return res.status(409).send()
+        if (existingUser)
+            return res.status(200).json({
+                error: 'Email address already registered',
+            })
 
         await usersCollection.insertOne({
             email: email,
