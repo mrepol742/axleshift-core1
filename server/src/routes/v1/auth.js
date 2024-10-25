@@ -2,18 +2,15 @@ import dotenv from 'dotenv'
 dotenv.config()
 import { ObjectId } from 'mongodb'
 import express from 'express'
-import bcrypt from 'bcryptjs'
-import fs from 'fs'
-import path from 'path'
-import crypto from 'crypto'
-import { jwtDecode } from 'jwt-decode'
 import database from '../../models/db.js'
 import logger from '../../components/logger.js'
-import { addSession, removeSession, getUser } from '../../components/sessions.js'
+import { addSession, removeSession } from '../../components/sessions.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import passwordHash, { generateUniqueId } from '../../components/password.js'
 import { send } from '../../components/mail.js'
+import sendOTPEmail from '../../components/otp/email.js'
+import { Github, Google, FormLogin, FormRegister, FormOauth2 } from '../../components/auth/index.js'
 
 const router = express.Router()
 
@@ -47,18 +44,21 @@ router.post('/register', async (req, res) => {
             newsletter,
             type,
             credential,
+            code,
         } = req.body
-        if (!type || !['form', 'google'].includes(type)) return res.status(400).send()
+        if (!type || !['form', 'google', 'github'].includes(type)) return res.status(400).send()
         if (
             type === 'form' &&
             (!email || !first_name || !last_name || !password || !repeat_password || !newsletter)
         )
             return res.status(400).send()
         if (type === 'google' && !credential) return res.status(400).send()
+        if (type === 'github' && !code) return res.status(400).send()
 
         // hehe i need to save a bit of line of code here
         // its getting quite bit complex
-        if (type === 'google') return await formOauth2(req, res)
+        if (type === 'google') return await Google(req, res)
+        if (type === 'github') return await Github(req, res)
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             return res.status(200).json({ error: 'Invalid email address' })
@@ -71,38 +71,7 @@ router.post('/register', async (req, res) => {
         if (password != repeat_password)
             return res.status(200).json({ error: 'Password does not match' })
 
-        const db = await database()
-        const usersCollection = db.collection('users')
-        const existingUser = await usersCollection.findOne({ email: email })
-
-        if (existingUser) return res.status(409).send()
-
-        await usersCollection.insertOne({
-            email: email,
-            first_name: first_name,
-            last_name: last_name,
-            role: 'user',
-            registration_type: 'form',
-            password: passwordHash(password),
-            email_verify_at: '',
-            created_at: Date.now(),
-            update_at: Date.now(),
-        })
-
-        if (newsletter === 'true') {
-            const newsletterCollection = db.collection('newsletter')
-            const existingSubscriber = await newsletterCollection.findOne({ email: email })
-            if (!existingSubscriber) {
-                newsletterCollection.insertOne({
-                    email: email,
-                    is_subsribe: true,
-                    created_at: Date.now(),
-                    update_at: Date.now(),
-                })
-            }
-        }
-
-        return res.status(201).send()
+        return await FormRegister(req, res)
     } catch (e) {
         logger.error(e)
     }
@@ -120,113 +89,22 @@ router.post('/register', async (req, res) => {
 */
 router.post('/login', recaptcha, async (req, res) => {
     try {
-        const { email, password, credential, type } = req.body
-        if (!type || !['form', 'google'].includes(type)) return res.status(400).send()
+        const { email, password, credential, type, code } = req.body
+        if (!type || !['form', 'google', 'github'].includes(type)) return res.status(400).send()
         if (type === 'form' && (!email || !password)) return res.status(400).send()
         if (type === 'google' && !credential) return res.status(400).send()
+        if (type === 'github' && !code) return res.status(400).send()
 
-        if (type === 'form') return await formLogin(req, res)
-        if (type === 'google') return await formOauth2(req, res)
+        if (type === 'google') return await Google(req, res)
+        if (type === 'github') return await Github(req, res)
 
         // finally the end :(
+        return await FormLogin(req, res)
     } catch (e) {
         logger.error(e)
     }
     return res.status(500).send()
 })
-
-// its beefy isnt it?
-const formOauth2 = async (req, res) => {
-    try {
-        const credential = jwtDecode(req.body.credential)
-        const provider = getProvider(credential)
-        //TODO: verify credential here FIRST
-
-        const db = await database()
-        const usersCollection = db.collection('users')
-        if (/^\/login$/.test(req.url)) {
-            const theUser = await usersCollection.findOne({ email: credential.email })
-            if (!theUser) return res.status(404).send()
-            if (
-                !theUser.oauth2 ||
-                !theUser.oauth2[provider] ||
-                theUser.oauth2[provider].email !== credential.email
-            )
-                return res.status(200).json({ error: 'Please Login using your account password' })
-
-            const session_token = crypto
-                .createHash('sha256')
-                .update(generateUniqueId())
-                .digest('hex')
-            const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-            addSession(theUser, session_token, ip, req.headers['user-agent'])
-
-            return res.status(200).json({ token: session_token })
-        }
-
-        const existingUser = await usersCollection.findOne({ email: credential.email })
-        if (existingUser)
-            return res.status(200).json({ error: 'This Email address is already registred' })
-
-        await Promise.all([
-            usersCollection.insertOne({
-                email: credential.email,
-                first_name: credential.given_name,
-                last_name: credential.family_name,
-                role: 'user',
-                registration_type: provider,
-                oauth2: {
-                    [provider]: {
-                        email: credential.email,
-                        created_at: Date.now(),
-                        update_at: Date.now(),
-                    },
-                },
-                password: null,
-                email_verify_at: Date.now(),
-                created_at: Date.now(),
-                update_at: Date.now(),
-            }),
-            send(
-                {
-                    to: credential.email,
-                    subject: 'Welcome to Core 1 at Axleshift',
-                    text: `<h2>We're excited to have you on board.</h2><p>Our platform is designed to streamline your management and enhance your shipping experience. With tools to manage shipments, track deliveries, and optimize routes, you'll have everything you need at your fingertips.</p><p>If you have any questions or need assistance getting started, don't hesitate to reach out. We're here to help!</p><p>Looking forward to a successful journey together!</p><br/><p>Best regards,</p>Melvin Jones Repol<br/>The Developer<br/>Core 1 Axleshift`,
-                },
-                credential.given_name,
-            ),
-        ])
-        return res.status(201).send()
-    } catch (e) {
-        logger.error(e)
-    }
-    return res.status(500).send()
-}
-
-const getProvider = (credential) => {
-    // will run to identify information
-    // present in the credential
-    // to identify which service this oauth2 belongs
-    // just incase we added service like github or something
-    if (/^([a-zA-Z0-9._%+-]+)@gmail\.com$/.test(credential.email)) return 'google'
-    return null
-}
-
-const formLogin = async (req, res) => {
-    const { email, password } = req.body
-    const db = await database()
-    const theUser = await db.collection('users').findOne({ email: email })
-    if (!theUser) return res.status(404).send()
-    if (passwordHash(password) != theUser.password) return res.status(401).send()
-
-    const session_token = crypto.createHash('sha256').update(generateUniqueId()).digest('hex')
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-    addSession(theUser, session_token, ip, req.headers['user-agent'])
-
-    return res.status(200).json({
-        token: session_token,
-    })
-}
 
 /*
   Url: POST /api/v1/auth/verify
@@ -254,29 +132,6 @@ router.post('/verify', auth, async function (req, res, next) {
 
     return res.status(200).json({ otp: true })
 })
-
-const sendOTPEmail = (req, otpCollection) => {
-    const otp = Math.floor(100000 + Math.random() * 900000)
-    Promise.all([
-        otpCollection.insertOne({
-            user_id: req.user._id,
-            token: req.token,
-            code: otp,
-            verified: false,
-            expired: false,
-            created_at: Date.now(),
-            updated_at: Date.now(),
-        }),
-        send(
-            {
-                to: req.user.email,
-                subject: 'One Time Password (OTP)',
-                text: `Your otp is ${otp}, valid for 10 minutes only.`,
-            },
-            req.user.first_name,
-        ),
-    ])
-}
 
 /*
   Url: POST /api/v1/auth/user
@@ -414,6 +269,13 @@ router.post('/verify/otp', [auth, recaptcha], async function (req, res, next) {
     return res.status(500).send()
 })
 
+/*
+  Url: POST /api/v1/auth/token
+  Header:
+     Authentication
+  Returns:
+     API token
+*/
 router.get('/token', auth, async function (req, res, next) {
     try {
         const db = await database()
@@ -425,6 +287,14 @@ router.get('/token', auth, async function (req, res, next) {
     return res.status(500).send()
 })
 
+/*
+  Url: POST /api/v1/auth/token/whitelist-ip
+  Header:
+     Authentication
+  Request Body:
+     Otp
+     Recaptcha ref
+*/
 router.get('/token/whitelist-ip', [auth, recaptcha], async function (req, res, next) {
     try {
         const db = await database()
@@ -436,6 +306,15 @@ router.get('/token/whitelist-ip', [auth, recaptcha], async function (req, res, n
     return res.status(500).send()
 })
 
+/*
+  Url: POST /api/v1/auth/token/new
+  Header:
+     Authentication
+  Request Body:
+     Recaptcha ref
+  Returns:
+     API token
+*/
 router.post('/token/new', [auth, recaptcha], async function (req, res, next) {
     try {
         const db = await database()

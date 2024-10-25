@@ -18,8 +18,14 @@ import {
 import { GoogleLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION, VITE_APP_API_URL } from '../../config'
+import {
+    VITE_APP_RECAPTCHA_SITE_KEY,
+    VITE_APP_SESSION,
+    VITE_APP_API_URL,
+    VITE_APP_GITHUB_OAUTH_CLIENT_ID,
+} from '../../config'
 import errorMessages from '../../components/http/ErrorMessages'
 
 const Login = () => {
@@ -32,9 +38,11 @@ const Login = () => {
         error: false,
         message: '',
     })
+    const urlParams = new URLSearchParams(window.location.search)
+    const url = urlParams.get('n') ? urlParams.get('n') : '/'
 
     useEffect(() => {
-        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate(url)
     }, [])
 
     const handleSubmit = async (e, type, credential) => {
@@ -71,8 +79,6 @@ const Login = () => {
                     })
 
                 cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })
-                const urlParams = new URLSearchParams(window.location.search)
-                const url = urlParams.get('n') ? urlParams.get('n') : '/'
                 window.location.href = url
             })
             .catch((error) => {
@@ -99,7 +105,7 @@ const Login = () => {
                     </div>
                 )}
                 <CRow className="justify-content-center">
-                    <CCol md={8} lg={6} xl={5}>
+                    <CCol md={8} lg={6} xl={5} className="my-2">
                         <CCard className="p-1 p-md-4 shadow">
                             {error.error && (
                                 <CAlert color="danger" className="d-flex align-items-center">
@@ -178,7 +184,7 @@ const Login = () => {
                                             </CButton>
                                             <CButton
                                                 className="me-2 rounded border-2 border-primary text-primary"
-                                                onClick={() => navigate('/register')}
+                                                onClick={() => navigate(`/register${url}`)}
                                             >
                                                 Signup
                                             </CButton>
@@ -202,7 +208,18 @@ const Login = () => {
                                             useOneTap
                                         />
                                     </div>
-
+                                    <div className="d-flex justify-content-center mb-3">
+                                        <CButton
+                                            color="secondary"
+                                            className="d-block"
+                                            size="sm"
+                                            onClick={() =>
+                                                (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
+                                            }
+                                        >
+                                            <FontAwesomeIcon icon={faGithub} /> Signin using Github
+                                        </CButton>
+                                    </div>
                                     <CButton
                                         color="link"
                                         className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"

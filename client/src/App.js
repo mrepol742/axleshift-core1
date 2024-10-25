@@ -19,6 +19,7 @@ const Login = lazy(() => import('./views/auth/login'))
 const Register = lazy(() => import('./views/auth/register'))
 const ForgotPassword = lazy(() => import('./views/auth/forgotpassword'))
 const MailOTP = lazy(() => import('./views/auth/otp/mail'))
+const GithubCallback = lazy(() => import('./views/auth/github/callback'))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -90,6 +91,12 @@ const App = () => {
                             element={<Terms />}
                         />
                         <Route exact path="/login" name="Login" element={<Login />} />
+                        <Route
+                            exact
+                            path="/auth/github/callback"
+                            name="Github Callback"
+                            element={<GithubCallback />}
+                        />
                         <Route exact path="/register" name="Register" element={<Register />} />
                         <Route exact path="/otp" name="OTP" element={<MailOTP />} />
                         <Route

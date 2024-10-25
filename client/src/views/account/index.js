@@ -66,30 +66,36 @@ const Account = () => {
                     <CCard className="mb-3">
                         <CCardBody>
                             <CForm>
-                                <CInputGroup className="mb-3">
-                                    <CInputGroupText>
-                                        <FontAwesomeIcon icon={faUser} />
-                                    </CInputGroupText>
-                                    <CFormInput
-                                        type="text"
-                                        placeholder="First Name"
-                                        autoComplete="given-name"
-                                        value={user.first_name}
-                                        required
-                                    />
-                                </CInputGroup>
-                                <CInputGroup className="mb-3">
-                                    <CInputGroupText>
-                                        <FontAwesomeIcon icon={faUser} />
-                                    </CInputGroupText>
-                                    <CFormInput
-                                        type="text"
-                                        placeholder="Last Name"
-                                        autoComplete="family-name"
-                                        value={user.last_name}
-                                        required
-                                    />
-                                </CInputGroup>
+                                <CRow>
+                                    <CCol md={6} className="mb-3">
+                                        <CInputGroup>
+                                            <CInputGroupText>
+                                                <FontAwesomeIcon icon={faUser} />
+                                            </CInputGroupText>
+                                            <CFormInput
+                                                id="first_name"
+                                                placeholder="First Name"
+                                                autoComplete="given-name"
+                                                value={user.first_name}
+                                                required
+                                            />
+                                        </CInputGroup>
+                                    </CCol>
+                                    <CCol md={6} className="mb-3">
+                                        <CInputGroup>
+                                            <CInputGroupText>
+                                                <FontAwesomeIcon icon={faUser} />
+                                            </CInputGroupText>
+                                            <CFormInput
+                                                id="last_name"
+                                                placeholder="Last Name"
+                                                autoComplete="family-name"
+                                                value={user.last_name}
+                                                required
+                                            />
+                                        </CInputGroup>
+                                    </CCol>
+                                </CRow>
                                 <CInputGroup className="mb-3">
                                     <CInputGroupText>
                                         <FontAwesomeIcon icon={faClock} />
