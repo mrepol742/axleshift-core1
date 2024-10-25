@@ -1,10 +1,9 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import pino from 'pino'
+import { NODE_ENV } from '../config.js'
 
 let logger
 
-if (process.env.NODE_ENV !== 'production') {
+if (NODE_ENV !== 'production') {
     logger = pino({
         level: 'debug',
         transport: {

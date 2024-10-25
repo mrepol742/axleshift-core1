@@ -1,15 +1,14 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import axios from 'axios'
 import logger from '../logger.js'
+import { GITHUB_OAUTH_CLIENT_ID, GITHUB_OAUTH_SECRET_ID } from '../../config.js'
 
 const GithubAccessToken = async (code) => {
     try {
         const response = await axios.post(
             'https://github.com/login/oauth/access_token',
             {
-                client_id: process.env.GITHUB_OAUTH_CLIENT_ID,
-                client_secret: process.env.GITHUB_OAUTH_SECRET_ID,
+                client_id: GITHUB_OAUTH_CLIENT_ID,
+                client_secret: GITHUB_OAUTH_SECRET_ID,
                 code,
             },
             {

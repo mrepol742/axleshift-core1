@@ -1,8 +1,7 @@
-import dotenv from 'dotenv'
-dotenv.config()
-import logger from './logger.js'
 import axios from 'axios'
 import { parseRateLimit } from 'ratelimit-header-parser'
+import { GITHUB_OWNER, GITHUB_REPO, GITHUB_AUTH_TOKEN } from '../config.js'
+import logger from './logger.js'
 
 let last_fetch
 let res = []
@@ -20,10 +19,10 @@ const scm = async () => {
 const fetch = async () => {
     try {
         const response = await axios.get(
-            `https://api.github.com/repos/${process.env.GITHUB_OWNER}/${process.env.GITHUB_REPO}/dependabot/alerts`,
+            `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/dependabot/alerts`,
             {
                 headers: {
-                    Authorization: `token ${process.env.GITHUB_AUTH_TOKEN}`,
+                    Authorization: `token ${GITHUB_AUTH_TOKEN}`,
                     Accept: 'application/vnd.github.v3+json',
                 },
             },
