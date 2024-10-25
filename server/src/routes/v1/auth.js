@@ -33,7 +33,7 @@ const router = express.Router()
 [0]       "invalid-input-response"
 [0]     ]
     */
-router.post('/register', async (req, res) => {
+router.post('/register', recaptcha, async (req, res) => {
     try {
         const {
             email,
@@ -137,10 +137,8 @@ router.post('/verify', auth, async function (req, res, next) {
   Url: POST /api/v1/auth/user
   Header:
      Authentication
-  Returns:
-     User info
 */
-router.post('/user', auth, async function (req, res, next) {
+router.post('/user', [auth, recaptcha], async function (req, res, next) {
     try {
         return res.status(200).json({
             user: {

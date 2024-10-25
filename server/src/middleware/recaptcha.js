@@ -16,7 +16,7 @@ const recaptcha = async (req, res, next) => {
         })
 
         const { success, score } = response.data
-        if (!success || score < 0.5) return res.status(401).send()
+        if (!success || score < 0.5) return res.status(403).send()
 
         return next()
     } catch (error) {

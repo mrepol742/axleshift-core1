@@ -38,7 +38,6 @@ const Register = () => {
         last_name: '',
         password: '',
         repeat_password: '',
-        recaptcha_ref: '',
     })
     const [loading, setLoading] = useState(false)
     const [isChecked, setIsChecked] = useState(false)
@@ -69,8 +68,6 @@ const Register = () => {
         const formDataToSend = new FormData()
         if (type === 'form') {
             for (const key in formData) {
-                // this is just a test
-                if (key == 'newsletter') return alert(formData[key])
                 formDataToSend.append(key, formData[key])
             }
         } else if (type === 'google') {
@@ -85,7 +82,7 @@ const Register = () => {
         }
         formDataToSend.append('type', type)
         formDataToSend.append('recaptcha_ref', recaptcha)
-        if (isChecked) formDataToSend.append('newsletter', 'true')
+        formDataToSend.append('newsletter', isChecked)
 
         await axios
             .post(`${VITE_APP_API_URL}/api/v1/auth/register`, formDataToSend, {
@@ -152,11 +149,11 @@ const Register = () => {
                                         </CInputGroupText>
                                         <CFormInput
                                             id="email"
-                                            name="email"
+                                            type="email"
                                             placeholder="Email"
                                             autoComplete="email"
-                                            //          value={formData.email}
-                                            onChange={handleInputChange}
+                                            value={formData.email}
+                                            onChange={(e) => handleInputChange(e)}
                                             required
                                         />
                                     </CInputGroup>
@@ -164,15 +161,15 @@ const Register = () => {
                                         <CCol md={6} className="mb-3">
                                             <CInputGroup>
                                                 <CInputGroupText>
-                                                    {' '}
                                                     <FontAwesomeIcon icon={faUser} />
                                                 </CInputGroupText>
                                                 <CFormInput
                                                     id="first_name"
+                                                    type="text"
                                                     placeholder="First Name"
                                                     autoComplete="given-name"
-                                                    //     value={formData.first_name}
-                                                    onChange={handleInputChange}
+                                                    value={formData.first_name}
+                                                    onChange={(e) => handleInputChange(e)}
                                                     required
                                                 />
                                             </CInputGroup>
@@ -180,15 +177,15 @@ const Register = () => {
                                         <CCol md={6} className="mb-3">
                                             <CInputGroup>
                                                 <CInputGroupText>
-                                                    {' '}
                                                     <FontAwesomeIcon icon={faUser} />
                                                 </CInputGroupText>
                                                 <CFormInput
                                                     id="last_name"
+                                                    type="text"
                                                     placeholder="Last Name"
                                                     autoComplete="family-name"
-                                                    //     value={formData.last_name}
-                                                    onChange={handleInputChange}
+                                                    value={formData.last_name}
+                                                    onChange={(e) => handleInputChange(e)}
                                                     required
                                                 />
                                             </CInputGroup>
@@ -203,8 +200,8 @@ const Register = () => {
                                             type="password"
                                             placeholder="Password"
                                             autoComplete="new-password"
-                                            // value={formData.password}
-                                            onChange={handleInputChange}
+                                            value={formData.password}
+                                            onChange={(e) => handleInputChange(e)}
                                             required
                                         />
                                     </CInputGroup>
@@ -217,8 +214,8 @@ const Register = () => {
                                             type="password"
                                             placeholder="Repeat password"
                                             autoComplete="new-password"
-                                            //   value={formData.repeat_password}
-                                            onChange={handleInputChange}
+                                            value={formData.repeat_password}
+                                            onChange={(e) => handleInputChange(e)}
                                             required
                                         />
                                     </CInputGroup>

@@ -15,8 +15,8 @@ const sendOTPEmail = (req, otpCollection) => {
         send(
             {
                 to: req.user.email,
-                subject: 'One Time Password (OTP)',
-                text: `Your otp is ${otp}, valid for 10 minutes only.`,
+                subject: 'Core 1: One Time Password (OTP)',
+                text: `<h2>Your One Time Password is:</h2><h4>${otp}</h4><p>This OTP is valid only for 10 mins, if you did not intend to log in to core 1, please ignore this email.</p><p>OTP is an extra layer of security used when logging into websites or apps. <b>DO NOT SHARE YOUR OTP CODE</b>.</p>`,
             },
             req.user.first_name,
         ),

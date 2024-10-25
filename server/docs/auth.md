@@ -91,33 +91,6 @@
 
 -   **Status 401**: Unauthorized
 
-### 5. User
-
--   **Endpoint:** `/auth/user`
--   **Method:** `POST`
--   **Type**: Internal
-
-#### Headers
-
--   **Authorization:** `Bearer <token>`
-
-#### Response
-
--   **Status 200**: User profile
-
-```json
-{
-    "user": {
-        "email": "string",
-        "first_name": "string",
-        "last_name": "string",
-        "created_at": "date"
-    }
-}
-```
-
--   **Status 401**: Unauthorized
-
 ## Notes
 
 -   Passwords must be at least 8 characters long and contain a mix of letters, numbers, and symbols.
