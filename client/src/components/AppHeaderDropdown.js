@@ -13,8 +13,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faArrowRightFromBracket,
-    faShieldHalved,
-    faCircleInfo,
+    faShield,
+    faCircleUser,
+    faBell,
 } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
 
@@ -30,15 +31,20 @@ const AppHeaderDropdown = () => {
                 <CAvatar src="https://avatars.githubusercontent.com/u/62317165?v=4" size="md" />
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
-                <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">
-                    <div>
-                        {user.first_name} {user.last_name}
-                    </div>
-                    {user.email}
+                <CDropdownHeader className="bg-body-secondary fw-semibold mb-2 fs-6 px-5">
+                    {user.first_name} {user.last_name}
                 </CDropdownHeader>
                 <CDropdownItem onClick={() => navigate('/account')}>
-                    <FontAwesomeIcon icon={faCircleInfo} className="me-2" />
-                    About
+                    <FontAwesomeIcon icon={faCircleUser} className="me-2" />
+                    Account
+                </CDropdownItem>
+                <CDropdownItem onClick={() => navigate('/account/security')}>
+                    <FontAwesomeIcon icon={faShield} className="me-2" />
+                    Security
+                </CDropdownItem>
+                <CDropdownItem onClick={() => navigate('/account/notifications')}>
+                    <FontAwesomeIcon icon={faBell} className="me-2" />
+                    Notifications
                 </CDropdownItem>
                 <CDropdownDivider />
                 <CDropdownItem onClick={() => navigate('/logout')}>

@@ -16,11 +16,17 @@ import {
     CSpinner,
     CFormCheck,
 } from '@coreui/react'
-import { useGoogleOneTapLogin } from '@react-oauth/google'
+import { GoogleLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
+import {
+    VITE_APP_RECAPTCHA_SITE_KEY,
+    VITE_APP_API_URL,
+    VITE_APP_SESSION,
+    VITE_APP_GITHUB_OAUTH_CLIENT_ID,
+} from '../../config'
 import errorMessages from '../../components/http/ErrorMessages'
 
 const Register = () => {
@@ -40,21 +46,11 @@ const Register = () => {
         error: false,
         message: '',
     })
-
-    useGoogleOneTapLogin({
-        onSuccess: (credentialResponse) => {
-            handleSubmit(null, 'google', credentialResponse.credential)
-        },
-        onError: () => {
-            setError({
-                error: true,
-                message: 'Register Failed',
-            })
-        },
-    })
+    const urlParams = new URLSearchParams(window.location.search)
+    const url = urlParams.get('n') ? urlParams.get('n') : '/'
 
     useEffect(() => {
-        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate(url)
     }, [])
 
     const handleInputChange = (e) => {
@@ -96,11 +92,14 @@ const Register = () => {
                 headers: {},
             })
             .then((response) => {
-                if (!response.data.error) navigate('/login')
-                setError({
-                    error: true,
-                    message: response.data.error,
-                })
+                if (response.data.error)
+                    return setError({
+                        error: true,
+                        message: response.data.error,
+                    })
+                if (response.data.type === 'form') return navigate(`/login${url}`)
+                cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })
+                window.location.href = url
             })
             .catch((error) => {
                 console.error(error)
@@ -126,7 +125,7 @@ const Register = () => {
                     </div>
                 )}
                 <CRow className="justify-content-center">
-                    <CCol md={8} lg={6} xl={5}>
+                    <CCol md={8} lg={6} xl={5} className="my-2">
                         <CCard className="p-1 p-md-4 shadow">
                             <CCardBody>
                                 {error.error && (
@@ -161,32 +160,40 @@ const Register = () => {
                                             required
                                         />
                                     </CInputGroup>
-                                    <CInputGroup className="mb-3">
-                                        <CInputGroupText>
-                                            {' '}
-                                            <FontAwesomeIcon icon={faUser} />
-                                        </CInputGroupText>
-                                        <CFormInput
-                                            id="first_name"
-                                            placeholder="First Name"
-                                            autoComplete="given-name"
-                                            //     value={formData.first_name}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                        <CInputGroupText>
-                                            {' '}
-                                            <FontAwesomeIcon icon={faUser} />
-                                        </CInputGroupText>
-                                        <CFormInput
-                                            id="last_name"
-                                            placeholder="Last Name"
-                                            autoComplete="family-name"
-                                            //     value={formData.last_name}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
-                                    </CInputGroup>
+                                    <CRow>
+                                        <CCol md={6} className="mb-3">
+                                            <CInputGroup>
+                                                <CInputGroupText>
+                                                    {' '}
+                                                    <FontAwesomeIcon icon={faUser} />
+                                                </CInputGroupText>
+                                                <CFormInput
+                                                    id="first_name"
+                                                    placeholder="First Name"
+                                                    autoComplete="given-name"
+                                                    //     value={formData.first_name}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </CInputGroup>
+                                        </CCol>
+                                        <CCol md={6} className="mb-3">
+                                            <CInputGroup>
+                                                <CInputGroupText>
+                                                    {' '}
+                                                    <FontAwesomeIcon icon={faUser} />
+                                                </CInputGroupText>
+                                                <CFormInput
+                                                    id="last_name"
+                                                    placeholder="Last Name"
+                                                    autoComplete="family-name"
+                                                    //     value={formData.last_name}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </CInputGroup>
+                                        </CCol>
+                                    </CRow>
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
                                             <FontAwesomeIcon icon={faLock} />
@@ -217,7 +224,7 @@ const Register = () => {
                                     </CInputGroup>
                                     <CFormCheck
                                         id="newsletter"
-                                        className="mb-4"
+                                        className="mb-1"
                                         checked={isChecked}
                                         onChange={(e) => setIsChecked(event.target.checked)}
                                         label="Subscribe to our newsletter"
@@ -229,19 +236,21 @@ const Register = () => {
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/privacy-policy')}
                                             >
-                                                Privacy Policy
+                                                {' '}
+                                                Privacy Policy{' '}
                                             </a>
                                             and
                                             <a
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                                                 onClick={() => navigate('/terms-of-service')}
                                             >
+                                                {' '}
                                                 Terms of Service
                                             </a>
                                             .
                                         </small>
                                     </p>
-                                    <div className="d-grid">
+                                    <div className="d-grid mb-3">
                                         <CButtonGroup>
                                             <CButton
                                                 type="submit"
@@ -252,11 +261,41 @@ const Register = () => {
                                             </CButton>
                                             <CButton
                                                 className="me-2 rounded border-2 border-primary text-primary"
-                                                onClick={() => navigate('/login')}
+                                                onClick={() => navigate(`/login${url}`)}
                                             >
                                                 Login
                                             </CButton>
                                         </CButtonGroup>
+                                    </div>
+                                    <div className="d-flex justify-content-center mb-3">
+                                        <GoogleLogin
+                                            onSuccess={(credentialResponse) => {
+                                                handleSubmit(
+                                                    null,
+                                                    'google',
+                                                    credentialResponse.credential,
+                                                )
+                                            }}
+                                            onError={() => {
+                                                setError({
+                                                    error: true,
+                                                    message: 'Login Failed',
+                                                })
+                                            }}
+                                            useOneTap
+                                        />
+                                    </div>
+                                    <div className="d-flex justify-content-center mb-3">
+                                        <CButton
+                                            color="secondary"
+                                            className="d-block"
+                                            size="sm"
+                                            onClick={() =>
+                                                (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
+                                            }
+                                        >
+                                            <FontAwesomeIcon icon={faGithub} /> Signup using Github
+                                        </CButton>
                                     </div>
                                 </CForm>
                             </CCardBody>

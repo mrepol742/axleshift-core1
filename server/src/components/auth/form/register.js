@@ -1,0 +1,47 @@
+import crypto from 'crypto'
+import database from '../../../models/db.js'
+import logger from '../../logger.js'
+import passwordHash, { generateUniqueId } from '../../password.js'
+import { addSession } from '../../../components/sessions.js'
+
+const FormRegister = async (req, res) => {
+    try {
+        const db = await database()
+        const usersCollection = db.collection('users')
+        const existingUser = await usersCollection.findOne({ email: email })
+
+        if (existingUser) return res.status(409).send()
+
+        await usersCollection.insertOne({
+            email: email,
+            first_name: first_name,
+            last_name: last_name,
+            role: 'user',
+            registration_type: 'form',
+            password: passwordHash(password),
+            email_verify_at: '',
+            created_at: Date.now(),
+            update_at: Date.now(),
+        })
+
+        if (newsletter === 'true') {
+            const newsletterCollection = db.collection('newsletter')
+            const existingSubscriber = await newsletterCollection.findOne({ email: email })
+            if (!existingSubscriber) {
+                newsletterCollection.insertOne({
+                    email: email,
+                    is_subsribe: true,
+                    created_at: Date.now(),
+                    update_at: Date.now(),
+                })
+            }
+        }
+
+        return res.status(201).send()
+    } catch (err) {
+        logger.error(err)
+    }
+    return res.status(500).send()
+}
+
+export default FormRegister
