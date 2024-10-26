@@ -14,7 +14,9 @@ const FormOauth2 = async (req, res) => {
         const db = await database()
         const usersCollection = db.collection('users')
         if (/^\/login$/.test(req.url)) {
-            const theUser = await usersCollection.findOne({ email: credential.email })
+            const theUser = await usersCollection.findOne({
+                [`oauth2.${provider}.email`]: credential.email,
+            })
             if (theUser) {
                 if (
                     !theUser.oauth2 ||

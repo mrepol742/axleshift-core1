@@ -8,6 +8,7 @@ const exludeRoute = ['/api/v1/auth/verify']
 const limitedRequestRoute = [
     '/api/v1/auth/login',
     '/api/v1/auth/register',
+    '/api/v1/auth/user',
     '/api/v1/newsletter',
     '/api/v1/auth/token/new',
     '/api/v1/auth/verify/otp/new',

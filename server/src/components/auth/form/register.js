@@ -9,7 +9,13 @@ const FormRegister = async (req, res) => {
         const { email, first_name, last_name, password, newsletter } = req.body
         const db = await database()
         const usersCollection = db.collection('users')
-        const existingUser = await usersCollection.findOne({ email: email })
+        const existingUser = await usersCollection.findOne({
+            $or: [
+                { [`oauth2.google.email`]: email },
+                { [`oauth2.github.email`]: email },
+                { email: email },
+            ],
+        })
 
         if (existingUser)
             return res.status(200).json({
@@ -41,7 +47,7 @@ const FormRegister = async (req, res) => {
             }
         }
 
-        return res.status(201).send()
+        return res.status(201).json({ type: 'form' })
     } catch (err) {
         logger.error(err)
     }

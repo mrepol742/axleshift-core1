@@ -138,13 +138,38 @@ router.post('/verify', auth, async function (req, res, next) {
 */
 router.post('/user', [auth, recaptcha], async function (req, res, next) {
     try {
-        return res.status(200).json({
-            user: {
-                email: req.user.email,
-                first_name: req.user.first_name,
-                last_name: req.user.last_name,
-            },
+        const { first_name, last_name, timezone, email } = req.body
+        const set = {}
+        if (first_name && req.user.first_name !== first_name) set.first_name = first_name
+        if (last_name && req.user.last_name !== last_name) set.last_name = last_name
+        if (timezone && req.user.timezone !== timezone) set.timezone = timezone
+        if (email && req.user.email !== email) set.email = email
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+            return res.status(200).json({ error: 'Invalid email address' })
+
+        if (Object.keys(set).length === 0)
+            return res.status(200).json({ error: 'No changes detected' })
+        set.updated_at = Date.now()
+
+        const db = await database()
+        const usersCollection = db.collection('users')
+        const existingUser = await usersCollection.findOne({
+            $or: [
+                { [`oauth2.google.email`]: email },
+                { [`oauth2.github.email`]: email },
+                { email: email },
+            ],
         })
+        if (existingUser)
+            return res.status(200).json({ error: 'The email address is already used' })
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(req.user._id) },
+            {
+                $set: set,
+            },
+        )
+        return res.status(200).send()
     } catch (e) {
         logger.error(e)
     }

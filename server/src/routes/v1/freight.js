@@ -4,7 +4,6 @@ import logger from '../../components/logger.js'
 import database from '../../models/db.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
-import { getUser } from '../../components/sessions.js'
 
 const router = express.Router()
 const limit = 20
