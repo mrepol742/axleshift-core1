@@ -19,7 +19,7 @@ const auth = () => {
         request(app)
             .post('/api/v1/auth/login')
             .send({ email: 'test@example.com', password: 'test', recaptcha_ref: 'test' })
-            .expect(401)
+            .expect(403)
             .end((err, res) => {
                 if (err) return done(err)
                 done()

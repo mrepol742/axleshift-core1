@@ -1,9 +1,8 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import { ObjectId } from 'mongodb'
 import logger from '../logger.js'
 import database from '../../models/db.js'
 import { getClientIp } from '../ip.js'
+import { API_EXTERNAL_RATE_DELAY } from '../../config.js'
 
 const allowedRoutes = ['/:id']
 
@@ -29,7 +28,7 @@ const external = async (req, res, next) => {
     })
 
     if (!existingApiToken) {
-        logger.error(`invalid or denied api token: ${token}`)
+        logger.info(`invalid or denied api token: ${token}`)
         return res.status(403).send()
     }
 
@@ -59,7 +58,7 @@ const external = async (req, res, next) => {
 
     setTimeout(() => {
         return next()
-    }, process.env.API_EXTERNAL_RATE_DELAY)
+    }, API_EXTERNAL_RATE_DELAY)
 }
 
 export default external

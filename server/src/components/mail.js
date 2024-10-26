@@ -1,6 +1,5 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import nodemailer from 'nodemailer'
+import { MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM_ADDRESS } from '../config.js'
 import logger from './logger.js'
 
 let mailInstance = null
@@ -10,12 +9,12 @@ const mail = async () => {
 
     try {
         mailInstance = await nodemailer.createTransport({
-            host: process.env.MAIL_HOST,
-            port: process.env.MAIL_PORT,
+            host: MAIL_HOST,
+            port: MAIL_PORT,
             secure: false,
             auth: {
-                user: process.env.MAIL_USERNAME,
-                pass: process.env.MAIL_PASSWORD,
+                user: MAIL_USERNAME,
+                pass: MAIL_PASSWORD,
             },
         })
 
@@ -28,7 +27,7 @@ const mail = async () => {
 }
 
 export const send = (options, name) => {
-    options.from = process.env.MAIL_FROM_ADDRESS
+    options.from = MAIL_FROM_ADDRESS
     options.html = body(options.subject, name, options.text)
 
     mailInstance.sendMail(options, (error, info) => {

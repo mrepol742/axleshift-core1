@@ -1,5 +1,6 @@
 import { getClientIp } from '../components/ip.js'
 import logger from '../components/logger.js'
+import { API_RATE_LIMIT, API_EXTERNAL_RATE_LIMIT } from '../config.js'
 
 const TIME_WINDOW = 60 * 3 * 1000
 const requestCounts = {}
@@ -7,6 +8,7 @@ const exludeRoute = ['/api/v1/auth/verify']
 const limitedRequestRoute = [
     '/api/v1/auth/login',
     '/api/v1/auth/register',
+    '/api/v1/auth/user',
     '/api/v1/newsletter',
     '/api/v1/auth/token/new',
     '/api/v1/auth/verify/otp/new',
@@ -52,8 +54,8 @@ const getRateLimit = (path) => {
         return regex.test(path)
     })
     logger.info(`rate limit: ${isAllowed} - ${path}`)
-    if (isAllowed) return process.env.API_EXTERNAL_RATE_LIMIT
-    return process.env.API_RATE_LIMIT
+    if (isAllowed) return API_EXTERNAL_RATE_LIMIT
+    return API_RATE_LIMIT
 }
 
 export default rateLimiter

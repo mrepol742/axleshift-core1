@@ -1,5 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import { ObjectId } from 'mongodb'
 import express from 'express'
 import database from '../../models/db.js'
@@ -7,7 +5,6 @@ import logger from '../../components/logger.js'
 import scm from '../../components/scm.js'
 import sentry from '../../components/sentry.js'
 import auth from '../../middleware/auth.js'
-import { getUser } from '../../components/sessions.js'
 
 const router = express.Router()
 

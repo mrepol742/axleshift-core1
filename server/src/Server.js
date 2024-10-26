@@ -1,5 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
@@ -9,6 +7,7 @@ import mongoSanitize from 'express-mongo-sanitize'
 import helmet from 'helmet'
 import statusMonitor from 'express-status-monitor'
 import compression from 'compression'
+import { NODE_ENV } from './config.js'
 
 import rateLimiter from './middleware/rateLimiter.js'
 import sanitize from './middleware/sanitize.js'
@@ -54,7 +53,7 @@ app.get('/', (req, res) => {
     res.send('If you can read this means this server is working.')
 })
 
-if (process.env.NODE_ENV !== 'production')
+if (NODE_ENV !== 'production')
     app.get('/debug-sentry', (req, res) => {
         throw new Error(
             "This is a test DON't PaNICCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",

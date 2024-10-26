@@ -1,5 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import express from 'express'
 import database from '../../models/db.js'
 import logger from '../../components/logger.js'

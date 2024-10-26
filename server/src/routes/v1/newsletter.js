@@ -1,5 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import { ObjectId } from 'mongodb'
 import express from 'express'
 import database from '../../models/db.js'

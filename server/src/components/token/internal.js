@@ -1,16 +1,15 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import { ObjectId } from 'mongodb'
 import logger from '../logger.js'
 import { getUser, getSession } from '../sessions.js'
 import database from '../../models/db.js'
 import { getClientIp } from '../ip.js'
+import { REACT_APP_ORIGIN, API_RATE_DELAY } from '../../config.js'
 
 const adminRoute = []
 
 const internal = async (req, res, next) => {
     let ip = getClientIp(req)
-    if (process.env.REACT_APP_ORIGIN !== ip) return res.status(403).send()
+    if (REACT_APP_ORIGIN !== ip) return res.status(403).send()
 
     const authHeader = req.headers['authorization']
     const token = authHeader.split(' ')[1]
@@ -66,7 +65,7 @@ const internal = async (req, res, next) => {
 
     setTimeout(() => {
         return next()
-    }, process.env.API_RATE_DELAY)
+    }, API_RATE_DELAY)
 }
 
 export default internal

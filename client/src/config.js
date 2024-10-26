@@ -1,12 +1,18 @@
 const VITE_APP_API_URL = import.meta.env.VITE_APP_API_URL ?? 'http://localhost:5051'
+
 const VITE_APP_RECAPTCHA_SITE_KEY = import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY ?? ''
 const VITE_APP_SESSION = import.meta.env.VITE_APP_SESSION ?? 'RCTSESSION'
+
 const VITE_APP_NODE_ENV = import.meta.env.VITE_APP_NODE_ENV ?? 'development'
+
 const VITE_APP_SENTRY_DNS = import.meta.env.VITE_APP_SENTRY_DNS ?? ''
+
 const VITE_APP_GOOGLE_ANALYTICS = import.meta.env.VITE_APP_GOOGLE_ANALYTICS ?? ''
 const VITE_APP_GOOGLE_MAP = import.meta.env.VITE_APP_GOOGLE_MAP ?? ''
+
 const VITE_APP_GOOGLE_OAUTH_CLIENT_ID = import.meta.env.VITE_APP_GOOGLE_OAUTH_CLIENT_ID ?? ''
 const VITE_APP_GITHUB_OAUTH_CLIENT_ID = import.meta.env.VITE_APP_GITHUB_OAUTH_CLIENT_ID ?? ''
+
 const VITE_APP_FIREBASE_API_KEY = import.meta.env.VITE_APP_FIREBASE_API_KEY ?? ''
 const VITE_APP_FIREBASE_AUTH_DOMAIN = import.meta.env.VITE_APP_FIREBASE_AUTH_DOMAIN ?? ''
 const VITE_APP_FIREBASE_PROJECT_ID = import.meta.env.VITE_APP_FIREBASE_PROJECT_ID ?? ''

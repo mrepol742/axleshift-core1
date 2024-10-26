@@ -1,9 +1,8 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import fs from 'fs'
 import { MongoClient } from 'mongodb'
 import logger from '../components/logger.js'
 import passwordHash from '../components/password.js'
+import { MONGO_URL, MONGO_DB } from '../config.js'
 
 const data = JSON.parse(fs.readFileSync(import.meta.dirname + '/users.json', 'utf8')).docs
 const requiredCollections = [
@@ -21,10 +20,10 @@ const db = async () => {
     if (dbInstance) return dbInstance
 
     try {
-        const client = new MongoClient(process.env.MONGO_URL)
+        const client = new MongoClient(MONGO_URL)
         await client.connect()
 
-        dbInstance = client.db(process.env.MONGO_DB)
+        dbInstance = client.db(MONGO_DB)
 
         const collections = await dbInstance.listCollections().toArray()
         const collectionNames = collections.map((c) => c.name)

@@ -1,7 +1,6 @@
-import dotenv from 'dotenv'
-dotenv.config()
-import logger from './logger.js'
 import axios from 'axios'
+import { SENTRY_ORGANIZATION_SLUG, SENTRY_PROJECT_SLUG, SENTRY_AUTH_TOKEN } from '../config.js'
+import logger from './logger.js'
 
 let last_fetch
 let res = []
@@ -19,10 +18,10 @@ const sentry = async () => {
 const fetch = async () => {
     try {
         const response = await axios.get(
-            `https://sentry.io/api/0/projects/${process.env.SENTRY_ORGANIZATION_SLUG}/${process.env.SENTRY_PROJECT_SLUG}/issues/`,
+            `https://sentry.io/api/0/projects/${SENTRY_ORGANIZATION_SLUG}/${SENTRY_PROJECT_SLUG}/issues/`,
             {
                 headers: {
-                    Authorization: `Bearer ${process.env.SENTRY_AUTH_TOKEN}`,
+                    Authorization: `Bearer ${SENTRY_AUTH_TOKEN}`,
                 },
             },
         )

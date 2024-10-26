@@ -1,7 +1,6 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import axios from 'axios'
 import logger from '../components/logger.js'
+import { RECAPTCHA_SECRET } from '../config.js'
 
 const recaptcha = async (req, res, next) => {
     const { recaptcha_ref } = req.body
@@ -10,7 +9,7 @@ const recaptcha = async (req, res, next) => {
     try {
         const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
             params: {
-                secret: process.env.RECAPTCHA_SECRET,
+                secret: RECAPTCHA_SECRET,
                 response: recaptcha_ref,
             },
         })
@@ -19,9 +18,8 @@ const recaptcha = async (req, res, next) => {
         if (!success || score < 0.5) return res.status(403).send()
 
         return next()
-    } catch (error) {
-        logger.error('reCAPTCHA verification failed')
-        logger.error(error)
+    } catch (err) {
+        logger.error(err)
     }
     return res.status(401).send()
 }

@@ -18,6 +18,7 @@ import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import Profile from '../../components/Profile'
+import errorMessages from '../../components/http/ErrorMessages'
 
 const Account = () => {
     const user = Profile()
@@ -31,6 +32,7 @@ const Account = () => {
     const [contactInfo, setContactInfo] = useState({
         email: user.email,
     })
+    const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
     const handleInputChange = (e, type) => {
@@ -48,12 +50,42 @@ const Account = () => {
 
     const handleAccountDetails = (e) => {
         e.preventDefault()
-        alert('test')
+        handleSubmit(accountDetails)
     }
 
     const handleContactInfo = (e) => {
         e.preventDefault()
-        alert('test')
+        handleSubmit(contactInfo)
+    }
+
+    const handleSubmit = async (formData) => {
+        setLoading(true)
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        const formDataToSend = new FormData()
+        for (const key in formData) {
+            formDataToSend.append(key, formData[key])
+        }
+        formDataToSend.append('recaptcha_ref', recaptcha)
+
+        await axios
+            .post(`${VITE_APP_API_URL}/api/v1/auth/user`, formDataToSend, {
+                headers: {
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+                },
+            })
+            .then((response) => {
+                if (response.data.error) return alert(response.data.error)
+                alert('Done')
+            })
+            .catch((error) => {
+                console.error(error)
+                const message = errorMessages[error.status] || 'An unexpected error occurred'
+
+                alert(message)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     return (
@@ -124,27 +156,34 @@ const Account = () => {
                                         ))}
                                     </datalist>
                                 </CInputGroup>
-                                <CButton
-                                    color="secondary"
-                                    className="mb-4 me-2 rounded"
-                                    size="sm"
-                                    disabled
-                                >
-                                    <FontAwesomeIcon icon={faGoogle} /> Connect Google
-                                </CButton>
-                                <CButton
-                                    color="secondary"
-                                    className="mb-4 me-2 rounded"
-                                    size="sm"
-                                    disabled
-                                >
-                                    <FontAwesomeIcon icon={faGithub} /> Connect Github
-                                </CButton>
+                                <div className="mb-3">
+                                    <CButton
+                                        color="secondary"
+                                        className="mb-1 me-2 rounded"
+                                        size="sm"
+                                        disabled
+                                    >
+                                        <FontAwesomeIcon icon={faGoogle} />{' '}
+                                        {user.oauth2.google
+                                            ? user.oauth2.google.email
+                                            : 'Connect Google'}
+                                    </CButton>
+                                    <CButton
+                                        color="secondary"
+                                        className="mb-1 me-2 rounded"
+                                        size="sm"
+                                        disabled
+                                    >
+                                        <FontAwesomeIcon icon={faGithub} />{' '}
+                                        {user.oauth2.github
+                                            ? user.oauth2.github.email
+                                            : 'Connect Github'}
+                                    </CButton>
+                                </div>
                                 <CButton
                                     type="submit"
                                     color="primary"
                                     className="d-block me-2 rounded"
-                                    disabled
                                 >
                                     Save changes
                                 </CButton>
@@ -171,12 +210,7 @@ const Account = () => {
                                         onChange={(e) => handleInputChange(e, 'contactInfo')}
                                     />
                                 </CInputGroup>
-                                <CButton
-                                    type="submit"
-                                    color="primary"
-                                    className="me-2 rounded"
-                                    disabled
-                                >
+                                <CButton type="submit" color="primary" className="me-2 rounded">
                                     Save changes
                                 </CButton>
                             </CForm>

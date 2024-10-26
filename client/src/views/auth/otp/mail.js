@@ -95,6 +95,11 @@ const MailOTP = () => {
                 },
             })
             .then((response) => {
+                if (response.data.error)
+                    return setError({
+                        error: true,
+                        message: response.data.error,
+                    })
                 const urlParams = new URLSearchParams(window.location.search)
                 const url = urlParams.get('n') ? urlParams.get('n') : '/'
                 navigate(url)
