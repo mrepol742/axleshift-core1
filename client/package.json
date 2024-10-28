@@ -24,11 +24,10 @@
         "@coreui/chartjs": "^4.0.0",
         "@coreui/coreui": "^5.0.2",
         "@coreui/icons": "^3.0.1",
-        "@coreui/icons-react": "^2.2.1",
+        "@coreui/icons-react": "^2.3.0",
         "@coreui/react": "^5.1.0",
         "@coreui/react-chartjs": "^3.0.0",
         "@coreui/utils": "^2.0.2",
-        "@fontsource/poppins": "^5.1.0",
         "@fortawesome/fontawesome-svg-core": "^6.6.0",
         "@fortawesome/free-brands-svg-icons": "^6.6.0",
         "@fortawesome/free-regular-svg-icons": "^6.6.0",
@@ -63,8 +62,7 @@
         "react-router-dom": "^6.23.1",
         "redux": "^5.0.1",
         "redux-persist": "^6.0.0",
-        "simplebar-react": "^3.2.5",
-        "ua-parser-js": "^1.0.39"
+        "simplebar-react": "^3.2.5"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.25.8",

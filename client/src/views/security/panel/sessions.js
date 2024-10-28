@@ -30,18 +30,10 @@ import {
     CTabContent,
     CTabPanel,
 } from '@coreui/react'
-import UAParser from 'ua-parser-js'
 import { isAdmin } from '../../../components/Profile'
 import { parseTimestamp } from '../../../components/Timestamp'
 
 const Sessions = ({ result }) => {
-    const getDevice = (userAgent) => {
-        const parser = new UAParser()
-        parser.setUA(userAgent)
-        const result = parser.getResult()
-        return userAgent
-    }
-
     return (
         <>
             <CTable hover responsive className="rounded">
@@ -61,7 +53,7 @@ const Sessions = ({ result }) => {
                             <CTableDataCell>{index + 1}</CTableDataCell>
                             {isAdmin && <CTableDataCell>{session.user_id}</CTableDataCell>}
                             <CTableDataCell>{session.ip_address}</CTableDataCell>
-                            <CTableDataCell>{getDevice(session.user_agent)}</CTableDataCell>
+                            <CTableDataCell>{session.user_agent}</CTableDataCell>
                             <CTableDataCell>
                                 {session.active ? 'Active' : 'Inactive'}
                             </CTableDataCell>

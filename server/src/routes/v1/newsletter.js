@@ -26,7 +26,7 @@ router.post('/', recaptcha, async (req, res, next) => {
             email: email,
             is_subsribe: true,
             created_at: Date.now(),
-            update_at: Date.now(),
+            updated_at: Date.now(),
         })
 
         return res.status(200).json({ message: 'If you can see this message means it work' })

@@ -43,6 +43,7 @@ export const getUser = async (sessionToken) => {
                 oauth2: theUser.oauth2,
                 password: theUser.password ? 'OK' : null,
                 timezone: theUser.timezone,
+                customer_service_ref: theUser.customer_service_ref,
             }
     } catch (e) {
         logger.error(e)

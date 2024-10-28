@@ -11,7 +11,6 @@ import {
     CSidebarToggler,
     CNavLink,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 
 import { AppSidebarNav } from './AppSidebarNav'
 

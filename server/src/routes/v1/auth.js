@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
+import crypto from 'crypto'
 import database from '../../models/db.js'
 import logger from '../../components/logger.js'
 import { addSession, removeSession } from '../../components/sessions.js'
