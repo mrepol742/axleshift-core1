@@ -153,15 +153,17 @@ router.post('/user', [auth, recaptcha], async function (req, res, next) {
 
         const db = await database()
         const usersCollection = db.collection('users')
-        const existingUser = await usersCollection.findOne({
-            $or: [
-                { [`oauth2.google.email`]: email },
-                { [`oauth2.github.email`]: email },
-                { email: email },
-            ],
-        })
-        if (existingUser)
-            return res.status(200).json({ error: 'The email address is already used' })
+        if (email) {
+            const existingUser = await usersCollection.findOne({
+                $or: [
+                    { [`oauth2.google.email`]: email },
+                    { [`oauth2.github.email`]: email },
+                    { email: email },
+                ],
+            })
+            if (existingUser)
+                return res.status(200).json({ error: 'The email address is already used' })
+        }
 
         await usersCollection.updateOne(
             { _id: new ObjectId(req.user._id) },

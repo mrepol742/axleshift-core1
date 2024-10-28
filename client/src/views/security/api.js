@@ -31,7 +31,14 @@ import {
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCopy, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import {
+    faCopy,
+    faEye,
+    faEyeSlash,
+    faPlus,
+    faPen,
+    faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import errorMessages from '../../components/http/ErrorMessages'
 
@@ -39,8 +46,11 @@ const API = () => {
     const [loading, setLoading] = useState(false)
     const recaptchaRef = React.useRef()
     const [isBlurred, setIsBlurred] = useState(true)
-    const [result, setResult] = useState(null)
-    const [message, setMessage] = useState('')
+    const [disabledAdd, setDisabledAdd] = useState(false)
+    const [result, setResult] = useState({
+        token: '',
+        ip_address: [],
+    })
 
     const handleIconClick = () => {
         setIsBlurred((prev) => !prev)
@@ -49,10 +59,10 @@ const API = () => {
     const copyToClipboard = async () => {
         try {
             await navigator.clipboard.writeText(result)
-            setMessage('API Key copied!')
+            alert('API Key copied!')
         } catch (err) {
             console.log(err)
-            setMessage('Failed... no idea why.')
+            alert('Failed... no idea why.')
         }
     }
 
@@ -70,13 +80,12 @@ const API = () => {
                 },
             })
             .then((response) => {
-                setResult(response.data.token)
-                setMessage('')
+                setResult(response.data)
             })
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
-                setMessage(message)
+                alert(message)
             })
             .finally(() => {
                 setLoading(false)
@@ -92,17 +101,30 @@ const API = () => {
                 },
             })
             .then((response) => {
-                setResult(response.data.token)
-                setMessage('')
+                setResult(response.data)
             })
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
-                setMessage(message)
+                alert(message)
             })
             .finally(() => {
                 setLoading(false)
             })
+    }
+
+    const handleAddIp = () => {
+        if (!Array.isArray(result.ip_address))
+            return setResult((prev) => ({
+                ...prev,
+                ip_address: [''],
+            }))
+        if (result.ip_address.length < 5)
+            return setResult((prev) => ({
+                ...prev,
+                ip_address: [...prev.ip_address, ''],
+            }))
+        alert('Max number of whitelisted ip address reached')
     }
 
     useEffect(() => {
@@ -118,46 +140,112 @@ const API = () => {
             )}
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-            <h3>Auth token</h3>
-            {!result && (
-                <div className="text-center border rounded mb-4">
-                    <div className="p-0 p-md-5 my-5 my-md-0">
-                        <CImage src="/images/threat.png" fluid width="50%" />
-                        <h1>There was no API Token</h1>
-                        <CButton color="primary" onClick={gen}>
-                            Generate Token
-                        </CButton>
-                        <p>{message}</p>
-                    </div>
-                </div>
-            )}
-            {result && (
-                <>
-                    <div className="text-center border rounded mb-4">
-                        <div className="p-2 p-md-5 my-5 my-md-0">
-                            <CInputGroup className="mb-3">
-                                <CFormInput
-                                    className={isBlurred ? 'blurred' : ''}
-                                    value={result}
-                                    aria-describedby="basic-addon"
-                                />
-                                <CInputGroupText id="basic-addon" onClick={handleIconClick}>
-                                    <FontAwesomeIcon icon={faEyeSlash} />
-                                </CInputGroupText>
-                                <CInputGroupText id="basic-addon" onClick={copyToClipboard}>
-                                    <FontAwesomeIcon icon={faCopy} />
-                                </CInputGroupText>
-                            </CInputGroup>
-                            <CButton color="secondary" onClick={gen}>
-                                Generate new token
-                            </CButton>
-                            <p>{message}</p>
+            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                <CCol>
+                    <h4>Auth token</h4>
+                    {!result && (
+                        <div className="text-center border rounded mb-4">
+                            <div className="p-1 p-md-5 my-5 my-md-0">
+                                <CImage src="/images/threat.png" fluid width="50%" />
+                                <h1>There was no API Token</h1>
+                                <CButton color="primary" size="sm" onClick={gen}>
+                                    Generate Token
+                                </CButton>
+                            </div>
                         </div>
+                    )}
+                    {result && (
+                        <div className="text-center border rounded mb-4">
+                            <div className="p-2 p-md-3 my-5 my-md-0">
+                                <div className="d-flex mb-3">
+                                    <CFormInput
+                                        className={isBlurred ? 'blurred' : ''}
+                                        value={result.token}
+                                        aria-describedby="basic-addon"
+                                    />
+                                    <CButton className="ms-2" onClick={handleIconClick}>
+                                        <FontAwesomeIcon icon={isBlurred ? faEye : faEyeSlash} />
+                                    </CButton>
+                                    <CButton className="ms-2" onClick={copyToClipboard}>
+                                        <FontAwesomeIcon icon={faCopy} />
+                                    </CButton>
+                                </div>
+                                <CButton color="primary" size="sm" onClick={gen}>
+                                    Generate new token
+                                </CButton>
+                            </div>
+                        </div>
+                    )}
+                </CCol>
+                <CCol>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <h4>Ip address</h4>
+                        <CButton
+                            color="success"
+                            size="sm"
+                            className="text-white"
+                            onClick={handleAddIp}
+                            disabled={disabledAdd}
+                        >
+                            <FontAwesomeIcon icon={faPlus} /> Create
+                        </CButton>
                     </div>
-                </>
-            )}
+                    {!result.ip_address && (
+                        <div className="text-center border rounded mb-4">
+                            <div className="p-2 p-md-3 my-5 my-md-0">
+                                <h6>There was no Whitelisted IP Addresses</h6>
+                            </div>
+                        </div>
+                    )}
 
-            <h3>Whitelisted IP address</h3>
+                    {result.ip_address && (
+                        <div className="text-center border rounded mb-4">
+                            <div className="p-2 p-md-3 my-5 my-md-0">
+                                <CForm>
+                                    {result.ip_address.map((input, index) => (
+                                        <div className="d-flex mb-2" key={index}>
+                                            <CFormInput
+                                                value={input}
+                                                onChange={(e) =>
+                                                    handleInputChange(index, e.target.value)
+                                                }
+                                                placeholder={`192.168.0.${index + 1}`}
+                                            />
+                                            <CButton
+                                                color="primary"
+                                                className="ms-2"
+                                                onClick={handleIconClick}
+                                            >
+                                                <FontAwesomeIcon icon={faPen} />
+                                            </CButton>
+                                            <CButton
+                                                color="danger"
+                                                className="text-white ms-2"
+                                                onClick={copyToClipboard}
+                                            >
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </CButton>
+                                        </div>
+                                    ))}
+                                    <CButton
+                                        type="submit"
+                                        color="primary"
+                                        className="d-block me-2 rounded"
+                                    >
+                                        Save changes
+                                    </CButton>
+                                </CForm>
+                            </div>
+                        </div>
+                    )}
+                </CCol>
+            </CRow>
         </div>
     )
 }
