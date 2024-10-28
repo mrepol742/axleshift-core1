@@ -303,26 +303,7 @@ router.get('/token', auth, async function (req, res, next) {
     try {
         const db = await database()
         const apiToken = await db.collection('apiToken').findOne({ user_id: req.user._id })
-        return res.status(200).json({ token: apiToken.token })
-    } catch (e) {
-        logger.error(e)
-    }
-    return res.status(500).send()
-})
-
-/*
-  Url: POST /api/v1/auth/token/whitelist-ip
-  Header:
-     Authentication
-  Request Body:
-     Otp
-     Recaptcha ref
-*/
-router.get('/token/whitelist-ip', [auth, recaptcha], async function (req, res, next) {
-    try {
-        const db = await database()
-        const apiToken = await db.collection('apiToken').findOne({ user_id: req.user._id })
-        return res.status(200).json({ token: apiToken.token })
+        return res.status(200).json({ token: apiToken.token, whitelist_ip: apiToken.whitelist_ip })
     } catch (e) {
         logger.error(e)
     }

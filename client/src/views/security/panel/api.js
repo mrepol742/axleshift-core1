@@ -55,9 +55,7 @@ const API = ({ setLoading, result }) => {
             .catch((error) => {
                 console.error(error)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     return (

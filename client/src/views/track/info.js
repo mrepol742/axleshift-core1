@@ -37,16 +37,12 @@ const TrackInfo = () => {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => {
-                setResponseData(response.data)
-            })
+            .then((response) => setResponseData(response.data))
             .catch((error) => {
                 console.error(error)
                 setError(true)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {

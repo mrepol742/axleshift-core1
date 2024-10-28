@@ -49,7 +49,7 @@ const API = () => {
     const [disabledAdd, setDisabledAdd] = useState(false)
     const [result, setResult] = useState({
         token: '',
-        ip_address: [],
+        whitelist_ip: [],
     })
 
     const handleIconClick = () => {
@@ -79,17 +79,13 @@ const API = () => {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => {
-                setResult(response.data)
-            })
+            .then((response) => setResult(response.data))
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
                 alert(message)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     const fetchData = async () => {
@@ -100,30 +96,27 @@ const API = () => {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => {
-                setResult(response.data)
-            })
+            .then((response) => setResult(response.data))
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
                 alert(message)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     const handleAddIp = () => {
-        if (!Array.isArray(result.ip_address))
+        if (!Array.isArray(result.whitelist_ip))
             return setResult((prev) => ({
                 ...prev,
-                ip_address: [''],
+                whitelist_ip: [''],
             }))
-        if (result.ip_address.length < 5)
+        if (result.whitelist_ip.length < 5)
             return setResult((prev) => ({
                 ...prev,
-                ip_address: [...prev.ip_address, ''],
+                whitelist_ip: [...prev.whitelist_ip, ''],
             }))
+        alert(JSON.stringify(result))
         alert('Max number of whitelisted ip address reached')
     }
 
@@ -196,7 +189,7 @@ const API = () => {
                             <FontAwesomeIcon icon={faPlus} /> Create
                         </CButton>
                     </div>
-                    {!result.ip_address && (
+                    {!result.whitelist_ip && (
                         <div className="text-center border rounded mb-4">
                             <div className="p-2 p-md-3 my-5 my-md-0">
                                 <h6>There was no Whitelisted IP Addresses</h6>
@@ -204,26 +197,19 @@ const API = () => {
                         </div>
                     )}
 
-                    {result.ip_address && (
+                    {result.whitelist_ip && (
                         <div className="text-center border rounded mb-4">
                             <div className="p-2 p-md-3 my-5 my-md-0">
                                 <CForm>
-                                    {result.ip_address.map((input, index) => (
+                                    {result.whitelist_ip.map((input, index) => (
                                         <div className="d-flex mb-2" key={index}>
                                             <CFormInput
                                                 value={input}
                                                 onChange={(e) =>
-                                                    handleInputChange(index, e.target.value)
+                                                    handleIpChange(index, e.target.value)
                                                 }
                                                 placeholder={`192.168.0.${index + 1}`}
                                             />
-                                            <CButton
-                                                color="primary"
-                                                className="ms-2"
-                                                onClick={handleIconClick}
-                                            >
-                                                <FontAwesomeIcon icon={faPen} />
-                                            </CButton>
                                             <CButton
                                                 color="danger"
                                                 className="text-white ms-2"

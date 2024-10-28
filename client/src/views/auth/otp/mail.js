@@ -113,9 +113,7 @@ const MailOTP = () => {
                     message,
                 })
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     return (

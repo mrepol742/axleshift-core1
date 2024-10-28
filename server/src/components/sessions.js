@@ -30,17 +30,20 @@ export const getUser = async (sessionToken) => {
         if (!tokenCollection) return null
         const theUser = await db.collection('users').findOne({ _id: tokenCollection.user_id })
 
-        return {
-            _id: theUser._id,
-            email: theUser.email,
-            first_name: theUser.first_name,
-            last_name: theUser.last_name,
-            role: theUser.role,
-            email_verify_at: theUser.email_verify_at,
-            oauth2: theUser.oauth2,
-            password: theUser.password ? 'OK' : null,
-            timezone: theUser.timezone,
-        }
+        // i have trust issues
+        // with database admins
+        if (theUser)
+            return {
+                _id: theUser._id,
+                email: theUser.email,
+                first_name: theUser.first_name,
+                last_name: theUser.last_name,
+                role: theUser.role,
+                email_verify_at: theUser.email_verify_at,
+                oauth2: theUser.oauth2,
+                password: theUser.password ? 'OK' : null,
+                timezone: theUser.timezone,
+            }
     } catch (e) {
         logger.error(e)
     }

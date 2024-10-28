@@ -37,9 +37,7 @@ const Callback = () => {
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
                 setError(message)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {

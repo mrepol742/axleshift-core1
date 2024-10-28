@@ -17,7 +17,8 @@
         "lint-fix": "eslint \"src/**/*.js\" --fix",
         "serve": "vite preview",
         "start": "vite --host",
-        "test": "jest"
+        "test": "jest",
+        "test-coverage": "jest --coverage"
     },
     "dependencies": {
         "@coreui/chartjs": "^4.0.0",
