@@ -111,13 +111,49 @@ const API = () => {
                 ...prev,
                 whitelist_ip: [''],
             }))
-        if (result.whitelist_ip.length < 5)
+        if (result.whitelist_ip.length < 6)
             return setResult((prev) => ({
                 ...prev,
                 whitelist_ip: [...prev.whitelist_ip, ''],
             }))
-        alert(JSON.stringify(result))
         alert('Max number of whitelisted ip address reached')
+    }
+
+    const handleIpChange = (index, value) => {
+        const newInputs = [...result.whitelist_ip]
+        newInputs[index] = value
+
+        setResult((prevResult) => ({
+            ...prevResult,
+            whitelist_ip: newInputs,
+        }))
+    }
+
+    const handleWhitelistIpSubmit = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        const recaptcha = await recaptchaRef.current.executeAsync()
+
+        const formData = new FormData()
+        formData.append('whitelist_ip', result.whitelist_ip)
+        formData.append('recaptcha_ref', recaptcha)
+
+        await axios
+            .post(`${VITE_APP_API_URL}/api/v1/auth/token/whitelist-ip`, formData, {
+                headers: {
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+                },
+            })
+            .then((response) => {
+                if (response.data.error) return alert(response.data.error)
+                alert('done')
+            })
+            .catch((error) => {
+                console.error(error)
+                const message = errorMessages[error.status] || 'An unexpected error occurred'
+                alert(message)
+            })
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {
@@ -200,7 +236,7 @@ const API = () => {
                     {result.whitelist_ip && (
                         <div className="text-center border rounded mb-4">
                             <div className="p-2 p-md-3 my-5 my-md-0">
-                                <CForm>
+                                <CForm onSubmit={handleWhitelistIpSubmit}>
                                     {result.whitelist_ip.map((input, index) => (
                                         <div className="d-flex mb-2" key={index}>
                                             <CFormInput

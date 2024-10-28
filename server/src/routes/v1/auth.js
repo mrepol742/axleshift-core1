@@ -358,5 +358,44 @@ router.post('/token/new', [auth, recaptcha], async function (req, res, next) {
     return res.status(500).send()
 })
 
+/*
+  Url: POST /api/v1/auth/token/whitelist-ip
+  Header:
+     Authentication
+  Request Body:
+     Otp
+     Recaptcha ref
+*/
+router.post('/token/whitelist-ip', [auth, recaptcha], async function (req, res, next) {
+    try {
+        let whitelist_ip = req.body.whitelist_ip
+        if (!whitelist_ip) return res.status(400).send()
+        whitelist_ip = whitelist_ip.split(',')
+        if (whitelist_ip.length > 6)
+            return res.status(200).json({ error: 'Max number of whitelisted ip address reached' })
+        const db = await database()
+        const apiTokenCollection = db.collection('apiToken')
+        const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id })
+
+        if (!apiToken) return res.status(500).send()
+        await apiTokenCollection.updateOne(
+            { _id: new ObjectId(apiToken._id) },
+            {
+                $set: {
+                    active: true,
+                    whitelist_ip: whitelist_ip,
+                    compromised: false,
+                    updated_at: Date.now(),
+                    modified_by: 'system',
+                },
+            },
+        )
+        return res.status(200).send()
+    } catch (e) {
+        logger.error(e)
+    }
+    return res.status(500).send()
+})
+
 // means 9:51 pm
 export default router

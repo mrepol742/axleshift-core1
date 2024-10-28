@@ -14,7 +14,7 @@ const limitedRequestRoute = [
     '/api/v1/auth/verify/otp/new',
     '/api/v1/auth/verify/otp',
 ]
-const exteralRequestRoute = ['/api/v1/freight/:id']
+const exteralRequestRoute = ['/api/v1/freight/', '/api/v1/freight/:id']
 
 const rateLimiter = (req, res, next) => {
     const path = req.path
@@ -28,7 +28,7 @@ const rateLimiter = (req, res, next) => {
         (timestamp) => currentTime - timestamp < TIME_WINDOW,
     )
 
-    const limit = getRateLimit(path)
+    const limit = getRateLimit(req)
     const remainingRequests = limit - requestCounts[key].length
 
     // Set rate limit headers
@@ -45,16 +45,18 @@ const rateLimiter = (req, res, next) => {
     next()
 }
 
-const getRateLimit = (path) => {
+const getRateLimit = (req) => {
+    let path = req.path
     path = path.endsWith('/') ? path.slice(0, -1) : path
     if (limitedRequestRoute.includes(path)) return 5
+    const authHeader = req.headers['authorization']
     const isAllowed = exteralRequestRoute.some((route) => {
         if (route === path) return true
         const regex = new RegExp(`^${route.replace(/:\w+/, '\\w+')}$`)
         return regex.test(path)
     })
-    logger.info(`rate limit: ${isAllowed} - ${path}`)
-    if (isAllowed) return API_EXTERNAL_RATE_LIMIT
+    if (isAllowed || (authHeader && /^Bearer\score1_/.test(authHeader)))
+        return API_EXTERNAL_RATE_LIMIT
     return API_RATE_LIMIT
 }
 
