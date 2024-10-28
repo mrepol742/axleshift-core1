@@ -69,15 +69,11 @@ const SecurityManagement = () => {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => {
-                setResult(response.data)
-            })
+            .then((response) => setResult(response.data))
             .catch((error) => {
                 console.error(error)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {

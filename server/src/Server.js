@@ -20,6 +20,15 @@ const app = express()
 const upload = multer()
 
 app.use(compression())
+app.use(
+    mongoSanitize({
+        onSanitize: ({ req, key }) => {
+            logger.warn(`this request[${key}] is sanitized`)
+            logger.warn(req)
+        },
+    }),
+)
+app.use(sanitize)
 app.use(cors({ origin: '*' }))
 app.use(
     statusMonitor({
@@ -31,15 +40,6 @@ app.use(upload.none())
 app.use(express.json())
 app.use(pinoHttp({ logger }))
 app.use(rateLimiter)
-app.use(sanitize)
-app.use(
-    mongoSanitize({
-        onSanitize: ({ req, key }) => {
-            logger.warn(`this request[${key}] is sanitized`)
-            logger.warn(req)
-        },
-    }),
-)
 
 app.use(express.static(path.join(process.cwd(), 'public')))
 app.use('/api/v1/', APIv1)

@@ -42,9 +42,7 @@ const Newsletter = ({ setLoading }) => {
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
                 setMessage(message)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     return (

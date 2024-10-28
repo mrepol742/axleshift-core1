@@ -16,12 +16,7 @@ const Callback = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
 
-    useEffect(async () => {
-        const urlParams = new URLSearchParams(window.location.search)
-        const code = urlParams.get('code')
-
-        if (!code) navigate('/')
-
+    const fetchData = async (code) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         const formData = new FormData()
         formData.append('type', 'github')
@@ -42,9 +37,16 @@ const Callback = () => {
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
                 setError(message)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
+    }
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const code = urlParams.get('code')
+
+        if (!code) navigate('/')
+
+        fetchData(code)
     }, [])
 
     return (

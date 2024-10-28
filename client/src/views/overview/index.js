@@ -63,9 +63,7 @@ const Overview = () => {
             .catch((error) => {
                 console.error(error)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {

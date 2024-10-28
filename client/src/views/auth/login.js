@@ -90,9 +90,7 @@ const Login = () => {
                     message,
                 })
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     return (

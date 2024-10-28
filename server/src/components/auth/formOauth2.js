@@ -1,5 +1,7 @@
-import database from '../../models/db.js'
 import { jwtDecode } from 'jwt-decode'
+import crypto from 'crypto'
+import database from '../../models/db.js'
+import passwordHash, { generateUniqueId } from '../password.js'
 import logger from '../logger.js'
 import { addSession } from '../sessions.js'
 import Token from './token.js'
@@ -36,6 +38,11 @@ const FormOauth2 = async (req, res) => {
         if (existingUser)
             return res.status(200).json({ error: 'This Email address is already registered' })
 
+        const customer_service_ref = crypto
+            .createHash('sha256')
+            .update(generateUniqueId())
+            .digest('hex')
+
         await Promise.all([
             usersCollection.insertOne({
                 email: credential.email,
@@ -47,13 +54,14 @@ const FormOauth2 = async (req, res) => {
                     [provider]: {
                         email: credential.email,
                         created_at: Date.now(),
-                        update_at: Date.now(),
+                        updated_at: Date.now(),
                     },
                 },
                 password: null,
                 email_verify_at: Date.now(),
+                customer_service_ref: customer_service_ref,
                 created_at: Date.now(),
-                update_at: Date.now(),
+                updated_at: Date.now(),
             }),
             send(
                 {

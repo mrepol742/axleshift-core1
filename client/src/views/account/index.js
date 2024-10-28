@@ -83,9 +83,7 @@ const Account = () => {
 
                 alert(message)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     return (

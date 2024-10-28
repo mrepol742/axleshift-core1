@@ -1,10 +1,12 @@
 import React, { lazy } from 'react'
 import auth from './components/middleware/Auth'
+import profile from './components/Profile'
 
 const Overview = auth(lazy(() => import('./views/overview/index')))
-const FreightInfo = auth(lazy(() => import('./views/overview/info')))
+const Info = auth(lazy(() => import('./views/overview/info')))
 
-const Customer = auth(lazy(() => import('./views/customer/index')))
+const Inbox = auth(lazy(() => import('./views/support/customer-service/index')))
+const Chat = auth(lazy(() => import('./views/support/customer-service/chat')))
 const Account = auth(lazy(() => import('./views/account/index')))
 
 const Freight = auth(lazy(() => import('./views/freight/index')))
@@ -15,8 +17,8 @@ const FreightSea = auth(lazy(() => import('./views/freight/sea')))
 const Pricing = auth(lazy(() => import('./views/pricing/index')))
 
 const Security = auth(lazy(() => import('./views/security/index')))
-const SecurityManagement = auth(lazy(() => import('./views/security/management')))
-const SecurityAnalysis = auth(lazy(() => import('./views/security/analysis')))
+const Management = auth(lazy(() => import('./views/security/management')))
+const Analysis = auth(lazy(() => import('./views/security/analysis')))
 const DeviceLock = auth(lazy(() => import('./views/security/device')))
 const APIKey = auth(lazy(() => import('./views/security/api')))
 
@@ -30,9 +32,10 @@ const Logout = auth(lazy(() => import('./views/auth/logout')))
 
 const routes = [
     { path: '/', name: 'Overview', element: Overview },
-    { path: '/v/:id', name: 'Freight Info', element: FreightInfo },
+    { path: '/v/:id', name: 'Shipment Info', element: Info },
 
-    { path: '/customer', name: 'Customer Service', element: Customer },
+    { path: '/customer', name: 'Inbox', element: Inbox },
+    { path: '/customer/:id', name: 'Chat', element: Chat },
     { path: '/account', name: 'Account', element: Account },
 
     { path: '/documents', name: 'Freight Documents', element: Err500 },
@@ -48,8 +51,8 @@ const routes = [
     { path: '/pricing', name: 'Pricing', element: Pricing },
 
     { path: '/security', name: 'Security', element: Security },
-    { path: '/security/management', name: 'Security Management', element: SecurityManagement },
-    { path: '/security/analysis', name: 'Security Analysis', element: SecurityAnalysis },
+    { path: '/security/management', name: 'Security Management', element: Management },
+    { path: '/security/analysis', name: 'Security Analysis', element: Analysis },
     { path: '/security/device', name: 'Device Lock', element: DeviceLock },
     { path: '/security/apikey', name: 'API Key', element: APIKey },
 

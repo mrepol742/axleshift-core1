@@ -40,10 +40,7 @@ const auth = () => {
     it('POST /api/v1/auth/verify External', (done) => {
         request(app)
             .post('/api/v1/auth/verify')
-            .set(
-                'Authorization',
-                'Bearer core1_af1b6864fa4280ec8f70ac01e5533e39b457c26fcef2b4e9ff53b240b451b94a',
-            )
+            .set('Authorization', `Bearer core1_${TOKEN}`)
             .expect(403)
             .end((err, res) => {
                 if (err) return done(err)
@@ -108,9 +105,9 @@ const auth = () => {
             })
     })
 
-    it('GET /api/v1/auth/token/whitelist-ip', (done) => {
+    it('POST /api/v1/auth/token/new', (done) => {
         request(app)
-            .get('/api/v1/auth/token/whitelist-ip')
+            .post('/api/v1/auth/token/new')
             .set('Authorization', `Bearer ${TOKEN}`)
             .send({ recaptcha_ref: 'test' })
             .expect(403)
@@ -120,9 +117,9 @@ const auth = () => {
             })
     })
 
-    it('POST /api/v1/auth/token/new', (done) => {
+    it('POST /api/v1/auth/token/whitelist-ip', (done) => {
         request(app)
-            .post('/api/v1/auth/token/new')
+            .post('/api/v1/auth/token/whitelist-ip')
             .set('Authorization', `Bearer ${TOKEN}`)
             .send({ recaptcha_ref: 'test' })
             .expect(403)

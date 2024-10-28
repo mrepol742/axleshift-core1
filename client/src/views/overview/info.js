@@ -102,9 +102,7 @@ const FreightInfo = () => {
                 console.error(error)
                 setError(true)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     const handleEditButton = async () => {
@@ -116,9 +114,7 @@ const FreightInfo = () => {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => {
-                alert('save')
-            })
+            .then((response) => alert('save'))
             .catch((error) => {
                 console.error(error)
             })
@@ -145,15 +141,11 @@ const FreightInfo = () => {
                     },
                 },
             )
-            .then((response) => {
-                navigate('/')
-            })
+            .then((response) => navigate('/'))
             .catch((error) => {
                 console.error(error)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     const handleQRDownload = () => {

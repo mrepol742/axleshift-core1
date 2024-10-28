@@ -78,15 +78,11 @@ const Sea = () => {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => {
-                navigate('/')
-            })
+            .then((response) => navigate('/'))
             .catch((error) => {
                 console.error(error)
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }
 
     const handleShipperInformation = () => {

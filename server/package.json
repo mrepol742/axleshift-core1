@@ -44,7 +44,8 @@
         "pino": "^9.3.2",
         "pino-http": "^10.3.0",
         "pino-pretty": "^11.2.2",
-        "ratelimit-header-parser": "^0.1.0"
+        "ratelimit-header-parser": "^0.1.0",
+        "ua-parser-js": "^1.0.39"
     },
     "devDependencies": {
         "chai": "^5.1.1",

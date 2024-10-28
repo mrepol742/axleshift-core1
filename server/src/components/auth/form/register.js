@@ -22,6 +22,11 @@ const FormRegister = async (req, res) => {
                 error: 'Email address already registered',
             })
 
+        const customer_service_ref = crypto
+            .createHash('sha256')
+            .update(generateUniqueId())
+            .digest('hex')
+
         await usersCollection.insertOne({
             email: email,
             first_name: first_name,
@@ -30,8 +35,9 @@ const FormRegister = async (req, res) => {
             registration_type: 'form',
             password: passwordHash(password),
             email_verify_at: '',
+            customer_service_ref: customer_service_ref,
             created_at: Date.now(),
-            update_at: Date.now(),
+            updated_at: Date.now(),
         })
 
         if (newsletter === 'true') {
@@ -42,7 +48,7 @@ const FormRegister = async (req, res) => {
                     email: email,
                     is_subsribe: true,
                     created_at: Date.now(),
-                    update_at: Date.now(),
+                    updated_at: Date.now(),
                 })
             }
         }

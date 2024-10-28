@@ -50,6 +50,3 @@ npm run terraform
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-
-# Freight Management System - Level 1 Overview
