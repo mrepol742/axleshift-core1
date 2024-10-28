@@ -26,16 +26,13 @@ const Chat = () => {
     const endOfMessagesRef = useRef(null)
     const [rows, setRows] = useState(1)
     const messagesRef = collection(database, 'messages')
-    const { id } = useParams()
+    let { id } = isAdmin() ? useParams() : user.customer_service_ref
 
     useEffect(() => {
-        let customer_service_ref = id
-        // if (isAdmin()) loadMessages(id)
-
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const msgs = snapshot.docs
                 .map((doc) => ({ id: doc.id, ...doc.data() }))
-                .filter((msg) => msg.customer_service_ref === customer_service_ref)
+                .filter((msg) => msg.customer_service_ref === id)
             setMessages(msgs)
         })
         return () => unsubscribe()
@@ -64,7 +61,7 @@ const Chat = () => {
             text: message,
             sender: user.role,
             timestamp: Date.now(),
-            customer_service_ref: user.customer_service_ref,
+            customer_service_ref: id,
         })
         setMessage('')
         setRows(1)
