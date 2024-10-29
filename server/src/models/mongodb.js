@@ -16,7 +16,7 @@ const requiredCollections = [
 ]
 let dbInstance = null
 
-const db = async () => {
+const mongodb = async () => {
     if (dbInstance) return dbInstance
 
     try {
@@ -58,4 +58,4 @@ const db = async () => {
     return dbInstance
 }
 
-export default db
+export default mongodb

@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
 import crypto from 'crypto'
-import database from '../../models/db.js'
+import database from '../../models/mongodb.js'
 import logger from '../../components/logger.js'
 import { addSession, removeSession } from '../../components/sessions.js'
 import auth from '../../middleware/auth.js'
@@ -9,6 +9,7 @@ import recaptcha from '../../middleware/recaptcha.js'
 import passwordHash, { generateUniqueId } from '../../components/password.js'
 import { send } from '../../components/mail.js'
 import sendOTPEmail from '../../components/otp/email.js'
+import ipwhitelist from '../../middleware/ipwhitelist.js'
 import { Github, Google, FormLogin, FormRegister, FormOauth2 } from '../../components/auth/index.js'
 
 const router = express.Router()
@@ -32,7 +33,7 @@ const router = express.Router()
 [0]       "invalid-input-response"
 [0]     ]
     */
-router.post('/register', recaptcha, async (req, res) => {
+router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
     try {
         const {
             email,
@@ -86,8 +87,11 @@ router.post('/register', recaptcha, async (req, res) => {
   Returns:
      Session token
 */
-router.post('/login', recaptcha, async (req, res) => {
+router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
     try {
+        let ip = getClientIp(req)
+        if (REACT_APP_ORIGIN !== ip) return res.status(403).send()
+
         const { email, password, credential, type, code } = req.body
         if (!type || !['form', 'google', 'github'].includes(type)) return res.status(400).send()
         if (type === 'form' && (!email || !password)) return res.status(400).send()

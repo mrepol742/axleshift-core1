@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import database from '../../../models/db.js'
+import database from '../../../models/mongodb.js'
 import logger from '../../logger.js'
 import passwordHash, { generateUniqueId } from '../../password.js'
 import { addSession } from '../../../components/sessions.js'

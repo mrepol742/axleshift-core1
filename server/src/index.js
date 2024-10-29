@@ -12,7 +12,7 @@ Sentry.init({
 
 import logger from './components/logger.js'
 import app from './Server.js'
-import db from './models/db.js'
+import db from './models/mongodb.js'
 import mail from './components/mail.js'
 import cron from './components/cron.js'
 import test from './components/test.js'

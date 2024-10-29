@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode'
 import crypto from 'crypto'
-import database from '../../models/db.js'
+import database from '../../models/mongodb.js'
 import passwordHash, { generateUniqueId } from '../password.js'
 import logger from '../logger.js'
 import { addSession } from '../sessions.js'

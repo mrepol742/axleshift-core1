@@ -1,5 +1,5 @@
 import express from 'express'
-import database from '../../models/db.js'
+import database from '../../models/mongodb.js'
 import logger from '../../components/logger.js'
 import auth from '../../middleware/auth.js'
 
