@@ -49,3 +49,6 @@ crash.log
 # Other local configuration files
 *.override.tf
 *.override.tf.json
+
+.gemini.json
+test.js

@@ -1,11 +1,13 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { GEMINI_MODEL } from '../config.js'
-import { getApiKey, moveApikey } from '../components/apikey.js'
+import { getApikey } from '../components/apikey.js'
 import logger from '../components/logger.js'
 
 const gemini = async (prompt, json, retry) => {
+    const apikey = getApikey()
+    if (!apikey) return null
     try {
-        const genAI = new GoogleGenerativeAI(getApiKey())
+        const genAI = new GoogleGenerativeAI(apikey)
         const model = genAI.getGenerativeModel({ model: GEMINI_MODEL })
         const result = await model.generateContent(prompt)
         const res = result.response.text()
@@ -13,7 +15,6 @@ const gemini = async (prompt, json, retry) => {
     } catch (err) {
         logger.error(err)
         if (retry) return null
-        if (error.code === '429') moveApikey()
         return gemini(prompt, json, true)
     }
     return null
