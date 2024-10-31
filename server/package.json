@@ -14,7 +14,10 @@
         "production": "node src/index",
         "test": "mocha --timeout 10000 --exit",
         "dev": "nodemon --ext js --ignore '*.json' src/index",
-        "lint": "prettier --write ."
+        "lint": "prettier --write .",
+        "env": "[ ! -f .env ] && cp .env.example .env",
+        "gemini": "[ ! -f .gemini.json ] && cp .gemini.example.json .gemini.json",
+        "prompt": "[ ! -f .prompt.json ] && cp .prompt.example.json .prompt.json"
     },
     "author": "The Freight Capstone Core 1",
     "license": "MIT",

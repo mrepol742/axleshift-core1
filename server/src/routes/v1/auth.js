@@ -89,9 +89,6 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
 */
 router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
     try {
-        let ip = getClientIp(req)
-        if (REACT_APP_ORIGIN !== ip) return res.status(403).send()
-
         const { email, password, credential, type, code } = req.body
         if (!type || !['form', 'google', 'github'].includes(type)) return res.status(400).send()
         if (type === 'form' && (!email || !password)) return res.status(400).send()

@@ -15,10 +15,10 @@ import {
     CButtonGroup,
     CSpinner,
 } from '@coreui/react'
-import { GoogleLogin } from '@react-oauth/google'
+import { useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import {
     VITE_APP_RECAPTCHA_SITE_KEY,
@@ -42,7 +42,7 @@ const Login = () => {
     const url = urlParams.get('n') ? urlParams.get('n') : '/'
 
     useEffect(() => {
-        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate(url)
+        if (cookies.get(VITE_APP_SESSION) !== undefined) return (window.location.href = url)
     }, [])
 
     const handleSubmit = async (e, type, credential) => {
@@ -105,17 +105,17 @@ const Login = () => {
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5} className="my-2">
                         <CCard className="p-1 p-md-4 shadow">
-                            {error.error && (
-                                <CAlert color="danger" className="d-flex align-items-center">
-                                    <FontAwesomeIcon
-                                        className="flex-shrink-0 me-2"
-                                        icon={faXmark}
-                                        size="xl"
-                                    />
-                                    <div>{error.message}</div>
-                                </CAlert>
-                            )}
                             <CCardBody>
+                                {error.error && (
+                                    <CAlert color="danger" className="d-flex align-items-center">
+                                        <FontAwesomeIcon
+                                            className="flex-shrink-0 me-2"
+                                            icon={faXmark}
+                                            size="xl"
+                                        />
+                                        <div>{error.message}</div>
+                                    </CAlert>
+                                )}
                                 <CForm onSubmit={(e) => handleSubmit(e, 'form', null)}>
                                     <h1>Login</h1>
                                     <p className="text-body-secondary">Sign In to your account</p>
@@ -188,34 +188,41 @@ const Login = () => {
                                             </CButton>
                                         </CButtonGroup>
                                     </div>
-                                    <div className="d-flex justify-content-center mb-3">
-                                        <GoogleLogin
-                                            onSuccess={(credentialResponse) => {
-                                                handleSubmit(
-                                                    null,
-                                                    'google',
-                                                    credentialResponse.credential,
-                                                )
-                                            }}
-                                            onError={() => {
-                                                setError({
-                                                    error: true,
-                                                    message: 'Login Failed',
-                                                })
-                                            }}
-                                            useOneTap
-                                        />
-                                    </div>
-                                    <div className="d-flex justify-content-center mb-3">
+                                    <div className="mb-4 text-center">
+                                        <span className="text-muted d-block mb-1">
+                                            Or continue with
+                                        </span>
                                         <CButton
-                                            color="secondary"
-                                            className="d-block"
-                                            size="sm"
+                                            color="outline-primary"
+                                            className="me-2"
+                                            onClick={() =>
+                                                useGoogleLogin({
+                                                    onSuccess: (credentialResponse) => {
+                                                        handleSubmit(
+                                                            null,
+                                                            'google',
+                                                            credentialResponse.access_token,
+                                                        )
+                                                    },
+                                                    onError: () => {
+                                                        setError({
+                                                            error: true,
+                                                            message: 'Please try again later',
+                                                        })
+                                                    },
+                                                })
+                                            }
+                                        >
+                                            <FontAwesomeIcon icon={faGoogle} />
+                                        </CButton>
+                                        <CButton
+                                            color="outline-primary"
+                                            className="me-2"
                                             onClick={() =>
                                                 (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
                                             }
                                         >
-                                            <FontAwesomeIcon icon={faGithub} /> Signin using Github
+                                            <FontAwesomeIcon icon={faGithub} />
                                         </CButton>
                                     </div>
                                     <CButton

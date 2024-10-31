@@ -20,7 +20,7 @@
     "server-install": "cd server && npm i",
     "client-install": "cd client && npm i",
     "setup-env": "concurrently \"npm run server-env\" \"npm run client-env\"",
-    "server-env": "cd server && [ ! -f .env ] && cp .env.example .env",
+    "server-env": "cd server && concurrently \"npm run env\" \"npm run gemini\" \"npm run prompt\"",
     "client-env": "cd client && [ ! -f .env ] && cp .env.example .env",
     "post-production": "concurrently \"npm run server\" \"npm run client-post\"",
     "client-post": "cd client && npm run build && cd build && python3 -m http.server",

@@ -19,6 +19,7 @@ import APIv1 from './routes/v1/index.js'
 const app = express()
 const upload = multer()
 
+app.use(cors())
 app.use(compression())
 app.use(
     mongoSanitize({
@@ -29,17 +30,16 @@ app.use(
     }),
 )
 app.use(sanitize)
-app.use(cors({ origin: '*' }))
+app.use(helmet())
+app.use(upload.none())
+app.use(express.json())
+app.use(rateLimiter)
+app.use(pinoHttp({ logger }))
 app.use(
     statusMonitor({
         title: 'Server',
     }),
 )
-app.use(helmet())
-app.use(upload.none())
-app.use(express.json())
-app.use(pinoHttp({ logger }))
-app.use(rateLimiter)
 
 app.use(express.static(path.join(process.cwd(), 'public')))
 app.use('/api/v1/', APIv1)

@@ -58,5 +58,10 @@
         "request": 0,
         "last_accessed": null,
         "key": null
+    },
+    "GEMINI_AUTH_KEY_AXIK": {
+        "request": 0,
+        "last_accessed": null,
+        "key": null
     }
 }

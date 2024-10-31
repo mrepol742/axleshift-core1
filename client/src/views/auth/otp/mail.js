@@ -128,17 +128,17 @@ const MailOTP = () => {
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
                         <CCard className="p-1 p-md-4 shadow">
-                            {error.error && (
-                                <CAlert color="danger" className="d-flex align-items-center">
-                                    <FontAwesomeIcon
-                                        className="flex-shrink-0 me-2"
-                                        icon={faXmark}
-                                        size="xl"
-                                    />
-                                    <div>{error.message}</div>
-                                </CAlert>
-                            )}
                             <CCardBody>
+                                {error.error && (
+                                    <CAlert color="danger" className="d-flex align-items-center">
+                                        <FontAwesomeIcon
+                                            className="flex-shrink-0 me-2"
+                                            icon={faXmark}
+                                            size="xl"
+                                        />
+                                        <div>{error.message}</div>
+                                    </CAlert>
+                                )}
                                 <CForm onSubmit={handleSubmit}>
                                     <h1>OTP</h1>
                                     <p className="text-body-secondary">

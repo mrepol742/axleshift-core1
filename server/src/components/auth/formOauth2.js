@@ -6,12 +6,12 @@ import logger from '../logger.js'
 import { addSession } from '../sessions.js'
 import Token from './token.js'
 import { send } from '../mail.js'
+import Download from '../download.js'
 
 const FormOauth2 = async (req, res) => {
     try {
         const credential = req.body.credential
         const provider = credential.request_type ? 'github' : 'google'
-        //TODO: verify credential here FIRST
 
         const db = await database()
         const usersCollection = db.collection('users')
@@ -38,10 +38,7 @@ const FormOauth2 = async (req, res) => {
         if (existingUser)
             return res.status(200).json({ error: 'This Email address is already registered' })
 
-        const customer_service_ref = crypto
-            .createHash('sha256')
-            .update(generateUniqueId())
-            .digest('hex')
+        const user_profile_ref = generateUniqueId()
 
         await Promise.all([
             usersCollection.insertOne({
@@ -57,9 +54,10 @@ const FormOauth2 = async (req, res) => {
                         updated_at: Date.now(),
                     },
                 },
+                avatar: user_profile_ref,
                 password: null,
                 email_verify_at: Date.now(),
-                customer_service_ref: customer_service_ref,
+                customer_service_ref: generateUniqueId(),
                 created_at: Date.now(),
                 updated_at: Date.now(),
             }),
@@ -71,6 +69,7 @@ const FormOauth2 = async (req, res) => {
                 },
                 credential.given_name,
             ),
+            Download(credential.picture, user_profile_ref),
         ])
 
         const theUser = await usersCollection.findOne({ email: credential.email })
