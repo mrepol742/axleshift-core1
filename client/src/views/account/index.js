@@ -234,7 +234,7 @@ const Account = () => {
                 </CCol>
             </CRow>
 
-            <h4>Delete account</h4>
+            <h4 className="text-danger">Delete account</h4>
             <CCard className="mb-3">
                 <CCardBody>
                     <p>

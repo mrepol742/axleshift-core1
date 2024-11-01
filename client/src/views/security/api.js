@@ -187,7 +187,7 @@ const API = () => {
                     )}
                     {result.token && (
                         <div className="text-center border rounded mb-4">
-                            <div className="p-2 p-md-3 my-5 my-md-0">
+                            <div className="p-2 p-md-3">
                                 <div className="d-flex mb-3">
                                     <CFormInput
                                         className={isBlurred ? 'blurred' : ''}
@@ -227,7 +227,7 @@ const API = () => {
                             <FontAwesomeIcon icon={faPlus} /> Create
                         </CButton>
                     </div>
-                    {!result.whitelist_ip && (
+                    {result.whitelist_ip.length == 0 && (
                         <div className="text-center border rounded mb-4">
                             <div className="p-2 p-md-3 my-5 my-md-0">
                                 <h6>There was no Whitelisted IP Addresses</h6>
@@ -235,9 +235,9 @@ const API = () => {
                         </div>
                     )}
 
-                    {result.whitelist_ip && (
+                    {result.whitelist_ip.length != 0 && (
                         <div className="text-center border rounded mb-4">
-                            <div className="p-2 p-md-3 my-5 my-md-0">
+                            <div className="p-2 p-md-3">
                                 <CForm onSubmit={handleWhitelistIpSubmit}>
                                     {result.whitelist_ip.map((input, index) => (
                                         <div className="d-flex mb-2" key={index}>
