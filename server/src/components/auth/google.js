@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { jwtDecode } from 'jwt-decode'
 import logger from '../logger.js'
 import FormOauth2 from './formOauth2.js'
 

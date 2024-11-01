@@ -1,4 +1,3 @@
-import { jwtDecode } from 'jwt-decode'
 import crypto from 'crypto'
 import database from '../../models/mongodb.js'
 import passwordHash, { generateUniqueId } from '../password.js'

@@ -40,6 +40,17 @@ const Login = () => {
     })
     const urlParams = new URLSearchParams(window.location.search)
     const url = urlParams.get('n') ? urlParams.get('n') : '/'
+    const handleGoogleLogin = useGoogleLogin({
+        onSuccess: async (credentialResponse) => {
+            handleSubmit(null, 'google', credentialResponse.access_token)
+        },
+        onError: () => {
+            setError({
+                error: true,
+                message: 'Please try again later',
+            })
+        },
+    })
 
     useEffect(() => {
         if (cookies.get(VITE_APP_SESSION) !== undefined) return (window.location.href = url)
@@ -181,37 +192,22 @@ const Login = () => {
                                                 Login
                                             </CButton>
                                             <CButton
-                                                className="me-2 rounded border-2 border-primary text-primary"
-                                                onClick={() => navigate(`/register${url}`)}
+                                                color="outline-primary"
+                                                className="me-2 rounded"
+                                                onClick={() => navigate(`/register?n=${url}`)}
                                             >
                                                 Signup
                                             </CButton>
                                         </CButtonGroup>
                                     </div>
-                                    <div className="mb-4 text-center">
+                                    <div className="text-center">
                                         <span className="text-muted d-block mb-1">
                                             Or continue with
                                         </span>
                                         <CButton
                                             color="outline-primary"
                                             className="me-2"
-                                            onClick={() =>
-                                                useGoogleLogin({
-                                                    onSuccess: (credentialResponse) => {
-                                                        handleSubmit(
-                                                            null,
-                                                            'google',
-                                                            credentialResponse.access_token,
-                                                        )
-                                                    },
-                                                    onError: () => {
-                                                        setError({
-                                                            error: true,
-                                                            message: 'Please try again later',
-                                                        })
-                                                    },
-                                                })
-                                            }
+                                            onClick={handleGoogleLogin}
                                         >
                                             <FontAwesomeIcon icon={faGoogle} />
                                         </CButton>
@@ -234,16 +230,6 @@ const Login = () => {
                                     </CButton>
                                 </CForm>
                             </CCardBody>
-                            <div className="ms-auto">
-                                <a
-                                    href="https://stats.uptimerobot.com/5l58Mua0Wi"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                >
-                                    System Status
-                                </a>
-                            </div>
                         </CCard>
                     </CCol>
                 </CRow>

@@ -52,7 +52,7 @@ const Landing = () => {
                         <Navbar />
                         <CRow className="h-100 justify-content-start align-items-center">
                             <CCol xs={12} md={6} className="px-4 mx-0 mx-md-4">
-                                <h1 className="text-white display-1" style={{ fontWeight: 800 }}>
+                                <h1 className="text-white display-1" style={{ fontWeight: 400 }}>
                                     Where <span className="text-warning">Freight</span> Meets
                                     Efficiency
                                 </h1>

@@ -62,13 +62,13 @@ const Login = () => {
                                         <CButtonGroup>
                                             <CButton
                                                 type="submit"
-                                                color="success"
+                                                color="primary"
                                                 className="me-2 rounded"
                                             >
                                                 Submit
                                             </CButton>
                                             <CButton
-                                                color="primary"
+                                                color="outline-primary"
                                                 className="me-2 rounded"
                                                 onClick={() => navigate('/login')}
                                             >
@@ -78,16 +78,6 @@ const Login = () => {
                                     </div>
                                 </CForm>
                             </CCardBody>
-                            <div className="ms-auto">
-                                <a
-                                    href="https://stats.uptimerobot.com/5l58Mua0Wi"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                >
-                                    System Status
-                                </a>
-                            </div>
                         </CCard>
                     </CCol>
                 </CRow>

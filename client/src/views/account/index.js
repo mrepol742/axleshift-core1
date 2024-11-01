@@ -162,7 +162,7 @@ const Account = () => {
                                         disabled
                                     >
                                         <FontAwesomeIcon icon={faGoogle} />{' '}
-                                        {user.oauth2.google
+                                        {user.oauth2 && user.oauth2.google
                                             ? user.oauth2.google.email
                                             : 'Connect Google'}
                                     </CButton>
@@ -173,7 +173,7 @@ const Account = () => {
                                         disabled
                                     >
                                         <FontAwesomeIcon icon={faGithub} />{' '}
-                                        {user.oauth2.github
+                                        {user.oauth2 && user.oauth2.github
                                             ? user.oauth2.github.email
                                             : 'Connect Github'}
                                     </CButton>
