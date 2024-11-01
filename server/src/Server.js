@@ -41,7 +41,7 @@ app.use(
     }),
 )
 
-app.use(express.static(path.join(process.cwd(), 'public')))
+app.use(express.static('public'))
 app.use('/api/v1/', APIv1)
 
 app.use((err, req, res, next) => {

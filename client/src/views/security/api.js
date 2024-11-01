@@ -96,7 +96,9 @@ const API = () => {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => setResult(response.data))
+            .then((response) => {
+                if (!response.data.error) setResult(response.data)
+            })
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'An unexpected error occurred'
@@ -172,18 +174,18 @@ const API = () => {
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol>
                     <h4>Auth token</h4>
-                    {!result && (
+                    {!result.token && (
                         <div className="text-center border rounded mb-4">
                             <div className="p-1 p-md-5 my-5 my-md-0">
                                 <CImage src="/images/threat.png" fluid width="50%" />
-                                <h1>There was no API Token</h1>
+                                <h4>There was no Auth Token</h4>
                                 <CButton color="primary" size="sm" onClick={gen}>
                                     Generate Token
                                 </CButton>
                             </div>
                         </div>
                     )}
-                    {result && (
+                    {result.token && (
                         <div className="text-center border rounded mb-4">
                             <div className="p-2 p-md-3 my-5 my-md-0">
                                 <div className="d-flex mb-3">

@@ -305,6 +305,8 @@ router.get('/token', auth, async function (req, res, next) {
     try {
         const db = await database()
         const apiToken = await db.collection('apiToken').findOne({ user_id: req.user._id })
+        if (!apiToken) return res.status(200).json({ error: 'No API Token found' })
+
         return res.status(200).json({ token: apiToken.token, whitelist_ip: apiToken.whitelist_ip })
     } catch (e) {
         logger.error(e)
