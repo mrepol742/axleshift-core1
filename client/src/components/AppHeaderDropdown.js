@@ -30,8 +30,11 @@ const AppHeaderDropdown = () => {
         <CDropdown variant="nav-item">
             <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
                 <CImage
-                    src={user.avatar ? `${VITE_APP_API_URL}/u/${user.avatar}.png` : `${VITE_APP_API_URL}/favicon.ico`}
-                    alt={user.avatar ? `${VITE_APP_API_URL}/u/${user.avatar}.png` : 'error'}
+                    src={
+                        user.avatar
+                            ? `${VITE_APP_API_URL}/u/${user.avatar}.png`
+                            : `${VITE_APP_API_URL}/favicon.ico`
+                    }
                     size="md"
                 />
             </CDropdownToggle>

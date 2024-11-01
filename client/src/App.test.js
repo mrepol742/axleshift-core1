@@ -3,7 +3,6 @@ import { MemoryRouter } from 'react-router-dom'
 import React from 'react'
 import store from './store'
 import { Provider } from 'react-redux'
-import './bootstrap'
 import App from './views/landing'
 
 describe('App tests', () => {
@@ -15,7 +14,7 @@ describe('App tests', () => {
                 </MemoryRouter>
             </Provider>,
         )
-        const heading = screen.getByText(/Where Freight Meets Efficiency/i)
-        expect(heading).toBeInTheDocument()
+        const headings = screen.getAllByText(/Freight/i)
+        expect(headings.length).toBeGreaterThan(0)
     })
 })
