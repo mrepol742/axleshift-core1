@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
+    CImage,
     CSpinner,
     CCard,
     CCardHeader,
@@ -100,6 +101,22 @@ const Account = () => {
                     <CCard className="mb-3">
                         <CCardBody>
                             <CForm onSubmit={handleAccountDetails}>
+                                <CImage
+                                    crossOrigin="Anonymous"
+                                    src={
+                                        user.avatar
+                                            ? `${VITE_APP_API_URL}/u/${user.avatar}.png`
+                                            : `${VITE_APP_API_URL}/favicon.ico`
+                                    }
+                                    className="border border-5 mb-3 rounded-2"
+                                    width="90px"
+                                />
+                                <CFormInput
+                                    id="profile_pic"
+                                    type="file"
+                                    className="mb-3"
+                                    disabled
+                                />
                                 <CRow>
                                     <CCol md={6} className="mb-3">
                                         <CInputGroup>
@@ -162,7 +179,7 @@ const Account = () => {
                                         disabled
                                     >
                                         <FontAwesomeIcon icon={faGoogle} />{' '}
-                                        {user.oauth2.google
+                                        {user.oauth2 && user.oauth2.google
                                             ? user.oauth2.google.email
                                             : 'Connect Google'}
                                     </CButton>
@@ -173,7 +190,7 @@ const Account = () => {
                                         disabled
                                     >
                                         <FontAwesomeIcon icon={faGithub} />{' '}
-                                        {user.oauth2.github
+                                        {user.oauth2 && user.oauth2.github
                                             ? user.oauth2.github.email
                                             : 'Connect Github'}
                                     </CButton>

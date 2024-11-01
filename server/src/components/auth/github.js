@@ -24,6 +24,7 @@ const Github = async (req, res) => {
             email: response.data.email,
             given_name: nameParts[0],
             family_name: nameParts[nameParts.length - 1],
+            picture: response.data.avatar_url,
             request_type: 'github_user',
         }
         return await FormOauth2(req, res)

@@ -33,6 +33,8 @@ const SENTRY_AUTH_TOKEN = process.env.SENTRY_AUTH_TOKEN ?? ''
 const SENTRY_ORGANIZATION_SLUG = process.env.SENTRY_ORGANIZATION_SLUG ?? 'freight-capstone'
 const SENTRY_PROJECT_SLUG = process.env.SENTRY_PROJECT_SLUG ?? 'core1'
 
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? ''
+
 export {
     MONGO_URL,
     MONGO_DB,
@@ -60,4 +62,5 @@ export {
     SENTRY_AUTH_TOKEN,
     SENTRY_ORGANIZATION_SLUG,
     SENTRY_PROJECT_SLUG,
+    GEMINI_MODEL,
 }

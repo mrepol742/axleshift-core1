@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import database from '../models/db.js'
+import database from '../models/mongodb.js'
 import logger from './logger.js'
 
 export const addSession = async (theUser, sessionToken, ip, userAgent) => {
@@ -41,6 +41,7 @@ export const getUser = async (sessionToken) => {
                 role: theUser.role,
                 email_verify_at: theUser.email_verify_at,
                 oauth2: theUser.oauth2,
+                avatar: theUser.avatar,
                 password: theUser.password ? 'OK' : null,
                 timezone: theUser.timezone,
                 customer_service_ref: theUser.customer_service_ref,

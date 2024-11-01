@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import database from '../../../models/db.js'
+import database from '../../../models/mongodb.js'
 import logger from '../../logger.js'
 import passwordHash, { generateUniqueId } from '../../password.js'
 import { addSession } from '../../../components/sessions.js'
@@ -22,20 +22,16 @@ const FormRegister = async (req, res) => {
                 error: 'Email address already registered',
             })
 
-        const customer_service_ref = crypto
-            .createHash('sha256')
-            .update(generateUniqueId())
-            .digest('hex')
-
         await usersCollection.insertOne({
             email: email,
             first_name: first_name,
             last_name: last_name,
             role: 'user',
             registration_type: 'form',
+            avatar: null,
             password: passwordHash(password),
             email_verify_at: '',
-            customer_service_ref: customer_service_ref,
+            customer_service_ref: generateUniqueId(),
             created_at: Date.now(),
             updated_at: Date.now(),
         })

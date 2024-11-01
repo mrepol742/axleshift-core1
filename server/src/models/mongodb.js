@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { MongoClient } from 'mongodb'
 import logger from '../components/logger.js'
-import passwordHash from '../components/password.js'
+import passwordHash, { generateUniqueId } from '../components/password.js'
 import { MONGO_URL, MONGO_DB } from '../config.js'
 
 const data = JSON.parse(fs.readFileSync(import.meta.dirname + '/users.json', 'utf8')).docs
@@ -16,7 +16,7 @@ const requiredCollections = [
 ]
 let dbInstance = null
 
-const db = async () => {
+const mongodb = async () => {
     if (dbInstance) return dbInstance
 
     try {
@@ -43,7 +43,10 @@ const db = async () => {
                 if (documents.length != 0) return
 
                 for (const element of data) {
+                    element.registration_type = 'internal'
                     element.password = passwordHash(element.password)
+                    element.email_verify_at = Date.now()
+                    element.customer_service_ref = generateUniqueId()
                 }
                 const insertResult = await collection.insertMany(data)
                 logger.info(`inserted documents: ${insertResult.insertedCount}`)
@@ -58,4 +61,4 @@ const db = async () => {
     return dbInstance
 }
 
-export default db
+export default mongodb

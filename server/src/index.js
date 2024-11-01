@@ -12,10 +12,11 @@ Sentry.init({
 
 import logger from './components/logger.js'
 import app from './Server.js'
-import db from './models/db.js'
+import db from './models/mongodb.js'
 import mail from './components/mail.js'
 import cron from './components/cron.js'
 import test from './components/test.js'
+import gemini from './models/gemini.js'
 
 process.on('uncaughtException', (err, origin) => {
     logger.error(err)

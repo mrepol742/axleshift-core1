@@ -128,17 +128,17 @@ const MailOTP = () => {
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
                         <CCard className="p-1 p-md-4 shadow">
-                            {error.error && (
-                                <CAlert color="danger" className="d-flex align-items-center">
-                                    <FontAwesomeIcon
-                                        className="flex-shrink-0 me-2"
-                                        icon={faXmark}
-                                        size="xl"
-                                    />
-                                    <div>{error.message}</div>
-                                </CAlert>
-                            )}
                             <CCardBody>
+                                {error.error && (
+                                    <CAlert color="danger" className="d-flex align-items-center">
+                                        <FontAwesomeIcon
+                                            className="flex-shrink-0 me-2"
+                                            icon={faXmark}
+                                            size="xl"
+                                        />
+                                        <div>{error.message}</div>
+                                    </CAlert>
+                                )}
                                 <CForm onSubmit={handleSubmit}>
                                     <h1>OTP</h1>
                                     <p className="text-body-secondary">
@@ -168,16 +168,6 @@ const MailOTP = () => {
                                     </CButton>
                                 </CForm>
                             </CCardBody>
-                            <div className="ms-auto">
-                                <a
-                                    href="https://stats.uptimerobot.com/5l58Mua0Wi"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                >
-                                    System Status
-                                </a>
-                            </div>
                         </CCard>
                     </CCol>
                 </CRow>

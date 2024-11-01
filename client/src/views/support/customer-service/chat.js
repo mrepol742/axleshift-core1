@@ -26,7 +26,7 @@ const Chat = () => {
     const endOfMessagesRef = useRef(null)
     const [rows, setRows] = useState(1)
     const messagesRef = collection(database, 'messages')
-    let { id } = isAdmin() ? useParams() : user.customer_service_ref
+    const id = isAdmin() ? useParams().id : user.customer_service_ref
 
     useEffect(() => {
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {

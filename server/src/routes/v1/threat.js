@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
-import database from '../../models/db.js'
+import database from '../../models/mongodb.js'
 import logger from '../../components/logger.js'
 import scm from '../../components/scm.js'
 import sentry from '../../components/sentry.js'

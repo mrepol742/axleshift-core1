@@ -1,12 +1,13 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
-import database from '../../models/db.js'
+import database from '../../models/mongodb.js'
 import logger from '../../components/logger.js'
 import recaptcha from '../../middleware/recaptcha.js'
+import ipwhitelist from '../../middleware/ipwhitelist.js'
 
 const router = express.Router()
 
-router.post('/', recaptcha, async (req, res, next) => {
+router.post('/', [ipwhitelist, recaptcha], async (req, res, next) => {
     try {
         const email = req.body.email
         if (!email) return res.status(400).send()

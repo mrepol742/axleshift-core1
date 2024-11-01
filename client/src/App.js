@@ -25,7 +25,7 @@ const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
     const storedTheme = useSelector((state) => state.theme)
     ReactGA.initialize(VITE_APP_GOOGLE_ANALYTICS)
-    let token = cookies.get(VITE_APP_SESSION)
+    const token = cookies.get(VITE_APP_SESSION)
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.href.split('?')[1])
@@ -38,10 +38,6 @@ const App = () => {
 
         ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
     }, [])
-
-    useEffect(() => {
-        token = cookies.get(VITE_APP_SESSION)
-    }, [useNavigate])
 
     return (
         <Router>

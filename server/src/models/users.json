@@ -1,11 +1,19 @@
 {
     "docs": [
         {
-            "email": "mrepol742@gmail.com",
+            "email": "admin@example.com",
             "first_name": "Melvin Jones",
             "last_name": "Repol",
             "role": "admin",
-            "password": "mrepol742",
+            "password": "admin",
+            "email_verify_at": ""
+        },
+        {
+            "email": "user@example.com",
+            "first_name": "Melvin Jones",
+            "last_name": "Repol",
+            "role": "user",
+            "password": "user",
             "email_verify_at": ""
         }
     ]

@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import logger from '../logger.js'
-import database from '../../models/db.js'
+import database from '../../models/mongodb.js'
 import { getClientIp } from '../ip.js'
 import { API_EXTERNAL_RATE_DELAY } from '../../config.js'
 

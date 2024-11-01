@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
+    CImage,
     CAvatar,
     CBadge,
     CDropdown,
@@ -18,8 +19,8 @@ import {
     faBell,
 } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
-
 import Profile from '../components/Profile'
+import { VITE_APP_API_URL } from '../config.js'
 
 const AppHeaderDropdown = () => {
     const navigate = useNavigate()
@@ -28,7 +29,17 @@ const AppHeaderDropdown = () => {
     return (
         <CDropdown variant="nav-item">
             <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
-                <CAvatar src="https://avatars.githubusercontent.com/u/62317165?v=4" size="md" />
+                <CImage
+                    crossOrigin="Anonymous"
+                    src={
+                        user.avatar
+                            ? `${VITE_APP_API_URL}/u/${user.avatar}.png`
+                            : `${VITE_APP_API_URL}/favicon.ico`
+                    }
+                    className={user.avatar ? 'rounded-5' : 'rounded-1'}
+                    fluid
+                    width="40px"
+                />
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
                 <CDropdownHeader className="bg-body-secondary fw-semibold mb-2 fs-6 px-5">

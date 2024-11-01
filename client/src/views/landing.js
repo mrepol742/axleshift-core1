@@ -52,18 +52,11 @@ const Landing = () => {
                         <Navbar />
                         <CRow className="h-100 justify-content-start align-items-center">
                             <CCol xs={12} md={6} className="px-4 mx-0 mx-md-4">
-                                <h1
-                                    className="display-6 text-white"
-                                    data-aos="fade-right"
-                                    data-aos-duration="1000"
-                                >
-                                    Where Freight Meets Efficiency
+                                <h1 className="text-white display-1" style={{ fontWeight: 400 }}>
+                                    Where <span className="text-warning">Freight</span> Meets
+                                    Efficiency
                                 </h1>
-                                <p
-                                    className="lead text-white"
-                                    data-aos="fade-up"
-                                    data-aos-duration="1000"
-                                >
+                                <p className="lead text-white">
                                     Our cutting-edge platform empowers businesses to improve their
                                     shipping strategies. Experience optimized routing without the
                                     complexities of tracking.
@@ -71,9 +64,7 @@ const Landing = () => {
                                 <CButton
                                     to="/register"
                                     as={NavLink}
-                                    className="rounded-1 btn-warning fs-6 px-5"
-                                    data-aos="fade-down"
-                                    data-aos-duration="1000"
+                                    className="rounded-3 btn-warning px-5 py-3"
                                 >
                                     Register now
                                 </CButton>

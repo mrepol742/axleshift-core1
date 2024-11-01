@@ -8,7 +8,7 @@ const auth = () => {
     it('POST /api/v1/auth/register', (done) => {
         request(app)
             .post('/api/v1/auth/register')
-            .expect(400)
+            .expect(403)
             .end((err, res) => {
                 if (err) return done(err)
                 done()

@@ -16,10 +16,10 @@ import {
     CSpinner,
     CFormCheck,
 } from '@coreui/react'
-import { GoogleLogin } from '@react-oauth/google'
+import { useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import {
     VITE_APP_RECAPTCHA_SITE_KEY,
@@ -47,9 +47,20 @@ const Register = () => {
     })
     const urlParams = new URLSearchParams(window.location.search)
     const url = urlParams.get('n') ? urlParams.get('n') : '/'
+    const handleGoogleLogin = useGoogleLogin({
+        onSuccess: async (credentialResponse) => {
+            handleSubmit(null, 'google', credentialResponse.access_token)
+        },
+        onError: () => {
+            setError({
+                error: true,
+                message: 'Please try again later',
+            })
+        },
+    })
 
     useEffect(() => {
-        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate(url)
+        if (cookies.get(VITE_APP_SESSION) !== undefined) return (window.location.href = url)
     }, [])
 
     const handleInputChange = (e) => {
@@ -255,55 +266,37 @@ const Register = () => {
                                                 Create Account
                                             </CButton>
                                             <CButton
-                                                className="me-2 rounded border-2 border-primary text-primary"
-                                                onClick={() => navigate(`/login${url}`)}
+                                                color="outline-primary"
+                                                className="me-2 rounded"
+                                                onClick={() => navigate(`/login?n=${url}`)}
                                             >
                                                 Login
                                             </CButton>
                                         </CButtonGroup>
                                     </div>
-                                    <div className="d-flex justify-content-center mb-3">
-                                        <GoogleLogin
-                                            onSuccess={(credentialResponse) => {
-                                                handleSubmit(
-                                                    null,
-                                                    'google',
-                                                    credentialResponse.credential,
-                                                )
-                                            }}
-                                            onError={() => {
-                                                setError({
-                                                    error: true,
-                                                    message: 'Login Failed',
-                                                })
-                                            }}
-                                            useOneTap
-                                        />
-                                    </div>
-                                    <div className="d-flex justify-content-center mb-3">
+                                    <div className="text-center">
+                                        <span className="text-muted d-block mb-1">
+                                            Or continue with
+                                        </span>
                                         <CButton
-                                            color="secondary"
-                                            className="d-block"
-                                            size="sm"
+                                            color="outline-primary"
+                                            className="me-2"
+                                            onClick={handleGoogleLogin}
+                                        >
+                                            <FontAwesomeIcon icon={faGoogle} />
+                                        </CButton>
+                                        <CButton
+                                            color="outline-primary"
+                                            className="me-2"
                                             onClick={() =>
                                                 (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
                                             }
                                         >
-                                            <FontAwesomeIcon icon={faGithub} /> Signup using Github
+                                            <FontAwesomeIcon icon={faGithub} />
                                         </CButton>
                                     </div>
                                 </CForm>
                             </CCardBody>
-                            <div className="ms-auto">
-                                <a
-                                    href="https://stats.uptimerobot.com/5l58Mua0Wi"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                >
-                                    System Status
-                                </a>
-                            </div>
                         </CCard>
                     </CCol>
                 </CRow>
