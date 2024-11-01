@@ -11,7 +11,8 @@
         "url": "git@github.com:freight-capstone/core1.git"
     },
     "scripts": {
-        "production": "node src/index",
+        "production": "concurrently \"npm run env\" \"npm run gemini\" \"npm run prompt\" \"npm run start\"",
+        "start": "node src/index",
         "test": "mocha --timeout 10000 --exit",
         "dev": "nodemon --ext js --ignore '*.json' src/index",
         "lint": "prettier --write .",
@@ -29,6 +30,7 @@
         "axios": "^1.7.7",
         "boolean-pro": "^1.0.0",
         "compression": "^1.7.4",
+        "concurrently": "^9.0.1",
         "cors": "^2.8.5",
         "dompurify": "^3.1.7",
         "dotenv": "^16.4.5",
