@@ -37,6 +37,25 @@ const App = () => {
         setColorMode(storedTheme)
 
         ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('/sw.js')
+                .then((reg) => {
+                    if (reg.installing) {
+                        console.log('Service worker installing')
+                    } else if (reg.waiting) {
+                        console.log('Service worker installed')
+                    } else if (reg.active) {
+                        console.log('Service worker active')
+                    }
+                })
+                .catch((err) => {
+                    console.error('Service worker failed: ', err)
+                })
+        } else {
+            console.error("Service worker ain't available :(")
+        }
     }, [])
 
     return (
