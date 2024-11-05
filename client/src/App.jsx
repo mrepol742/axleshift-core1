@@ -13,7 +13,7 @@ import DocumentTitle from './components/middleware/DocumentTitle'
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
 const Privacy = lazy(() => import('./views/legal-agreements/privacy-policy'))
-const Terms = lazy(() => import('./views/legal-agreements/terms-of-service.js'))
+const Terms = lazy(() => import('./views/legal-agreements/terms-of-service'))
 const Landing = lazy(() => import('./views/landing'))
 const Login = lazy(() => import('./views/auth/login'))
 const Register = lazy(() => import('./views/auth/register'))
