@@ -165,12 +165,12 @@ ShipmentForm.propTypes = {
     formData: PropTypes.shape({
         shipment: PropTypes.shape({
             shipment_description: PropTypes.string.isRequired,
-            shipment_weight: PropTypes.number.isRequired,
-            shipment_dimension_length: PropTypes.number.isRequired,
-            shipment_dimension_width: PropTypes.number.isRequired,
-            shipment_dimension_height: PropTypes.number.isRequired,
-            shipment_volume: PropTypes.number.isRequired,
-            shipment_value: PropTypes.number.isRequired,
+            shipment_weight: PropTypes.string.isRequired,
+            shipment_dimension_length: PropTypes.string.isRequired,
+            shipment_dimension_width: PropTypes.string.isRequired,
+            shipment_dimension_height: PropTypes.string.isRequired,
+            shipment_volume: PropTypes.string.isRequired,
+            shipment_value: PropTypes.string.isRequired,
             shipment_instructions: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,

@@ -15,7 +15,7 @@ const Inbox = () => {
     const messagesRef = collection(database, 'messages')
 
     useEffect(() => {
-        // if (!isAdmin()) navigate(`/customer/${user.customer_service_ref}`)
+        // if (!isAdmin()) navigate(`/customer/${user.ref}`)
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -23,9 +23,9 @@ const Inbox = () => {
             snapshot.docs.forEach((doc) => {
                 const msg = { id: doc.id, ...doc.data() }
 
-                if (!thread.includes(msg.customer_service_ref)) {
-                    latestMessagesMap.set(msg.customer_service_ref, msg)
-                    thread.push(msg.customer_service_ref)
+                if (!thread.includes(msg.ref)) {
+                    latestMessagesMap.set(msg.ref, msg)
+                    thread.push(msg.ref)
                 }
             })
 
@@ -50,10 +50,10 @@ const Inbox = () => {
                             <CListGroupItem
                                 as="a"
                                 key={index}
-                                onClick={() => navigate(`/customer/${thread.customer_service_ref}`)}
+                                onClick={() => navigate(`/customer/${thread.ref}`)}
                             >
                                 <div className="d-flex w-100 justify-content-between">
-                                    <h5 className="mb-1">#{thread.customer_service_ref}</h5>
+                                    <h5 className="mb-1">#{thread.ref}</h5>
                                     <small>{parseTimestamp(thread.timestamp)}</small>
                                 </div>
                                 <p className="mb-1">{thread.text}</p>
@@ -63,7 +63,7 @@ const Inbox = () => {
                     </CListGroup>
                 </div>
             ) : (
-                navigate(`/customer/${user.customer_service_ref}`)
+                navigate(`/customer/${user.ref}`)
             )}
         </>
     )

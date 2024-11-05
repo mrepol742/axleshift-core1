@@ -31,12 +31,8 @@ const AppHeaderDropdown = () => {
             <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
                 <CImage
                     crossOrigin="Anonymous"
-                    src={
-                        user.avatar
-                            ? `${VITE_APP_API_URL}/u/${user.avatar}.png`
-                            : `${VITE_APP_API_URL}/favicon.ico`
-                    }
-                    className={user.avatar ? 'rounded-5' : 'rounded-1'}
+                    src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
+                    className="rounded-5"
                     fluid
                     width="40px"
                 />

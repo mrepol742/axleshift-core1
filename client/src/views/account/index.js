@@ -103,11 +103,7 @@ const Account = () => {
                             <CForm onSubmit={handleAccountDetails}>
                                 <CImage
                                     crossOrigin="Anonymous"
-                                    src={
-                                        user.avatar
-                                            ? `${VITE_APP_API_URL}/u/${user.avatar}.png`
-                                            : `${VITE_APP_API_URL}/favicon.ico`
-                                    }
+                                    src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
                                     className="border border-5 mb-3 rounded-2"
                                     width="90px"
                                 />

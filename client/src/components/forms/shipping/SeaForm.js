@@ -132,7 +132,7 @@ SeaForm.propTypes = {
             shipping_discharge_port: PropTypes.string.isRequired,
             shipping_sailing_date: PropTypes.string.isRequired,
             shipping_estimated_arrival_date: PropTypes.string.isRequired,
-            shipping_cargo_type: PropTypes.number.isRequired,
+            shipping_cargo_type: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,
     handleInputChange: PropTypes.func,

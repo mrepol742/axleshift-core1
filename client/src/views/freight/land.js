@@ -43,12 +43,12 @@ const Land = () => {
         },
         shipment: {
             shipment_description: '',
-            shipment_weight: 0,
-            shipment_dimension_length: 0,
-            shipment_dimension_width: 0,
-            shipment_dimension_height: 0,
-            shipment_volume: 0,
-            shipment_value: 0,
+            shipment_weight: '',
+            shipment_dimension_length: '',
+            shipment_dimension_width: '',
+            shipment_dimension_height: '',
+            shipment_volume: '',
+            shipment_value: '',
             shipment_instructions: '',
         },
         shipping: {
@@ -56,7 +56,7 @@ const Land = () => {
             shipping_destination_address: '',
             shipping_pickup_date: '',
             shipping_delivery_date: '',
-            shipping_vehicle_type: 0,
+            shipping_vehicle_type: '',
         },
     })
 

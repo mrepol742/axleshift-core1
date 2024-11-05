@@ -235,7 +235,7 @@ const API = () => {
                         </div>
                     )}
 
-                    {result.whitelist_ip.length != 0 && (
+                    {result.whitelist_ip && (
                         <div className="text-center border rounded mb-4">
                             <div className="p-2 p-md-3">
                                 <CForm onSubmit={handleWhitelistIpSubmit}>

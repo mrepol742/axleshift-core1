@@ -43,12 +43,12 @@ const Sea = () => {
         },
         shipment: {
             shipment_description: '',
-            shipment_weight: 0,
-            shipment_dimension_length: 0,
-            shipment_dimension_width: 0,
-            shipment_dimension_height: 0,
-            shipment_volume: 0,
-            shipment_value: 0,
+            shipment_weight: '',
+            shipment_dimension_length: '',
+            shipment_dimension_width: '',
+            shipment_dimension_height: '',
+            shipment_volume: '',
+            shipment_value: '',
             shipment_instructions: '',
         },
         shipping: {
@@ -56,7 +56,7 @@ const Sea = () => {
             shipping_discharge_port: '',
             shipping_sailing_date: '',
             shipping_estimated_arrival_date: '',
-            shipping_cargo_type: 1,
+            shipping_cargo_type: '',
         },
     })
 

@@ -37,7 +37,7 @@ const FormOauth2 = async (req, res) => {
         if (existingUser)
             return res.status(200).json({ error: 'This Email address is already registered' })
 
-        const user_profile_ref = generateUniqueId()
+        const ref = generateUniqueId()
 
         await Promise.all([
             usersCollection.insertOne({
@@ -53,10 +53,9 @@ const FormOauth2 = async (req, res) => {
                         updated_at: Date.now(),
                     },
                 },
-                avatar: user_profile_ref,
                 password: null,
                 email_verify_at: Date.now(),
-                customer_service_ref: generateUniqueId(),
+                ref: ref,
                 created_at: Date.now(),
                 updated_at: Date.now(),
             }),
@@ -68,7 +67,7 @@ const FormOauth2 = async (req, res) => {
                 },
                 credential.given_name,
             ),
-            Download(credential.picture, user_profile_ref),
+            Download(credential.picture, ref),
         ])
 
         const theUser = await usersCollection.findOne({ email: credential.email })

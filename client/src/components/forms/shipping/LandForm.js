@@ -130,7 +130,7 @@ LandForm.propTypes = {
             shipping_destination_address: PropTypes.string.isRequired,
             shipping_pickup_date: PropTypes.string.isRequired,
             shipping_delivery_date: PropTypes.string.isRequired,
-            shipping_vehicle_type: PropTypes.number.isRequired,
+            shipping_vehicle_type: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,
     handleInputChange: PropTypes.func,

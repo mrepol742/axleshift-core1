@@ -64,7 +64,7 @@ const ConsineeForm = ({
                 Phone Number<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
-                type="id"
+                type="tel"
                 autoComplete="tel"
                 id="consignee_contact_phone_number"
                 value={formData.consignee.consignee_contact_phone_number}

@@ -41,10 +41,9 @@ export const getUser = async (sessionToken) => {
                 role: theUser.role,
                 email_verify_at: theUser.email_verify_at,
                 oauth2: theUser.oauth2,
-                avatar: theUser.avatar,
                 password: theUser.password ? 'OK' : null,
                 timezone: theUser.timezone,
-                customer_service_ref: theUser.customer_service_ref,
+                ref: theUser.ref,
             }
     } catch (e) {
         logger.error(e)

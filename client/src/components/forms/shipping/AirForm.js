@@ -129,7 +129,7 @@ AirForm.propTypes = {
             shipping_destination_airport: PropTypes.string.isRequired,
             shipping_preferred_departure_date: PropTypes.string.isRequired,
             shipping_preferred_arrival_date: PropTypes.string.isRequired,
-            shipping_flight_type: PropTypes.number.isRequired,
+            shipping_flight_type: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,
     handleInputChange: PropTypes.func,

@@ -46,7 +46,7 @@ const mongodb = async () => {
                     element.registration_type = 'internal'
                     element.password = passwordHash(element.password)
                     element.email_verify_at = Date.now()
-                    element.customer_service_ref = generateUniqueId()
+                    element.ref = generateUniqueId()
                 }
                 const insertResult = await collection.insertMany(data)
                 logger.info(`inserted documents: ${insertResult.insertedCount}`)

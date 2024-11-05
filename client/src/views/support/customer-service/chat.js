@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import database from '../../../firebase'
 import { collection, addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
-
+import { VITE_APP_API_URL } from '../../../config'
 import Profile, { isAdmin } from '../../../components/Profile'
 import { parseTimestamp } from '../../../components/Timestamp'
 
@@ -26,13 +26,13 @@ const Chat = () => {
     const endOfMessagesRef = useRef(null)
     const [rows, setRows] = useState(1)
     const messagesRef = collection(database, 'messages')
-    const id = isAdmin() ? useParams().id : user.customer_service_ref
+    const id = isAdmin() ? useParams().id : user.ref
 
     useEffect(() => {
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const msgs = snapshot.docs
                 .map((doc) => ({ id: doc.id, ...doc.data() }))
-                .filter((msg) => msg.customer_service_ref === id)
+                .filter((msg) => msg.ref === id)
             setMessages(msgs)
         })
         return () => unsubscribe()
@@ -61,7 +61,7 @@ const Chat = () => {
             text: message,
             sender: user.role,
             timestamp: Date.now(),
-            customer_service_ref: id,
+            ref: id,
         })
         setMessage('')
         setRows(1)
@@ -103,8 +103,13 @@ const Chat = () => {
                         >
                             {message.sender === (user.role === 'admin' ? 'user' : 'admin') && (
                                 <CImage
+                                    crossOrigin="Anonymous"
                                     className="rounded-5 me-2"
-                                    src="https://avatars.githubusercontent.com/u/62317165?v=4"
+                                    src={
+                                        user.role === 'admin'
+                                            ? `${VITE_APP_API_URL}/u/${user.ref}.png`
+                                            : `/images/default-avatar.jpg`
+                                    }
                                     style={{ width: '45px', height: '100%' }}
                                 />
                             )}
@@ -126,8 +131,9 @@ const Chat = () => {
                             </div>
                             {message.sender === (user.role === 'user' ? 'user' : 'admin') && (
                                 <CImage
+                                    crossOrigin="Anonymous"
                                     className="rounded-5 ms-2"
-                                    src="https://avatars.githubusercontent.com/u/62317165?v=4"
+                                    src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
                                     style={{ width: '45px', height: '100%' }}
                                 />
                             )}
@@ -138,8 +144,9 @@ const Chat = () => {
                 <div className="card-footer text-muted d-flex justify-content-start align-items-center p-3 gap-2">
                     <div>
                         <CImage
+                            crossOrigin="Anonymous"
                             className="me-2 rounded-5"
-                            src="https://avatars.githubusercontent.com/u/62317165?v=4"
+                            src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
                             style={{ width: '40px', height: '100%' }}
                         />
                     </div>
