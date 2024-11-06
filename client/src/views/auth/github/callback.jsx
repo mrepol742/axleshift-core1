@@ -34,7 +34,7 @@ const Callback = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'An unexpected error occurred'
+                const message = errorMessages[error.status] || 'Internal Application Error'
                 setError(message)
             })
             .finally(() => setLoading(false))

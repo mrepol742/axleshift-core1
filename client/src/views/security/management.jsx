@@ -33,11 +33,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
-import Dependabot from './panel/dependabot'
-import Sessions from './panel/sessions'
-import Sentry from './panel/sentry'
-import Dashboard from './panel/dashboard'
-import API from './panel/api'
+import { Activity, Api, Dashboard, Dependabot, Maintenance, Sentry, Sessions } from './panel/index'
 
 const SecurityManagement = () => {
     const [loading, setLoading] = useState(false)
@@ -105,6 +101,12 @@ const SecurityManagement = () => {
                     <CTab aria-controls="api-tab-pane" itemKey={4}>
                         API Key
                     </CTab>
+                    <CTab aria-controls="activity-tab-pane" itemKey={5}>
+                        Activity
+                    </CTab>
+                    <CTab aria-controls="maintenance-tab-pane" itemKey={6}>
+                        Maintenance
+                    </CTab>
                 </CTabList>
                 <CTabContent>
                     <CTabPanel className="py-3" aria-labelledby="dashboard-tab-pane" itemKey={0}>
@@ -140,7 +142,13 @@ const SecurityManagement = () => {
                         />
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={4}>
-                        <API setLoading={setLoading} result={result} />
+                        <Api setLoading={setLoading} result={result} />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={5}>
+                        <Activity setLoading={setLoading} result={result} />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={6}>
+                        <Maintenance setLoading={setLoading} result={result} />
                     </CTabPanel>
                 </CTabContent>
             </CTabs>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     CImage,
@@ -25,13 +25,18 @@ import { VITE_APP_API_URL } from '../config.js'
 const AppHeaderDropdown = () => {
     const navigate = useNavigate()
     const user = Profile()
+    const [avatar, setAvatar] = useState('/images/default-avatar.jpg')
+
+    useEffect(() => {
+        if (user && user.ref) setAvatar(`${VITE_APP_API_URL}/u/${user.ref}.png`)
+    }, [user])
 
     return (
         <CDropdown variant="nav-item">
             <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
                 <CImage
                     crossOrigin="Anonymous"
-                    src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
+                    src={avatar}
                     className="rounded-5"
                     fluid
                     width="40px"

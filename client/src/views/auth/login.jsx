@@ -71,7 +71,7 @@ const Login = () => {
             setLoading(false)
             setError({
                 error: true,
-                message: 'An unexpected error occurred',
+                message: 'Internal Application Error',
             })
             return
         }
@@ -94,7 +94,7 @@ const Login = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'An unexpected error occurred'
+                const message = errorMessages[error.status] || 'Internal Application Error'
 
                 setError({
                     error: true,

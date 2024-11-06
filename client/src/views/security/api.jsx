@@ -79,10 +79,15 @@ const API = () => {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => setResult(response.data))
+            .then((response) =>
+                setResult((prevResult) => ({
+                    ...prevResult,
+                    token: response.data.token,
+                })),
+            )
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'An unexpected error occurred'
+                const message = errorMessages[error.status] || 'Internal Application Error'
                 alert(message)
             })
             .finally(() => setLoading(false))
@@ -101,7 +106,7 @@ const API = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'An unexpected error occurred'
+                const message = errorMessages[error.status] || 'Internal Application Error'
                 alert(message)
             })
             .finally(() => setLoading(false))
@@ -152,7 +157,7 @@ const API = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'An unexpected error occurred'
+                const message = errorMessages[error.status] || 'Internal Application Error'
                 alert(message)
             })
             .finally(() => setLoading(false))
@@ -227,7 +232,7 @@ const API = () => {
                             <FontAwesomeIcon icon={faPlus} /> Create
                         </CButton>
                     </div>
-                    {result.whitelist_ip.length == 0 && (
+                    {result.whitelist_ip.length === 0 && (
                         <div className="text-center border rounded mb-4">
                             <div className="p-2 p-md-3 my-5 my-md-0">
                                 <h6>There was no Whitelisted IP Addresses</h6>
@@ -235,7 +240,7 @@ const API = () => {
                         </div>
                     )}
 
-                    {result.whitelist_ip && (
+                    {result.whitelist_ip.length !== 0 && (
                         <div className="text-center border rounded mb-4">
                             <div className="p-2 p-md-3">
                                 <CForm onSubmit={handleWhitelistIpSubmit}>

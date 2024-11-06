@@ -80,7 +80,7 @@ const Account = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'An unexpected error occurred'
+                const message = errorMessages[error.status] || 'Internal Application Error'
 
                 alert(message)
             })

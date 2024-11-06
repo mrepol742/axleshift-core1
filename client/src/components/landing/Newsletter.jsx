@@ -39,7 +39,7 @@ const Newsletter = ({ setLoading }) => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'An unexpected error occurred'
+                const message = errorMessages[error.status] || 'Internal Application Error'
                 setMessage(message)
             })
             .finally(() => setLoading(false))

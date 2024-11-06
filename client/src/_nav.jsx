@@ -78,12 +78,6 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Analysis',
-        to: '/security/analysis',
-        icon: <FontAwesomeIcon icon={faCircleNotch} className="nav-icon" />,
-    },
-    {
-        component: CNavItem,
         name: 'Activity',
         to: '/security/activity',
         icon: <FontAwesomeIcon icon={faRectangleList} className="nav-icon" />,
