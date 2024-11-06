@@ -31,15 +31,15 @@ app.use(
 )
 app.use(sanitize)
 app.use(helmet())
+app.use(
+    statusMonitor({
+        title: 'Server status',
+    }),
+)
 app.use(upload.none())
 app.use(express.json())
 app.use(rateLimiter)
 app.use(pinoHttp({ logger }))
-app.use(
-    statusMonitor({
-        title: 'Server',
-    }),
-)
 
 app.use(express.static('public'))
 app.use('/api/v1/', APIv1)

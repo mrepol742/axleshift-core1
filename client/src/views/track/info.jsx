@@ -18,7 +18,7 @@ import { VITE_APP_API_URL, VITE_APP_SESSION, VITE_APP_GOOGLE_MAP } from '../../c
 import Page404 from '../errors/404'
 
 const TrackInfo = () => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
     const [responseData, setResponseData] = useState({
         events: [],
@@ -30,7 +30,6 @@ const TrackInfo = () => {
     const { id } = useParams()
 
     const fetchData = async () => {
-        setLoading(true)
         await axios
             .get(`${VITE_APP_API_URL}/api/v1/track/${id}`, {
                 headers: {
@@ -57,9 +56,9 @@ const TrackInfo = () => {
                 </div>
             )}
 
-            {error && <Page404 />}
+            {error && <>Shipment not found</>}
 
-            {!error && (
+            {responseData.origin && (
                 <>
                     <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                         <CCol>
