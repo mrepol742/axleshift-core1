@@ -64,14 +64,14 @@ const mongodb = async () => {
 }
 
 const copyDefaultAvatar = (ref) => {
-    const sourcePath = path.join(process.cwd(), 'default-avatar.jpg');
-    const targetPath = path.join(process.cwd(), 'u', `${ref}.png`);
-  
+    const sourcePath = path.join(process.cwd(), 'default-avatar.jpg')
+    const targetPath = path.join(process.cwd(), 'u', `${ref}.png`)
+
     try {
-      fs.copyFileSync(sourcePath, targetPath);
-      logger.info(`Avatar copied to ${targetPath}`);
+        fs.copyFileSync(sourcePath, targetPath)
+        logger.info(`Avatar copied to ${targetPath}`)
     } catch (error) {
-      logger.error(error);
+        logger.error(error)
     }
 }
 
