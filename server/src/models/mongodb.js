@@ -13,6 +13,7 @@ const requiredCollections = [
     'otp',
     'newsletter',
     'apiToken',
+    'activityLog',
 ]
 let dbInstance = null
 
@@ -46,7 +47,8 @@ const mongodb = async () => {
                     element.registration_type = 'internal'
                     element.password = passwordHash(element.password)
                     element.email_verify_at = Date.now()
-                    element.customer_service_ref = generateUniqueId()
+                    element.ref = generateUniqueId()
+                    copyDefaultAvatar(element.ref)
                 }
                 const insertResult = await collection.insertMany(data)
                 logger.info(`inserted documents: ${insertResult.insertedCount}`)
@@ -59,6 +61,18 @@ const mongodb = async () => {
         logger.error(e)
     }
     return dbInstance
+}
+
+const copyDefaultAvatar = (ref) => {
+    const sourcePath = path.join(process.cwd(), 'default-avatar.jpg')
+    const targetPath = path.join(process.cwd(), 'u', `${ref}.png`)
+
+    try {
+        fs.copyFileSync(sourcePath, targetPath)
+        logger.info(`Avatar copied to ${targetPath}`)
+    } catch (error) {
+        logger.error(error)
+    }
 }
 
 export default mongodb

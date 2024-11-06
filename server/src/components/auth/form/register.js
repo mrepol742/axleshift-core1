@@ -31,7 +31,7 @@ const FormRegister = async (req, res) => {
             avatar: null,
             password: passwordHash(password),
             email_verify_at: '',
-            customer_service_ref: generateUniqueId(),
+            ref: generateUniqueId(),
             created_at: Date.now(),
             updated_at: Date.now(),
         })
