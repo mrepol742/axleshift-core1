@@ -34,12 +34,14 @@
     "docker-run": "docker run -p 5051:5051 --env-file .env core1-server:latest",
     "terraform": "cd server && terraform init && terraform plan -out=tfplan && terraform apply -auto-approve tfplan",
     "pm2": "pm2 start src/index.js --name core1",
-    "pm2-restart": "pm2 restart all --update-env"
+    "pm2-restart": "pm2 restart all --update-env",
+    "app": "cd mobile && npm run android"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
   },
   "engines": {
     "node": ">=20.x"
-  }
+  },
+  "private": true
 }
