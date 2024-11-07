@@ -45,8 +45,15 @@ npm run docker-run
 
 # terraform
 npm run terraform
+
+# run mobile app
+npm run app
 ```
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License with Commons Clause**.
+
+- **Commercial Use Restriction**: You may not use the software for commercial purposes, as defined in the [LICENSE](LICENSE) file. Commercial use includes using the software as part of any service offered for a fee or any use that generates revenue either directly or indirectly.
+
+See the full [LICENSE](LICENSE) file for more details.

@@ -5,7 +5,6 @@ import pinoHttp from 'pino-http'
 import multer from 'multer'
 import mongoSanitize from 'express-mongo-sanitize'
 import helmet from 'helmet'
-import statusMonitor from 'express-status-monitor'
 import compression from 'compression'
 import { NODE_ENV } from './config.js'
 
@@ -31,11 +30,6 @@ app.use(
 )
 app.use(sanitize)
 app.use(helmet())
-app.use(
-    statusMonitor({
-        title: 'Server status',
-    }),
-)
 app.use(upload.none())
 app.use(express.json())
 app.use(rateLimiter)

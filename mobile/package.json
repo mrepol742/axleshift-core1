@@ -1,7 +1,14 @@
 {
-  "name": "main-mobile",
+  "name": "@freight-capstone/core1-mobile",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "bugs": {
+    "url": "https://github.com/freight-capstone/core1/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:freight-capstone/core1.git"
+  },
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -14,6 +21,8 @@
   "jest": {
     "preset": "jest-expo"
   },
+  "author": "The Freight Capstone Core 1",
+  "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
     "@fontsource/poppins": "^5.1.0",
@@ -45,6 +54,9 @@
     "jest-expo": "~51.0.3",
     "react-test-renderer": "18.2.0",
     "typescript": "~5.3.3"
+  },
+  "engines": {
+    "node": ">=20.x"
   },
   "private": true
 }

@@ -43,7 +43,7 @@ import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from 
 import errorMessages from '../../components/http/ErrorMessages'
 
 const API = () => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const recaptchaRef = React.useRef()
     const [isBlurred, setIsBlurred] = useState(true)
     const [disabledAdd, setDisabledAdd] = useState(false)
@@ -94,7 +94,6 @@ const API = () => {
     }
 
     const fetchData = async () => {
-        setLoading(true)
         await axios
             .get(`${VITE_APP_API_URL}/api/v1/auth/token/`, {
                 headers: {
@@ -176,105 +175,110 @@ const API = () => {
             )}
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                <CCol>
-                    <h4>Auth token</h4>
-                    {!result.token && (
-                        <div className="text-center border rounded mb-4">
-                            <div className="p-1 p-md-5 my-5 my-md-0">
-                                <CImage src="/images/threat.png" fluid width="50%" />
-                                <h4>There was no Auth Token</h4>
-                                <CButton color="primary" size="sm" onClick={gen}>
-                                    Generate Token
-                                </CButton>
-                            </div>
-                        </div>
-                    )}
-                    {result.token && (
-                        <div className="text-center border rounded mb-4">
-                            <div className="p-2 p-md-3">
-                                <div className="d-flex mb-3">
-                                    <CFormInput
-                                        className={isBlurred ? 'blurred' : ''}
-                                        value={result.token}
-                                        aria-describedby="basic-addon"
-                                    />
-                                    <CButton className="ms-2" onClick={handleIconClick}>
-                                        <FontAwesomeIcon icon={isBlurred ? faEye : faEyeSlash} />
-                                    </CButton>
-                                    <CButton className="ms-2" onClick={copyToClipboard}>
-                                        <FontAwesomeIcon icon={faCopy} />
+
+            {!loading && (
+                <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                    <CCol>
+                        <h4>Auth token</h4>
+                        {!result.token && (
+                            <div className="text-center border rounded mb-4">
+                                <div className="p-1 p-md-5 my-5 my-md-0">
+                                    <CImage src="/images/threat.png" fluid width="50%" />
+                                    <h4>There was no Auth Token</h4>
+                                    <CButton color="primary" size="sm" onClick={gen}>
+                                        Generate Token
                                     </CButton>
                                 </div>
-                                <CButton color="primary" size="sm" onClick={gen}>
-                                    Generate new token
-                                </CButton>
                             </div>
-                        </div>
-                    )}
-                </CCol>
-                <CCol>
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <h4>Ip address</h4>
-                        <CButton
-                            color="success"
-                            size="sm"
-                            className="text-white"
-                            onClick={handleAddIp}
-                            disabled={disabledAdd}
-                        >
-                            <FontAwesomeIcon icon={faPlus} /> Create
-                        </CButton>
-                    </div>
-                    {result.whitelist_ip.length === 0 && (
-                        <div className="text-center border rounded mb-4">
-                            <div className="p-2 p-md-3 my-5 my-md-0">
-                                <h6>There was no Whitelisted IP Addresses</h6>
-                            </div>
-                        </div>
-                    )}
-
-                    {result.whitelist_ip.length !== 0 && (
-                        <div className="text-center border rounded mb-4">
-                            <div className="p-2 p-md-3">
-                                <CForm onSubmit={handleWhitelistIpSubmit}>
-                                    {result.whitelist_ip.map((input, index) => (
-                                        <div className="d-flex mb-2" key={index}>
-                                            <CFormInput
-                                                value={input}
-                                                onChange={(e) =>
-                                                    handleIpChange(index, e.target.value)
-                                                }
-                                                placeholder={`192.168.0.${index + 1}`}
+                        )}
+                        {result.token && (
+                            <div className="text-center border rounded mb-4">
+                                <div className="p-2 p-md-3">
+                                    <div className="d-flex mb-3">
+                                        <CFormInput
+                                            className={isBlurred ? 'blurred' : ''}
+                                            value={result.token}
+                                            aria-describedby="basic-addon"
+                                        />
+                                        <CButton className="ms-2" onClick={handleIconClick}>
+                                            <FontAwesomeIcon
+                                                icon={isBlurred ? faEye : faEyeSlash}
                                             />
-                                            <CButton
-                                                color="danger"
-                                                className="text-white ms-2"
-                                                onClick={copyToClipboard}
-                                            >
-                                                <FontAwesomeIcon icon={faTrash} />
-                                            </CButton>
-                                        </div>
-                                    ))}
-                                    <CButton
-                                        type="submit"
-                                        color="primary"
-                                        className="d-block me-2 rounded"
-                                    >
-                                        Save changes
+                                        </CButton>
+                                        <CButton className="ms-2" onClick={copyToClipboard}>
+                                            <FontAwesomeIcon icon={faCopy} />
+                                        </CButton>
+                                    </div>
+                                    <CButton color="primary" size="sm" onClick={gen}>
+                                        Generate new token
                                     </CButton>
-                                </CForm>
+                                </div>
                             </div>
+                        )}
+                    </CCol>
+                    <CCol>
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <h4>Ip address</h4>
+                            <CButton
+                                color="success"
+                                size="sm"
+                                className="text-white"
+                                onClick={handleAddIp}
+                                disabled={disabledAdd}
+                            >
+                                <FontAwesomeIcon icon={faPlus} /> Create
+                            </CButton>
                         </div>
-                    )}
-                </CCol>
-            </CRow>
+                        {result.whitelist_ip.length === 0 && (
+                            <div className="text-center border rounded mb-4">
+                                <div className="p-2 p-md-3 my-5 my-md-0">
+                                    <h6>There was no Whitelisted IP Addresses</h6>
+                                </div>
+                            </div>
+                        )}
+
+                        {result.whitelist_ip.length !== 0 && (
+                            <div className="text-center border rounded mb-4">
+                                <div className="p-2 p-md-3">
+                                    <CForm onSubmit={handleWhitelistIpSubmit}>
+                                        {result.whitelist_ip.map((input, index) => (
+                                            <div className="d-flex mb-2" key={index}>
+                                                <CFormInput
+                                                    value={input}
+                                                    onChange={(e) =>
+                                                        handleIpChange(index, e.target.value)
+                                                    }
+                                                    placeholder={`192.168.0.${index + 1}`}
+                                                />
+                                                <CButton
+                                                    color="danger"
+                                                    className="text-white ms-2"
+                                                    onClick={copyToClipboard}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} />
+                                                </CButton>
+                                            </div>
+                                        ))}
+                                        <CButton
+                                            type="submit"
+                                            color="primary"
+                                            className="d-block me-2 rounded"
+                                        >
+                                            Save changes
+                                        </CButton>
+                                    </CForm>
+                                </div>
+                            </div>
+                        )}
+                    </CCol>
+                </CRow>
+            )}
         </div>
     )
 }
