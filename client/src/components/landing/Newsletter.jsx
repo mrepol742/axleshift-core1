@@ -13,7 +13,7 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import errorMessages from '../../components/http/ErrorMessages'
+import errorMessages from '../../components/ErrorMessages'
 import { VITE_APP_API_URL, VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 
 const Newsletter = ({ setLoading }) => {

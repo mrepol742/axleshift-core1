@@ -6,19 +6,24 @@ import multer from 'multer'
 import mongoSanitize from 'express-mongo-sanitize'
 import helmet from 'helmet'
 import compression from 'compression'
-import { NODE_ENV } from './config.js'
-
+import { createProxyMiddleware } from 'http-proxy-middleware'
+import { NODE_ENV, EXT_EXPRESS_PORT } from './config.js'
 import rateLimiter from './middleware/rateLimiter.js'
 import sanitize from './middleware/sanitize.js'
-
 import logger from './components/logger.js'
-
 import APIv1 from './routes/v1/index.js'
 
 const app = express()
 const upload = multer()
 
 app.use(cors())
+app.use('/api/pmz', createProxyMiddleware({
+    target: `http://localhost:${EXT_EXPRESS_PORT}`,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/api/pmz': ''
+    },
+}));
 app.use(compression())
 app.use(
     mongoSanitize({
@@ -37,7 +42,7 @@ app.use(pinoHttp({ logger }))
 
 app.use(express.static('public'))
 app.use('/api/v1/', APIv1)
-
+  
 app.use((err, req, res, next) => {
     logger.error(err)
     return res.status(500).send()

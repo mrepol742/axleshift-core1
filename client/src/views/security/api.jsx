@@ -40,7 +40,7 @@ import {
     faTrash,
 } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
-import errorMessages from '../../components/http/ErrorMessages'
+import errorMessages from '../../components/ErrorMessages'
 
 const API = () => {
     const [loading, setLoading] = useState(true)

@@ -18,7 +18,7 @@ import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { useDispatch } from 'react-redux'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
-import errorMessages from '../../../components/http/ErrorMessages'
+import errorMessages from '../../../components/ErrorMessages'
 
 const MailOTP = () => {
     const [loading, setLoading] = useState(false)

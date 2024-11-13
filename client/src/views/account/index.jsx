@@ -19,7 +19,7 @@ import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import Profile from '../../components/Profile'
-import errorMessages from '../../components/http/ErrorMessages'
+import errorMessages from '../../components/ErrorMessages'
 
 const Account = () => {
     const user = Profile()

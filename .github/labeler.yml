@@ -1,25 +1,119 @@
-root:
-- changed-files:
-  - any-glob-to-any-file: '*'
+workflow:
+- all:
+  - changed-files:
+    - any-glob-to-any-file: 
+      - .github/**/*
+
+client:
+- all:
+  - changed-files:
+    - any-glob-to-any-file: 
+      - client/src/**/*
+
+server:
+- all:
+  - changed-files:
+    - any-glob-to-any-file: 
+      - server/src/**/*
+
+mobile:
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - mobile/app/**/*
+
+auth:
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - client/src/views/auth/**/*
+      - client/src/components/middleware/Auth.jsx
+      - server/src/components/auth/**/*
+      - server/src/routes/v1/auth.js
+
+routes:
+- all:
+  - changed-files:
+    - any-glob-to-any-file: 
+      - server/src/routes/**/*
+
+env:
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - client/.env.example
+      - server/.env.example
+
+dependencies:
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - package.json
+      - package-lock.json
+      - client/package.json
+      - client/package-lock.json
+      - server/package.json
+      - server/package-lock.json
+      - mobile/package.json
+      - mobile/package-lock.json
 
 documentation:
-- changed-files:
-  - any-glob-to-any-file: '**/*.md'
-
-workflow:
-- changed-files:
-  - any-glob-to-any-file: '**/*.yml'
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - server/docs/**/*
 
 test:
-- changed-files:
-  - any-glob-to-any-file: 'server'
-
-frontend:
 - all:
   - changed-files:
-    - any-glob-to-any-file: 'client/src/**/*'
+    - any-glob-to-any-file:
+      - server/test/**/*
+      - mobile/components/__tests__/**/*
 
-backend:
+container:
 - all:
   - changed-files:
-    - any-glob-to-any-file: 'server/src/**/*'
+    - server/Dockerfile
+    - server/.dockerignore
+
+infra:
+- all:
+  - changed-files:
+    - server/main.tf
+
+vcs:
+- all:
+  - changed-files:
+    - .gitignore
+    - server/.gitignore
+    - client/.gitignore
+    - mobile/.gitignore
+
+'cargo-tracking':
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - client/src/views/track/**/*
+      - server/src/routes/v1/track.js
+
+'order-management':
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - client/src/components/forms/**/*
+      - client/src/views/freight/**/*
+      - client/src/views/overview/**/*
+      - server/src/routes/v1/freight.js
+
+'customer-communication-and-service':
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - client/src/views/support/**/*
+      - client/firebase.js
+
+'rate-management':
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - client/src/views/pricing/**/*
