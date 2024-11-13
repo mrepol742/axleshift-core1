@@ -23,7 +23,7 @@ Api docs here [/server/docs/README.md](/server/docs/README.md)
 npm run setup
 
 # setup environments
-npm run setup-env
+npm run setup:env
 
 # start app
 npm run start
@@ -35,13 +35,13 @@ npm run lint
 npm run test
 
 # test production
-npm run post-production
+npm run post:production
 
 # build docker
 npm run docker
 
 # run docker
-npm run docker-run
+npm run docker:run
 
 # terraform
 npm run terraform

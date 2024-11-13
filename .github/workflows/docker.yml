@@ -9,7 +9,8 @@ on:
 jobs:
   docker:
     runs-on: 'ubuntu-latest'
-
+    if: github.repository == 'freight-capstone/core1'
+    
     steps:
       - name: Clone repository
         uses: actions/checkout@v4

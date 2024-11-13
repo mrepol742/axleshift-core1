@@ -3,7 +3,6 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { CSpinner } from '@coreui/react'
 import { useDispatch } from 'react-redux'
 import { VITE_APP_SESSION, VITE_APP_API_URL } from '../../config'
-import MaintenancePage from '../../views/errors/500'
 
 const Auth = (WrappedComponent) => {
     const AuthComponent = (props) => {

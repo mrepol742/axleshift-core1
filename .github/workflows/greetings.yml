@@ -5,11 +5,14 @@ on:
   issues:
 
 jobs:
-  greeting:
+  greetings:
+  
     runs-on: ubuntu-latest
     permissions:
       issues: write
       pull-requests: write
+    if: github.repository == 'freight-capstone/core1'
+
     steps:
       - uses: actions/first-interaction@v1
         with:

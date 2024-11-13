@@ -26,7 +26,7 @@ import {
     VITE_APP_API_URL,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
-import errorMessages from '../../components/http/ErrorMessages'
+import errorMessages from '../../components/ErrorMessages'
 
 const Login = () => {
     const navigate = useNavigate()
