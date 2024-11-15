@@ -24,7 +24,7 @@ const Freight = () => {
 
     return (
         <>
-            <h3>Select your preffered Freight Option</h3>
+            <h3>Select your preffered Freight Option.</h3>
             <Masonry
                 breakpointCols={{
                     default: 4,
@@ -38,7 +38,7 @@ const Freight = () => {
                 <div>
                     <CCard
                         className="bg-dark text-white mb-3"
-                        onClick={() => navigate('/security/management')}
+                        onClick={() => navigate('/freight/land')}
                         style={{ cursor: 'pointer' }}
                     >
                         <CCardHeader
@@ -64,7 +64,7 @@ const Freight = () => {
                 <div>
                     <CCard
                         className="bg-dark text-white mb-3"
-                        onClick={() => navigate('/security/analysis')}
+                        onClick={() => navigate('/freight/air')}
                         style={{ cursor: 'pointer' }}
                     >
                         <CCardHeader
@@ -90,7 +90,7 @@ const Freight = () => {
                 <div>
                     <CCard
                         className="bg-dark text-white mb-3"
-                        onClick={() => navigate('/security/apikey')}
+                        onClick={() => navigate('/freight/sea')}
                         style={{ cursor: 'pointer' }}
                     >
                         <CCardHeader

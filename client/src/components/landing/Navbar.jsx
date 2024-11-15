@@ -45,10 +45,9 @@ const Navbar = () => {
                 <CNavbarNav>
                     <CNavItem>
                         <CNavLink
-                            className="text-white"
                             to="/register"
                             as={NavLink}
-                            className="bg-warning rounded text-warning px-3 text-white d-block d-md-none"
+                            className="bg-warning rounded px-3 text-white d-block d-md-none"
                         >
                             Register
                         </CNavLink>
