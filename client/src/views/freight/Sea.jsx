@@ -16,14 +16,19 @@ import {
     CSpinner,
     CImage,
 } from '@coreui/react'
+import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
-import LandForm from '../../components/forms/shipping/LandForm'
+import SeaForm from '../../components/forms/shipping/SeaForm'
+import { useToast } from '../../components/AppToastProvider'
+import errorMessages from '../../components/ErrorMessages'
 
-const Land = () => {
+const Sea = () => {
     const navigate = useNavigate()
+    const recaptchaRef = React.useRef()
+    const { addToast } = useToast()
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -52,11 +57,11 @@ const Land = () => {
             shipment_instructions: '',
         },
         shipping: {
-            shipping_origin_addresss: '',
-            shipping_destination_address: '',
-            shipping_pickup_date: '',
-            shipping_delivery_date: '',
-            shipping_vehicle_type: '',
+            shipping_loading_port: '',
+            shipping_discharge_port: '',
+            shipping_sailing_date: '',
+            shipping_estimated_arrival_date: '',
+            shipping_cargo_type: '',
         },
     })
 
@@ -72,8 +77,18 @@ const Land = () => {
     }
 
     const handleSubmit = async () => {
+        setLoading(true)
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        const formDataToSend = new FormData()
+        for (const key in formData) {
+            formDataToSend.append(key, formData[key])
+        }
+        formDataToSend.append('recaptcha_ref', recaptcha)
+        for (const key in formDataToSend) {
+            console.log(key, formDataToSend[key])
+        }
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/freight/b/land`, formData, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/b/sea`, formDataToSend, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
@@ -81,23 +96,10 @@ const Land = () => {
             .then((response) => navigate('/'))
             .catch((error) => {
                 console.error(error)
+                const message = errorMessages[error.status] || 'Internal Application Error'
+                addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))
-    }
-    const handleShipperInformation = () => {
-        setCurrentPage(1)
-    }
-
-    const handleConsigneeInfo = () => {
-        setCurrentPage(2)
-    }
-
-    const handleShipmentDetails = () => {
-        setCurrentPage(3)
-    }
-
-    const handleShippingInformation = () => {
-        setCurrentPage(4)
     }
 
     return (
@@ -109,14 +111,14 @@ const Land = () => {
             )}
             <CRow className="mb-4">
                 <CCol xs={3} md={5} xl={3} className="image-container d-none d-md-flex">
-                    <CImage fluid rounded src="/images/freight-land.jpg" className="custom-image" />
+                    <CImage fluid rounded src="/images/freight-sea.jpg" className="custom-image" />
                 </CCol>
                 <CCol md={7}>
                     {currentPage === 1 && (
                         <ShipperForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleConsigneeInfo={handleConsigneeInfo}
+                            handleConsigneeInfo={(e) => setCurrentPage(2)}
                         />
                     )}
 
@@ -124,8 +126,8 @@ const Land = () => {
                         <ConsineeForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleShipperInformation={handleShipperInformation}
-                            handleShipmentDetails={handleShipmentDetails}
+                            handleShipperInformation={(e) => setCurrentPage(1)}
+                            handleShipmentDetails={(e) => setCurrentPage(3)}
                         />
                     )}
 
@@ -133,16 +135,16 @@ const Land = () => {
                         <ShipmentForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleConsigneeInfo={handleConsigneeInfo}
-                            handleShippingInformation={handleShippingInformation}
+                            handleConsigneeInfo={(e) => setCurrentPage(2)}
+                            handleShippingInformation={(e) => setCurrentPage(4)}
                         />
                     )}
 
                     {currentPage === 4 && (
-                        <LandForm
+                        <SeaForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleShipmentDetails={handleShipmentDetails}
+                            handleShipmentDetails={(e) => setCurrentPage(3)}
                             handleSubmit={handleSubmit}
                         />
                     )}
@@ -152,4 +154,4 @@ const Land = () => {
     )
 }
 
-export default Land
+export default Sea

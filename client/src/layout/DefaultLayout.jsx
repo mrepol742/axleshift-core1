@@ -1,7 +1,7 @@
 import React from 'react'
 import { CToaster, CToast, CToastHeader, CToastBody, CImage } from '@coreui/react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
-import { useToast } from '../components/ToastContext'
+import { useToast } from '../components/AppToastProvider'
 import { parseTimestamp } from '../components/Timestamp'
 
 const DefaultLayout = () => {

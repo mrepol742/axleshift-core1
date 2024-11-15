@@ -12,14 +12,14 @@ import DocumentTitle from './components/middleware/DocumentTitle'
 // Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
-const Privacy = lazy(() => import('./views/legal-agreements/privacy-policy'))
-const Terms = lazy(() => import('./views/legal-agreements/terms-of-service'))
-const Landing = lazy(() => import('./views/landing'))
-const Login = lazy(() => import('./views/auth/login'))
-const Register = lazy(() => import('./views/auth/register'))
-const ForgotPassword = lazy(() => import('./views/auth/forgotpassword'))
-const MailOTP = lazy(() => import('./views/auth/otp/mail'))
-const GithubCallback = lazy(() => import('./views/auth/github/callback'))
+const Privacy = lazy(() => import('./views/legal/PrivacyPolicy'))
+const Terms = lazy(() => import('./views/legal/Terms'))
+const Landing = lazy(() => import('./views/Landing'))
+const Login = lazy(() => import('./views/auth/Login'))
+const Register = lazy(() => import('./views/auth/Register'))
+const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
+const MailOTP = lazy(() => import('./views/auth/otp/Mail'))
+const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')

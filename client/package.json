@@ -9,6 +9,7 @@
         "type": "git",
         "url": "git@github.com:freight-capstone/core1.git"
     },
+    "type": "module",
     "license": "MIT",
     "author": "The Freight Capstone Core 1",
     "scripts": {

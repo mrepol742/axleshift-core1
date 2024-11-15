@@ -2,37 +2,39 @@ import React, { lazy } from 'react'
 import auth from './components/middleware/Auth'
 import profile from './components/Profile'
 
+const Logout = auth(lazy(() => import('./views/auth/Logout')))
+
 const Overview = auth(lazy(() => import('./views/overview/index')))
-const Info = auth(lazy(() => import('./views/overview/info')))
+const Info = auth(lazy(() => import('./views/overview/Info')))
+const Search = auth(lazy(() => import('./views/overview/Search')))
 
 const Inbox = auth(lazy(() => import('./views/support/customer-service/index')))
-const Chat = auth(lazy(() => import('./views/support/customer-service/chat')))
+const Chat = auth(lazy(() => import('./views/support/customer-service/Chat')))
 const Account = auth(lazy(() => import('./views/account/index')))
 
 const Freight = auth(lazy(() => import('./views/freight/index')))
-const FreightAir = auth(lazy(() => import('./views/freight/air')))
-const FreightLand = auth(lazy(() => import('./views/freight/land')))
-const FreightSea = auth(lazy(() => import('./views/freight/sea')))
+const FreightAir = auth(lazy(() => import('./views/freight/Air')))
+const FreightLand = auth(lazy(() => import('./views/freight/Land')))
+const FreightSea = auth(lazy(() => import('./views/freight/Sea')))
 
 const Pricing = auth(lazy(() => import('./views/pricing/index')))
 
 const Security = auth(lazy(() => import('./views/security/index')))
-const Management = auth(lazy(() => import('./views/security/management')))
-const DeviceLock = auth(lazy(() => import('./views/security/device')))
-const APIKey = auth(lazy(() => import('./views/security/api')))
-const Activity = auth(lazy(() => import('./views/security/activity')))
+const Management = auth(lazy(() => import('./views/security/Management')))
+const DeviceLock = auth(lazy(() => import('./views/security/Device')))
+const APIKey = auth(lazy(() => import('./views/security/API')))
+const Activity = auth(lazy(() => import('./views/security/Activity')))
 
 const Track = auth(lazy(() => import('./views/track/index')))
-const TrackInfo = auth(lazy(() => import('./views/track/info')))
+const TrackInfo = auth(lazy(() => import('./views/track/Info')))
 
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 const Err500 = auth(lazy(() => import('./views/errors/500')))
 
-const Logout = auth(lazy(() => import('./views/auth/logout')))
-
 const routes = [
     { path: '/', name: 'Overview', element: Overview },
     { path: '/v/:id', name: 'Shipment Info', element: Info },
+    { path: '/search', name: 'Search Shipment', element: Search },
 
     { path: '/customer', name: 'Inbox', element: Inbox },
     { path: '/customer/:id', name: 'Chat', element: Chat },

@@ -7,14 +7,14 @@ import 'core-js'
 import { VITE_APP_GOOGLE_OAUTH_CLIENT_ID } from './config'
 import App from './App'
 import store from './store'
-import { ToastProvider } from './components/ToastContext'
+import { AppToastProvider } from './components/AppToastProvider'
 
 createRoot(document.getElementById('root')).render(
     <Provider store={store}>
-        <ToastProvider>
+        <AppToastProvider>
             <GoogleOAuthProvider clientId={VITE_APP_GOOGLE_OAUTH_CLIENT_ID}>
                 <App />
             </GoogleOAuthProvider>
-        </ToastProvider>
+        </AppToastProvider>
     </Provider>,
 )

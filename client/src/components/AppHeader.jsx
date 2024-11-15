@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -13,6 +13,10 @@ import {
     CNavLink,
     CNavItem,
     useColorModes,
+    CForm,
+    CInputGroup,
+    CFormInput,
+    CInputGroupText,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -21,16 +25,18 @@ import {
     faMoon,
     faSun,
     faCircleHalfStroke,
+    faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { AppBreadcrumb, AppHeaderDropdown } from './index'
+import AppNotifcationDropdown from './AppNotificationDropdown'
 
 const AppHeader = () => {
     const headerRef = useRef()
     const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
-
     const dispatch = useDispatch()
     const sidebarShow = useSelector((state) => state.sidebarShow)
+    const { query, setQuery } = useState('')
 
     useEffect(() => {
         document.addEventListener('scroll', () => {
@@ -52,18 +58,34 @@ const AppHeader = () => {
                     <FontAwesomeIcon icon={faBars} />
                 </CHeaderToggler>
                 <CHeaderNav className="d-none d-md-flex">
-                    <CNavItem>
-                        <CNavLink to="/" as={NavLink}>
-                            Overview
-                        </CNavLink>
-                    </CNavItem>
+                    <CForm action="/search" className="mx-auto" style={{ maxWidth: '400px' }}>
+                        <CInputGroup style={{ borderRadius: '50px' }}>
+                            <CFormInput
+                                aria-label="query"
+                                name="q"
+                                value={query}
+                                placeholder="Find & track shipment..."
+                                onChange={(e) => setQuery(e.target.value)}
+                                aria-describedby="basic-addon"
+                                style={{
+                                    borderRadius: '50px 0 0 50px',
+                                    height: '35px',
+                                    fontSize: '0.9em',
+                                }}
+                            />
+                            <CInputGroupText
+                                id="basic-addon"
+                                type="submit"
+                                style={{ borderRadius: '0 50px 50px 0' }}
+                                className="px-3"
+                            >
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                            </CInputGroupText>
+                        </CInputGroup>
+                    </CForm>
                 </CHeaderNav>
-                <CHeaderNav className="ms-auto">
-                    <CNavItem>
-                        <CNavLink href="#">
-                            <FontAwesomeIcon icon={faBell} />
-                        </CNavLink>
-                    </CNavItem>
+                <CHeaderNav className="ms-auto px-2">
+                    <AppNotifcationDropdown />
                 </CHeaderNav>
                 <CHeaderNav>
                     <CDropdown variant="nav-item" placement="bottom-end">

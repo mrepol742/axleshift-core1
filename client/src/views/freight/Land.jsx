@@ -21,13 +21,16 @@ import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from 
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
-import AirForm from '../../components/forms/shipping/AirForm'
+import LandForm from '../../components/forms/shipping/LandForm'
+import { useToast } from '../../components/AppToastProvider'
+import errorMessages from '../../components/ErrorMessages'
 
-const Air = () => {
+const Land = () => {
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(false)
+    const { addToast } = useToast()
     const [formData, setFormData] = useState({
         shipper: {
             shipper_company_name: '',
@@ -54,13 +57,12 @@ const Air = () => {
             shipment_instructions: '',
         },
         shipping: {
-            shipping_origin_airport: '',
-            shipping_destination_airport: '',
-            shipping_preferred_departure_date: '',
-            shipping_preferred_arrival_date: '',
-            shipping_flight_type: 1,
+            shipping_origin_addresss: '',
+            shipping_destination_address: '',
+            shipping_pickup_date: '',
+            shipping_delivery_date: '',
+            shipping_vehicle_type: '',
         },
-        recaptcha_ref: '',
     })
 
     const handleInputChange = (e, section) => {
@@ -86,7 +88,7 @@ const Air = () => {
             console.log(key, formDataToSend[key])
         }
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/freight/b/air`, formDataToSend, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/b/land`, formDataToSend, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
@@ -94,24 +96,10 @@ const Air = () => {
             .then((response) => navigate('/'))
             .catch((error) => {
                 console.error(error)
+                const message = errorMessages[error.status] || 'Internal Application Error'
+                addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))
-    }
-
-    const handleShipperInformation = () => {
-        setCurrentPage(1)
-    }
-
-    const handleConsigneeInfo = () => {
-        setCurrentPage(2)
-    }
-
-    const handleShipmentDetails = () => {
-        setCurrentPage(3)
-    }
-
-    const handleShippingInformation = () => {
-        setCurrentPage(4)
     }
 
     return (
@@ -124,14 +112,14 @@ const Air = () => {
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <CRow className="mb-4">
                 <CCol xs={3} md={5} xl={3} className="image-container d-none d-md-flex">
-                    <CImage fluid rounded src="/images/freight-air.jpg" className="custom-image" />
+                    <CImage fluid rounded src="/images/freight-land.jpg" className="custom-image" />
                 </CCol>
                 <CCol md={7}>
                     {currentPage === 1 && (
                         <ShipperForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleConsigneeInfo={handleConsigneeInfo}
+                            handleConsigneeInfo={(e) => setCurrentPage(2)}
                         />
                     )}
 
@@ -139,8 +127,8 @@ const Air = () => {
                         <ConsineeForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleShipperInformation={handleShipperInformation}
-                            handleShipmentDetails={handleShipmentDetails}
+                            handleShipperInformation={(e) => setCurrentPage(1)}
+                            handleShipmentDetails={(e) => setCurrentPage(3)}
                         />
                     )}
 
@@ -148,16 +136,16 @@ const Air = () => {
                         <ShipmentForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleConsigneeInfo={handleConsigneeInfo}
-                            handleShippingInformation={handleShippingInformation}
+                            handleConsigneeInfo={(e) => setCurrentPage(2)}
+                            handleShippingInformation={(e) => setCurrentPage(4)}
                         />
                     )}
 
                     {currentPage === 4 && (
-                        <AirForm
+                        <LandForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleShipmentDetails={handleShipmentDetails}
+                            handleShipmentDetails={(e) => setCurrentPage(3)}
                             handleSubmit={handleSubmit}
                         />
                     )}
@@ -167,4 +155,4 @@ const Air = () => {
     )
 }
 
-export default Air
+export default Land
