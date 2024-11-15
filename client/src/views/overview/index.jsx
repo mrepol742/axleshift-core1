@@ -17,6 +17,7 @@ import {
     CSpinner,
     CCardText,
     CFormSelect,
+    CContainer,
 } from '@coreui/react'
 import Masonry from 'react-masonry-css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -83,83 +84,101 @@ const Overview = () => {
 
             <WidgetsDropdown className="mb-4" />
 
-            <CForm className="d-flex justify-content-left my-2 my-lg-0">
-                <CInputGroup className="mb-3">
-                    <CFormInput
-                        aria-label="tracking id"
-                        aria-describedby="basic-addon"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                    />
-                    <CInputGroupText id="basic-addon">
-                        <FontAwesomeIcon icon={faMagnifyingGlass} />
-                    </CInputGroupText>
-                </CInputGroup>
-                <div className="mx-2"></div>
-                <CFormSelect
-                    options={[
-                        { label: 'All', value: '0' },
-                        { label: 'On Route', value: '1' },
-                        { label: 'Canceled', value: '2' },
-                        { label: 'Shipped', value: '3' },
-                    ]}
-                    required
-                    className="mb-3"
-                />
-                <div className="mx-2"></div>
-                <CFormSelect
-                    options={[
-                        { label: 'Newer', value: '1' },
-                        { label: 'Older', value: '2' },
-                    ]}
-                    required
-                    className="mb-3"
-                />
-            </CForm>
+            {data.length == 0 && (
+                <CRow className="justify-content-center my-5">
+                    <CCol md={6}>
+                        <div className="clearfix">
+                            <h1 className="float-start display-3 me-4">OOPS</h1>
+                            <h4>You don&apos;t have any shipment yet.</h4>
+                            <p className="text-body-secondary float-start text-decoration-underline" onClick={(e) => navigate('/freight')}>
+                                Wanna add one? Click here.
+                            </p>
+                        </div>
+                    </CCol>
+                </CRow>
+            )}
 
-            <Masonry
-                breakpointCols={{
-                    default: 4,
-                    1100: 3,
-                    700: 2,
-                    500: 1,
-                }}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column"
-            >
-                {data.map((item) => (
-                    <CCard
-                        className="mb-3"
-                        key={item._id}
-                        onClick={() => navigate(`/v/${item._id}`)}
-                        style={{ cursor: 'pointer' }}
+            {data.length !== 0 && (
+                <>
+                    <CForm className="d-flex justify-content-left my-2 my-lg-0">
+                        <CInputGroup className="mb-3">
+                            <CFormInput
+                                aria-label="tracking id"
+                                aria-describedby="basic-addon"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                            />
+                            <CInputGroupText id="basic-addon">
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                            </CInputGroupText>
+                        </CInputGroup>
+                        <div className="mx-2"></div>
+                        <CFormSelect
+                            options={[
+                                { label: 'All', value: '0' },
+                                { label: 'On Route', value: '1' },
+                                { label: 'Canceled', value: '2' },
+                                { label: 'Shipped', value: '3' },
+                            ]}
+                            required
+                            className="mb-3"
+                        />
+                        <div className="mx-2"></div>
+                        <CFormSelect
+                            options={[
+                                { label: 'Newer', value: '1' },
+                                { label: 'Older', value: '2' },
+                            ]}
+                            required
+                            className="mb-3"
+                        />
+                    </CForm>
+
+                    <Masonry
+                        breakpointCols={{
+                            default: 4,
+                            1100: 3,
+                            700: 2,
+                            500: 1,
+                        }}
+                        className="my-masonry-grid"
+                        columnClassName="my-masonry-grid_column"
                     >
-                        <CCardHeader
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <div></div>
-                            <div>{parseTimestamp(item.created_at)}</div>
-                        </CCardHeader>
-                        <CCardBody>
-                            <CCardText>{item.data.shipment.shipment_description}</CCardText>
-                        </CCardBody>
-                        <CCardFooter className="bg-dark text-white border-0">
-                            Status: On route
-                        </CCardFooter>
-                    </CCard>
-                ))}
-            </Masonry>
+                        {data.map((item) => (
+                            <CCard
+                                className="mb-3"
+                                key={item._id}
+                                onClick={() => navigate(`/v/${item._id}`)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <CCardHeader
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <div></div>
+                                    <div>{parseTimestamp(item.created_at)}</div>
+                                </CCardHeader>
+                                <CCardBody>
+                                    <CCardText>{item.data.shipment.shipment_description}</CCardText>
+                                </CCardBody>
+                                <CCardFooter className="bg-dark text-white border-0">
+                                    Status: On route
+                                </CCardFooter>
+                            </CCard>
+                        ))}
+                    </Masonry>
 
-            <AppPagination
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                totalPages={totalPages}
-                setTotalPages={setTotalPages}
-            />
+                    <AppPagination
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        totalPages={totalPages}
+                        setTotalPages={setTotalPages}
+                    />
+                </>
+            )}
         </>
     )
 }
