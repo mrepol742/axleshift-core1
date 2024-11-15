@@ -115,7 +115,7 @@ const Login = () => {
                 )}
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5} className="my-2">
-                        <CCard className="p-1 p-md-4 shadow">
+                        <CCard className="p-1 p-sm-4 shadow">
                             <CCardBody>
                                 {error.error && (
                                     <CAlert color="danger" className="d-flex align-items-center">

@@ -39,7 +39,7 @@ const Navbar = () => {
                     aria-expanded={visible}
                     onClick={() => setVisible(!visible)}
                 />
-                <CNavbarBrand to="/" as={NavLink} className="d-none d-md-block">
+                <CNavbarBrand to="/" as={NavLink} className="d-none d-sm-block">
                     <CImage src="/images/logo.png" width="150px" />
                 </CNavbarBrand>
                 <CNavbarNav>
@@ -47,7 +47,7 @@ const Navbar = () => {
                         <CNavLink
                             to="/register"
                             as={NavLink}
-                            className="bg-warning rounded px-3 text-white d-block d-md-none"
+                            className="bg-warning rounded px-3 text-white d-block d-sm-none"
                         >
                             Register
                         </CNavLink>
@@ -104,10 +104,9 @@ const Navbar = () => {
                         </CNavItem>
                         <CNavItem>
                             <CNavLink
-                                className="text-white"
                                 to="/register"
                                 as={NavLink}
-                                className="d-none d-md-block"
+                                className="d-none text-white d-sm-block"
                             >
                                 Register
                             </CNavLink>

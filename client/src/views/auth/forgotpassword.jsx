@@ -38,7 +38,7 @@ const Login = () => {
             <CContainer>
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
-                        <CCard className="p-1 p-md-4 shadow">
+                        <CCard className="p-1 p-sm-4 shadow">
                             <CCardBody>
                                 <CForm onSubmit={handleSubmit}>
                                     <h1>Forgot Password</h1>
