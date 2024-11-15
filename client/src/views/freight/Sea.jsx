@@ -109,6 +109,7 @@ const Sea = () => {
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )}
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <CRow className="mb-4">
                 <CCol xs={3} md={5} xl={3} className="image-container d-none d-md-flex">
                     <CImage fluid rounded src="/images/freight-sea.jpg" className="custom-image" />

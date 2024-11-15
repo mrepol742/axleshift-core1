@@ -61,7 +61,7 @@ const Air = () => {
             shipping_destination_airport: '',
             shipping_preferred_departure_date: '',
             shipping_preferred_arrival_date: '',
-            shipping_flight_type: 1,
+            shipping_flight_type: '',
         },
         recaptcha_ref: '',
     })
