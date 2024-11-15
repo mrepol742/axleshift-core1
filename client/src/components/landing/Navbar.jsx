@@ -32,24 +32,31 @@ const Navbar = () => {
     const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
 
     return (
-        <CNavbar expand="sm" colorScheme={colorMode}>
+        <CNavbar expand="sm" colorScheme={colorMode} className="fixed-top p-navbar">
             <CContainer fluid>
-                <CNavbarBrand to="/" as={NavLink} data-aos="fade-down" data-aos-duration="1000">
-                    <CImage src="/images/logo.png" width="150px" />
-                </CNavbarBrand>
                 <CNavbarToggler
                     aria-label="Toggle navigation"
                     aria-expanded={visible}
                     onClick={() => setVisible(!visible)}
                 />
+                <CNavbarBrand to="/" as={NavLink} className="d-none d-md-block">
+                    <CImage src="/images/logo.png" width="150px" />
+                </CNavbarBrand>
+                <CNavbarNav>
+                    <CNavItem>
+                        <CNavLink
+                            className="text-white"
+                            to="/register"
+                            as={NavLink}
+                            className="bg-warning rounded text-warning px-3 text-white d-block d-md-none"
+                        >
+                            Register
+                        </CNavLink>
+                    </CNavItem>
+                </CNavbarNav>
                 <CCollapse className="navbar-collapse" visible={visible}>
                     <CNavbarNav className="ms-auto">
-                        <CDropdown
-                            variant="nav-item"
-                            placement="bottom-end"
-                            data-aos="fade-down"
-                            data-aos-duration="1000"
-                        >
+                        <CDropdown variant="nav-item" placement="bottom-end">
                             <CDropdownToggle caret={false} className="text-white">
                                 {colorMode === 'dark' ? (
                                     <FontAwesomeIcon icon={faMoon} />
@@ -92,13 +99,7 @@ const Navbar = () => {
                             </CDropdownMenu>
                         </CDropdown>
                         <CNavItem>
-                            <CNavLink
-                                className="text-white"
-                                to="/login"
-                                as={NavLink}
-                                data-aos="fade-down"
-                                data-aos-duration="1000"
-                            >
+                            <CNavLink className="text-white" to="/login" as={NavLink}>
                                 Login
                             </CNavLink>
                         </CNavItem>
@@ -107,8 +108,7 @@ const Navbar = () => {
                                 className="text-white"
                                 to="/register"
                                 as={NavLink}
-                                data-aos="fade-down"
-                                data-aos-duration="1000"
+                                className="d-none d-md-block"
                             >
                                 Register
                             </CNavLink>

@@ -48,15 +48,19 @@ const Landing = () => {
                     className="landing-page"
                     style={{ backgroundImage: `url(${backgroundImage})` }}
                 >
-                    <CContainer fluid className="h-100">
+                    <CContainer className="py-5 my-5">
                         <Navbar />
                         <CRow className="h-100 justify-content-start align-items-center">
                             <CCol xs={12} md={6} className="px-4 mx-0 mx-md-4">
-                                <h1 className="text-white display-1" style={{ fontWeight: 400 }}>
+                                <h1
+                                    className="text-white display-2"
+                                    style={{ fontWeight: 400 }}
+                                    data-aos="fade-up"
+                                >
                                     Where <span className="text-warning">Freight</span> Meets
                                     Efficiency
                                 </h1>
-                                <p className="lead text-white">
+                                <p className="lead text-white" data-aos="fade-up">
                                     Our cutting-edge platform empowers businesses to improve their
                                     shipping strategies. Experience optimized routing without the
                                     complexities of tracking.
@@ -64,7 +68,8 @@ const Landing = () => {
                                 <CButton
                                     to="/register"
                                     as={NavLink}
-                                    className="rounded-3 btn-warning px-5 py-3"
+                                    className="rounded-3 btn-warning text-white px-4 py-2 px-md-5 py-md-3"
+                                    data-aos="fade-right"
                                 >
                                     Register now
                                 </CButton>

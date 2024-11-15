@@ -30,6 +30,7 @@ import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
+import { useToast } from '../../components/ToastContext'
 
 const Overview = () => {
     const [data, setData] = useState([])
@@ -37,6 +38,7 @@ const Overview = () => {
     const [totalPages, setTotalPages] = useState(0)
     const [query, setQuery] = useState('')
     const [loading, setLoading] = useState(false)
+    const { addToast } = useToast()
     const navigate = useNavigate()
 
     const handleSearchSubmit = (e) => {
@@ -68,6 +70,7 @@ const Overview = () => {
 
     useEffect(() => {
         fetchData(currentPage, query)
+        addToast('Welcome to core axleshift', 'Hello World')
     }, [currentPage])
 
     return (
