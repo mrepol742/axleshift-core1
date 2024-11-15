@@ -1,119 +1,81 @@
 workflow:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file: 
-      - .github/**/*
+    - any-glob-to-any-file: .github/**/*
 
 client:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file: 
-      - client/src/**/*
+    - any-glob-to-any-file: client/src/**/*
 
 server:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file: 
-      - server/src/**/*
+    - any-glob-to-any-file: server/src/**/*
 
 mobile:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - mobile/app/**/*
+    - any-glob-to-any-file: mobile/app/**/*
 
 auth:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - client/src/views/auth/**/*
-      - client/src/components/middleware/Auth.jsx
-      - server/src/components/auth/**/*
-      - server/src/routes/v1/auth.js
+    - any-glob-to-any-file: ['client/src/views/auth/**/*', 'client/src/components/middleware/Auth.jsx', 'server/src/components/auth/**/*', 'server/src/routes/v1/auth.js']
 
 routes:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file: 
-      - server/src/routes/**/*
+    - any-glob-to-any-file: server/src/routes/**/*
 
 env:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - client/.env.example
-      - server/.env.example
+    - any-glob-to-any-file: ['client/.env.example', 'server/.env.example']
 
 dependencies:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - package.json
-      - package-lock.json
-      - client/package.json
-      - client/package-lock.json
-      - server/package.json
-      - server/package-lock.json
-      - mobile/package.json
-      - mobile/package-lock.json
+    - any-glob-to-any-file: ['package.json', 'package-lock.json', 'client/package.json', 'client/package-lock.json', 'server/package.json', 'server/package-lock.json', 'mobile/package.json', 'mobile/package-lock.json']
 
 documentation:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - server/docs/**/*
+    - any-glob-to-any-file: server/docs/**/*
 
 test:
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - server/test/**/*
-      - mobile/components/__tests__/**/*
+    - any-glob-to-any-file: ['server/test/**/*', 'mobile/components/__tests__/**/*']
 
 container:
-- all:
-  - changed-files:
-    - server/Dockerfile
-    - server/.dockerignore
+- any:
+  - changed-files: ['server/Dockerfile', 'server/.dockerignore']
 
 infra:
-- all:
-  - changed-files:
-    - server/main.tf
+- any:
+  - changed-files: server/main.tf
 
 vcs:
-- all:
-  - changed-files:
-    - .gitignore
-    - server/.gitignore
-    - client/.gitignore
-    - mobile/.gitignore
+- any:
+  - changed-files: ['.gitignore', 'server/.gitignore', 'client/.gitignore', 'mobile/.gitignore']
 
 'cargo-tracking':
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - client/src/views/track/**/*
-      - server/src/routes/v1/track.js
+    - any-glob-to-any-file: ['client/src/views/track/**/*', 'server/src/routes/v1/track.js']
 
 'order-management':
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - client/src/components/forms/**/*
-      - client/src/views/freight/**/*
-      - client/src/views/overview/**/*
-      - server/src/routes/v1/freight.js
+    - any-glob-to-any-file: ['client/src/components/forms/**/*', 'client/src/views/freight/**/*', 'client/src/views/overview/**/*', 'server/src/routes/v1/freight.js']
 
 'customer-communication-and-service':
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - client/src/views/support/**/*
-      - client/firebase.js
+    - any-glob-to-any-file: ['client/src/views/support/**/*', 'client/firebase.js']
 
 'rate-management':
-- all:
+- any:
   - changed-files:
-    - any-glob-to-any-file:
-      - client/src/views/pricing/**/*
+    - any-glob-to-any-file: client/src/views/pricing/**/*
