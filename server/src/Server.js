@@ -17,13 +17,16 @@ const app = express()
 const upload = multer()
 
 app.use(cors())
-app.use('/api/pmz', createProxyMiddleware({
-    target: `http://localhost:${EXT_EXPRESS_PORT}`,
-    changeOrigin: true,
-    pathRewrite: {
-      '^/api/pmz': ''
-    },
-}));
+app.use(
+    '/api/pmz',
+    createProxyMiddleware({
+        target: `http://localhost:${EXT_EXPRESS_PORT}`,
+        changeOrigin: true,
+        pathRewrite: {
+            '^/api/pmz': '',
+        },
+    }),
+)
 app.use(compression())
 app.use(
     mongoSanitize({
@@ -42,7 +45,7 @@ app.use(pinoHttp({ logger }))
 
 app.use(express.static('public'))
 app.use('/api/v1/', APIv1)
-  
+
 app.use((err, req, res, next) => {
     logger.error(err)
     return res.status(500).send()

@@ -173,3 +173,8 @@
     padding-left: 14px;
     background-clip: padding-box;
 }
+
+.p-navbar {
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
