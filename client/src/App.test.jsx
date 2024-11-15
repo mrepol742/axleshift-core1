@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom'
 import React from 'react'
 import store from './store'
 import { Provider } from 'react-redux'
-import App from './views/landing'
+import App from './views/Landing'
 
 describe('App tests', () => {
     it('should contains the heading title', () => {
