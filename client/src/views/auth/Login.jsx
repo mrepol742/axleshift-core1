@@ -220,11 +220,7 @@ const Login = () => {
                                         >
                                             <FontAwesomeIcon icon={faGithub} />
                                         </CButton>
-                                        <CButton
-                                            color="outline-primary"
-                                            className="me-2"
-                                            disabled
-                                        >
+                                        <CButton color="outline-primary" className="me-2" disabled>
                                             <FontAwesomeIcon icon={faMicrosoft} />
                                         </CButton>
                                     </div>

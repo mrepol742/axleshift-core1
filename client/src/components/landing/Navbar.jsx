@@ -55,7 +55,11 @@ const Navbar = () => {
                 </CNavbarNav>
                 <CCollapse className="navbar-collapse" visible={visible}>
                     <CNavbarNav className="ms-auto">
-                        <CDropdown variant="nav-item" placement="bottom-end" className="mx-2 mx-sm-0">
+                        <CDropdown
+                            variant="nav-item"
+                            placement="bottom-end"
+                            className="mx-2 mx-sm-0"
+                        >
                             <CDropdownToggle caret={false} className="text-white">
                                 {colorMode === 'dark' ? (
                                     <FontAwesomeIcon icon={faMoon} />

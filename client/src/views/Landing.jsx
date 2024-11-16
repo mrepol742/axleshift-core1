@@ -58,7 +58,11 @@ const Landing = () => {
                                     style={{ fontWeight: 100 }}
                                     data-aos="fade-right"
                                 >
-                                    Where <span className="text-warning" style={{ fontWeight: 400 }}>Freight</span> Meets Efficiency
+                                    Where{' '}
+                                    <span className="text-warning" style={{ fontWeight: 400 }}>
+                                        Freight
+                                    </span>{' '}
+                                    Meets Efficiency
                                 </h1>
                                 <p className="lead text-white" data-aos="fade-right">
                                     Our cutting-edge platform empowers businesses to improve their
@@ -71,7 +75,9 @@ const Landing = () => {
                                     className="rounded-3 btn-warning text-white px-4 py-2 px-md-5 py-md-3"
                                     data-aos="fade-up"
                                 >
-                                    Register now <FontAwesomeIcon icon={faGoogle} /> <FontAwesomeIcon icon={faGithub} /> <FontAwesomeIcon icon={faMicrosoft} />
+                                    Register now <FontAwesomeIcon icon={faGoogle} />{' '}
+                                    <FontAwesomeIcon icon={faGithub} />{' '}
+                                    <FontAwesomeIcon icon={faMicrosoft} />
                                 </CButton>
                             </CCol>
                         </CRow>

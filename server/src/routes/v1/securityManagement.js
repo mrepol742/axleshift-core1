@@ -14,18 +14,11 @@ router.get('/', auth, async (req, res, next) => {
         sentry(),
         (async () => {
             const db = await database()
-            return await db
-                .collection('sessions')
-                .find()
-                .sort({ last_accessed: -1 })
-                .toArray()
+            return await db.collection('sessions').find().sort({ last_accessed: -1 }).toArray()
         })(),
         (async () => {
             const db = await database()
-            return await db.collection('apiToken')
-            .find()
-            .sort({ last_accessed: -1 })
-            .toArray();
+            return await db.collection('apiToken').find().sort({ last_accessed: -1 }).toArray()
         })(),
     ])
 

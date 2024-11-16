@@ -117,7 +117,7 @@ const FreightInfo = () => {
         setEditedFormData((prev) => ({
             ...prev,
             recaptcha_ref: recaptcha,
-        }));
+        }))
         alert(editedFormData.recaptcha_ref)
 
         await axios
@@ -129,7 +129,8 @@ const FreightInfo = () => {
             .then((response) => {
                 addToast('Your changes has been saved.')
                 navigate('/')
-            }).catch((error) => {
+            })
+            .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'Internal Application Error'
                 addToast(message, 'Submit failed!')
@@ -162,7 +163,8 @@ const FreightInfo = () => {
             .then((response) => {
                 addToast('Shipment has been deleted.')
                 navigate('/')
-            }).catch((error) => {
+            })
+            .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'Internal Application Error'
                 addToast(message, 'Submit failed!')

@@ -83,7 +83,7 @@ const Land = () => {
         setFormData((prev) => ({
             ...prev,
             recaptcha_ref: recaptcha,
-        }));
+        }))
         await axios
             .post(`${VITE_APP_API_URL}/api/v1/freight/b/land`, formData, {
                 headers: {
