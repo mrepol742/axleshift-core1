@@ -64,14 +64,13 @@ const Account = () => {
     const handleSubmit = async (formData) => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        const formDataToSend = new FormData()
-        for (const key in formData) {
-            formDataToSend.append(key, formData[key])
+        const updatedFormData = {
+            ...formData,
+            recaptcha_ref: recaptcha,
         }
-        formDataToSend.append('recaptcha_ref', recaptcha)
 
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/auth/user`, formDataToSend, {
+            .post(`${VITE_APP_API_URL}/api/v1/auth/user`, updatedFormData, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },

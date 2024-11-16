@@ -69,16 +69,18 @@ const API = () => {
     const gen = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-
-        const formData = new FormData()
-        formData.append('recaptcha_ref', recaptcha)
-
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/auth/token/new`, formData, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+            .post(
+                `${VITE_APP_API_URL}/api/v1/auth/token/new`,
+                {
+                    recaptcha_ref: recaptcha,
                 },
-            })
+                {
+                    headers: {
+                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+                    },
+                },
+            )
             .then((response) =>
                 setResult((prevResult) => ({
                     ...prevResult,
@@ -139,17 +141,19 @@ const API = () => {
         e.preventDefault()
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-
-        const formData = new FormData()
-        formData.append('whitelist_ip', result.whitelist_ip)
-        formData.append('recaptcha_ref', recaptcha)
-
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/auth/token/whitelist-ip`, formData, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+            .post(
+                `${VITE_APP_API_URL}/api/v1/auth/token/whitelist-ip`,
+                {
+                    whitelist_ip: result.whitelist_ip,
+                    recaptcha_ref: recaptcha,
                 },
-            })
+                {
+                    headers: {
+                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+                    },
+                },
+            )
             .then((response) => {
                 if (response.data.error) return alert(response.data.error)
                 alert('done')

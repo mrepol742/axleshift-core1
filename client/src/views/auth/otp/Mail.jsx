@@ -83,17 +83,19 @@ const MailOTP = () => {
         e.preventDefault()
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-
-        const formData = new FormData()
-        formData.append('otp', otp)
-        formData.append('recaptcha_ref', recaptcha)
-
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/auth/verify/otp`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
+            .post(
+                `${VITE_APP_API_URL}/api/v1/auth/verify/otp`,
+                {
+                    otp: otp,
+                    recaptcha_ref: recaptcha,
                 },
-            })
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            )
             .then((response) => {
                 if (response.data.error)
                     return setError({

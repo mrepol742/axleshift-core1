@@ -63,7 +63,6 @@ const Sea = () => {
             shipping_estimated_arrival_date: '',
             shipping_cargo_type: '',
         },
-        recaptcha_ref: '',
     })
 
     const handleInputChange = (e, section) => {
@@ -80,17 +79,20 @@ const Sea = () => {
     const handleSubmit = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        setFormData((prev) => ({
-            ...prev,
+        const updatedFormData = {
+            ...formData,
             recaptcha_ref: recaptcha,
-        }))
+        }
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/freight/b/sea`, formData, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/b/sea`, updatedFormData, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => navigate('/'))
+            .then((response) => {
+                addToast('Shipment has been confirmed.', 'Shipment')
+                navigate('/')
+            })
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'Internal Application Error'

@@ -114,22 +114,18 @@ const FreightInfo = () => {
         if (disabled) return setDisabled(false)
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        setEditedFormData((prev) => ({
-            ...prev,
+        const updatedFormData = {
+            ...editedFormData,
             recaptcha_ref: recaptcha,
-        }))
-        alert(editedFormData.recaptcha_ref)
+        }
 
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`, editedFormData, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`, updatedFormData, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => {
-                addToast('Your changes has been saved.')
-                navigate('/')
-            })
+            .then((response) => addToast('Your changes has been saved.'))
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'Internal Application Error'
