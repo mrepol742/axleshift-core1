@@ -22,10 +22,13 @@ import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
 import AirForm from '../../components/forms/shipping/AirForm'
+import { useToast } from '../../components/AppToastProvider'
+import errorMessages from '../../components/ErrorMessages'
 
 const Air = () => {
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
+    const { addToast } = useToast()
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -58,7 +61,7 @@ const Air = () => {
             shipping_destination_airport: '',
             shipping_preferred_departure_date: '',
             shipping_preferred_arrival_date: '',
-            shipping_flight_type: 1,
+            shipping_flight_type: '',
         },
         recaptcha_ref: '',
     })
@@ -77,41 +80,24 @@ const Air = () => {
     const handleSubmit = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        const formDataToSend = new FormData()
-        for (const key in formData) {
-            formDataToSend.append(key, formData[key])
-        }
-        formDataToSend.append('recaptcha_ref', recaptcha)
-        for (const key in formDataToSend) {
-            console.log(key, formDataToSend[key])
-        }
+        setFormData((prev) => ({
+            ...prev,
+            recaptcha_ref: recaptcha,
+        }))
+
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/freight/b/air`, formDataToSend, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/b/air`, formData, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => navigate('/'))
+            .then((response) => alert('/'))
             .catch((error) => {
                 console.error(error)
+                const message = errorMessages[error.status] || 'Internal Application Error'
+                addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))
-    }
-
-    const handleShipperInformation = () => {
-        setCurrentPage(1)
-    }
-
-    const handleConsigneeInfo = () => {
-        setCurrentPage(2)
-    }
-
-    const handleShipmentDetails = () => {
-        setCurrentPage(3)
-    }
-
-    const handleShippingInformation = () => {
-        setCurrentPage(4)
     }
 
     return (
@@ -131,7 +117,7 @@ const Air = () => {
                         <ShipperForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleConsigneeInfo={handleConsigneeInfo}
+                            handleConsigneeInfo={(e) => setCurrentPage(2)}
                         />
                     )}
 
@@ -139,8 +125,8 @@ const Air = () => {
                         <ConsineeForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleShipperInformation={handleShipperInformation}
-                            handleShipmentDetails={handleShipmentDetails}
+                            handleShipperInformation={(e) => setCurrentPage(1)}
+                            handleShipmentDetails={(e) => setCurrentPage(3)}
                         />
                     )}
 
@@ -148,8 +134,8 @@ const Air = () => {
                         <ShipmentForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleConsigneeInfo={handleConsigneeInfo}
-                            handleShippingInformation={handleShippingInformation}
+                            handleConsigneeInfo={(e) => setCurrentPage(2)}
+                            handleShippingInformation={(e) => setCurrentPage(4)}
                         />
                     )}
 
@@ -157,7 +143,7 @@ const Air = () => {
                         <AirForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleShipmentDetails={handleShipmentDetails}
+                            handleShipmentDetails={(e) => setCurrentPage(3)}
                             handleSubmit={handleSubmit}
                         />
                     )}

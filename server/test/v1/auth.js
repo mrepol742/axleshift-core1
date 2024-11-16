@@ -52,7 +52,7 @@ const auth = () => {
         request(app)
             .post('/api/v1/auth/user')
             .set('Authorization', `Bearer ${TOKEN}`)
-            .expect(403)
+            .expect(400)
             .end((err, res) => {
                 if (err) return done(err)
                 done()

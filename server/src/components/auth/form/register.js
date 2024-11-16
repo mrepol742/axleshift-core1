@@ -3,6 +3,7 @@ import database from '../../../models/mongodb.js'
 import logger from '../../logger.js'
 import passwordHash, { generateUniqueId } from '../../password.js'
 import { addSession } from '../../../components/sessions.js'
+import { send } from '../../mail.js'
 
 const FormRegister = async (req, res) => {
     try {

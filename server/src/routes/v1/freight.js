@@ -94,7 +94,7 @@ router.get('/:id', auth, async (req, res, next) => {
      Shipment
      Shipping
 */
-router.post('/b/:type', [auth, recaptcha], async (req, res, next) => {
+router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment, shipping } = req.body
         const type = req.params.type
@@ -134,7 +134,7 @@ router.post('/b/:type', [auth, recaptcha], async (req, res, next) => {
      Consignee
      Shipment
 */
-router.post('/u/:type/:id', auth, async (req, res, next) => {
+router.post('/u/:type/:id', [recaptcha, auth], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment } = req.body
         const { type, id } = req.params
@@ -175,7 +175,7 @@ router.post('/u/:type/:id', auth, async (req, res, next) => {
   Header:
      Authentication
 */
-router.post('/d/:id', auth, async (req, res, next) => {
+router.post('/d/:id', [recaptcha, auth], async (req, res, next) => {
     try {
         const id = req.params.id
         const db = await database()

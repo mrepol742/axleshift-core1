@@ -138,7 +138,7 @@ router.post('/verify', auth, async function (req, res, next) {
   Header:
      Authentication
 */
-router.post('/user', [auth, recaptcha], async function (req, res, next) {
+router.post('/user', [recaptcha, auth], async function (req, res, next) {
     try {
         const { first_name, last_name, timezone, email } = req.body
         const set = {}
@@ -198,7 +198,7 @@ router.post('/logout', auth, function (req, res, next) {
   Request Body:
      Recaptcha ref
 */
-router.post('/verify/otp/new', [auth, recaptcha], async function (req, res, next) {
+router.post('/verify/otp/new', [recaptcha, auth], async function (req, res, next) {
     try {
         const db = await database()
         const otpCollection = db.collection('otp')
@@ -242,7 +242,7 @@ router.post('/verify/otp/new', [auth, recaptcha], async function (req, res, next
      Otp
      Recaptcha ref
 */
-router.post('/verify/otp', [auth, recaptcha], async function (req, res, next) {
+router.post('/verify/otp', [recaptcha, auth], async function (req, res, next) {
     try {
         const otp = req.body.otp
         if (!otp) return res.status(400).send()
@@ -323,7 +323,7 @@ router.get('/token', auth, async function (req, res, next) {
   Returns:
      API token
 */
-router.post('/token/new', [auth, recaptcha], async function (req, res, next) {
+router.post('/token/new', [recaptcha, auth], async function (req, res, next) {
     try {
         const db = await database()
         const apiTokenCollection = db.collection('apiToken')
@@ -370,7 +370,7 @@ router.post('/token/new', [auth, recaptcha], async function (req, res, next) {
      Otp
      Recaptcha ref
 */
-router.post('/token/whitelist-ip', [auth, recaptcha], async function (req, res, next) {
+router.post('/token/whitelist-ip', [recaptcha, auth], async function (req, res, next) {
     try {
         let whitelist_ip = req.body.whitelist_ip
         if (!whitelist_ip) return res.status(400).send()

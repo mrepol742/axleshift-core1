@@ -14,7 +14,7 @@ import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpLong, faArrowDownLong } from '@fortawesome/free-solid-svg-icons'
 
-const WidgetsDropdown = (props) => {
+const Widgets = (props) => {
     const widgetChartRef1 = useRef(null)
     const widgetChartRef2 = useRef(null)
 
@@ -307,9 +307,9 @@ const WidgetsDropdown = (props) => {
     )
 }
 
-WidgetsDropdown.propTypes = {
+Widgets.propTypes = {
     className: PropTypes.string,
     withCharts: PropTypes.bool,
 }
 
-export default WidgetsDropdown
+export default Widgets

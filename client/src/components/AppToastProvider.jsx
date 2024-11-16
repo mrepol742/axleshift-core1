@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const ToastContext = createContext()
 
-export const ToastProvider = ({ children }) => {
+export const AppToastProvider = ({ children }) => {
     const [toasts, setToasts] = useState([])
 
     const addToast = (message, header = 'Welcome') => {
@@ -22,6 +22,6 @@ export const useToast = () => {
     return useContext(ToastContext)
 }
 
-ToastProvider.propTypes = {
+AppToastProvider.propTypes = {
     children: PropTypes.node.isRequired,
 }

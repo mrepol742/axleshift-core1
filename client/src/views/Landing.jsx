@@ -13,7 +13,8 @@ import {
     CSpinner,
 } from '@coreui/react'
 import AOS from 'aos'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub, faGoogle, faMicrosoft } from '@fortawesome/free-brands-svg-icons'
 import { Navbar, Services, About, Team, Newsletter, Footer } from '../components/landing/index'
 
 const Landing = () => {
@@ -54,13 +55,16 @@ const Landing = () => {
                             <CCol xs={12} md={6} className="px-4 mx-0 mx-md-4">
                                 <h1
                                     className="text-white display-2"
-                                    style={{ fontWeight: 400 }}
-                                    data-aos="fade-up"
+                                    style={{ fontWeight: 100 }}
+                                    data-aos="fade-right"
                                 >
-                                    Where <span className="text-warning">Freight</span> Meets
-                                    Efficiency
+                                    Where{' '}
+                                    <span className="text-warning" style={{ fontWeight: 400 }}>
+                                        Freight
+                                    </span>{' '}
+                                    Meets Efficiency
                                 </h1>
-                                <p className="lead text-white" data-aos="fade-up">
+                                <p className="lead text-white" data-aos="fade-right">
                                     Our cutting-edge platform empowers businesses to improve their
                                     shipping strategies. Experience optimized routing without the
                                     complexities of tracking.
@@ -69,9 +73,11 @@ const Landing = () => {
                                     to="/register"
                                     as={NavLink}
                                     className="rounded-3 btn-warning text-white px-4 py-2 px-md-5 py-md-3"
-                                    data-aos="fade-right"
+                                    data-aos="fade-up"
                                 >
-                                    Register now
+                                    Register now <FontAwesomeIcon icon={faGoogle} />{' '}
+                                    <FontAwesomeIcon icon={faGithub} />{' '}
+                                    <FontAwesomeIcon icon={faMicrosoft} />
                                 </CButton>
                             </CCol>
                         </CRow>

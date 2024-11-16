@@ -26,33 +26,27 @@ import {
     faEllipsisVertical,
     faLocationDot,
 } from '@fortawesome/free-solid-svg-icons'
-import WidgetsDropdown from './widgets'
+import WidgetsDropdown from './Widgets'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
-import { useToast } from '../../components/ToastContext'
+import { useToast } from '../../components/AppToastProvider'
 
 const Overview = () => {
     const [data, setData] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
-    const [query, setQuery] = useState('')
     const [loading, setLoading] = useState(false)
     const { addToast } = useToast()
     const navigate = useNavigate()
 
-    const handleSearchSubmit = (e) => {
-        e.preventDefault()
-        fetchData(0, query)
-    }
-
-    const fetchData = async (page, query) => {
+    const fetchData = async (page) => {
         setLoading(true)
         await axios
             .post(
                 `${VITE_APP_API_URL}/api/v1/freight`,
-                { page, q: query },
+                { page },
                 {
                     headers: {
                         Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
@@ -70,9 +64,12 @@ const Overview = () => {
     }
 
     useEffect(() => {
-        fetchData(currentPage, query)
-        addToast('Welcome to core axleshift', 'Hello World')
+        fetchData(currentPage)
     }, [currentPage])
+
+    useEffect(() => {
+        addToast('Welcome to core axleshift', 'Hello World')
+    }, [])
 
     return (
         <>
@@ -90,7 +87,10 @@ const Overview = () => {
                         <div className="clearfix">
                             <h1 className="float-start display-3 me-4">OOPS</h1>
                             <h4>You don&apos;t have any shipment yet.</h4>
-                            <p className="text-body-secondary float-start text-decoration-underline" onClick={(e) => navigate('/freight')}>
+                            <p
+                                className="text-body-secondary float-start text-decoration-underline"
+                                onClick={(e) => navigate('/freight')}
+                            >
                                 Wanna add one? Click here.
                             </p>
                         </div>
@@ -101,18 +101,6 @@ const Overview = () => {
             {data.length !== 0 && (
                 <>
                     <CForm className="d-flex justify-content-left my-2 my-lg-0">
-                        <CInputGroup className="mb-3">
-                            <CFormInput
-                                aria-label="tracking id"
-                                aria-describedby="basic-addon"
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                            />
-                            <CInputGroupText id="basic-addon">
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                            </CInputGroupText>
-                        </CInputGroup>
-                        <div className="mx-2"></div>
                         <CFormSelect
                             options={[
                                 { label: 'All', value: '0' },

@@ -16,14 +16,19 @@ import {
     CSpinner,
     CImage,
 } from '@coreui/react'
+import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
 import SeaForm from '../../components/forms/shipping/SeaForm'
+import { useToast } from '../../components/AppToastProvider'
+import errorMessages from '../../components/ErrorMessages'
 
 const Sea = () => {
     const navigate = useNavigate()
+    const recaptchaRef = React.useRef()
+    const { addToast } = useToast()
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -58,6 +63,7 @@ const Sea = () => {
             shipping_estimated_arrival_date: '',
             shipping_cargo_type: '',
         },
+        recaptcha_ref: '',
     })
 
     const handleInputChange = (e, section) => {
@@ -72,6 +78,12 @@ const Sea = () => {
     }
 
     const handleSubmit = async () => {
+        setLoading(true)
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setFormData((prev) => ({
+            ...prev,
+            recaptcha_ref: recaptcha,
+        }))
         await axios
             .post(`${VITE_APP_API_URL}/api/v1/freight/b/sea`, formData, {
                 headers: {
@@ -81,24 +93,10 @@ const Sea = () => {
             .then((response) => navigate('/'))
             .catch((error) => {
                 console.error(error)
+                const message = errorMessages[error.status] || 'Internal Application Error'
+                addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))
-    }
-
-    const handleShipperInformation = () => {
-        setCurrentPage(1)
-    }
-
-    const handleConsigneeInfo = () => {
-        setCurrentPage(2)
-    }
-
-    const handleShipmentDetails = () => {
-        setCurrentPage(3)
-    }
-
-    const handleShippingInformation = () => {
-        setCurrentPage(4)
     }
 
     return (
@@ -108,6 +106,7 @@ const Sea = () => {
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )}
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <CRow className="mb-4">
                 <CCol xs={3} md={5} xl={3} className="image-container d-none d-md-flex">
                     <CImage fluid rounded src="/images/freight-sea.jpg" className="custom-image" />
@@ -117,7 +116,7 @@ const Sea = () => {
                         <ShipperForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleConsigneeInfo={handleConsigneeInfo}
+                            handleConsigneeInfo={(e) => setCurrentPage(2)}
                         />
                     )}
 
@@ -125,8 +124,8 @@ const Sea = () => {
                         <ConsineeForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleShipperInformation={handleShipperInformation}
-                            handleShipmentDetails={handleShipmentDetails}
+                            handleShipperInformation={(e) => setCurrentPage(1)}
+                            handleShipmentDetails={(e) => setCurrentPage(3)}
                         />
                     )}
 
@@ -134,8 +133,8 @@ const Sea = () => {
                         <ShipmentForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleConsigneeInfo={handleConsigneeInfo}
-                            handleShippingInformation={handleShippingInformation}
+                            handleConsigneeInfo={(e) => setCurrentPage(2)}
+                            handleShippingInformation={(e) => setCurrentPage(4)}
                         />
                     )}
 
@@ -143,7 +142,7 @@ const Sea = () => {
                         <SeaForm
                             formData={formData}
                             handleInputChange={handleInputChange}
-                            handleShipmentDetails={handleShipmentDetails}
+                            handleShipmentDetails={(e) => setCurrentPage(3)}
                             handleSubmit={handleSubmit}
                         />
                     )}

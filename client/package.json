@@ -13,7 +13,7 @@
     "author": "The Freight Capstone Core 1",
     "scripts": {
         "build": "env-cmd -f ./.env vite build",
-        "lint": "eslint \"src/**/*.js\" --fix",
+        "lint": "eslint \"src/**/*.jsx\" --fix",
         "serve": "vite preview",
         "start": "vite --host",
         "test": "jest",

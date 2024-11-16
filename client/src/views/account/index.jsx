@@ -20,11 +20,13 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import Profile from '../../components/Profile'
 import errorMessages from '../../components/ErrorMessages'
+import { useToast } from '../../components/AppToastProvider'
 
 const Account = () => {
     const user = Profile()
     const recaptchaRef = React.useRef()
     const timezones = Intl.supportedValuesOf('timeZone')
+    const { addToast } = useToast()
     const [accountDetails, setAccountDetails] = useState({
         first_name: user.first_name,
         last_name: user.last_name,
@@ -81,8 +83,7 @@ const Account = () => {
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'Internal Application Error'
-
-                alert(message)
+                addToast(message, 'Fetch failed!')
             })
             .finally(() => setLoading(false))
     }
