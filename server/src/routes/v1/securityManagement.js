@@ -14,33 +14,24 @@ router.get('/', auth, async (req, res, next) => {
         sentry(),
         (async () => {
             const db = await database()
-
-            const sessions = await db
+            return await db
                 .collection('sessions')
-                .find(req.user.role !== 'admin' ? { user_id: new ObjectId(req.user._id) } : {})
+                .find()
                 .sort({ last_accessed: -1 })
                 .toArray()
-
-            return sessions
         })(),
         (async () => {
             const db = await database()
-
-            const apiToken = await db.collection('apiToken').findOne({ user_id: req.user._id })
-
-            return apiToken
+            return await db.collection('apiToken')
+            .find()
+            .sort({ last_accessed: -1 })
+            .toArray();
         })(),
     ])
 
     return res
         .status(200)
         .json({ scm: _scm, sentry: _sentry, sessions: _sessions, apiToken: _apiToken })
-})
-
-router.get('/scan', auth, async (req, res, next) => {
-    const [gds_advisory] = await Promise.all([scm()])
-
-    return res.status(200).json({ scm: gds_advisory })
 })
 
 export default router

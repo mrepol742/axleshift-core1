@@ -18,7 +18,7 @@ import {
 import { useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { faGithub, faGoogle, faMicrosoft } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import {
     VITE_APP_RECAPTCHA_SITE_KEY,
@@ -219,6 +219,13 @@ const Login = () => {
                                             }
                                         >
                                             <FontAwesomeIcon icon={faGithub} />
+                                        </CButton>
+                                        <CButton
+                                            color="outline-primary"
+                                            className="me-2"
+                                            disabled
+                                        >
+                                            <FontAwesomeIcon icon={faMicrosoft} />
                                         </CButton>
                                     </div>
                                     <CButton

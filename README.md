@@ -46,6 +46,18 @@ npm run docker:run
 # terraform
 npm run terraform
 
+# start prometheus monitoring
+npm run prom
+
+# restart prometheus
+npm run prom:restart
+
+# start grafana
+npm run graf
+
+# restart grafana
+npm run graf:restart
+
 # run mobile app
 npm run app
 ```

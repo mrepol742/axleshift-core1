@@ -80,21 +80,18 @@ const Air = () => {
     const handleSubmit = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        const formDataToSend = new FormData()
-        for (const key in formData) {
-            formDataToSend.append(key, formData[key])
-        }
-        formDataToSend.append('recaptcha_ref', recaptcha)
-        for (const key in formDataToSend) {
-            console.log(key, formDataToSend[key])
-        }
+        setFormData((prev) => ({
+            ...prev,
+            recaptcha_ref: recaptcha,
+        }));
+
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/freight/b/air`, formDataToSend, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/b/air`, formData, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => navigate('/'))
+            .then((response) => alert('/'))
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'Internal Application Error'

@@ -49,7 +49,7 @@ const SecurityManagement = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/threat/`, {
+            .get(`${VITE_APP_API_URL}/api/v1/securityManagement/`, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },

@@ -36,7 +36,11 @@
     "pm2": "pm2 start src/index.js --name core1",
     "pm2:restart": "pm2 restart all --update-env",
     "app": "cd mobile && npm run android",
-    "spellcheck": "npx --yes cspell --show-context --show-suggestions '**/*.*'"
+    "spellcheck": "npx --yes cspell --show-context --show-suggestions '**/*.*'",
+    "prom": "sudo systemctl start prometheus",
+    "prom:restart": "sudo systemctl restart prometheus",
+    "graf": "sudo systemctl start grafana",
+    "graf:restart": "sudo systemctl restart grafana"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"

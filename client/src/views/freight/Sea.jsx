@@ -63,6 +63,7 @@ const Sea = () => {
             shipping_estimated_arrival_date: '',
             shipping_cargo_type: '',
         },
+        recaptcha_ref: '',
     })
 
     const handleInputChange = (e, section) => {
@@ -79,16 +80,12 @@ const Sea = () => {
     const handleSubmit = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        const formDataToSend = new FormData()
-        for (const key in formData) {
-            formDataToSend.append(key, formData[key])
-        }
-        formDataToSend.append('recaptcha_ref', recaptcha)
-        for (const key in formDataToSend) {
-            console.log(key, formDataToSend[key])
-        }
+        setFormData((prev) => ({
+            ...prev,
+            recaptcha_ref: recaptcha,
+        }));
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/freight/b/sea`, formDataToSend, {
+            .post(`${VITE_APP_API_URL}/api/v1/freight/b/sea`, formData, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },

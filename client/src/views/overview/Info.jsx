@@ -35,6 +35,7 @@ import AirForm from '../../components/forms/shipping/AirForm'
 import LandForm from '../../components/forms/shipping/LandForm'
 import SeaForm from '../../components/forms/shipping/SeaForm'
 import { useToast } from '../../components/AppToastProvider'
+import errorMessages from '../../components/ErrorMessages'
 import Page404 from '../errors/404'
 
 const FreightInfo = () => {
@@ -55,14 +56,15 @@ const FreightInfo = () => {
         },
         shipment: {
             shipment_description: '',
-            shipment_weight: 0,
-            shipment_dimension_length: 0,
-            shipment_dimension_width: 0,
-            shipment_dimension_height: 0,
-            shipment_volume: 0,
-            shipment_value: 0,
+            shipment_weight: '',
+            shipment_dimension_length: '',
+            shipment_dimension_width: '',
+            shipment_dimension_height: '',
+            shipment_volume: '',
+            shipment_value: '',
             shipment_instructions: '',
         },
+        recaptcha_ref: '',
     }
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
@@ -111,15 +113,27 @@ const FreightInfo = () => {
     const handleEditButton = async () => {
         if (disabled) return setDisabled(false)
         setLoading(true)
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setEditedFormData((prev) => ({
+            ...prev,
+            recaptcha_ref: recaptcha,
+        }));
+        alert(editedFormData.recaptcha_ref)
+
         await axios
             .post(`${VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`, editedFormData, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => alert('save'))
-            .catch((error) => {
+            .then((response) => {
+                addToast('Your changes has been saved.')
+                navigate('/')
+            }).catch((error) => {
                 console.error(error)
+                const message = errorMessages[error.status] || 'Internal Application Error'
+                addToast(message, 'Submit failed!')
+                setEditedFormData(formData)
             })
             .finally(() => {
                 setLoading(false)
@@ -134,19 +148,25 @@ const FreightInfo = () => {
             return
         }
         setLoading(true)
+        const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
             .post(
                 `${VITE_APP_API_URL}/api/v1/freight/d/${id}`,
-                {},
+                { recaptcha_ref: recaptcha },
                 {
                     headers: {
                         Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                     },
                 },
             )
-            .then((response) => navigate('/'))
-            .catch((error) => {
+            .then((response) => {
+                addToast('Shipment has been deleted.')
+                navigate('/')
+            }).catch((error) => {
                 console.error(error)
+                const message = errorMessages[error.status] || 'Internal Application Error'
+                addToast(message, 'Submit failed!')
+                setEditedFormData(formData)
             })
             .finally(() => setLoading(false))
     }
