@@ -18,15 +18,18 @@ const Callback = () => {
 
     const fetchData = async (code) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
-        const formData = new FormData()
-        formData.append('type', 'github')
-        formData.append('code', code)
-        formData.append('recaptcha_ref', recaptcha)
-
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/auth/login`, formData, {
-                headers: {},
-            })
+            .post(
+                `${VITE_APP_API_URL}/api/v1/auth/login`,
+                {
+                    type: 'github',
+                    code: code,
+                    recaptcha_ref: recaptcha,
+                },
+                {
+                    headers: {},
+                },
+            )
             .then((response) => {
                 if (response.data.error) return setError(response.data.error)
                 cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })

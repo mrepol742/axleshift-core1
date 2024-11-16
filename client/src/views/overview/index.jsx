@@ -32,17 +32,17 @@ import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
 import { useToast } from '../../components/AppToastProvider'
+import errorMessages from '../../components/ErrorMessages'
 
 const Overview = () => {
     const [data, setData] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const { addToast } = useToast()
     const navigate = useNavigate()
 
     const fetchData = async (page) => {
-        setLoading(true)
         await axios
             .post(
                 `${VITE_APP_API_URL}/api/v1/freight`,
@@ -59,6 +59,8 @@ const Overview = () => {
             })
             .catch((error) => {
                 console.error(error)
+                const message = errorMessages[error.status] || 'Internal Application Error'
+                addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))
     }
@@ -66,10 +68,6 @@ const Overview = () => {
     useEffect(() => {
         fetchData(currentPage)
     }, [currentPage])
-
-    useEffect(() => {
-        addToast('Welcome to core axleshift', 'Hello World')
-    }, [])
 
     return (
         <>
@@ -81,7 +79,7 @@ const Overview = () => {
 
             <WidgetsDropdown className="mb-4" />
 
-            {data.length == 0 && (
+            {!loading && data.length == 0 && (
                 <CRow className="justify-content-center my-5">
                     <CCol md={6}>
                         <div className="clearfix">
@@ -100,7 +98,7 @@ const Overview = () => {
 
             {data.length !== 0 && (
                 <>
-                    <CForm className="d-flex justify-content-left my-2 my-lg-0">
+                    <CForm className="d-block d-sm-flex justify-content-left my-2 my-lg-0">
                         <CFormSelect
                             options={[
                                 { label: 'All', value: '0' },
@@ -108,7 +106,6 @@ const Overview = () => {
                                 { label: 'Canceled', value: '2' },
                                 { label: 'Shipped', value: '3' },
                             ]}
-                            required
                             className="mb-3"
                         />
                         <div className="mx-2"></div>
@@ -117,7 +114,14 @@ const Overview = () => {
                                 { label: 'Newer', value: '1' },
                                 { label: 'Older', value: '2' },
                             ]}
-                            required
+                            className="mb-3"
+                        />
+                        <div className="mx-2"></div>
+                        <AppPagination
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            totalPages={totalPages}
+                            setTotalPages={setTotalPages}
                             className="mb-3"
                         />
                     </CForm>
@@ -158,13 +162,6 @@ const Overview = () => {
                             </CCard>
                         ))}
                     </Masonry>
-
-                    <AppPagination
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
-                        totalPages={totalPages}
-                        setTotalPages={setTotalPages}
-                    />
                 </>
             )}
         </>

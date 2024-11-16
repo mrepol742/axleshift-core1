@@ -75,7 +75,6 @@ const Register = () => {
         if (e) e.preventDefault()
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-
         const formDataToSend = new FormData()
         if (type === 'form') {
             for (const key in formData) {

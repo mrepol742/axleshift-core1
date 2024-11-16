@@ -25,15 +25,17 @@ const Newsletter = ({ setLoading }) => {
         e.preventDefault()
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-
-        const formData = new FormData()
-        formData.append('email', emailAddress)
-        formData.append('recaptcha_ref', recaptcha)
-
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/newsletter`, formData, {
-                headers: {},
-            })
+            .post(
+                `${VITE_APP_API_URL}/api/v1/newsletter`,
+                {
+                    email: emailAddress,
+                    recaptcha_ref: recaptcha,
+                },
+                {
+                    headers: {},
+                },
+            )
             .then((response) => {
                 if (response.data.message) setMessage(response.data.message)
             })
@@ -54,7 +56,7 @@ const Newsletter = ({ setLoading }) => {
                         <p className="lead text-white">
                             We will email you about our products newest updates.
                         </p>
-                        <CForm onSubmit={handleSubmit}>
+                        <CForm>
                             <ReCAPTCHA
                                 style={{ display: 'none' }}
                                 ref={recaptchaRef}
@@ -71,7 +73,7 @@ const Newsletter = ({ setLoading }) => {
                                     value={emailAddress}
                                     onChange={(e) => setEmailAddress(e.target.value)}
                                 />
-                                <CInputGroupText id="basic-addon" type="submit">
+                                <CInputGroupText id="basic-addon" onClick={(e) => handleSubmit(e)}>
                                     <FontAwesomeIcon icon={faPaperPlane} className="text-white" />
                                 </CInputGroupText>
                             </CInputGroup>

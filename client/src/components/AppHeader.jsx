@@ -27,7 +27,6 @@ import {
     faCircleHalfStroke,
     faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons'
-
 import { AppBreadcrumb, AppHeaderDropdown } from './index'
 import AppNotifcationDropdown from './AppNotificationDropdown'
 
