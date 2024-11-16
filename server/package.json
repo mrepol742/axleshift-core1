@@ -1,7 +1,7 @@
 {
     "name": "@freight-capstone/core1-server",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "src/index.js",
     "type": "module",
     "bugs": {
         "url": "https://github.com/freight-capstone/core1/issues"
