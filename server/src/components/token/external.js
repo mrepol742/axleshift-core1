@@ -29,12 +29,12 @@ const external = async (req, res, next) => {
 
     if (!existingApiToken) {
         logger.info(`invalid or denied api token: ${token}`)
-        return res.status(403).send()
+        return res.status(401).send()
     }
 
     const ip = getClientIp(req)
     const w_ip = existingApiToken.whitelist_ip
-    if (!w_ip.includes(ip)) return res.status(403).send()
+    if (!w_ip.includes(ip)) return res.status(401).send()
 
     Promise.all([
         (async () => {

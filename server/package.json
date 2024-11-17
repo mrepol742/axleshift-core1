@@ -18,7 +18,9 @@
         "lint": "prettier --write .",
         "env": "[ ! -f .env ] && cp .env.example .env",
         "gemini": "[ ! -f .gemini.json ] && cp .gemini.example.json .gemini.json",
-        "prompt": "[ ! -f .prompt.json ] && cp .prompt.example.json .prompt.json"
+        "prompt": "[ ! -f .prompt.json ] && cp .prompt.example.json .prompt.json",
+        "pm2": "pm2 start src/index.js --name core1-axleshift",
+        "pm2:restart": "pm2 restart all --update-env"
     },
     "author": "The Freight Capstone Core 1",
     "license": "MIT",

@@ -63,10 +63,10 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             return res.status(200).json({ error: 'Invalid email address' })
         if (password.length < 8)
-            return res.status(200).json({ error: 'Password must be greater than 8 digit' })
-        if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password))
+            return res.status(200).json({ error: 'Password must be at least 8 characters long' })
+        if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).+$/.test(password))
             return res.status(200).json({
-                error: 'Password must be at least 8 characters long and contain letters, numbers, and symbols.',
+                error: 'Password must contain letters, numbers, and symbols.',
             })
         if (password != repeat_password)
             return res.status(200).json({ error: 'Password does not match' })
