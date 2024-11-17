@@ -8,7 +8,6 @@ const Auth = (WrappedComponent) => {
     const AuthComponent = (props) => {
         const navigate = useNavigate()
         const [isAuth, setIsAuth] = useState(null)
-        const [otp, setOtp] = useState(false)
         const dispatch = useDispatch()
 
         let loc = `/login`
@@ -30,11 +29,7 @@ const Auth = (WrappedComponent) => {
                     },
                 )
                 .then((response) => {
-                    if (response.data.otp) {
-                        setOtp(true)
-                        setIsAuth(false)
-                        return
-                    }
+                    if (response.data.otp) return (window.location.href = '/otp')
                     dispatch({
                         type: 'set',
                         user: response.data,
@@ -44,7 +39,6 @@ const Auth = (WrappedComponent) => {
                 .catch((err) => {
                     if (!err.response) return console.error(err)
                     cookies.remove(VITE_APP_SESSION)
-                    setIsAuth(false)
                     window.location.href = loc
                 })
         }
@@ -52,8 +46,6 @@ const Auth = (WrappedComponent) => {
         useEffect(() => {
             checkAuthentication()
         }, [navigate])
-
-        if (otp) return <Navigate to={loc.replace('/login', '/otp')} />
 
         if (isAuth === null)
             return (
@@ -67,7 +59,6 @@ const Auth = (WrappedComponent) => {
         return <WrappedComponent {...props} />
     }
 
-    AuthComponent.displayName = `Auth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`
     return AuthComponent
 }
 

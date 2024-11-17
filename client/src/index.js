@@ -8,13 +8,16 @@ import { VITE_APP_GOOGLE_OAUTH_CLIENT_ID } from './config'
 import App from './App'
 import store from './store'
 import { AppToastProvider } from './components/AppToastProvider'
+import { AppNotificationProvider } from './components/AppNotificationProvider'
 
 createRoot(document.getElementById('root')).render(
     <Provider store={store}>
-        <AppToastProvider>
-            <GoogleOAuthProvider clientId={VITE_APP_GOOGLE_OAUTH_CLIENT_ID}>
-                <App />
-            </GoogleOAuthProvider>
-        </AppToastProvider>
+        <GoogleOAuthProvider clientId={VITE_APP_GOOGLE_OAUTH_CLIENT_ID}>
+            <AppToastProvider>
+                <AppNotificationProvider>
+                    <App />
+                </AppNotificationProvider>
+            </AppToastProvider>
+        </GoogleOAuthProvider>
     </Provider>,
 )
