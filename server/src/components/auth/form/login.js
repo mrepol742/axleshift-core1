@@ -14,7 +14,8 @@ const FormLogin = async (req, res) => {
         if (passwordHash(password) != theUser.password) return res.status(401).send()
 
         const session_token = crypto.createHash('sha256').update(generateUniqueId()).digest('hex')
-        addSession(theUser, session_token, getClientIp(req), req.headers['user-agent'])
+        const userAgent = req.headers['user-agent'] || 'unknown'
+        addSession(theUser, session_token, getClientIp(req), userAgent)
 
         return res.status(200).json({
             token: session_token,

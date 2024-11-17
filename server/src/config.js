@@ -6,7 +6,7 @@ const MONGO_DB = process.env.MONGO_DB ?? 'core1'
 const NODE_ENV = process.env.NODE_ENV ?? 'development'
 const EXPRESS_PORT = process.env.EXPRESS_PORT ?? 5051
 const EXT_EXPRESS_PORT = process.env.EXT_EXPRESS_PORT ?? 7000
-const REACT_APP_ORIGIN = process.env.REACT_APP_ORIGIN ?? 'http://localhost:3000'
+const REACT_APP_ORIGIN = process.env.REACT_APP_ORIGIN ?? '::1'
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET ?? ''
 
 const GOOGLE_OAUTH_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID ?? ''

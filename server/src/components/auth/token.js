@@ -4,8 +4,11 @@ import { addSession } from '../sessions.js'
 import { getClientIp } from '../ip.js'
 
 const Token = (theUser, req) => {
-    const session_token = crypto.createHash('sha256').update(generateUniqueId()).digest('hex')``
-    addSession(theUser, session_token, getClientIp(req), req.headers['user-agent'])
+    const uniqueId = generateUniqueId()
+    const session_token = crypto.createHash('sha256').update(uniqueId).digest('hex')
+    const clientIp = getClientIp(req)
+    const userAgent = req.headers['user-agent'] || 'unknown'
+    addSession(theUser, session_token, clientIp, userAgent)
     return session_token
 }
 

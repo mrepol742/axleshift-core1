@@ -2,13 +2,13 @@ import { ObjectId } from 'mongodb'
 import logger from '../logger.js'
 import { getUser, getSession } from '../sessions.js'
 import database from '../../models/mongodb.js'
+import { getClientIp } from '../../components/ip.js'
 import { REACT_APP_ORIGIN, API_RATE_DELAY } from '../../config.js'
 
 const adminRoute = []
 
 const internal = async (req, res, next) => {
-    const ip = req.socket.remoteAddress
-    if (REACT_APP_ORIGIN !== ip) return res.status(401).send()
+    if (REACT_APP_ORIGIN !== req.socket.remoteAddress) return res.status(401).send()
 
     const authHeader = req.headers['authorization']
     const token = authHeader.split(' ')[1]
@@ -19,10 +19,11 @@ const internal = async (req, res, next) => {
         return res.status(401).send()
 
     if (!session.active) return res.status(401).send()
-    const user_a = req.headers['user-agent']
+    const user_a = req.headers['user-agent'] || 'unknown'
 
     const diff = Date.now() - session.last_accessed
     const week = 7 * 24 * 60 * 60 * 1000
+    let ip = getClientIp(req)
     // a week has pass so change the ip to 0
     // thus triggering the protocol down below!
     // hacky aint it?
