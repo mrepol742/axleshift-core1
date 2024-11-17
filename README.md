@@ -3,64 +3,121 @@
 [![Docker CI](https://github.com/freight-capstone/core1/actions/workflows/docker.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/docker.yml)
 [![Dependabot Updates](https://github.com/freight-capstone/core1/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/dependabot/dependabot-updates)
 [![Terraform CI](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml)
-![](https://wakatime.com/badge/user/8ad4afa2-1a56-40d1-a949-4663473915b6/project/db9d6547-2999-475a-83e2-9355e84a7fcd.svg?style=flat-square)
-![](https://wakatime.com/badge/user/8ad4afa2-1a56-40d1-a949-4663473915b6/project/73db9967-f0f0-4322-a0a0-dc4905b18d18.svg?style=flat-square)
-<br>
 
-Api docs here [/server/docs/README.md](/server/docs/README.md)
+Api docs: [/server/docs/README.md](/server/docs/README.md)
 
 ## Pre-requisites
-- Node.js v20.^
+- Node.js v20.^ `sudo pacman -Sy nodejs`
+- Docker `sudo pacman -Sy docker`
+- Terraform `sudo pacman -Sy terraform`
+- Grafana `sudo pacman -Sy grafana`
+- PM2 `sudo pacman -Sy pm2`
 
-## Setting up
-```sh
- npm i && npm run setup && npm run setup-env
-```
+---
 
-## Script commands
-```sh
-# install necessary dependencies
-npm run setup
+### **1. Setup and Initialization**
 
-# setup environments
-npm run setup:env
+- **Install Dependencies**  
+  ```sh
+  npm run setup
+  ```
 
-# start app
-npm run start
+- **Setup Environments**  
+  ```sh
+  npm run setup:env
+  ```
 
-# lint app
-npm run lint
+---
 
-# test app
-npm run test
+### **2. Application Development**
 
-# test production
-npm run post:production
+- **Start Application**  
+  ```sh
+  npm run start
+  ```
 
-# build docker
-npm run docker
+- **Lint Code**  
+  ```sh
+  npm run lint
+  ```
 
-# run docker
-npm run docker:run
+- **Run Tests**  
+  ```sh
+  npm run test
+  ```
 
-# terraform
-npm run terraform
+- **Run Tests in Production Mode**  
+  ```sh
+  npm run post:production
+  ```
 
-# start prometheus monitoring
-npm run prom
+- **Run Mobile App**  
+  ```sh
+  npm run app
+  ```
 
-# restart prometheus
-npm run prom:restart
+---
 
-# start grafana
-npm run graf
+### **3. Docker Commands**
 
-# restart grafana
-npm run graf:restart
+- **Build Docker Image**  
+  ```sh
+  npm run docker
+  ```
 
-# run mobile app
-npm run app
-```
+- **Run Docker Container**  
+  ```sh
+  npm run docker:run
+  ```
+
+---
+
+### **4. Terraform Commands**
+
+- **Run Terraform**  
+  ```sh
+  npm run terraform
+  ```
+
+---
+
+### **5. Monitoring & Observability**
+
+- **Start Prometheus Monitoring**  
+  ```sh
+  npm run prom
+  ```
+
+- **Restart Prometheus**  
+  ```sh
+  npm run prom:restart
+  ```
+
+- **Start Grafana**  
+  ```sh
+  npm run graf
+  ```
+
+- **Restart Grafana**  
+  ```sh
+  npm run graf:restart
+  ```
+
+---
+
+### **6. Process Management**
+
+- **Start PM2 (Process Manager)**  
+  ```sh
+  npm run pm2
+  ```
+
+- **Restart PM2**  
+  ```sh
+  npm run pm2:restart
+  ```
+
+---
 
 ## License
 

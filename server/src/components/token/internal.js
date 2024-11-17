@@ -6,6 +6,7 @@ import { getClientIp } from '../../components/ip.js'
 import { REACT_APP_ORIGIN, API_RATE_DELAY } from '../../config.js'
 
 const adminRoute = []
+const exludeRoute = ['/api/v1/auth/verify']
 
 const internal = async (req, res, next) => {
     if (REACT_APP_ORIGIN !== req.socket.remoteAddress) return res.status(401).send()
@@ -62,6 +63,7 @@ const internal = async (req, res, next) => {
     req.user = theUser
 
     if (theUser.role === 'admin') return next()
+    if (exludeRoute.includes(req.path)) return next()
 
     setTimeout(() => {
         return next()
