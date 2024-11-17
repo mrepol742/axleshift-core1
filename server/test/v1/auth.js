@@ -30,7 +30,7 @@ const auth = () => {
         request(app)
             .post('/api/v1/auth/verify')
             .set('Authorization', `Bearer ${TOKEN}`)
-            .expect(403)
+            .expect(401)
             .end((err, res) => {
                 if (err) return done(err)
                 done()
@@ -41,7 +41,7 @@ const auth = () => {
         request(app)
             .post('/api/v1/auth/verify')
             .set('Authorization', `Bearer core1_${TOKEN}`)
-            .expect(403)
+            .expect(401)
             .end((err, res) => {
                 if (err) return done(err)
                 done()
@@ -63,7 +63,7 @@ const auth = () => {
         request(app)
             .post('/api/v1/auth/logout')
             .set('Authorization', `Bearer ${TOKEN}`)
-            .expect(403)
+            .expect(401)
             .end((err, res) => {
                 if (err) return done(err)
                 done()
@@ -98,7 +98,7 @@ const auth = () => {
         request(app)
             .get('/api/v1/auth/token')
             .set('Authorization', `Bearer ${TOKEN}`)
-            .expect(403)
+            .expect(401)
             .end((err, res) => {
                 if (err) return done(err)
                 done()
