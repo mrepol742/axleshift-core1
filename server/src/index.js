@@ -18,14 +18,9 @@ import cron from './components/cron.js'
 import test from './components/test.js'
 import gemini from './models/gemini.js'
 
-process.on('uncaughtException', (err, origin) => {
-    logger.error(err)
-    //haysssssssssssssssssssssssssssssssssss
-})
+process.on('uncaughtException', (err, origin) => logger.error(err))
 
-process.on('unhandledRejection', (reason, promise) => {
-    logger.error(reason)
-})
+process.on('unhandledRejection', (reason, promise) => logger.error(reason))
 
 app.listen(config.EXPRESS_PORT, async (err) => {
     if (err) return logger.error(err)

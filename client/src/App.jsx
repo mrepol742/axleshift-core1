@@ -53,29 +53,21 @@ const App = () => {
                         {!token && (
                             <Route exact path="/" name="Landing Page" element={<Landing />} />
                         )}
+                        <Route path="/privacy-policy" name="Privacy Policy" element={<Privacy />} />
                         <Route
-                            exact
-                            path="/privacy-policy"
-                            name="Privacy Policy"
-                            element={<Privacy />}
-                        />
-                        <Route
-                            exact
                             path="/terms-of-service"
                             name="Terms of Service"
                             element={<Terms />}
                         />
-                        <Route exact path="/login" name="Login" element={<Login />} />
+                        <Route path="/login" name="Login" element={<Login />} />
                         <Route
-                            exact
                             path="/auth/github/callback"
                             name="Github Callback"
                             element={<GithubCallback />}
                         />
-                        <Route exact path="/register" name="Register" element={<Register />} />
-                        <Route exact path="/otp" name="OTP" element={<MailOTP />} />
+                        <Route path="/register" name="Register" element={<Register />} />
+                        <Route path="/otp" name="OTP" element={<MailOTP />} />
                         <Route
-                            exact
                             path="/forgot-password"
                             name="Forgot Password"
                             element={<ForgotPassword />}

@@ -33,7 +33,7 @@
     "docker": "cd server && docker build -t core1-server .",
     "docker:run": "docker run -p 5051:5051 --env-file .env core1-server:latest",
     "terraform": "cd server && terraform init && terraform plan -out=tfplan && terraform apply -auto-approve tfplan",
-    "pm2": "pm2 start src/index.js --name core1",
+    "pm2": "pm2 start src/index.js --name core1-axleshift",
     "pm2:restart": "pm2 restart all --update-env",
     "app": "cd mobile && npm run android",
     "spellcheck": "npx --yes cspell --show-context --show-suggestions '**/*.*'",
