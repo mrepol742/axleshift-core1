@@ -8,7 +8,9 @@ export default defineConfig(() => {
         base: './',
         build: {
             outDir: 'build',
-            chunkSizeWarningLimit: 600,
+            chunkSizeWarningLimit: 800,
+            minify: 'terser',
+            sourcemap: false,
             rollupOptions: {
                 output: {
                     entryFileNames: 'assets/[hash].js',
@@ -34,6 +36,7 @@ export default defineConfig(() => {
             loader: 'jsx',
             include: /src\/.*\.jsx?$/,
             exclude: [],
+            target: 'esnext',
         },
         optimizeDeps: {
             force: true,
@@ -42,6 +45,7 @@ export default defineConfig(() => {
                     '.js': 'jsx',
                 },
             },
+            include: ['react', 'react-dom'],
         },
         plugins: [react()],
         resolve: {
