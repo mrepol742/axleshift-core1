@@ -3,6 +3,7 @@ import database from '../../../models/mongodb.js'
 import logger from '../../logger.js'
 import passwordHash, { generateUniqueId } from '../../password.js'
 import { addSession } from '../../../components/sessions.js'
+import { getClientIp } from '../../ip.js'
 
 const FormLogin = async (req, res) => {
     try {
@@ -13,8 +14,7 @@ const FormLogin = async (req, res) => {
         if (passwordHash(password) != theUser.password) return res.status(401).send()
 
         const session_token = crypto.createHash('sha256').update(generateUniqueId()).digest('hex')
-        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-        addSession(theUser, session_token, ip, req.headers['user-agent'])
+        addSession(theUser, session_token, getClientIp(req), req.headers['user-agent'])
 
         return res.status(200).json({
             token: session_token,

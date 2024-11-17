@@ -14,6 +14,7 @@ import {
 } from '@coreui/react'
 import AOS from 'aos'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRightLong } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faGoogle, faMicrosoft } from '@fortawesome/free-brands-svg-icons'
 import { Navbar, Services, About, Team, Newsletter, Footer } from '../components/landing/index'
 
@@ -52,14 +53,14 @@ const Landing = () => {
                     <CContainer className="py-5 my-5">
                         <Navbar />
                         <CRow className="h-100 justify-content-start align-items-center">
-                            <CCol xs={12} md={6} className="px-4 mx-0 mx-md-4">
+                            <CCol xs={12} md={7} className="px-4 mx-0 mx-md-4">
                                 <h1
                                     className="text-white display-2"
                                     style={{ fontWeight: 100 }}
                                     data-aos="fade-right"
                                 >
                                     Where{' '}
-                                    <span className="text-warning" style={{ fontWeight: 400 }}>
+                                    <span className="text-primary" style={{ fontWeight: 400 }}>
                                         Freight
                                     </span>{' '}
                                     Meets Efficiency
@@ -72,13 +73,16 @@ const Landing = () => {
                                 <CButton
                                     to="/register"
                                     as={NavLink}
-                                    className="rounded-3 btn-warning text-white px-4 py-2 px-md-5 py-md-3"
+                                    className="rounded-3 btn-primary text-white px-4 py-2 px-md-5 fs-5"
                                     data-aos="fade-up"
                                 >
-                                    Register now <FontAwesomeIcon icon={faGoogle} />{' '}
-                                    <FontAwesomeIcon icon={faGithub} />{' '}
-                                    <FontAwesomeIcon icon={faMicrosoft} />
+                                    <FontAwesomeIcon icon={faArrowRightLong} /> Join us
                                 </CButton>
+                                <div className="py-3">
+                                    <FontAwesomeIcon icon={faGoogle} className="me-2 text-white" />
+                                    <FontAwesomeIcon icon={faGithub} className="me-2 text-white" />
+                                    <FontAwesomeIcon icon={faMicrosoft} className="text-white" />
+                                </div>
                             </CCol>
                         </CRow>
                     </CContainer>
