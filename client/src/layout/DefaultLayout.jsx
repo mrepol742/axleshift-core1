@@ -2,13 +2,16 @@ import React, { useEffect } from 'react'
 import { CToaster, CToast, CToastHeader, CToastBody, CImage } from '@coreui/react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
 import { useToast } from '../components/AppToastProvider'
+import { useNotif } from '../components/AppNotificationProvider'
 import { parseTimestamp } from '../components/Timestamp'
 
 const DefaultLayout = () => {
     const { toasts, addToast } = useToast()
+    const { addNotif } = useNotif()
 
     useEffect(() => {
         addToast('Welcome to core axleshift', 'Hello World')
+        addNotif('Welcome to core axleshift')
     }, [])
 
     return (

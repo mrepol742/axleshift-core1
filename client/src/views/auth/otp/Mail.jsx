@@ -21,7 +21,8 @@ import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from 
 import errorMessages from '../../../components/ErrorMessages'
 
 const MailOTP = () => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [email, setEmail] = useState('')
     const [error, setError] = useState({
         error: false,
         message: '',
@@ -47,12 +48,14 @@ const MailOTP = () => {
             )
             .then((response) => {
                 if (response.data.is_email_verified) return navigate('/')
+                setEmail(response.data.email)
             })
             .catch((err) => {
                 if (!err.response) return console.error(err)
                 cookies.remove(VITE_APP_SESSION)
                 navigate('/login')
             })
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {
@@ -71,6 +74,11 @@ const MailOTP = () => {
 
             setOtp(newOtp)
         }
+    }
+
+    const handleLogout = () => {
+        cookies.remove(VITE_APP_SESSION)
+        window.location.href = '/login'
     }
 
     const handleKeyDown = (e, index) => {
@@ -127,52 +135,71 @@ const MailOTP = () => {
                         <CSpinner color="primary" variant="grow" />
                     </div>
                 )}
-                <CRow className="justify-content-center">
-                    <CCol md={8} lg={6} xl={5}>
-                        <CCard className="p-1 p-md-4 shadow">
-                            <CCardBody>
-                                {error.error && (
-                                    <CAlert color="danger" className="d-flex align-items-center">
-                                        <FontAwesomeIcon
-                                            className="flex-shrink-0 me-2"
-                                            icon={faXmark}
-                                            size="xl"
-                                        />
-                                        <div>{error.message}</div>
-                                    </CAlert>
-                                )}
-                                <CForm onSubmit={handleSubmit}>
-                                    <h1>OTP</h1>
-                                    <p className="text-body-secondary">
-                                        Enter the 6digit code that was sent to your email address.
-                                    </p>
-                                    <ReCAPTCHA
-                                        ref={recaptchaRef}
-                                        size="invisible"
-                                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                                    />
-                                    <div className="d-flex justify-content-center gap-2 mb-3">
-                                        {otp.map((digit, index) => (
-                                            <CFormInput
-                                                key={index}
-                                                type="text"
-                                                id={`otp-input-${index}`}
-                                                value={digit}
-                                                onChange={(e) => handleChange(e, index)}
-                                                onKeyDown={(e) => handleKeyDown(e, index)}
-                                                className="otp-input"
-                                                maxLength="1"
+                {!email && <p className="text-center">Processing...</p>}
+                {email && (
+                    <CRow className="justify-content-center">
+                        <CCol md={8} lg={6} xl={5}>
+                            <CCard className="p-1 p-md-4 shadow">
+                                <CCardBody>
+                                    {error.error && (
+                                        <CAlert
+                                            color="danger"
+                                            className="d-flex align-items-center"
+                                        >
+                                            <FontAwesomeIcon
+                                                className="flex-shrink-0 me-2"
+                                                icon={faXmark}
+                                                size="xl"
                                             />
-                                        ))}
-                                    </div>
-                                    <CButton type="submit" color="primary" className="me-2 rounded">
-                                        Submit
-                                    </CButton>
-                                </CForm>
-                            </CCardBody>
-                        </CCard>
-                    </CCol>
-                </CRow>
+                                            <div>{error.message}</div>
+                                        </CAlert>
+                                    )}
+                                    <CForm onSubmit={handleSubmit}>
+                                        <h1>OTP</h1>
+                                        <p className="text-body-secondary">
+                                            Enter the 6 digit code that was sent to <b>{email}</b>.
+                                        </p>
+                                        <ReCAPTCHA
+                                            ref={recaptchaRef}
+                                            size="invisible"
+                                            sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                                        />
+                                        <div className="d-flex justify-content-center gap-2 mb-3">
+                                            {otp.map((digit, index) => (
+                                                <CFormInput
+                                                    key={index}
+                                                    type="text"
+                                                    id={`otp-input-${index}`}
+                                                    value={digit}
+                                                    onChange={(e) => handleChange(e, index)}
+                                                    onKeyDown={(e) => handleKeyDown(e, index)}
+                                                    className="otp-input"
+                                                    maxLength="1"
+                                                />
+                                            ))}
+                                        </div>
+                                        <div className="d-flex justify-content-center">
+                                            <CButton
+                                                type="submit"
+                                                color="primary"
+                                                className="me-2 rounded"
+                                            >
+                                                Submit
+                                            </CButton>
+                                        </div>
+                                        <CButton
+                                            color="link"
+                                            className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                            onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </CButton>
+                                    </CForm>
+                                </CCardBody>
+                            </CCard>
+                        </CCol>
+                    </CRow>
+                )}
             </CContainer>
         </div>
     )

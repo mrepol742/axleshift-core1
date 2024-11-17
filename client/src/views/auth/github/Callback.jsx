@@ -66,7 +66,7 @@ const Callback = () => {
                     size="invisible"
                     sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
                 />
-                <p className="text-center">{error ? error : 'Processing github...'}</p>
+                <p className="text-center">{error ? error : 'Processing...'}</p>
             </CContainer>
         </div>
     )

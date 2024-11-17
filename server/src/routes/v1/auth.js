@@ -115,7 +115,7 @@ router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
      Otp
 */
 router.post('/verify', auth, async function (req, res, next) {
-    const { _id, email_verify_at, ...filter } = req.user
+    const { _id, email, email_verify_at, ...filter } = req.user
     filter.is_email_verified = email_verify_at !== ''
     if (req.user.email_verify_at !== '') return res.status(200).json(filter)
 
@@ -126,11 +126,11 @@ router.post('/verify', auth, async function (req, res, next) {
         const past = new Date(theOtp.created_at)
         const ten = 10 * 60 * 1000
 
-        if (!(Date.now() - past > ten)) return res.status(200).json({ otp: true })
+        if (!(Date.now() - past > ten)) return res.status(200).json({ otp: true, email: email })
     }
     sendOTPEmail(req, otpCollection)
 
-    return res.status(200).json({ otp: true })
+    return res.status(200).json({ otp: true, email: email })
 })
 
 /*
