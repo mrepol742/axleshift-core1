@@ -18,7 +18,12 @@ const exteralRequestRoute = ['/api/v1/freight/', '/api/v1/freight/:id']
 
 const rateLimiter = (req, res, next) => {
     const path = req.path
-    if (exludeRoute.includes(path)) return next()
+    if (
+        exludeRoute.includes(path) ||
+        /^\/u\/.*\.png$/.test(path) ||
+        /^\/[^/]+\.(jpg|ico)$/.test(path)
+    )
+        return next()
 
     const key = `${getClientIp(req)}-${path}`
     const currentTime = Date.now()

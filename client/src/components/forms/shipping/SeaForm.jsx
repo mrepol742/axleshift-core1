@@ -26,7 +26,7 @@ const SeaForm = ({
 
     return (
         <CForm ref={formRef}>
-            {!isInfo && <CProgress value={100} className="mb-3" variant="striped" animated />}
+            {!isInfo && <CProgress color="success" value={100} className="mb-3" />}
             <h3 className="mb-4">Shipping Information</h3>
 
             <CFormLabel htmlFor="shipping_loading_port">

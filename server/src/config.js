@@ -29,6 +29,8 @@ const GITHUB_AUTH_TOKEN = process.env.GITHUB_AUTH_TOKEN ?? ''
 const GITHUB_REPO = process.env.GITHUB_REPO ?? 'core1'
 const GITHUB_OWNER = process.env.GITHUB_OWNER ?? 'freight-capstone'
 
+const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET ?? ''
+
 const SENTRY_DNS = process.env.SENTRY_DNS ?? ''
 const SENTRY_AUTH_TOKEN = process.env.SENTRY_AUTH_TOKEN ?? ''
 const SENTRY_ORGANIZATION_SLUG = process.env.SENTRY_ORGANIZATION_SLUG ?? 'freight-capstone'
@@ -60,6 +62,7 @@ export {
     GITHUB_AUTH_TOKEN,
     GITHUB_REPO,
     GITHUB_OWNER,
+    GITHUB_WEBHOOK_SECRET,
     SENTRY_DNS,
     SENTRY_AUTH_TOKEN,
     SENTRY_ORGANIZATION_SLUG,

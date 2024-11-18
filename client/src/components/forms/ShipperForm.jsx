@@ -7,7 +7,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo,
 
     return (
         <CForm ref={formRef}>
-            {!isInfo && <CProgress value={25} className="mb-3" variant="striped" animated />}
+            {!isInfo && <CProgress color="danger" value={25} className="mb-3" />}
             <h3 className="mb-4">Shipper Information</h3>
 
             <CFormLabel htmlFor="shipper_company_name">
