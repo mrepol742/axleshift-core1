@@ -30,6 +30,7 @@ const Auth = (WrappedComponent) => {
                 )
                 .then((response) => {
                     if (response.data.otp) return (window.location.href = '/otp')
+                    if (response.data.role === 'user') return (window.location.href = '/hold-on')
                     dispatch({
                         type: 'set',
                         user: response.data,
@@ -49,7 +50,7 @@ const Auth = (WrappedComponent) => {
 
         if (isAuth === null)
             return (
-                <div className="loading-overlay">
+                <div className="loading-overlay bg-dark">
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )
