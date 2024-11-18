@@ -90,11 +90,11 @@ const AppHeader = () => {
                             />
                             <CInputGroupText
                                 id="basic-addon"
-                                type="submit"
+                                onClick={handleSubmit}
                                 style={{ borderRadius: '0 50px 50px 0' }}
                                 className="px-3"
                             >
-                                <FontAwesomeIcon icon={faMagnifyingGlass} type="submit" />
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
                             </CInputGroupText>
                         </CInputGroup>
                     </CForm>
