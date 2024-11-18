@@ -22,17 +22,15 @@ router.get('/', auth, async (req, res, next) => {
         })(),
     ])
 
-    return res
-        .status(200)
-        .json({
-            dashboard: [],
-            sessions: _sessions,
-            scm: _scm,
-            sentry: _sentry,
-            apiTokens: _apiTokens,
-            activity: [],
-            maintenance: [],
-        })
+    return res.status(200).json({
+        dashboard: [],
+        sessions: _sessions,
+        scm: _scm,
+        sentry: _sentry,
+        apiTokens: _apiTokens,
+        activity: [],
+        maintenance: [],
+    })
 })
 
 export default router

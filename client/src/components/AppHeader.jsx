@@ -37,8 +37,14 @@ const AppHeader = () => {
     const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
     const dispatch = useDispatch()
     const sidebarShow = useSelector((state) => state.sidebarShow)
-    const { query, setQuery } = useState('')
+    const [query, setQuery] = useState('')
     const navigate = useNavigate()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        if (/^[a-fA-F0-9]{24}$/.test(query)) return navigate(`/track/${query}`)
+        navigate(`/search?q=${query}`)
+    }
 
     useEffect(() => {
         document.addEventListener('scroll', () => {
@@ -64,7 +70,7 @@ const AppHeader = () => {
                         <FontAwesomeIcon icon={faCalendarDays} />
                     </CButton>
                     <CForm
-                        action="/search"
+                        onSubmit={handleSubmit}
                         className="mx-auto d-none d-md-flex"
                         style={{ maxWidth: '400px' }}
                     >
@@ -88,7 +94,7 @@ const AppHeader = () => {
                                 style={{ borderRadius: '0 50px 50px 0' }}
                                 className="px-3"
                             >
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                <FontAwesomeIcon icon={faMagnifyingGlass} type="submit" />
                             </CInputGroupText>
                         </CInputGroup>
                     </CForm>
