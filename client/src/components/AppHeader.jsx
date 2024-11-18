@@ -28,6 +28,7 @@ import {
     faCircleHalfStroke,
     faMagnifyingGlass,
     faCalendarDays,
+    faPlus,
 } from '@fortawesome/free-solid-svg-icons'
 import { AppBreadcrumb, AppHeaderDropdown } from './index'
 import AppNotifcationDropdown from './AppNotificationDropdown'
@@ -42,6 +43,7 @@ const AppHeader = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if (!query || query.trim().length === 0) return null
         if (/^[a-fA-F0-9]{24}$/.test(query)) return navigate(`/track/${query}`)
         navigate(`/search?q=${query}`)
     }
@@ -66,6 +68,9 @@ const AppHeader = () => {
                     <FontAwesomeIcon icon={faBars} />
                 </CHeaderToggler>
                 <CHeaderNav>
+                    <CButton variant="nav-item" onClick={(e) => navigate('/freight')}>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </CButton>
                     <CButton variant="nav-item" onClick={(e) => navigate('/schedules')}>
                         <FontAwesomeIcon icon={faCalendarDays} />
                     </CButton>

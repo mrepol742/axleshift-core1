@@ -245,7 +245,7 @@ router.post('/verify/otp/new', [recaptcha, auth], async function (req, res, next
 */
 router.post('/verify/otp', [recaptcha, auth], async function (req, res, next) {
     try {
-        const otp = req.body.otp
+        const otp = req.body.otp.toString()
         if (!otp) return res.status(400).send()
 
         const db = await database()

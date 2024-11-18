@@ -15,6 +15,10 @@ import {
     CFormSelect,
     CSpinner,
     CImage,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalFooter,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
@@ -31,6 +35,7 @@ const Sea = () => {
     const { addToast } = useToast()
     const [currentPage, setCurrentPage] = useState(1)
     const [loading, setLoading] = useState(false)
+    const [confirmation, setConfirmation] = useState(false)
     const [formData, setFormData] = useState({
         shipper: {
             shipper_company_name: '',
@@ -77,6 +82,7 @@ const Sea = () => {
     }
 
     const handleSubmit = async () => {
+        if (!confirmation) return setConfirmation(true)
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         const updatedFormData = {
@@ -109,6 +115,24 @@ const Sea = () => {
                 </div>
             )}
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+            {confirmation && (
+                <CModal
+                    visible="true"
+                    onClose={() => setConfirmation(false)}
+                    alignment="center"
+                    scrollable
+                >
+                    <CModalHeader closeButton>Shipment Confirmation</CModalHeader>
+                    <CModalBody>
+                        Do you confirm that the details you input are correct and accurate?
+                    </CModalBody>
+                    <CModalFooter>
+                        <CButton color="primary" onClick={handleSubmit}>
+                            Confirm
+                        </CButton>
+                    </CModalFooter>
+                </CModal>
+            )}
             <CRow className="mb-4">
                 <CCol xs={3} md={5} xl={3} className="image-container d-none d-md-flex">
                     <CImage fluid rounded src="/images/freight-sea.jpg" className="custom-image" />

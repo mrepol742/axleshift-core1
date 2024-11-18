@@ -15,6 +15,7 @@ import Masonry from 'react-masonry-css'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch, faLock, faServer, faKey } from '@fortawesome/free-solid-svg-icons'
+import { isAdmin } from '../../components/Profile'
 
 const Freight = () => {
     const navigate = useNavigate()
@@ -31,33 +32,35 @@ const Freight = () => {
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column"
             >
-                <div>
-                    <CCard
-                        className="bg-dark text-white mb-3"
-                        onClick={() => navigate('/security/management')}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <CCardHeader
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}
+                {isAdmin && (
+                    <div>
+                        <CCard
+                            className="bg-dark text-white mb-3"
+                            onClick={() => navigate('/security/management')}
+                            style={{ cursor: 'pointer' }}
                         >
-                            <div>
-                                <FontAwesomeIcon icon={faServer} />
-                            </div>
-                            <div>Management</div>
-                        </CCardHeader>
-                        <CCardBody>
-                            <CCardText>Your All in One Security Dashboard</CCardText>
-                        </CCardBody>
-                    </CCard>
-                </div>
+                            <CCardHeader
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <div>
+                                    <FontAwesomeIcon icon={faServer} />
+                                </div>
+                                <div>Management</div>
+                            </CCardHeader>
+                            <CCardBody>
+                                <CCardText>Your All in One Security Dashboard</CCardText>
+                            </CCardBody>
+                        </CCard>
+                    </div>
+                )}
                 <div>
                     <CCard
                         className="bg-dark text-white mb-3"
-                        onClick={() => navigate('/security/analysis')}
+                        onClick={() => navigate('/security/activity')}
                         style={{ cursor: 'pointer' }}
                     >
                         <CCardHeader
@@ -70,10 +73,10 @@ const Freight = () => {
                             <div>
                                 <FontAwesomeIcon icon={faCircleNotch} />
                             </div>
-                            <div>Analysis</div>
+                            <div>Activity</div>
                         </CCardHeader>
                         <CCardBody>
-                            <CCardText>Scan and check for any issues</CCardText>
+                            <CCardText>Logs account changes for security audits.</CCardText>
                         </CCardBody>
                     </CCard>
                 </div>

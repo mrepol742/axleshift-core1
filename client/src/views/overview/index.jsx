@@ -25,6 +25,9 @@ import {
     faMagnifyingGlass,
     faEllipsisVertical,
     faLocationDot,
+    faPlaneDeparture,
+    faTruck,
+    faShip,
 } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './Widgets'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
@@ -97,34 +100,6 @@ const Overview = () => {
 
             {data.length !== 0 && (
                 <>
-                    <CForm className="d-block d-sm-flex justify-content-left my-2 my-lg-0">
-                        <CFormSelect
-                            options={[
-                                { label: 'All', value: '0' },
-                                { label: 'On Route', value: '1' },
-                                { label: 'Canceled', value: '2' },
-                                { label: 'Shipped', value: '3' },
-                            ]}
-                            className="mb-3"
-                        />
-                        <div className="mx-2"></div>
-                        <CFormSelect
-                            options={[
-                                { label: 'Newer', value: '1' },
-                                { label: 'Older', value: '2' },
-                            ]}
-                            className="mb-3"
-                        />
-                        <div className="mx-2"></div>
-                        <AppPagination
-                            currentPage={currentPage}
-                            setCurrentPage={setCurrentPage}
-                            totalPages={totalPages}
-                            setTotalPages={setTotalPages}
-                            className="mb-3"
-                        />
-                    </CForm>
-
                     <Masonry
                         breakpointCols={{
                             default: 4,
@@ -149,18 +124,31 @@ const Overview = () => {
                                         alignItems: 'center',
                                     }}
                                 >
-                                    <div></div>
+                                    <div>
+                                        {item.type == 'air' && (
+                                            <FontAwesomeIcon icon={faPlaneDeparture} />
+                                        )}
+                                        {item.type == 'land' && <FontAwesomeIcon icon={faTruck} />}
+                                        {item.type == 'sea' && <FontAwesomeIcon icon={faShip} />}
+                                    </div>
                                     <div>{parseTimestamp(item.created_at)}</div>
                                 </CCardHeader>
                                 <CCardBody>
                                     <CCardText>{item.data.shipment.shipment_description}</CCardText>
                                 </CCardBody>
-                                <CCardFooter className="bg-dark text-white border-0">
-                                    Status: On route
+                                <CCardFooter className="bg-dark text-white border-0 small">
+                                    Status: on route
                                 </CCardFooter>
                             </CCard>
                         ))}
                     </Masonry>
+                    <AppPagination
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        totalPages={totalPages}
+                        setTotalPages={setTotalPages}
+                        className="mb-3"
+                    />
                 </>
             )}
         </>

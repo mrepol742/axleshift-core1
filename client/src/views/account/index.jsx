@@ -207,7 +207,6 @@ const Account = () => {
                     <CCard className="mb-3">
                         <CCardBody>
                             <CForm onSubmit={handleContactInfo}>
-                                <h6>Email</h6>
                                 <CInputGroup className="mb-3">
                                     <CInputGroupText>
                                         <FontAwesomeIcon icon={faEnvelope} />
