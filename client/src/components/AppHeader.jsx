@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
     CContainer,
@@ -17,6 +17,7 @@ import {
     CInputGroup,
     CFormInput,
     CInputGroupText,
+    CButton,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -26,6 +27,7 @@ import {
     faSun,
     faCircleHalfStroke,
     faMagnifyingGlass,
+    faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons'
 import { AppBreadcrumb, AppHeaderDropdown } from './index'
 import AppNotifcationDropdown from './AppNotificationDropdown'
@@ -36,6 +38,7 @@ const AppHeader = () => {
     const dispatch = useDispatch()
     const sidebarShow = useSelector((state) => state.sidebarShow)
     const { query, setQuery } = useState('')
+    const navigate = useNavigate()
 
     useEffect(() => {
         document.addEventListener('scroll', () => {
@@ -56,8 +59,15 @@ const AppHeader = () => {
                 >
                     <FontAwesomeIcon icon={faBars} />
                 </CHeaderToggler>
-                <CHeaderNav className="d-none d-md-flex">
-                    <CForm action="/search" className="mx-auto" style={{ maxWidth: '400px' }}>
+                <CHeaderNav>
+                    <CButton variant="nav-item" onClick={(e) => navigate('/schedules')}>
+                        <FontAwesomeIcon icon={faCalendarDays} />
+                    </CButton>
+                    <CForm
+                        action="/search"
+                        className="mx-auto d-none d-md-flex"
+                        style={{ maxWidth: '400px' }}
+                    >
                         <CInputGroup style={{ borderRadius: '50px' }}>
                             <CFormInput
                                 aria-label="query"
@@ -68,7 +78,7 @@ const AppHeader = () => {
                                 aria-describedby="basic-addon"
                                 style={{
                                     borderRadius: '50px 0 0 50px',
-                                    height: '35px',
+                                    height: '40px',
                                     fontSize: '0.9em',
                                 }}
                             />

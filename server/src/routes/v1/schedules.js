@@ -5,15 +5,7 @@ import auth from '../../middleware/auth.js'
 
 const router = express.Router()
 
-router.post('/route-optimization', auth, async (req, res) => {
-    return res.status(501).send()
-})
-
-router.post('/freight-cost', auth, async (req, res) => {
-    return res.status(501).send()
-})
-
-router.post('/performance', auth, async (req, res) => {
+router.post('/schudules', auth, async (req, res) => {
     return res.status(501).send()
 })
 

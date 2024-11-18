@@ -7,6 +7,7 @@ const Logout = auth(lazy(() => import('./views/auth/Logout')))
 const Overview = auth(lazy(() => import('./views/overview/index')))
 const Info = auth(lazy(() => import('./views/overview/Info')))
 const Search = auth(lazy(() => import('./views/overview/Search')))
+const Schedules = auth(lazy(() => import('./views/schedules/index')))
 
 const Inbox = auth(lazy(() => import('./views/support/customer-service/index')))
 const Chat = auth(lazy(() => import('./views/support/customer-service/Chat')))
@@ -35,6 +36,7 @@ const routes = [
     { path: '/', name: 'Overview', element: Overview },
     { path: '/v/:id', name: 'Shipment Info', element: Info },
     { path: '/search', name: 'Search Shipment', element: Search },
+    { path: '/schedules', name: 'Schedules', element: Schedules },
 
     { path: '/customer', name: 'Inbox', element: Inbox },
     { path: '/customer/:id', name: 'Chat', element: Chat },

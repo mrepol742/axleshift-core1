@@ -1,15 +1,15 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
-import database from '../../models/mongodb.js'
-import logger from '../../components/logger.js'
-import scm from '../../components/scm.js'
-import sentry from '../../components/sentry.js'
-import auth from '../../middleware/auth.js'
+import database from '../../../models/mongodb.js'
+import logger from '../../../components/logger.js'
+import scm from '../../../components/scm.js'
+import sentry from '../../../components/sentry.js'
+import auth from '../../../middleware/auth.js'
 
 const router = express.Router()
 
 router.get('/', auth, async (req, res, next) => {
-    const [_scm, _sentry, _sessions, _apiToken] = await Promise.all([
+    const [_scm, _sentry, _sessions, _apiTokens] = await Promise.all([
         scm(),
         sentry(),
         (async () => {
@@ -24,7 +24,15 @@ router.get('/', auth, async (req, res, next) => {
 
     return res
         .status(200)
-        .json({ scm: _scm, sentry: _sentry, sessions: _sessions, apiToken: _apiToken })
+        .json({
+            dashboard: [],
+            sessions: _sessions,
+            scm: _scm,
+            sentry: _sentry,
+            apiTokens: _apiTokens,
+            activity: [],
+            maintenance: [],
+        })
 })
 
 export default router

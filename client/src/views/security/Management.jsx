@@ -44,12 +44,12 @@ const SecurityManagement = () => {
     const [priority, setPriority] = useState('1')
     const [order, setOrder] = useState('1')
     const [query, setQuery] = useState('')
-    const [result, setResult] = useState({ scm: [], sessions: [], sentry: [], apiToken: {} })
+    const [result, setResult] = useState({ scm: [], sessions: [], sentry: [], apiTokens: {} })
     const navigate = useNavigate()
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/securityManagement/`, {
+            .get(`${VITE_APP_API_URL}/api/v1/sec/management/`, {
                 headers: {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
