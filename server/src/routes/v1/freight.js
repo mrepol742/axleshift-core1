@@ -4,6 +4,7 @@ import logger from '../../components/logger.js'
 import database from '../../models/mongodb.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
+import { send } from '../../components/mail.js'
 
 const router = express.Router()
 const limit = 20
@@ -102,7 +103,7 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
         if (!['air', 'land', 'sea'].includes(type)) return res.status(400).send()
 
         const db = await database()
-        await db.collection('freight').insertOne({
+        const _shipment = await db.collection('freight').insertOne({
             user_id: req.user._id,
             data: {
                 shipper: shipper,
@@ -114,6 +115,14 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
             created_at: Date.now(),
             updated_at: Date.now(),
         })
+        send(
+            {
+                to: req.user.email,
+                subject: 'Shipment booking confirmed',
+                text: `You can track your shipment using this tracking id: #${_shipment._id}<br>Visit <a href="https://core1.axleshift.com/track/">https://core1.axleshift.com/track</a> for real time tracking and shipment monitoring. <br><br>If you need assistance feel free to contact us.`,
+            },
+            req.user.first_name,
+        )
         return res.status(201).send()
     } catch (e) {
         logger.error(e)
