@@ -64,7 +64,6 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo,
                 className="mb-3"
                 disabled={isDisabled}
             />
-
             <CFormLabel htmlFor="shipper_company_address">
                 Address<span className="text-danger ms-1">*</span>
             </CFormLabel>

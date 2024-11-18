@@ -76,8 +76,8 @@ const Account = () => {
                 },
             })
             .then((response) => {
-                if (response.data.error) return alert(response.data.error)
-                alert('Done')
+                if (response.data.error) return addToast(response.data.error)
+                addToast('Your changes has been saved.')
             })
             .catch((error) => {
                 console.error(error)

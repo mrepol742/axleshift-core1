@@ -229,7 +229,7 @@ const FreightInfo = () => {
                                     <QRCodeSVG value={id} className="border border-4 rounded-2" />
                                 </div>
                             </CModalBody>
-                            <CModalFooter>
+                            <CModalFooter className="d-flex justify-content-center align-items-center">
                                 <CButton color="primary" onClick={handleQRDownload}>
                                     Download
                                 </CButton>
