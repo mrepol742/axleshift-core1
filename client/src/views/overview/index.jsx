@@ -155,8 +155,8 @@ const Overview = () => {
                                 <CCardBody>
                                     <CCardText>{item.data.shipment.shipment_description}</CCardText>
                                 </CCardBody>
-                                <CCardFooter className="bg-dark text-white border-0">
-                                    Status: On route
+                                <CCardFooter className="bg-dark text-white border-0 small">
+                                    Status: on route
                                 </CCardFooter>
                             </CCard>
                         ))}
