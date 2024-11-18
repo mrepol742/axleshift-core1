@@ -104,18 +104,13 @@ const Track = () => {
                     </CForm>
                     <div>
                         <CCard
-                            className="d-inline-block"
+                            className="d-inline-block p-5 text-center border border-2"
                             {...getRootProps()}
-                            style={{
-                                border: '2px dashed #3498db',
-                                padding: '20px',
-                                textAlign: 'center',
-                            }}
                         >
                             <CFormInput {...getInputProps()} />
                             {!image && (
                                 <>
-                                    <CCardTitle>Drag & Drop Image Here</CCardTitle>
+                                    <CCardTitle>Drag & Drop QRCode</CCardTitle>
                                     <p>or click to select an image</p>
                                 </>
                             )}
@@ -132,7 +127,7 @@ const Track = () => {
                                 />
                             )}
                         </CCard>
-                        <CButton color="primary" className="d-block my-2" onClick={handleScan}>
+                        <CButton color="primary" className="d-block my-2 px-5" onClick={handleScan}>
                             Scan
                         </CButton>
                     </div>

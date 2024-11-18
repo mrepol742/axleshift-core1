@@ -28,6 +28,7 @@ import {
     faCircleHalfStroke,
     faMagnifyingGlass,
     faCalendarDays,
+    faPlus,
 } from '@fortawesome/free-solid-svg-icons'
 import { AppBreadcrumb, AppHeaderDropdown } from './index'
 import AppNotifcationDropdown from './AppNotificationDropdown'
@@ -66,6 +67,9 @@ const AppHeader = () => {
                     <FontAwesomeIcon icon={faBars} />
                 </CHeaderToggler>
                 <CHeaderNav>
+                    <CButton variant="nav-item" onClick={(e) => navigate('/freight')}>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </CButton>
                     <CButton variant="nav-item" onClick={(e) => navigate('/schedules')}>
                         <FontAwesomeIcon icon={faCalendarDays} />
                     </CButton>
