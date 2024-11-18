@@ -12,6 +12,7 @@ const Schedules = auth(lazy(() => import('./views/schedules/index')))
 const Inbox = auth(lazy(() => import('./views/support/customer-service/index')))
 const Chat = auth(lazy(() => import('./views/support/customer-service/Chat')))
 const Account = auth(lazy(() => import('./views/account/index')))
+const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const Freight = auth(lazy(() => import('./views/freight/index')))
 const FreightAir = auth(lazy(() => import('./views/freight/Air')))
@@ -41,6 +42,7 @@ const routes = [
     { path: '/customer', name: 'Inbox', element: Inbox },
     { path: '/customer/:id', name: 'Chat', element: Chat },
     { path: '/account', name: 'Account', element: Account },
+    { path: '/account/security', name: 'Security', element: _Security },
 
     { path: '/documents', name: 'Freight Documents', element: Err500 },
 

@@ -43,6 +43,7 @@ const AppHeader = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if (!query || query.trim().length === 0) return null
         if (/^[a-fA-F0-9]{24}$/.test(query)) return navigate(`/track/${query}`)
         navigate(`/search?q=${query}`)
     }
