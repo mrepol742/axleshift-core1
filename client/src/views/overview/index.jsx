@@ -28,7 +28,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './Widgets'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
-import AppSearch from '../../components/AppSearch'
 import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
 import { useToast } from '../../components/AppToastProvider'

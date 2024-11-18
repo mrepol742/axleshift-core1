@@ -20,6 +20,7 @@ const Register = lazy(() => import('./views/auth/Register'))
 const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
 const MailOTP = lazy(() => import('./views/auth/otp/Mail'))
 const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
+const Err403 = lazy(() => import('./views/errors/403'))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -53,6 +54,7 @@ const App = () => {
                         {!token && (
                             <Route exact path="/" name="Landing Page" element={<Landing />} />
                         )}
+                        <Route path="/hold-on" name="yacks" element={<Err403 />} />
                         <Route path="/privacy-policy" name="Privacy Policy" element={<Privacy />} />
                         <Route
                             path="/terms-of-service"
