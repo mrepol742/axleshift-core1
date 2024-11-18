@@ -14,11 +14,23 @@ import {
     CRow,
     CButtonGroup,
     CSpinner,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalFooter,
 } from '@coreui/react'
 import { useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
+import {
+    faEnvelope,
+    faLock,
+    faXmark,
+    faQrcode,
+    faEye,
+    faEyeSlash,
+} from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faGoogle, faMicrosoft } from '@fortawesome/free-brands-svg-icons'
+import { QRCodeSVG } from 'qrcode.react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import {
     VITE_APP_RECAPTCHA_SITE_KEY,
@@ -27,6 +39,7 @@ import {
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
 import errorMessages from '../../components/ErrorMessages'
+import { generateUUID } from '../../components/UUID'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -34,12 +47,20 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const [showQR, setShowQR] = useState(false)
     const [error, setError] = useState({
         error: false,
         message: '',
     })
+    const svgRef = React.useRef(null)
     const urlParams = new URLSearchParams(window.location.search)
     const url = urlParams.get('n') ? urlParams.get('n') : '/'
+    const [showPassword, setShowPassword] = useState(false)
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword)
+    }
+
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async (credentialResponse) => {
             handleSubmit(null, 'google', credentialResponse.access_token)
@@ -55,6 +76,13 @@ const Login = () => {
     useEffect(() => {
         if (cookies.get(VITE_APP_SESSION) !== undefined) return (window.location.href = url)
     }, [])
+
+    const getUUID = () => {
+        const _uuid = cookies.get('uuid')
+        const uuid = _uuid ? _uuid : generateUUID()
+        if (!_uuid) cookies.set('uuid', uuid, { expires: 30 })
+        return uuid
+    }
 
     const handleSubmit = async (e, type, credential) => {
         if (e) e.preventDefault()
@@ -113,6 +141,31 @@ const Login = () => {
                         <CSpinner color="primary" variant="grow" />
                     </div>
                 )}
+                {showQR && (
+                    <CModal
+                        visible="true"
+                        onClose={() => setShowQR(false)}
+                        alignment="center"
+                        scrollable
+                    >
+                        <CModalHeader closeButton></CModalHeader>
+                        <CModalBody>
+                            <div
+                                className="d-flex justify-content-center align-items-center"
+                                ref={svgRef}
+                            >
+                                <QRCodeSVG
+                                    value={() => getUUID()}
+                                    className="border border-4 rounded-2"
+                                />
+                            </div>
+                        </CModalBody>
+                        <CModalFooter className="px-4">
+                            Open Axleshift App and go to Settings &gt; Account &gt; Login using
+                            QRCode
+                        </CModalFooter>
+                    </CModal>
+                )}
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5} className="my-2">
                         <CCard className="p-1 p-sm-4 shadow">
@@ -153,13 +206,26 @@ const Login = () => {
                                             <FontAwesomeIcon icon={faLock} />
                                         </CInputGroupText>
                                         <CFormInput
-                                            type="password"
+                                            type={showPassword ? 'text' : 'password'}
                                             placeholder="Password"
                                             autoComplete="current-password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
                                         />
+                                        <CInputGroupText>
+                                            <span
+                                                onClick={togglePasswordVisibility}
+                                                aria-label={
+                                                    showPassword ? 'Hide password' : 'Show password'
+                                                }
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={showPassword ? faEyeSlash : faEye}
+                                                    onClick={togglePasswordVisibility}
+                                                />
+                                            </span>
+                                        </CInputGroupText>
                                     </CInputGroup>
                                     <p>
                                         <small>
@@ -201,6 +267,9 @@ const Login = () => {
                                         </CButtonGroup>
                                     </div>
                                     <div className="text-center">
+                                        <CButton className="me-2" onClick={(e) => setShowQR(true)}>
+                                            Login using <FontAwesomeIcon icon={faQrcode} /> QRCode
+                                        </CButton>
                                         <span className="text-muted d-block mb-1">
                                             Or continue with
                                         </span>

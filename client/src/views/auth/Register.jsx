@@ -18,7 +18,14 @@ import {
 } from '@coreui/react'
 import { useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faLock, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
+import {
+    faEnvelope,
+    faLock,
+    faUser,
+    faXmark,
+    faEye,
+    faEyeSlash,
+} from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faGoogle, faMicrosoft } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import {
@@ -47,6 +54,12 @@ const Register = () => {
     })
     const urlParams = new URLSearchParams(window.location.search)
     const url = urlParams.get('n') ? urlParams.get('n') : '/'
+    const [showPassword, setShowPassword] = useState(false)
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword)
+    }
+
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async (credentialResponse) => {
             handleSubmit(null, 'google', credentialResponse.access_token)
@@ -205,13 +218,26 @@ const Register = () => {
                                         </CInputGroupText>
                                         <CFormInput
                                             id="password"
-                                            type="password"
+                                            type={showPassword ? 'text' : 'password'}
                                             placeholder="Password"
-                                            autoComplete="new-password"
+                                            autoComplete="current-password"
                                             value={formData.password}
                                             onChange={(e) => handleInputChange(e)}
                                             required
                                         />
+                                        <CInputGroupText>
+                                            <span
+                                                onClick={togglePasswordVisibility}
+                                                aria-label={
+                                                    showPassword ? 'Hide password' : 'Show password'
+                                                }
+                                            >
+                                                <FontAwesomeIcon
+                                                    icon={showPassword ? faEyeSlash : faEye}
+                                                    onClick={togglePasswordVisibility}
+                                                />
+                                            </span>
+                                        </CInputGroupText>
                                     </CInputGroup>
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>

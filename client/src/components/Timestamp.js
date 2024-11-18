@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const parseTimestamp = (timestamp) => {
     const now = Math.floor(Date.now() / 1000)
     const seconds = Math.floor((Date.now() - timestamp) / 1000)

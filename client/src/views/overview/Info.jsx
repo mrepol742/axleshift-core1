@@ -215,17 +215,18 @@ const FreightInfo = () => {
                 <>
                     {showQR && (
                         <CModal
-                            visible={showQR}
+                            visible="true"
                             onClose={() => setShowQR(false)}
                             alignment="center"
                             scrollable
                         >
-                            <CModalHeader closeButton>Freight QRCode</CModalHeader>
+                            <CModalHeader closeButton></CModalHeader>
                             <CModalBody>
-                                <div className="d-flex justify-content-center align-items-center">
-                                    <div ref={svgRef} className="d-inline-block">
-                                        <QRCodeSVG value={id} />
-                                    </div>
+                                <div
+                                    className="d-flex justify-content-center align-items-center"
+                                    ref={svgRef}
+                                >
+                                    <QRCodeSVG value={id} className="border border-4 rounded-2" />
                                 </div>
                             </CModalBody>
                             <CModalFooter>
