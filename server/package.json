@@ -14,7 +14,7 @@
         "production": "concurrently \"npm run env\" \"npm run gemini\" \"npm run prompt\" \"npm run start\"",
         "start": "node src/index",
         "test": "mocha --timeout 10000 --exit",
-        "dev": "nodemon --ext js --ignore '*.json' --trace-deprecation src/index",
+        "dev": "nodemon --ext js --ignore '*.json' --trace-deprecation --trace-warnings src/index",
         "lint": "prettier --write .",
         "env": "[ ! -f .env ] && cp .env.example .env",
         "gemini": "[ ! -f .gemini.json ] && cp .gemini.example.json .gemini.json",

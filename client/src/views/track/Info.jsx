@@ -28,6 +28,7 @@ const TrackInfo = () => {
         markerPositions: [],
     })
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const fetchData = async () => {
         await axios
@@ -65,8 +66,17 @@ const TrackInfo = () => {
                             <div className="mb-4">
                                 <CCard className="mb-3 bg-dark text-white p-3">
                                     <CCardText> #{id}</CCardText>
-                                    Origin: {responseData.origin} | Destination:{' '}
-                                    {responseData.destination} | Status: {responseData.status}
+                                    <div className="small">
+                                        <b>From</b>: {responseData.origin} <br />
+                                        <b>To</b>: {responseData.destination} <br />
+                                        <b>Status</b>: {responseData.status}
+                                    </div>
+                                    <div
+                                        className="d-flex justify-content-end align-items-center text-primary"
+                                        onClick={(e) => navigate(`/v/${id}`)}
+                                    >
+                                        View shipment information
+                                    </div>
                                 </CCard>
                                 <LoadScript googleMapsApiKey={VITE_APP_GOOGLE_MAP}>
                                     <GoogleMap
@@ -88,8 +98,8 @@ const TrackInfo = () => {
                             <div className="timeline">
                                 {responseData.events.map((event, index) => (
                                     <div className="timeline-event" key={index}>
-                                        <div className="timeline-date">{event.date}</div>
-                                        <div className="timeline-content">
+                                        <div className="text-primary px-4">{event.date}</div>
+                                        <div className="px-4 py-1 mb-2">
                                             <p>{event.description}</p>
                                         </div>
                                     </div>

@@ -68,12 +68,16 @@ const AppHeader = () => {
                     <FontAwesomeIcon icon={faBars} />
                 </CHeaderToggler>
                 <CHeaderNav>
-                    <CButton variant="nav-item" onClick={(e) => navigate('/freight')}>
-                        <FontAwesomeIcon icon={faPlus} />
-                    </CButton>
-                    <CButton variant="nav-item" onClick={(e) => navigate('/schedules')}>
-                        <FontAwesomeIcon icon={faCalendarDays} />
-                    </CButton>
+                    <CNavItem onClick={(e) => navigate('/freight')}>
+                        <CButton>
+                            <FontAwesomeIcon icon={faPlus} />
+                        </CButton>
+                    </CNavItem>
+                    <CNavItem onClick={(e) => navigate('/schedules')}>
+                        <CButton>
+                            <FontAwesomeIcon icon={faCalendarDays} />
+                        </CButton>
+                    </CNavItem>
                     <CForm
                         onSubmit={handleSubmit}
                         className="mx-auto d-none d-md-flex"
