@@ -38,7 +38,12 @@ const Dashboard = () => {
         return () => clearInterval(intervalId)
     }, [])
 
-    return <>{JSON.stringify(formData, null, 4)}</>
+    return <>
+    process_cpu_user_seconds_total {Math.floor(formData.process_cpu_user_seconds_total[0].value) } 
+    process_cpu_system_seconds_total {Math.floor(formData.process_cpu_user_seconds_total[0].value) } 
+    
+    
+    {JSON.stringify(formData, null, 4)}</>
 }
 
 export default Dashboard
