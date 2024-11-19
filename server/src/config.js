@@ -29,7 +29,7 @@ const GITHUB_AUTH_TOKEN = process.env.GITHUB_AUTH_TOKEN ?? ''
 const GITHUB_REPO = process.env.GITHUB_REPO ?? 'core1'
 const GITHUB_OWNER = process.env.GITHUB_OWNER ?? 'freight-capstone'
 
-const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET ?? ''
+const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET ?? 'freight-capstone'
 
 const SENTRY_DNS = process.env.SENTRY_DNS ?? ''
 const SENTRY_AUTH_TOKEN = process.env.SENTRY_AUTH_TOKEN ?? ''

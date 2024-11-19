@@ -1,8 +1,6 @@
 import express from 'express'
 import { collectDefaultMetrics, Registry, Counter, Gauge } from 'prom-client'
-import database from '../../models/mongodb.js'
-import logger from '../../components/logger.js'
-import auth from '../../middleware/auth.js'
+import ipwhitelist from '../../middleware/ipwhitelist.js'
 
 const router = express.Router()
 const registry = new Registry()
@@ -38,7 +36,7 @@ router.use((req, res, next) => {
     next()
 })
 
-router.get('/', async (req, res) => {
+router.get('/prometheus', ipwhitelist, async (req, res) => {
     res.set('Content-Type', registry.contentType)
     res.end(await registry.metrics())
 })

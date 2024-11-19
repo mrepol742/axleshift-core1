@@ -45,14 +45,6 @@ jobs:
           echo "MONGO_DB=core1" >> .env
           echo "MONGO_URL=mongodb://localhost:27017" >> .env
           echo "RECAPTCHA_SECRET=${{ secrets.EXPRESS_RECAPTCHA_SECRET }}" >> .env
-          echo "NODE_ENV=development" >> .env
-          echo "EXPRESS_PORT=5051" >> .env
-          echo "EXT_EXPRESS_PORT=7000" >> .env
-          echo "REACT_APP_ORIGIN=::1" >> .env
-          echo "API_RATE_LIMIT=30" >> .env
-          echo "API_RATE_DELAY=600" >> .env
-          echo "API_EXTERNAL_RATE_LIMIT=1000" >> .env
-          echo "API_EXTERNAL_RATE_DELAY=600" >> .env
         
       - name: Install dependencies
         run: |
