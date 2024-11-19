@@ -37,11 +37,6 @@ router.use((req, res, next) => {
 })
 
 router.get('/prometheus', auth, async (req, res) => {
-    res.set('Content-Type', registry.contentType)
-    res.end(await registry.metrics())
-})
-
-router.get('/prometheus/json', auth, async (req, res) => {
     const metrics = await registry.metrics()
 
     const metricsJson = {}

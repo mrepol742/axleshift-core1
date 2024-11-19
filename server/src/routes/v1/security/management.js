@@ -33,4 +33,14 @@ router.get('/', auth, async (req, res, next) => {
     })
 })
 
+router.get('/sessions', auth, async (req, res, next) => {})
+
+router.get('/dependabot', auth, async (req, res, next) => {})
+
+router.get('/sentry', auth, async (req, res, next) => {})
+
+router.get('/apikeys', auth, async (req, res, next) => {})
+
+router.get('/activity', auth, async (req, res, next) => {})
+
 export default router
