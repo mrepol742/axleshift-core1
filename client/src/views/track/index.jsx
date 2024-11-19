@@ -19,8 +19,11 @@ import { useDropzone } from 'react-dropzone'
 import jsqr from 'jsqr'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { useToast } from '../../components/AppToastProvider'
+import errorMessages from '../../components/ErrorMessages'
 
 const Track = () => {
+    const { addToast } = useToast()
     const [trackingID, setTrackingID] = useState('')
     const [image, setImage] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -39,8 +42,11 @@ const Track = () => {
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' })
 
-    const handleSubmit = () => {
-        navigate(`/track/${trackingID}`)
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if (!trackingID || trackingID.trim().length === 0) return null
+        if (/^[a-fA-F0-9]{24}$/.test(trackingID)) return navigate(`/track/${trackingID}`)
+        addToast('Invalid Tracking ID Number.')
     }
 
     const handleScan = () => {
@@ -59,13 +65,16 @@ const Track = () => {
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
             const trackingID = jsqr(imageData.data, canvas.width, canvas.height)
 
-            if (!trackingID) return alert('No QR code found.')
+            if (!trackingID) return addToast('No QR code found.')
 
-            setTrackingID(trackingID.data)
+            const _trackinID = trackingID.data
+            setTrackingID(_trackinID)
             setLoading(true)
             setTimeout(() => {
                 setLoading(false)
-                navigate(`/track/${trackingID.data}`)
+                if (!_trackinID || _trackinID.trim().length === 0) return null
+                if (/^[a-fA-F0-9]{24}$/.test(_trackinID)) return navigate(`/track/${_trackinID}`)
+                addToast('Invalid Tracking ID Number.')
             }, 2000)
         }
     }
@@ -92,12 +101,12 @@ const Track = () => {
                     <CForm className="mb-3" onSubmit={handleSubmit}>
                         <CInputGroup>
                             <CFormInput
-                                aria-label="tracking id"
+                                aria-label="Track shipment"
                                 aria-describedby="basic-addon"
                                 value={trackingID}
                                 onChange={(e) => setTrackingID(e.target.value)}
                             />
-                            <CInputGroupText id="basic-addon">
+                            <CInputGroupText id="basic-addon" onClick={handleSubmit}>
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                             </CInputGroupText>
                         </CInputGroup>
