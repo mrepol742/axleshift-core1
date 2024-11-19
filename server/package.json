@@ -41,6 +41,7 @@
         "express-mongo-sanitize": "^2.2.0",
         "helmet": "^8.0.0",
         "http-proxy-middleware": "^3.0.3",
+        "inspirational-quotes": "^2.0.1",
         "is-spaghetti-code": "^1.0.0",
         "jsdom": "^25.0.1",
         "mongodb": "^6.8.0",

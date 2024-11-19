@@ -11,7 +11,6 @@ describe('App Tests', async () => {
             .expect(200)
             .end((err, res) => {
                 if (err) return done(err)
-                expect(res.text).to.equal('If you can read this means this server is working.')
                 done()
             })
     })

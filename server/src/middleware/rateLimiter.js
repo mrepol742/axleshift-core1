@@ -4,7 +4,7 @@ import { API_RATE_LIMIT, API_EXTERNAL_RATE_LIMIT } from '../config.js'
 
 const TIME_WINDOW = 60 * 3 * 1000
 const requestCounts = {}
-const exludeRoute = ['/api/v1/auth/verify']
+const exludeRoute = ['/api/v1/auth/verify', '/metrics/v1/prometheus']
 const limitedRequestRoute = [
     '/api/v1/auth/login',
     '/api/v1/auth/register',

@@ -8,7 +8,6 @@
 
 @import 'simplebar-react/dist/simplebar.min.css';
 @import 'aos/dist/aos.css';
-@import 'react-big-calendar/lib/sass/styles';
 
 // Vendors
 @import 'vendors/simplebar';
@@ -18,3 +17,6 @@
 
 // If you want to add custom CSS you can put it here
 @import 'custom';
+
+@import 'calendar';
+@import 'react-big-calendar/lib/sass/styles';

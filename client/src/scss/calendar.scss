@@ -1,0 +1,31 @@
+
+$out-of-range-color: lighten(#333, 40%);
+$out-of-range-bg-color: lighten(#333, 70%);
+
+$calendar-border: $border-color;
+$cell-border: $border-color;
+
+// Each calendar segment is 1/7th.
+$segment-width: 0.14286%;
+
+$time-selection-color: white;
+$time-selection-bg-color: rgba(0, 0, 0, 0.5);
+$date-selection-bg-color: rgba(0, 0, 0, 0.1);
+
+$event-bg: #3174ad;
+$event-border: darken(#3174ad, 10%);
+$event-outline: #3b99fc;
+$event-color: #3b99fc;
+$event-border-radius: 5px;
+$event-padding: 2px 5px;
+$event-zindex: 4;
+
+$btn-color: #373a3c;
+$btn-bg: #fff;
+$btn-border: #ccc;
+
+$current-time-color: #74ad31;
+
+$rbc-css-prefix: rbc-i;
+
+$today-highlight-bg: $primary;
