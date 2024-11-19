@@ -1,6 +1,6 @@
 import express from 'express'
 import { collectDefaultMetrics, Registry, Counter, Gauge } from 'prom-client'
-import ipwhitelist from '../../middleware/ipwhitelist.js'
+import auth from '../../middleware/auth.js'
 
 const router = express.Router()
 const registry = new Registry()
@@ -36,9 +36,28 @@ router.use((req, res, next) => {
     next()
 })
 
-router.get('/prometheus', ipwhitelist, async (req, res) => {
+router.get('/prometheus', auth, async (req, res) => {
     res.set('Content-Type', registry.contentType)
     res.end(await registry.metrics())
+})
+
+router.get('/prometheus/json', auth, async (req, res) => {
+    const metrics = await registry.metrics()
+
+    const metricsJson = {}
+    metrics.split('\n').forEach((line) => {
+        if (line && line.includes('{')) {
+            const metricName = line.split('{')[0].trim()
+            metricsJson[metricName] = metricsJson[metricName] || []
+            metricsJson[metricName].push(line)
+        } else if (line && !line.startsWith('#')) {
+            const [metricName, value] = line.split(' ')
+            metricsJson[metricName] = metricsJson[metricName] || []
+            metricsJson[metricName].push({ value: parseFloat(value) })
+        }
+    })
+
+    res.json(metricsJson)
 })
 
 export default router

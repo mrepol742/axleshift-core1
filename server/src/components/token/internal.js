@@ -2,10 +2,9 @@ import { ObjectId } from 'mongodb'
 import logger from '../logger.js'
 import { getUser, getSession } from '../sessions.js'
 import database from '../../models/mongodb.js'
-import { getClientIp } from '../../components/ip.js'
 import { REACT_APP_ORIGIN, API_RATE_DELAY } from '../../config.js'
 
-const adminRoute = []
+const adminRoute = ['/metrics/v1/prometheus', '/api/v1/sec/management']
 const exludeRoute = ['/api/v1/auth/verify']
 
 const internal = async (req, res, next) => {
@@ -20,32 +19,24 @@ const internal = async (req, res, next) => {
         return res.status(401).send()
 
     if (!session.active) return res.status(401).send()
-    const user_a = req.headers['user-agent'] || 'unknown'
+    let user_a = req.headers['user-agent'] || 'unknown'
 
     const diff = Date.now() - session.last_accessed
     const week = 7 * 24 * 60 * 60 * 1000
-    let ip = getClientIp(req)
-    // a week has pass so change the ip to 0
-    // thus triggering the protocol down below!
-    // hacky aint it?
-    if (diff >= week) {
-        ip = 0
-        logger.info(week)
-        logger.info(diff)
-        logger.info(session.last_accessed)
-    }
+
+    if (diff >= week) user_a = null
 
     Promise.all([
         (async () => {
             try {
                 const db = await database()
-                const value = session.ip_address === ip && session.user_agent === user_a
+                const value = session.user_agent === user_a
                 db.collection('sessions').updateOne(
                     { token: token },
                     {
                         $set: {
                             active: value,
-                            compromised: value,
+                            compromised: !value,
                             last_accessed: Date.now(),
                             modified_by: 'system',
                         },
@@ -57,7 +48,7 @@ const internal = async (req, res, next) => {
         })(),
     ])
 
-    if (session.ip_address !== ip || session.user_agent !== user_a) return res.status(401).send()
+    if (session.user_agent !== user_a) return res.status(401).send()
 
     req.token = token
     req.user = theUser

@@ -7,6 +7,7 @@ import mongoSanitize from 'express-mongo-sanitize'
 import helmet from 'helmet'
 import compression from 'compression'
 import { createProxyMiddleware } from 'http-proxy-middleware'
+import Quotes from 'inspirational-quotes'
 import { NODE_ENV, EXT_EXPRESS_PORT } from './config.js'
 import rateLimiter from './middleware/rateLimiter.js'
 import sanitize from './middleware/sanitize.js'
@@ -50,14 +51,8 @@ app.use('/api/v1/', APIv1)
 app.use('/webhook/v1/', GithubWebhook)
 app.use('/metrics/v1/', PrometheusMetrics)
 
-app.use((err, req, res, next) => {
-    logger.error(err)
-    return res.status(500).send()
-})
-
-app.get('/', (req, res) => {
-    res.send('If you can read this means this server is working.')
-})
+app.use((err, req, res, next) => res.status(500).send())
+app.get('/', (req, res) => res.send(Quotes.getRandomQuote()))
 
 if (NODE_ENV !== 'production')
     app.get('/debug-sentry', (req, res) => {

@@ -30,6 +30,11 @@ export default defineConfig(() => {
                 plugins: [
                     autoprefixer({}), // add options if needed
                 ],
+                sass: {
+                    sassOptions: {
+                        quietDeps: true,
+                    },
+                },
             },
         },
         esbuild: {
