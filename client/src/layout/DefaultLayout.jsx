@@ -30,7 +30,12 @@ const DefaultLayout = () => {
                 {toasts.map((toast) => (
                     <CToast key={toast.id} autohide={true} visible={true}>
                         <CToastHeader closeButton>
-                            <CImage className="rounded me-2" src="/favicon.ico" width="20" />
+                            <CImage
+                                className="rounded me-2"
+                                src="/favicon.ico"
+                                width="20"
+                                loading="lazy"
+                            />
                             <div className="fw-bold me-auto">{toast.header}</div>
                             <small>{parseTimestamp(toast.id)}</small>
                         </CToastHeader>

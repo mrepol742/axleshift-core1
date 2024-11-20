@@ -107,6 +107,7 @@ const Account = () => {
                                     src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
                                     className="border border-5 mb-3 rounded-2"
                                     width="90px"
+                                    loading="lazy"
                                 />
                                 <CFormInput
                                     id="profile_pic"

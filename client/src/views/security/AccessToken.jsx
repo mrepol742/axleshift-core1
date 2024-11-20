@@ -192,7 +192,12 @@ const API = () => {
                         {!result.token && (
                             <div className="text-center border rounded mb-4">
                                 <div className="p-1 p-md-5 my-5 my-md-0">
-                                    <CImage src="/images/threat.png" fluid width="50%" />
+                                    <CImage
+                                        src="/images/threat.png"
+                                        fluid
+                                        width="50%"
+                                        loading="lazy"
+                                    />
                                     <h4>There was no Auth Token</h4>
                                     <CButton color="primary" size="sm" onClick={gen}>
                                         Generate Token

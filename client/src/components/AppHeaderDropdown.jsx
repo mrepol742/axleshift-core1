@@ -35,6 +35,7 @@ const AppHeaderDropdown = () => {
                     className="rounded-5"
                     fluid
                     width="40px"
+                    loading="lazy"
                 />
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">

@@ -36,11 +36,13 @@ const AppSidebar = () => {
                         src="/images/logo.png"
                         className="sidebar-brand-full"
                         height={30}
+                        loading="lazy"
                     />
                     <CImage
                         src="/images/favicon.png"
                         className="sidebar-brand-narrow"
                         height={30}
+                        loading="lazy"
                     />
                 </CSidebarBrand>
                 <CCloseButton

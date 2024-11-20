@@ -1,7 +1,7 @@
 import React from 'react'
 import { CCard, CCardBody, CButton } from '@coreui/react'
 
-const Api = () => {
+const AccessToken = () => {
     return (
         <>
             <h4>Deactivate all apikeys</h4>
@@ -24,4 +24,4 @@ const Api = () => {
     )
 }
 
-export default Api
+export default AccessToken

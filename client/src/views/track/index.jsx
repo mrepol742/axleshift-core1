@@ -94,6 +94,7 @@ const Track = () => {
                         rounded
                         src="/images/freight-track.jpg"
                         className="custom-image"
+                        loading="lazy"
                     />
                 </CCol>
                 <CCol md={7} className="mb-4">
@@ -133,6 +134,7 @@ const Track = () => {
                                         maxHeight: '128px',
                                         objectFit: 'cover',
                                     }}
+                                    loading="lazy"
                                 />
                             )}
                         </CCard>
