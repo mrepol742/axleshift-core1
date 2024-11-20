@@ -40,9 +40,11 @@ import {
     faTrash,
 } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
+import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
 
 const API = () => {
+    const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
     const recaptchaRef = React.useRef()
     const [isBlurred, setIsBlurred] = useState(true)
@@ -59,10 +61,10 @@ const API = () => {
     const copyToClipboard = async () => {
         try {
             await navigator.clipboard.writeText(result)
-            alert('API Key copied!')
+            addToast('API Key copied!')
         } catch (err) {
             console.log(err)
-            alert('Failed... no idea why.')
+            addToast('Failed... no idea why.')
         }
     }
 
@@ -90,7 +92,7 @@ const API = () => {
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'Internal Application Error'
-                alert(message)
+                addToast(message)
             })
             .finally(() => setLoading(false))
     }
@@ -108,7 +110,7 @@ const API = () => {
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'Internal Application Error'
-                alert(message)
+                addToast(message)
             })
             .finally(() => setLoading(false))
     }
@@ -124,7 +126,7 @@ const API = () => {
                 ...prev,
                 whitelist_ip: [...prev.whitelist_ip, ''],
             }))
-        alert('Max number of whitelisted ip address reached')
+        addToast('Max number of whitelisted ip address reached')
     }
 
     const handleIpChange = (index, value) => {
@@ -145,7 +147,7 @@ const API = () => {
             .post(
                 `${VITE_APP_API_URL}/api/v1/auth/token/whitelist-ip`,
                 {
-                    whitelist_ip: result.whitelist_ip,
+                    whitelist_ip: result.whitelist_ip.toString(),
                     recaptcha_ref: recaptcha,
                 },
                 {
@@ -155,13 +157,13 @@ const API = () => {
                 },
             )
             .then((response) => {
-                if (response.data.error) return alert(response.data.error)
-                alert('done')
+                if (response.data.error) return addToast(response.data.error)
+                addToast('Your changes has been saved.')
             })
             .catch((error) => {
                 console.error(error)
                 const message = errorMessages[error.status] || 'Internal Application Error'
-                alert(message)
+                addToast(message)
             })
             .finally(() => setLoading(false))
     }

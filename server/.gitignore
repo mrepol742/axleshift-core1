@@ -24,10 +24,6 @@ dist-ssr
 *.sw?
 
 .env
-*.gguf
-
-/build
-/log
 /data
 
 # Local Terraform files

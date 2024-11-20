@@ -378,6 +378,18 @@ router.post('/token/whitelist-ip', [recaptcha, auth], async function (req, res, 
         whitelist_ip = whitelist_ip.split(',')
         if (whitelist_ip.length > 6)
             return res.status(200).json({ error: 'Max number of whitelisted ip address reached' })
+        for (let i = 0; i < whitelist_ip.length; i++) {
+            if (!/^(\d{1,3}\.){3}\d{1,3}(:\d{1,5})?$/.test(whitelist_ip[i])) {
+                if (
+                    !/^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})(:\d{1,5})?$|^::([0-9a-fA-F]{1,4}:){0,6}([0-9a-fA-F]{1,4})?(:\d{1,5})?$|^([0-9a-fA-F]{1,4}:){1,7}:(:\d{1,5})?$/.test(
+                        whitelist_ip[i],
+                    )
+                )
+                    return res
+                        .status(200)
+                        .json({ error: `Invalid IP Address '${whitelist_ip[i]}'` })
+            }
+        }
         const db = await database()
         const apiTokenCollection = db.collection('apiToken')
         const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id })
