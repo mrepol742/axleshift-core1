@@ -1,0 +1,29 @@
+{
+    "name": "@freight-capstone/core1-server-tests",
+    "version": "1.0.0",
+    "main": "src/index.js",
+    "type": "module",
+    "bugs": {
+        "url": "https://github.com/freight-capstone/core1/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:freight-capstone/core1.git"
+    },
+    "scripts": {
+        "start": "node src/index"
+    },
+    "author": "The Freight Capstone Core 1",
+    "license": "MIT",
+    "description": "",
+    "dependencies": {
+        "axios": "^1.7.7",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.21.1"
+    },
+    "engines": {
+        "node": ">=20.x"
+    },
+    "private": true
+}
