@@ -1,7 +1,7 @@
 import React from 'react'
 import { CCard, CCardBody, CButton, CRow, CCol } from '@coreui/react'
 
-const Device = () => {
+const Sessions = () => {
     return (
         <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
             <CCol className="mb-3">
@@ -36,4 +36,4 @@ const Device = () => {
     )
 }
 
-export default Device
+export default Sessions

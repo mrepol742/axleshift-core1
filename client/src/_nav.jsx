@@ -19,6 +19,7 @@ import {
     faCircleQuestion,
     faKey,
     faRectangleList,
+    faTowerBroadcast,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -84,15 +85,15 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'API Key',
-        to: '/security/apikey',
+        name: 'Access Token',
+        to: '/security/access-token',
         icon: <FontAwesomeIcon icon={faKey} className="nav-icon" />,
     },
     {
         component: CNavItem,
-        name: 'Device Lock',
-        to: '/security/device',
-        icon: <FontAwesomeIcon icon={faLock} className="nav-icon" />,
+        name: 'Sessions',
+        to: '/security/sessions',
+        icon: <FontAwesomeIcon icon={faTowerBroadcast} className="nav-icon" />,
     },
     {
         component: CNavTitle,

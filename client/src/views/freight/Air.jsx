@@ -136,7 +136,13 @@ const Air = () => {
             )}
             <CRow className="mb-4">
                 <CCol xs={3} md={5} xl={3} className="image-container d-none d-md-flex">
-                    <CImage fluid rounded src="/images/freight-air.jpg" className="custom-image" />
+                    <CImage
+                        fluid
+                        rounded
+                        src="/images/freight-air.jpg"
+                        className="custom-image"
+                        loading="lazy"
+                    />
                 </CCol>
                 <CCol md={7}>
                     {currentPage === 1 && (

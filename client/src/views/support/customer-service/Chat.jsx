@@ -111,6 +111,7 @@ const Chat = () => {
                                             : `/images/default-avatar.jpg`
                                     }
                                     style={{ width: '45px', height: '100%' }}
+                                    loading="lazy"
                                 />
                             )}
                             <div>
@@ -135,6 +136,7 @@ const Chat = () => {
                                     className="rounded-5 ms-2"
                                     src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
                                     style={{ width: '45px', height: '100%' }}
+                                    loading="lazy"
                                 />
                             )}
                         </div>
@@ -148,6 +150,7 @@ const Chat = () => {
                             className="me-2 rounded-5"
                             src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
                             style={{ width: '40px', height: '100%' }}
+                            loading="lazy"
                         />
                     </div>
 

@@ -56,6 +56,7 @@ const Team = () => {
                                 src={member.image}
                                 className="rounded-pill mx-auto mb-2 border border-primary p-1"
                                 style={{ width: '100px', height: '100px' }}
+                                loading="lazy"
                             />
                             <div className="d-flex flex-column align-items-center">
                                 <h4>{member.name}</h4>

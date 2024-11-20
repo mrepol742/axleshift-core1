@@ -6,7 +6,7 @@ const About = () => {
         <CContainer fluid className="h-100 p-5 bg-primary shadow" data-aos="fade-up">
             <CRow className="h-100 justify-content-start align-items-center">
                 <CCol xs={12} md={5} className="mb-4" data-aos="zoom-in">
-                    <CImage fluid src="/images/about.svg" />
+                    <CImage fluid src="/images/about.svg" loading="lazy" />
                 </CCol>
                 <CCol xs={12} md={7} lg={6} xl={5} className="mb-4 p-2">
                     <span className="text-white" data-aos="zoom-out-up">

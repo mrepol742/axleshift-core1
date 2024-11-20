@@ -40,6 +40,10 @@ const Sentry = () => {
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
     const [result, setResult] = useState([])
+    const [query, setQuery] = useState('')
+    const [order, setOrder] = useState(0)
+    const [priority, setPriority] = useState(0)
+    const [state, setState] = useState(0)
 
     const fetchData = async () => {
         await axios
@@ -75,7 +79,7 @@ const Sentry = () => {
             {result.length === 0 && !loading && (
                 <div className="text-center border rounded">
                     <div className="p-0 p-md-5 my-5 my-md-0">
-                        <CImage src="/images/threat.png" fluid width="50%" />
+                        <CImage src="/images/threat.png" fluid width="50%" loading="lazy" />
                         <h1>We couldn&apos;t find any issues.</h1>
                         <p>Should we add one? :)</p>
                     </div>
@@ -100,10 +104,10 @@ const Sentry = () => {
                             value={state}
                             onChange={(e) => setState(e.target.value)}
                             options={[
-                                { label: 'All', value: '0' },
-                                { label: 'Resolved', value: '1' },
-                                { label: 'Unresolved', value: '2' },
-                                { label: 'Not Plan', value: '3' },
+                                { label: 'All', value: 0 },
+                                { label: 'Resolved', value: 1 },
+                                { label: 'Unresolved', value: 2 },
+                                { label: 'Not Plan', value: 3 },
                             ]}
                             required
                             className="mb-3"
@@ -113,10 +117,10 @@ const Sentry = () => {
                             value={priority}
                             onChange={(e) => setPriority(e.target.value)}
                             options={[
-                                { label: 'All', value: '0' },
-                                { label: 'High', value: '1' },
-                                { label: 'Medium', value: '2' },
-                                { label: 'Low', value: '3' },
+                                { label: 'All', value: 0 },
+                                { label: 'High', value: 1 },
+                                { label: 'Medium', value: 2 },
+                                { label: 'Low', value: 3 },
                             ]}
                             required
                             className="mb-3"
@@ -126,8 +130,8 @@ const Sentry = () => {
                             value={order}
                             onChange={(e) => setOrder(e.target.value)}
                             options={[
-                                { label: 'Newer', value: '1' },
-                                { label: 'Older', value: '2' },
+                                { label: 'Newer', value: 1 },
+                                { label: 'Older', value: 2 },
                             ]}
                             required
                             className="mb-3"

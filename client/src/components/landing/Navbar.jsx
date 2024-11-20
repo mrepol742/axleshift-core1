@@ -40,7 +40,7 @@ const Navbar = () => {
                     onClick={() => setVisible(!visible)}
                 />
                 <CNavbarBrand to="/" as={NavLink} className="d-none d-sm-block">
-                    <CImage src="/images/logo.png" width="150px" />
+                    <CImage src="/images/logo.png" width="150px" loading="lazy" />
                 </CNavbarBrand>
                 <CNavbarNav>
                     <CNavItem>
