@@ -1,5 +1,4 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect } from 'react'
 import {
     CContainer,
     CInputGroup,
@@ -32,23 +31,48 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-
 import { parseTimestamp } from '../../../components/Timestamp'
+import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
+import { useToast } from '../../../components/AppToastProvider'
+import errorMessages from '../../../components/ErrorMessages'
 
-const Sentry = ({
-    query,
-    setQuery,
-    state,
-    setState,
-    priority,
-    setPriority,
-    order,
-    setOrder,
-    result,
-}) => {
+const Sentry = () => {
+    const { addToast } = useToast()
+    const [loading, setLoading] = useState(true)
+    const [result, setResult] = useState([])
+
+    const fetchData = async () => {
+        await axios
+            .get(`${VITE_APP_API_URL}/api/v1/sec/management/sentry`, {
+                headers: {
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+                },
+            })
+            .then((response) => {
+                if (!response.data.error) setResult(response.data)
+            })
+            .catch((error) => {
+                console.error(error)
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
     return (
-        <>
-            {result.sentry.length === 0 && (
+        <div>
+            {loading && (
+                <div className="loading-overlay">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            )}
+
+            {result.length === 0 && !loading && (
                 <div className="text-center border rounded">
                     <div className="p-0 p-md-5 my-5 my-md-0">
                         <CImage src="/images/threat.png" fluid width="50%" />
@@ -57,7 +81,7 @@ const Sentry = ({
                     </div>
                 </div>
             )}
-            {result.sentry.length !== 0 && (
+            {result.length !== 0 && (
                 <>
                     <CForm className="d-flex justify-content-left my-2 my-lg-0">
                         <CInputGroup className="mb-3">
@@ -124,7 +148,7 @@ const Sentry = ({
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {result.sentry.map((issue) => (
+                            {result.map((issue) => (
                                 <CTableRow key={issue.id}>
                                     <CTableDataCell>{issue.id}</CTableDataCell>
                                     <CTableDataCell>{issue.title}</CTableDataCell>
@@ -142,33 +166,8 @@ const Sentry = ({
                     </CTable>
                 </>
             )}
-        </>
+        </div>
     )
-}
-
-Sentry.propTypes = {
-    query: PropTypes.string.isRequired,
-    setQuery: PropTypes.func.isRequired,
-    state: PropTypes.string.isRequired,
-    setState: PropTypes.func.isRequired,
-    priority: PropTypes.string.isRequired,
-    setPriority: PropTypes.func.isRequired,
-    order: PropTypes.string.isRequired,
-    setOrder: PropTypes.func.isRequired,
-    result: PropTypes.shape({
-        sentry: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.string.isRequired,
-                title: PropTypes.string.isRequired,
-                culprit: PropTypes.string.isRequired,
-                level: PropTypes.string.isRequired,
-                status: PropTypes.string.isRequired,
-                priority: PropTypes.string.isRequired,
-                count: PropTypes.string.isRequired,
-                updated_at: PropTypes.string.isRequired,
-            }),
-        ).isRequired,
-    }).isRequired,
 }
 
 export default Sentry

@@ -32,7 +32,7 @@ const Freight = () => {
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column"
             >
-                {isAdmin && (
+                {isAdmin() && (
                     <div>
                         <CCard
                             className="bg-dark text-white mb-3"

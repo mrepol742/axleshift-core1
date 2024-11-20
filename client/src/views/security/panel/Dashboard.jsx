@@ -7,7 +7,7 @@ import Widgets from './dashboard/Widgets'
 
 const Dashboard = () => {
     const [formData, setFormData] = useState(null)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const { addToast } = useToast()
     const [averageLoadData, setAverageLoadData] = useState(Array(10).fill(0))
     const [totalAverageLoadData, setTotalAverageLoadData] = useState(0)
@@ -17,30 +17,31 @@ const Dashboard = () => {
     const calculateAverageLoad = (user, system, idle, startTime) => {
         calculateCPUUsage(user, system, idle, startTime)
         const uptime = Date.now() - startTime
-        const average = system / uptime
+        const result = system / uptime
+        const average = parseFloat(result.toString().match(/^(\d+\.\d)/))
         setAverageLoadData((prevData) => {
             const newData = [...prevData, average]
             if (newData.length > 10) newData.shift()
             return newData
         })
         const _average = averageLoadData.reduce((sum, value) => sum + value, 0)
-        setTotalAverageLoadData(_average)
+        setTotalAverageLoadData(_average.toString().match(/^(\d+\.\d)/))
     }
 
     const calculateCPUUsage = (user, system, idle, startTime) => {
         const uptime = (Date.now() - startTime) * 4
-        const usage = (idle / uptime) * 100
+        const result = (idle / uptime) * 100
+        const usage = parseFloat(result.toString().match(/^(\d+\.\d)/))
         setCPUUsageData((prevData) => {
             const newData = [...prevData, usage]
             if (newData.length > 10) newData.shift()
             return newData
         })
         const _average = cpuUsageData.reduce((sum, value) => sum + value, 0)
-        setTotalCPUUsageData(_average)
+        setTotalCPUUsageData(_average.toString().match(/^(\d+\.\d)/))
     }
 
     const fetchData = async () => {
-        setLoading(true)
         await axios
             .get(`${VITE_APP_API_URL}/metrics/v1/prometheus`, {
                 headers: {
@@ -60,7 +61,8 @@ const Dashboard = () => {
             .catch((error) => {
                 if (error.status == 401) return window.location.reload()
                 console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))
@@ -77,29 +79,31 @@ const Dashboard = () => {
     }, [])
 
     return (
-        <>
+        <div>
             {formData && (
-                <CRow xs={{ gutter: 4 }}>
-                    <CCol sm={6} xl={4} xxl={3}>
-                        <Widgets
-                            color="primary"
-                            title="Average Load Time"
-                            value={totalAverageLoadData}
-                            data={averageLoadData}
-                        />
-                    </CCol>
-                    <CCol sm={6} xl={4} xxl={3}>
-                        <Widgets
-                            color="danger"
-                            title="CPU Usage"
-                            value={`${totalCPUUsageData}%`}
-                            data={cpuUsageData}
-                        />
-                    </CCol>
-                </CRow>
+                <>
+                    <CRow xs={{ gutter: 4 }}>
+                        <CCol sm={6} xl={4} xxl={3}>
+                            <Widgets
+                                color="primary"
+                                title="Average Load Time"
+                                value={totalAverageLoadData}
+                                data={averageLoadData}
+                            />
+                        </CCol>
+                        <CCol sm={6} xl={4} xxl={3}>
+                            <Widgets
+                                color="danger"
+                                title="CPU Usage"
+                                value={`${totalCPUUsageData}%`}
+                                data={cpuUsageData}
+                            />
+                        </CCol>
+                    </CRow>
+                    {JSON.stringify(formData, null, 4)}
+                </>
             )}
-            {JSON.stringify(formData, null, 4)}
-        </>
+        </div>
     )
 }
 

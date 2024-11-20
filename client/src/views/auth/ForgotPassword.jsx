@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     CButton,
@@ -12,6 +12,7 @@ import {
     CInputGroupText,
     CRow,
     CButtonGroup,
+    CSpinner,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
@@ -22,9 +23,11 @@ import errorMessages from '../../components/ErrorMessages'
 const Login = () => {
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/')
+        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/overview')
+        setLoading(false)
     }, [])
 
     const handleSubmit = async (e) => {
@@ -36,6 +39,12 @@ const Login = () => {
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <div className="auth-bg" />
             <CContainer>
+                {loading && (
+                    <div className="loading-overlay">
+                        <CSpinner color="primary" variant="grow" />
+                    </div>
+                )}
+
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5}>
                         <CCard className="p-1 p-sm-4 shadow">

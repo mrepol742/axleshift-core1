@@ -41,7 +41,8 @@ const Newsletter = ({ setLoading }) => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
                 setMessage(message)
             })
             .finally(() => setLoading(false))

@@ -47,7 +47,7 @@ const MailOTP = () => {
                 },
             )
             .then((response) => {
-                if (response.data.is_email_verified) return navigate('/')
+                if (response.data.is_email_verified) return navigate('/overview')
                 setEmail(response.data.email)
             })
             .catch((err) => {
@@ -116,7 +116,8 @@ const MailOTP = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
 
                 setError({
                     error: true,

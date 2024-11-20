@@ -128,7 +128,8 @@ const FreightInfo = () => {
             .then((response) => addToast('Your changes has been saved.'))
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
                 setEditedFormData(formData)
             })
@@ -158,11 +159,12 @@ const FreightInfo = () => {
             )
             .then((response) => {
                 addToast('Shipment has been deleted.')
-                navigate('/')
+                navigate('/overview')
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
                 setEditedFormData(formData)
             })

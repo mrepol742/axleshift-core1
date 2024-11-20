@@ -6,7 +6,7 @@ import logger from './logger.js'
 let last_fetch
 let res = []
 
-const scm = async () => {
+const dependabot = async () => {
     if (!last_fetch || res.length === 0) return await fetch()
 
     const past = new Date(last_fetch)
@@ -52,4 +52,4 @@ const fetch = async () => {
     return []
 }
 
-export default scm
+export default dependabot

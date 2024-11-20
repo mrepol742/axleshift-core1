@@ -46,7 +46,7 @@ const Register = () => {
         password: '',
         repeat_password: '',
     })
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [isChecked, setIsChecked] = useState(false)
     const [error, setError] = useState({
         error: false,
@@ -74,6 +74,7 @@ const Register = () => {
 
     useEffect(() => {
         if (cookies.get(VITE_APP_SESSION) !== undefined) return (window.location.href = url)
+        setLoading(false)
     }, [])
 
     const handleInputChange = (e) => {
@@ -99,7 +100,7 @@ const Register = () => {
             setLoading(false)
             setError({
                 error: true,
-                message: 'Internal Application Error',
+                message: 'Server is offline or restarting please wait',
             })
             return
         }
@@ -123,7 +124,8 @@ const Register = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
 
                 setError({
                     error: true,
@@ -142,6 +144,7 @@ const Register = () => {
                         <CSpinner color="primary" variant="grow" />
                     </div>
                 )}
+
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5} className="my-2">
                         <CCard className="p-1 p-sm-4 shadow">

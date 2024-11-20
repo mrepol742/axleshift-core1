@@ -2,6 +2,25 @@ import React, { lazy } from 'react'
 import auth from './components/middleware/Auth'
 import profile from './components/Profile'
 
+/*
+ * GLOBAL ROUTE
+ */
+const MailOTP = lazy(() => import('./views/auth/otp/Mail'))
+const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
+
+/*
+ * EXTERNAL ROUTE
+ */
+const Landing = lazy(() => import('./views/landing/index'))
+const Privacy = lazy(() => import('./views/legal/PrivacyPolicy'))
+const Terms = lazy(() => import('./views/legal/Terms'))
+const Login = lazy(() => import('./views/auth/Login'))
+const Register = lazy(() => import('./views/auth/Register'))
+const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
+
+/*
+ * INTERNAL ROUTE
+ */
 const Logout = auth(lazy(() => import('./views/auth/Logout')))
 
 const Overview = auth(lazy(() => import('./views/overview/index')))
@@ -32,9 +51,24 @@ const TrackInfo = auth(lazy(() => import('./views/track/Info')))
 
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 const Err500 = auth(lazy(() => import('./views/errors/500')))
+const Err403 = lazy(() => import('./views/errors/403'))
 
 const routes = [
-    { path: '/', name: 'Overview', element: Overview },
+    { path: '/', external: true, name: '', element: Landing },
+    { path: '/privacy-policy', external: true, name: 'Privacy Policy', element: Privacy },
+    { path: '/terms-of-service', external: true, name: 'Terms of Service', element: Terms },
+    { path: '/login', external: true, name: 'Login', element: Login },
+    { path: '/register', external: true, name: 'Register', element: Register },
+    { path: '/otp', external: true, name: 'OTP', element: MailOTP },
+    {
+        path: '/auth/github/callback',
+        external: true,
+        name: 'Githb Callback',
+        element: GithubCallback,
+    },
+    { path: '/forgot-password', external: true, name: 'Forgot Password', element: ForgotPassword },
+
+    { path: '/overview', name: 'Overview', element: Overview },
     { path: '/v/:id', name: 'Shipment Info', element: Info },
     { path: '/search', name: 'Search Shipment', element: Search },
     { path: '/schedules', name: 'Schedules', element: Schedules },

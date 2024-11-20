@@ -37,7 +37,8 @@ const Callback = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
                 setError(message)
             })
             .finally(() => setLoading(false))
@@ -47,7 +48,7 @@ const Callback = () => {
         const urlParams = new URLSearchParams(window.location.search)
         const code = urlParams.get('code')
 
-        if (!code) navigate('/')
+        if (!code) navigate('/overview')
 
         fetchData(code)
     }, [])

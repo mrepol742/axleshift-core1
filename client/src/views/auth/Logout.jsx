@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { CContainer, CSpinner } from '@coreui/react'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 
 const Logout = () => {
-    useEffect(() => {
-        logout()
-    }, [])
+    const [loading, setLoading] = useState(true)
 
     const logout = async () => {
         await axios
@@ -24,9 +23,26 @@ const Logout = () => {
             .catch((error) => {
                 console.error(error)
             })
+            .finally(() => setLoading(false))
     }
 
-    return null
+    useEffect(() => {
+        logout()
+    }, [])
+
+    return (
+        <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+            <div className="auth-bg" />
+            <CContainer>
+                {loading && (
+                    <div className="loading-overlay">
+                        <CSpinner color="primary" variant="grow" />
+                    </div>
+                )}
+                <p className="text-center">Processing...</p>
+            </CContainer>
+        </div>
+    )
 }
 
 export default Logout

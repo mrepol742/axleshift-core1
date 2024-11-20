@@ -8,19 +8,9 @@ import { VITE_APP_GOOGLE_ANALYTICS, VITE_APP_SESSION, VITE_APP_NODE_ENV } from '
 import './scss/style.scss'
 import './bootstrap'
 import DocumentTitle from './components/middleware/DocumentTitle'
+import routes from './routes'
 
-// Containers
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
-
-const Privacy = lazy(() => import('./views/legal/PrivacyPolicy'))
-const Terms = lazy(() => import('./views/legal/Terms'))
-const Landing = lazy(() => import('./views/Landing'))
-const Login = lazy(() => import('./views/auth/Login'))
-const Register = lazy(() => import('./views/auth/Register'))
-const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
-const MailOTP = lazy(() => import('./views/auth/otp/Mail'))
-const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
-const Err403 = lazy(() => import('./views/errors/403'))
 
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
@@ -51,30 +41,20 @@ const App = () => {
             >
                 <DocumentTitle>
                     <Routes>
-                        {!token && (
-                            <Route exact path="/" name="Landing Page" element={<Landing />} />
-                        )}
-                        <Route path="/hold-on" name="yacks" element={<Err403 />} />
-                        <Route path="/privacy-policy" name="Privacy Policy" element={<Privacy />} />
-                        <Route
-                            path="/terms-of-service"
-                            name="Terms of Service"
-                            element={<Terms />}
-                        />
-                        <Route path="/login" name="Login" element={<Login />} />
-                        <Route
-                            path="/auth/github/callback"
-                            name="Github Callback"
-                            element={<GithubCallback />}
-                        />
-                        <Route path="/register" name="Register" element={<Register />} />
-                        <Route path="/otp" name="OTP" element={<MailOTP />} />
-                        <Route
-                            path="/forgot-password"
-                            name="Forgot Password"
-                            element={<ForgotPassword />}
-                        />
-                        <Route path="*" name="Home" element={<DefaultLayout />} />
+                        {routes.map((route, idx) => {
+                            return (
+                                route.external && (
+                                    <Route
+                                        key={idx}
+                                        path={route.path}
+                                        exact={route.exact}
+                                        name={route.name}
+                                        element={<route.element />}
+                                    />
+                                )
+                            )
+                        })}
+                        <Route path="*" element={<DefaultLayout />} />
                     </Routes>
                 </DocumentTitle>
             </Suspense>

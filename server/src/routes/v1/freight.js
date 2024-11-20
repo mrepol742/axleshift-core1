@@ -49,7 +49,7 @@ router.post('/', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -79,7 +79,7 @@ router.get('/:id', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -127,7 +127,7 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -172,7 +172,7 @@ router.post('/u/:type/:id', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -199,7 +199,7 @@ router.post('/d/:id', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 export default router
