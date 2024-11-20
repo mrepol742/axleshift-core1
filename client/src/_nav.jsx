@@ -25,7 +25,7 @@ const _nav = [
     {
         component: CNavItem,
         name: 'Overview',
-        to: '/',
+        to: '/overview',
         icon: <FontAwesomeIcon icon={faHouse} className="nav-icon" />,
     },
     {

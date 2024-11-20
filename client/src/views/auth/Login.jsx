@@ -46,7 +46,7 @@ const Login = () => {
     const recaptchaRef = React.useRef()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [showQR, setShowQR] = useState(false)
     const [error, setError] = useState({
         error: false,
@@ -75,6 +75,7 @@ const Login = () => {
 
     useEffect(() => {
         if (cookies.get(VITE_APP_SESSION) !== undefined) return (window.location.href = url)
+        setLoading(false)
     }, [])
 
     const getUUID = () => {
@@ -142,7 +143,7 @@ const Login = () => {
                         <CSpinner color="primary" variant="grow" />
                     </div>
                 )}
-                {showQR && (
+                {showQR && !loading && (
                     <CModal
                         visible="true"
                         onClose={() => setShowQR(false)}
@@ -167,6 +168,7 @@ const Login = () => {
                         </CModalFooter>
                     </CModal>
                 )}
+
                 <CRow className="justify-content-center">
                     <CCol md={8} lg={6} xl={5} className="my-2">
                         <CCard className="p-1 p-sm-4 shadow">

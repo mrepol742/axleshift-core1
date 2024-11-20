@@ -29,7 +29,6 @@ import {
     CTabContent,
     CTabPanel,
 } from '@coreui/react'
-import { isAdmin } from '../../../components/Profile'
 import { parseTimestamp } from '../../../components/Timestamp'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
@@ -91,7 +90,7 @@ const Sessions = () => {
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell>#</CTableHeaderCell>
-                                {isAdmin && <CTableHeaderCell>User</CTableHeaderCell>}
+                                <CTableHeaderCell>User</CTableHeaderCell>
                                 <CTableHeaderCell>Location</CTableHeaderCell>
                                 <CTableHeaderCell>Device</CTableHeaderCell>
                                 <CTableHeaderCell>Status</CTableHeaderCell>
@@ -102,7 +101,7 @@ const Sessions = () => {
                             {result.map((session, index) => (
                                 <CTableRow key={index}>
                                     <CTableDataCell>{index + 1}</CTableDataCell>
-                                    {isAdmin && <CTableDataCell>{session.user_id}</CTableDataCell>}
+                                    <CTableDataCell>{session.user_id}</CTableDataCell>
                                     <CTableDataCell>{session.ip_address}</CTableDataCell>
                                     <CTableDataCell>{session.user_agent}</CTableDataCell>
                                     <CTableDataCell>

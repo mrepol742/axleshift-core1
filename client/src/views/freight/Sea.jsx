@@ -97,7 +97,7 @@ const Sea = () => {
             })
             .then((response) => {
                 addToast('Shipment has been confirmed.', 'Shipment')
-                navigate('/')
+                navigate('/overview')
             })
             .catch((error) => {
                 console.error(error)

@@ -2,8 +2,9 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import React from 'react'
 import store from './store'
+import './bootstrap'
 import { Provider } from 'react-redux'
-import App from './views/Landing'
+import App from './views/landing/index'
 
 describe('App tests', () => {
     it('should contains the heading title', () => {

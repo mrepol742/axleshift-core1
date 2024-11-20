@@ -47,7 +47,7 @@ const MailOTP = () => {
                 },
             )
             .then((response) => {
-                if (response.data.is_email_verified) return navigate('/')
+                if (response.data.is_email_verified) return navigate('/overview')
                 setEmail(response.data.email)
             })
             .catch((err) => {

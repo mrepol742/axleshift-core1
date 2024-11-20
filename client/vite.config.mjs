@@ -11,6 +11,11 @@ export default defineConfig(() => {
             chunkSizeWarningLimit: 800,
             minify: 'terser',
             sourcemap: false,
+            terserOptions: {
+                compress: {
+                    drop_console: true,
+                },
+            },
             rollupOptions: {
                 output: {
                     entryFileNames: 'assets/[hash].js',
@@ -46,11 +51,12 @@ export default defineConfig(() => {
         optimizeDeps: {
             force: true,
             esbuildOptions: {
+                treeShaking: true,
+                minify: true,
                 loader: {
                     '.js': 'jsx',
                 },
             },
-            include: ['react', 'react-dom'],
         },
         plugins: [react()],
         resolve: {

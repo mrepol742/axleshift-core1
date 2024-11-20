@@ -1,18 +1,22 @@
 import React, { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
-
-// routes config
 import routes from '../routes'
 
 const AppContent = () => {
     return (
         <CContainer className="px-4" lg>
-            <Suspense fallback={<CSpinner color="primary" />}>
+            <Suspense
+                fallback={
+                    <div className="loading-overlay">
+                        <CSpinner color="primary" variant="grow" />
+                    </div>
+                }
+            >
                 <Routes>
                     {routes.map((route, idx) => {
                         return (
-                            route.element && (
+                            !route.external && (
                                 <Route
                                     key={idx}
                                     path={route.path}
@@ -23,7 +27,6 @@ const AppContent = () => {
                             )
                         )
                     })}
-                    <Route path="/" element={<Navigate to="dashboard" replace />} />
                 </Routes>
             </Suspense>
         </CContainer>
