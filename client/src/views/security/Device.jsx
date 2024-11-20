@@ -18,7 +18,7 @@ const Device = () => {
                 <CCard>
                     <CCardBody>
                         <p>
-                            Clearing all active user sessions will log you out from all devices and
+                            Clearing all device sessions will log you out from all devices and
                             browsers, except for the one you&apos;re currently using.
                         </p>
                         <CButton

@@ -2,45 +2,77 @@ import { ObjectId } from 'mongodb'
 import express from 'express'
 import database from '../../../models/mongodb.js'
 import logger from '../../../components/logger.js'
-import scm from '../../../components/scm.js'
+import dependabot from '../../../components/dependabot.js'
 import sentry from '../../../components/sentry.js'
 import auth from '../../../middleware/auth.js'
 
 const router = express.Router()
 
-router.get('/', auth, async (req, res, next) => {
-    const [_scm, _sentry, _sessions, _apiTokens] = await Promise.all([
-        scm(),
-        sentry(),
-        (async () => {
-            const db = await database()
-            return await db.collection('sessions').find().sort({ last_accessed: -1 }).toArray()
-        })(),
-        (async () => {
-            const db = await database()
-            return await db.collection('apiToken').find().sort({ last_accessed: -1 }).toArray()
-        })(),
-    ])
+router.get('/', auth, async (req, res, next) => res.status(301).send())
 
-    return res.status(200).json({
-        dashboard: [],
-        sessions: _sessions,
-        scm: _scm,
-        sentry: _sentry,
-        apiTokens: _apiTokens,
-        activity: [],
-        maintenance: [],
-    })
+router.get('/sessions', auth, async (req, res, next) => {
+    try {
+        const db = await database()
+        const response = await db
+            .collection('sessions')
+            .find()
+            .sort({ last_accessed: -1 })
+            .toArray()
+        return res.status(200).json(response)
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).send()
 })
 
-router.get('/sessions', auth, async (req, res, next) => {})
+router.get('/dependabot', auth, async (req, res, next) => {
+    try {
+        const response = await dependabot()
+        return res.status(200).json(response)
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).send()
+})
 
-router.get('/dependabot', auth, async (req, res, next) => {})
+router.get('/sentry', auth, async (req, res, next) => {
+    try {
+        const response = await sentry()
+        return res.status(200).json(response)
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).send()
+})
 
-router.get('/sentry', auth, async (req, res, next) => {})
+router.get('/apikeys', auth, async (req, res, next) => {
+    try {
+        const db = await database()
+        const response = await db
+            .collection('apiToken')
+            .find()
+            .sort({ last_accessed: -1 })
+            .toArray()
+        return res.status(200).json(response)
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).send()
+})
 
-router.get('/apikeys', auth, async (req, res, next) => {})
-
-router.get('/activity', auth, async (req, res, next) => {})
+router.get('/activity', auth, async (req, res, next) => {
+    try {
+        const db = await database()
+        const response = await db
+            .collection('activityLog')
+            .find()
+            .sort({ last_accessed: -1 })
+            .toArray()
+        return res.status(200).json(response)
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).send()
+})
 
 export default router

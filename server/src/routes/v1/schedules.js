@@ -6,7 +6,7 @@ import auth from '../../middleware/auth.js'
 const router = express.Router()
 
 router.post('/schudules', auth, async (req, res) => {
-    return res.status(501).send()
+    res.status(501).send()
 })
 
 export default router

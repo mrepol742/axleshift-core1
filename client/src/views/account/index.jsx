@@ -81,7 +81,8 @@ const Account = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Fetch failed!')
             })
             .finally(() => setLoading(false))

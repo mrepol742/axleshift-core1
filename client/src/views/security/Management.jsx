@@ -1,23 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react'
 import {
-    CContainer,
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CForm,
-    CFormSelect,
-    CRow,
-    CCol,
-    CImage,
-    CCard,
-    CCardTitle,
-    CButton,
-    CCardHeader,
-    CSpinner,
-    CCardBody,
-    CCardText,
-    CCardFooter,
     CTable,
     CTableHead,
     CTableRow,
@@ -30,51 +12,11 @@ import {
     CTabContent,
     CTabPanel,
 } from '@coreui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import { Activity, Api, Dashboard, Dependabot, Maintenance, Sentry, Sessions } from './panel/index'
-import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../components/ErrorMessages'
 
 const SecurityManagement = () => {
-    const { addToast } = useToast()
-    const [loading, setLoading] = useState(true)
-    const [state, setState] = useState('2')
-    const [priority, setPriority] = useState('1')
-    const [order, setOrder] = useState('1')
-    const [query, setQuery] = useState('')
-    const [result, setResult] = useState({ scm: [], sessions: [], sentry: [], apiTokens: {} })
-    const navigate = useNavigate()
-
-    const fetchData = async () => {
-        await axios
-            .get(`${VITE_APP_API_URL}/api/v1/sec/management/`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
-            .then((response) => setResult(response.data))
-            .catch((error) => {
-                console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
-                addToast(message, 'Fetch failed!')
-            })
-            .finally(() => setLoading(false))
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
-
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-
             <CTabs activeItemKey={0} className="mb-4">
                 <CTabList variant="underline-border">
                     <CTab aria-controls="dashboard-tab-pane" itemKey={0}>
@@ -104,42 +46,22 @@ const SecurityManagement = () => {
                         <Dashboard />
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="sessions-tab-pane" itemKey={1}>
-                        <Sessions result={result} />
+                        <Sessions />
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="dependabot-tab-pane" itemKey={2}>
-                        <Dependabot
-                            query={query}
-                            setQuery={setQuery}
-                            state={state}
-                            setState={setState}
-                            priority={priority}
-                            setPriority={setPriority}
-                            order={order}
-                            setOrder={setOrder}
-                            result={result}
-                        />
+                        <Dependabot />
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="sentry-tab-pane" itemKey={3}>
-                        <Sentry
-                            query={query}
-                            setQuery={setQuery}
-                            state={state}
-                            setState={setState}
-                            priority={priority}
-                            setPriority={setPriority}
-                            order={order}
-                            setOrder={setOrder}
-                            result={result}
-                        />
+                        <Sentry />
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={4}>
-                        <Api setLoading={setLoading} result={result} />
+                        <Api />
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={5}>
-                        <Activity setLoading={setLoading} result={result} />
+                        <Activity />
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={6}>
-                        <Maintenance setLoading={setLoading} result={result} />
+                        <Maintenance />
                     </CTabPanel>
                 </CTabContent>
             </CTabs>

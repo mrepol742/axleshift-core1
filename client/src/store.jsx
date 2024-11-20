@@ -3,6 +3,8 @@ import { legacy_createStore as createStore } from 'redux'
 const initialState = {
     sidebarShow: true,
     sidebarUnfoldable: false,
+    maintenance: false,
+    error: false,
     theme: 'light',
     user: {},
 }

@@ -38,8 +38,22 @@ const Auth = (WrappedComponent) => {
                     setIsAuth(true)
                 })
                 .catch((err) => {
-                    if (!err.response) return console.error(err)
-                    cookies.remove(VITE_APP_SESSION)
+                    console.error(err)
+                    if (err.status == 503) {
+                        dispatch({
+                            type: 'set',
+                            maintenance: true,
+                        })
+                        return (window.location.href = loc)
+                    }
+                    if (err.status >= 500) {
+                        dispatch({
+                            type: 'set',
+                            error: true,
+                        })
+                    } else {
+                        cookies.remove(VITE_APP_SESSION)
+                    }
                     window.location.href = loc
                 })
         }

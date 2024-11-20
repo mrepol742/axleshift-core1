@@ -82,7 +82,7 @@ router.get('/:id', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 export default router

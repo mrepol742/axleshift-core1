@@ -75,7 +75,7 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -103,7 +103,7 @@ router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -178,7 +178,7 @@ router.post('/user', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -232,7 +232,7 @@ router.post('/verify/otp/new', [recaptcha, auth], async function (req, res, next
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -292,7 +292,7 @@ router.post('/verify/otp', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -312,7 +312,7 @@ router.get('/token', auth, async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -360,7 +360,7 @@ router.post('/token/new', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 /*
@@ -411,7 +411,7 @@ router.post('/token/whitelist-ip', [recaptcha, auth], async function (req, res, 
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    res.status(500).send()
 })
 
 // means 9:51 pm

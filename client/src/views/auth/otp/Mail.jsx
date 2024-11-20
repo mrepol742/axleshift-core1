@@ -116,7 +116,8 @@ const MailOTP = () => {
             })
             .catch((error) => {
                 console.error(error)
-                const message = errorMessages[error.status] || 'Internal Application Error'
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
 
                 setError({
                     error: true,
