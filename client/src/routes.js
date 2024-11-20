@@ -7,6 +7,7 @@ import profile from './components/Profile'
  */
 const MailOTP = lazy(() => import('./views/auth/otp/Mail'))
 const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
+const Logout = lazy(() => import('./views/auth/Logout'))
 
 /*
  * EXTERNAL ROUTE
@@ -21,8 +22,6 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
 /*
  * INTERNAL ROUTE
  */
-const Logout = auth(lazy(() => import('./views/auth/Logout')))
-
 const Overview = auth(lazy(() => import('./views/overview/index')))
 const Info = auth(lazy(() => import('./views/overview/Info')))
 const Search = auth(lazy(() => import('./views/overview/Search')))
@@ -51,7 +50,6 @@ const TrackInfo = auth(lazy(() => import('./views/track/Info')))
 
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 const Err500 = auth(lazy(() => import('./views/errors/500')))
-const Err403 = lazy(() => import('./views/errors/403'))
 
 const routes = [
     { path: '/', external: true, name: '', element: Landing },
@@ -59,11 +57,12 @@ const routes = [
     { path: '/terms-of-service', external: true, name: 'Terms of Service', element: Terms },
     { path: '/login', external: true, name: 'Login', element: Login },
     { path: '/register', external: true, name: 'Register', element: Register },
+    { path: '/logout', external: true, name: 'Logout', element: Logout },
     { path: '/otp', external: true, name: 'OTP', element: MailOTP },
     {
         path: '/auth/github/callback',
         external: true,
-        name: 'Githb Callback',
+        name: 'Github Callback',
         element: GithubCallback,
     },
     { path: '/forgot-password', external: true, name: 'Forgot Password', element: ForgotPassword },
@@ -98,8 +97,6 @@ const routes = [
 
     { path: '/track', name: 'Track', element: Track },
     { path: '/track/:id', name: 'Track', element: TrackInfo },
-
-    { path: '/logout', name: 'Logout', element: Logout },
 
     { path: '*', name: '404', element: Err404 },
 ]

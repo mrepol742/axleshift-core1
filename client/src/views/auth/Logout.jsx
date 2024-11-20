@@ -27,21 +27,18 @@ const Logout = () => {
     }
 
     useEffect(() => {
+        if (!cookies.get(VITE_APP_SESSION)) return (window.location.href = '/')
         logout()
     }, [])
 
     return (
-        <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
-            <div className="auth-bg" />
-            <CContainer>
-                {loading && (
-                    <div className="loading-overlay">
-                        <CSpinner color="primary" variant="grow" />
-                    </div>
-                )}
-                <p className="text-center">Processing...</p>
-            </CContainer>
-        </div>
+        <CContainer>
+            {loading && (
+                <div className="loading-overlay">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            )}
+        </CContainer>
     )
 }
 
