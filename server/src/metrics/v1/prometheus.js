@@ -1,6 +1,7 @@
 import express from 'express'
 import { collectDefaultMetrics, Registry, Counter, Gauge } from 'prom-client'
 import auth from '../../middleware/auth.js'
+import logger from '../../components/logger.js'
 
 const router = express.Router()
 const registry = new Registry()
@@ -37,22 +38,27 @@ router.use((req, res, next) => {
 })
 
 router.get('/prometheus', auth, async (req, res) => {
-    const metrics = await registry.metrics()
+    try {
+        const metrics = await registry.metrics()
 
-    const metricsJson = {}
-    metrics.split('\n').forEach((line) => {
-        if (line && line.includes('{')) {
-            const metricName = line.split('{')[0].trim()
-            metricsJson[metricName] = metricsJson[metricName] || []
-            metricsJson[metricName].push(line)
-        } else if (line && !line.startsWith('#')) {
-            const [metricName, value] = line.split(' ')
-            metricsJson[metricName] = metricsJson[metricName] || []
-            metricsJson[metricName].push({ value: parseFloat(value) })
-        }
-    })
+        const metricsJson = {}
+        metrics.split('\n').forEach((line) => {
+            if (line && line.includes('{')) {
+                const metricName = line.split('{')[0].trim()
+                metricsJson[metricName] = metricsJson[metricName] || []
+                metricsJson[metricName].push(line)
+            } else if (line && !line.startsWith('#')) {
+                const [metricName, value] = line.split(' ')
+                metricsJson[metricName] = metricsJson[metricName] || []
+                metricsJson[metricName].push({ value: parseFloat(value) })
+            }
+        })
 
-    res.json(metricsJson)
+        res.json(metricsJson)
+    } catch (err) {
+        logger.error(err)
+    }
+    res.status(500).send()
 })
 
 export default router

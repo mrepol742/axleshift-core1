@@ -5,6 +5,7 @@ import track from './track.js'
 import schedules from './schedules.js'
 import securityManagement from './security/management.js'
 import securityActivity from './security/activity.js'
+import securitySessions from './security/sessions.js'
 import insights from './insights.js'
 import newsletter from './newsletter.js'
 import { NODE_ENV } from '../../config.js'
@@ -14,8 +15,11 @@ router.use('/auth', auth)
 router.use('/freight', freight)
 router.use('/track', track)
 router.use('/schedules', schedules)
+
 router.use('/sec/management', securityManagement)
 router.use('/sec/activity', securityActivity)
+router.use('/sec/sessions', securitySessions)
+
 router.use('/insights', insights)
 router.use('/newsletter', newsletter)
 
