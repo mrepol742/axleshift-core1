@@ -41,15 +41,15 @@ const Auth = (WrappedComponent) => {
                         user: response.data,
                     })
                     setResult(response.data)
-                    setIsAuth(true)
                 })
                 .catch((err) => {
                     console.error(err)
                     if (err.status == 503) return setMaintenance(true)
-                    if (err.status >= 500) return setServerErr(true)
+                    if (!err.response) return setServerErr(true)
                     cookies.remove(VITE_APP_SESSION)
                     window.location.href = loc
                 })
+                .finally(() => setIsAuth(true))
         }
 
         useEffect(() => {

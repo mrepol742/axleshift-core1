@@ -1,4 +1,5 @@
 const ErrorMessages = {
+    400: 'Internal application error',
     429: 'Slowwww down tooo many request',
     401: 'Invalid password',
     403: "You failed the robot test, you robot ain't you?",
