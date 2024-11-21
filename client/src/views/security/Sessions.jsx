@@ -74,39 +74,41 @@ const Sessions = () => {
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
-            {!loading && (
-                <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                    <CCol className="mb-3">
-                        <h4>Last login IP Address</h4>
-                        <CCard>
-                            <CCardBody>
-                                <p className="display-3">{result.session.ip_address}</p>
-                                <span className="lead">{result.session.user_agent}</span>
-                            </CCardBody>
-                        </CCard>
-                    </CCol>
-                    <CCol className="mb-3">
-                        <h4>Logout other sessions</h4>
-                        <CCard>
-                            <CCardBody>
-                                <p>
-                                    Clearing all device sessions will log you out from all devices
-                                    and browsers, except for the one you&apos;re currently using.
-                                </p>
-                                <CButton
-                                    type="submit"
-                                    color="danger"
-                                    className="mt-4 d-block me-2 rounded"
-                                    disabled={result.logout}
-                                    onClick={handleLogout}
-                                >
-                                    Logout other sessions
-                                </CButton>
-                            </CCardBody>
-                        </CCard>
-                    </CCol>
-                </CRow>
-            )}
+            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                <CCol className="mb-3">
+                    {!loading && (
+                        <>
+                            <h4>Last login IP Address</h4>
+                            <CCard>
+                                <CCardBody>
+                                    <p className="display-3">{result.session.ip_address}</p>
+                                    <span className="lead">{result.session.user_agent}</span>
+                                </CCardBody>
+                            </CCard>
+                        </>
+                    )}
+                </CCol>
+                <CCol className="mb-3">
+                    <h4>Logout other sessions</h4>
+                    <CCard>
+                        <CCardBody>
+                            <p>
+                                Clearing all device sessions will log you out from all devices and
+                                browsers, except for the one you&apos;re currently using.
+                            </p>
+                            <CButton
+                                type="submit"
+                                color="danger"
+                                className="mt-4 d-block me-2 rounded"
+                                disabled={result.logout}
+                                onClick={handleLogout}
+                            >
+                                Logout other sessions
+                            </CButton>
+                        </CCardBody>
+                    </CCard>
+                </CCol>
+            </CRow>
         </div>
     )
 }

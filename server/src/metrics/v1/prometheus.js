@@ -54,7 +54,7 @@ router.get('/prometheus', auth, async (req, res) => {
             }
         })
 
-        res.json(metricsJson)
+        return res.json(metricsJson)
     } catch (err) {
         logger.error(err)
     }

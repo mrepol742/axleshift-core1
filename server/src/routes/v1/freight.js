@@ -112,6 +112,7 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
                 shipping: shipping,
             },
             type: type,
+            session_id: req.session._id,
             created_at: Date.now(),
             updated_at: Date.now(),
         })

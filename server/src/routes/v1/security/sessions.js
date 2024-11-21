@@ -9,16 +9,20 @@ const router = express.Router()
 router.get('/', auth, async (req, res) => {
     try {
         const db = await database()
-        const session = await db
-            .collection('sessions')
-            .find({ user_id: req.user._id, active: true, compromised: false })
-            .sort({ lastAccessed: -1 })
-            .limit(1)
-            .toArray()
+        const sessionsCollection = await db.collection('sessions')
 
-        const activeSessionsCount = await db
-            .collection('sessions')
-            .countDocuments({ user_id: req.user._id, active: true, compromised: false })
+        const [session, activeSessionsCount] = await Promise.all([
+            sessionsCollection
+                .find({ user_id: req.user._id, active: true, compromised: false })
+                .sort({ lastAccessed: -1 })
+                .limit(1)
+                .toArray(),
+            sessionsCollection.countDocuments({
+                user_id: req.user._id,
+                active: true,
+                compromised: false,
+            }),
+        ])
 
         if (session)
             return res.status(200).json({ session: session[0], logout: !(activeSessionsCount > 1) })

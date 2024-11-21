@@ -52,6 +52,7 @@ const internal = async (req, res, next) => {
 
     req.token = token
     req.user = theUser
+    req.session = session
 
     if (theUser.role === 'admin') return next()
     if (exludeRoute.includes(req.path)) return next()
