@@ -49,7 +49,6 @@ const Track = auth(lazy(() => import('./views/track/index')))
 const TrackInfo = auth(lazy(() => import('./views/track/Info')))
 
 const Err404 = auth(lazy(() => import('./views/errors/404')))
-const Err500 = auth(lazy(() => import('./views/errors/500')))
 
 const routes = [
     { path: '/', external: true, name: '', element: Landing },
@@ -77,15 +76,15 @@ const routes = [
     { path: '/account', name: 'Account', element: Account },
     { path: '/account/security', name: 'Security', element: _Security },
 
-    { path: '/documents', name: 'Freight Documents', element: Err500 },
+    // { path: '/documents', name: 'Freight Documents', element: Err500 },
 
     { path: '/freight', name: 'Freight', element: Freight },
     { path: '/freight/air', name: 'Air', element: FreightAir },
     { path: '/freight/land', name: 'Land', element: FreightLand },
     { path: '/freight/sea', name: 'Sea', element: FreightSea },
 
-    { path: '/payment', name: 'Payment Info', element: Err500 },
-    { path: '/payment/invoice', name: 'Invoice', element: Err500 },
+    //  { path: '/payment', name: 'Payment Info', element: Err500 },
+    //  { path: '/payment/invoice', name: 'Invoice', element: Err500 },
 
     { path: '/pricing', name: 'Pricing', element: Pricing },
 

@@ -20,7 +20,7 @@ export default defineConfig(() => {
                 output: {
                     entryFileNames: 'assets/[hash].js',
                     chunkFileNames: 'assets/[hash].js',
-                    assetFileNames: 'assets/[name].[ext]',
+                    assetFileNames: 'assets/[hash].[ext]',
                     manualChunks(id) {
                         // this thing fixes issues with vite build minif of sentry
                         if (id.includes('node_modules') && !id.includes('sentry')) {
