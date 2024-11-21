@@ -47,12 +47,21 @@ app.use(rateLimiter)
 app.use(pinoHttp({ logger }))
 
 app.use(express.static('public'))
+
 app.use('/api/v1/', APIv1)
 app.use('/webhook/v1/', GithubWebhook)
 app.use('/metrics/v1/', PrometheusMetrics)
 
 app.use((err, req, res, next) => res.status(500).send())
+
 app.get('/', (req, res) => res.send(Quotes.getRandomQuote()))
+app.get('/u/:favicon', (req, res, next) => {
+    const faviconPath = path.join(process.cwd(), 'public', 'u', req.params.favicon)
+  
+    res.sendFile(faviconPath, (err) => {
+      if (err) res.sendFile(path.join(process.cwd(), 'public', 'default-avatar.jpg'));
+    });
+});
 
 if (NODE_ENV !== 'production')
     app.get('/debug-sentry', (req, res) => {
