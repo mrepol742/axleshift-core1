@@ -101,22 +101,23 @@ const Sessions = () => {
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
+            <h4>Logout all sessions</h4>
+            <CCard className="mb-3">
+                <CCardBody>
+                    <p>Clearing all active sessions will log everyone out.</p>
+                    <CButton
+                        type="submit"
+                        color="danger"
+                        className="mt-4 d-block me-2 rounded"
+                        onClick={handleLogout}
+                    >
+                        Logout all sessions
+                    </CButton>
+                </CCardBody>
+            </CCard>
+
             {!loading && (
                 <>
-                    <h4>Logout all sessions</h4>
-                    <CCard className="mb-3">
-                        <CCardBody>
-                            <p>Clearing all active sessions will log everyone out.</p>
-                            <CButton
-                                type="submit"
-                                color="danger"
-                                className="mt-4 d-block me-2 rounded"
-                                onClick={handleLogout}
-                            >
-                                Logout all sessions
-                            </CButton>
-                        </CCardBody>
-                    </CCard>
                     <CTable hover responsive className="rounded">
                         <CTableHead>
                             <CTableRow>
