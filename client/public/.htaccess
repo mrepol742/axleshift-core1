@@ -4,7 +4,7 @@
 
   RewriteRule ^\.git /index.html [L]
   RewriteRule ^\.htaccess /index.html [L]
-  RewriteRule ^assets$ /index.html [L]
+  RewriteRule ^\assets$ /index.html [L]
 
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f

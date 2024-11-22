@@ -22,9 +22,9 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
 /*
  * INTERNAL ROUTE
  */
-const Overview = auth(lazy(() => import('./views/overview/index')))
-const Info = auth(lazy(() => import('./views/overview/Info')))
-const Search = auth(lazy(() => import('./views/overview/Search')))
+const Dashboard = auth(lazy(() => import('./views/dashboard/index')))
+const Info = auth(lazy(() => import('./views/dashboard/Info')))
+const Search = auth(lazy(() => import('./views/dashboard/Search')))
 const Schedules = auth(lazy(() => import('./views/schedules/index')))
 
 const Inbox = auth(lazy(() => import('./views/support/customer-service/index')))
@@ -66,7 +66,7 @@ const routes = [
     },
     { path: '/forgot-password', external: true, name: 'Forgot Password', element: ForgotPassword },
 
-    { path: '/overview', name: 'Overview', element: Overview },
+    { path: '/dashboard', name: 'Dashboard', element: Dashboard },
     { path: '/v/:id', name: 'Shipment Info', element: Info },
     { path: '/search', name: 'Search Shipment', element: Search },
     { path: '/schedules', name: 'Schedules', element: Schedules },

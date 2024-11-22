@@ -36,7 +36,7 @@ import { parseTimestamp } from '../../components/Timestamp'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
 
-const Overview = () => {
+const Dashboard = () => {
     const [data, setData] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
@@ -156,4 +156,4 @@ const Overview = () => {
     )
 }
 
-export default Overview
+export default Dashboard

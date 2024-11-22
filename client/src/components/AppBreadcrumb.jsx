@@ -34,18 +34,22 @@ const AppBreadcrumb = () => {
 
     return (
         <CBreadcrumb className="my-0">
-            <CBreadcrumbItem onClick={() => navigate('/overview')}>Home</CBreadcrumbItem>
+            <CBreadcrumbItem onClick={() => navigate('/dashboard')}>Home</CBreadcrumbItem>
             {breadcrumbs.map((breadcrumb, index) => {
                 return (
-                    <CBreadcrumbItem
-                        {...(breadcrumb.active
-                            ? { active: true }
-                            : { onClick: () => navigate(breadcrumb.pathname) })}
-                        key={index}
-                        style={{ cursor: breadcrumb.active ? 'default' : 'pointer' }}
-                    >
-                        {breadcrumb.name}
-                    </CBreadcrumbItem>
+                    <>
+                        {breadcrumb.pathname !== '/dashboard' && (
+                            <CBreadcrumbItem
+                                {...(breadcrumb.active
+                                    ? { active: true }
+                                    : { onClick: () => navigate(breadcrumb.pathname) })}
+                                key={index}
+                                style={{ cursor: breadcrumb.active ? 'default' : 'pointer' }}
+                            >
+                                {breadcrumb.name}
+                            </CBreadcrumbItem>
+                        )}
+                    </>
                 )
             })}
         </CBreadcrumb>

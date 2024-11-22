@@ -159,7 +159,7 @@ const FreightInfo = () => {
             )
             .then((response) => {
                 addToast('Shipment has been deleted.')
-                navigate('/overview')
+                navigate('/dashboard')
             })
             .catch((error) => {
                 console.error(error)
