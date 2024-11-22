@@ -142,7 +142,7 @@ const AccessToken = () => {
                                     </CTableDataCell>
                                     <CTableDataCell>{token.token}</CTableDataCell>
                                     <CTableDataCell>
-                                        {JSON.stringify(token.whitelist_ip)}
+                                        {token.whitelist_ip.map((ip) => ip.split(',')[0]).join(' ')}
                                     </CTableDataCell>
                                     <CTableDataCell>
                                         {token.last_accessed

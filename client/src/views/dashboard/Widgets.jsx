@@ -309,7 +309,6 @@ const Widgets = (props) => {
 
 Widgets.propTypes = {
     className: PropTypes.string,
-    withCharts: PropTypes.bool,
 }
 
 export default Widgets

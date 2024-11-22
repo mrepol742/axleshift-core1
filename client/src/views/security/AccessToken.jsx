@@ -190,8 +190,8 @@ const API = () => {
                     <CCol>
                         <h4>Auth token</h4>
                         {!result.token && (
-                            <div className="text-center border rounded mb-4">
-                                <div className="p-1 p-md-5 my-5 my-md-0">
+                            <CCard>
+                                <CCardBody>
                                     <CImage
                                         src="/images/threat.png"
                                         fluid
@@ -202,12 +202,12 @@ const API = () => {
                                     <CButton color="primary" size="sm" onClick={gen}>
                                         Generate Token
                                     </CButton>
-                                </div>
-                            </div>
+                                </CCardBody>
+                            </CCard>
                         )}
                         {result.token && (
-                            <div className="text-center border rounded mb-4">
-                                <div className="p-2 p-md-3">
+                            <CCard>
+                                <CCardBody>
                                     <div className="d-flex mb-3">
                                         <CFormInput
                                             className={isBlurred ? 'blurred' : ''}
@@ -224,10 +224,10 @@ const API = () => {
                                         </CButton>
                                     </div>
                                     <CButton color="primary" size="sm" onClick={gen}>
-                                        Generate new token
+                                        New token
                                     </CButton>
-                                </div>
-                            </div>
+                                </CCardBody>
+                            </CCard>
                         )}
                     </CCol>
                     <CCol>
@@ -238,28 +238,27 @@ const API = () => {
                                 alignItems: 'center',
                             }}
                         >
-                            <h4>Ip address</h4>
+                            <h4>Whitelisted IP</h4>
                             <CButton
-                                color="success"
                                 size="sm"
-                                className="text-white"
+                                className="text-white p-2"
                                 onClick={handleAddIp}
                                 disabled={disabledAdd}
                             >
-                                <FontAwesomeIcon icon={faPlus} /> Create
+                                <FontAwesomeIcon icon={faPlus} /> Add
                             </CButton>
                         </div>
                         {result.whitelist_ip.length === 0 && (
-                            <div className="text-center border rounded mb-4">
-                                <div className="p-2 p-md-3 my-5 my-md-0">
+                            <CCard>
+                                <CCardBody>
                                     <h6>There was no Whitelisted IP Addresses</h6>
-                                </div>
-                            </div>
+                                </CCardBody>
+                            </CCard>
                         )}
 
                         {result.whitelist_ip.length !== 0 && (
-                            <div className="text-center border rounded mb-4">
-                                <div className="p-2 p-md-3">
+                            <CCard>
+                                <CCardBody>
                                     <CForm onSubmit={handleWhitelistIpSubmit}>
                                         {result.whitelist_ip.map((input, index) => (
                                             <div className="d-flex mb-2" key={index}>
@@ -280,6 +279,7 @@ const API = () => {
                                             </div>
                                         ))}
                                         <CButton
+                                            size="sm"
                                             type="submit"
                                             color="primary"
                                             className="d-block me-2 rounded"
@@ -287,8 +287,8 @@ const API = () => {
                                             Save changes
                                         </CButton>
                                     </CForm>
-                                </div>
-                            </div>
+                                </CCardBody>
+                            </CCard>
                         )}
                     </CCol>
                 </CRow>

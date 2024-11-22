@@ -2,10 +2,13 @@
   RewriteEngine On
   RewriteBase /
 
-  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^\.git /index.html [L]
+  RewriteRule ^\.htaccess /index.html [L]
+  RewriteRule ^\assets$ /index.html [L]
+
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ index.html [QSA,L]
-  RewriteRule ^\.git - [F]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule . /index.html [L]
 
   Header unset ETag
   FileETag None

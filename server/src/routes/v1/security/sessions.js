@@ -12,20 +12,12 @@ router.get('/', auth, async (req, res) => {
         const sessionsCollection = await db.collection('sessions')
 
         const [session, activeSessionsCount] = await Promise.all([
-            sessionsCollection
-                .find({ user_id: req.user._id, active: true, compromised: false })
-                .sort({ lastAccessed: -1 })
-                .limit(1)
-                .toArray(),
-            sessionsCollection.countDocuments({
-                user_id: req.user._id,
-                active: true,
-                compromised: false,
-            }),
+            sessionsCollection.findOne({ token: req.session.token }),
+            sessionsCollection.countDocuments({ token: req.session.token }),
         ])
 
         if (session)
-            return res.status(200).json({ session: session[0], logout: !(activeSessionsCount > 1) })
+            return res.status(200).json({ session: session, logout: !(activeSessionsCount > 1) })
     } catch (e) {
         logger.error(e)
     }

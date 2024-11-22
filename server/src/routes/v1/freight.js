@@ -32,9 +32,9 @@ router.post('/', auth, async (req, res, next) => {
         const freightCollection = db.collection('freight')
 
         const [totalItems, items] = await Promise.all([
-            freightCollection.countDocuments({ user_id: new ObjectId(req.user._id) }),
+            freightCollection.countDocuments({ user_id: req.user._id }),
             freightCollection
-                .find(req.user.role !== 'admin' ? { user_id: new ObjectId(req.user._id) } : {})
+                .find(req.user.role !== 'admin' ? { user_id: req.user._id } : {})
                 .sort({ created_at: -1 })
                 .skip(skip)
                 .limit(limit)

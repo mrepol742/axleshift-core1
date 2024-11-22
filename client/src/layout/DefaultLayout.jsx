@@ -11,8 +11,8 @@ const DefaultLayout = () => {
     const { addNotif } = useNotif()
 
     useEffect(() => {
-        addToast('Welcome to core axleshift', 'Hello World')
-        addNotif('Welcome to core axleshift')
+        addToast('Welcome to core 1 axleshift', 'Hello World')
+        addNotif('Welcome to core 1 axleshift')
     }, [])
 
     return (

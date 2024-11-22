@@ -5,8 +5,20 @@ import auth from '../../../middleware/auth.js'
 
 const router = express.Router()
 
-router.post('/', auth, async (req, res) => {
-    return res.status(501).send()
+router.get('/', auth, async (req, res) => {
+    try {
+        const db = await database()
+        const activityLog = await db
+            .collection('activityLog')
+            .find({ user_id: req.user._id })
+            .sort({ created_at: -1 })
+            .toArray()
+
+        if (activityLog) return res.status(200).json(activityLog)
+    } catch (e) {
+        logger.error(e)
+    }
+    return res.status(500).send()
 })
 
 export default router

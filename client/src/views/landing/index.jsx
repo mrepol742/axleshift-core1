@@ -32,7 +32,7 @@ const Landing = () => {
     const [backgroundImage, setBackgroundImage] = useState('')
 
     useEffect(() => {
-        if (cookies.get(VITE_APP_SESSION)) return navigate('/overview')
+        if (cookies.get(VITE_APP_SESSION)) return navigate('/dashboard')
 
         const randomIndex = Math.floor(Math.random() * images.length)
         setBackgroundImage(images[randomIndex])
@@ -57,7 +57,7 @@ const Landing = () => {
                             <CContainer className="py-5 my-5">
                                 <Navbar />
                                 <CRow className="h-100 justify-content-start align-items-center">
-                                    <CCol xs={12} md={7} className="px-4 mx-0 mx-md-4">
+                                    <CCol xs={12} md={9} className="px-4 mx-0 mx-md-4">
                                         <h1
                                             className="text-white display-2"
                                             style={{ fontWeight: 100 }}

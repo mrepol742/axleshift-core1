@@ -48,7 +48,7 @@ const Callback = () => {
         const urlParams = new URLSearchParams(window.location.search)
         const code = urlParams.get('code')
 
-        if (!code) navigate('/overview')
+        if (!code) navigate('/dashboard')
 
         fetchData(code)
     }, [])

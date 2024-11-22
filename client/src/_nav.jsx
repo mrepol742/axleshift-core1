@@ -2,7 +2,7 @@ import React from 'react'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-    faHouse,
+    faChartLine,
     faLocationDot,
     faShip,
     faShieldHalved,
@@ -25,9 +25,9 @@ import {
 const _nav = [
     {
         component: CNavItem,
-        name: 'Overview',
-        to: '/overview',
-        icon: <FontAwesomeIcon icon={faHouse} className="nav-icon" />,
+        name: 'Dashboard',
+        to: '/dashboard',
+        icon: <FontAwesomeIcon icon={faChartLine} className="nav-icon" />,
     },
     {
         component: CNavTitle,

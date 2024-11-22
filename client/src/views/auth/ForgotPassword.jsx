@@ -26,7 +26,7 @@ const Login = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/overview')
+        if (cookies.get(VITE_APP_SESSION) !== undefined) return navigate('/dashboard')
         setLoading(false)
     }, [])
 
