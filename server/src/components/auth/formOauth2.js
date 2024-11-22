@@ -6,6 +6,7 @@ import { addSession } from '../sessions.js'
 import Token from './token.js'
 import { send } from '../mail.js'
 import Download from '../download.js'
+import activity from '../activity.js'
 
 const FormOauth2 = async (req, res) => {
     try {
@@ -72,6 +73,14 @@ const FormOauth2 = async (req, res) => {
 
         const theUser = await usersCollection.findOne({ email: credential.email })
         const session_token = await Token(theUser, req)
+
+        activity(req.user, req.session, 'Account', 'Welcome to core 1 axleshift')
+        activity(
+            req.user,
+            req.session,
+            'Account',
+            `Successfully bind ${provider} account as authentication credentials`,
+        )
         return res.status(200).json({ token: session_token })
     } catch (e) {
         logger.error(e)

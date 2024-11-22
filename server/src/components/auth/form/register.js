@@ -4,6 +4,7 @@ import logger from '../../logger.js'
 import passwordHash, { generateUniqueId } from '../../password.js'
 import { addSession } from '../../../components/sessions.js'
 import { send } from '../../mail.js'
+import activity from '../../activity.js'
 
 const FormRegister = async (req, res) => {
     try {
@@ -66,6 +67,8 @@ const FormRegister = async (req, res) => {
                 }
             })(),
         ])
+
+        activity(req.user, req.session, 'Account', 'Welcome to core 1 axleshift')
         return res.status(201).json({ type: 'form' })
     } catch (err) {
         logger.error(err)

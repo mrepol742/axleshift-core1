@@ -35,6 +35,7 @@ import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
+import { isAdmin } from '../../components/Profile'
 
 const Dashboard = () => {
     const [data, setData] = useState([])
@@ -80,20 +81,13 @@ const Dashboard = () => {
                 </div>
             )}
 
-            <WidgetsDropdown className="mb-4" />
-
             {!loading && data.length == 0 && (
                 <CRow className="justify-content-center my-5">
                     <CCol md={6}>
                         <div className="clearfix">
                             <h1 className="float-start display-3 me-4">OOPS</h1>
-                            <h4>You don&apos;t have any shipment yet.</h4>
-                            <p
-                                className="text-body-secondary float-start text-decoration-underline"
-                                onClick={(e) => navigate('/freight')}
-                            >
-                                Wanna add one? Click here.
-                            </p>
+                            <h4>There was no shipment yet.</h4>
+                            <p>Check it out later</p>
                         </div>
                     </CCol>
                 </CRow>
@@ -101,6 +95,7 @@ const Dashboard = () => {
 
             {data.length !== 0 && (
                 <>
+                    <WidgetsDropdown className="mb-4" />
                     <Masonry
                         breakpointCols={{
                             default: 4,

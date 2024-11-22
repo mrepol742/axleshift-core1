@@ -79,7 +79,7 @@ router.get('/apikeys', auth, async (req, res, next) => {
         ])
 
         if (apiToken)
-            return res.status(200).json({ apiToken: apiToken, deny: !(activeApiTokenCount > 1) })
+            return res.status(200).json({ apiToken: apiToken, deny: !(activeApiTokenCount > 0) })
     } catch (e) {
         logger.error(e)
     }
@@ -111,12 +111,12 @@ router.post('/apikeys/deactivate', [recaptcha, auth], async (req, res, next) => 
 router.get('/activity', auth, async (req, res, next) => {
     try {
         const db = await database()
-        const response = await db
+        const activityLog = await db
             .collection('activityLog')
             .find()
             .sort({ last_accessed: -1 })
             .toArray()
-        return res.status(200).json(response)
+        if (activityLog) return res.status(200).json(activityLog)
     } catch (e) {
         logger.error(e)
     }

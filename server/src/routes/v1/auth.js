@@ -11,6 +11,7 @@ import { send } from '../../components/mail.js'
 import sendOTPEmail from '../../components/otp/email.js'
 import ipwhitelist from '../../middleware/ipwhitelist.js'
 import { Github, Google, FormLogin, FormRegister, FormOauth2 } from '../../components/auth/index.js'
+import activity from '../../components/activity.js'
 
 const router = express.Router()
 
@@ -174,6 +175,7 @@ router.post('/user', [recaptcha, auth], async function (req, res, next) {
                 $set: set,
             },
         )
+        activity(req.user, req.session, 'Account', 'Update user information')
         return res.status(200).send()
     } catch (e) {
         logger.error(e)
@@ -356,6 +358,7 @@ router.post('/token/new', [recaptcha, auth], async function (req, res, next) {
             updated_at: Date.now(),
         })
 
+        activity(req.user, req.session, 'Auth Token', 'Generate new API Auth Token')
         return res.status(200).json({ token: apiT })
     } catch (e) {
         logger.error(e)
@@ -407,6 +410,8 @@ router.post('/token/whitelist-ip', [recaptcha, auth], async function (req, res, 
                 },
             },
         )
+
+        activity(req.user, req.session, 'Auth Token', `Added ${whitelist_ip} to whitelist ip`)
         return res.status(200).send()
     } catch (e) {
         logger.error(e)
