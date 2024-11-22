@@ -48,6 +48,8 @@ const Activity = auth(lazy(() => import('./views/security/Activity')))
 const Track = auth(lazy(() => import('./views/track/index')))
 const TrackInfo = auth(lazy(() => import('./views/track/Info')))
 
+const Invoices = auth(lazy(() => import('./views/invoices/index')))
+
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 
 const routes = [
@@ -83,7 +85,7 @@ const routes = [
     { path: '/freight/land', name: 'Land', element: FreightLand },
     { path: '/freight/sea', name: 'Sea', element: FreightSea },
 
-    //  { path: '/payment', name: 'Payment Info', element: Err500 },
+    { path: '/invoices', name: 'Invoices', element: Invoices },
     //  { path: '/payment/invoice', name: 'Invoice', element: Err500 },
 
     { path: '/pricing', name: 'Pricing', element: Pricing },

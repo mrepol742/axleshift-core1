@@ -78,13 +78,15 @@ const Dependabot = () => {
             )}
 
             {result.length === 0 && !loading && (
-                <div className="text-center border rounded">
-                    <div className="p-0 p-md-5 my-5 my-md-0">
-                        <CImage src="/images/threat.png" fluid width="50%" loading="lazy" />
-                        <h1>We couldn&apos;t find any threats.</h1>
-                        <p>Should we add one? :)</p>
-                    </div>
-                </div>
+                <CRow className="justify-content-center my-5">
+                    <CCol md={6}>
+                        <div className="clearfix">
+                            <h1 className="float-start display-3 me-4">OOPS</h1>
+                            <h4>There was no alerts yet.</h4>
+                            <p>Check it out later</p>
+                        </div>
+                    </CCol>
+                </CRow>
             )}
             {result.length !== 0 && (
                 <>

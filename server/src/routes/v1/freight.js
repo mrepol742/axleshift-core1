@@ -112,6 +112,7 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
                 shipping: shipping,
             },
             type: type,
+            status: 'to_pay',
             session_id: req.session._id,
             created_at: Date.now(),
             updated_at: Date.now(),
@@ -178,14 +179,13 @@ router.post('/u/:type/:id', [recaptcha, auth], async (req, res, next) => {
 
 /*
   Delete a shipment
-  Url: POST /api/v1/freight/u/:type/:id
+  Url: POST /api/v1/freight/c/:id
   Params:
-     Freight type
      Freight id
   Header:
      Authentication
 */
-router.post('/d/:id', [recaptcha, auth], async (req, res, next) => {
+router.post('/c/:id', [recaptcha, auth], async (req, res, next) => {
     try {
         const id = req.params.id
         const db = await database()
@@ -195,7 +195,16 @@ router.post('/d/:id', [recaptcha, auth], async (req, res, next) => {
         const freight = await freightCollection.findOne({ _id: new ObjectId(id) })
         if (!freight) return res.status(404).send()
 
-        await freightCollection.deleteOne({ _id: new ObjectId(id) })
+        await freightCollection.updateOne(
+            { _id: new ObjectId(id) },
+            {
+                $set: {
+                    status: 'canceled',
+                    updated_at: Date.now(),
+                    modified_by: req.user._id,
+                },
+            },
+        )
         return res.status(200).send()
     } catch (e) {
         logger.error(e)

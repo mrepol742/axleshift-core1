@@ -8,7 +8,7 @@ import securityActivity from './security/activity.js'
 import securitySessions from './security/sessions.js'
 import insights from './insights.js'
 import newsletter from './newsletter.js'
-import payment from './payment.js'
+import invoices from './invoices.js'
 
 const router = express.Router()
 router.use('/auth', auth)
@@ -23,6 +23,6 @@ router.use('/sec/sessions', securitySessions)
 router.use('/insights', insights)
 router.use('/newsletter', newsletter)
 
-router.use('/payment', payment)
+router.use('/invoices', invoices)
 
 export default router

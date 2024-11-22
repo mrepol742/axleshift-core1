@@ -71,6 +71,7 @@ const FreightInfo = () => {
     const [formData, setFormData] = useState(dataF)
     const [editedFormData, setEditedFormData] = useState(dataF)
     const [type, setType] = useState('')
+    const [status, setStatus] = useState('')
     const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(true)
     const [error, setError] = useState(false)
@@ -100,6 +101,7 @@ const FreightInfo = () => {
             })
             .then((response) => {
                 setType(response.data.data.type)
+                setStatus(response.data.data.status)
                 setFormData(response.data.data.data)
                 setEditedFormData(response.data.data.data)
             })
@@ -149,7 +151,7 @@ const FreightInfo = () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
             .post(
-                `${VITE_APP_API_URL}/api/v1/freight/d/${id}`,
+                `${VITE_APP_API_URL}/api/v1/freight/c/${id}`,
                 { recaptcha_ref: recaptcha },
                 {
                     headers: {
@@ -263,20 +265,35 @@ const FreightInfo = () => {
                             >
                                 <FontAwesomeIcon icon={faQrcode} />
                             </CButton>
-                            <CButton
-                                color="primary"
-                                className="me-2 rounded"
-                                onClick={handleEditButton}
-                            >
-                                {!disabled ? 'Save' : 'Edit'}
-                            </CButton>
-                            <CButton
-                                color={!disabled ? 'secondary' : 'danger'}
-                                className="me-2 rounded"
-                                onClick={handleDeleteButton}
-                            >
-                                {!disabled ? 'Cancel' : 'Delete'}
-                            </CButton>
+                            {status !== 'canceled' && status !== 'delivered' && (
+                                <>
+                                    {status === 'to_pay' && (
+                                        <CButton
+                                            color="primary"
+                                            className="me-2 rounded"
+                                            onClick={(e) => setShowQR(true)}
+                                        >
+                                            Book shipment
+                                        </CButton>
+                                    )}
+                                    {status !== 'in_route' && (
+                                        <CButton
+                                            color="primary"
+                                            className="me-2 rounded"
+                                            onClick={handleEditButton}
+                                        >
+                                            {!disabled ? 'Save' : 'Edit'}
+                                        </CButton>
+                                    )}
+                                    <CButton
+                                        color={!disabled ? 'warn' : 'danger'}
+                                        className="me-2 rounded"
+                                        onClick={handleDeleteButton}
+                                    >
+                                        Cancel
+                                    </CButton>
+                                </>
+                            )}
                         </CButtonGroup>
                     </div>
                     <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>

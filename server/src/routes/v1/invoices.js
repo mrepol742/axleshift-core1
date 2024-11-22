@@ -13,7 +13,7 @@ const { xendit } = new Xendit({
 })
 const router = express.Router()
 
-router.get('/invoice', [auth], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
     try {
         const db = await database()
         const response = await db
@@ -28,7 +28,7 @@ router.get('/invoice', [auth], async (req, res) => {
     res.status(500).send()
 })
 
-router.post('/invoice', [recaptcha, shipment, auth], async (req, res) => {
+router.post('/', [recaptcha, shipment, auth], async (req, res) => {
     try {
         const invoice = await xendit.createInvoice({
             amount: req.shipment.cost,
@@ -46,7 +46,7 @@ router.post('/invoice', [recaptcha, shipment, auth], async (req, res) => {
     res.status(500).send()
 })
 
-router.post('/invoice/cancel', [recaptcha, shipment, auth], async (req, res) => {
+router.post('/cancel', [recaptcha, shipment, auth], async (req, res) => {
     try {
         const invoice_id = req.body.invoice_id
         if (!invoice_id) return res.status(400).send()

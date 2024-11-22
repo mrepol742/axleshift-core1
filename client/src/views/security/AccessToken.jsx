@@ -185,52 +185,45 @@ const API = () => {
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
-            {!loading && (
-                <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                    <CCol>
-                        <h4>Auth token</h4>
-                        {!result.token && (
-                            <CCard>
-                                <CCardBody>
-                                    <CImage
-                                        src="/images/threat.png"
-                                        fluid
-                                        width="50%"
-                                        loading="lazy"
-                                    />
-                                    <h4>There was no Auth Token</h4>
-                                    <CButton color="primary" size="sm" onClick={gen}>
-                                        Generate Token
-                                    </CButton>
-                                </CCardBody>
-                            </CCard>
-                        )}
-                        {result.token && (
-                            <CCard>
-                                <CCardBody>
-                                    <div className="d-flex mb-3">
-                                        <CFormInput
-                                            className={isBlurred ? 'blurred' : ''}
-                                            value={result.token}
-                                            aria-describedby="basic-addon"
-                                        />
-                                        <CButton className="ms-2" onClick={handleIconClick}>
-                                            <FontAwesomeIcon
-                                                icon={isBlurred ? faEye : faEyeSlash}
-                                            />
-                                        </CButton>
-                                        <CButton className="ms-2" onClick={copyToClipboard}>
-                                            <FontAwesomeIcon icon={faCopy} />
-                                        </CButton>
-                                    </div>
-                                    <CButton color="primary" size="sm" onClick={gen}>
-                                        New token
-                                    </CButton>
-                                </CCardBody>
-                            </CCard>
-                        )}
+            {!loading && !result.token && (
+                <CRow className="justify-content-center my-5">
+                    <CCol md={6}>
+                        <div className="clearfix">
+                            <h1 className="float-start display-3 me-4">OOPS</h1>
+                            <h4>You have not generate a token yet.</h4>
+                            <CButton color="primary" size="sm" onClick={gen}>
+                                Generate Token
+                            </CButton>
+                        </div>
                     </CCol>
-                    <CCol>
+                </CRow>
+            )}
+            {!loading && result.token && (
+                <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                    <CCol className="mb-3">
+                        <h4>Auth token</h4>
+                        <CCard>
+                            <CCardBody>
+                                <div className="d-flex mb-3">
+                                    <CFormInput
+                                        className={isBlurred ? 'blurred' : ''}
+                                        value={result.token}
+                                        aria-describedby="basic-addon"
+                                    />
+                                    <CButton className="ms-2" onClick={handleIconClick}>
+                                        <FontAwesomeIcon icon={isBlurred ? faEye : faEyeSlash} />
+                                    </CButton>
+                                    <CButton className="ms-2" onClick={copyToClipboard}>
+                                        <FontAwesomeIcon icon={faCopy} />
+                                    </CButton>
+                                </div>
+                                <CButton color="primary" size="sm" onClick={gen}>
+                                    New token
+                                </CButton>
+                            </CCardBody>
+                        </CCard>
+                    </CCol>
+                    <CCol className="mb-3">
                         <div
                             style={{
                                 display: 'flex',
@@ -250,8 +243,12 @@ const API = () => {
                         </div>
                         {result.whitelist_ip.length === 0 && (
                             <CCard>
-                                <CCardBody>
-                                    <h6>There was no Whitelisted IP Addresses</h6>
+                                <CCardBody className="justify-content-center m-3">
+                                    <div className="clearfix">
+                                        <h1 className="float-start display-3 me-4">OOPS</h1>
+                                        <h4>There was no Whitelisted IP Addresses.</h4>
+                                        <p>Add new one to begin</p>
+                                    </div>
                                 </CCardBody>
                             </CCard>
                         )}
