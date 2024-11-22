@@ -123,4 +123,6 @@ router.get('/activity', auth, async (req, res, next) => {
     res.status(500).send()
 })
 
+router.get('/maintenance', auth, async (req, res, next) => res.status(500).send())
+
 export default router

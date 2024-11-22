@@ -1,7 +1,66 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { CCard, CCardBody, CButton, CSpinner } from '@coreui/react'
+import ReCAPTCHA from 'react-google-recaptcha'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
+import { useToast } from '../../../components/AppToastProvider'
+import errorMessages from '../../../components/ErrorMessages'
 
 const Maintenance = () => {
-    return <>This will setup maintenance status to the system denying user access temporarily.</>
+    const recaptchaRef = React.useRef()
+    const { addToast } = useToast()
+    const [loading, setLoading] = useState(true)
+    const [maintenance, setMaintenance] = useState(false)
+
+    const fetchData = async () => {
+        await axios
+            .get(`${VITE_APP_API_URL}/api/v1/sec/management/maintenance`, {
+                headers: {
+                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+                },
+            })
+            .then((response) => setMaintenance(response.data.maintenance))
+            .catch((error) => {
+                console.error(error)
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    return (
+        <div>
+            {loading && (
+                <div className="loading-overlay">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            )}
+
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+
+            <h4>Enable maintenance</h4>
+            <CCard>
+                <CCardBody>
+                    <p>
+                        When enabled, it prevents users from interacting with the platform until
+                        maintenance is complete.
+                    </p>
+                    <CButton
+                        type="submit"
+                        color="danger"
+                        className="mt-4 d-block me-2 rounded"
+                        disabled={maintenance}
+                    >
+                        Enable maintenance
+                    </CButton>
+                </CCardBody>
+            </CCard>
+        </div>
+    )
 }
 
 export default Maintenance
