@@ -229,7 +229,7 @@ const FreightInfo = () => {
                 <>
                     {showQR && (
                         <CModal
-                            visible="true"
+                            visible={true}
                             onClose={() => setShowQR(false)}
                             alignment="center"
                             scrollable

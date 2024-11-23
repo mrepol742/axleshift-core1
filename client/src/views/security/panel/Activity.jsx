@@ -7,6 +7,9 @@ import {
     CTableBody,
     CTableDataCell,
     CSpinner,
+    CCard,
+    CCardBody,
+    CCardTitle,
 } from '@coreui/react'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
@@ -48,34 +51,41 @@ const Activity = () => {
             )}
 
             {!loading && (
-                <CTable hover responsive className="rounded-5 border border-2">
-                    <CTableHead>
-                        <CTableRow>
-                            <CTableHeaderCell className="text-muted poppins-regular">
-                                Actor
-                            </CTableHeaderCell>
-                            <CTableHeaderCell className="text-muted poppins-regular">
-                                Type
-                            </CTableHeaderCell>
-                            <CTableHeaderCell className="text-muted poppins-regular">
-                                Message
-                            </CTableHeaderCell>
-                            <CTableHeaderCell className="text-muted poppins-regular">
-                                Created At
-                            </CTableHeaderCell>
-                        </CTableRow>
-                    </CTableHead>
-                    <CTableBody>
-                        {result.map((log) => (
-                            <CTableRow key={log._id}>
-                                <CTableDataCell>{log.user_id}</CTableDataCell>
-                                <CTableDataCell>{log.type}</CTableDataCell>
-                                <CTableDataCell>{log.message}</CTableDataCell>
-                                <CTableDataCell>{parseTimestamp(log.created_at)}</CTableDataCell>
-                            </CTableRow>
-                        ))}
-                    </CTableBody>
-                </CTable>
+                <CCard>
+                    <CCardBody>
+                        <CCardTitle>Activity Logs</CCardTitle>
+                        <CTable hover responsive>
+                            <CTableHead>
+                                <CTableRow>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        Actor
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        Type
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        Message
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        Created At
+                                    </CTableHeaderCell>
+                                </CTableRow>
+                            </CTableHead>
+                            <CTableBody>
+                                {result.map((log, index) => (
+                                    <CTableRow key={index}>
+                                        <CTableDataCell>{log.user_id}</CTableDataCell>
+                                        <CTableDataCell>{log.type}</CTableDataCell>
+                                        <CTableDataCell>{log.message}</CTableDataCell>
+                                        <CTableDataCell>
+                                            {parseTimestamp(log.created_at)}
+                                        </CTableDataCell>
+                                    </CTableRow>
+                                ))}
+                            </CTableBody>
+                        </CTable>
+                    </CCardBody>
+                </CCard>
             )}
         </div>
     )

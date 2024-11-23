@@ -140,36 +140,59 @@ const Sentry = () => {
                         />
                     </CForm>
 
-                    <CTable hover responsive className="rounded">
-                        <CTableHead>
-                            <CTableRow>
-                                <CTableHeaderCell>#</CTableHeaderCell>
-                                <CTableHeaderCell>Title</CTableHeaderCell>
-                                <CTableHeaderCell>Culprit</CTableHeaderCell>
-                                <CTableHeaderCell>Level</CTableHeaderCell>
-                                <CTableHeaderCell>Status</CTableHeaderCell>
-                                <CTableHeaderCell>Priority</CTableHeaderCell>
-                                <CTableHeaderCell>Count</CTableHeaderCell>
-                                <CTableHeaderCell>Last Updated</CTableHeaderCell>
-                            </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                            {result.map((issue) => (
-                                <CTableRow key={issue.id}>
-                                    <CTableDataCell>{issue.id}</CTableDataCell>
-                                    <CTableDataCell>{issue.title}</CTableDataCell>
-                                    <CTableDataCell>{issue.culprit}</CTableDataCell>
-                                    <CTableDataCell>{issue.level}</CTableDataCell>
-                                    <CTableDataCell>{issue.status}</CTableDataCell>
-                                    <CTableDataCell>{issue.priority}</CTableDataCell>
-                                    <CTableDataCell>{issue.count}</CTableDataCell>
-                                    <CTableDataCell>
-                                        {parseTimestamp(new Date(issue.updated_at).getTime())}
-                                    </CTableDataCell>
-                                </CTableRow>
-                            ))}
-                        </CTableBody>
-                    </CTable>
+                    <CCard>
+                        <CCardBody>
+                            <CCardTitle>Error Reports</CCardTitle>
+                            <CTable hover responsive>
+                                <CTableHead>
+                                    <CTableRow>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            #
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Title
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Culprit
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Level
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Status
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Priority
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Count
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Last Updated
+                                        </CTableHeaderCell>
+                                    </CTableRow>
+                                </CTableHead>
+                                <CTableBody>
+                                    {result.map((issue, index) => (
+                                        <CTableRow key={index}>
+                                            <CTableDataCell>{issue.id}</CTableDataCell>
+                                            <CTableDataCell>{issue.title}</CTableDataCell>
+                                            <CTableDataCell>{issue.culprit}</CTableDataCell>
+                                            <CTableDataCell>{issue.level}</CTableDataCell>
+                                            <CTableDataCell>{issue.status}</CTableDataCell>
+                                            <CTableDataCell>{issue.priority}</CTableDataCell>
+                                            <CTableDataCell>{issue.count}</CTableDataCell>
+                                            <CTableDataCell>
+                                                {parseTimestamp(
+                                                    new Date(issue.updated_at).getTime(),
+                                                )}
+                                            </CTableDataCell>
+                                        </CTableRow>
+                                    ))}
+                                </CTableBody>
+                            </CTable>
+                        </CCardBody>
+                    </CCard>
                 </>
             )}
         </div>

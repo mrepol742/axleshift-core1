@@ -118,7 +118,7 @@ const Sea = () => {
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             {confirmation && (
                 <CModal
-                    visible="true"
+                    visible={true}
                     onClose={() => setConfirmation(false)}
                     alignment="center"
                     scrollable

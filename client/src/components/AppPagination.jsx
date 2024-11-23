@@ -12,7 +12,7 @@ const AppPagination = ({ currentPage, setCurrentPage, totalPages, setTotalPages 
                 disabled={currentPage === 1}
                 aria-label="Previous"
             >
-                <FontAwesomeIcon aria-hidden="true" icon={faChevronLeft} />
+                <FontAwesomeIcon aria-hidden={true} icon={faChevronLeft} />
             </CPaginationItem>
 
             {(() => {
@@ -75,7 +75,7 @@ const AppPagination = ({ currentPage, setCurrentPage, totalPages, setTotalPages 
                 disabled={currentPage === totalPages}
                 aria-label="Next"
             >
-                <FontAwesomeIcon aria-hidden="true" icon={faChevronRight} />
+                <FontAwesomeIcon aria-hidden={true} icon={faChevronRight} />
             </CPaginationItem>
         </CPagination>
     )

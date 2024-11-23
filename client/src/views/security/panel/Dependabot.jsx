@@ -141,36 +141,59 @@ const Dependabot = () => {
                         />
                     </CForm>
 
-                    <CTable hover responsive className="rounded">
-                        <CTableHead>
-                            <CTableRow>
-                                <CTableHeaderCell>#</CTableHeaderCell>
-                                <CTableHeaderCell>State</CTableHeaderCell>
-                                <CTableHeaderCell>Scope</CTableHeaderCell>
-                                <CTableHeaderCell>Manifest</CTableHeaderCell>
-                                <CTableHeaderCell>CVE</CTableHeaderCell>
-                                <CTableHeaderCell>Summary</CTableHeaderCell>
-                                <CTableHeaderCell>Severity</CTableHeaderCell>
-                                <CTableHeaderCell>Last Updated</CTableHeaderCell>
-                            </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                            {result.map((alert) => (
-                                <CTableRow key={alert.number}>
-                                    <CTableDataCell>{alert.number}</CTableDataCell>
-                                    <CTableDataCell>{alert.state}</CTableDataCell>
-                                    <CTableDataCell>{alert.scope}</CTableDataCell>
-                                    <CTableDataCell>{alert.manifest}</CTableDataCell>
-                                    <CTableDataCell>{alert.cve}</CTableDataCell>
-                                    <CTableDataCell>{alert.summary}</CTableDataCell>
-                                    <CTableDataCell>{alert.severity}</CTableDataCell>
-                                    <CTableDataCell>
-                                        {parseTimestamp(new Date(alert.updated_at).getTime())}
-                                    </CTableDataCell>
-                                </CTableRow>
-                            ))}
-                        </CTableBody>
-                    </CTable>
+                    <CCard>
+                        <CCardBody>
+                            <CCardTitle>Vulnirability Alerts</CCardTitle>
+                            <CTable hover responsive>
+                                <CTableHead>
+                                    <CTableRow>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            #
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            State
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Scope
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Manifest
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            CVE
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Summary
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Severity
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Last Updated
+                                        </CTableHeaderCell>
+                                    </CTableRow>
+                                </CTableHead>
+                                <CTableBody>
+                                    {result.map((alert, index) => (
+                                        <CTableRow key={index}>
+                                            <CTableDataCell>{alert.number}</CTableDataCell>
+                                            <CTableDataCell>{alert.state}</CTableDataCell>
+                                            <CTableDataCell>{alert.scope}</CTableDataCell>
+                                            <CTableDataCell>{alert.manifest}</CTableDataCell>
+                                            <CTableDataCell>{alert.cve}</CTableDataCell>
+                                            <CTableDataCell>{alert.summary}</CTableDataCell>
+                                            <CTableDataCell>{alert.severity}</CTableDataCell>
+                                            <CTableDataCell>
+                                                {parseTimestamp(
+                                                    new Date(alert.updated_at).getTime(),
+                                                )}
+                                            </CTableDataCell>
+                                        </CTableRow>
+                                    ))}
+                                </CTableBody>
+                            </CTable>
+                        </CCardBody>
+                    </CCard>
                 </>
             )}
         </div>
