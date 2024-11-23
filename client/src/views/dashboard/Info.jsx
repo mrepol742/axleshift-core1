@@ -186,7 +186,7 @@ const FreightInfo = () => {
                 },
             )
             .then((response) => {
-                addToast('Shipment has been deleted.')
+                addToast('Shipment has been canceled.')
                 navigate('/dashboard')
             })
             .catch((error) => {
@@ -251,7 +251,7 @@ const FreightInfo = () => {
                 </CRow>
             )}
 
-            {!error && (
+            {!error && !loading && (
                 <>
                     {showQR && (
                         <CModal

@@ -51,7 +51,7 @@ const Activity = () => {
             )}
 
             {!loading && (
-                <CCard>
+                <CCard className="mb-4">
                     <CCardBody>
                         <CCardTitle>Activity Logs</CCardTitle>
                         <CTable hover responsive>

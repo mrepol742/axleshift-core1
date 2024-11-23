@@ -21,7 +21,7 @@ router.get('/', [auth], async (req, res) => {
         const response = await db
             .collection('invoices')
             .find({ user_id: req.user._id })
-            .sort({ last_accessed: -1 })
+            .sort({ updated_at: -1 })
             .toArray()
         return res.status(200).send(response)
     } catch (err) {

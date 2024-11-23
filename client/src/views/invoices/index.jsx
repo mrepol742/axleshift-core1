@@ -71,7 +71,7 @@ const Invoices = () => {
             )}
 
             {result.length !== 0 && (
-                <CCard>
+                <CCard className="mb-4">
                     <CCardBody>
                         <CCardTitle>Transactions</CCardTitle>
                         <CTable hover responsive>
