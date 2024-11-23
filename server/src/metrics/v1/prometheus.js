@@ -22,6 +22,7 @@ const responseDuration = new Gauge({
 })
 
 router.use((req, res, next) => {
+    if (req.path !== '/prometheus') return next()
     const start = Date.now()
 
     res.on('finish', () => {
