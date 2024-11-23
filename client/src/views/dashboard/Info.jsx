@@ -186,7 +186,7 @@ const FreightInfo = () => {
                 },
             )
             .then((response) => {
-                addToast('Shipment has been deleted.')
+                addToast('Shipment has been canceled.')
                 navigate('/dashboard')
             })
             .catch((error) => {
@@ -262,11 +262,10 @@ const FreightInfo = () => {
                         >
                             <CModalHeader closeButton></CModalHeader>
                             <CModalBody>
-                                <div
-                                    className="d-flex justify-content-center align-items-center"
-                                    ref={svgRef}
-                                >
-                                    <QRCodeSVG value={id} className="border border-4 rounded-2" />
+                                <div className="d-flex justify-content-center align-items-center">
+                                    <div ref={svgRef} className="d-inline-block">
+                                        <QRCodeSVG value={id} />
+                                    </div>
                                 </div>
                             </CModalBody>
                             <CModalFooter className="d-flex justify-content-center align-items-center">

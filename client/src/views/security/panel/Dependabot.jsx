@@ -143,7 +143,7 @@ const Dependabot = () => {
 
                     <CCard>
                         <CCardBody>
-                            <CCardTitle>Vulnirability Alerts</CCardTitle>
+                            <CCardTitle>Vulnerability Alerts</CCardTitle>
                             <CTable hover responsive>
                                 <CTableHead>
                                     <CTableRow>

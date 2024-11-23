@@ -58,7 +58,7 @@ const Auth = (WrappedComponent) => {
 
         if (isAuth === null)
             return (
-                <div className={`loading-overlay ${!token ? '' : 'bg-dark'}`}>
+                <div className={`loading-overlay ${token ? '' : 'bg-dark'}`}>
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )
