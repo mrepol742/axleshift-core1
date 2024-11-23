@@ -9,6 +9,7 @@ import Err503 from '../../views/errors/503'
 
 const Auth = (WrappedComponent) => {
     const AuthComponent = (props) => {
+        const token = cookies.get(VITE_APP_SESSION)
         const navigate = useNavigate()
         const [isAuth, setIsAuth] = useState(null)
         const dispatch = useDispatch()
@@ -21,7 +22,6 @@ const Auth = (WrappedComponent) => {
             loc = `/login?n=${window.location.pathname}${window.location.search}`
 
         const checkAuthentication = async () => {
-            const token = cookies.get(VITE_APP_SESSION)
             if (token === undefined) return setIsAuth(false)
 
             await axios
@@ -58,7 +58,7 @@ const Auth = (WrappedComponent) => {
 
         if (isAuth === null)
             return (
-                <div className="loading-overlay">
+                <div className={`loading-overlay ${!token ? '' : 'bg-dark'}`}>
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )

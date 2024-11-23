@@ -14,6 +14,7 @@ const requiredCollections = [
     'newsletter',
     'apiToken',
     'activityLog',
+    'invoices',
 ]
 let dbInstance = null
 

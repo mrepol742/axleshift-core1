@@ -91,6 +91,32 @@ const FreightInfo = () => {
         }))
     }
 
+    const bookShipment = async () => {
+        setLoading(true)
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        await axios
+            .post(
+                `${VITE_APP_API_URL}/api/v1/invoices`,
+                {
+                    id: id,
+                    recaptcha_ref: recaptcha,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+                    },
+                },
+            )
+            .then((response) => (window.location.href = response.data.r_url))
+            .catch((error) => {
+                console.error(error)
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
+    }
+
     const fetchData = async () => {
         setLoading(true)
         await axios
@@ -271,7 +297,7 @@ const FreightInfo = () => {
                                         <CButton
                                             color="primary"
                                             className="me-2 rounded"
-                                            onClick={(e) => setShowQR(true)}
+                                            onClick={bookShipment}
                                         >
                                             Book shipment
                                         </CButton>
