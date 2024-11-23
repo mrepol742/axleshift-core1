@@ -22,10 +22,9 @@ const Dashboard = () => {
         setAverageLoadData((prevData) => {
             const newData = [...prevData, average]
             if (newData.length > 10) newData.shift()
+            setTotalAverageLoadData(someMath(newData))
             return newData
         })
-        const _average = averageLoadData.reduce((sum, value) => sum + value, 0)
-        setTotalAverageLoadData(_average.toString().match(/^(\d+\.\d)/))
     }
 
     const calculateCPUUsage = (user, system, idle, startTime) => {
@@ -35,10 +34,17 @@ const Dashboard = () => {
         setCPUUsageData((prevData) => {
             const newData = [...prevData, usage]
             if (newData.length > 10) newData.shift()
+            setTotalCPUUsageData(someMath(newData))
             return newData
         })
-        const _average = cpuUsageData.reduce((sum, value) => sum + value, 0)
-        setTotalCPUUsageData(_average.toString().match(/^(\d+\.\d)/))
+    }
+
+    const someMath = (arr) => {
+        const nonZeroValues = arr.filter((value) => value !== 0)
+        const sum = nonZeroValues.reduce((acc, curr) => acc + curr, 0)
+        const count = nonZeroValues.length
+
+        return count === 0 ? 0 : sum / count
     }
 
     const fetchData = async () => {

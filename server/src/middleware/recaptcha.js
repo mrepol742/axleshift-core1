@@ -21,7 +21,7 @@ const recaptcha = async (req, res, next) => {
     } catch (err) {
         logger.error(err)
     }
-    return res.status(401).send()
+    res.status(401).send()
 }
 
 export default recaptcha

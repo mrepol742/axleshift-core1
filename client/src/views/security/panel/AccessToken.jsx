@@ -121,38 +121,57 @@ const AccessToken = () => {
                             </CButton>
                         </CCardBody>
                     </CCard>
-                    <CTable hover responsive className="rounded">
-                        <CTableHead>
-                            <CTableRow>
-                                <CTableHeaderCell>#</CTableHeaderCell>
-                                <CTableHeaderCell>User</CTableHeaderCell>
-                                <CTableHeaderCell>Status</CTableHeaderCell>
-                                <CTableHeaderCell>Token</CTableHeaderCell>
-                                <CTableHeaderCell>Whitelist</CTableHeaderCell>
-                                <CTableHeaderCell>Last Accessed</CTableHeaderCell>
-                            </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                            {result.apiToken.map((token, index) => (
-                                <CTableRow key={index}>
-                                    <CTableDataCell>{index + 1}</CTableDataCell>
-                                    <CTableDataCell>{token.user_id}</CTableDataCell>
-                                    <CTableDataCell>
-                                        {token.active ? 'Active' : 'Inactive'}
-                                    </CTableDataCell>
-                                    <CTableDataCell>{token.token}</CTableDataCell>
-                                    <CTableDataCell>
-                                        {token.whitelist_ip.map((ip) => ip.split(',')[0]).join(' ')}
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                        {token.last_accessed
-                                            ? parseTimestamp(token.last_accessed)
-                                            : 'Never'}
-                                    </CTableDataCell>
-                                </CTableRow>
-                            ))}
-                        </CTableBody>
-                    </CTable>
+                    <CCard>
+                        <CCardBody>
+                            <CCardTitle>API keys</CCardTitle>
+                            <CTable hover responsive>
+                                <CTableHead>
+                                    <CTableRow>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            #
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            User
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Status
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Token
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Whitelist
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                            Last Accessed
+                                        </CTableHeaderCell>
+                                    </CTableRow>
+                                </CTableHead>
+                                <CTableBody>
+                                    {result.apiToken.map((token, index) => (
+                                        <CTableRow key={index}>
+                                            <CTableDataCell>{index + 1}</CTableDataCell>
+                                            <CTableDataCell>{token.user_id}</CTableDataCell>
+                                            <CTableDataCell>
+                                                {token.active ? 'Active' : 'Inactive'}
+                                            </CTableDataCell>
+                                            <CTableDataCell>{token.token}</CTableDataCell>
+                                            <CTableDataCell>
+                                                {token.whitelist_ip
+                                                    .map((ip) => ip.split(',')[0])
+                                                    .join(' ')}
+                                            </CTableDataCell>
+                                            <CTableDataCell>
+                                                {token.last_accessed
+                                                    ? parseTimestamp(token.last_accessed)
+                                                    : 'Never'}
+                                            </CTableDataCell>
+                                        </CTableRow>
+                                    ))}
+                                </CTableBody>
+                            </CTable>
+                        </CCardBody>
+                    </CCard>
                 </>
             )}
         </div>

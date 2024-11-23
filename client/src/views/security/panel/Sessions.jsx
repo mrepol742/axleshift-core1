@@ -117,36 +117,51 @@ const Sessions = () => {
             </CCard>
 
             {!loading && (
-                <>
-                    <CTable hover responsive className="rounded">
-                        <CTableHead>
-                            <CTableRow>
-                                <CTableHeaderCell>#</CTableHeaderCell>
-                                <CTableHeaderCell>User</CTableHeaderCell>
-                                <CTableHeaderCell>Location</CTableHeaderCell>
-                                <CTableHeaderCell>Device</CTableHeaderCell>
-                                <CTableHeaderCell>Status</CTableHeaderCell>
-                                <CTableHeaderCell>Last Accessed</CTableHeaderCell>
-                            </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                            {result.map((session, index) => (
-                                <CTableRow key={index}>
-                                    <CTableDataCell>{index + 1}</CTableDataCell>
-                                    <CTableDataCell>{session.user_id}</CTableDataCell>
-                                    <CTableDataCell>{session.ip_address}</CTableDataCell>
-                                    <CTableDataCell>{session.user_agent}</CTableDataCell>
-                                    <CTableDataCell>
-                                        {session.active ? 'Active' : 'Inactive'}
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                        {parseTimestamp(session.last_accessed)}
-                                    </CTableDataCell>
+                <CCard>
+                    <CCardBody>
+                        <CCardTitle>Sessions</CCardTitle>
+                        <CTable hover responsive>
+                            <CTableHead>
+                                <CTableRow>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        #
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        User
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        Location
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        Device
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        Status
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                        Last Accessed
+                                    </CTableHeaderCell>
                                 </CTableRow>
-                            ))}
-                        </CTableBody>
-                    </CTable>
-                </>
+                            </CTableHead>
+                            <CTableBody>
+                                {result.map((session, index) => (
+                                    <CTableRow key={index}>
+                                        <CTableDataCell>{index + 1}</CTableDataCell>
+                                        <CTableDataCell>{session.user_id}</CTableDataCell>
+                                        <CTableDataCell>{session.ip_address}</CTableDataCell>
+                                        <CTableDataCell>{session.user_agent}</CTableDataCell>
+                                        <CTableDataCell>
+                                            {session.active ? 'Active' : 'Inactive'}
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            {parseTimestamp(session.last_accessed)}
+                                        </CTableDataCell>
+                                    </CTableRow>
+                                ))}
+                            </CTableBody>
+                        </CTable>
+                    </CCardBody>
+                </CCard>
             )}
         </div>
     )

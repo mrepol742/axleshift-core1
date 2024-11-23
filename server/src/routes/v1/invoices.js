@@ -3,7 +3,7 @@ import { Xendit } from 'xendit-node'
 import database from '../../models/mongodb.js'
 import logger from '../../components/logger.js'
 import auth from '../../middleware/auth.js'
-import shipment from '../../middleware/shipment.js'
+import freight from '../../middleware/freight.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY } from '../../config.js'
 
@@ -13,7 +13,7 @@ const { xendit } = new Xendit({
 })
 const router = express.Router()
 
-router.get('/invoice', [auth], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
     try {
         const db = await database()
         const response = await db
@@ -28,13 +28,13 @@ router.get('/invoice', [auth], async (req, res) => {
     res.status(500).send()
 })
 
-router.post('/invoice', [recaptcha, shipment, auth], async (req, res) => {
+router.post('/', [recaptcha, auth, freight], async (req, res) => {
     try {
         const invoice = await xendit.createInvoice({
-            amount: req.shipment.cost,
+            amount: req.freight.cost,
             invoiceDuration: 172800,
             externalId: 'core1-axleshift',
-            description: req.shipment.description,
+            description: req.freight.data.shipment.shipment_description,
             currency: req.user.currency,
             reminderTime: 1,
         })
@@ -46,7 +46,7 @@ router.post('/invoice', [recaptcha, shipment, auth], async (req, res) => {
     res.status(500).send()
 })
 
-router.post('/invoice/cancel', [recaptcha, shipment, auth], async (req, res) => {
+router.post('/cancel', [recaptcha, auth], async (req, res) => {
     try {
         const invoice_id = req.body.invoice_id
         if (!invoice_id) return res.status(400).send()

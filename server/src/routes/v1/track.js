@@ -4,6 +4,7 @@ import logger from '../../components/logger.js'
 import database from '../../models/mongodb.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
+import freight from '../../middleware/freight.js'
 
 const router = express.Router()
 
@@ -20,13 +21,9 @@ const router = express.Router()
      Destination
      Status
 */
-router.get('/:id', auth, async (req, res, next) => {
+router.get('/:id', [auth, freight], async (req, res, next) => {
     try {
-        const id = req.params.id
-
-        const db = await database()
-        const freight = await db.collection('freight').findOne({ _id: new ObjectId(id) })
-        if (!freight) return res.status(404).send()
+        const freight = req.freight
 
         const events = []
         events.push({

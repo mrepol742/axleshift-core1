@@ -133,7 +133,7 @@ const Dashboard = () => {
                                     <CCardText>{item.data.shipment.shipment_description}</CCardText>
                                 </CCardBody>
                                 <CCardFooter className="bg-dark text-white border-0 small">
-                                    Status: on route
+                                    Status: {item.status}
                                 </CCardFooter>
                             </CCard>
                         ))}
