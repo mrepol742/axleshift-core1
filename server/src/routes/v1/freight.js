@@ -150,6 +150,7 @@ router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) =
         if (!shipper || !consignee || !shipment) return res.status(400).send()
         if (!['air', 'land', 'sea'].includes(type)) return res.status(400).send()
 
+        const db = await database()
         await db.collection('freight').updateOne(
             { _id: new ObjectId(id) },
             {

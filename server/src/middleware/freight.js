@@ -4,7 +4,7 @@ import logger from '../components/logger.js'
 import database from '../models/mongodb.js'
 
 const freight = async (req, res, next) => {
-    const id = /^\/[a-fA-F0-9]{24}$/.test(req.path) ? req.params.id : req.body.id
+    const id = req.params.id ? (/[a-fA-F0-9]{24}/.test(req.params.id) ? req.params.id : req.body.id)  : req.body.id
     if (!id) return res.status(400).send()
 
     try {

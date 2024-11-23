@@ -13,10 +13,11 @@ const router = express.Router()
 
 router.post('/github', async (req, res) => {
     try {
-        if (!(await webhooks.verify(req.body.toString(), req.headers['x-hub-signature-256'])))
+        if (!(await webhooks.verify(req.body.toString(), req.headers['X-Hub-Signature-256'])))
             return res.status(401).send()
 
-        run('git pull origin core1-backend && npm i && npm run pm2:restart')
+        if (req.body.ref === 'refs/heads/core1-backend')
+            run('git pull origin core1-backend && npm i && npm run pm2:restart')
             .then((output) => console.log(output))
             .catch((error) => logger.error(error))
 
