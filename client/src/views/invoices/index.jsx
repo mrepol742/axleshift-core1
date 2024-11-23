@@ -58,7 +58,7 @@ const Invoices = () => {
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
-            {result.length === 0 && (
+            {!loading && result.length === 0 && (
                 <CRow className="justify-content-center my-5">
                     <CCol md={6}>
                         <div className="clearfix">
