@@ -251,7 +251,7 @@ const FreightInfo = () => {
                 </CRow>
             )}
 
-            {!error && !loading && (
+            {!error && (
                 <>
                     {showQR && (
                         <CModal
