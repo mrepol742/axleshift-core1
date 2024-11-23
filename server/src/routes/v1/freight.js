@@ -4,6 +4,7 @@ import logger from '../../components/logger.js'
 import database from '../../models/mongodb.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
+import freight from '../../middleware/freight.js'
 import { send } from '../../components/mail.js'
 
 const router = express.Router()
@@ -65,16 +66,13 @@ router.post('/', auth, async (req, res, next) => {
   Example:
      curl -H "Authorization: Bearer apiKey" http://{base-url}/api/v1/freight/{tracking-id}
 */
-router.get('/:id', auth, async (req, res, next) => {
+router.get('/:id', [auth, freight], async (req, res, next) => {
     try {
-        const id = req.params.id
-
-        const db = await database()
-        const freight = await db.collection('freight').findOne({ _id: new ObjectId(id) })
-        if (!freight) return res.status(404).send()
-
+        // even tho there are 0.0000% changes this throws an error
+        // i dont care
+        // ait gonna dleete this try catch!
         return res.status(200).json({
-            data: freight,
+            data: req.freight,
         })
     } catch (e) {
         logger.error(e)
@@ -145,19 +143,14 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
      Consignee
      Shipment
 */
-router.post('/u/:type/:id', [recaptcha, auth], async (req, res, next) => {
+router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment } = req.body
         const { type, id } = req.params
         if (!shipper || !consignee || !shipment) return res.status(400).send()
         if (!['air', 'land', 'sea'].includes(type)) return res.status(400).send()
 
-        const db = await database()
-        const freightCollection = db.collection('freight')
-        const freight = await freightCollection.findOne({ _id: new ObjectId(id) })
-        if (!freight) return res.status(404).send()
-
-        await freightCollection.updateOne(
+        await db.collection('freight').updateOne(
             { _id: new ObjectId(id) },
             {
                 $set: {
@@ -185,17 +178,11 @@ router.post('/u/:type/:id', [recaptcha, auth], async (req, res, next) => {
   Header:
      Authentication
 */
-router.post('/c/:id', [recaptcha, auth], async (req, res, next) => {
+router.post('/c/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const id = req.params.id
         const db = await database()
-
-        const freightCollection = db.collection('freight')
-
-        const freight = await freightCollection.findOne({ _id: new ObjectId(id) })
-        if (!freight) return res.status(404).send()
-
-        await freightCollection.updateOne(
+        await db.collection('freight').updateOne(
             { _id: new ObjectId(id) },
             {
                 $set: {

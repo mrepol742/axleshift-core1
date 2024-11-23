@@ -36,6 +36,8 @@
     "pm2": "pm2 start src/index.js --name core1-axleshift",
     "pm2:restart": "pm2 restart all --update-env",
     "app": "cd mobile && npm run android",
+    "app:install": "cd mobile && npm i",
+    "app:lint": "cd mobile && npm run lint",
     "spellcheck": "npx --yes cspell --show-context --show-suggestions '**/*.*'",
     "prom": "sudo systemctl start prometheus",
     "prom:restart": "sudo systemctl restart prometheus",
