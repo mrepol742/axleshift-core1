@@ -85,7 +85,7 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
 router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
     try {
 
-        activity(req, `canceled invoice #${req.invoice._id}`)
+        activity(req, `cancelled invoice #${req.invoice._id}`)
         return res.status(200).send()
     } catch (err) {
         logger.error(err)

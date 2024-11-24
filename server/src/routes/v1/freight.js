@@ -190,14 +190,14 @@ router.post('/c/:id', [recaptcha, auth, freight], async (req, res, next) => {
             { _id: new ObjectId(id) },
             {
                 $set: {
-                    status: 'canceled',
+                    status: 'cancelled',
                     updated_at: Date.now(),
                     modified_by: req.user._id,
                 },
             },
         )
 
-        activity(req, `canceled a shipment #${id}`)
+        activity(req, `cancelled a shipment #${id}`)
         return res.status(200).send()
     } catch (e) {
         logger.error(e)

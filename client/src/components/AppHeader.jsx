@@ -32,21 +32,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { AppBreadcrumb, AppHeaderDropdown } from './index'
 import AppNotifcationDropdown from './AppNotificationDropdown'
+import AppSearch from './AppSearch'
 
 const AppHeader = () => {
     const headerRef = useRef()
     const { colorMode, setColorMode } = useColorModes('theme')
     const dispatch = useDispatch()
     const sidebarShow = useSelector((state) => state.sidebarShow)
-    const [query, setQuery] = useState('')
     const navigate = useNavigate()
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (!query || query.trim().length === 0) return null
-        if (/^[a-fA-F0-9]{24}$/.test(query)) return navigate(`/track/${query}`)
-        navigate(`/search?q=${query}`)
-    }
 
     useEffect(() => {
         document.addEventListener('scroll', () => {
@@ -78,35 +71,7 @@ const AppHeader = () => {
                             <FontAwesomeIcon icon={faCalendarDays} />
                         </CButton>
                     </CNavItem>
-                    <CForm
-                        onSubmit={handleSubmit}
-                        className="mx-auto d-none d-md-flex"
-                        style={{ maxWidth: '400px' }}
-                    >
-                        <CInputGroup style={{ borderRadius: '50px' }}>
-                            <CFormInput
-                                aria-label="query"
-                                name="q"
-                                value={query}
-                                placeholder="Find & track shipment..."
-                                onChange={(e) => setQuery(e.target.value)}
-                                aria-describedby="basic-addon"
-                                style={{
-                                    borderRadius: '50px 0 0 50px',
-                                    height: '40px',
-                                    fontSize: '0.9em',
-                                }}
-                            />
-                            <CInputGroupText
-                                id="basic-addon"
-                                onClick={handleSubmit}
-                                style={{ borderRadius: '0 50px 50px 0' }}
-                                className="px-3"
-                            >
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                            </CInputGroupText>
-                        </CInputGroup>
-                    </CForm>
+                    <AppSearch className="mx-auto d-none d-md-flex" />
                 </CHeaderNav>
                 <CHeaderNav className="ms-auto px-2">
                     <AppNotifcationDropdown />

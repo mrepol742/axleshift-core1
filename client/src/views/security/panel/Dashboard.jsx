@@ -80,7 +80,7 @@ const Dashboard = () => {
 
         const intervalId = setInterval(() => {
             fetchData()
-        }, 3500)
+        }, 2000)
 
         return () => clearInterval(intervalId)
     }, [])

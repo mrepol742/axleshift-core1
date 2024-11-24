@@ -11,10 +11,11 @@ const Inbox = () => {
     const { user } = useUserProvider()
     const navigate = useNavigate()
     const [threadsID, setThreadsID] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const messagesRef = collection(database, 'messages')
 
     useEffect(() => {
+        if (user.role !== 'admin') return ''
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -42,7 +43,9 @@ const Inbox = () => {
                 </div>
             )}
 
-            {user.role === 'admin' ? (
+            {user.role !== 'admin' && navigate(`/customer/${user.ref}`)}
+
+            {user.role === 'admin' && (
                 <div className="row d-flex justify-content-center mx-0 mb-4">
                     <CListGroup>
                         {threadsID.map((thread, index) => (
@@ -61,8 +64,6 @@ const Inbox = () => {
                         ))}
                     </CListGroup>
                 </div>
-            ) : (
-                navigate(`/customer/${user.ref}`)
             )}
         </>
     )

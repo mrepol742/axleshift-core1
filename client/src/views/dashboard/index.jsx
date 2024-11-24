@@ -28,6 +28,9 @@ import {
     faPlaneDeparture,
     faTruck,
     faShip,
+    faCircleInfo,
+    faClock,
+    faQuestion,
 } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './Widgets'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
@@ -35,6 +38,7 @@ import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
+import AppSearch from '../../components/AppSearch'
 
 const Dashboard = () => {
     const [data, setData] = useState([])
@@ -68,6 +72,23 @@ const Dashboard = () => {
             .finally(() => setLoading(false))
     }
 
+    const getCardColor = (status) => {
+        if (status === 'cancelled') return 'danger'
+        if (status === 'received') return 'primary'
+        if (status === 'in_route' || status === 'in_ship') return 'warning'
+        // for to_pay
+        return ''
+    }
+
+    const getStatus = (status) => {
+        if (status === 'cancelled') return 'Cancelled'
+        if (status === 'received') return 'Received'
+        if (status === 'in_route') return 'To Receive'
+        if (status === 'in_ship') return 'To Ship'
+        // for to_pay
+        return 'Unknown'
+    }
+
     useEffect(() => {
         fetchData(currentPage)
     }, [currentPage])
@@ -95,6 +116,9 @@ const Dashboard = () => {
             {data.length !== 0 && (
                 <>
                     <WidgetsDropdown className="mb-4" />
+
+                    <h4>Shipments</h4>
+                    <AppSearch className="mb-3 d-block d-md-none" />
                     <Masonry
                         breakpointCols={{
                             default: 4,
@@ -107,18 +131,21 @@ const Dashboard = () => {
                     >
                         {data.map((item) => (
                             <CCard
+                                color={getCardColor(item.status)}
                                 className="mb-3"
                                 key={item._id}
                                 onClick={() => navigate(`/v/${item._id}`)}
                                 style={{ cursor: 'pointer' }}
                             >
                                 <CCardHeader
+                                    className="border-0"
                                     style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         alignItems: 'center',
                                     }}
                                 >
+                                    <div>{getStatus(item.status)}</div>
                                     <div>
                                         {item.type == 'air' && (
                                             <FontAwesomeIcon icon={faPlaneDeparture} />
@@ -126,24 +153,44 @@ const Dashboard = () => {
                                         {item.type == 'land' && <FontAwesomeIcon icon={faTruck} />}
                                         {item.type == 'sea' && <FontAwesomeIcon icon={faShip} />}
                                     </div>
-                                    <div>{parseTimestamp(item.created_at)}</div>
                                 </CCardHeader>
                                 <CCardBody>
-                                    <CCardText>{item.data.shipment.shipment_description}</CCardText>
+                                    <CCardText>
+                                        <div className="mb-2">
+                                            <small className="text-muted d-block">Courier</small>
+                                            Shoppe SPX
+                                        </div>
+                                        <div className="mb-2">
+                                            <small className="text-muted d-block">Shipment</small>
+                                            {item.data.shipment.shipment_description}
+                                        </div>
+                                    </CCardText>
                                 </CCardBody>
-                                <CCardFooter className="bg-dark text-white border-0 small">
-                                    Status: {item.status}
+                                <CCardFooter className="border-0 small bg-transparent">
+                                    <small className="text-muted d-block">Last update</small>
+                                    {parseTimestamp(item.updated_at)} ago
                                 </CCardFooter>
                             </CCard>
                         ))}
                     </Masonry>
-                    <AppPagination
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
-                        totalPages={totalPages}
-                        setTotalPages={setTotalPages}
-                        className="mb-3"
-                    />
+
+                    <button
+                        className="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-3"
+                        style={{ width: '50px', height: '50px', fontSize: '20px' }}
+                        onClick={(e) => navigate('/customer')}
+                    >
+                        <FontAwesomeIcon icon={faQuestion} />
+                    </button>
+
+                    {data.length > 20 && (
+                        <AppPagination
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            totalPages={totalPages}
+                            setTotalPages={setTotalPages}
+                            className="mb-3"
+                        />
+                    )}
                 </>
             )}
         </>
