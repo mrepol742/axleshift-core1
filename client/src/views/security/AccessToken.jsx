@@ -42,6 +42,7 @@ import {
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
+import { parseTimestamp } from '../../components/Timestamp'
 
 const API = () => {
     const { addToast } = useToast()
@@ -234,7 +235,7 @@ const API = () => {
                             <h4>Whitelisted IP</h4>
                             <CButton
                                 size="sm"
-                                className="text-white p-2"
+                                className="text-white"
                                 onClick={handleAddIp}
                                 disabled={disabledAdd}
                             >
@@ -242,7 +243,7 @@ const API = () => {
                             </CButton>
                         </div>
                         {result.whitelist_ip.length === 0 && (
-                            <CCard>
+                            <CCard className="mb-3">
                                 <CCardBody className="justify-content-center m-3">
                                     <div className="clearfix">
                                         <h1 className="float-start display-3 me-4">OOPS</h1>
@@ -254,7 +255,7 @@ const API = () => {
                         )}
 
                         {result.whitelist_ip.length !== 0 && (
-                            <CCard>
+                            <CCard className="mb-3">
                                 <CCardBody>
                                     <CForm onSubmit={handleWhitelistIpSubmit}>
                                         {result.whitelist_ip.map((input, index) => (
@@ -287,6 +288,18 @@ const API = () => {
                                 </CCardBody>
                             </CCard>
                         )}
+
+                        <h4>Last accessed</h4>
+                        <CCard>
+                            <CCardBody>
+                                <p className="display-5">
+                                    {result.last_accessed
+                                        ? parseTimestamp(result.last_accessed)
+                                        : 'Never'}
+                                </p>
+                                <span className="lead">{result.user_agent}</span>
+                            </CCardBody>
+                        </CCard>
                     </CCol>
                 </CRow>
             )}

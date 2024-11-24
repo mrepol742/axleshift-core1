@@ -36,6 +36,7 @@ const external = async (req, res, next) => {
     const w_ip = existingApiToken.whitelist_ip
     if (!w_ip.includes(ip)) return res.status(401).send()
 
+    let user_a = req.headers['user-agent'] || 'unknown'
     Promise.all([
         (async () => {
             try {
@@ -44,6 +45,7 @@ const external = async (req, res, next) => {
                     { token: token },
                     {
                         $set: {
+                            user_agent: user_a,
                             last_accessed: Date.now(),
                         },
                     },

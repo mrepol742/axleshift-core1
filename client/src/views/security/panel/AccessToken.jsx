@@ -140,6 +140,9 @@ const AccessToken = () => {
                                             Whitelist
                                         </CTableHeaderCell>
                                         <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                            Device
+                                        </CTableHeaderCell>
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Last Accessed
                                         </CTableHeaderCell>
                                     </CTableRow>
@@ -157,6 +160,7 @@ const AccessToken = () => {
                                                     .map((ip) => ip.split(',')[0])
                                                     .join(' ')}
                                             </CTableDataCell>
+                                            <CTableDataCell>{token.user_agent}</CTableDataCell>
                                             <CTableDataCell>
                                                 {token.last_accessed
                                                     ? parseTimestamp(token.last_accessed)
