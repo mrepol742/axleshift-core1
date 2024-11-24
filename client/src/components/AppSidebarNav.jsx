@@ -3,10 +3,11 @@ import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import SimpleBar from 'simplebar-react'
 import { CBadge, CNavLink, CSidebarNav } from '@coreui/react'
-import { isAdmin } from './Profile'
+import { useUserProvider } from './UserProvider'
 
 export const AppSidebarNav = ({ items }) => {
     const adminRoute = ['/security/management']
+    const { user } = useUserProvider()
 
     const navLink = (name, icon, badge, indent = false) => {
         return (
@@ -60,7 +61,7 @@ export const AppSidebarNav = ({ items }) => {
         <CSidebarNav as={SimpleBar}>
             {items &&
                 items
-                    .filter((item) => isAdmin() || !adminRoute.includes(item.to))
+                    .filter((item) => user.role === 'admin' || !adminRoute.includes(item.to))
                     .map((item, index) =>
                         item.items ? navGroup(item, index) : navItem(item, index),
                     )}

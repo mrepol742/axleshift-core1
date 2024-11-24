@@ -35,7 +35,7 @@ import AppNotifcationDropdown from './AppNotificationDropdown'
 
 const AppHeader = () => {
     const headerRef = useRef()
-    const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
+    const { colorMode, setColorMode } = useColorModes('theme')
     const dispatch = useDispatch()
     const sidebarShow = useSelector((state) => state.sidebarShow)
     const [query, setQuery] = useState('')

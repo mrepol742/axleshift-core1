@@ -6,6 +6,7 @@ import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import freight from '../../middleware/freight.js'
 import { send } from '../../components/mail.js'
+import activity from '../../components/activity.js'
 
 const router = express.Router()
 const limit = 20
@@ -118,11 +119,12 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
         send(
             {
                 to: req.user.email,
-                subject: 'Shipment booking confirmed',
+                subject: 'Shipment has been created',
                 text: `You can track your shipment using this tracking id: #${_shipment._id}<br>Visit <a href="https://core1.axleshift.com/track/">https://core1.axleshift.com/track</a> for real time tracking and shipment monitoring. <br><br>If you need assistance feel free to contact us.`,
             },
             req.user.first_name,
         )
+        activity(req, `created a shipment #${_shipment._id}`)
         return res.status(201).send()
     } catch (e) {
         logger.error(e)
@@ -164,6 +166,7 @@ router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) =
             },
         )
 
+        activity(req, `updated a shipment information #${id}`)
         return res.status(200).send()
     } catch (e) {
         logger.error(e)
@@ -193,6 +196,8 @@ router.post('/c/:id', [recaptcha, auth, freight], async (req, res, next) => {
                 },
             },
         )
+
+        activity(req, `canceled a shipment #${id}`)
         return res.status(200).send()
     } catch (e) {
         logger.error(e)

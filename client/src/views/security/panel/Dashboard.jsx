@@ -13,6 +13,7 @@ const Dashboard = () => {
     const [totalAverageLoadData, setTotalAverageLoadData] = useState(0)
     const [cpuUsageData, setCPUUsageData] = useState(Array(10).fill(0))
     const [totalCPUUsageData, setTotalCPUUsageData] = useState(0)
+    const session = cookies.get(VITE_APP_SESSION)
 
     const calculateAverageLoad = (user, system, idle, startTime) => {
         calculateCPUUsage(user, system, idle, startTime)
@@ -51,7 +52,7 @@ const Dashboard = () => {
         await axios
             .get(`${VITE_APP_API_URL}/metrics/v1/prometheus`, {
                 headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
+                    Authorization: `Bearer ${session}`,
                 },
             })
             .then((response) => {
@@ -79,7 +80,7 @@ const Dashboard = () => {
 
         const intervalId = setInterval(() => {
             fetchData()
-        }, 1500)
+        }, 3500)
 
         return () => clearInterval(intervalId)
     }, [])

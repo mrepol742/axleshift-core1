@@ -57,17 +57,23 @@ const Activity = () => {
                         <CTable hover responsive>
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Actor
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                        User ID
                                     </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Type
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                        Session ID
                                     </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Message
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                        Event
                                     </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Created At
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                        IP Address
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                        Device
+                                    </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                        Time
                                     </CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
@@ -75,11 +81,11 @@ const Activity = () => {
                                 {result.map((log, index) => (
                                     <CTableRow key={index}>
                                         <CTableDataCell>{log.user_id}</CTableDataCell>
-                                        <CTableDataCell>{log.type}</CTableDataCell>
-                                        <CTableDataCell>{log.message}</CTableDataCell>
-                                        <CTableDataCell>
-                                            {parseTimestamp(log.created_at)}
-                                        </CTableDataCell>
+                                        <CTableDataCell>{log.session_id}</CTableDataCell>
+                                        <CTableDataCell>{log.event}</CTableDataCell>
+                                        <CTableDataCell>{log.ip_address}</CTableDataCell>
+                                        <CTableDataCell>{log.user_agent}</CTableDataCell>
+                                        <CTableDataCell>{parseTimestamp(log.time)}</CTableDataCell>
                                     </CTableRow>
                                 ))}
                             </CTableBody>

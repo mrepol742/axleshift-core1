@@ -15,10 +15,11 @@ import Masonry from 'react-masonry-css'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch, faLock, faServer, faKey } from '@fortawesome/free-solid-svg-icons'
-import { isAdmin } from '../../components/Profile'
+import { useUserProvider } from '../../components/UserProvider'
 
 const Freight = () => {
     const navigate = useNavigate()
+    const { user } = useUserProvider()
 
     return (
         <>
@@ -32,7 +33,7 @@ const Freight = () => {
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column"
             >
-                {isAdmin() && (
+                {user === 'admin' && (
                     <div>
                         <CCard
                             className="bg-dark text-white mb-3"

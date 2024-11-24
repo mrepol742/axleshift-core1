@@ -16,7 +16,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
-import Profile from '../components/Profile'
 import { VITE_APP_API_URL } from '../config.js'
 import { useNotif } from './AppNotificationProvider'
 import { parseTimestamp } from '../components/Timestamp'

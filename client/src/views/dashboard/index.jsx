@@ -35,7 +35,6 @@ import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
-import { isAdmin } from '../../components/Profile'
 
 const Dashboard = () => {
     const [data, setData] = useState([])

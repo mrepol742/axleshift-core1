@@ -127,22 +127,19 @@ const AccessToken = () => {
                             <CTable hover responsive>
                                 <CTableHead>
                                     <CTableRow>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
-                                            #
-                                        </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             User
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Status
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Token
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Whitelist
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Last Accessed
                                         </CTableHeaderCell>
                                     </CTableRow>
@@ -150,7 +147,6 @@ const AccessToken = () => {
                                 <CTableBody>
                                     {result.apiToken.map((token, index) => (
                                         <CTableRow key={index}>
-                                            <CTableDataCell>{index + 1}</CTableDataCell>
                                             <CTableDataCell>{token.user_id}</CTableDataCell>
                                             <CTableDataCell>
                                                 {token.active ? 'Active' : 'Inactive'}

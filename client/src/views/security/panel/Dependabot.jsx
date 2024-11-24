@@ -147,28 +147,28 @@ const Dependabot = () => {
                             <CTable hover responsive>
                                 <CTableHead>
                                     <CTableRow>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             #
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             State
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Scope
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Manifest
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             CVE
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Summary
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Severity
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Last Updated
                                         </CTableHeaderCell>
                                     </CTableRow>

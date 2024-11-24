@@ -78,6 +78,11 @@ router.get('/apikeys', auth, async (req, res, next) => {
             apiTokenCollection.countDocuments({ active: true, compromised: false }),
         ])
 
+        for (let i = 0; i < apiToken.length; i++) {
+            const token = apiToken[i].token
+            apiToken[i].token = token.match(/(?<=core1_)\w{14}/)[0]
+        }
+
         if (apiToken)
             return res.status(200).json({ apiToken: apiToken, deny: !(activeApiTokenCount > 0) })
     } catch (e) {
@@ -123,6 +128,6 @@ router.get('/activity', auth, async (req, res, next) => {
     res.status(500).send()
 })
 
-router.get('/maintenance', auth, async (req, res, next) => res.status(301).send())
+router.get('/maintenance', auth, async (req, res, next) => res.status(200).send())
 
 export default router

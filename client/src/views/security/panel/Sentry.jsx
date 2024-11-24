@@ -146,28 +146,28 @@ const Sentry = () => {
                             <CTable hover responsive>
                                 <CTableHead>
                                     <CTableRow>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             #
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Title
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Culprit
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Level
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Status
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Priority
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Count
                                         </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular">
+                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Last Updated
                                         </CTableHeaderCell>
                                     </CTableRow>

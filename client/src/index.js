@@ -4,20 +4,25 @@ import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import 'core-js'
+import { AppToastProvider } from './components/AppToastProvider'
+import { AppNotificationProvider } from './components/AppNotificationProvider'
+import { UserProvider } from './components/UserProvider'
 import { VITE_APP_GOOGLE_OAUTH_CLIENT_ID } from './config'
 import App from './App'
 import store from './store'
-import { AppToastProvider } from './components/AppToastProvider'
-import { AppNotificationProvider } from './components/AppNotificationProvider'
 
-createRoot(document.getElementById('root')).render(
-    <Provider store={store}>
-        <GoogleOAuthProvider clientId={VITE_APP_GOOGLE_OAUTH_CLIENT_ID}>
-            <AppToastProvider>
-                <AppNotificationProvider>
-                    <App />
-                </AppNotificationProvider>
-            </AppToastProvider>
-        </GoogleOAuthProvider>
-    </Provider>,
+const div = document.createElement('div')
+document.body.appendChild(div)
+createRoot(div).render(
+    <UserProvider>
+        <Provider store={store}>
+            <GoogleOAuthProvider clientId={VITE_APP_GOOGLE_OAUTH_CLIENT_ID}>
+                <AppToastProvider>
+                    <AppNotificationProvider>
+                        <App />
+                    </AppNotificationProvider>
+                </AppToastProvider>
+            </GoogleOAuthProvider>
+        </Provider>
+    </UserProvider>,
 )

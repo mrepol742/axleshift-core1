@@ -68,7 +68,7 @@ const FormRegister = async (req, res) => {
             })(),
         ])
 
-        activity(req.user, req.session, 'Account', 'Welcome to core 1 axleshift')
+        activity(req, 'created account')
         return res.status(201).json({ type: 'form' })
     } catch (err) {
         logger.error(err)
