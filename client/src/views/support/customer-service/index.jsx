@@ -4,18 +4,18 @@ import { CSpinner, CListGroup, CListGroupItem } from '@coreui/react'
 import database from '../../../firebase'
 import { collection, addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
 
-import Profile, { isAdmin } from '../../../components/Profile'
+import { useUserProvider } from '../../../components/UserProvider'
 import { parseTimestamp } from '../../../components/Timestamp'
 
 const Inbox = () => {
-    const user = Profile()
+    const { user } = useUserProvider()
     const navigate = useNavigate()
     const [threadsID, setThreadsID] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const messagesRef = collection(database, 'messages')
 
     useEffect(() => {
-        // if (!isAdmin()) navigate(`/customer/${user.ref}`)
+        if (user.role !== 'admin') return ''
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -43,7 +43,9 @@ const Inbox = () => {
                 </div>
             )}
 
-            {isAdmin() ? (
+            {user.role !== 'admin' && navigate(`/customer/${user.ref}`)}
+
+            {user.role === 'admin' && (
                 <div className="row d-flex justify-content-center mx-0 mb-4">
                     <CListGroup>
                         {threadsID.map((thread, index) => (
@@ -62,8 +64,6 @@ const Inbox = () => {
                         ))}
                     </CListGroup>
                 </div>
-            ) : (
-                navigate(`/customer/${user.ref}`)
             )}
         </>
     )

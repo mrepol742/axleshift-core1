@@ -78,10 +78,7 @@ const Invoices = () => {
                             <CTableHead>
                                 <CTableRow>
                                     <CTableHeaderCell className="text-muted poppins-regular">
-                                        #
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Tracking ID
+                                        Shipment ID
                                     </CTableHeaderCell>
                                     <CTableHeaderCell className="text-muted poppins-regular">
                                         Invoice ID
@@ -100,7 +97,6 @@ const Invoices = () => {
                             <CTableBody>
                                 {result.map((invoice, index) => (
                                     <CTableRow key={index}>
-                                        <CTableDataCell>{index + 1}</CTableDataCell>
                                         <CTableDataCell
                                             onClick={(e) => navigate(`/v/${invoice.freight_id}`)}
                                         >

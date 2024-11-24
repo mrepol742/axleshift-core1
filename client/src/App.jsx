@@ -13,7 +13,7 @@ import routes from './routes'
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
 const App = () => {
-    const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
+    const { isColorModeSet, setColorMode } = useColorModes('theme')
     const storedTheme = useSelector((state) => state.theme)
     ReactGA.initialize(VITE_APP_GOOGLE_ANALYTICS)
     const token = cookies.get(VITE_APP_SESSION)

@@ -14,17 +14,17 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightFromBracket, faShield, faCircleUser } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
-import Profile from '../components/Profile'
+import { useUserProvider } from '../components/UserProvider'
 import { VITE_APP_API_URL } from '../config.js'
 
 const AppHeaderDropdown = () => {
     const navigate = useNavigate()
-    const user = Profile()
+    const { user } = useUserProvider()
     const [avatar, setAvatar] = useState('/images/default-avatar.jpg')
 
     useEffect(() => {
         if (user && user.ref) setAvatar(`${VITE_APP_API_URL}/u/${user.ref}.png`)
-    }, [user])
+    }, [])
 
     return (
         <CDropdown variant="nav-item">

@@ -18,7 +18,7 @@ const Maintenance = () => {
                     Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
                 },
             })
-            .then((response) => setMaintenance(response.data.maintenance))
+            .then((response) => setMaintenance(response.data.maintenance || 'a'))
             .catch((error) => {
                 console.error(error)
                 const message =

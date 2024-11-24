@@ -175,7 +175,7 @@ router.post('/user', [recaptcha, auth], async function (req, res, next) {
                 $set: set,
             },
         )
-        activity(req.user, req.session, 'Account', 'Update user information')
+        activity(req, 'update user account information')
         return res.status(200).send()
     } catch (e) {
         logger.error(e)
@@ -190,7 +190,7 @@ router.post('/user', [recaptcha, auth], async function (req, res, next) {
 */
 router.post('/logout', auth, function (req, res, next) {
     removeSession(req.token)
-
+    activity(req, 'logout')
     return res.status(200).send()
 })
 
@@ -229,6 +229,7 @@ router.post('/verify/otp/new', [recaptcha, auth], async function (req, res, next
             )
 
             sendOTPEmail(req, otpCollection)
+            activity(req, 'generate new mail otp')
         }
         return res.status(200).send()
     } catch (e) {
@@ -358,7 +359,7 @@ router.post('/token/new', [recaptcha, auth], async function (req, res, next) {
             updated_at: Date.now(),
         })
 
-        activity(req.user, req.session, 'Auth Token', 'Generate new API Auth Token')
+        activity(req, 'generate new auth token')
         return res.status(200).json({ token: apiT })
     } catch (e) {
         logger.error(e)
@@ -411,7 +412,7 @@ router.post('/token/whitelist-ip', [recaptcha, auth], async function (req, res, 
             },
         )
 
-        activity(req.user, req.session, 'Auth Token', `Added ${whitelist_ip} to whitelist ip`)
+        activity(req, `added ${whitelist_ip} to whitelist ip`)
         return res.status(200).send()
     } catch (e) {
         logger.error(e)

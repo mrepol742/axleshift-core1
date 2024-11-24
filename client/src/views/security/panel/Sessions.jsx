@@ -123,22 +123,19 @@ const Sessions = () => {
                         <CTable hover responsive>
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        #
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                         User
                                     </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                         Location
                                     </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                         Device
                                     </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                         Status
                                     </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
+                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                         Last Accessed
                                     </CTableHeaderCell>
                                 </CTableRow>
@@ -146,7 +143,6 @@ const Sessions = () => {
                             <CTableBody>
                                 {result.map((session, index) => (
                                     <CTableRow key={index}>
-                                        <CTableDataCell>{index + 1}</CTableDataCell>
                                         <CTableDataCell>{session.user_id}</CTableDataCell>
                                         <CTableDataCell>{session.ip_address}</CTableDataCell>
                                         <CTableDataCell>{session.user_agent}</CTableDataCell>

@@ -74,13 +74,8 @@ const FormOauth2 = async (req, res) => {
         const theUser = await usersCollection.findOne({ email: credential.email })
         const session_token = await Token(theUser, req)
 
-        activity(req.user, req.session, 'Account', 'Welcome to core 1 axleshift')
-        activity(
-            req.user,
-            req.session,
-            'Account',
-            `Successfully bind ${provider} account as authentication credentials`,
-        )
+        activity(req, 'created account')
+        activity(req, `bind ${provider} as authentication credentials`)
         return res.status(200).json({ token: session_token })
     } catch (e) {
         logger.error(e)

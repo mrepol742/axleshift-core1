@@ -8,6 +8,7 @@ import freight from '../../middleware/freight.js'
 import invoices from '../../middleware/invoices.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY } from '../../config.js'
+import activity from '../../components/activity.js'
 
 const { Invoice } = new Xendit({
     secretKey: XENDIT_API_KEY,
@@ -73,6 +74,7 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
             },
         )
 
+        activity(req, `create invoice for shipment #${req.freight._id} with invoice id #${_invoice._id}`)
         return res.status(200).send({ r_url: invoice.invoiceUrl })
     } catch (err) {
         logger.error(err)
@@ -80,11 +82,10 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
     res.status(500).send()
 })
 
-router.post('/cancel', [recaptcha, auth], async (req, res) => {
+router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
     try {
-        const invoice_id = req.body.invoice_id
-        if (!invoice_id) return res.status(400).send()
 
+        activity(req, `cancelled invoice #${req.invoice._id}`)
         return res.status(200).send()
     } catch (err) {
         logger.error(err)

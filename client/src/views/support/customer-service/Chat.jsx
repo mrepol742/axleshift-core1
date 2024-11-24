@@ -16,17 +16,17 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import database from '../../../firebase'
 import { collection, addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { VITE_APP_API_URL } from '../../../config'
-import Profile, { isAdmin } from '../../../components/Profile'
+import { useUserProvider } from '../../../components/UserProvider'
 import { parseTimestamp } from '../../../components/Timestamp'
 
 const Chat = () => {
-    const user = Profile()
+    const { user } = useUserProvider()
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState('')
     const endOfMessagesRef = useRef(null)
     const [rows, setRows] = useState(1)
     const messagesRef = collection(database, 'messages')
-    const id = isAdmin() ? useParams().id : user.ref
+    const id = user.role === 'admin' ? useParams().id : user.ref
 
     useEffect(() => {
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {

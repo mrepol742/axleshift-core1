@@ -29,7 +29,7 @@ import {
 
 const Navbar = () => {
     const [visible, setVisible] = useState(false)
-    const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
+    const { colorMode, setColorMode } = useColorModes('theme')
 
     return (
         <CNavbar expand="sm" colorScheme={colorMode} className="fixed-top p-navbar">

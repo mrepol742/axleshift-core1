@@ -186,7 +186,7 @@ const FreightInfo = () => {
                 },
             )
             .then((response) => {
-                addToast('Shipment has been canceled.')
+                addToast('Shipment has been cancelled.')
                 navigate('/dashboard')
             })
             .catch((error) => {
@@ -290,7 +290,7 @@ const FreightInfo = () => {
                             >
                                 <FontAwesomeIcon icon={faQrcode} />
                             </CButton>
-                            {status !== 'canceled' && status !== 'delivered' && (
+                            {status !== 'cancelled' && status !== 'delivered' && (
                                 <>
                                     {status === 'to_pay' && (
                                         <CButton
