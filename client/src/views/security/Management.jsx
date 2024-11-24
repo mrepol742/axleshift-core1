@@ -38,11 +38,10 @@ const SecurityManagement = () => {
     const [activeItemKey, setActiveItemKey] = useState(0)
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
-    const urlParams = new URLSearchParams(window.location.search)
-    const tab = urlParams.get('tab') ? urlParams.get('tab') : ''
+    const tab = window.location.hash ? window.location.hash.substring(1) : ''
 
     const handleTabChange = (itemKey, tabName) => {
-        navigate(`?tab=${tabName}`)
+        navigate(`#${tabName}`)
     }
 
     useEffect(() => {
