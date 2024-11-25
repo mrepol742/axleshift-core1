@@ -26,9 +26,74 @@ const limit = 20
 // TODO: integrate search function here!
 router.post('/', auth, async (req, res, next) => {
     try {
-        if (!req.user) return res.status(401).send()
-        const page = parseInt(req.body.page) || 1
-        const skip = (page - 1) * limit
+        // if (!req.user) return res.status(401).send()
+        const { page, query, status, type } = req.body
+        if (!page) return res.status(400).send()
+        const current_page = parseInt(page) || 1
+        const skip = (current_page - 1) * limit
+
+        let filter
+        if (!query) {
+            filter = req.user.role !== 'admin' ? { user_id: req.user._id } : {}
+        } else {
+            const deep_filter = {
+                $or: [
+                    // Shipper Fields
+                    { 'data.shipper.shipper_company_name': query },
+                    { 'data.shipper.shipper_contact_name': query },
+                    { 'data.shipper.shipper_contact_email_address': query },
+                    { 'data.shipper.shipper_contact_phone_number': query },
+                    { 'data.shipper.shipper_company_address': query },
+
+                    // Consignee Fields
+                    { 'data.consignee.consignee_company_name': query },
+                    { 'data.consignee.consignee_contact_name': query },
+                    { 'data.consignee.consignee_contact_email_address': query },
+                    { 'data.consignee.consignee_contact_phone_number': query },
+                    { 'data.consignee.consignee_company_address': query },
+
+                    // Shipment Fields
+                    { 'data.shipment.shipment_description': query },
+                    { 'data.shipment.shipment_weight': query },
+                    { 'data.shipment.shipment_dimension_length': query },
+                    { 'data.shipment.shipment_dimension_width': query },
+                    { 'data.shipment.shipment_dimension_height': query },
+                    { 'data.shipment.shipment_volume': query },
+                    { 'data.shipment.shipment_value': query },
+                    { 'data.shipment.shipment_instructions': query },
+
+                    // Shipping Air Fields
+                    { 'data.shipping.shipping_origin_airport': query },
+                    { 'data.shipping.shipping_destination_airport': query },
+                    { 'data.shipping.shipping_preferred_departure_date': query },
+                    { 'data.shipping.shipping_preferred_arrival_date': query },
+                    { 'data.shipping.shipping_flight_type': query },
+
+                    // Shipping Land Fields
+                    { 'data.shipping.shipping_origin_addresss': query },
+                    { 'data.shipping.shipping_destination_address': query },
+                    { 'data.shipping.shipping_pickup_date': query },
+                    { 'data.shipping.shipping_delivery_date': query },
+                    { 'data.shipping.shipping_vehicle_type': query },
+
+                    // Shipping Sea Fields
+                    { 'data.shipping.shipping_loading_port': query },
+                    { 'data.shipping.shipping_discharge_port': query },
+                    { 'data.shipping.shipping_sailing_date': query },
+                    { 'data.shipping.shipping_estimated_arrival_date': query },
+                    { 'data.shipping.shipping_cargo_type': query },
+                ],
+            }
+            if (status && ['to_pay', 'to_ship', 'to_receive', 'recieved', 'cancelled'].includes(status)) 
+                deep_filter.$or.push({ status: query });
+            if (type && ['air', 'land', 'sea'].includes(type)) 
+                deep_filter.$or.push({ type: query })
+
+            filter =
+                req.user.role !== 'admin'
+                    ? { user_id: req.user._id, ...deep_filter }
+                    : { ...deep_filter }
+        }
 
         const db = await database()
         const freightCollection = db.collection('freight')
@@ -36,7 +101,7 @@ router.post('/', auth, async (req, res, next) => {
         const [totalItems, items] = await Promise.all([
             freightCollection.countDocuments({ user_id: req.user._id }),
             freightCollection
-                .find(req.user.role !== 'admin' ? { user_id: req.user._id } : {})
+                .find(filter)
                 .sort({ created_at: -1 })
                 .skip(skip)
                 .limit(limit)
@@ -46,7 +111,7 @@ router.post('/', auth, async (req, res, next) => {
         return res.status(200).json({
             data: items,
             totalPages: Math.ceil(totalItems / limit),
-            currentPage: page,
+            currentPage: current_page,
         })
     } catch (e) {
         logger.error(e)
