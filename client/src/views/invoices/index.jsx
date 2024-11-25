@@ -15,7 +15,7 @@ import {
     CCardTitle,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
 import { parseTimestamp } from '../../components/Timestamp'
@@ -29,14 +29,9 @@ const Invoices = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/invoices`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
+            .get(`/invoices`)
             .then((response) => setResult(response.data))
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)

@@ -4,6 +4,7 @@ import logger from '../../logger.js'
 import passwordHash, { generateUniqueId } from '../../password.js'
 import { addSession } from '../../../components/sessions.js'
 import { getClientIp } from '../../ip.js'
+import activity from '../../activity.js'
 
 const FormLogin = async (req, res) => {
     try {
@@ -17,6 +18,7 @@ const FormLogin = async (req, res) => {
         const userAgent = req.headers['user-agent'] || 'unknown'
         addSession(theUser, session_token, getClientIp(req), userAgent)
 
+        activity(req, 'login')
         return res.status(200).json({
             token: session_token,
         })

@@ -29,6 +29,7 @@ const FormOauth2 = async (req, res) => {
                         .status(200)
                         .json({ error: 'Please Login using your account password' })
 
+                activity(req, 'login')
                 const session_token = await Token(theUser, req)
                 return res.status(200).json({ token: session_token })
             }

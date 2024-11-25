@@ -1,22 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useState } from 'react'
 import {
-    CCard,
-    CCardGroup,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
     CCol,
     CRow,
-    CForm,
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CPagination,
-    CPaginationItem,
-    CSpinner,
-    CButton,
-    CButtonGroup,
     CFormSelect,
     CTable,
     CTableHead,
@@ -25,7 +10,6 @@ import {
     CTableBody,
     CTableDataCell,
 } from '@coreui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Pricing = () => {
     const [selectedOption, setSelectedOption] = useState('')

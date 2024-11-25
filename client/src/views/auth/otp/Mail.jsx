@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import {
     CCard,
     CCardBody,
-    CCardTitle,
     CFormInput,
     CButton,
     CContainer,
@@ -14,10 +13,9 @@ import {
     CForm,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faLock, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { useDispatch } from 'react-redux'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../config'
 import errorMessages from '../../../components/ErrorMessages'
 
 const MailOTP = () => {
@@ -31,29 +29,21 @@ const MailOTP = () => {
     const token = cookies.get(VITE_APP_SESSION)
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
-    const dispatch = useDispatch()
 
     const checkAuthentication = async () => {
         if (token === undefined) return navigate('/login')
 
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/auth/verify`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
-            )
+            .post(`/auth/verify`, null)
             .then((response) => {
                 if (response.data.is_email_verified) return navigate('/dashboard')
                 setEmail(response.data.email)
             })
             .catch((err) => {
-                if (!err.response) return console.error(err)
-                cookies.remove(VITE_APP_SESSION)
-                navigate('/login')
+                if (err.response) {
+                    cookies.remove(VITE_APP_SESSION)
+                    navigate('/login')
+                }
             })
             .finally(() => setLoading(false))
     }
@@ -92,18 +82,10 @@ const MailOTP = () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/auth/verify/otp`,
-                {
-                    otp: otp,
-                    recaptcha_ref: recaptcha,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
-            )
+            .post(`/auth/verify/otp`, {
+                otp: otp,
+                recaptcha_ref: recaptcha,
+            })
             .then((response) => {
                 if (response.data.error)
                     return setError({
@@ -115,7 +97,6 @@ const MailOTP = () => {
                 navigate(url)
             })
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
 

@@ -1,17 +1,5 @@
 import React from 'react'
-import {
-    CContainer,
-    CRow,
-    CCol,
-    CCard,
-    CCardImage,
-    CCardTitle,
-    CCardText,
-    CCardBody,
-    CImage,
-} from '@coreui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faShip, faRoute, faUser, faUserShield } from '@fortawesome/free-solid-svg-icons'
+import { CContainer, CRow, CCol, CImage } from '@coreui/react'
 
 const Team = () => {
     const teamMembers = [

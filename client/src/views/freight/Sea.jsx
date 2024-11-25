@@ -1,18 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-    CForm,
-    CFormLabel,
-    CFormInput,
     CRow,
     CCol,
-    CFormTextarea,
-    CCard,
-    CCardBody,
-    CCardTitle,
     CButton,
-    CProgress,
-    CFormSelect,
     CSpinner,
     CImage,
     CModal,
@@ -21,7 +12,7 @@ import {
     CModalFooter,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
@@ -90,17 +81,12 @@ const Sea = () => {
             recaptcha_ref: recaptcha,
         }
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/freight/b/sea`, updatedFormData, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
+            .post(`/freight/b/sea`, updatedFormData)
             .then((response) => {
                 addToast('Shipment has been confirmed.', 'Shipment')
                 navigate('/dashboard')
             })
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')

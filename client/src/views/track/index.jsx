@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-    CContainer,
     CInputGroup,
     CFormInput,
     CInputGroupText,
@@ -14,13 +13,11 @@ import {
     CButton,
     CSpinner,
 } from '@coreui/react'
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { useDropzone } from 'react-dropzone'
 import jsqr from 'jsqr'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../components/ErrorMessages'
 
 const Track = () => {
     const { addToast } = useToast()

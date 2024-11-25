@@ -1,47 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import {
-    CContainer,
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CForm,
-    CFormSelect,
-    CRow,
-    CCol,
-    CImage,
-    CCard,
-    CCardTitle,
-    CButton,
-    CCardHeader,
-    CSpinner,
-    CCardBody,
-    CCardText,
-    CCardFooter,
-    CTable,
-    CTableHead,
-    CTableRow,
-    CTableDataCell,
-    CTableBody,
-    CTableHeaderCell,
-    CTabs,
-    CTabList,
-    CTab,
-    CTabContent,
-    CTabPanel,
-} from '@coreui/react'
+import { CFormInput, CForm, CRow, CCol, CCard, CButton, CSpinner, CCardBody } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faCopy,
-    faEye,
-    faEyeSlash,
-    faPlus,
-    faPen,
-    faTrash,
-} from '@fortawesome/free-solid-svg-icons'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
+import { faCopy, faEye, faEyeSlash, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
+import { parseTimestamp } from '../../components/Timestamp'
 
 const API = () => {
     const { addToast } = useToast()
@@ -72,17 +37,9 @@ const API = () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/auth/token/new`,
-                {
-                    recaptcha_ref: recaptcha,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                    },
-                },
-            )
+            .post(`/auth/token/new`, {
+                recaptcha_ref: recaptcha,
+            })
             .then((response) =>
                 setResult((prevResult) => ({
                     ...prevResult,
@@ -90,7 +47,6 @@ const API = () => {
                 })),
             )
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)
@@ -100,16 +56,9 @@ const API = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/auth/token/`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
-            .then((response) => {
-                if (!response.data.error) setResult(response.data)
-            })
+            .get(`/auth/token/`)
+            .then((response) => setResult(response.data))
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)
@@ -146,24 +95,15 @@ const API = () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/auth/token/whitelist-ip`,
-                {
-                    whitelist_ip: result.whitelist_ip.toString(),
-                    recaptcha_ref: recaptcha,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                    },
-                },
-            )
+            .post(`/auth/token/whitelist-ip`, {
+                whitelist_ip: result.whitelist_ip.toString(),
+                recaptcha_ref: recaptcha,
+            })
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
                 addToast('Your changes has been saved.')
             })
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)
@@ -234,15 +174,15 @@ const API = () => {
                             <h4>Whitelisted IP</h4>
                             <CButton
                                 size="sm"
-                                className="text-white p-2"
+                                className="text-white"
                                 onClick={handleAddIp}
                                 disabled={disabledAdd}
                             >
                                 <FontAwesomeIcon icon={faPlus} /> Add
                             </CButton>
                         </div>
-                        {result.whitelist_ip.length === 0 && (
-                            <CCard>
+                        {result.whitelist_ip && result.whitelist_ip.length === 0 && (
+                            <CCard className="mb-3">
                                 <CCardBody className="justify-content-center m-3">
                                     <div className="clearfix">
                                         <h1 className="float-start display-3 me-4">OOPS</h1>
@@ -253,8 +193,8 @@ const API = () => {
                             </CCard>
                         )}
 
-                        {result.whitelist_ip.length !== 0 && (
-                            <CCard>
+                        {result.whitelist_ip && result.whitelist_ip.length !== 0 && (
+                            <CCard className="mb-3">
                                 <CCardBody>
                                     <CForm onSubmit={handleWhitelistIpSubmit}>
                                         {result.whitelist_ip.map((input, index) => (
@@ -287,6 +227,18 @@ const API = () => {
                                 </CCardBody>
                             </CCard>
                         )}
+
+                        <h4>Last accessed</h4>
+                        <CCard>
+                            <CCardBody>
+                                <p className="display-5">
+                                    {result.last_accessed
+                                        ? parseTimestamp(result.last_accessed)
+                                        : 'Never'}
+                                </p>
+                                <span className="lead">{result.user_agent}</span>
+                            </CCardBody>
+                        </CCard>
                     </CCol>
                 </CRow>
             )}

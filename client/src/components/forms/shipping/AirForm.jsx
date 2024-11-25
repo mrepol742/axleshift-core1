@@ -1,16 +1,6 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
-import {
-    CForm,
-    CProgress,
-    CFormLabel,
-    CFormInput,
-    CButton,
-    CRow,
-    CCol,
-    CFormTextarea,
-    CFormSelect,
-} from '@coreui/react'
+import { CForm, CProgress, CFormLabel, CFormInput, CButton, CFormSelect } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 

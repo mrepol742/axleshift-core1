@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import {
-    CContainer,
     CInputGroup,
     CFormInput,
     CInputGroupText,
@@ -8,31 +7,20 @@ import {
     CFormSelect,
     CRow,
     CCol,
-    CImage,
     CCard,
     CCardTitle,
-    CButton,
-    CCardHeader,
     CSpinner,
     CCardBody,
-    CCardText,
-    CCardFooter,
     CTable,
     CTableHead,
     CTableRow,
     CTableDataCell,
     CTableBody,
     CTableHeaderCell,
-    CTabs,
-    CTabList,
-    CTab,
-    CTabContent,
-    CTabPanel,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { parseTimestamp } from '../../../components/Timestamp'
-import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../components/ErrorMessages'
 
@@ -47,16 +35,9 @@ const Sentry = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/sec/management/sentry`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
-            .then((response) => {
-                if (!response.data.error) setResult(response.data)
-            })
+            .get(`/sec/management/sentry`)
+            .then((response) => setResult(response.data))
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)

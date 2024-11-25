@@ -116,11 +116,7 @@ router.post('/apikeys/deactivate', [recaptcha, auth], async (req, res, next) => 
 router.get('/activity', auth, async (req, res, next) => {
     try {
         const db = await database()
-        const activityLog = await db
-            .collection('activityLog')
-            .find()
-            .sort({ last_accessed: -1 })
-            .toArray()
+        const activityLog = await db.collection('activityLog').find().sort({ time: -1 }).toArray()
         if (activityLog) return res.status(200).json(activityLog)
     } catch (e) {
         logger.error(e)

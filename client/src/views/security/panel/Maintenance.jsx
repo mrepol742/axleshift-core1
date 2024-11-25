@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { CCard, CCardBody, CButton, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../components/ErrorMessages'
 
@@ -13,14 +13,9 @@ const Maintenance = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/sec/management/maintenance`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
+            .get(`/sec/management/maintenance`)
             .then((response) => setMaintenance(response.data.maintenance || 'a'))
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)

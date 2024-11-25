@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { CContainer, CRow, CCol } from '@coreui/react'
+import React, { useEffect, useState } from 'react'
+import { CRow, CCol } from '@coreui/react'
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../components/ErrorMessages'
-import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
 import Widgets from './dashboard/Widgets'
 
 const Dashboard = () => {
@@ -13,7 +12,6 @@ const Dashboard = () => {
     const [totalAverageLoadData, setTotalAverageLoadData] = useState(0)
     const [cpuUsageData, setCPUUsageData] = useState(Array(10).fill(0))
     const [totalCPUUsageData, setTotalCPUUsageData] = useState(0)
-    const session = cookies.get(VITE_APP_SESSION)
 
     const calculateAverageLoad = (user, system, idle, startTime) => {
         calculateCPUUsage(user, system, idle, startTime)
@@ -50,11 +48,7 @@ const Dashboard = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/metrics/v1/prometheus`, {
-                headers: {
-                    Authorization: `Bearer ${session}`,
-                },
-            })
+            .get(`/metrics/prometheus`)
             .then((response) => {
                 const data = response.data
                 setFormData(data)
@@ -66,8 +60,6 @@ const Dashboard = () => {
                 )
             })
             .catch((error) => {
-                if (error.status == 401) return window.location.reload()
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')

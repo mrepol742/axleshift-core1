@@ -16,7 +16,7 @@ import {
     CSpinner,
     CFormCheck,
 } from '@coreui/react'
-import { useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google'
+import { useGoogleLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faEnvelope,
@@ -30,7 +30,6 @@ import { faGithub, faGoogle, faMicrosoft } from '@fortawesome/free-brands-svg-ic
 import ReCAPTCHA from 'react-google-recaptcha'
 import {
     VITE_APP_RECAPTCHA_SITE_KEY,
-    VITE_APP_API_URL,
     VITE_APP_SESSION,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
@@ -109,9 +108,7 @@ const Register = () => {
         formDataToSend.append('newsletter', isChecked)
 
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/auth/register`, formDataToSend, {
-                headers: {},
-            })
+            .post(`/auth/register`, formDataToSend)
             .then((response) => {
                 if (response.data.error)
                     return setError({
@@ -123,7 +120,6 @@ const Register = () => {
                 window.location.href = url
             })
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
 

@@ -1,24 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
-import {
-    CContainer,
-    CDropdown,
-    CDropdownItem,
-    CDropdownMenu,
-    CDropdownToggle,
-    CHeader,
-    CHeaderNav,
-    CHeaderToggler,
-    CNavLink,
-    CNavItem,
-    useColorModes,
-    CForm,
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CButton,
-} from '@coreui/react'
+import { CForm, CInputGroup, CFormInput, CInputGroupText } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 

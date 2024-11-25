@@ -1,13 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react'
 import {
-    CImage,
-    CAvatar,
-    CBadge,
     CDropdown,
-    CDropdownDivider,
-    CDropdownHeader,
-    CDropdownItem,
     CDropdownMenu,
     CDropdownToggle,
     CListGroup,
@@ -15,13 +8,11 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
-import { useSelector } from 'react-redux'
-import { VITE_APP_API_URL } from '../config.js'
 import { useNotif } from './AppNotificationProvider'
 import { parseTimestamp } from '../components/Timestamp'
 
 const AppNotificationDropdown = () => {
-    const { notifs, addNotif } = useNotif()
+    const { notifs } = useNotif()
 
     return (
         <CDropdown variant="nav-item">

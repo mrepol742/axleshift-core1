@@ -1,17 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import {
-    CNavbar,
-    CNavbarBrand,
-    CNavbarNav,
-    CNavItem,
-    CNavLink,
-    CContainer,
-    CRow,
-    CCol,
-    CButton,
-    CSpinner,
-} from '@coreui/react'
+import { CContainer, CRow, CCol, CButton, CSpinner } from '@coreui/react'
 import AOS from 'aos'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightLong } from '@fortawesome/free-solid-svg-icons'

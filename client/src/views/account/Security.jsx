@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
-    CImage,
     CSpinner,
     CCard,
-    CCardHeader,
     CCardBody,
     CInputGroup,
     CInputGroupText,
@@ -15,12 +13,9 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons'
-import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useUserProvider } from '../../components/UserProvider'
-import errorMessages from '../../components/ErrorMessages'
-import { useToast } from '../../components/AppToastProvider'
 
 const Security = () => {
     const { user } = useUserProvider()

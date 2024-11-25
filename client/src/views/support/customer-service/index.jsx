@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CSpinner, CListGroup, CListGroupItem } from '@coreui/react'
 import database from '../../../firebase'
-import { collection, addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 
 import { useUserProvider } from '../../../components/UserProvider'
 import { parseTimestamp } from '../../../components/Timestamp'
@@ -32,6 +32,7 @@ const Inbox = () => {
             // i need coffeeeeeeeeee
             const latestMessagesArray = Array.from(latestMessagesMap.values())
             setThreadsID(latestMessagesArray)
+            setLoading(false)
         })
     }, [])
 

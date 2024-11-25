@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { CForm, CFormSelect } from '@coreui/react'
 
 const Search = () => {
-    const navigate = useNavigate()
     const urlParams = new URLSearchParams(window.location.search)
     const query = urlParams.get('q') ? urlParams.get('q') : ''
 

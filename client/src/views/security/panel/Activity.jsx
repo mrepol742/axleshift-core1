@@ -11,7 +11,6 @@ import {
     CCardBody,
     CCardTitle,
 } from '@coreui/react'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../components/ErrorMessages'
 import { parseTimestamp } from '../../../components/Timestamp'
@@ -23,14 +22,9 @@ const Activity = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/sec/management/activity`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
+            .get(`/sec/management/activity`)
             .then((response) => setResult(response.data))
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)
@@ -83,7 +77,12 @@ const Activity = () => {
                                         <CTableDataCell>{log.user_id}</CTableDataCell>
                                         <CTableDataCell>{log.session_id}</CTableDataCell>
                                         <CTableDataCell>{log.event}</CTableDataCell>
-                                        <CTableDataCell>{log.ip_address}</CTableDataCell>
+                                        <CTableDataCell>
+                                            {log.ip_address === '::1' ||
+                                            log.ip_address === '::ffff:127.0.0.1'
+                                                ? 'localhost'
+                                                : log.ip_address}
+                                        </CTableDataCell>
                                         <CTableDataCell>{log.user_agent}</CTableDataCell>
                                         <CTableDataCell>{parseTimestamp(log.time)}</CTableDataCell>
                                     </CTableRow>

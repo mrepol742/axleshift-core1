@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import {
-    VITE_APP_RECAPTCHA_SITE_KEY,
-    VITE_APP_SESSION,
-    VITE_APP_API_URL,
-    VITE_APP_GITHUB_OAUTH_CLIENT_ID,
-} from '../../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../config'
 import errorMessages from '../../../components/ErrorMessages'
 
 const Callback = () => {
@@ -19,24 +14,17 @@ const Callback = () => {
     const fetchData = async (code) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/auth/login`,
-                {
-                    type: 'github',
-                    code: code,
-                    recaptcha_ref: recaptcha,
-                },
-                {
-                    headers: {},
-                },
-            )
+            .post(`/auth/login`, {
+                type: 'github',
+                code: code,
+                recaptcha_ref: recaptcha,
+            })
             .then((response) => {
                 if (response.data.error) return setError(response.data.error)
                 cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })
                 window.location.href = '/'
             })
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 setError(message)

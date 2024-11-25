@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     CImage,
     CSpinner,
     CCard,
-    CCardHeader,
     CCardBody,
     CInputGroup,
     CInputGroupText,
@@ -17,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faUser, faClock } from '@fortawesome/free-solid-svg-icons'
 import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL } from '../../config'
 import { useUserProvider } from '../../components/UserProvider'
 import errorMessages from '../../components/ErrorMessages'
 import { useToast } from '../../components/AppToastProvider'
@@ -35,7 +34,6 @@ const Account = () => {
     const [contactInfo, setContactInfo] = useState({
         email: user.email,
     })
-    const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
     const handleInputChange = (e, type) => {
@@ -70,17 +68,12 @@ const Account = () => {
         }
 
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/auth/user`, updatedFormData, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
+            .post(`/auth/user`, updatedFormData)
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
                 addToast('Your changes has been saved.')
             })
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Fetch failed!')

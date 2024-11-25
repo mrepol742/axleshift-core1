@@ -74,7 +74,10 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
             },
         )
 
-        activity(req, `create invoice for shipment #${req.freight._id} with invoice id #${_invoice._id}`)
+        activity(
+            req,
+            `create invoice for shipment #${req.freight._id} with invoice id #${_invoice._id}`,
+        )
         return res.status(200).send({ r_url: invoice.invoiceUrl })
     } catch (err) {
         logger.error(err)
@@ -84,7 +87,6 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
 
 router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
     try {
-
         activity(req, `cancelled invoice #${req.invoice._id}`)
         return res.status(200).send()
     } catch (err) {

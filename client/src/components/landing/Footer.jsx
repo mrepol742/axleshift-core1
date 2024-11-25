@@ -1,15 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-    CContainer,
-    CRow,
-    CCol,
-    CImage,
-    CForm,
-    CFormInput,
-    CInputGroup,
-    CInputGroupText,
-} from '@coreui/react'
+import { CContainer } from '@coreui/react'
 
 const Footer = () => {
     const navigate = useNavigate()
