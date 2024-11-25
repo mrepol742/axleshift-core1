@@ -87,6 +87,17 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
 
 router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
     try {
+        const db = await database()
+        await db.collection('invoices').updateOne(
+            { _id: new ObjectId(req.invoice._id) },
+            {
+                $set: {
+                    status: 'CANCELLED',
+                    updated_at: Date.now(),
+                    modified_by: 'system',
+                },
+            },
+        )
         activity(req, `cancelled invoice #${req.invoice._id}`)
         return res.status(200).send()
     } catch (err) {
