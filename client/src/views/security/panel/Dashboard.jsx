@@ -47,7 +47,7 @@ const Dashboard = () => {
     }
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/metrics/prometheus`)
             .then((response) => {
                 const data = response.data

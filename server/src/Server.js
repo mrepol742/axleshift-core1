@@ -49,7 +49,6 @@ app.get('/', (req, res) => res.send(Quotes.getRandomQuote()))
 app.use('/api/v1/', APIv1)
 app.use('/webhook/v1/', GithubWebhook)
 app.use(
-    '/public',
     express.static(path.join(process.cwd(), 'public'), {
         setHeaders: function (res, filePath) {
             res.setHeader('Cache-Control', 'public, max-age=1296000')

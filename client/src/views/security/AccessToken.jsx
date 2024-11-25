@@ -36,7 +36,7 @@ const API = () => {
     const gen = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        await axios
+        axios
             .post(`/auth/token/new`, {
                 recaptcha_ref: recaptcha,
             })
@@ -55,7 +55,7 @@ const API = () => {
     }
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/auth/token/`)
             .then((response) => setResult(response.data))
             .catch((error) => {
@@ -94,7 +94,7 @@ const API = () => {
         e.preventDefault()
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        await axios
+        axios
             .post(`/auth/token/whitelist-ip`, {
                 whitelist_ip: result.whitelist_ip.toString(),
                 recaptcha_ref: recaptcha,

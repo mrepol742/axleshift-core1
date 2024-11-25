@@ -107,7 +107,7 @@ const Register = () => {
         formDataToSend.append('recaptcha_ref', recaptcha)
         formDataToSend.append('newsletter', isChecked)
 
-        await axios
+        axios
             .post(`/auth/register`, formDataToSend)
             .then((response) => {
                 if (response.data.error)

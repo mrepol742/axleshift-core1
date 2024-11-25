@@ -34,6 +34,7 @@ const Inbox = () => {
             setThreadsID(latestMessagesArray)
             setLoading(false)
         })
+        return () => unsubscribe()
     }, [])
 
     return (

@@ -80,7 +80,7 @@ const Air = () => {
             ...formData,
             recaptcha_ref: recaptcha,
         }
-        await axios
+        axios
             .post(`/freight/b/air`, updatedFormData)
             .then((response) => {
                 addToast('Shipment has been confirmed.', 'Shipment')

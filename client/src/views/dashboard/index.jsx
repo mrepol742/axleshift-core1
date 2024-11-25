@@ -29,7 +29,7 @@ const Dashboard = () => {
     const navigate = useNavigate()
 
     const fetchData = async (page) => {
-        await axios
+        axios
             .post(`/freight`, { page })
             .then((response) => {
                 setData(response.data.data)

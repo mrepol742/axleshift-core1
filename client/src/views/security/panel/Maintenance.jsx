@@ -12,7 +12,7 @@ const Maintenance = () => {
     const [maintenance, setMaintenance] = useState(false)
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/sec/management/maintenance`)
             .then((response) => setMaintenance(response.data.maintenance || 'a'))
             .catch((error) => {
