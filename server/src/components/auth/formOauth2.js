@@ -29,6 +29,8 @@ const FormOauth2 = async (req, res) => {
                         .status(200)
                         .json({ error: 'Please Login using your account password' })
 
+                req.user = theUser
+                req.session = { _id: 0 }
                 activity(req, 'login')
                 const session_token = await Token(theUser, req)
                 return res.status(200).json({ token: session_token })
@@ -75,6 +77,8 @@ const FormOauth2 = async (req, res) => {
         const theUser = await usersCollection.findOne({ email: credential.email })
         const session_token = await Token(theUser, req)
 
+        req.user = theUser
+        req.session = { _id: 0 }
         activity(req, 'created account')
         activity(req, `bind ${provider} as authentication credentials`)
         return res.status(200).json({ token: session_token })

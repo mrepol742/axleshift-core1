@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     CImage,
     CSpinner,
@@ -34,7 +34,13 @@ const Account = () => {
     const [contactInfo, setContactInfo] = useState({
         email: user.email,
     })
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [avatar, setAvatar] = useState('/images/default-avatar.jpg')
+
+    useEffect(() => {
+        if (user && user.ref) setAvatar(`${VITE_APP_API_URL}/u/${user.ref}.png`)
+        setLoading(false)
+    }, [])
 
     const handleInputChange = (e, type) => {
         const { id, value } = e.target
@@ -95,13 +101,15 @@ const Account = () => {
                     <CCard className="mb-3">
                         <CCardBody>
                             <CForm onSubmit={handleAccountDetails}>
-                                <CImage
-                                    crossOrigin="Anonymous"
-                                    src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
-                                    className="border border-5 mb-3 rounded-2"
-                                    width="90px"
-                                    loading="lazy"
-                                />
+                                {!loading && (
+                                    <CImage
+                                        crossOrigin="Anonymous"
+                                        src={avatar}
+                                        className="border border-5 mb-3 rounded-2"
+                                        width="90px"
+                                        loading="lazy"
+                                    />
+                                )}
                                 <CFormInput
                                     id="profile_pic"
                                     type="file"

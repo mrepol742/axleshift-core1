@@ -7,11 +7,12 @@ const Logout = () => {
 
     const logout = async () => {
         await axios
-            .post(`/auth/logout`, null)
+            .post(`/auth/logout`)
             .then((response) => {
                 cookies.remove(VITE_APP_SESSION)
                 window.location.href = '/'
             })
+            .catch((error) => (window.location.href = '/'))
             .finally(() => setLoading(false))
     }
 

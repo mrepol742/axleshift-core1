@@ -18,6 +18,8 @@ const FormLogin = async (req, res) => {
         const userAgent = req.headers['user-agent'] || 'unknown'
         addSession(theUser, session_token, getClientIp(req), userAgent)
 
+        req.user = theUser
+        req.session = { _id: 0 }
         activity(req, 'login')
         return res.status(200).json({
             token: session_token,
