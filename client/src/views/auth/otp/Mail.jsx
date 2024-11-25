@@ -33,7 +33,7 @@ const MailOTP = () => {
     const checkAuthentication = async () => {
         if (token === undefined) return navigate('/login')
 
-        await axios
+        axios
             .post(`/auth/verify`, null)
             .then((response) => {
                 if (response.data.is_email_verified) return navigate('/dashboard')
@@ -81,7 +81,7 @@ const MailOTP = () => {
         e.preventDefault()
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        await axios
+        axios
             .post(`/auth/verify/otp`, {
                 otp: otp,
                 recaptcha_ref: recaptcha,

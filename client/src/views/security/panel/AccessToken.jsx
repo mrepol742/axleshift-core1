@@ -32,7 +32,7 @@ const AccessToken = () => {
     const handleDeactivation = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        await axios
+        axios
             .post(`/sec/management/apikeys/deactivate`, {
                 recaptcha_ref: recaptcha,
             })
@@ -46,7 +46,7 @@ const AccessToken = () => {
     }
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/sec/management/apikeys`)
             .then((response) => setResult(response.data))
             .catch((error) => {

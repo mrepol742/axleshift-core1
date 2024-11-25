@@ -82,7 +82,7 @@ const FreightInfo = () => {
     const bookShipment = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        await axios
+        axios
             .post(`/invoices`, {
                 id: id,
                 recaptcha_ref: recaptcha,
@@ -98,7 +98,7 @@ const FreightInfo = () => {
 
     const fetchData = async () => {
         setLoading(true)
-        await axios
+        axios
             .get(`/freight/${id}`)
             .then((response) => {
                 setType(response.data.data.type)
@@ -122,7 +122,7 @@ const FreightInfo = () => {
             recaptcha_ref: recaptcha,
         }
 
-        await axios
+        axios
             .post(`/freight/u/${type}/${id}`, updatedFormData)
             .then((response) => addToast('Your changes has been saved.'))
             .catch((error) => {
@@ -145,7 +145,7 @@ const FreightInfo = () => {
         }
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        await axios
+        axios
             .post(`/freight/c/${id}`, { recaptcha_ref: recaptcha })
             .then((response) => {
                 addToast('Shipment has been cancelled.')

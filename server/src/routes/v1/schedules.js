@@ -5,8 +5,44 @@ import auth from '../../middleware/auth.js'
 
 const router = express.Router()
 
-router.post('/schudules', auth, async (req, res) => {
-    res.status(501).send()
+router.get('/', auth, async (req, res) => {
+    try {
+        const db = await database()
+        const freightCollection = db.collection('freight')
+
+        const filter = {
+            status: { $ne: 'canceled' },
+            ...(req.user.role !== 'admin' ? { user_id: req.user._id } : {}),
+        }
+        const freight = await freightCollection.find(filter).sort({ created_at: -1 }).toArray()
+
+        const events = []
+
+        const _datein = {
+            sea: 'shipping_sailing_date',
+            air: 'shipping_preferred_departure_date',
+            land: 'shipping_pickup_date',
+        }
+
+        const _dateout = {
+            sea: 'shipping_estimated_arrival_date',
+            air: 'shipping_preferred_arrival_date',
+            land: 'shipping_delivery_date',
+        }
+
+        for (let i = 0; i < freight.length; i++) {
+            events.push({
+                title: freight[i].data.shipment.shipment_description,
+                start: freight[i].data.shipping[_datein[freight[i].type]],
+                end: freight[i].data.shipping[_dateout[freight[i].type]],
+                allDay: false,
+            })
+        }
+        return res.status(200).json(events)
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).send()
 })
 
 export default router

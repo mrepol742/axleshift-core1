@@ -80,7 +80,7 @@ const Sea = () => {
             ...formData,
             recaptcha_ref: recaptcha,
         }
-        await axios
+        axios
             .post(`/freight/b/sea`, updatedFormData)
             .then((response) => {
                 addToast('Shipment has been confirmed.', 'Shipment')

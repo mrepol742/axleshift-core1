@@ -28,7 +28,7 @@ const Invoices = () => {
     const [result, setResult] = useState([])
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/invoices`)
             .then((response) => setResult(response.data))
             .catch((error) => {

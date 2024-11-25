@@ -21,7 +21,7 @@ const Activity = () => {
     const [result, setResult] = useState([])
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/sec/activity`)
             .then((response) => setResult(response.data))
             .catch((error) => {

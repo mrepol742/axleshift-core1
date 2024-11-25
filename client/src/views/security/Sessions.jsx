@@ -17,7 +17,7 @@ const Sessions = () => {
     const handleLogout = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        await axios
+        axios
             .post(`/sec/sessions/logout`, {
                 recaptcha_ref: recaptcha,
             })
@@ -31,7 +31,7 @@ const Sessions = () => {
     }
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/sec/sessions`)
             .then((response) => setResult(response.data))
             .catch((error) => {

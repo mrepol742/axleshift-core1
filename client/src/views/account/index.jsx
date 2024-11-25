@@ -73,7 +73,7 @@ const Account = () => {
             recaptcha_ref: recaptcha,
         }
 
-        await axios
+        axios
             .post(`/auth/user`, updatedFormData)
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
@@ -102,15 +102,13 @@ const Account = () => {
                     <CCard className="mb-3">
                         <CCardBody>
                             <CForm onSubmit={handleAccountDetails}>
-                                {!loading && (
-                                    <CImage
-                                        crossOrigin="Anonymous"
-                                        src={avatar}
-                                        className="border border-5 mb-3 rounded-2"
-                                        width="90px"
-                                        loading="lazy"
-                                    />
-                                )}
+                                <CImage
+                                    crossOrigin="Anonymous"
+                                    src={avatar}
+                                    className="border border-5 mb-3 rounded-2"
+                                    width="90px"
+                                    loading="lazy"
+                                />
                                 <CFormInput
                                     id="profile_pic"
                                     type="file"

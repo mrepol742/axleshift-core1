@@ -7,7 +7,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
     try {
         const db = await database()
         const sessionsCollection = db.collection('sessions')
-        const session =  await sessionsCollection.insertOne({
+        const session = await sessionsCollection.insertOne({
             user_id: theUser._id,
             token: sessionToken,
             active: true,
@@ -22,7 +22,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
                 'x-forwarded-for': ip,
             },
             user: { _id: theUser._id },
-            session: { _id: session._id},
+            session: { _id: session._id },
         }
 
         if (theUser.log) activity(req, theUser.log)
