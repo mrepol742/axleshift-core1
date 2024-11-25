@@ -1,4 +1,5 @@
 import express from 'express'
+import useragent from 'useragent'
 import database from '../../../models/mongodb.js'
 import logger from '../../../components/logger.js'
 import auth from '../../../middleware/auth.js'
@@ -15,6 +16,9 @@ router.get('/', auth, async (req, res) => {
             sessionsCollection.findOne({ token: req.session.token }),
             sessionsCollection.countDocuments({ token: req.session.token }),
         ])
+
+        const agent = useragent.parse(session.user_agent)
+        session.user_agent = `${agent.os.family} ${agent.family}`
 
         if (session)
             return res.status(200).json({ session: session, logout: !(activeSessionsCount > 1) })

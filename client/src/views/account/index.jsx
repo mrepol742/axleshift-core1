@@ -22,7 +22,7 @@ import errorMessages from '../../components/ErrorMessages'
 import { useToast } from '../../components/AppToastProvider'
 
 const Account = () => {
-    const { user } = useUserProvider()
+    const { user, setUser } = useUserProvider()
     const recaptchaRef = React.useRef()
     const timezones = Intl.supportedValuesOf('timeZone')
     const { addToast } = useToast()
@@ -77,6 +77,7 @@ const Account = () => {
             .post(`/auth/user`, updatedFormData)
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
+                setUser(response.data)
                 addToast('Your changes has been saved.')
             })
             .catch((error) => {

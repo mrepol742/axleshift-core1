@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
+import useragent from 'useragent'
 import database from '../../../models/mongodb.js'
 import logger from '../../../components/logger.js'
 import dependabot from '../../../components/dependabot.js'
@@ -14,12 +15,19 @@ router.get('/', auth, async (req, res, next) => res.status(301).send())
 router.get('/sessions', auth, async (req, res, next) => {
     try {
         const db = await database()
-        const response = await db
+        const sessions = await db
             .collection('sessions')
             .find()
             .sort({ last_accessed: -1 })
             .toArray()
-        return res.status(200).json(response)
+
+        for (let i = 0; i < sessions.length; i++) {
+            const user_agent = sessions[i].user_agent
+            const agent = useragent.parse(user_agent)
+            sessions[i].user_agent = `${agent.os.family} ${agent.family}`
+        }
+
+        return res.status(200).json(sessions)
     } catch (e) {
         logger.error(e)
     }
@@ -81,6 +89,10 @@ router.get('/apikeys', auth, async (req, res, next) => {
         for (let i = 0; i < apiToken.length; i++) {
             const token = apiToken[i].token
             apiToken[i].token = token.match(/(?<=core1_)\w{14}/)[0]
+
+            const user_agent = apiToken[i].user_agent
+            const agent = useragent.parse(user_agent)
+            apiToken[i].user_agent = `${agent.os.family} ${agent.family}`
         }
 
         if (apiToken)
@@ -117,7 +129,14 @@ router.get('/activity', auth, async (req, res, next) => {
     try {
         const db = await database()
         const activityLog = await db.collection('activityLog').find().sort({ time: -1 }).toArray()
-        if (activityLog) return res.status(200).json(activityLog)
+
+        for (let i = 0; i < activityLog.length; i++) {
+            const user_agent = activityLog[i].user_agent
+            const agent = useragent.parse(user_agent)
+            activityLog[i].user_agent = `${agent.os.family} ${agent.family}`
+        }
+
+        return res.status(200).json(activityLog)
     } catch (e) {
         logger.error(e)
     }

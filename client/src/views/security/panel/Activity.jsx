@@ -61,7 +61,7 @@ const Activity = () => {
                                         Event
                                     </CTableHeaderCell>
                                     <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        IP Address
+                                        Location
                                     </CTableHeaderCell>
                                     <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                         Device
