@@ -26,11 +26,12 @@ const Sessions = () => {
         logout: true,
     })
 
-    const handleLogout = async () => {
+    const handleLogout = async (id) => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         axios
             .post(`/sec/sessions/logout`, {
+                session_id: id,
                 recaptcha_ref: recaptcha,
             })
             .then((response) => window.location.reload())
@@ -73,11 +74,6 @@ const Sessions = () => {
                     <CCardBody>
                         <div className="d-flex justify-content-between align-items-center">
                             <div>
-                                {session.current && (
-                                    <CBadge color="danger" className="me-2">
-                                        Current
-                                    </CBadge>
-                                )}
                                 <CBadge color="primary" className="me-2">
                                     {parseTimestamp(session.last_accessed)}
                                 </CBadge>
@@ -89,7 +85,9 @@ const Sessions = () => {
                                         : session.ip_address}
                                 </CCardText>
                             </div>
-                            <CButton color="primary">Logout</CButton>
+                            <CButton color="danger" onClick={(e) => handleLogout(session._id)}>
+                                Logout
+                            </CButton>
                         </div>
                     </CCardBody>
                 </CCard>
@@ -97,24 +95,18 @@ const Sessions = () => {
 
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol className="mb-3">
-                    {!loading && (
-                        <>
-                            <h4>Last login IP Address</h4>
-                            <CCard>
-                                <CCardBody>
-                                    <p className="display-3">
-                                        {result.current_session.ip_address === '::1' ||
-                                        result.current_session.ip_address === '::ffff:127.0.0.1'
-                                            ? 'localhost'
-                                            : result.current_session.ip_address}
-                                    </p>
-                                    <span className="lead">
-                                        {result.current_session.user_agent}
-                                    </span>
-                                </CCardBody>
-                            </CCard>
-                        </>
-                    )}
+                    <h4>This device</h4>
+                    <CCard>
+                        <CCardBody>
+                            <p className="display-3">
+                                {result.current_session.ip_address === '::1' ||
+                                result.current_session.ip_address === '::ffff:127.0.0.1'
+                                    ? 'localhost'
+                                    : result.current_session.ip_address}
+                            </p>
+                            <span className="lead">{result.current_session.user_agent}</span>
+                        </CCardBody>
+                    </CCard>
                 </CCol>
                 <CCol className="mb-3">
                     <h4>Logout other sessions</h4>
@@ -129,7 +121,7 @@ const Sessions = () => {
                                 color="danger"
                                 className="mt-4 d-block me-2 rounded"
                                 disabled={result.logout}
-                                onClick={handleLogout}
+                                onClick={(e) => handleLogout(null)}
                             >
                                 Logout other sessions
                             </CButton>

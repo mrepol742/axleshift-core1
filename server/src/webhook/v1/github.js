@@ -11,12 +11,14 @@ router.post('/', async (req, res) => {
     try {
         const github_signature = req.headers['x-hub-signature-256']
         if (!github_signature) return res.status(400).send()
-        const hash = 'sha256=' + crypto.createHmac('sha256', GITHUB_WEBHOOK_SECRET)
-        .update(JSON.stringify(req.body))
-        .digest('hex');
+        const hash =
+            'sha256=' +
+            crypto
+                .createHmac('sha256', GITHUB_WEBHOOK_SECRET)
+                .update(JSON.stringify(req.body))
+                .digest('hex')
 
-        if (hash !== github_signature)
-            return res.status(401).send()
+        if (hash !== github_signature) return res.status(401).send()
 
         if (req.body.ref === 'refs/heads/core1-backend')
             run('git pull origin core1-backend && npm i && npm run pm2:restart')
