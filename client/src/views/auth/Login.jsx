@@ -106,7 +106,7 @@ const Login = () => {
         formData.append('type', type)
         formData.append('recaptcha_ref', recaptcha)
 
-        await axios
+        axios
             .post(`/auth/login`, formData, {
                 headers: {},
             })

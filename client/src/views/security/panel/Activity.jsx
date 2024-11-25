@@ -21,7 +21,7 @@ const Activity = () => {
     const [result, setResult] = useState([])
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/sec/management/activity`)
             .then((response) => setResult(response.data))
             .catch((error) => {
@@ -61,7 +61,7 @@ const Activity = () => {
                                         Event
                                     </CTableHeaderCell>
                                     <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        IP Address
+                                        Location
                                     </CTableHeaderCell>
                                     <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                         Device

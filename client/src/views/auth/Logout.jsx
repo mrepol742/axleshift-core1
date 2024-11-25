@@ -6,7 +6,7 @@ const Logout = () => {
     const [loading, setLoading] = useState(true)
 
     const logout = async () => {
-        await axios
+        axios
             .post(`/auth/logout`)
             .then((response) => {
                 cookies.remove(VITE_APP_SESSION)

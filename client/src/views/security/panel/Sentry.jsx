@@ -34,7 +34,7 @@ const Sentry = () => {
     const [state, setState] = useState(0)
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/sec/management/sentry`)
             .then((response) => setResult(response.data))
             .catch((error) => {

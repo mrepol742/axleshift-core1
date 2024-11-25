@@ -25,7 +25,7 @@ const Auth = (WrappedComponent) => {
             if (!token) return setIsAuth(false)
             if (user && Object.keys(user).length > 0) return setIsAuth(true)
 
-            await axios
+            axios
                 .post(`/auth/verify`, null)
                 .then((response) => {
                     if (response.data.otp) return (window.location.href = '/otp')

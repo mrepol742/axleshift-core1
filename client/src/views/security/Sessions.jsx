@@ -1,23 +1,35 @@
 import React, { useState, useEffect } from 'react'
-import { CCard, CCardBody, CButton, CRow, CCol, CSpinner } from '@coreui/react'
+import {
+    CCard,
+    CCardBody,
+    CButton,
+    CRow,
+    CCol,
+    CSpinner,
+    CCardTitle,
+    CCardText,
+    CBadge,
+} from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
+import { parseTimestamp } from '../../components/Timestamp'
 
 const Sessions = () => {
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
     const [result, setResult] = useState({
-        session: [],
+        sessions: [],
+        current_session: [],
         logout: true,
     })
 
     const handleLogout = async () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-        await axios
+        axios
             .post(`/sec/sessions/logout`, {
                 recaptcha_ref: recaptcha,
             })
@@ -31,7 +43,7 @@ const Sessions = () => {
     }
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/sec/sessions`)
             .then((response) => setResult(response.data))
             .catch((error) => {
@@ -56,6 +68,33 @@ const Sessions = () => {
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
+            {result.sessions.map((session, index) => (
+                <CCard key={index} className="mb-3">
+                    <CCardBody>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <div>
+                                {session.current && (
+                                    <CBadge color="danger" className="me-2">
+                                        Current
+                                    </CBadge>
+                                )}
+                                <CBadge color="primary" className="me-2">
+                                    {parseTimestamp(session.last_accessed)}
+                                </CBadge>
+                                <CCardTitle>{session.user_agent}</CCardTitle>
+                                <CCardText>
+                                    {session.ip_address === '::1' ||
+                                    session.ip_address === '::ffff:127.0.0.1'
+                                        ? 'localhost'
+                                        : session.ip_address}
+                                </CCardText>
+                            </div>
+                            <CButton color="primary">Logout</CButton>
+                        </div>
+                    </CCardBody>
+                </CCard>
+            ))}
+
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol className="mb-3">
                     {!loading && (
@@ -64,12 +103,14 @@ const Sessions = () => {
                             <CCard>
                                 <CCardBody>
                                     <p className="display-3">
-                                        {result.session.ip_address === '::1' ||
-                                        result.session.ip_address === '::ffff:127.0.0.1'
+                                        {result.current_session.ip_address === '::1' ||
+                                        result.current_session.ip_address === '::ffff:127.0.0.1'
                                             ? 'localhost'
-                                            : result.session.ip_address}
+                                            : result.current_session.ip_address}
                                     </p>
-                                    <span className="lead">{result.session.user_agent}</span>
+                                    <span className="lead">
+                                        {result.current_session.user_agent}
+                                    </span>
                                 </CCardBody>
                             </CCard>
                         </>

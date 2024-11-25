@@ -18,7 +18,7 @@ const TrackInfo = () => {
     const navigate = useNavigate()
 
     const fetchData = async () => {
-        await axios
+        axios
             .get(`/track/${id}`)
             .then((response) => setResponseData(response.data))
             .catch((error) => setError(true))

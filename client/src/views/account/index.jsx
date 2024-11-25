@@ -22,7 +22,7 @@ import errorMessages from '../../components/ErrorMessages'
 import { useToast } from '../../components/AppToastProvider'
 
 const Account = () => {
-    const { user } = useUserProvider()
+    const { user, setUser } = useUserProvider()
     const recaptchaRef = React.useRef()
     const timezones = Intl.supportedValuesOf('timeZone')
     const { addToast } = useToast()
@@ -73,10 +73,11 @@ const Account = () => {
             recaptcha_ref: recaptcha,
         }
 
-        await axios
+        axios
             .post(`/auth/user`, updatedFormData)
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
+                setUser(response.data)
                 addToast('Your changes has been saved.')
             })
             .catch((error) => {
@@ -101,15 +102,13 @@ const Account = () => {
                     <CCard className="mb-3">
                         <CCardBody>
                             <CForm onSubmit={handleAccountDetails}>
-                                {!loading && (
-                                    <CImage
-                                        crossOrigin="Anonymous"
-                                        src={avatar}
-                                        className="border border-5 mb-3 rounded-2"
-                                        width="90px"
-                                        loading="lazy"
-                                    />
-                                )}
+                                <CImage
+                                    crossOrigin="Anonymous"
+                                    src={avatar}
+                                    className="border border-5 mb-3 rounded-2"
+                                    width="90px"
+                                    loading="lazy"
+                                />
                                 <CFormInput
                                     id="profile_pic"
                                     type="file"

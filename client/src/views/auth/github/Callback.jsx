@@ -13,7 +13,7 @@ const Callback = () => {
 
     const fetchData = async (code) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
-        await axios
+        axios
             .post(`/auth/login`, {
                 type: 'github',
                 code: code,

@@ -50,5 +50,9 @@
   "engines": {
     "node": ">=20.x"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "request": "^2.88.2",
+    "yamlparser": "^0.0.2"
+  }
 }

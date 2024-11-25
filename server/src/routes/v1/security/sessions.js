@@ -1,4 +1,5 @@
 import express from 'express'
+import useragent from 'useragent'
 import database from '../../../models/mongodb.js'
 import logger from '../../../components/logger.js'
 import auth from '../../../middleware/auth.js'
@@ -11,13 +12,32 @@ router.get('/', auth, async (req, res) => {
         const db = await database()
         const sessionsCollection = await db.collection('sessions')
 
-        const [session, activeSessionsCount] = await Promise.all([
+        const filter = { user_id: req.user._id, active: true }
+        const [sessions, session, activeSessionsCount] = await Promise.all([
+            sessionsCollection.find(filter).sort({ last_accessed: -1 }).toArray(),
             sessionsCollection.findOne({ token: req.session.token }),
-            sessionsCollection.countDocuments({ token: req.session.token }),
+            sessionsCollection.countDocuments(filter),
         ])
 
+        const agent = useragent.parse(session.user_agent)
+        session.user_agent = `${agent.os.family} ${agent.family}`
+
+        for (let i = 0; i < sessions.length; i++) {
+            const agent = useragent.parse(sessions[i].user_agent)
+            sessions[i].user_agent = `${agent.os.family} ${agent.family}`
+            if (req.session.token === sessions[i].token) sessions[i].current = true
+            sessions[i].token = null
+        }
+
         if (session)
-            return res.status(200).json({ session: session, logout: !(activeSessionsCount > 1) })
+            return res.status(200).json({
+                sessions: sessions,
+                current_session: {
+                    ip_address: session.ip_address,
+                    user_agent: session.user_agent,
+                },
+                logout: !(activeSessionsCount > 1),
+            })
     } catch (e) {
         logger.error(e)
     }

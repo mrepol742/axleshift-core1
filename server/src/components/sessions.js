@@ -1,11 +1,13 @@
 import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
 import logger from './logger.js'
+import activity from './activity.js'
 
 export const addSession = async (theUser, sessionToken, ip, userAgent) => {
     try {
         const db = await database()
-        db.collection('sessions').insertOne({
+        const sessionsCollection = db.collection('sessions')
+        const session = await sessionsCollection.insertOne({
             user_id: theUser._id,
             token: sessionToken,
             active: true,
@@ -14,6 +16,18 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
             compromised: false,
             last_accessed: Date.now(),
         })
+        const req = {
+            headers: {
+                'user-agent': userAgent,
+                'x-forwarded-for': ip,
+            },
+            user: { _id: theUser._id },
+            session: { _id: session._id },
+        }
+
+        if (theUser.log) activity(req, theUser.log)
+        if (theUser.log1) activity(req, theUser.log1)
+        activity(req, 'login')
     } catch (e) {
         logger.error(e)
     }
