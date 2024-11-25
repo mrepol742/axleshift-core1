@@ -8,7 +8,6 @@ import {
     CSidebarFooter,
     CSidebarHeader,
     CSidebarToggler,
-    CNavLink,
 } from '@coreui/react'
 import { AppSidebarNav } from './AppSidebarNav'
 import navigation from '../_nav'

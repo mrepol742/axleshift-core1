@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
     CContainer,
@@ -10,23 +10,16 @@ import {
     CHeader,
     CHeaderNav,
     CHeaderToggler,
-    CNavLink,
     CNavItem,
     useColorModes,
-    CForm,
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
     CButton,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faBars,
-    faBell,
     faMoon,
     faSun,
     faCircleHalfStroke,
-    faMagnifyingGlass,
     faCalendarDays,
     faPlus,
 } from '@fortawesome/free-solid-svg-icons'

@@ -14,7 +14,6 @@ import sanitize from './middleware/sanitize.js'
 import logger from './components/logger.js'
 import APIv1 from './routes/v1/index.js'
 import GithubWebhook from './webhook/v1/github.js'
-import PrometheusMetrics from './metrics/v1/prometheus.js'
 
 const app = express()
 const upload = multer()
@@ -49,8 +48,6 @@ app.use(pinoHttp({ logger }))
 app.get('/', (req, res) => res.send(Quotes.getRandomQuote()))
 app.use('/api/v1/', APIv1)
 app.use('/webhook/v1/', GithubWebhook)
-app.use('/metrics/v1/', PrometheusMetrics)
-app.use(express.static('public'))
 app.use(
     '/public',
     express.static(path.join(process.cwd(), 'public'), {

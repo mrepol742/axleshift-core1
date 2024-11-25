@@ -19,7 +19,7 @@ import {
     CModalBody,
     CModalFooter,
 } from '@coreui/react'
-import { useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google'
+import { useGoogleLogin } from '@react-oauth/google'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faEnvelope,
@@ -35,7 +35,6 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import {
     VITE_APP_RECAPTCHA_SITE_KEY,
     VITE_APP_SESSION,
-    VITE_APP_API_URL,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
 import errorMessages from '../../components/ErrorMessages'
@@ -108,7 +107,7 @@ const Login = () => {
         formData.append('recaptcha_ref', recaptcha)
 
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/auth/login`, formData, {
+            .post(`/auth/login`, formData, {
                 headers: {},
             })
             .then((response) => {

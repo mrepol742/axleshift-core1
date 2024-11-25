@@ -1,21 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import {
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CForm,
-    CRow,
-    CCol,
-    CCard,
-    CCardText,
-    CSpinner,
-} from '@coreui/react'
+import { CRow, CCol, CCard, CCardText, CSpinner } from '@coreui/react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { VITE_APP_API_URL, VITE_APP_SESSION, VITE_APP_GOOGLE_MAP } from '../../config'
-import Page404 from '../errors/404'
+import { VITE_APP_GOOGLE_MAP } from '../../config'
 
 const TrackInfo = () => {
     const [loading, setLoading] = useState(true)
@@ -32,16 +19,9 @@ const TrackInfo = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/track/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
+            .get(`/track/${id}`)
             .then((response) => setResponseData(response.data))
-            .catch((error) => {
-                console.error(error)
-                setError(true)
-            })
+            .catch((error) => setError(true))
             .finally(() => setLoading(false))
     }
 

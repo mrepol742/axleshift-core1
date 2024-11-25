@@ -1,19 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
-    CCard,
-    CCardGroup,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
     CCol,
     CRow,
-    CForm,
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CPagination,
-    CPaginationItem,
     CSpinner,
     CButton,
     CButtonGroup,
@@ -27,7 +16,7 @@ import { faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { QRCodeSVG } from 'qrcode.react'
 import html2canvas from 'html2canvas'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import ShipperForm from '../../components/forms/ShipperForm'
 import ConsineeForm from '../../components/forms/ConsineeForm'
 import ShipmentForm from '../../components/forms/ShipmentForm'
@@ -36,7 +25,6 @@ import LandForm from '../../components/forms/shipping/LandForm'
 import SeaForm from '../../components/forms/shipping/SeaForm'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../components/ErrorMessages'
-import Page404 from '../errors/404'
 
 const FreightInfo = () => {
     const dataF = {
@@ -95,21 +83,12 @@ const FreightInfo = () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/invoices`,
-                {
-                    id: id,
-                    recaptcha_ref: recaptcha,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                    },
-                },
-            )
+            .post(`/invoices`, {
+                id: id,
+                recaptcha_ref: recaptcha,
+            })
             .then((response) => (window.location.href = response.data.r_url))
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)
@@ -120,11 +99,7 @@ const FreightInfo = () => {
     const fetchData = async () => {
         setLoading(true)
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/freight/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
+            .get(`/freight/${id}`)
             .then((response) => {
                 setType(response.data.data.type)
                 setStatus(response.data.data.status)
@@ -148,14 +123,9 @@ const FreightInfo = () => {
         }
 
         await axios
-            .post(`${VITE_APP_API_URL}/api/v1/freight/u/${type}/${id}`, updatedFormData, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
+            .post(`/freight/u/${type}/${id}`, updatedFormData)
             .then((response) => addToast('Your changes has been saved.'))
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
@@ -176,21 +146,12 @@ const FreightInfo = () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/freight/c/${id}`,
-                { recaptcha_ref: recaptcha },
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                    },
-                },
-            )
+            .post(`/freight/c/${id}`, { recaptcha_ref: recaptcha })
             .then((response) => {
                 addToast('Shipment has been cancelled.')
                 navigate('/dashboard')
             })
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')

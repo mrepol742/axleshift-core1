@@ -1,16 +1,5 @@
 import React from 'react'
-import {
-    CCardGroup,
-    CCard,
-    CCol,
-    CRow,
-    CCardBody,
-    CCardTitle,
-    CCardImageOverlay,
-    CCardText,
-    CCardImage,
-    CCardHeader,
-} from '@coreui/react'
+import { CCard, CCardBody, CCardText, CCardHeader } from '@coreui/react'
 import Masonry from 'react-masonry-css'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -33,7 +22,7 @@ const Freight = () => {
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column"
             >
-                {user === 'admin' && (
+                {user.role === 'admin' && (
                     <div>
                         <CCard
                             className="bg-dark text-white mb-3"

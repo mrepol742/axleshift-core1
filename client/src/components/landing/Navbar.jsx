@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
 import {
     CNavbar,
     CContainer,
@@ -16,16 +15,9 @@ import {
     CDropdownItem,
     useColorModes,
     CImage,
-    CHeaderNav,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faBars,
-    faBell,
-    faMoon,
-    faSun,
-    faCircleHalfStroke,
-} from '@fortawesome/free-solid-svg-icons'
+import { faMoon, faSun, faCircleHalfStroke } from '@fortawesome/free-solid-svg-icons'
 
 const Navbar = () => {
     const [visible, setVisible] = useState(false)

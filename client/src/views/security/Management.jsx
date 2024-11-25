@@ -1,19 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-    CTable,
-    CTableHead,
-    CTableRow,
-    CTableDataCell,
-    CTableBody,
-    CTableHeaderCell,
-    CTabs,
-    CTabList,
-    CTab,
-    CTabContent,
-    CTabPanel,
-    CSpinner,
-} from '@coreui/react'
+import { CTabs, CTabList, CTab, CTabContent, CTabPanel, CSpinner } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faChartLine,

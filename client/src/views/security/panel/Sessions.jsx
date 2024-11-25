@@ -1,37 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import {
-    CContainer,
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CForm,
-    CFormSelect,
-    CRow,
-    CCol,
-    CImage,
     CCard,
     CCardTitle,
     CButton,
-    CCardHeader,
     CSpinner,
     CCardBody,
-    CCardText,
-    CCardFooter,
     CTable,
     CTableHead,
     CTableRow,
     CTableDataCell,
     CTableBody,
     CTableHeaderCell,
-    CTabs,
-    CTabList,
-    CTab,
-    CTabContent,
-    CTabPanel,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { parseTimestamp } from '../../../components/Timestamp'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../components/ErrorMessages'
 
@@ -45,22 +28,11 @@ const Sessions = () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/sec/management/sessions/logout`,
-                {
-                    recaptcha_ref: recaptcha,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                    },
-                },
-            )
-            .then((response) => {
-                if (!response.data.error) return window.location.reload()
+            .post(`/sec/management/sessions/logout`, {
+                recaptcha_ref: recaptcha,
             })
+            .then((response) => window.location.reload)
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)
@@ -70,16 +42,9 @@ const Sessions = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/sec/management/sessions`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
-            .then((response) => {
-                if (!response.data.error) setResult(response.data)
-            })
+            .get(`/sec/management/sessions`)
+            .then((response) => setResult(response.data))
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)
@@ -144,7 +109,12 @@ const Sessions = () => {
                                 {result.map((session, index) => (
                                     <CTableRow key={index}>
                                         <CTableDataCell>{session.user_id}</CTableDataCell>
-                                        <CTableDataCell>{session.ip_address}</CTableDataCell>
+                                        <CTableDataCell>
+                                            {session.ip_address === '::1' ||
+                                            session.ip_address === '::ffff:127.0.0.1'
+                                                ? 'localhost'
+                                                : session.ip_address}
+                                        </CTableDataCell>
                                         <CTableDataCell>{session.user_agent}</CTableDataCell>
                                         <CTableDataCell>
                                             {session.active ? 'Active' : 'Inactive'}

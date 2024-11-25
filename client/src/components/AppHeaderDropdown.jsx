@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     CImage,
-    CAvatar,
-    CBadge,
     CDropdown,
     CDropdownDivider,
     CDropdownHeader,
@@ -13,7 +11,6 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightFromBracket, faShield, faCircleUser } from '@fortawesome/free-solid-svg-icons'
-import { useSelector } from 'react-redux'
 import { useUserProvider } from '../components/UserProvider'
 import { VITE_APP_API_URL } from '../config.js'
 

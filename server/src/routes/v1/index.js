@@ -6,6 +6,7 @@ import schedules from './schedules.js'
 import securityManagement from './security/management.js'
 import securityActivity from './security/activity.js'
 import securitySessions from './security/sessions.js'
+import prometheus from './metrics/prometheus.js'
 import insights from './insights.js'
 import newsletter from './newsletter.js'
 import invoices from './invoices.js'
@@ -19,6 +20,8 @@ router.use('/schedules', schedules)
 router.use('/sec/management', securityManagement)
 router.use('/sec/activity', securityActivity)
 router.use('/sec/sessions', securitySessions)
+
+router.use('/metrics', prometheus)
 
 router.use('/insights', insights)
 router.use('/newsletter', newsletter)

@@ -1,20 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-    CCardGroup,
-    CCard,
-    CCol,
-    CRow,
-    CCardBody,
-    CCardTitle,
-    CCardImageOverlay,
-    CCardText,
-    CCardImage,
-    CCardHeader,
-    CCarousel,
-    CCarouselItem,
-    CImage,
-} from '@coreui/react'
+import { CCard, CCardBody, CCardText, CCardHeader } from '@coreui/react'
 import Masonry from 'react-masonry-css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlaneDeparture, faTruck, faShip } from '@fortawesome/free-solid-svg-icons'

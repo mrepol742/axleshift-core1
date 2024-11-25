@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-    CContainer,
-    CRow,
-    CCol,
-    CCard,
-    CCardImage,
-    CCardTitle,
-    CCardText,
-    CCardBody,
-} from '@coreui/react'
+import { CContainer, CRow, CCol } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShip, faRoute, faUser, faUserShield } from '@fortawesome/free-solid-svg-icons'
 

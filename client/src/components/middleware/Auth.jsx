@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { CSpinner } from '@coreui/react'
-import { useDispatch } from 'react-redux'
-import { VITE_APP_SESSION, VITE_APP_API_URL } from '../../config'
+import { VITE_APP_SESSION } from '../../config'
 import Err403 from '../../views/errors/403'
 import Err500 from '../../views/errors/500'
 import Err503 from '../../views/errors/503'
@@ -14,7 +13,6 @@ const Auth = (WrappedComponent) => {
         const { user, setUser } = useUserProvider()
         const navigate = useNavigate()
         const [isAuth, setIsAuth] = useState(null)
-        const dispatch = useDispatch()
         const [result, setResult] = useState([])
         const [maintenance, setMaintenance] = useState(false)
         const [serverErr, setServerErr] = useState(false)
@@ -28,25 +26,15 @@ const Auth = (WrappedComponent) => {
             if (user && Object.keys(user).length > 0) return setIsAuth(true)
 
             await axios
-                .post(
-                    `${VITE_APP_API_URL}/api/v1/auth/verify`,
-                    {},
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
-                )
+                .post(`/auth/verify`, null)
                 .then((response) => {
                     if (response.data.otp) return (window.location.href = '/otp')
                     setUser(response.data)
                     setResult(response.data)
                 })
                 .catch((err) => {
-                    console.error(err)
                     if (err.status == 503) return setMaintenance(true)
                     if (!err.response) return setServerErr(true)
-                    cookies.remove(VITE_APP_SESSION)
                     window.location.href = loc
                 })
                 .finally(() => setIsAuth(true))

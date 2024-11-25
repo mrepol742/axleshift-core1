@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { CToaster, CToast, CToastHeader, CToastBody, CImage } from '@coreui/react'
-import { useSelector } from 'react-redux'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
 import { useToast } from '../components/AppToastProvider'
 import { useNotif } from '../components/AppNotificationProvider'

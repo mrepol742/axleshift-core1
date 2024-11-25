@@ -4,7 +4,6 @@ import {
     CContainer,
     CRow,
     CCol,
-    CImage,
     CForm,
     CFormInput,
     CInputGroup,
@@ -14,7 +13,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import errorMessages from '../../components/ErrorMessages'
-import { VITE_APP_API_URL, VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 
 const Newsletter = ({ setLoading }) => {
     const [emailAddress, setEmailAddress] = useState('')
@@ -26,19 +25,11 @@ const Newsletter = ({ setLoading }) => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/newsletter`,
-                {
-                    email: emailAddress,
-                    recaptcha_ref: recaptcha,
-                },
-                {
-                    headers: {},
-                },
-            )
-            .then((response) => {
-                if (response.data.message) setMessage(response.data.message)
+            .post(`/newsletter`, {
+                email: emailAddress,
+                recaptcha_ref: recaptcha,
             })
+            .then((response) => setMessage(response.data.message))
             .catch((error) => {
                 console.error(error)
                 const message =

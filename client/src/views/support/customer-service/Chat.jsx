@@ -1,16 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import {
-    CCard,
-    CCardBody,
-    CImage,
-    CFormInput,
-    CButton,
-    CFormTextarea,
-    CSpinner,
-    CListGroup,
-    CListGroupItem,
-} from '@coreui/react'
+import { useParams } from 'react-router-dom'
+import { CCard, CCardBody, CImage, CButton, CFormTextarea } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import database from '../../../firebase'

@@ -1,37 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import {
-    CContainer,
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CForm,
-    CFormSelect,
     CRow,
     CCol,
-    CImage,
     CCard,
     CCardTitle,
     CButton,
-    CCardHeader,
     CSpinner,
     CCardBody,
-    CCardText,
-    CCardFooter,
     CTable,
     CTableHead,
     CTableRow,
     CTableDataCell,
     CTableBody,
     CTableHeaderCell,
-    CTabs,
-    CTabList,
-    CTab,
-    CTabContent,
-    CTabPanel,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { parseTimestamp } from '../../../components/Timestamp'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_SESSION } from '../../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../components/ErrorMessages'
 
@@ -48,22 +33,11 @@ const AccessToken = () => {
         setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/sec/management/apikeys/deactivate`,
-                {
-                    recaptcha_ref: recaptcha,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                    },
-                },
-            )
-            .then((response) => {
-                if (!response.data.error) return window.location.reload()
+            .post(`/sec/management/apikeys/deactivate`, {
+                recaptcha_ref: recaptcha,
             })
+            .then((response) => window.location.reload())
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)
@@ -73,16 +47,9 @@ const AccessToken = () => {
 
     const fetchData = async () => {
         await axios
-            .get(`${VITE_APP_API_URL}/api/v1/sec/management/apikeys`, {
-                headers: {
-                    Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                },
-            })
-            .then((response) => {
-                if (!response.data.error) setResult(response.data)
-            })
+            .get(`/sec/management/apikeys`)
+            .then((response) => setResult(response.data))
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message)
@@ -104,7 +71,19 @@ const AccessToken = () => {
 
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
-            {!loading && (
+            {result.apiToken.length === 0 && !loading && (
+                <CRow className="justify-content-center my-5">
+                    <CCol md={6}>
+                        <div className="clearfix">
+                            <h1 className="float-start display-3 me-4">OOPS</h1>
+                            <h4>There was no apikeys yet.</h4>
+                            <p>Check it out later</p>
+                        </div>
+                    </CCol>
+                </CRow>
+            )}
+
+            {result.apiToken.length !== 0 && !loading && (
                 <>
                     <h4>Deactivate all apikeys</h4>
                     <CCard className="mb-3">

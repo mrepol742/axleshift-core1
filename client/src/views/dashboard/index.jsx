@@ -2,38 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     CCard,
-    CCardGroup,
     CCardBody,
     CCardFooter,
     CCardHeader,
     CCol,
     CRow,
-    CForm,
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CPagination,
-    CPaginationItem,
     CSpinner,
     CCardText,
-    CFormSelect,
-    CContainer,
 } from '@coreui/react'
 import Masonry from 'react-masonry-css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faMagnifyingGlass,
-    faEllipsisVertical,
-    faLocationDot,
-    faPlaneDeparture,
-    faTruck,
-    faShip,
-    faCircleInfo,
-    faClock,
-    faQuestion,
-} from '@fortawesome/free-solid-svg-icons'
+import { faPlaneDeparture, faTruck, faShip, faQuestion } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './Widgets'
-import { VITE_APP_API_URL, VITE_APP_SESSION } from '../../config'
 import AppPagination from '../../components/AppPagination'
 import { parseTimestamp } from '../../components/Timestamp'
 import { useToast } from '../../components/AppToastProvider'
@@ -50,21 +30,12 @@ const Dashboard = () => {
 
     const fetchData = async (page) => {
         await axios
-            .post(
-                `${VITE_APP_API_URL}/api/v1/freight`,
-                { page },
-                {
-                    headers: {
-                        Authorization: `Bearer ${cookies.get(VITE_APP_SESSION)}`,
-                    },
-                },
-            )
+            .post(`/freight`, { page })
             .then((response) => {
                 setData(response.data.data)
                 setTotalPages(response.data.totalPages)
             })
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')

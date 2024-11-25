@@ -11,7 +11,7 @@ router.get('/', auth, async (req, res) => {
         const activityLog = await db
             .collection('activityLog')
             .find({ user_id: req.user._id })
-            .sort({ created_at: -1 })
+            .sort({ time: -1 })
             .toArray()
 
         if (activityLog) return res.status(200).json(activityLog)

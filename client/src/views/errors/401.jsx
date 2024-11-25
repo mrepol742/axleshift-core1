@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-    CButton,
-    CCol,
-    CContainer,
-    CFormInput,
-    CInputGroup,
-    CInputGroupText,
-    CRow,
-} from '@coreui/react'
+import { CCol, CContainer, CRow } from '@coreui/react'
 
 const Page401 = () => {
     return (
