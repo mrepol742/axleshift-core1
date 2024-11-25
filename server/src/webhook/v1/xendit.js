@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
         const token = req.headers['x-callback-token']
         if (!token) return res.status(400).send()
         if (token !== XENDIT_WEBHOOK_VERIFICATION_TOKEN) return res.status(401).send()
-        
+
         const db = await database()
         db.collection('invoices').updateOne(
             { invoice_id: req.body.id },

@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb'
 import express from 'express'
 import useragent from 'useragent'
 import database from '../../../models/mongodb.js'
@@ -25,13 +26,12 @@ router.get('/', auth, async (req, res) => {
         for (let i = 0; i < sessions.length; i++) {
             const agent = useragent.parse(sessions[i].user_agent)
             sessions[i].user_agent = `${agent.os.family} ${agent.family}`
-            if (req.session.token === sessions[i].token) sessions[i].current = true
-            sessions[i].token = null
         }
+        const _sessions = sessions.filter((item) => item.token !== req.session.token)
 
         if (session)
             return res.status(200).json({
-                sessions: sessions,
+                sessions: _sessions,
                 current_session: {
                     ip_address: session.ip_address,
                     user_agent: session.user_agent,
@@ -46,10 +46,13 @@ router.get('/', auth, async (req, res) => {
 
 router.post('/logout', [recaptcha, auth], async (req, res) => {
     try {
+        const session_id = req.body.session_id
+        logger.info(session_id)
         const db = await database()
         await db.collection('sessions').updateMany(
             {
-                user_id: req.user._id,
+                _id: session_id ? new ObjectId(session_id) : { $ne: '0' },
+                user_id: session_id ? { $ne: '0' } : req.user._id,
                 token: { $ne: req.token },
             },
             {
