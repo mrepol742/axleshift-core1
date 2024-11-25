@@ -8,12 +8,12 @@ import helmet from 'helmet'
 import compression from 'compression'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import Quotes from 'inspirational-quotes'
-import { NODE_ENV, EXT_EXPRESS_PORT } from './config.js'
+import { NODE_ENV, EXT_EXPRESS_PORT, EXT_EXPRESS_PORT_1 } from './config.js'
 import rateLimiter from './middleware/rateLimiter.js'
 import sanitize from './middleware/sanitize.js'
 import logger from './components/logger.js'
 import APIv1 from './routes/v1/index.js'
-import GithubWebhook from './webhook/v1/github.js'
+import Webhookv1 from './webhook/v1/index.js'
 
 const app = express()
 const upload = multer()
@@ -26,6 +26,16 @@ app.use(
         changeOrigin: true,
         pathRewrite: {
             '^/api/pmz': '',
+        },
+    }),
+)
+app.use(
+    '/frontend/webhook',
+    createProxyMiddleware({
+        target: `http://localhost:${EXT_EXPRESS_PORT_1}`,
+        changeOrigin: true,
+        pathRewrite: {
+            '^/frontend/webhook': '',
         },
     }),
 )
@@ -47,7 +57,8 @@ app.use(pinoHttp({ logger }))
 
 app.get('/', (req, res) => res.send(Quotes.getRandomQuote()))
 app.use('/api/v1/', APIv1)
-app.use('/webhook/v1/', GithubWebhook)
+app.use('/webhook/v1/', Webhookv1)
+
 app.use(
     express.static(path.join(process.cwd(), 'public'), {
         setHeaders: function (res, filePath) {

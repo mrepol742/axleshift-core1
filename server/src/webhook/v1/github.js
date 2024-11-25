@@ -1,19 +1,21 @@
 import express from 'express'
-import { Webhooks } from '@octokit/webhooks'
+import crypto from 'crypto'
 import database from '../../models/mongodb.js'
 import logger from '../../components/logger.js'
 import { GITHUB_WEBHOOK_SECRET } from '../../config.js'
 import { run } from '../../components/cmd.js'
 
-const webhooks = new Webhooks({
-    secret: GITHUB_WEBHOOK_SECRET,
-})
-
 const router = express.Router()
 
-router.post('/github', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
-        if (!(await webhooks.verify(req.body.toString(), req.headers['x-hub-signature-256'])))
+        const github_signature = req.headers['x-hub-signature-256']
+        if (!github_signature) return res.status(400).send()
+        const hash = 'sha256=' + crypto.createHmac('sha256', GITHUB_WEBHOOK_SECRET)
+        .update(JSON.stringify(req.body))
+        .digest('hex');
+
+        if (hash !== github_signature)
             return res.status(401).send()
 
         if (req.body.ref === 'refs/heads/core1-backend')

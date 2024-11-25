@@ -102,7 +102,7 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
         if (!['air', 'land', 'sea'].includes(type)) return res.status(400).send()
 
         const db = await database()
-        const _shipment = await db.collection('freight').insertOne({
+        await db.collection('freight').insertOne({
             user_id: req.user._id,
             data: {
                 shipper: shipper,
@@ -120,11 +120,11 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
             {
                 to: req.user.email,
                 subject: 'Shipment has been created',
-                text: `You can track your shipment using this tracking id: #${_shipment._id}<br>Visit <a href="https://core1.axleshift.com/track/">https://core1.axleshift.com/track</a> for real time tracking and shipment monitoring. <br><br>If you need assistance feel free to contact us.`,
+                text: `We have arranged your shipment schedules please proceed to payment so we can processed your shipment as soon as possible.<br><br>If you need assistance feel free to contact us.`,
             },
             req.user.first_name,
         )
-        activity(req, `created a shipment #${_shipment._id}`)
+        activity(req, `created a shipment`)
         return res.status(201).send()
     } catch (e) {
         logger.error(e)
