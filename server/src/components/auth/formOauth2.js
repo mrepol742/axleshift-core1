@@ -1,6 +1,5 @@
 import crypto from 'crypto'
 import database from '../../models/mongodb.js'
-import passwordHash, { generateUniqueId } from '../password.js'
 import logger from '../logger.js'
 import { addSession } from '../sessions.js'
 import Token from './token.js'
@@ -38,7 +37,7 @@ const FormOauth2 = async (req, res) => {
         if (existingUser)
             return res.status(200).json({ error: 'This Email address is already registered' })
 
-        const ref = generateUniqueId()
+        const ref = crypto.randomBytes(4).toString('hex')
 
         await Promise.all([
             usersCollection.insertOne({

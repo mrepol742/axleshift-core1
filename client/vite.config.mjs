@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import htmlMinifier from 'vite-plugin-html-minifier'
 import path from 'node:path'
 import autoprefixer from 'autoprefixer'
 
@@ -58,7 +59,15 @@ export default defineConfig(() => {
                 },
             },
         },
-        plugins: [react()],
+        plugins: [
+            react(),
+            htmlMinifier({
+                collapseWhitespace: true,
+                removeComments: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+            }),
+        ],
         resolve: {
             alias: [
                 {

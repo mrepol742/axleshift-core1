@@ -5,7 +5,6 @@ import logger from '../../../components/logger.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
 import activity from '../../../components/activity.js'
-import passwordHash from '../../../components/password.js'
 import sendOTPEmail from '../../../components/otp/email.js'
 
 const router = express.Router()
