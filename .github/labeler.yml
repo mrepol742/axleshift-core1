@@ -22,6 +22,10 @@ routes:
 - changed-files:
   - any-glob-to-any-file: 'server/src/routes/**/*'
 
+webhooks:
+- changed-files:
+  - any-glob-to-any-file: ['server/src/webhook/**/*', 'webhooks/src/**/*']
+
 env:
 - changed-files:
   - any-glob-to-any-file: ['client/.env.example', 'server/.env.example']
@@ -30,13 +34,9 @@ dependencies:
 - changed-files:
   - any-glob-to-any-file: ['package.json', 'package-lock.json', 'client/package.json', 'client/package-lock.json', 'server/package.json', 'server/package-lock.json', 'mobile/package.json', 'mobile/package-lock.json']
 
-documentation:
-- changed-files:
-  - any-glob-to-any-file: 'server/docs/**/*'
-
 test:
 - changed-files:
-  - any-glob-to-any-file: ['server/test/**/*', 'mobile/components/__tests__/**/*']
+  - any-glob-to-any-file: ['server/test/**/*', 'mobile/components/__tests__/**/*', 'tests/src/**/*']
 
 container:
 - changed-files:

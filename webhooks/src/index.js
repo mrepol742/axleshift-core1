@@ -7,6 +7,8 @@ import axios from 'axios'
 const app = express()
 const port = process.env.APP_EXPRESS_PORT || 3000
 
+app.get('/', async (req, res) => res.send('Hello, world: WHAT RE YOU DOIN HERE?'))
+
 app.post('/webhook/v1/github', async (req, res) => {
     try {
         const github_signature = req.headers['x-hub-signature-256']

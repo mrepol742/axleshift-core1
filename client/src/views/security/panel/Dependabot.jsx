@@ -128,9 +128,6 @@ const Dependabot = () => {
                                 <CTableHead>
                                     <CTableRow>
                                         <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                            #
-                                        </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             State
                                         </CTableHeaderCell>
                                         <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
@@ -156,7 +153,6 @@ const Dependabot = () => {
                                 <CTableBody>
                                     {result.map((alert, index) => (
                                         <CTableRow key={index}>
-                                            <CTableDataCell>{alert.number}</CTableDataCell>
                                             <CTableDataCell>{alert.state}</CTableDataCell>
                                             <CTableDataCell>{alert.scope}</CTableDataCell>
                                             <CTableDataCell>{alert.manifest}</CTableDataCell>
