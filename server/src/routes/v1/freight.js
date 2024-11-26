@@ -11,19 +11,6 @@ import activity from '../../components/activity.js'
 const router = express.Router()
 const limit = 20
 
-/*
-  Get all freight shipment
-  Url: POST /api/v1/freight
-  Header:
-     Authentication
-  Request Body:
-     Page
-  Returns:
-     Data
-     Total pages
-     Current page
-*/
-// TODO: integrate search function here!
 router.post('/', auth, async (req, res, next) => {
     try {
         // if (!req.user) return res.status(401).send()
@@ -84,10 +71,12 @@ router.post('/', auth, async (req, res, next) => {
                     { 'data.shipping.shipping_cargo_type': query },
                 ],
             }
-            if (status && ['to_pay', 'to_ship', 'to_receive', 'recieved', 'cancelled'].includes(status)) 
-                deep_filter.$or.push({ status: query });
-            if (type && ['air', 'land', 'sea'].includes(type)) 
-                deep_filter.$or.push({ type: query })
+            if (
+                status &&
+                ['to_pay', 'to_ship', 'to_receive', 'recieved', 'cancelled'].includes(status)
+            )
+                deep_filter.$or.push({ status: query })
+            if (type && ['air', 'land', 'sea'].includes(type)) deep_filter.$or.push({ type: query })
 
             filter =
                 req.user.role !== 'admin'
@@ -119,19 +108,6 @@ router.post('/', auth, async (req, res, next) => {
     res.status(500).send()
 })
 
-/*
-  Get specific info on freight shipment tracking id
-  Url: POST /api/v1/freight/:id
-  Header:
-     Authentication
-  Params:
-     Freight id
-  Returns:
-     Data
-
-  Example:
-     curl -H "Authorization: Bearer apiKey" http://{base-url}/api/v1/freight/{tracking-id}
-*/
 router.get('/:id', [auth, freight], async (req, res, next) => {
     try {
         // even tho there are 0.0000% changes this throws an error
@@ -146,19 +122,6 @@ router.get('/:id', [auth, freight], async (req, res, next) => {
     res.status(500).send()
 })
 
-/*
-  Book a shipment
-  Url: POST /api/v1/freight/b/:type
-  Header:
-     Authentication
-  Params:
-     Freight type
-  Request Body:
-     Shipper
-     Consignee
-     Shipment
-     Shipping
-*/
 router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment, shipping } = req.body
@@ -197,19 +160,6 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
     res.status(500).send()
 })
 
-/*
-  Update a shipment
-  Url: POST /api/v1/freight/u/:type/:id
-  Header:
-     Authentication
-  Params:
-     Freight type
-     Freight id
-  Request Body:
-     Shipper
-     Consignee
-     Shipment
-*/
 router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment } = req.body
@@ -239,14 +189,6 @@ router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) =
     res.status(500).send()
 })
 
-/*
-  Delete a shipment
-  Url: POST /api/v1/freight/c/:id
-  Params:
-     Freight id
-  Header:
-     Authentication
-*/
 router.post('/c/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const id = req.params.id

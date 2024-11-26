@@ -1,5 +1,7 @@
 import express from 'express'
 import auth from './auth.js'
+import authToken from './auth/token.js'
+import authVerify from './auth/verify.js'
 import freight from './freight.js'
 import track from './track.js'
 import schedules from './schedules.js'
@@ -13,6 +15,9 @@ import invoices from './invoices.js'
 
 const router = express.Router()
 router.use('/auth', auth)
+router.use('/auth/token', authToken)
+router.use('/auth/verify', authVerify)
+
 router.use('/freight', freight)
 router.use('/track', track)
 router.use('/schedules', schedules)

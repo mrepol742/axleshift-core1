@@ -4,14 +4,13 @@
 [![Dependabot Updates](https://github.com/freight-capstone/core1/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/dependabot/dependabot-updates)
 [![Terraform CI](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml)
 
-Api docs: [/server/docs/README.md](/server/docs/README.md)
-
 ## Pre-requisites
 - Node.js v20.^ `sudo pacman -Sy nodejs`
 - Docker `sudo pacman -Sy docker`
 - Terraform `sudo pacman -Sy terraform`
 - Grafana `sudo pacman -Sy grafana`
 - PM2 `sudo pacman -Sy pm2`
+- smee `sudo npm i --global smee-client`
 
 ---
 

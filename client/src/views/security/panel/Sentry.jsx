@@ -128,9 +128,6 @@ const Sentry = () => {
                                 <CTableHead>
                                     <CTableRow>
                                         <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                            #
-                                        </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                             Title
                                         </CTableHeaderCell>
                                         <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
@@ -156,7 +153,6 @@ const Sentry = () => {
                                 <CTableBody>
                                     {result.map((issue, index) => (
                                         <CTableRow key={index}>
-                                            <CTableDataCell>{issue.id}</CTableDataCell>
                                             <CTableDataCell>{issue.title}</CTableDataCell>
                                             <CTableDataCell>{issue.culprit}</CTableDataCell>
                                             <CTableDataCell>{issue.level}</CTableDataCell>
