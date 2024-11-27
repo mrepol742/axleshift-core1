@@ -32,11 +32,12 @@ const Account = auth(lazy(() => import('./views/account/index')))
 const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const Freight = auth(lazy(() => import('./views/freight/index')))
-const FreightAir = auth(lazy(() => import('./views/freight/Air')))
-const FreightLand = auth(lazy(() => import('./views/freight/Land')))
-const FreightSea = auth(lazy(() => import('./views/freight/Sea')))
+const FreightAir = auth(lazy(() => import('./views/freight/panel/Air')))
+const FreightLand = auth(lazy(() => import('./views/freight/panel/Land')))
+const FreightSea = auth(lazy(() => import('./views/freight/panel/Sea')))
 
-const Pricing = auth(lazy(() => import('./views/pricing/index')))
+const Rates = auth(lazy(() => import('./views/rates/index')))
+const Couriers = auth(lazy(() => import('./views/couriers/index')))
 
 const Security = auth(lazy(() => import('./views/security/index')))
 const Management = auth(lazy(() => import('./views/security/Management')))
@@ -87,7 +88,8 @@ const routes = [
     { path: '/invoices', name: 'Invoices', element: Invoices },
     //  { path: '/payment/invoice', name: 'Invoice', element: Err500 },
 
-    { path: '/pricing', name: 'Pricing', element: Pricing },
+    { path: '/rates', name: 'Rates', element: Rates },
+    { path: '/couriers', name: 'Couriers', element: Couriers },
 
     { path: '/security', name: 'Security', element: Security },
     { path: '/security/management', name: 'Management', element: Management },

@@ -13,6 +13,7 @@ const requiredCollections = [
     'apiToken',
     'activityLog',
     'invoices',
+    'rates',
 ]
 let dbInstance = null
 

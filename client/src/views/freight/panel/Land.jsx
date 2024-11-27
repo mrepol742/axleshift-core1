@@ -12,13 +12,13 @@ import {
     CModalFooter,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
-import ShipperForm from '../../components/forms/ShipperForm'
-import ConsineeForm from '../../components/forms/ConsineeForm'
-import ShipmentForm from '../../components/forms/ShipmentForm'
-import LandForm from '../../components/forms/shipping/LandForm'
-import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../components/ErrorMessages'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
+import ShipperForm from '../../../components/forms/ShipperForm'
+import ConsineeForm from '../../../components/forms/ConsineeForm'
+import ShipmentForm from '../../../components/forms/ShipmentForm'
+import LandForm from '../../../components/forms/shipping/LandForm'
+import { useToast } from '../../../components/AppToastProvider'
+import errorMessages from '../../../components/ErrorMessages'
 
 const Land = () => {
     const navigate = useNavigate()

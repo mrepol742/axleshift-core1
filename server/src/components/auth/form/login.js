@@ -11,10 +11,8 @@ const FormLogin = async (req, res) => {
         const db = await database()
         const theUser = await db.collection('users').findOne({ email: email })
         if (!theUser) return res.status(404).send()
-        
-        const passwordHash = crypto.createHmac('sha256', password)
-            .update(APP_KEY)
-            .digest('hex')
+
+        const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         if (passwordHash != theUser.password) return res.status(401).send()
 
         const session_token = crypto.randomBytes(16).toString('hex')

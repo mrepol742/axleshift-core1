@@ -23,13 +23,10 @@ const FormRegister = async (req, res) => {
             return res.status(200).json({
                 error: 'Email address already registered',
             })
-            
-        
-        const passwordHash = crypto.createHmac('sha256', password)
-            .update(APP_KEY)
-            .digest('hex')
+
+        const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         const ref = crypto.randomBytes(4).toString('hex')
-        
+
         await Promise.all([
             usersCollection.insertOne({
                 email: email,

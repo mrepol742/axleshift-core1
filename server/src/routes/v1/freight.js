@@ -28,16 +28,41 @@ router.post('/', auth, async (req, res, next) => {
                     // Shipper Fields
                     { 'data.shipper.shipper_company_name': { $regex: query, $options: 'i' } },
                     { 'data.shipper.shipper_contact_name': { $regex: query, $options: 'i' } },
-                    { 'data.shipper.shipper_contact_email_address': { $regex: query, $options: 'i' } },
-                    { 'data.shipper.shipper_contact_phone_number': { $regex: query, $options: 'i' } },
+                    {
+                        'data.shipper.shipper_contact_email_address': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
+                    {
+                        'data.shipper.shipper_contact_phone_number': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
                     { 'data.shipper.shipper_company_address': { $regex: query, $options: 'i' } },
 
                     // Consignee Fields
                     { 'data.consignee.consignee_company_name': { $regex: query, $options: 'i' } },
                     { 'data.consignee.consignee_contact_name': { $regex: query, $options: 'i' } },
-                    { 'data.consignee.consignee_contact_email_address': { $regex: query, $options: 'i' } },
-                    { 'data.consignee.consignee_contact_phone_number': { $regex: query, $options: 'i' } },
-                    { 'data.consignee.consignee_company_address': { $regex: query, $options: 'i' } },
+                    {
+                        'data.consignee.consignee_contact_email_address': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
+                    {
+                        'data.consignee.consignee_contact_phone_number': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
+                    {
+                        'data.consignee.consignee_company_address': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
 
                     // Shipment Fields
                     { 'data.shipment.shipment_description': { $regex: query, $options: 'i' } },
@@ -51,14 +76,34 @@ router.post('/', auth, async (req, res, next) => {
 
                     // Shipping Air Fields
                     { 'data.shipping.shipping_origin_airport': { $regex: query, $options: 'i' } },
-                    { 'data.shipping.shipping_destination_airport': { $regex: query, $options: 'i' } },
-                    { 'data.shipping.shipping_preferred_departure_date': { $regex: query, $options: 'i' } },
-                    { 'data.shipping.shipping_preferred_arrival_date': { $regex: query, $options: 'i' } },
+                    {
+                        'data.shipping.shipping_destination_airport': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
+                    {
+                        'data.shipping.shipping_preferred_departure_date': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
+                    {
+                        'data.shipping.shipping_preferred_arrival_date': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
                     { 'data.shipping.shipping_flight_type': { $regex: query, $options: 'i' } },
 
                     // Shipping Land Fields
                     { 'data.shipping.shipping_origin_addresss': { $regex: query, $options: 'i' } },
-                    { 'data.shipping.shipping_destination_address': { $regex: query, $options: 'i' } },
+                    {
+                        'data.shipping.shipping_destination_address': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
                     { 'data.shipping.shipping_pickup_date': { $regex: query, $options: 'i' } },
                     { 'data.shipping.shipping_delivery_date': { $regex: query, $options: 'i' } },
                     { 'data.shipping.shipping_vehicle_type': { $regex: query, $options: 'i' } },
@@ -67,7 +112,12 @@ router.post('/', auth, async (req, res, next) => {
                     { 'data.shipping.shipping_loading_port': { $regex: query, $options: 'i' } },
                     { 'data.shipping.shipping_discharge_port': { $regex: query, $options: 'i' } },
                     { 'data.shipping.shipping_sailing_date': { $regex: query, $options: 'i' } },
-                    { 'data.shipping.shipping_estimated_arrival_date': { $regex: query, $options: 'i' } },
+                    {
+                        'data.shipping.shipping_estimated_arrival_date': {
+                            $regex: query,
+                            $options: 'i',
+                        },
+                    },
                     { 'data.shipping.shipping_cargo_type': { $regex: query, $options: 'i' } },
                 ],
             }

@@ -15,7 +15,6 @@ import app from './Server.js'
 import db from './models/mongodb.js'
 import mail from './components/mail.js'
 import cron from './components/cron.js'
-import test from './components/test.js'
 import gemini from './models/gemini.js'
 
 process.on('uncaughtException', (err, origin) => logger.error(err))
@@ -25,7 +24,7 @@ process.on('unhandledRejection', (reason, promise) => logger.error(reason))
 app.listen(config.EXPRESS_PORT, async (err) => {
     if (err) return logger.error(err)
     logger.info(`server running on port ${config.EXPRESS_PORT}`)
-    await Promise.all([db(), mail(), cron(), test(config.EXPRESS_PORT)])
+    await Promise.all([db(), mail(), cron()])
 })
 
 for (const key in config) {

@@ -12,15 +12,15 @@ import {
     CModalFooter,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
-import ShipperForm from '../../components/forms/ShipperForm'
-import ConsineeForm from '../../components/forms/ConsineeForm'
-import ShipmentForm from '../../components/forms/ShipmentForm'
-import SeaForm from '../../components/forms/shipping/SeaForm'
-import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../components/ErrorMessages'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
+import ShipperForm from '../../../components/forms/ShipperForm'
+import ConsineeForm from '../../../components/forms/ConsineeForm'
+import ShipmentForm from '../../../components/forms/ShipmentForm'
+import AirForm from '../../../components/forms/shipping/AirForm'
+import { useToast } from '../../../components/AppToastProvider'
+import errorMessages from '../../../components/ErrorMessages'
 
-const Sea = () => {
+const Air = () => {
     const navigate = useNavigate()
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
@@ -53,11 +53,11 @@ const Sea = () => {
             shipment_instructions: '',
         },
         shipping: {
-            shipping_loading_port: '',
-            shipping_discharge_port: '',
-            shipping_sailing_date: '',
-            shipping_estimated_arrival_date: '',
-            shipping_cargo_type: '',
+            shipping_origin_airport: '',
+            shipping_destination_airport: '',
+            shipping_preferred_departure_date: '',
+            shipping_preferred_arrival_date: '',
+            shipping_flight_type: '',
         },
     })
 
@@ -81,7 +81,7 @@ const Sea = () => {
             recaptcha_ref: recaptcha,
         }
         axios
-            .post(`/freight/b/sea`, updatedFormData)
+            .post(`/freight/b/air`, updatedFormData)
             .then((response) => {
                 addToast('Shipment has been confirmed.', 'Shipment')
                 navigate('/dashboard')
@@ -125,7 +125,7 @@ const Sea = () => {
                     <CImage
                         fluid
                         rounded
-                        src="/images/freight-sea.jpg"
+                        src="/images/freight-air.jpg"
                         className="custom-image"
                         loading="lazy"
                     />
@@ -158,7 +158,7 @@ const Sea = () => {
                     )}
 
                     {currentPage === 4 && (
-                        <SeaForm
+                        <AirForm
                             formData={formData}
                             handleInputChange={handleInputChange}
                             handleShipmentDetails={(e) => setCurrentPage(3)}
@@ -171,4 +171,4 @@ const Sea = () => {
     )
 }
 
-export default Sea
+export default Air
