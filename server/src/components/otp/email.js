@@ -2,6 +2,7 @@ import { send } from '../mail.js'
 
 const sendOTPEmail = (req, otpCollection) => {
     const otp = Math.floor(100000 + Math.random() * 900000)
+    const dateNow = Date.now()
     Promise.all([
         otpCollection.insertOne({
             user_id: req.user._id,
@@ -9,8 +10,8 @@ const sendOTPEmail = (req, otpCollection) => {
             code: otp,
             verified: false,
             expired: false,
-            created_at: Date.now(),
-            updated_at: Date.now(),
+            created_at: dateNow,
+            updated_at: dateNow,
         }),
         send(
             {

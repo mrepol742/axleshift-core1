@@ -51,6 +51,7 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
 
         const db = await database()
         const invoicesCollection = db.collection('invoices')
+        const dateNow = Date.now()
         const _invoice = await invoicesCollection.insertOne({
             user_id: req.user._id,
             freight_id: req.freight._id,
@@ -60,15 +61,15 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
             amount: invoice.amount,
             status: invoice.status,
             currency: invoice.currency,
-            created_at: Date.now(),
-            updated_at: Date.now(),
+            created_at: dateNow,
+            updated_at: dateNow,
         })
         await db.collection('freight').updateOne(
             { _id: new ObjectId(req.freight._id) },
             {
                 $set: {
                     invoice_id: _invoice._id,
-                    updated_at: Date.now(),
+                    updated_at: dateNow,
                     modified_by: 'system',
                 },
             },

@@ -38,6 +38,7 @@ const FormOauth2 = async (req, res) => {
             return res.status(200).json({ error: 'This Email address is already registered' })
 
         const ref = crypto.randomBytes(4).toString('hex')
+        const dateNow = Date.now()
 
         await Promise.all([
             usersCollection.insertOne({
@@ -49,15 +50,15 @@ const FormOauth2 = async (req, res) => {
                 oauth2: {
                     [provider]: {
                         email: credential.email,
-                        created_at: Date.now(),
-                        updated_at: Date.now(),
+                        created_at: dateNow,
+                        updated_at: dateNow,
                     },
                 },
                 password: null,
-                email_verify_at: Date.now(),
+                email_verify_at: dateNow,
                 ref: ref,
-                created_at: Date.now(),
-                updated_at: Date.now(),
+                created_at: dateNow,
+                updated_at: dateNow,
             }),
             send(
                 {

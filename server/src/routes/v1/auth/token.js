@@ -44,14 +44,15 @@ router.post('/new', [recaptcha, auth], async function (req, res, next) {
             )
             return res.status(200).json({ token: apiT })
         }
+        const dateNow = Date.now()
         await apiTokenCollection.insertOne({
             user_id: req.user._id,
             active: true,
             compromised: false,
             token: apiT,
             whitelist_ip: [],
-            created_at: Date.now(),
-            updated_at: Date.now(),
+            created_at: dateNow,
+            updated_at: dateNow,
         })
 
         activity(req, 'generate new auth token')

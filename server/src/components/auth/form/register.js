@@ -26,6 +26,7 @@ const FormRegister = async (req, res) => {
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         const ref = crypto.randomBytes(4).toString('hex')
+        const dateNow = Date.now()
 
         await Promise.all([
             usersCollection.insertOne({
@@ -38,8 +39,8 @@ const FormRegister = async (req, res) => {
                 password: passwordHash,
                 email_verify_at: '',
                 ref: ref,
-                created_at: Date.now(),
-                updated_at: Date.now(),
+                created_at: dateNow,
+                updated_at: dateNow,
             }),
             send(
                 {
@@ -57,11 +58,12 @@ const FormRegister = async (req, res) => {
                             email: email,
                         })
                         if (!existingSubscriber) {
+                            const dateNow = Date.now()
                             newsletterCollection.insertOne({
                                 email: email,
                                 is_subsribe: true,
-                                created_at: Date.now(),
-                                updated_at: Date.now(),
+                                created_at: dateNow,
+                                updated_at: dateNow,
                             })
                         }
                     }
