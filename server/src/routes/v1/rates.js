@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
 import database from '../../models/mongodb.js'
-import logger from '../../components/logger.js'
+import logger from '../../utils/logger.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
 
@@ -42,7 +42,7 @@ const generateRandomData = () => {
     return data
 }
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     try {
         // const db = await database()
         // const response = await db

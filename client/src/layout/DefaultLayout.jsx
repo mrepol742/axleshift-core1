@@ -3,7 +3,7 @@ import { CToaster, CToast, CToastHeader, CToastBody, CImage } from '@coreui/reac
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
 import { useToast } from '../components/AppToastProvider'
 import { useNotif } from '../components/AppNotificationProvider'
-import { parseTimestamp } from '../components/Timestamp'
+import parseTimestamp from '../utils/Timestamp'
 
 const DefaultLayout = () => {
     const { toasts, addToast } = useToast()

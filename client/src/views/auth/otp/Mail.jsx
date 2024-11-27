@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../config'
-import errorMessages from '../../../components/ErrorMessages'
+import errorMessages from '../../../utils/ErrorMessages'
 
 const MailOTP = () => {
     const [loading, setLoading] = useState(true)

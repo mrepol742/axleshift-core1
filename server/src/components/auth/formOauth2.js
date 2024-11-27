@@ -1,10 +1,10 @@
 import crypto from 'crypto'
 import database from '../../models/mongodb.js'
-import logger from '../logger.js'
+import logger from '../../utils/logger.js'
 import { addSession } from '../sessions.js'
 import Token from './token.js'
 import { send } from '../mail.js'
-import Download from '../download.js'
+import Download from '../../utils/download.js'
 import activity from '../activity.js'
 
 const FormOauth2 = async (req, res) => {

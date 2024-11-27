@@ -1,5 +1,5 @@
 // just to make sure
-export const generateUUID = () => {
+const generateUUID = () => {
     const array = new Uint8Array(16)
     window.crypto.getRandomValues(array)
     array[6] = (array[6] & 0x0f) | 0x40
@@ -16,3 +16,5 @@ export const generateUUID = () => {
 
     return uuid
 }
+
+export default generateUUID

@@ -19,6 +19,7 @@ import {
     CTableBody,
     CTableHeaderCell,
 } from '@coreui/react'
+import formatNumber from '../../utils/Number'
 
 const Panel = ({ result, type }) => {
     return (
@@ -40,6 +41,9 @@ const Panel = ({ result, type }) => {
                             <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                 Cost
                             </CTableHeaderCell>
+                            <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                Currency
+                            </CTableHeaderCell>
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -47,10 +51,11 @@ const Panel = ({ result, type }) => {
                             .filter((rate) => rate.type === type)
                             .map((rate, index) => (
                                 <CTableRow key={index}>
-                                    <CTableDataCell>{rate.distance}</CTableDataCell>
-                                    <CTableDataCell>{rate.weight}</CTableDataCell>
+                                    <CTableDataCell>{formatNumber(rate.distance)}</CTableDataCell>
+                                    <CTableDataCell>{formatNumber(rate.weight)}</CTableDataCell>
                                     <CTableDataCell>{rate.courier}</CTableDataCell>
-                                    <CTableDataCell>{rate.cost}</CTableDataCell>
+                                    <CTableDataCell>{formatNumber(rate.cost)}</CTableDataCell>
+                                    <CTableDataCell>{rate.currency}</CTableDataCell>
                                 </CTableRow>
                             ))}
                     </CTableBody>

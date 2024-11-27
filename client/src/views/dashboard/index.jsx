@@ -16,7 +16,7 @@ import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './Widgets'
 import AppPagination from '../../components/AppPagination'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../components/ErrorMessages'
+import errorMessages from '../../utils/ErrorMessages'
 import AppSearch from '../../components/AppSearch'
 import ShipmentCard from './ShipmentCard'
 

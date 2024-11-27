@@ -20,9 +20,9 @@ import {
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { parseTimestamp } from '../../../components/Timestamp'
+import parseTimestamp from '../../../utils/Timestamp'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../components/ErrorMessages'
+import errorMessages from '../../../utils/ErrorMessages'
 
 const Dependabot = () => {
     const { addToast } = useToast()

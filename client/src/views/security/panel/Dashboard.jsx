@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { CRow, CCol } from '@coreui/react'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../components/ErrorMessages'
+import errorMessages from '../../../utils/ErrorMessages'
 import Widgets from './dashboard/Widgets'
 
 const Dashboard = () => {

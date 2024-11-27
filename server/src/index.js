@@ -10,7 +10,7 @@ Sentry.init({
     disableInstrumentationWarnings: true,
 })
 
-import logger from './components/logger.js'
+import logger from './utils/logger.js'
 import app from './Server.js'
 import db from './models/mongodb.js'
 import mail from './components/mail.js'

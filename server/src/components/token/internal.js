@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import logger from '../logger.js'
+import logger from '../../utils/logger.js'
 import { getUser, getSession } from '../sessions.js'
 import database from '../../models/mongodb.js'
 import { REACT_APP_ORIGIN, API_RATE_DELAY } from '../../config.js'

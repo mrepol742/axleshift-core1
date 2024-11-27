@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faEye, faEyeSlash, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../components/ErrorMessages'
-import { parseTimestamp } from '../../components/Timestamp'
+import errorMessages from '../../utils/ErrorMessages'
+import parseTimestamp from '../../utils/Timestamp'
 
 const API = () => {
     const { addToast } = useToast()

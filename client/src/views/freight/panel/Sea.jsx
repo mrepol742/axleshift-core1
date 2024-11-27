@@ -18,7 +18,7 @@ import ConsineeForm from '../../../components/forms/ConsineeForm'
 import ShipmentForm from '../../../components/forms/ShipmentForm'
 import SeaForm from '../../../components/forms/shipping/SeaForm'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../components/ErrorMessages'
+import errorMessages from '../../../utils/ErrorMessages'
 
 const Sea = () => {
     const navigate = useNavigate()

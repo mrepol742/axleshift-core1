@@ -1,5 +1,5 @@
 import axios from 'axios'
-import logger from '../logger.js'
+import logger from '../../utils/logger.js'
 import { GITHUB_OAUTH_CLIENT_ID, GITHUB_OAUTH_SECRET_ID } from '../../config.js'
 
 const GithubAccessToken = async (code) => {

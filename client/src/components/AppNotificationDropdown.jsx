@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { useNotif } from './AppNotificationProvider'
-import { parseTimestamp } from '../components/Timestamp'
+import parseTimestamp from '../utils/Timestamp'
 
 const AppNotificationDropdown = () => {
     const { notifs } = useNotif()

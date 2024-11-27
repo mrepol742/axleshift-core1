@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb'
 import express from 'express'
 import useragent from 'useragent'
 import database from '../../../models/mongodb.js'
-import logger from '../../../components/logger.js'
+import logger from '../../../utils/logger.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
 

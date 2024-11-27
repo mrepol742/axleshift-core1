@@ -13,10 +13,10 @@ import {
     CTableHeaderCell,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { parseTimestamp } from '../../../components/Timestamp'
+import parseTimestamp from '../../../utils/Timestamp'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../components/ErrorMessages'
+import errorMessages from '../../../utils/ErrorMessages'
 
 const Sessions = () => {
     const recaptchaRef = React.useRef()

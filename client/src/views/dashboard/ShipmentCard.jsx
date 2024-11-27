@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { CCard, CCardBody, CCardHeader, CCardFooter, CCardText } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlaneDeparture, faTruck, faShip } from '@fortawesome/free-solid-svg-icons'
-import { parseTimestamp } from '../../components/Timestamp'
+import parseTimestamp from '../../utils/Timestamp'
 
 const ShipmentCard = ({ shipment }) => {
     const navigate = useNavigate()

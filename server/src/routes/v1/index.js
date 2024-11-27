@@ -13,6 +13,7 @@ import insights from './insights.js'
 import newsletter from './newsletter.js'
 import invoices from './invoices.js'
 import rates from './rates.js'
+import couriers from './couriers.js'
 
 const router = express.Router()
 router.use('/auth', auth)
@@ -33,6 +34,7 @@ router.use('/insights', insights)
 router.use('/newsletter', newsletter)
 
 router.use('/rates', rates)
+router.use('/couriers', couriers)
 router.use('/invoices', invoices)
 
 export default router

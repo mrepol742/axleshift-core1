@@ -24,7 +24,7 @@ import AirForm from '../../components/forms/shipping/AirForm'
 import LandForm from '../../components/forms/shipping/LandForm'
 import SeaForm from '../../components/forms/shipping/SeaForm'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../components/ErrorMessages'
+import errorMessages from '../../utils/ErrorMessages'
 
 const FreightInfo = () => {
     const dataF = {

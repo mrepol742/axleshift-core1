@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
-import logger from './logger.js'
+import logger from '../utils/logger.js'
 import activity from './activity.js'
 
 export const addSession = async (theUser, sessionToken, ip, userAgent) => {

@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { MongoClient } from 'mongodb'
-import logger from '../components/logger.js'
+import logger from '../utils/logger.js'
 import { MONGO_URL, MONGO_DB } from '../config.js'
 
 const requiredCollections = [
@@ -14,6 +14,7 @@ const requiredCollections = [
     'activityLog',
     'invoices',
     'rates',
+    'couriers',
 ]
 let dbInstance = null
 

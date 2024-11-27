@@ -12,8 +12,8 @@ import {
     CCardTitle,
 } from '@coreui/react'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../components/ErrorMessages'
-import { parseTimestamp } from '../../components/Timestamp'
+import errorMessages from '../../utils/ErrorMessages'
+import parseTimestamp from '../../utils/Timestamp'
 
 const Activity = () => {
     const { addToast } = useToast()

@@ -18,7 +18,7 @@ import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL } from '../../config'
 import { useUserProvider } from '../../components/UserProvider'
-import errorMessages from '../../components/ErrorMessages'
+import errorMessages from '../../utils/ErrorMessages'
 import { useToast } from '../../components/AppToastProvider'
 
 const Account = () => {

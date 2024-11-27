@@ -1,5 +1,5 @@
 import axios from 'axios'
-import logger from '../components/logger.js'
+import logger from '../utils/logger.js'
 import { RECAPTCHA_SECRET } from '../config.js'
 
 const recaptcha = async (req, res, next) => {

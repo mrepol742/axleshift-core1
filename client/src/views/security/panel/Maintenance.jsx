@@ -3,7 +3,7 @@ import { CCard, CCardBody, CButton, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../components/ErrorMessages'
+import errorMessages from '../../../utils/ErrorMessages'
 
 const Maintenance = () => {
     const recaptchaRef = React.useRef()

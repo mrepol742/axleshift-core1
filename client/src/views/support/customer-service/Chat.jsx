@@ -7,7 +7,7 @@ import database from '../../../firebase'
 import { collection, addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { VITE_APP_API_URL } from '../../../config'
 import { useUserProvider } from '../../../components/UserProvider'
-import { parseTimestamp } from '../../../components/Timestamp'
+import parseTimestamp from '../../../utils/Timestamp'
 
 const Chat = () => {
     const { user } = useUserProvider()

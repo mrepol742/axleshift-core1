@@ -18,7 +18,7 @@ import ConsineeForm from '../../../components/forms/ConsineeForm'
 import ShipmentForm from '../../../components/forms/ShipmentForm'
 import AirForm from '../../../components/forms/shipping/AirForm'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../components/ErrorMessages'
+import errorMessages from '../../../utils/ErrorMessages'
 
 const Air = () => {
     const navigate = useNavigate()

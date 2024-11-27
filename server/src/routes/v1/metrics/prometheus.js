@@ -1,7 +1,7 @@
 import express from 'express'
 import { collectDefaultMetrics, Registry, Counter, Gauge } from 'prom-client'
 import auth from '../../../middleware/auth.js'
-import logger from '../../../components/logger.js'
+import logger from '../../../utils/logger.js'
 
 const router = express.Router()
 const registry = new Registry()

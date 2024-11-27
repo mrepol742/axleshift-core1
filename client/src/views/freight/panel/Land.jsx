@@ -18,7 +18,7 @@ import ConsineeForm from '../../../components/forms/ConsineeForm'
 import ShipmentForm from '../../../components/forms/ShipmentForm'
 import LandForm from '../../../components/forms/shipping/LandForm'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../components/ErrorMessages'
+import errorMessages from '../../../utils/ErrorMessages'
 
 const Land = () => {
     const navigate = useNavigate()

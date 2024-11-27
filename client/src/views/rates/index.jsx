@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { CTabs, CTabList, CTab, CTabContent, CTabPanel, CSpinner } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlaneDeparture, faTruck, faShip } from '@fortawesome/free-solid-svg-icons'
+import { useToast } from '../../components/AppToastProvider'
+import errorMessages from '../../utils/ErrorMessages'
 import Panel from './Panel'
 
 const Rates = () => {
+    const { addToast } = useToast()
     const [activeItemKey, setActiveItemKey] = useState(0)
     const [loading, setLoading] = useState(true)
     const [result, setResult] = useState([])
@@ -42,7 +45,6 @@ const Rates = () => {
                 break
         }
         fetchData()
-        setLoading(false)
     }, [])
 
     return (
