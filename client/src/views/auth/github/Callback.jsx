@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../config'
-import errorMessages from '../../../components/ErrorMessages'
+import errorMessages from '../../../utils/ErrorMessages'
 
 const Callback = () => {
     const navigate = useNavigate()

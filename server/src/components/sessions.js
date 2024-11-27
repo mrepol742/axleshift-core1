@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
-import logger from './logger.js'
+import logger from '../utils/logger.js'
 import activity from './activity.js'
 
 export const addSession = async (theUser, sessionToken, ip, userAgent) => {
@@ -36,7 +36,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent) => {
 export const getUser = async (sessionToken) => {
     try {
         const db = await database()
-        const isApiToken = /^core1_[0-9a-f]{64}$/.test(sessionToken)
+        const isApiToken = /^core1_[0-9a-f]{16}$/.test(sessionToken)
         const endpoint = isApiToken ? 'apiToken' : 'sessions'
         const tokenCollection = await db
             .collection(endpoint)

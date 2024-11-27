@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ObjectId } from 'mongodb'
-import logger from '../components/logger.js'
+import logger from '../utils/logger.js'
 import database from '../models/mongodb.js'
 
 const invoices = async (req, res, next) => {

@@ -33,7 +33,7 @@ import {
     VITE_APP_SESSION,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
-import errorMessages from '../../components/ErrorMessages'
+import errorMessages from '../../utils/ErrorMessages'
 
 const Register = () => {
     const navigate = useNavigate()

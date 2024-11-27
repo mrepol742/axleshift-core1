@@ -37,8 +37,8 @@ import {
     VITE_APP_SESSION,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
-import errorMessages from '../../components/ErrorMessages'
-import { generateUUID } from '../../components/UUID'
+import errorMessages from '../../utils/ErrorMessages'
+import generateUUID from '../../utils/UUID'
 
 const Login = () => {
     const navigate = useNavigate()

@@ -1,4 +1,4 @@
-export const parseTimestamp = (timestamp) => {
+const parseTimestamp = (timestamp) => {
     const now = Math.floor(Date.now() / 1000)
     const seconds = Math.floor((Date.now() - timestamp) / 1000)
 
@@ -21,3 +21,5 @@ export const parseTimestamp = (timestamp) => {
     if (years > 1) return `${years} yrs`
     return `${years} yr`
 }
+
+export default parseTimestamp

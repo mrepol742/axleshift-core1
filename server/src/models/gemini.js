@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { GEMINI_MODEL } from '../config.js'
-import { getApikey } from '../components/apikey.js'
-import logger from '../components/logger.js'
+import { getApikey } from '../utils/apikey.js'
+import logger from '../utils/logger.js'
 
 const gemini = async (prompt, json, retry) => {
     const apikey = getApikey()

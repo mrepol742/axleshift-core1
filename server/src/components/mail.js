@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import { MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM_ADDRESS } from '../config.js'
-import logger from './logger.js'
+import logger from '../utils/logger.js'
 
 let mailInstance = null
 

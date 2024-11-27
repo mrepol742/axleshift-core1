@@ -1,5 +1,5 @@
 import axios from 'axios'
-import logger from '../logger.js'
+import logger from '../../utils/logger.js'
 import FormOauth2 from './formOauth2.js'
 
 const Google = async (req, res) => {

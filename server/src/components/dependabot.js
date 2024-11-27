@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { parseRateLimit } from 'ratelimit-header-parser'
 import { GITHUB_OWNER, GITHUB_REPO, GITHUB_AUTH_TOKEN } from '../config.js'
-import logger from './logger.js'
+import logger from '../utils/logger.js'
 
 let last_fetch
 let res = []

@@ -3,6 +3,7 @@ import cookies from 'js-cookie'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from './config.js'
 
 const _axios = axios.create()
+const excludedPaths = ['/login', '/register', '/auth/github/callback', '/forgot-password', '/otp']
 
 _axios.defaults.baseURL = `${VITE_APP_API_URL}/api/v1`
 _axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
@@ -26,9 +27,15 @@ _axios.interceptors.response.use(
     },
     (error) => {
         console.error(error)
-        if (error.response && error.response.status === 401) {
-            cookies.remove(VITE_APP_SESSION)
-            window.location.reload()
+        if (
+            error.response &&
+            error.response.status === 401 &&
+            !excludedPaths.includes(window.location.pathname)
+        ) {
+            if (!excludedPaths.includes(window.location.pathname)) {
+                cookies.remove(VITE_APP_SESSION)
+                window.location.reload()
+            }
         }
         return Promise.reject(error)
     },

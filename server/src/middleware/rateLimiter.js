@@ -1,5 +1,5 @@
 import { getClientIp } from '../components/ip.js'
-import logger from '../components/logger.js'
+import logger from '../utils/logger.js'
 import { API_RATE_LIMIT, API_EXTERNAL_RATE_LIMIT } from '../config.js'
 
 const TIME_WINDOW = 60 * 3 * 1000

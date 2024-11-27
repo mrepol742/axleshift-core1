@@ -1,7 +1,7 @@
 import cron from 'node-cron'
 import sessionTask from '../tasks/sessions.js'
 import otpTask from '../tasks/otp.js'
-import logger from './logger.js'
+import logger from '../utils/logger.js'
 
 const hour = '0 * * * *'
 

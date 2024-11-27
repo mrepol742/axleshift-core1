@@ -1,9 +1,9 @@
 import express from 'express'
 import crypto from 'crypto'
 import database from '../../models/mongodb.js'
-import logger from '../../components/logger.js'
+import logger from '../../utils/logger.js'
 import { GITHUB_WEBHOOK_SECRET } from '../../config.js'
-import { run } from '../../components/cmd.js'
+import { run } from '../../utils/cmd.js'
 
 const router = express.Router()
 

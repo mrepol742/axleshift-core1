@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
-import logger from '../../components/logger.js'
+import logger from '../../utils/logger.js'
 import database from '../../models/mongodb.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'

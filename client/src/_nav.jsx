@@ -5,7 +5,7 @@ import {
     faChartLine,
     faLocationDot,
     faShip,
-    faPesoSign,
+    faPercent,
     faBarsProgress,
     faFileInvoice,
     faFile,
@@ -15,6 +15,7 @@ import {
     faKey,
     faRectangleList,
     faTowerBroadcast,
+    faTrailer,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -58,9 +59,15 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Pricing',
-        to: '/pricing',
-        icon: <FontAwesomeIcon icon={faPesoSign} className="nav-icon" />,
+        name: 'Rates',
+        to: '/rates',
+        icon: <FontAwesomeIcon icon={faPercent} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Couriers',
+        to: '/couriers',
+        icon: <FontAwesomeIcon icon={faTrailer} className="nav-icon" />,
     },
     {
         component: CNavTitle,

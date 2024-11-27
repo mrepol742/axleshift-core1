@@ -5,7 +5,7 @@ import database from '../../../firebase'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 
 import { useUserProvider } from '../../../components/UserProvider'
-import { parseTimestamp } from '../../../components/Timestamp'
+import parseTimestamp from '../../../utils/Timestamp'
 
 const Inbox = () => {
     const { user } = useUserProvider()

@@ -1,11 +1,11 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
+import crypto from 'crypto'
 import database from '../../../models/mongodb.js'
-import logger from '../../../components/logger.js'
+import logger from '../../../utils/logger.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
 import activity from '../../../components/activity.js'
-import passwordHash from '../../../components/password.js'
 
 const router = express.Router()
 
@@ -27,7 +27,7 @@ router.post('/new', [recaptcha, auth], async function (req, res, next) {
         const db = await database()
         const apiTokenCollection = db.collection('apiToken')
         const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id })
-        const apiT = `core1_${passwordHash((Date.now() * 2) / 7)}`
+        const apiT = `core1_${crypto.randomBytes(8).toString('hex')}`
 
         if (apiToken) {
             await apiTokenCollection.updateOne(

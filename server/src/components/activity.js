@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
-import logger from './logger.js'
+import logger from '../utils/logger.js'
 import { getClientIp } from './ip.js'
 
 const activity = async (req, event) => {

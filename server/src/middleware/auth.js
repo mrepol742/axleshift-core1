@@ -8,8 +8,8 @@ const auth = async (req, res, next) => {
     const token = authHeader.split(' ')[1]
     if (!token) return res.status(401).send()
     // validate external token
-    if (/^core1_[0-9a-f]{64}$/.test(token)) return validateExternalToken(req, res, next)
-    if (!/^[0-9a-f]{64}$/.test(token)) return res.status(401).send()
+    if (/^core1_[0-9a-f]{16}$/.test(token)) return validateExternalToken(req, res, next)
+    if (!/^[0-9a-f]{32}$/.test(token)) return res.status(401).send()
     return validateInternalToken(req, res, next)
 }
 

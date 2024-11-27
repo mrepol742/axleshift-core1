@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import { CForm, CInputGroup, CFormInput, CInputGroupText } from '@coreui/react'
@@ -6,7 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 const AppSearch = ({ className }) => {
-    const [query, setQuery] = useState('')
+    const urlParams = new URLSearchParams(window.location.search)
+    const queryUrl = urlParams.get('q') ? urlParams.get('q') : ''
+    const [query, setQuery] = useState(queryUrl)
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
@@ -15,6 +17,10 @@ const AppSearch = ({ className }) => {
         if (/^[a-fA-F0-9]{24}$/.test(query)) return navigate(`/track/${query}`)
         navigate(`/search?q=${query}`)
     }
+
+    useEffect(() => {
+        setQuery(queryUrl)
+    }, [queryUrl])
 
     return (
         <CForm onSubmit={handleSubmit} className={className}>

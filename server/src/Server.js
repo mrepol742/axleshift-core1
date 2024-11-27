@@ -11,7 +11,7 @@ import Quotes from 'inspirational-quotes'
 import { NODE_ENV, EXT_EXPRESS_PORT, EXT_EXPRESS_PORT_1 } from './config.js'
 import rateLimiter from './middleware/rateLimiter.js'
 import sanitize from './middleware/sanitize.js'
-import logger from './components/logger.js'
+import logger from './utils/logger.js'
 import APIv1 from './routes/v1/index.js'
 import Webhookv1 from './webhook/v1/index.js'
 

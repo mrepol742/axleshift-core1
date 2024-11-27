@@ -4,6 +4,7 @@ const MONGO_URL = process.env.MONGO_URL ?? ''
 const MONGO_DB = process.env.MONGO_DB ?? 'core1'
 
 const NODE_ENV = process.env.NODE_ENV ?? 'development'
+const APP_KEY = process.env.APP_KEY ?? 'freight-capstone'
 const EXPRESS_PORT = process.env.EXPRESS_PORT ?? 5051
 const EXT_EXPRESS_PORT = process.env.EXT_EXPRESS_PORT ?? 7000
 const EXT_EXPRESS_PORT_1 = process.env.EXT_EXPRESS_PORT_1 ?? 7001
@@ -48,6 +49,7 @@ export {
     MONGO_URL,
     MONGO_DB,
     NODE_ENV,
+    APP_KEY,
     EXPRESS_PORT,
     EXT_EXPRESS_PORT,
     EXT_EXPRESS_PORT_1,

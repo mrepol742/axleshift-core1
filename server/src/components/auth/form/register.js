@@ -1,10 +1,10 @@
 import crypto from 'crypto'
 import database from '../../../models/mongodb.js'
-import logger from '../../logger.js'
-import passwordHash, { generateUniqueId } from '../../password.js'
+import logger from '../../../utils/logger.js'
 import { addSession } from '../../../components/sessions.js'
 import { send } from '../../mail.js'
 import activity from '../../activity.js'
+import { APP_KEY } from '../../../config.js'
 
 const FormRegister = async (req, res) => {
     try {
@@ -24,6 +24,9 @@ const FormRegister = async (req, res) => {
                 error: 'Email address already registered',
             })
 
+        const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
+        const ref = crypto.randomBytes(4).toString('hex')
+
         await Promise.all([
             usersCollection.insertOne({
                 email: email,
@@ -32,9 +35,9 @@ const FormRegister = async (req, res) => {
                 role: 'user',
                 registration_type: 'form',
                 avatar: null,
-                password: passwordHash(password),
+                password: passwordHash,
                 email_verify_at: '',
-                ref: generateUniqueId(),
+                ref: ref,
                 created_at: Date.now(),
                 updated_at: Date.now(),
             }),

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import GithubAccessToken from '../github/accesstoken.js'
-import logger from '../logger.js'
+import logger from '../../utils/logger.js'
 import FormOauth2 from './formOauth2.js'
 
 // its beefy isnt it?
