@@ -9,11 +9,17 @@ const FormLogin = async (req, res) => {
     try {
         const { email, password } = req.body
         const db = await database()
-        const theUser = await db.collection('users').findOne({ email: email })
+        const theUser = await db.collection('users').findOne({
+            $or: [
+                { [`oauth2.google.email`]: email },
+                { [`oauth2.github.email`]: email },
+                { email: email },
+            ],
+        })
         if (!theUser) return res.status(404).send()
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
-        if (passwordHash != theUser.password) return res.status(401).send()
+        if (passwordHash !== theUser.password) return res.status(401).send()
 
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'

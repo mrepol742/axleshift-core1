@@ -23,11 +23,12 @@ router.post('/', [ipwhitelist, recaptcha], async (req, res, next) => {
                 .status(200)
                 .json({ message: 'The email is already subcribe to our newsletter' })
 
+        const dateNow = Date.now()
         await newsletterCollection.insertOne({
             email: email,
             is_subsribe: true,
-            created_at: Date.now(),
-            updated_at: Date.now(),
+            created_at: dateNow,
+            updated_at: dateNow,
         })
 
         return res.status(200).json({ message: 'If you can see this message means it work' })

@@ -180,6 +180,7 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
         if (!['air', 'land', 'sea'].includes(type)) return res.status(400).send()
 
         const db = await database()
+        const dateNow = Date.now()
         await db.collection('freight').insertOne({
             user_id: req.user._id,
             data: {
@@ -191,8 +192,8 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
             type: type,
             status: 'to_pay',
             session_id: req.session._id,
-            created_at: Date.now(),
-            updated_at: Date.now(),
+            created_at: dateNow,
+            updated_at: dateNow,
         })
         send(
             {

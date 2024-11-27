@@ -107,9 +107,7 @@ const Login = () => {
         formData.append('recaptcha_ref', recaptcha)
 
         axios
-            .post(`/auth/login`, formData, {
-                headers: {},
-            })
+            .post(`/auth/login`, formData)
             .then((response) => {
                 if (response.data.error)
                     return setError({
@@ -121,7 +119,6 @@ const Login = () => {
                 window.location.href = url
             })
             .catch((error) => {
-                console.error(error)
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
 

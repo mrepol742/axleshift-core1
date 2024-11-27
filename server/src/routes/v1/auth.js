@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
+import crypto from 'crypto'
 import database from '../../models/mongodb.js'
 import logger from '../../utils/logger.js'
 import { addSession, removeSession } from '../../components/sessions.js'
@@ -8,6 +9,7 @@ import recaptcha from '../../middleware/recaptcha.js'
 import ipwhitelist from '../../middleware/ipwhitelist.js'
 import { Github, Google, FormLogin, FormRegister, FormOauth2 } from '../../components/auth/index.js'
 import activity from '../../components/activity.js'
+import { APP_KEY } from '../../config.js'
 
 const router = express.Router()
 
@@ -130,10 +132,80 @@ router.post('/user', [recaptcha, auth], async function (req, res, next) {
     res.status(500).send()
 })
 
+router.post('/password', [recaptcha, auth], async function (req, res, next) {
+    try {
+        const { password, new_password, repeat_password } = req.body
+        if (!new_password || !repeat_password) return res.status(400).send()
+        if (req.user.password === 'OK' && !password) return res.status(400).send()
+
+        const db = await database()
+        const usersCollection = db.collection('users')
+        const theUser = await usersCollection.findOne({ _id: new ObjectId(req.user._id) })
+        // return 401 instead of 404 to remove the cookies
+        if (!theUser) return res.status(401).send()
+
+        const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
+        if (req.user.password === 'OK') {
+            if (passwordHash !== theUser.password)
+                return res.status(200).json({ error: 'Invalid password' })
+        }
+
+        if (new_password.length < 8)
+            return res.status(200).json({ error: 'Password must be at least 8 characters long' })
+        if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).+$/.test(new_password))
+            return res.status(200).json({
+                error: 'Password must contain letters, numbers, and symbols.',
+            })
+        if (new_password != repeat_password)
+            return res.status(200).json({ error: 'Password does not match' })
+
+        const newPasswordHash = crypto
+            .createHmac('sha256', new_password)
+            .update(APP_KEY)
+            .digest('hex')
+        if (req.user.password === 'OK' && theUser.password === newPasswordHash)
+            return res.status(200).json({ error: 'yup here we go again you cannot do that.' })
+
+        if (theUser.old_passwords) {
+            const isNewPasswordOld = theUser.old_passwords.some((oldPasswordHash) => {
+                return passwordHash === oldPasswordHash
+            })
+
+            if (isNewPasswordOld)
+                return res
+                    .status(200)
+                    .json({ error: 'The new password cannot be the same as your previous ones.' })
+        }
+
+        const dateNow = Date.now()
+        await usersCollection.updateOne(
+            { _id: new ObjectId(req.user._id) },
+            {
+                $set: {
+                    password: newPasswordHash,
+                    password_changed_on: dateNow,
+                    updated_at: dateNow,
+                },
+                $push: {
+                    old_passwords: {
+                        $each: [passwordHash],
+                        $position: 0,
+                        $slice: -5,
+                    },
+                },
+            },
+        )
+        return res.status(200).send()
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).send()
+})
+
 router.post('/logout', auth, function (req, res, next) {
     removeSession(req.token)
     activity(req, 'logout')
-    return res.status(200).send()
+    res.status(200).send()
 })
 
 // means 9:51 pm

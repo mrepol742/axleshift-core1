@@ -14,13 +14,15 @@ router.get('/', auth, async (req, res) => {
         //     .collection('couriers')
         //     .find({})
         //     .toArray()
-        return res.status(200).json([
-            { name: 'xpress' },
-            { name: 'ninja' },
-            { name: 'lazada' },
-            { name: 'shoppee' },
-            { name: 'jnt' },
-        ])
+        return res
+            .status(200)
+            .json([
+                { name: 'xpress' },
+                { name: 'ninja' },
+                { name: 'lazada' },
+                { name: 'shoppee' },
+                { name: 'jnt' },
+            ])
     } catch (err) {
         logger.error(err)
     }

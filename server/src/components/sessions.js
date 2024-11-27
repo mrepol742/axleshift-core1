@@ -42,7 +42,9 @@ export const getUser = async (sessionToken) => {
             .collection(endpoint)
             .findOne({ token: sessionToken, active: true })
         if (!tokenCollection) return null
-        const theUser = await db.collection('users').findOne({ _id: tokenCollection.user_id })
+        const theUser = await db
+            .collection('users')
+            .findOne({ _id: new ObjectId(tokenCollection.user_id) })
 
         // i have trust issues
         // with database admins
