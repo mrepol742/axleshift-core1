@@ -5,6 +5,9 @@ import auth from '../../middleware/auth.js'
 
 const router = express.Router()
 
+/**
+ * Get all Freight schedules
+ */
 router.get('/', auth, async (req, res) => {
     try {
         const db = await database()

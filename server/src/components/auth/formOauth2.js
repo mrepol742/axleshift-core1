@@ -34,43 +34,41 @@ const FormOauth2 = async (req, res) => {
         }
 
         const existingUser = await usersCollection.findOne({ email: credential.email })
-        if (existingUser)
-            return res.status(200).json({ error: 'This Email address is already registered' })
+        if (!existingUser) {
+            const ref = crypto.randomBytes(4).toString('hex')
+            const dateNow = Date.now()
 
-        const ref = crypto.randomBytes(4).toString('hex')
-        const dateNow = Date.now()
-
-        await Promise.all([
-            usersCollection.insertOne({
-                email: credential.email,
-                first_name: credential.given_name,
-                last_name: credential.family_name,
-                role: 'user',
-                registration_type: provider,
-                oauth2: {
-                    [provider]: {
-                        email: credential.email,
-                        created_at: dateNow,
-                        updated_at: dateNow,
+            await Promise.all([
+                usersCollection.insertOne({
+                    email: credential.email,
+                    first_name: credential.given_name,
+                    last_name: credential.family_name,
+                    role: 'user',
+                    registration_type: provider,
+                    oauth2: {
+                        [provider]: {
+                            email: credential.email,
+                            created_at: dateNow,
+                            updated_at: dateNow,
+                        },
                     },
-                },
-                password: null,
-                email_verify_at: dateNow,
-                ref: ref,
-                created_at: dateNow,
-                updated_at: dateNow,
-            }),
-            send(
-                {
-                    to: credential.email,
-                    subject: 'Welcome to Core 1 at Axleshift',
-                    text: `<h2>We're excited to have you on board.</h2><p>Our platform is designed to streamline your management and enhance your shipping experience. With tools to manage shipments, track deliveries, and optimize routes, you'll have everything you need at your fingertips.</p><p>If you have any questions or need assistance getting started, don't hesitate to reach out. We're here to help!</p><p>Looking forward to a successful journey together!</p><br/>Best regards,<br/>Melvin Jones Repol<br/>The Developer<br/>Core 1 Axleshift`,
-                },
-                credential.given_name,
-            ),
-            Download(credential.picture, ref),
-        ])
-
+                    password: null,
+                    email_verify_at: dateNow,
+                    ref: ref,
+                    created_at: dateNow,
+                    updated_at: dateNow,
+                }),
+                send(
+                    {
+                        to: credential.email,
+                        subject: 'Welcome to Core 1 at Axleshift',
+                        text: `<h2>We're excited to have you on board.</h2><p>Our platform is designed to streamline your management and enhance your shipping experience. With tools to manage shipments, track deliveries, and optimize routes, you'll have everything you need at your fingertips.</p><p>If you have any questions or need assistance getting started, don't hesitate to reach out. We're here to help!</p><p>Looking forward to a successful journey together!</p><br/>Best regards,<br/>Melvin Jones Repol<br/>The Developer<br/>Core 1 Axleshift`,
+                    },
+                    credential.given_name,
+                ),
+                Download(credential.picture, ref),
+            ])
+        }
         const theUser = await usersCollection.findOne({ email: credential.email })
         theUser.log = 'created account'
         theUser.log1 = `bind ${provider} as authentication credentials`

@@ -13,6 +13,9 @@ import { APP_KEY } from '../../config.js'
 
 const router = express.Router()
 
+/**
+ * Account registration
+ */
 router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
     try {
         const {
@@ -58,6 +61,9 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
     res.status(500).send()
 })
 
+/**
+ * Login portal
+ */
 router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
     try {
         const { email, password, credential, type, code } = req.body
@@ -77,7 +83,10 @@ router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
     res.status(500).send()
 })
 
-router.post('/user', [recaptcha, auth], async function (req, res, next) {
+/**
+ * Update user information
+ */
+router.post('/user', [recaptcha, auth], async (req, res, next) => {
     try {
         const { first_name, last_name, timezone, email } = req.body
         const set = {}
@@ -132,7 +141,10 @@ router.post('/user', [recaptcha, auth], async function (req, res, next) {
     res.status(500).send()
 })
 
-router.post('/password', [recaptcha, auth], async function (req, res, next) {
+/**
+ * Set and change user password
+ */
+router.post('/password', [recaptcha, auth], async (req, res, next) => {
     try {
         const { password, new_password, repeat_password } = req.body
         if (!new_password || !repeat_password) return res.status(400).send()
@@ -202,7 +214,10 @@ router.post('/password', [recaptcha, auth], async function (req, res, next) {
     res.status(500).send()
 })
 
-router.post('/logout', auth, function (req, res, next) {
+/**
+ * Logout
+ */
+router.post('/logout', auth, (req, res, next) => {
     removeSession(req.token)
     activity(req, 'logout')
     res.status(200).send()

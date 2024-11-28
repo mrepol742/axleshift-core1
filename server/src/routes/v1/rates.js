@@ -42,6 +42,9 @@ const generateRandomData = () => {
     return data
 }
 
+/**
+ * Get all Rates
+ */
 router.get('/', auth, async (req, res) => {
     try {
         // const db = await database()

@@ -48,7 +48,7 @@ const Dashboard = () => {
     }, [currentPage])
 
     return (
-        <>
+        <div>
             {loading && (
                 <div className="loading-overlay">
                     <CSpinner color="primary" variant="grow" />
@@ -107,7 +107,7 @@ const Dashboard = () => {
                     )}
                 </>
             )}
-        </>
+        </div>
     )
 }
 

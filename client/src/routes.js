@@ -38,6 +38,7 @@ const FreightSea = auth(lazy(() => import('./views/freight/panel/Sea')))
 
 const Rates = auth(lazy(() => import('./views/rates/index')))
 const Couriers = auth(lazy(() => import('./views/couriers/index')))
+const Routes = auth(lazy(() => import('./views/routes/index')))
 
 const Security = auth(lazy(() => import('./views/security/index')))
 const Management = auth(lazy(() => import('./views/security/Management')))
@@ -90,6 +91,7 @@ const routes = [
 
     { path: '/rates', name: 'Rates', element: Rates },
     { path: '/couriers', name: 'Couriers', element: Couriers },
+    { path: '/routes', name: 'Routes', element: Routes },
 
     { path: '/security', name: 'Security', element: Security },
     { path: '/security/management', name: 'Management', element: Management },

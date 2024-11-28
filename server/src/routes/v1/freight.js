@@ -11,6 +11,9 @@ import activity from '../../components/activity.js'
 const router = express.Router()
 const limit = 20
 
+/**
+ * Get all Freight Shipments & search
+ */
 router.post('/', auth, async (req, res, next) => {
     try {
         // if (!req.user) return res.status(401).send()
@@ -158,6 +161,9 @@ router.post('/', auth, async (req, res, next) => {
     res.status(500).send()
 })
 
+/**
+ * Get Freight by freight id
+ */
 router.get('/:id', [auth, freight], async (req, res, next) => {
     try {
         // even tho there are 0.0000% changes this throws an error
@@ -172,6 +178,9 @@ router.get('/:id', [auth, freight], async (req, res, next) => {
     res.status(500).send()
 })
 
+/**
+ * Create a Freight shipment
+ */
 router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment, shipping } = req.body
@@ -211,6 +220,9 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
     res.status(500).send()
 })
 
+/**
+ * Update freight details
+ */
 router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment } = req.body
@@ -240,6 +252,9 @@ router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) =
     res.status(500).send()
 })
 
+/**
+ * Cancel a Freight shipment
+ */
 router.post('/c/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const id = req.params.id

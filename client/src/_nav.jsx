@@ -16,6 +16,7 @@ import {
     faRectangleList,
     faTowerBroadcast,
     faTrailer,
+    faRoute,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -68,6 +69,12 @@ const _nav = [
         name: 'Couriers',
         to: '/couriers',
         icon: <FontAwesomeIcon icon={faTrailer} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Routes',
+        to: '/routes',
+        icon: <FontAwesomeIcon icon={faRoute} className="nav-icon" />,
     },
     {
         component: CNavTitle,
