@@ -17,7 +17,7 @@ const Inbox = () => {
 
     const fetchData = () => {
         if (!isAdmin) navigate(`/customer/${user.ref}`)
-        setLoading(true)
+       
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -34,7 +34,6 @@ const Inbox = () => {
             // i need coffeeeeeeeeee
             const latestMessagesArray = Array.from(latestMessagesMap.values())
             setThreadsID(latestMessagesArray)
-            setLoading(false)
         })
     }
 
