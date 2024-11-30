@@ -9,13 +9,13 @@ import parseTimestamp from '../../../utils/Timestamp'
 
 const Inbox = () => {
     const { user } = useUserProvider()
-    const isAdmin = ['super_admin', 'admin'].includes(user.role)
     const navigate = useNavigate()
     const [threadsID, setThreadsID] = useState([])
     const [loading, setLoading] = useState(false)
     const messagesRef = collection(database, 'messages')
 
     const fetchData = () => {
+        const isAdmin = ['super_admin', 'admin', 'staff'].includes(user.role)
         if (!isAdmin) navigate(`/customer/${user.ref}`)
        
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
@@ -49,7 +49,7 @@ const Inbox = () => {
                 </div>
             )}
 
-            {isAdmin && (
+            {['super_admin', 'admin', 'staff'].includes(user.role) && (
                 <div className="row d-flex justify-content-center mx-0 mb-4">
                     <CListGroup>
                         {threadsID.map((thread, index) => (
