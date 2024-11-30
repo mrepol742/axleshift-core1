@@ -12,10 +12,11 @@ router.get('/', auth, async (req, res) => {
     try {
         const db = await database()
         const freightCollection = db.collection('freight')
+        const isUser = !['super_admin', 'admin', 'staff'].includes(req.user.role)
 
         const filter = {
             status: { $ne: 'canceled' },
-            ...(req.user.role !== 'admin' ? { user_id: req.user._id } : {}),
+            ...(isUser ? { user_id: req.user._id } : {}),
         }
         const freight = await freightCollection.find(filter).sort({ created_at: -1 }).toArray()
 

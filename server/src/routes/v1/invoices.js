@@ -7,7 +7,7 @@ import auth from '../../middleware/auth.js'
 import freight from '../../middleware/freight.js'
 import invoices from '../../middleware/invoices.js'
 import recaptcha from '../../middleware/recaptcha.js'
-import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY, NODE_ENV, EXPRESS_PORT } from '../../config.js'
+import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY, NODE_ENV } from '../../config.js'
 import activity from '../../components/activity.js'
 
 const { Invoice } = new Xendit({
@@ -44,8 +44,8 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
                 .status(200)
                 .send({ r_url: `https://checkout-staging.xendit.co/web/${req.invoice.invoice_id}` })
         const redirectUrl =
-            NODE_ENV === 'test'
-                ? `http://localhost:${EXPRESS_PORT}/v/${req.freight._id}`
+            NODE_ENV !== 'production'
+                ? `http://localhost:3000/v/${req.freight._id}`
                 : `https://core1.axleshift.com/v/${req.freight._id}`
         const invoice = await Invoice.createInvoice({
             data: {

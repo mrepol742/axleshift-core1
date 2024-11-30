@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { CSpinner } from '@coreui/react'
 import { VITE_APP_SESSION } from '../../config'
 import Err403 from '../../views/errors/403'
 import Err500 from '../../views/errors/500'
 import Err503 from '../../views/errors/503'
 import { useUserProvider } from '../UserProvider'
+import _nav from '../../_nav'
 
 const Auth = (WrappedComponent) => {
     const AuthComponent = (props) => {
         const token = cookies.get(VITE_APP_SESSION)
         const { user, setUser } = useUserProvider()
         const navigate = useNavigate()
+        const location = useLocation()
+        const currentPage = location.pathname
         const [isAuth, setIsAuth] = useState(null)
         const [result, setResult] = useState([])
         const [maintenance, setMaintenance] = useState(false)
         const [serverErr, setServerErr] = useState(false)
+        // const [accessResults, setAccessResults] = useState(false)
 
         let loc = `/login`
         if (window.location.pathname != '/')
@@ -23,6 +27,16 @@ const Auth = (WrappedComponent) => {
 
         const checkAuthentication = async () => {
             if (!token) return setIsAuth(false)
+            // const _accessResults = _nav
+            //     .filter((item) => {
+            //         return item.to === currentPage
+            //     })
+            //     .map((item) => {
+            //         return Array.isArray(item.role_exclude) && item.role_exclude.includes(user.role)
+            //     })
+
+            // setAccessResults(!_accessResults[0])
+
             if (user && Object.keys(user).length > 0) return setIsAuth(true)
 
             axios
@@ -52,10 +66,12 @@ const Auth = (WrappedComponent) => {
                 </div>
             )
 
+        // if (accessResults) return <Err403 />
+
         if (!isAuth) return <Navigate to={loc} />
 
-        if ((user ? user.role : result.role) === 'user') return <Err403 />
-        if ((user ? user.role : result.role) === 'user' && maintenance) return <Err503 />
+        // if ((user ? user.role : result.role) === 'user') return <Err403 />
+        if (maintenance) return <Err503 />
         if (serverErr) return <Err500 />
 
         return <WrappedComponent {...props} />

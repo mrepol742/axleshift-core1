@@ -169,30 +169,32 @@ const Account = () => {
                                         ))}
                                     </datalist>
                                 </CInputGroup>
-                                <div className="mb-3">
-                                    <CButton
-                                        color="secondary"
-                                        className="mb-1 me-2 rounded"
-                                        size="sm"
-                                        disabled
-                                    >
-                                        <FontAwesomeIcon icon={faGoogle} />{' '}
-                                        {user.oauth2 && user.oauth2.google
-                                            ? user.oauth2.google.email
-                                            : 'Connect Google'}
-                                    </CButton>
-                                    <CButton
-                                        color="secondary"
-                                        className="mb-1 me-2 rounded"
-                                        size="sm"
-                                        disabled
-                                    >
-                                        <FontAwesomeIcon icon={faGithub} />{' '}
-                                        {user.oauth2 && user.oauth2.github
-                                            ? user.oauth2.github.email
-                                            : 'Connect Github'}
-                                    </CButton>
-                                </div>
+                                {user.role === 'user' && (
+                                    <div className="mb-3">
+                                        <CButton
+                                            color="secondary"
+                                            className="mb-1 me-2 rounded"
+                                            size="sm"
+                                            disabled
+                                        >
+                                            <FontAwesomeIcon icon={faGoogle} />{' '}
+                                            {user.oauth2 && user.oauth2.google
+                                                ? user.oauth2.google.email
+                                                : 'Connect Google'}
+                                        </CButton>
+                                        <CButton
+                                            color="secondary"
+                                            className="mb-1 me-2 rounded"
+                                            size="sm"
+                                            disabled
+                                        >
+                                            <FontAwesomeIcon icon={faGithub} />{' '}
+                                            {user.oauth2 && user.oauth2.github
+                                                ? user.oauth2.github.email
+                                                : 'Connect Github'}
+                                        </CButton>
+                                    </div>
+                                )}
                                 <CButton
                                     type="submit"
                                     color="primary"
@@ -209,11 +211,12 @@ const Account = () => {
                     <CCard className="mb-3">
                         <CCardBody>
                             <CForm onSubmit={handleContactInfo}>
-                                <CInputGroup className="mb-3">
+                                <CInputGroup>
                                     <CInputGroupText>
                                         <FontAwesomeIcon icon={faEnvelope} />
                                     </CInputGroupText>
                                     <CFormInput
+                                        disabled={user.role !== 'user'}
                                         type="email"
                                         id="email"
                                         placeholder="Email"
@@ -222,38 +225,48 @@ const Account = () => {
                                         onChange={(e) => handleInputChange(e, 'contactInfo')}
                                     />
                                 </CInputGroup>
-                                <CButton type="submit" color="primary" className="me-2 rounded">
-                                    Save changes
-                                </CButton>
+                                {user.role === 'user' && (
+                                    <CButton
+                                        type="submit"
+                                        color="primary"
+                                        className="mt-3 me-2 rounded"
+                                    >
+                                        Save changes
+                                    </CButton>
+                                )}
                             </CForm>
                         </CCardBody>
                     </CCard>
                 </CCol>
             </CRow>
-
-            <h4 className="text-danger">Delete account</h4>
-            <CCard className="mb-3">
-                <CCardBody>
-                    <p>
-                        If you wish to delete your account, please note that this action is
-                        irreversible and will remove all your data permanently.
-                        <br />
-                        To proceed with the deletion of your account, please click the button below:
-                    </p>
-                    <span className="text-muted">
-                        We cannot process your account deletion request, if you have unpaid invoices
-                        or inroute shippment
-                    </span>
-                    <CButton
-                        type="submit"
-                        color="danger"
-                        className="mt-4 d-block me-2 rounded"
-                        disabled
-                    >
-                        Request account deletion
-                    </CButton>
-                </CCardBody>
-            </CCard>
+            {user.role === 'user' && (
+                <>
+                    <h4 className="text-danger">Delete account</h4>
+                    <CCard className="mb-3">
+                        <CCardBody>
+                            <p>
+                                If you wish to delete your account, please note that this action is
+                                irreversible and will remove all your data permanently.
+                                <br />
+                                To proceed with the deletion of your account, please click the
+                                button below:
+                            </p>
+                            <span className="text-muted">
+                                We cannot process your account deletion request, if you have unpaid
+                                invoices or inroute shippment
+                            </span>
+                            <CButton
+                                type="submit"
+                                color="danger"
+                                className="mt-4 d-block me-2 rounded"
+                                disabled
+                            >
+                                Request account deletion
+                            </CButton>
+                        </CCardBody>
+                    </CCard>
+                </>
+            )}
         </div>
     )
 }

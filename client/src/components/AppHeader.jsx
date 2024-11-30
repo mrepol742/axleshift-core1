@@ -26,9 +26,11 @@ import {
 import { AppBreadcrumb, AppHeaderDropdown } from './index'
 import AppNotifcationDropdown from './AppNotificationDropdown'
 import AppSearch from './AppSearch'
+import { useUserProvider } from './UserProvider'
 
 const AppHeader = () => {
     const headerRef = useRef()
+    const { user } = useUserProvider()
     const { colorMode, setColorMode } = useColorModes('theme')
     const dispatch = useDispatch()
     const sidebarShow = useSelector((state) => state.sidebarShow)
@@ -54,17 +56,19 @@ const AppHeader = () => {
                     <FontAwesomeIcon icon={faBars} />
                 </CHeaderToggler>
                 <CHeaderNav>
-                    <CNavItem>
-                        <CButton onClick={(e) => navigate('/freight')}>
-                            <FontAwesomeIcon icon={faPlus} />
-                        </CButton>
-                    </CNavItem>
+                    {['user', 'super_admin'].includes(user.role) && (
+                        <CNavItem>
+                            <CButton onClick={(e) => navigate('/freight')}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </CButton>
+                        </CNavItem>
+                    )}
                     <CNavItem>
                         <CButton onClick={(e) => navigate('/schedules')}>
                             <FontAwesomeIcon icon={faCalendarDays} />
                         </CButton>
                     </CNavItem>
-                    <AppSearch className="mx-auto d-none d-md-flex" />
+                    <AppSearch className="mx-auto d-none d-md-flex ms-2" />
                 </CHeaderNav>
                 <CHeaderNav className="ms-auto px-2">
                     <AppNotifcationDropdown />

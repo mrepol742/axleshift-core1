@@ -9,13 +9,15 @@ import parseTimestamp from '../../../utils/Timestamp'
 
 const Inbox = () => {
     const { user } = useUserProvider()
+    const isAdmin = ['super_admin', 'admin'].includes(user.role)
     const navigate = useNavigate()
     const [threadsID, setThreadsID] = useState([])
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const messagesRef = collection(database, 'messages')
 
-    useEffect(() => {
-        if (user.role !== 'admin') return ''
+    const fetchData = () => {
+        if (!isAdmin) navigate(`/customer/${user.ref}`)
+        setLoading(true)
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -34,7 +36,10 @@ const Inbox = () => {
             setThreadsID(latestMessagesArray)
             setLoading(false)
         })
-        return () => unsubscribe()
+    }
+
+    useEffect(() => {
+        fetchData()
     }, [])
 
     return (
@@ -45,9 +50,7 @@ const Inbox = () => {
                 </div>
             )}
 
-            {user.role !== 'admin' && navigate(`/customer/${user.ref}`)}
-
-            {user.role === 'admin' && (
+            {!isAdmin && (
                 <div className="row d-flex justify-content-center mx-0 mb-4">
                     <CListGroup>
                         {threadsID.map((thread, index) => (

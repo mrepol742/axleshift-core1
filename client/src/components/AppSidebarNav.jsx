@@ -6,7 +6,6 @@ import { CBadge, CNavLink, CSidebarNav } from '@coreui/react'
 import { useUserProvider } from './UserProvider'
 
 export const AppSidebarNav = ({ items }) => {
-    const adminRoute = ['/security/management']
     const { user } = useUserProvider()
 
     const navLink = (name, icon, badge, indent = false) => {
@@ -61,7 +60,11 @@ export const AppSidebarNav = ({ items }) => {
         <CSidebarNav as={SimpleBar}>
             {items &&
                 items
-                    .filter((item) => user.role === 'admin' || !adminRoute.includes(item.to))
+                    .filter(
+                        (item) =>
+                            Array.isArray(item.role_exclude) &&
+                            !item.role_exclude.includes(user.role),
+                    )
                     .map((item, index) =>
                         item.items ? navGroup(item, index) : navItem(item, index),
                     )}

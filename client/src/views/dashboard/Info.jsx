@@ -251,7 +251,7 @@ const FreightInfo = () => {
                             >
                                 <FontAwesomeIcon icon={faQrcode} />
                             </CButton>
-                            {status !== 'cancelled' && status !== 'delivered' && (
+                            {status !== 'cancelled' && status !== 'received' && (
                                 <>
                                     {status === 'to_pay' && (
                                         <CButton
@@ -262,19 +262,19 @@ const FreightInfo = () => {
                                             Book shipment
                                         </CButton>
                                     )}
-                                    {status !== 'in_route' && (
-                                        <CButton
-                                            color="primary"
-                                            className="me-2 rounded"
-                                            onClick={handleEditButton}
-                                        >
-                                            {!disabled ? 'Save' : 'Edit'}
-                                        </CButton>
-                                    )}
+                                    <CButton
+                                        color="primary"
+                                        className="me-2 rounded"
+                                        onClick={handleEditButton}
+                                        disabled={['to_receive', 'received'].includes(status)}
+                                    >
+                                        {!disabled ? 'Save' : 'Edit'}
+                                    </CButton>
                                     <CButton
                                         color={!disabled ? 'warn' : 'danger'}
                                         className="me-2 rounded"
                                         onClick={handleDeleteButton}
+                                        disabled={['to_receive', 'received'].includes(status)}
                                     >
                                         Cancel
                                     </CButton>
