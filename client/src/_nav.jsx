@@ -106,7 +106,7 @@ const _nav = [
         component: CNavItem,
         name: 'Access Token',
         to: '/security/access-token',
-        role_exclude: ['staff', 'admin'],
+        role_exclude: ['staff', 'user', 'admin'],
         icon: <FontAwesomeIcon icon={faKey} className="nav-icon" />,
     },
     {
@@ -119,11 +119,13 @@ const _nav = [
     {
         component: CNavTitle,
         name: 'Payments',
+        role_exclude: [],
     },
     {
         component: CNavItem,
         name: 'Invoices',
         to: '/invoices',
+        role_exclude: [],
         icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
     },
     {

@@ -50,7 +50,7 @@ const Inbox = () => {
                 </div>
             )}
 
-            {!isAdmin && (
+            {isAdmin && (
                 <div className="row d-flex justify-content-center mx-0 mb-4">
                     <CListGroup>
                         {threadsID.map((thread, index) => (

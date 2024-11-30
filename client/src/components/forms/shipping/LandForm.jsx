@@ -20,7 +20,7 @@ const LandForm = ({
             <h3 className="mb-4">Shipping Information</h3>
 
             <CFormLabel htmlFor="shipping_origin_addresss">
-                Origin Address<span className="text-danger ms-1">*</span>
+                Pickup Address<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
                 type="text"
@@ -33,7 +33,7 @@ const LandForm = ({
             />
 
             <CFormLabel htmlFor="shipping_destination_address">
-                Destination Address<span className="text-danger ms-1">*</span>
+                Dropoff Address<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
                 type="text"
@@ -58,7 +58,7 @@ const LandForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_delivery_date">
+            <CFormLabel htmlFor="shipping_delivery_date" className="d-none">
                 Delivery Date<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
@@ -66,13 +66,12 @@ const LandForm = ({
                 id="shipping_delivery_date"
                 value={formData.shipping.shipping_delivery_date}
                 onChange={(e) => handleInputChange(e, 'shipping')}
-                required
-                className="mb-3"
+                className="mb-3 d-none"
                 disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_vehicle_type">
-                Vehicle Type<span className="text-danger ms-1">*</span>
+                Shipment Type<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormSelect
                 id="shipping_vehicle_type"
@@ -119,7 +118,7 @@ LandForm.propTypes = {
             shipping_origin_addresss: PropTypes.string.isRequired,
             shipping_destination_address: PropTypes.string.isRequired,
             shipping_pickup_date: PropTypes.string.isRequired,
-            shipping_delivery_date: PropTypes.string.isRequired,
+            shipping_delivery_date: PropTypes.string,
             shipping_vehicle_type: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,

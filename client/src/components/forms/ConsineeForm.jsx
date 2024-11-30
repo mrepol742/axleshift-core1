@@ -19,15 +19,12 @@ const ConsineeForm = ({
             {!isInfo && <CProgress color="warning" value={50} className="mb-3" />}
             <h3 className="mb-4">Consignee Information</h3>
 
-            <CFormLabel htmlFor="consignee_company_name">
-                Company Name<span className="text-danger ms-1">*</span>
-            </CFormLabel>
+            <CFormLabel htmlFor="consignee_company_name">Company Name</CFormLabel>
             <CFormInput
                 type="text"
                 id="consignee_company_name"
                 value={formData.consignee.consignee_company_name}
                 onChange={(e) => handleInputChange(e, 'consignee')}
-                required
                 className="mb-3"
                 disabled={isDisabled}
             />
@@ -114,7 +111,7 @@ const ConsineeForm = ({
 ConsineeForm.propTypes = {
     formData: PropTypes.shape({
         consignee: PropTypes.shape({
-            consignee_company_name: PropTypes.string.isRequired,
+            consignee_company_name: PropTypes.string,
             consignee_contact_name: PropTypes.string.isRequired,
             consignee_contact_email_address: PropTypes.string.isRequired,
             consignee_contact_phone_number: PropTypes.string.isRequired,

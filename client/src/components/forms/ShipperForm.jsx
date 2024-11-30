@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
-import { CForm, CProgress, CFormLabel, CFormInput, CButton } from '@coreui/react'
+import { CForm, CProgress, CFormLabel, CFormInput, CButton, CFormCheck } from '@coreui/react'
 
 const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo, isDisabled }) => {
     const formRef = useRef(null)
@@ -10,15 +10,34 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo,
             {!isInfo && <CProgress color="danger" value={25} className="mb-3" />}
             <h3 className="mb-4">Shipper Information</h3>
 
-            <CFormLabel htmlFor="shipper_company_name">
-                Company Name<span className="text-danger ms-1">*</span>
-            </CFormLabel>
+            {!isInfo && (
+                <div className="mb-3">
+                    <h6>I am shipping as a...</h6>
+                    <CFormCheck
+                        inline
+                        type="radio"
+                        name="inlineRadioOptions"
+                        id="inlineCheckbox1"
+                        value="option1"
+                        label="Business"
+                    />
+                    <CFormCheck
+                        inline
+                        type="radio"
+                        name="inlineRadioOptions"
+                        id="inlineCheckbox2"
+                        value="option2"
+                        label="Private Persion"
+                    />
+                </div>
+            )}
+
+            <CFormLabel htmlFor="shipper_company_name">Company Name</CFormLabel>
             <CFormInput
                 type="text"
                 id="shipper_company_name"
                 value={formData.shipper.shipper_company_name}
                 onChange={(e) => handleInputChange(e, 'shipper')}
-                required
                 className="mb-3"
                 disabled={isDisabled}
             />
@@ -98,7 +117,7 @@ const ShipperForm = ({ formData, handleInputChange, handleConsigneeInfo, isInfo,
 ShipperForm.propTypes = {
     formData: PropTypes.shape({
         shipper: PropTypes.shape({
-            shipper_company_name: PropTypes.string.isRequired,
+            shipper_company_name: PropTypes.string,
             shipper_contact_name: PropTypes.string.isRequired,
             shipper_contact_email_address: PropTypes.string.isRequired,
             shipper_contact_phone_number: PropTypes.string.isRequired,

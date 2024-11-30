@@ -20,7 +20,7 @@ const AirForm = ({
             <h3 className="mb-4">Shipping Information</h3>
 
             <CFormLabel htmlFor="shipping_origin_airport">
-                Origin Airport<span className="text-danger ms-1">*</span>
+                Pickup Address<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
                 type="text"
@@ -33,7 +33,7 @@ const AirForm = ({
             />
 
             <CFormLabel htmlFor="shipping_destination_airport">
-                Destination Airport<span className="text-danger ms-1">*</span>
+                Dropoff Address<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
                 type="text"
@@ -58,7 +58,7 @@ const AirForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_preferred_arrival_date">
+            <CFormLabel htmlFor="shipping_preferred_arrival_date" className="d-none">
                 Preferred Arrival Date<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
@@ -66,13 +66,12 @@ const AirForm = ({
                 id="shipping_preferred_arrival_date"
                 value={formData.shipping.shipping_preferred_arrival_date}
                 onChange={(e) => handleInputChange(e, 'shipping')}
-                required
-                className="mb-3"
+                className="mb-3 d-none"
                 disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_flight_type">
-                Flight Type<span className="text-danger ms-1">*</span>
+                Shipment Type<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormSelect
                 id="shipping_flight_type"
@@ -118,7 +117,7 @@ AirForm.propTypes = {
             shipping_origin_airport: PropTypes.string.isRequired,
             shipping_destination_airport: PropTypes.string.isRequired,
             shipping_preferred_departure_date: PropTypes.string.isRequired,
-            shipping_preferred_arrival_date: PropTypes.string.isRequired,
+            shipping_preferred_arrival_date: PropTypes.string,
             shipping_flight_type: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,
