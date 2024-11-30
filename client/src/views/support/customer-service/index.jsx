@@ -35,6 +35,7 @@ const Inbox = () => {
             const latestMessagesArray = Array.from(latestMessagesMap.values())
             setThreadsID(latestMessagesArray)
         })
+        return () => unsubscribe()
     }
 
     useEffect(() => {
