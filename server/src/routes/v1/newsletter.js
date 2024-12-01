@@ -7,6 +7,9 @@ import ipwhitelist from '../../middleware/ipwhitelist.js'
 
 const router = express.Router()
 
+/**
+ * Add a email to newsletter
+ */
 router.post('/', [ipwhitelist, recaptcha], async (req, res, next) => {
     try {
         const email = req.body.email

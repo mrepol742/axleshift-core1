@@ -83,7 +83,7 @@ const Sea = () => {
         axios
             .post(`/freight/b/sea`, updatedFormData)
             .then((response) => {
-                addToast('Shipment has been confirmed.', 'Shipment')
+                addToast('Shipment has been created.', 'Shipment')
                 navigate('/dashboard')
             })
             .catch((error) => {

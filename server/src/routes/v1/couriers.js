@@ -7,6 +7,9 @@ import recaptcha from '../../middleware/recaptcha.js'
 
 const router = express.Router()
 
+/**
+ * Get all Couriers
+ */
 router.get('/', auth, async (req, res) => {
     try {
         // const db = await database()

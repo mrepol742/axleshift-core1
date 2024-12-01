@@ -20,7 +20,7 @@ const SeaForm = ({
             <h3 className="mb-4">Shipping Information</h3>
 
             <CFormLabel htmlFor="shipping_loading_port">
-                Loading Port<span className="text-danger ms-1">*</span>
+                Pickup Port<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
                 type="text"
@@ -33,7 +33,7 @@ const SeaForm = ({
             />
 
             <CFormLabel htmlFor="shipping_discharge_port">
-                Discharge Port<span className="text-danger ms-1">*</span>
+                Dropoff Port<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
                 type="text"
@@ -58,7 +58,7 @@ const SeaForm = ({
                 disabled={isDisabled}
             />
 
-            <CFormLabel htmlFor="shipping_estimated_arrival_date">
+            <CFormLabel htmlFor="shipping_estimated_arrival_date" className="d-none">
                 Estimated Arrival Date<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormInput
@@ -66,13 +66,12 @@ const SeaForm = ({
                 id="shipping_estimated_arrival_date"
                 value={formData.shipping.shipping_estimated_arrival_date}
                 onChange={(e) => handleInputChange(e, 'shipping')}
-                required
-                className="mb-4"
+                className="mb-4 d-none"
                 disabled={isDisabled}
             />
 
             <CFormLabel htmlFor="shipping_cargo_type">
-                Flight Type<span className="text-danger ms-1">*</span>
+                Shipment Type<span className="text-danger ms-1">*</span>
             </CFormLabel>
             <CFormSelect
                 id="shipping_cargo_type"
@@ -121,7 +120,7 @@ SeaForm.propTypes = {
             shipping_loading_port: PropTypes.string.isRequired,
             shipping_discharge_port: PropTypes.string.isRequired,
             shipping_sailing_date: PropTypes.string.isRequired,
-            shipping_estimated_arrival_date: PropTypes.string.isRequired,
+            shipping_estimated_arrival_date: PropTypes.string,
             shipping_cargo_type: PropTypes.string.isRequired,
         }).isRequired,
     }).isRequired,

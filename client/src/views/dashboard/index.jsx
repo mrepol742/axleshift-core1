@@ -9,6 +9,7 @@ import {
     CRow,
     CSpinner,
     CCardText,
+    CCardTitle,
 } from '@coreui/react'
 import Masonry from 'react-masonry-css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -48,7 +49,7 @@ const Dashboard = () => {
     }, [currentPage])
 
     return (
-        <>
+        <div>
             {loading && (
                 <div className="loading-overlay">
                     <CSpinner color="primary" variant="grow" />
@@ -57,11 +58,28 @@ const Dashboard = () => {
 
             {!loading && data.length == 0 && (
                 <CRow className="justify-content-center my-5">
-                    <CCol md={6}>
+                    <CCol md={7}>
                         <div className="clearfix">
-                            <h1 className="float-start display-3 me-4">OOPS</h1>
-                            <h4>There was no shipment yet.</h4>
-                            <p>Check it out later</p>
+                            <h2>Track your shipment</h2>
+                            <AppSearch className="mb-3" />
+                            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                                <CCol onClick={(e) => navigate('/freight')} className="mb-3">
+                                    <CCard>
+                                        <CCardBody>
+                                            <CCardTitle>Ship right now</CCardTitle>
+                                            <CCardText>Find the right service</CCardText>
+                                        </CCardBody>
+                                    </CCard>
+                                </CCol>
+                                <CCol onClick={(e) => navigate('/routes')} className="mb-3">
+                                    <CCard>
+                                        <CCardBody>
+                                            <CCardTitle>Get a qoute</CCardTitle>
+                                            <CCardText>Estimate cost and compare</CCardText>
+                                        </CCardBody>
+                                    </CCard>
+                                </CCol>
+                            </CRow>
                         </div>
                     </CCol>
                 </CRow>
@@ -107,7 +125,7 @@ const Dashboard = () => {
                     )}
                 </>
             )}
-        </>
+        </div>
     )
 }
 

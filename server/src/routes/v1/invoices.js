@@ -7,7 +7,7 @@ import auth from '../../middleware/auth.js'
 import freight from '../../middleware/freight.js'
 import invoices from '../../middleware/invoices.js'
 import recaptcha from '../../middleware/recaptcha.js'
-import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY } from '../../config.js'
+import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY, NODE_ENV } from '../../config.js'
 import activity from '../../components/activity.js'
 
 const { Invoice } = new Xendit({
@@ -16,6 +16,9 @@ const { Invoice } = new Xendit({
 })
 const router = express.Router()
 
+/**
+ * Get all Invoices
+ */
 router.get('/', [auth], async (req, res) => {
     try {
         const db = await database()
@@ -31,23 +34,35 @@ router.get('/', [auth], async (req, res) => {
     res.status(500).send()
 })
 
+/**
+ * Create an Invoice
+ */
 router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
     try {
         if (req.invoice)
             return res
                 .status(200)
                 .send({ r_url: `https://checkout-staging.xendit.co/web/${req.invoice.invoice_id}` })
+        const redirectUrl =
+            NODE_ENV !== 'production'
+                ? `http://localhost:3000/v/${req.freight._id}`
+                : `https://core1.axleshift.com/v/${req.freight._id}`
         const invoice = await Invoice.createInvoice({
             data: {
                 amount: 24463,
+                payerEmail: req.user.email,
                 invoiceDuration: 172800,
                 externalId: `core1-axleshift-${Date.now()}`,
                 description: req.freight.data.shipment.shipment_description,
                 currency: 'PHP',
                 reminderTime: 1,
                 shouldSendEmail: true,
+                failureRedirectUrl: redirectUrl,
+                successRedirectUrl: redirectUrl,
             },
         })
+
+        logger.info(invoice)
 
         const db = await database()
         const invoicesCollection = db.collection('invoices')
@@ -86,6 +101,9 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
     res.status(500).send()
 })
 
+/**
+ * Cancel an Invoice
+ */
 router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
     try {
         const db = await database()

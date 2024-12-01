@@ -8,19 +8,9 @@ import freight from '../../middleware/freight.js'
 
 const router = express.Router()
 
-/*
-  Get tracking status of shipment
-  Url: POST /api/v1/track/:id
-  Params:
-     Shipment Id
-  Header:
-     Authentication
-  Returns:
-     Events
-     Origin
-     Destination
-     Status
-*/
+/**
+ * Get Freight Tracking Status
+ */
 router.get('/:id', [auth, freight], async (req, res, next) => {
     try {
         const freight = req.freight

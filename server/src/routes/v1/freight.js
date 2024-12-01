@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
+import axios from 'axios'
 import logger from '../../utils/logger.js'
 import database from '../../models/mongodb.js'
 import auth from '../../middleware/auth.js'
@@ -7,10 +8,14 @@ import recaptcha from '../../middleware/recaptcha.js'
 import freight from '../../middleware/freight.js'
 import { send } from '../../components/mail.js'
 import activity from '../../components/activity.js'
+import { GOOGLE_MAP } from '../../config.js'
 
 const router = express.Router()
 const limit = 20
 
+/**
+ * Get all Freight Shipments & search
+ */
 router.post('/', auth, async (req, res, next) => {
     try {
         // if (!req.user) return res.status(401).send()
@@ -18,10 +23,11 @@ router.post('/', auth, async (req, res, next) => {
         if (!page) return res.status(400).send()
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
+        const isUser = !['super_admin', 'admin', 'staff'].includes(req.user.role)
 
         let filter
         if (!query) {
-            filter = req.user.role !== 'admin' ? { user_id: req.user._id } : {}
+            filter = isUser ? { user_id: req.user._id } : {}
         } else {
             const deep_filter = {
                 $or: [
@@ -128,10 +134,7 @@ router.post('/', auth, async (req, res, next) => {
                 deep_filter.$or.push({ status: query })
             if (type && ['air', 'land', 'sea'].includes(type)) deep_filter.$or.push({ type: query })
 
-            filter =
-                req.user.role !== 'admin'
-                    ? { user_id: req.user._id, ...deep_filter }
-                    : { ...deep_filter }
+            filter = isUser ? { user_id: req.user._id, ...deep_filter } : { ...deep_filter }
         }
 
         const db = await database()
@@ -158,6 +161,9 @@ router.post('/', auth, async (req, res, next) => {
     res.status(500).send()
 })
 
+/**
+ * Get Freight by freight id
+ */
 router.get('/:id', [auth, freight], async (req, res, next) => {
     try {
         // even tho there are 0.0000% changes this throws an error
@@ -172,6 +178,9 @@ router.get('/:id', [auth, freight], async (req, res, next) => {
     res.status(500).send()
 })
 
+/**
+ * Create a Freight shipment
+ */
 router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment, shipping } = req.body
@@ -211,6 +220,9 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
     res.status(500).send()
 })
 
+/**
+ * Update freight details
+ */
 router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment } = req.body
@@ -240,6 +252,9 @@ router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) =
     res.status(500).send()
 })
 
+/**
+ * Cancel a Freight shipment
+ */
 router.post('/c/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const id = req.params.id
@@ -257,6 +272,28 @@ router.post('/c/:id', [recaptcha, auth, freight], async (req, res, next) => {
 
         activity(req, `cancelled a shipment #${id}`)
         return res.status(200).send()
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).send()
+})
+
+router.post('/optimized-route', [auth], async (req, res, next) => {
+    try {
+        const { pickup, dropoff } = req.body
+
+        const params = {
+            origin: `${pickup.lat},${pickup.lng}`,
+            destination: `${dropoff.lat},${dropoff.lng}`,
+            waypoints: '',
+            optimize_waypoints: true,
+            key: GOOGLE_MAP,
+        }
+
+        const response = await axios.get('https://maps.googleapis.com/maps/api/directions/json', {
+            params,
+        })
+        return res.status(200).json(response.data)
     } catch (e) {
         logger.error(e)
     }

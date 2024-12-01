@@ -83,7 +83,7 @@ const Air = () => {
         axios
             .post(`/freight/b/air`, updatedFormData)
             .then((response) => {
-                addToast('Shipment has been confirmed.', 'Shipment')
+                addToast('Shipment has been created.', 'Shipment')
                 navigate('/dashboard')
             })
             .catch((error) => {

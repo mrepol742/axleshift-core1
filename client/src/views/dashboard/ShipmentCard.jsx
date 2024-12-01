@@ -12,7 +12,7 @@ const ShipmentCard = ({ shipment }) => {
     const getCardColor = (status) => {
         if (status === 'cancelled') return 'danger'
         if (status === 'received') return 'primary'
-        if (status === 'in_route' || status === 'in_ship') return 'warning'
+        if (status === 'to_receive' || status === 'to_ship') return 'warning'
         // for to_pay
         return ''
     }
@@ -20,10 +20,10 @@ const ShipmentCard = ({ shipment }) => {
     const getStatus = (status) => {
         if (status === 'cancelled') return 'Cancelled'
         if (status === 'received') return 'Received'
-        if (status === 'in_route') return 'To Receive'
-        if (status === 'in_ship') return 'To Ship'
+        if (status === 'to_receive') return 'To Receive'
+        if (status === 'to_ship') return 'To Ship'
         // for to_pay
-        return 'Unknown'
+        return 'To Pay'
     }
 
     return (

@@ -44,64 +44,50 @@ const ShipmentForm = ({
             <CRow className="mb-3">
                 <h5>Dimensions (cm)</h5>
                 <CCol xs>
-                    <CFormLabel htmlFor="shipment_dimension_length">
-                        Length<span className="text-danger ms-1">*</span>
-                    </CFormLabel>
+                    <CFormLabel htmlFor="shipment_dimension_length">Length</CFormLabel>
                     <CFormInput
                         type="number"
                         id="shipment_dimension_length"
                         value={formData.shipment.shipment_dimension_length}
                         onChange={(e) => handleInputChange(e, 'shipment')}
-                        required
                         disabled={isDisabled}
                     />
                 </CCol>
                 <CCol xs>
-                    <CFormLabel htmlFor="shipment_dimension_width">
-                        Width<span className="text-danger ms-1">*</span>
-                    </CFormLabel>
+                    <CFormLabel htmlFor="shipment_dimension_width">Width</CFormLabel>
                     <CFormInput
                         type="number"
                         id="shipment_dimension_width"
                         value={formData.shipment.shipment_dimension_width}
                         onChange={(e) => handleInputChange(e, 'shipment')}
-                        required
                         disabled={isDisabled}
                     />
                 </CCol>
                 <CCol xs>
-                    <CFormLabel htmlFor="shipment_dimension_height">
-                        Height<span className="text-danger ms-1">*</span>
-                    </CFormLabel>
+                    <CFormLabel htmlFor="shipment_dimension_height">Height</CFormLabel>
                     <CFormInput
                         type="number"
                         id="shipment_dimension_height"
                         value={formData.shipment.shipment_dimension_height}
                         onChange={(e) => handleInputChange(e, 'shipment')}
-                        required
                         disabled={isDisabled}
                     />
                 </CCol>
             </CRow>
             <CRow className="mb-3">
                 <CCol xs>
-                    <CFormLabel htmlFor="shipment_weight">
-                        Weight (kg)<span className="text-danger ms-1">*</span>
-                    </CFormLabel>
+                    <CFormLabel htmlFor="shipment_weight">Weight (kg)</CFormLabel>
                     <CFormInput
                         type="number"
                         id="shipment_weight"
                         value={formData.shipment.shipment_weight}
                         onChange={(e) => handleInputChange(e, 'shipment')}
-                        required
                         className="mb-3"
                         disabled={isDisabled}
                     />
                 </CCol>
                 <CCol xs>
-                    <CFormLabel htmlFor="shipment_volume">
-                        Total Volume<span className="text-danger ms-1">*</span>
-                    </CFormLabel>
+                    <CFormLabel htmlFor="shipment_volume">Total Volume</CFormLabel>
                     <CFormInput
                         type="number"
                         id="shipment_volume"
@@ -112,15 +98,12 @@ const ShipmentForm = ({
                     />
                 </CCol>
                 <CCol xs>
-                    <CFormLabel htmlFor="shipment_value">
-                        Value of Goods<span className="text-danger ms-1">*</span>
-                    </CFormLabel>
+                    <CFormLabel htmlFor="shipment_value">Value of Goods</CFormLabel>
                     <CFormInput
                         type="number"
                         id="shipment_value"
                         value={formData.shipment.shipment_value}
                         onChange={(e) => handleInputChange(e, 'shipment')}
-                        required
                         className="mb-3"
                         disabled={isDisabled}
                     />
@@ -164,16 +147,16 @@ const ShipmentForm = ({
 ShipmentForm.propTypes = {
     formData: PropTypes.shape({
         shipment: PropTypes.shape({
-            shipment_description: PropTypes.string.isRequired,
-            shipment_weight: PropTypes.string.isRequired,
-            shipment_dimension_length: PropTypes.string.isRequired,
-            shipment_dimension_width: PropTypes.string.isRequired,
-            shipment_dimension_height: PropTypes.string.isRequired,
-            shipment_volume: PropTypes.string.isRequired,
-            shipment_value: PropTypes.string.isRequired,
-            shipment_instructions: PropTypes.string.isRequired,
-        }).isRequired,
-    }).isRequired,
+            shipment_description: PropTypes.string,
+            shipment_weight: PropTypes.string,
+            shipment_dimension_length: PropTypes.string,
+            shipment_dimension_width: PropTypes.string,
+            shipment_dimension_height: PropTypes.string,
+            shipment_volume: PropTypes.string,
+            shipment_value: PropTypes.string,
+            shipment_instructions: PropTypes.string,
+        }),
+    }),
     handleInputChange: PropTypes.func,
     handleConsigneeInfo: PropTypes.func,
     handleShippingInformation: PropTypes.func,
