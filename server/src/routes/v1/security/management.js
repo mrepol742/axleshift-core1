@@ -14,25 +14,33 @@ router.get('/', auth, async (req, res, next) => res.status(301).send())
 
 router.get('/sessions', auth, async (req, res, next) => {
     try {
-        const db = await database()
-        const sessions = await db
-            .collection('sessions')
-            .find()
-            .sort({ last_accessed: -1 })
-            .toArray()
+        const db = await database();
+        const sessions = await db.collection('sessions').aggregate([
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'user_id',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            },
+            {
+                $sort: { last_accessed: -1 }
+            }
+        ]).toArray();
 
-        for (let i = 0; i < sessions.length; i++) {
-            const user_agent = sessions[i].user_agent
-            const agent = useragent.parse(user_agent)
-            sessions[i].user_agent = `${agent.os.family} ${agent.family}`
-        }
+        sessions.forEach(session => {
+            const user_agent = session.user_agent;
+            const agent = useragent.parse(user_agent);
+            session.user_agent = `${agent.os.family} ${agent.family}`
+        });
 
-        return res.status(200).json(sessions)
+        return res.status(200).json(sessions);
     } catch (e) {
-        logger.error(e)
+        logger.error(e);
+        return res.status(500).send();
     }
-    res.status(500).send()
-})
+});
 
 router.post('/sessions/logout', [recaptcha, auth], async (req, res, next) => {
     try {

@@ -53,6 +53,12 @@ const Invoices = auth(lazy(() => import('./views/invoices/index')))
 
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 
+/*
+ * `external` = true will mark the route for non admin only, any
+ * attemp of accessing unauthorized route path will return 404
+ * and any attemp using unauthorized api endpoint will logout
+ * the account.
+ */
 const routes = [
     { path: '/', external: true, name: '', element: Landing },
     { path: '/privacy-policy', external: true, name: 'Privacy Policy', element: Privacy },

@@ -1,6 +1,7 @@
 const parseTimestamp = (timestamp) => {
-    const now = Math.floor(Date.now() / 1000)
-    const seconds = Math.floor((Date.now() - timestamp) / 1000)
+    const localTimestamp = new Date(timestamp).getTime()
+    const now = Date.now()
+    const seconds = Math.floor((now - localTimestamp) / 1000)
 
     if (seconds < 60) return 'now'
     if (seconds < 3600) {
