@@ -75,7 +75,6 @@ const Track = () => {
             }, 2000)
         }
     }
-
     return (
         <div>
             {loading && (

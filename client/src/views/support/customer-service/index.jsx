@@ -17,7 +17,7 @@ const Inbox = () => {
     const fetchData = () => {
         const isAdmin = ['super_admin', 'admin', 'staff'].includes(user.role)
         if (!isAdmin) navigate(`/customer/${user.ref}`)
-       
+
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -42,14 +42,15 @@ const Inbox = () => {
         fetchData()
     }, [])
 
-    return (
-        <>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
 
+    return (
+        <div>
             {['super_admin', 'admin', 'staff'].includes(user.role) && (
                 <div className="row d-flex justify-content-center mx-0 mb-4">
                     <CListGroup>
@@ -70,7 +71,7 @@ const Inbox = () => {
                     </CListGroup>
                 </div>
             )}
-        </>
+        </div>
     )
 }
 

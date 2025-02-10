@@ -77,31 +77,28 @@ const Dashboard = () => {
         return () => clearInterval(intervalId)
     }, [])
 
+    if (!formData) return ''
+
     return (
         <div>
-            {formData && (
-                <>
-                    <CRow xs={{ gutter: 4 }}>
-                        <CCol sm={6} xl={4} xxl={3}>
-                            <Widgets
-                                color="primary"
-                                title="Average Load Time"
-                                value={totalAverageLoadData}
-                                data={averageLoadData}
-                            />
-                        </CCol>
-                        <CCol sm={6} xl={4} xxl={3}>
-                            <Widgets
-                                color="danger"
-                                title="CPU Usage"
-                                value={`${totalCPUUsageData}%`}
-                                data={cpuUsageData}
-                            />
-                        </CCol>
-                    </CRow>
-                    {JSON.stringify(formData, null, 4)}
-                </>
-            )}
+            <CRow xs={{ gutter: 4 }}>
+                <CCol sm={6} xl={4} xxl={3}>
+                    <Widgets
+                        color="primary"
+                        title="Average Load Time"
+                        value={totalAverageLoadData}
+                        data={averageLoadData}
+                    />
+                </CCol>
+                <CCol sm={6} xl={4} xxl={3}>
+                    <Widgets
+                        color="danger"
+                        title="CPU Usage"
+                        value={`${totalCPUUsageData}%`}
+                        data={cpuUsageData}
+                    />
+                </CCol>
+            </CRow>
         </div>
     )
 }

@@ -7,43 +7,9 @@ import AppSearch from '../../components/AppSearch'
 import ShipmentCard from './ShipmentCard'
 import AppPagination from '../../components/AppPagination'
 
-const Search = () => {
-    const [data, setData] = useState([])
-    const [currentPage, setCurrentPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(0)
-    const [loading, setLoading] = useState(true)
-    const { addToast } = useToast()
-    const navigate = useNavigate()
-    const urlParams = new URLSearchParams(window.location.search)
-    const query = urlParams.get('q') ? urlParams.get('q') : ''
-
-    const fetchData = async (page) => {
-        axios
-            .post(`/freight`, { page, query })
-            .then((response) => {
-                setData(response.data.data)
-                setTotalPages(response.data.totalPages)
-            })
-            .catch((error) => {
-                const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
-                addToast(message, 'Submit failed!')
-            })
-            .finally(() => setLoading(false))
-    }
-
-    useEffect(() => {
-        fetchData(currentPage)
-    }, [currentPage])
-
+const AppBar = () => {
     return (
-        <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-
+        <>
             <AppSearch className="mb-3 d-block d-md-none" />
 
             <CForm className="d-block d-sm-flex justify-content-left">
@@ -78,8 +44,49 @@ const Search = () => {
                     className="mb-3"
                 />
             </CForm>
+        </>
+    )
+}
+const Search = () => {
+    const [data, setData] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0)
+    const [loading, setLoading] = useState(true)
+    const { addToast } = useToast()
+    const navigate = useNavigate()
+    const urlParams = new URLSearchParams(window.location.search)
+    const query = urlParams.get('q') ? urlParams.get('q') : ''
 
-            {!loading && data.length == 0 && (
+    const fetchData = async (page) => {
+        axios
+            .post(`/freight`, { page, query })
+            .then((response) => {
+                setData(response.data.data)
+                setTotalPages(response.data.totalPages)
+            })
+            .catch((error) => {
+                const message =
+                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                addToast(message, 'Submit failed!')
+            })
+            .finally(() => setLoading(false))
+    }
+
+    useEffect(() => {
+        fetchData(currentPage)
+    }, [currentPage])
+
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
+    if (data.length == 0)
+        return (
+            <>
+                <AppBar />
                 <CRow className="justify-content-center my-5">
                     <CCol md={6}>
                         <div className="clearfix">
@@ -89,35 +96,35 @@ const Search = () => {
                         </div>
                     </CCol>
                 </CRow>
-            )}
+            </>
+        )
 
-            {data.length !== 0 && (
-                <>
-                    <Masonry
-                        breakpointCols={{
-                            default: 4,
-                            1100: 3,
-                            700: 2,
-                            500: 1,
-                        }}
-                        className="my-masonry-grid"
-                        columnClassName="my-masonry-grid_column"
-                    >
-                        {data.map((item, index) => (
-                            <ShipmentCard key={index} shipment={item} />
-                        ))}
-                    </Masonry>
+    return (
+        <div>
+            <AppBar />
+            <Masonry
+                breakpointCols={{
+                    default: 4,
+                    1100: 3,
+                    700: 2,
+                    500: 1,
+                }}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+            >
+                {data.map((item, index) => (
+                    <ShipmentCard key={index} shipment={item} />
+                ))}
+            </Masonry>
 
-                    {data.length > 20 && (
-                        <AppPagination
-                            currentPage={currentPage}
-                            setCurrentPage={setCurrentPage}
-                            totalPages={totalPages}
-                            setTotalPages={setTotalPages}
-                            className="mb-3"
-                        />
-                    )}
-                </>
+            {data.length > 20 && (
+                <AppPagination
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                    setTotalPages={setTotalPages}
+                    className="mb-3"
+                />
             )}
         </div>
     )

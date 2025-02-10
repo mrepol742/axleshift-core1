@@ -115,133 +115,135 @@ const API = () => {
         fetchData()
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
+    if (!result.token) {
+        return (
+            <CRow className="justify-content-center my-5">
+                <CCol md={6}>
+                    <div className="clearfix">
+                        <h1 className="float-start display-3 me-4">OOPS</h1>
+                        <h4>You have not generate a token yet.</h4>
+                        <CButton color="primary" size="sm" onClick={gen}>
+                            Generate Token
+                        </CButton>
+                    </div>
+                </CCol>
+            </CRow>
+        )
+    }
+
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
-            {!loading && !result.token && (
-                <CRow className="justify-content-center my-5">
-                    <CCol md={6}>
-                        <div className="clearfix">
-                            <h1 className="float-start display-3 me-4">OOPS</h1>
-                            <h4>You have not generate a token yet.</h4>
-                            <CButton color="primary" size="sm" onClick={gen}>
-                                Generate Token
-                            </CButton>
-                        </div>
-                    </CCol>
-                </CRow>
-            )}
-            {!loading && result.token && (
-                <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                    <CCol className="mb-3">
-                        <h4>Auth token</h4>
-                        <CCard>
-                            <CCardBody>
-                                <div className="d-flex mb-3">
-                                    <CFormInput
-                                        className={isBlurred ? 'blurred' : ''}
-                                        value={result.token}
-                                        aria-describedby="basic-addon"
-                                    />
-                                    <CButton className="ms-2" onClick={handleIconClick}>
-                                        <FontAwesomeIcon icon={isBlurred ? faEye : faEyeSlash} />
-                                    </CButton>
-                                    <CButton className="ms-2" onClick={copyToClipboard}>
-                                        <FontAwesomeIcon icon={faCopy} />
-                                    </CButton>
-                                </div>
-                                <CButton color="primary" size="sm" onClick={gen}>
-                                    New token
+            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                <CCol className="mb-3">
+                    <h4>Auth token</h4>
+                    <CCard>
+                        <CCardBody>
+                            <div className="d-flex mb-3">
+                                <CFormInput
+                                    className={isBlurred ? 'blurred' : ''}
+                                    value={result.token}
+                                    aria-describedby="basic-addon"
+                                />
+                                <CButton className="ms-2" onClick={handleIconClick}>
+                                    <FontAwesomeIcon icon={isBlurred ? faEye : faEyeSlash} />
                                 </CButton>
-                            </CCardBody>
-                        </CCard>
-                    </CCol>
-                    <CCol className="mb-3">
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <h4>Whitelisted IP</h4>
-                            <CButton
-                                size="sm"
-                                className="text-white"
-                                onClick={handleAddIp}
-                                disabled={disabledAdd}
-                            >
-                                <FontAwesomeIcon icon={faPlus} /> Add
+                                <CButton className="ms-2" onClick={copyToClipboard}>
+                                    <FontAwesomeIcon icon={faCopy} />
+                                </CButton>
+                            </div>
+                            <CButton color="primary" size="sm" onClick={gen}>
+                                New token
                             </CButton>
-                        </div>
-                        {result.whitelist_ip && result.whitelist_ip.length === 0 && (
-                            <CCard className="mb-3">
-                                <CCardBody className="justify-content-center m-3">
-                                    <div className="clearfix">
-                                        <h1 className="float-start display-3 me-4">OOPS</h1>
-                                        <h4>There was no Whitelisted IP Addresses.</h4>
-                                        <p>Add new one to begin</p>
-                                    </div>
-                                </CCardBody>
-                            </CCard>
-                        )}
-
-                        {result.whitelist_ip && result.whitelist_ip.length !== 0 && (
-                            <CCard className="mb-3">
-                                <CCardBody>
-                                    <CForm onSubmit={handleWhitelistIpSubmit}>
-                                        {result.whitelist_ip.map((input, index) => (
-                                            <div className="d-flex mb-2" key={index}>
-                                                <CFormInput
-                                                    value={input}
-                                                    onChange={(e) =>
-                                                        handleIpChange(index, e.target.value)
-                                                    }
-                                                    placeholder={`192.168.0.${index + 1}`}
-                                                />
-                                                <CButton
-                                                    color="danger"
-                                                    className="text-white ms-2"
-                                                    onClick={copyToClipboard}
-                                                >
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </CButton>
-                                            </div>
-                                        ))}
-                                        <CButton
-                                            size="sm"
-                                            type="submit"
-                                            color="primary"
-                                            className="d-block me-2 rounded"
-                                        >
-                                            Save changes
-                                        </CButton>
-                                    </CForm>
-                                </CCardBody>
-                            </CCard>
-                        )}
-
-                        <h4>Last accessed</h4>
-                        <CCard>
-                            <CCardBody>
-                                <p className="display-5">
-                                    {result.last_accessed
-                                        ? parseTimestamp(result.last_accessed)
-                                        : 'Never'}
-                                </p>
-                                <span className="lead">{result.user_agent}</span>
+                        </CCardBody>
+                    </CCard>
+                </CCol>
+                <CCol className="mb-3">
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <h4>Whitelisted IP</h4>
+                        <CButton
+                            size="sm"
+                            className="text-white"
+                            onClick={handleAddIp}
+                            disabled={disabledAdd}
+                        >
+                            <FontAwesomeIcon icon={faPlus} /> Add
+                        </CButton>
+                    </div>
+                    {result.whitelist_ip && result.whitelist_ip.length === 0 && (
+                        <CCard className="mb-3">
+                            <CCardBody className="justify-content-center m-3">
+                                <div className="clearfix">
+                                    <h1 className="float-start display-3 me-4">OOPS</h1>
+                                    <h4>There was no Whitelisted IP Addresses.</h4>
+                                    <p>Add new one to begin</p>
+                                </div>
                             </CCardBody>
                         </CCard>
-                    </CCol>
-                </CRow>
-            )}
+                    )}
+
+                    {result.whitelist_ip && result.whitelist_ip.length !== 0 && (
+                        <CCard className="mb-3">
+                            <CCardBody>
+                                <CForm onSubmit={handleWhitelistIpSubmit}>
+                                    {result.whitelist_ip.map((input, index) => (
+                                        <div className="d-flex mb-2" key={index}>
+                                            <CFormInput
+                                                value={input}
+                                                onChange={(e) =>
+                                                    handleIpChange(index, e.target.value)
+                                                }
+                                                placeholder={`192.168.0.${index + 1}`}
+                                            />
+                                            <CButton
+                                                color="danger"
+                                                className="text-white ms-2"
+                                                onClick={copyToClipboard}
+                                            >
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </CButton>
+                                        </div>
+                                    ))}
+                                    <CButton
+                                        size="sm"
+                                        type="submit"
+                                        color="primary"
+                                        className="d-block me-2 rounded"
+                                    >
+                                        Save changes
+                                    </CButton>
+                                </CForm>
+                            </CCardBody>
+                        </CCard>
+                    )}
+
+                    <h4>Last accessed</h4>
+                    <CCard>
+                        <CCardBody>
+                            <p className="display-5">
+                                {result.last_accessed
+                                    ? parseTimestamp(result.last_accessed)
+                                    : 'Never'}
+                            </p>
+                            <span className="lead">{result.user_agent}</span>
+                        </CCardBody>
+                    </CCard>
+                </CCol>
+            </CRow>
         </div>
     )
 }

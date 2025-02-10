@@ -43,79 +43,78 @@ const Invoices = () => {
         fetchData()
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
+    if (result.length === 0)
+        return (
+            <CRow className="justify-content-center my-5">
+                <CCol md={6}>
+                    <div className="clearfix">
+                        <h1 className="float-start display-3 me-4">OOPS</h1>
+                        <h4>There was no invoices yet.</h4>
+                        <p>Check it out later</p>
+                    </div>
+                </CCol>
+            </CRow>
+        )
+
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-
-            {!loading && result.length === 0 && (
-                <CRow className="justify-content-center my-5">
-                    <CCol md={6}>
-                        <div className="clearfix">
-                            <h1 className="float-start display-3 me-4">OOPS</h1>
-                            <h4>There was no invoices yet.</h4>
-                            <p>Check it out later</p>
-                        </div>
-                    </CCol>
-                </CRow>
-            )}
-
-            {result.length !== 0 && (
-                <CCard className="mb-4">
-                    <CCardBody>
-                        <CCardTitle>Transactions</CCardTitle>
-                        <CTable hover responsive>
-                            <CTableHead>
-                                <CTableRow>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Shipment ID
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Invoice ID
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Amount
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Status
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular">
-                                        Last Update
-                                    </CTableHeaderCell>
+            <CCard className="mb-4">
+                <CCardBody>
+                    <CCardTitle>Transactions</CCardTitle>
+                    <CTable hover responsive>
+                        <CTableHead>
+                            <CTableRow>
+                                <CTableHeaderCell className="text-muted poppins-regular">
+                                    Shipment ID
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular">
+                                    Invoice ID
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular">
+                                    Amount
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular">
+                                    Status
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular">
+                                    Last Update
+                                </CTableHeaderCell>
+                            </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                            {result.map((invoice, index) => (
+                                <CTableRow key={index}>
+                                    <CTableDataCell
+                                        onClick={(e) => navigate(`/v/${invoice.freight_id}`)}
+                                    >
+                                        {invoice.freight_id}
+                                    </CTableDataCell>
+                                    <CTableDataCell
+                                        onClick={(e) =>
+                                            (window.location.href = `https://checkout-staging.xendit.co/web/${invoice.invoice_id}`)
+                                        }
+                                    >
+                                        {invoice.invoice_id}
+                                    </CTableDataCell>
+                                    <CTableDataCell>{`${invoice.amount} ${invoice.currency}`}</CTableDataCell>
+                                    <CTableDataCell>{invoice.status}</CTableDataCell>
+                                    <CTableDataCell>
+                                        {parseTimestamp(invoice.updated_at)}
+                                    </CTableDataCell>
                                 </CTableRow>
-                            </CTableHead>
-                            <CTableBody>
-                                {result.map((invoice, index) => (
-                                    <CTableRow key={index}>
-                                        <CTableDataCell
-                                            onClick={(e) => navigate(`/v/${invoice.freight_id}`)}
-                                        >
-                                            {invoice.freight_id}
-                                        </CTableDataCell>
-                                        <CTableDataCell
-                                            onClick={(e) =>
-                                                (window.location.href = `https://checkout-staging.xendit.co/web/${invoice.invoice_id}`)
-                                            }
-                                        >
-                                            {invoice.invoice_id}
-                                        </CTableDataCell>
-                                        <CTableDataCell>{`${invoice.amount} ${invoice.currency}`}</CTableDataCell>
-                                        <CTableDataCell>{invoice.status}</CTableDataCell>
-                                        <CTableDataCell>
-                                            {parseTimestamp(invoice.updated_at)}
-                                        </CTableDataCell>
-                                    </CTableRow>
-                                ))}
-                            </CTableBody>
-                        </CTable>
-                    </CCardBody>
-                </CCard>
-            )}
+                            ))}
+                        </CTableBody>
+                    </CTable>
+                </CCardBody>
+            </CCard>
         </div>
     )
 }

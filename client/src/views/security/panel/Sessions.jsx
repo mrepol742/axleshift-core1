@@ -56,14 +56,15 @@ const Sessions = () => {
         fetchData()
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
             <h4>Logout all sessions</h4>
@@ -81,54 +82,52 @@ const Sessions = () => {
                 </CCardBody>
             </CCard>
 
-            {!loading && (
-                <CCard>
-                    <CCardBody>
-                        <CCardTitle>Sessions</CCardTitle>
-                        <CTable hover responsive>
-                            <CTableHead>
-                                <CTableRow>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        User
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        Location
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        Device
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        Status
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        Last Accessed
-                                    </CTableHeaderCell>
+            <CCard>
+                <CCardBody>
+                    <CCardTitle>Sessions</CCardTitle>
+                    <CTable hover responsive>
+                        <CTableHead>
+                            <CTableRow>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    User
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Location
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Device
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Status
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Last Accessed
+                                </CTableHeaderCell>
+                            </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                            {result.map((session, index) => (
+                                <CTableRow key={index}>
+                                    <CTableDataCell>{session.user_id}</CTableDataCell>
+                                    <CTableDataCell>
+                                        {session.ip_address === '::1' ||
+                                        session.ip_address === '::ffff:127.0.0.1'
+                                            ? 'localhost'
+                                            : session.ip_address}
+                                    </CTableDataCell>
+                                    <CTableDataCell>{session.user_agent}</CTableDataCell>
+                                    <CTableDataCell>
+                                        {session.active ? 'Active' : 'Inactive'}
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                        {parseTimestamp(session.last_accessed)}
+                                    </CTableDataCell>
                                 </CTableRow>
-                            </CTableHead>
-                            <CTableBody>
-                                {result.map((session, index) => (
-                                    <CTableRow key={index}>
-                                        <CTableDataCell>{session.user_id}</CTableDataCell>
-                                        <CTableDataCell>
-                                            {session.ip_address === '::1' ||
-                                            session.ip_address === '::ffff:127.0.0.1'
-                                                ? 'localhost'
-                                                : session.ip_address}
-                                        </CTableDataCell>
-                                        <CTableDataCell>{session.user_agent}</CTableDataCell>
-                                        <CTableDataCell>
-                                            {session.active ? 'Active' : 'Inactive'}
-                                        </CTableDataCell>
-                                        <CTableDataCell>
-                                            {parseTimestamp(session.last_accessed)}
-                                        </CTableDataCell>
-                                    </CTableRow>
-                                ))}
-                            </CTableBody>
-                        </CTable>
-                    </CCardBody>
-                </CCard>
-            )}
+                            ))}
+                        </CTableBody>
+                    </CTable>
+                </CCardBody>
+            </CCard>
         </div>
     )
 }
