@@ -25,6 +25,7 @@ const Chat = () => {
                 .filter((msg) => msg.ref === id)
             setMessages(msgs)
         })
+        return () => unsubscribe()
     }, [])
 
     useEffect(() => {
