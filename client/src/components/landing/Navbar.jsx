@@ -24,91 +24,78 @@ const Navbar = () => {
     const { colorMode, setColorMode } = useColorModes('theme')
 
     return (
-        <CNavbar expand="sm" colorScheme={colorMode} className="fixed-top p-navbar">
-            <CContainer fluid>
-                <CNavbarToggler
-                    aria-label="Toggle navigation"
-                    aria-expanded={visible}
-                    onClick={() => setVisible(!visible)}
-                />
-                <CNavbarBrand to="/" as={NavLink} className="d-none d-sm-block">
-                    <CImage src="/images/logo.png" width="150px" loading="lazy" />
-                </CNavbarBrand>
-                <CNavbarNav>
-                    <CNavItem>
-                        <CNavLink
-                            to="/register"
-                            as={NavLink}
-                            className="bg-primary rounded px-3 text-white d-block d-sm-none"
-                        >
-                            Register
-                        </CNavLink>
-                    </CNavItem>
-                </CNavbarNav>
-                <CCollapse className="navbar-collapse" visible={visible}>
-                    <CNavbarNav className="ms-auto">
-                        <CDropdown
-                            variant="nav-item"
-                            placement="bottom-end"
-                            className="mx-2 mx-sm-0"
-                        >
-                            <CDropdownToggle caret={false} className="text-white">
-                                {colorMode === 'dark' ? (
-                                    <FontAwesomeIcon icon={faMoon} />
-                                ) : colorMode === 'auto' ? (
-                                    <FontAwesomeIcon icon={faCircleHalfStroke} />
-                                ) : (
-                                    <FontAwesomeIcon icon={faSun} />
-                                )}
-                            </CDropdownToggle>
-                            <CDropdownMenu>
-                                <CDropdownItem
-                                    active={colorMode === 'light'}
-                                    className="d-flex align-items-center"
-                                    as="button"
-                                    type="button"
-                                    onClick={() => setColorMode('light')}
-                                >
-                                    <FontAwesomeIcon className="me-2" icon={faSun} /> Light
-                                </CDropdownItem>
-                                <CDropdownItem
-                                    active={colorMode === 'dark'}
-                                    className="d-flex align-items-center"
-                                    as="button"
-                                    type="button"
-                                    onClick={() => setColorMode('dark')}
-                                >
-                                    <FontAwesomeIcon className="me-2" icon={faMoon} size="lg" />{' '}
-                                    Dark
-                                </CDropdownItem>
-                                <CDropdownItem
-                                    active={colorMode === 'auto'}
-                                    className="d-flex align-items-center"
-                                    as="button"
-                                    type="button"
-                                    onClick={() => setColorMode('auto')}
-                                >
-                                    <FontAwesomeIcon className="me-2" icon={faCircleHalfStroke} />{' '}
-                                    Auto
-                                </CDropdownItem>
-                            </CDropdownMenu>
-                        </CDropdown>
-                        <CNavItem>
-                            <CNavLink className="text-white mx-2 mx-sm-0" to="/login" as={NavLink}>
-                                Login
-                            </CNavLink>
-                        </CNavItem>
-                        <CNavItem>
-                            <CNavLink
-                                to="/register"
-                                as={NavLink}
-                                className="d-none text-white d-sm-block"
+        <CNavbar
+            expand={false}
+            colorScheme={colorMode}
+            className="fixed-top p-3"
+            style={{
+                background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0))',
+            }}
+        >
+            <CContainer
+                fluid
+                className="position-relative d-flex justify-content-between align-items-center"
+            >
+                {/* Right Side - Navigation (Floating) */}
+                <div className="position-absolute top-0 end-0 mt-2 me-3 d-flex align-items-center">
+                    <CDropdown placement="bottom-end" className="px-3 mx-sm-0">
+                        <CDropdownToggle caret={false} className="text-white">
+                            {colorMode === 'dark' ? (
+                                <FontAwesomeIcon icon={faMoon} />
+                            ) : colorMode === 'auto' ? (
+                                <FontAwesomeIcon icon={faCircleHalfStroke} />
+                            ) : (
+                                <FontAwesomeIcon icon={faSun} />
+                            )}
+                        </CDropdownToggle>
+                        <CDropdownMenu>
+                            <CDropdownItem
+                                active={colorMode === 'light'}
+                                className="d-flex align-items-center"
+                                as="button"
+                                type="button"
+                                onClick={() => setColorMode('light')}
                             >
-                                Register
-                            </CNavLink>
-                        </CNavItem>
-                    </CNavbarNav>
-                </CCollapse>
+                                <FontAwesomeIcon className="me-2" icon={faSun} /> Light
+                            </CDropdownItem>
+                            <CDropdownItem
+                                active={colorMode === 'dark'}
+                                className="d-flex align-items-center"
+                                as="button"
+                                type="button"
+                                onClick={() => setColorMode('dark')}
+                            >
+                                <FontAwesomeIcon className="me-2" icon={faMoon} /> Dark
+                            </CDropdownItem>
+                            <CDropdownItem
+                                active={colorMode === 'auto'}
+                                className="d-flex align-items-center"
+                                as="button"
+                                type="button"
+                                onClick={() => setColorMode('auto')}
+                            >
+                                <FontAwesomeIcon className="me-2" icon={faCircleHalfStroke} /> Auto
+                            </CDropdownItem>
+                        </CDropdownMenu>
+                    </CDropdown>
+                    <CNavLink
+                        className="text-white mx-2 py-1 bg-primary px-4 rounded"
+                        to="/login"
+                        as={NavLink}
+                    >
+                        Login
+                    </CNavLink>
+                </div>
+
+                {/* Left Side - Logo */}
+                <CNavbarBrand to="/" as={NavLink} className="me-auto">
+                    <CImage
+                        src="/images/logo.png"
+                        className="img-fluid"
+                        style={{ maxWidth: '160px', height: 'auto' }}
+                        loading="lazy"
+                    />
+                </CNavbarBrand>
             </CContainer>
         </CNavbar>
     )
