@@ -49,129 +49,126 @@ const Sentry = () => {
         fetchData()
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
+    if (result.length === 0)
+        return (
+            <CRow className="justify-content-center my-5">
+                <CCol md={6}>
+                    <div className="clearfix">
+                        <h1 className="float-start display-3 me-4">OOPS</h1>
+                        <h4>There was no issues yet.</h4>
+                        <p>Check it out later</p>
+                    </div>
+                </CCol>
+            </CRow>
+        )
+
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
+            <CForm className="d-flex justify-content-left my-2 my-lg-0">
+                <CInputGroup className="mb-3">
+                    <CFormInput
+                        aria-label="tracking id"
+                        aria-describedby="basic-addon"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    <CInputGroupText id="basic-addon">
+                        <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </CInputGroupText>
+                </CInputGroup>
+                <div className="mx-2"></div>
+                <CFormSelect
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                    options={[
+                        { label: 'All', value: 0 },
+                        { label: 'Resolved', value: 1 },
+                        { label: 'Unresolved', value: 2 },
+                        { label: 'Not Plan', value: 3 },
+                    ]}
+                    required
+                    className="mb-3"
+                />
+                <div className="mx-2"></div>
+                <CFormSelect
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value)}
+                    options={[
+                        { label: 'All', value: 0 },
+                        { label: 'High', value: 1 },
+                        { label: 'Medium', value: 2 },
+                        { label: 'Low', value: 3 },
+                    ]}
+                    required
+                    className="mb-3"
+                />
+                <div className="mx-2"></div>
+                <CFormSelect
+                    value={order}
+                    onChange={(e) => setOrder(e.target.value)}
+                    options={[
+                        { label: 'Newer', value: 1 },
+                        { label: 'Older', value: 2 },
+                    ]}
+                    required
+                    className="mb-3"
+                />
+            </CForm>
 
-            {result.length === 0 && !loading && (
-                <CRow className="justify-content-center my-5">
-                    <CCol md={6}>
-                        <div className="clearfix">
-                            <h1 className="float-start display-3 me-4">OOPS</h1>
-                            <h4>There was no issues yet.</h4>
-                            <p>Check it out later</p>
-                        </div>
-                    </CCol>
-                </CRow>
-            )}
-            {result.length !== 0 && (
-                <>
-                    <CForm className="d-flex justify-content-left my-2 my-lg-0">
-                        <CInputGroup className="mb-3">
-                            <CFormInput
-                                aria-label="tracking id"
-                                aria-describedby="basic-addon"
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                            />
-                            <CInputGroupText id="basic-addon">
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                            </CInputGroupText>
-                        </CInputGroup>
-                        <div className="mx-2"></div>
-                        <CFormSelect
-                            value={state}
-                            onChange={(e) => setState(e.target.value)}
-                            options={[
-                                { label: 'All', value: 0 },
-                                { label: 'Resolved', value: 1 },
-                                { label: 'Unresolved', value: 2 },
-                                { label: 'Not Plan', value: 3 },
-                            ]}
-                            required
-                            className="mb-3"
-                        />
-                        <div className="mx-2"></div>
-                        <CFormSelect
-                            value={priority}
-                            onChange={(e) => setPriority(e.target.value)}
-                            options={[
-                                { label: 'All', value: 0 },
-                                { label: 'High', value: 1 },
-                                { label: 'Medium', value: 2 },
-                                { label: 'Low', value: 3 },
-                            ]}
-                            required
-                            className="mb-3"
-                        />
-                        <div className="mx-2"></div>
-                        <CFormSelect
-                            value={order}
-                            onChange={(e) => setOrder(e.target.value)}
-                            options={[
-                                { label: 'Newer', value: 1 },
-                                { label: 'Older', value: 2 },
-                            ]}
-                            required
-                            className="mb-3"
-                        />
-                    </CForm>
-
-                    <CCard>
-                        <CCardBody>
-                            <CCardTitle>Error Reports</CCardTitle>
-                            <CTable hover responsive>
-                                <CTableHead>
-                                    <CTableRow>
-                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                            Title
-                                        </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                            Culprit
-                                        </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                            Level
-                                        </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                            Status
-                                        </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                            Priority
-                                        </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                            Count
-                                        </CTableHeaderCell>
-                                        <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                            Last Updated
-                                        </CTableHeaderCell>
-                                    </CTableRow>
-                                </CTableHead>
-                                <CTableBody>
-                                    {result.map((issue, index) => (
-                                        <CTableRow key={index}>
-                                            <CTableDataCell>{issue.title}</CTableDataCell>
-                                            <CTableDataCell>{issue.culprit}</CTableDataCell>
-                                            <CTableDataCell>{issue.level}</CTableDataCell>
-                                            <CTableDataCell>{issue.status}</CTableDataCell>
-                                            <CTableDataCell>{issue.priority}</CTableDataCell>
-                                            <CTableDataCell>{issue.count}</CTableDataCell>
-                                            <CTableDataCell>
-                                                {parseTimestamp(
-                                                    new Date(issue.updated_at).getTime(),
-                                                )}
-                                            </CTableDataCell>
-                                        </CTableRow>
-                                    ))}
-                                </CTableBody>
-                            </CTable>
-                        </CCardBody>
-                    </CCard>
-                </>
-            )}
+            <CCard>
+                <CCardBody>
+                    <CCardTitle>Error Reports</CCardTitle>
+                    <CTable hover responsive>
+                        <CTableHead>
+                            <CTableRow>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Title
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Culprit
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Level
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Status
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Priority
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Count
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Last Updated
+                                </CTableHeaderCell>
+                            </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                            {result.map((issue, index) => (
+                                <CTableRow key={index}>
+                                    <CTableDataCell>{issue.title}</CTableDataCell>
+                                    <CTableDataCell>{issue.culprit}</CTableDataCell>
+                                    <CTableDataCell>{issue.level}</CTableDataCell>
+                                    <CTableDataCell>{issue.status}</CTableDataCell>
+                                    <CTableDataCell>{issue.priority}</CTableDataCell>
+                                    <CTableDataCell>{issue.count}</CTableDataCell>
+                                    <CTableDataCell>
+                                        {parseTimestamp(new Date(issue.updated_at).getTime())}
+                                    </CTableDataCell>
+                                </CTableRow>
+                            ))}
+                        </CTableBody>
+                    </CTable>
+                </CCardBody>
+            </CCard>
         </div>
     )
 }

@@ -18,24 +18,26 @@ const Landing = () => {
         setLoading(false)
     }, [])
 
-    return (
-        <div className="wrapper d-flex flex-column min-vh-100">
-            <div className="body flex-grow-1">
-                {loading && (
+    if (loading)
+        return (
+            <div className="wrapper d-flex flex-column min-vh-100">
+                <div className="body flex-grow-1">
                     <div className="loading-overlay">
                         <CSpinner color="primary" variant="grow" />
                     </div>
-                )}
-                {!loading && (
-                    <>
-                        <Lead />
-                        <Services />
-                        <About />
-                        <Team />
-                        <Newsletter setLoading={setLoading} />
-                        <Footer />
-                    </>
-                )}
+                </div>
+            </div>
+        )
+
+    return (
+        <div className="wrapper d-flex flex-column min-vh-100">
+            <div className="body flex-grow-1">
+                <Lead />
+                <Services />
+                <About />
+                <Team />
+                <Newsletter setLoading={setLoading} />
+                <Footer />
             </div>
         </div>
     )

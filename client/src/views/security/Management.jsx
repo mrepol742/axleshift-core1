@@ -59,100 +59,91 @@ const SecurityManagement = () => {
         setLoading(false)
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-
-            {!loading && (
-                <CTabs activeItemKey={activeItemKey} className="mb-4">
-                    <CTabList variant="underline-border">
-                        <CTab
-                            aria-controls="dashboard-tab-pane"
-                            itemKey={0}
-                            onClick={() => handleTabChange(0, 'dashboard')}
-                        >
-                            <FontAwesomeIcon icon={faChartLine} className="me-1" /> Dashboard
-                        </CTab>
-                        <CTab
-                            aria-controls="sessions-tab-pane"
-                            itemKey={1}
-                            onClick={() => handleTabChange(1, 'sessions')}
-                        >
-                            <FontAwesomeIcon icon={faTowerBroadcast} className="me-1" /> Sessions
-                        </CTab>
-                        <CTab
-                            aria-controls="dependabot-tab-pane"
-                            itemKey={2}
-                            onClick={() => handleTabChange(2, 'dependabot')}
-                        >
-                            <FontAwesomeIcon icon={faGithub} className="me-1" /> Dependabot
-                        </CTab>
-                        <CTab
-                            aria-controls="sentry-tab-pane"
-                            itemKey={3}
-                            onClick={() => handleTabChange(3, 'sentry')}
-                        >
-                            <FontAwesomeIcon icon={faBug} className="me-1" /> Sentry
-                        </CTab>
-                        <CTab
-                            aria-controls="access-token-tab-pane"
-                            itemKey={4}
-                            onClick={() => handleTabChange(4, 'access-token')}
-                        >
-                            <FontAwesomeIcon icon={faKey} className="me-1" /> Access Token
-                        </CTab>
-                        <CTab
-                            aria-controls="activity-tab-pane"
-                            itemKey={5}
-                            onClick={() => handleTabChange(5, 'activity')}
-                        >
-                            <FontAwesomeIcon icon={faList} className="me-1" /> Activity
-                        </CTab>
-                        <CTab
-                            aria-controls="maintenance-tab-pane"
-                            itemKey={6}
-                            onClick={() => handleTabChange(6, 'maintenance')}
-                        >
-                            <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> Maintenance
-                        </CTab>
-                    </CTabList>
-                    <CTabContent>
-                        <CTabPanel
-                            className="py-3"
-                            aria-labelledby="dashboard-tab-pane"
-                            itemKey={0}
-                        >
-                            <Dashboard />
-                        </CTabPanel>
-                        <CTabPanel className="py-3" aria-labelledby="sessions-tab-pane" itemKey={1}>
-                            <Sessions />
-                        </CTabPanel>
-                        <CTabPanel
-                            className="py-3"
-                            aria-labelledby="dependabot-tab-pane"
-                            itemKey={2}
-                        >
-                            <Dependabot />
-                        </CTabPanel>
-                        <CTabPanel className="py-3" aria-labelledby="sentry-tab-pane" itemKey={3}>
-                            <Sentry />
-                        </CTabPanel>
-                        <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={4}>
-                            <AccessToken />
-                        </CTabPanel>
-                        <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={5}>
-                            <Activity />
-                        </CTabPanel>
-                        <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={6}>
-                            <Maintenance />
-                        </CTabPanel>
-                    </CTabContent>
-                </CTabs>
-            )}
+            <CTabs activeItemKey={activeItemKey} className="mb-4">
+                <CTabList variant="underline-border">
+                    <CTab
+                        aria-controls="dashboard-tab-pane"
+                        itemKey={0}
+                        onClick={() => handleTabChange(0, 'dashboard')}
+                    >
+                        <FontAwesomeIcon icon={faChartLine} className="me-1" /> Dashboard
+                    </CTab>
+                    <CTab
+                        aria-controls="sessions-tab-pane"
+                        itemKey={1}
+                        onClick={() => handleTabChange(1, 'sessions')}
+                    >
+                        <FontAwesomeIcon icon={faTowerBroadcast} className="me-1" /> Sessions
+                    </CTab>
+                    <CTab
+                        aria-controls="dependabot-tab-pane"
+                        itemKey={2}
+                        onClick={() => handleTabChange(2, 'dependabot')}
+                    >
+                        <FontAwesomeIcon icon={faGithub} className="me-1" /> Dependabot
+                    </CTab>
+                    <CTab
+                        aria-controls="sentry-tab-pane"
+                        itemKey={3}
+                        onClick={() => handleTabChange(3, 'sentry')}
+                    >
+                        <FontAwesomeIcon icon={faBug} className="me-1" /> Sentry
+                    </CTab>
+                    <CTab
+                        aria-controls="access-token-tab-pane"
+                        itemKey={4}
+                        onClick={() => handleTabChange(4, 'access-token')}
+                    >
+                        <FontAwesomeIcon icon={faKey} className="me-1" /> Access Token
+                    </CTab>
+                    <CTab
+                        aria-controls="activity-tab-pane"
+                        itemKey={5}
+                        onClick={() => handleTabChange(5, 'activity')}
+                    >
+                        <FontAwesomeIcon icon={faList} className="me-1" /> Activity
+                    </CTab>
+                    <CTab
+                        aria-controls="maintenance-tab-pane"
+                        itemKey={6}
+                        onClick={() => handleTabChange(6, 'maintenance')}
+                    >
+                        <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> Maintenance
+                    </CTab>
+                </CTabList>
+                <CTabContent>
+                    <CTabPanel className="py-3" aria-labelledby="dashboard-tab-pane" itemKey={0}>
+                        <Dashboard />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="sessions-tab-pane" itemKey={1}>
+                        <Sessions />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="dependabot-tab-pane" itemKey={2}>
+                        <Dependabot />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="sentry-tab-pane" itemKey={3}>
+                        <Sentry />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={4}>
+                        <AccessToken />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={5}>
+                        <Activity />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={6}>
+                        <Maintenance />
+                    </CTabPanel>
+                </CTabContent>
+            </CTabs>
         </div>
     )
 }

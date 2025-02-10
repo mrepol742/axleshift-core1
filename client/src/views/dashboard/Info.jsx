@@ -191,128 +191,122 @@ const FreightInfo = () => {
         fetchData()
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
+    if (error)
+        return (
+            <CRow className="justify-content-center my-5">
+                <CCol md={6}>
+                    <div className="clearfix">
+                        <h1 className="float-start display-3 me-4">OOPS</h1>
+                        <h4>There was no shipment found.</h4>
+                        <p>Double check tracking id for any mistake.</p>
+                    </div>
+                </CCol>
+            </CRow>
+        )
+
     // i tried to resuse them like how she re--use u
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-
-            {error && (
-                <CRow className="justify-content-center my-5">
-                    <CCol md={6}>
-                        <div className="clearfix">
-                            <h1 className="float-start display-3 me-4">OOPS</h1>
-                            <h4>There was no shipment found.</h4>
-                            <p>Double check tracking id for any mistake.</p>
+            {showQR && (
+                <CModal
+                    visible={true}
+                    onClose={() => setShowQR(false)}
+                    alignment="center"
+                    scrollable
+                >
+                    <CModalHeader closeButton></CModalHeader>
+                    <CModalBody>
+                        <div className="d-flex justify-content-center align-items-center">
+                            <div ref={svgRef} className="d-inline-block">
+                                <QRCodeSVG value={id} />
+                            </div>
                         </div>
-                    </CCol>
-                </CRow>
+                    </CModalBody>
+                    <CModalFooter className="d-flex justify-content-center align-items-center">
+                        <CButton color="primary" onClick={handleQRDownload}>
+                            Download
+                        </CButton>
+                    </CModalFooter>
+                </CModal>
             )}
-
-            {!error && (
-                <>
-                    {showQR && (
-                        <CModal
-                            visible={true}
-                            onClose={() => setShowQR(false)}
-                            alignment="center"
-                            scrollable
-                        >
-                            <CModalHeader closeButton></CModalHeader>
-                            <CModalBody>
-                                <div className="d-flex justify-content-center align-items-center">
-                                    <div ref={svgRef} className="d-inline-block">
-                                        <QRCodeSVG value={id} />
-                                    </div>
-                                </div>
-                            </CModalBody>
-                            <CModalFooter className="d-flex justify-content-center align-items-center">
-                                <CButton color="primary" onClick={handleQRDownload}>
-                                    Download
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+            <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
+                <span className="d-block">#{id}</span>
+                <CButtonGroup className="mb-2 mb-sm-0">
+                    <CButton
+                        color="primary"
+                        className="me-2 rounded"
+                        onClick={(e) => setShowQR(true)}
+                    >
+                        <FontAwesomeIcon icon={faQrcode} />
+                    </CButton>
+                    {status !== 'cancelled' && status !== 'received' && (
+                        <>
+                            {status === 'to_pay' && (
+                                <CButton
+                                    color="primary"
+                                    className="me-2 rounded"
+                                    onClick={bookShipment}
+                                >
+                                    Book shipment
                                 </CButton>
-                            </CModalFooter>
-                        </CModal>
-                    )}
-                    <ReCAPTCHA
-                        ref={recaptchaRef}
-                        size="invisible"
-                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                    />
-                    <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
-                        <span className="d-block">#{id}</span>
-                        <CButtonGroup className="mb-2 mb-sm-0">
+                            )}
                             <CButton
                                 color="primary"
                                 className="me-2 rounded"
-                                onClick={(e) => setShowQR(true)}
+                                onClick={handleEditButton}
+                                disabled={['to_receive', 'received'].includes(status)}
                             >
-                                <FontAwesomeIcon icon={faQrcode} />
+                                {!disabled ? 'Save' : 'Edit'}
                             </CButton>
-                            {status !== 'cancelled' && status !== 'received' && (
-                                <>
-                                    {status === 'to_pay' && (
-                                        <CButton
-                                            color="primary"
-                                            className="me-2 rounded"
-                                            onClick={bookShipment}
-                                        >
-                                            Book shipment
-                                        </CButton>
-                                    )}
-                                    <CButton
-                                        color="primary"
-                                        className="me-2 rounded"
-                                        onClick={handleEditButton}
-                                        disabled={['to_receive', 'received'].includes(status)}
-                                    >
-                                        {!disabled ? 'Save' : 'Edit'}
-                                    </CButton>
-                                    <CButton
-                                        color={!disabled ? 'warn' : 'danger'}
-                                        className="me-2 rounded"
-                                        onClick={handleDeleteButton}
-                                        disabled={['to_receive', 'received'].includes(status)}
-                                    >
-                                        Cancel
-                                    </CButton>
-                                </>
-                            )}
-                        </CButtonGroup>
-                    </div>
-                    <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                        <CCol>
-                            <ShipperForm
-                                isInfo={true}
-                                formData={editedFormData}
-                                handleInputChange={handleInputChange}
-                                isDisabled={disabled}
-                            />
-                        </CCol>
-                        <CCol>
-                            <ConsineeForm
-                                isInfo={true}
-                                formData={editedFormData}
-                                handleInputChange={handleInputChange}
-                                isDisabled={disabled}
-                            />
-                        </CCol>
-                    </CRow>
-                    <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                        <CCol>
-                            <ShipmentForm
-                                isInfo={true}
-                                formData={editedFormData}
-                                handleInputChange={handleInputChange}
-                                isDisabled={disabled}
-                            />
-                        </CCol>
-                        <CCol>{renderForm()}</CCol>
-                    </CRow>
-                </>
-            )}
+                            <CButton
+                                color={!disabled ? 'warn' : 'danger'}
+                                className="me-2 rounded"
+                                onClick={handleDeleteButton}
+                                disabled={['to_receive', 'received'].includes(status)}
+                            >
+                                Cancel
+                            </CButton>
+                        </>
+                    )}
+                </CButtonGroup>
+            </div>
+            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                <CCol>
+                    <ShipperForm
+                        isInfo={true}
+                        formData={editedFormData}
+                        handleInputChange={handleInputChange}
+                        isDisabled={disabled}
+                    />
+                </CCol>
+                <CCol>
+                    <ConsineeForm
+                        isInfo={true}
+                        formData={editedFormData}
+                        handleInputChange={handleInputChange}
+                        isDisabled={disabled}
+                    />
+                </CCol>
+            </CRow>
+            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                <CCol>
+                    <ShipmentForm
+                        isInfo={true}
+                        formData={editedFormData}
+                        handleInputChange={handleInputChange}
+                        isDisabled={disabled}
+                    />
+                </CCol>
+                <CCol>{renderForm()}</CCol>
+            </CRow>
         </div>
     )
 }

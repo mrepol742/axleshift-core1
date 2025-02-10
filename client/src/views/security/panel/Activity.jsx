@@ -36,62 +36,61 @@ const Activity = () => {
         fetchData()
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-
-            {!loading && (
-                <CCard>
-                    <CCardBody>
-                        <CCardTitle>Activity Logs</CCardTitle>
-                        <CTable hover responsive>
-                            <CTableHead>
-                                <CTableRow>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        User ID
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        Session ID
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        Event
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        Location
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        Device
-                                    </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                        Time
-                                    </CTableHeaderCell>
+            <CCard>
+                <CCardBody>
+                    <CCardTitle>Activity Logs</CCardTitle>
+                    <CTable hover responsive>
+                        <CTableHead>
+                            <CTableRow>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    User ID
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Session ID
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Event
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Location
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Device
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                    Time
+                                </CTableHeaderCell>
+                            </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                            {result.map((log, index) => (
+                                <CTableRow key={index}>
+                                    <CTableDataCell>{log.user_id}</CTableDataCell>
+                                    <CTableDataCell>{log.session_id}</CTableDataCell>
+                                    <CTableDataCell>{log.event}</CTableDataCell>
+                                    <CTableDataCell>
+                                        {log.ip_address === '::1' ||
+                                        log.ip_address === '::ffff:127.0.0.1'
+                                            ? 'localhost'
+                                            : log.ip_address}
+                                    </CTableDataCell>
+                                    <CTableDataCell>{log.user_agent}</CTableDataCell>
+                                    <CTableDataCell>{parseTimestamp(log.time)}</CTableDataCell>
                                 </CTableRow>
-                            </CTableHead>
-                            <CTableBody>
-                                {result.map((log, index) => (
-                                    <CTableRow key={index}>
-                                        <CTableDataCell>{log.user_id}</CTableDataCell>
-                                        <CTableDataCell>{log.session_id}</CTableDataCell>
-                                        <CTableDataCell>{log.event}</CTableDataCell>
-                                        <CTableDataCell>
-                                            {log.ip_address === '::1' ||
-                                            log.ip_address === '::ffff:127.0.0.1'
-                                                ? 'localhost'
-                                                : log.ip_address}
-                                        </CTableDataCell>
-                                        <CTableDataCell>{log.user_agent}</CTableDataCell>
-                                        <CTableDataCell>{parseTimestamp(log.time)}</CTableDataCell>
-                                    </CTableRow>
-                                ))}
-                            </CTableBody>
-                        </CTable>
-                    </CCardBody>
-                </CCard>
-            )}
+                            ))}
+                        </CTableBody>
+                    </CTable>
+                </CCardBody>
+            </CCard>
         </div>
     )
 }

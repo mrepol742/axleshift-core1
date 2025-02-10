@@ -47,52 +47,51 @@ const Rates = () => {
         fetchData()
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-
-            {!loading && (
-                <CTabs activeItemKey={activeItemKey} className="mb-4">
-                    <CTabList variant="underline-border">
-                        <CTab
-                            aria-controls="air-tab-pane"
-                            itemKey={0}
-                            onClick={() => handleTabChange(0, 'air')}
-                        >
-                            <FontAwesomeIcon icon={faPlaneDeparture} className="me-1" /> Air Freight
-                        </CTab>
-                        <CTab
-                            aria-controls="land-tab-pane"
-                            itemKey={1}
-                            onClick={() => handleTabChange(1, 'land')}
-                        >
-                            <FontAwesomeIcon icon={faTruck} className="me-1" /> Land Freight
-                        </CTab>
-                        <CTab
-                            aria-controls="sea-tab-pane"
-                            itemKey={2}
-                            onClick={() => handleTabChange(2, 'sea')}
-                        >
-                            <FontAwesomeIcon icon={faShip} className="me-1" /> Sea Freight
-                        </CTab>
-                    </CTabList>
-                    <CTabContent>
-                        <CTabPanel className="py-3" aria-labelledby="air-tab-pane" itemKey={0}>
-                            <Panel result={result} type="air" />
-                        </CTabPanel>
-                        <CTabPanel className="py-3" aria-labelledby="land-tab-pane" itemKey={1}>
-                            <Panel result={result} type="land" />
-                        </CTabPanel>
-                        <CTabPanel className="py-3" aria-labelledby="sea-tab-pane" itemKey={2}>
-                            <Panel result={result} type="sea" />
-                        </CTabPanel>
-                    </CTabContent>
-                </CTabs>
-            )}
+            <CTabs activeItemKey={activeItemKey} className="mb-4">
+                <CTabList variant="underline-border">
+                    <CTab
+                        aria-controls="air-tab-pane"
+                        itemKey={0}
+                        onClick={() => handleTabChange(0, 'air')}
+                    >
+                        <FontAwesomeIcon icon={faPlaneDeparture} className="me-1" /> Air Freight
+                    </CTab>
+                    <CTab
+                        aria-controls="land-tab-pane"
+                        itemKey={1}
+                        onClick={() => handleTabChange(1, 'land')}
+                    >
+                        <FontAwesomeIcon icon={faTruck} className="me-1" /> Land Freight
+                    </CTab>
+                    <CTab
+                        aria-controls="sea-tab-pane"
+                        itemKey={2}
+                        onClick={() => handleTabChange(2, 'sea')}
+                    >
+                        <FontAwesomeIcon icon={faShip} className="me-1" /> Sea Freight
+                    </CTab>
+                </CTabList>
+                <CTabContent>
+                    <CTabPanel className="py-3" aria-labelledby="air-tab-pane" itemKey={0}>
+                        <Panel result={result} type="air" />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="land-tab-pane" itemKey={1}>
+                        <Panel result={result} type="land" />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="sea-tab-pane" itemKey={2}>
+                        <Panel result={result} type="sea" />
+                    </CTabPanel>
+                </CTabContent>
+            </CTabs>
         </div>
     )
 }

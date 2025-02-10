@@ -108,6 +108,13 @@ const MailOTP = () => {
             .finally(() => setLoading(false))
     }
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <div className="auth-bg" />

@@ -15,7 +15,7 @@ const Lead = () => {
             <CRow className="flex-grow-1 justify-content-center align-items-center">
                 <CCol xs={12} md={6} className="px-4 mx-0 mx-md-4 text-center">
                     <h1 className="text-white" data-aos="fade-right">
-                        Where <span className="text-primary">Freight</span> Meets Efficiency
+                        Where Freight Meets Efficiency
                     </h1>
                     <p className="text-white" data-aos="fade-right">
                         Our cutting-edge platform empowers businesses to improve their shipping

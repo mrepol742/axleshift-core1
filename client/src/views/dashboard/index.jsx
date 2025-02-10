@@ -48,82 +48,80 @@ const Dashboard = () => {
         fetchData(currentPage)
     }, [currentPage])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
+    if (data.length == 0)
+        return (
+            <CRow className="justify-content-center my-5">
+                <CCol md={7}>
+                    <div className="clearfix">
+                        <h2>Track your shipment</h2>
+                        <AppSearch className="mb-3" />
+                        <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
+                            <CCol onClick={(e) => navigate('/freight')} className="mb-3">
+                                <CCard>
+                                    <CCardBody>
+                                        <CCardTitle>Ship right now</CCardTitle>
+                                        <CCardText>Find the right service</CCardText>
+                                    </CCardBody>
+                                </CCard>
+                            </CCol>
+                            <CCol onClick={(e) => navigate('/routes')} className="mb-3">
+                                <CCard>
+                                    <CCardBody>
+                                        <CCardTitle>Get a qoute</CCardTitle>
+                                        <CCardText>Estimate cost and compare</CCardText>
+                                    </CCardBody>
+                                </CCard>
+                            </CCol>
+                        </CRow>
+                    </div>
+                </CCol>
+            </CRow>
+        )
+
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
+            <WidgetsDropdown className="mb-4" />
 
-            {!loading && data.length == 0 && (
-                <CRow className="justify-content-center my-5">
-                    <CCol md={7}>
-                        <div className="clearfix">
-                            <h2>Track your shipment</h2>
-                            <AppSearch className="mb-3" />
-                            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                                <CCol onClick={(e) => navigate('/freight')} className="mb-3">
-                                    <CCard>
-                                        <CCardBody>
-                                            <CCardTitle>Ship right now</CCardTitle>
-                                            <CCardText>Find the right service</CCardText>
-                                        </CCardBody>
-                                    </CCard>
-                                </CCol>
-                                <CCol onClick={(e) => navigate('/routes')} className="mb-3">
-                                    <CCard>
-                                        <CCardBody>
-                                            <CCardTitle>Get a qoute</CCardTitle>
-                                            <CCardText>Estimate cost and compare</CCardText>
-                                        </CCardBody>
-                                    </CCard>
-                                </CCol>
-                            </CRow>
-                        </div>
-                    </CCol>
-                </CRow>
-            )}
+            <h4>Shipments</h4>
+            <AppSearch className="mb-3 d-block d-md-none" />
+            <Masonry
+                breakpointCols={{
+                    default: 4,
+                    1100: 3,
+                    700: 2,
+                    500: 1,
+                }}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+            >
+                {data.map((item, index) => (
+                    <ShipmentCard key={index} shipment={item} />
+                ))}
+            </Masonry>
 
-            {data.length !== 0 && (
-                <>
-                    <WidgetsDropdown className="mb-4" />
+            <button
+                className="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-3"
+                style={{ width: '50px', height: '50px', fontSize: '20px' }}
+                onClick={(e) => navigate('/customer')}
+            >
+                <FontAwesomeIcon icon={faQuestion} />
+            </button>
 
-                    <h4>Shipments</h4>
-                    <AppSearch className="mb-3 d-block d-md-none" />
-                    <Masonry
-                        breakpointCols={{
-                            default: 4,
-                            1100: 3,
-                            700: 2,
-                            500: 1,
-                        }}
-                        className="my-masonry-grid"
-                        columnClassName="my-masonry-grid_column"
-                    >
-                        {data.map((item, index) => (
-                            <ShipmentCard key={index} shipment={item} />
-                        ))}
-                    </Masonry>
-
-                    <button
-                        className="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-3"
-                        style={{ width: '50px', height: '50px', fontSize: '20px' }}
-                        onClick={(e) => navigate('/customer')}
-                    >
-                        <FontAwesomeIcon icon={faQuestion} />
-                    </button>
-
-                    {data.length > 20 && (
-                        <AppPagination
-                            currentPage={currentPage}
-                            setCurrentPage={setCurrentPage}
-                            totalPages={totalPages}
-                            setTotalPages={setTotalPages}
-                            className="mb-3"
-                        />
-                    )}
-                </>
+            {data.length > 20 && (
+                <AppPagination
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                    setTotalPages={setTotalPages}
+                    className="mb-3"
+                />
             )}
         </div>
     )
