@@ -1,16 +1,13 @@
-name: Build CI
+name: Test
 
-# this thing will be executed in fork!
 on:
-    push:
-        branches: ["main"]
-    workflow_dispatch:
+  pull_request_target: 
 
 jobs:
-  build:
+  test:
 
     runs-on: 'ubuntu-latest'
-    if: github.repository == 'mrepol742/freight-ms-core1'
+    if: github.repository == 'freight-capstone/core1'
     
     steps:
       - name: Clone repository
@@ -61,44 +58,7 @@ jobs:
       - name: Executing jest & mocha
         run: npm run test
 
-      - name: Build frontend
-        run: cd client && npm run build
-
-      - name: Build backend
+      - name: Build
         run: |
-          mkdir -p server/.github/workflows
-          cp .github/workflows/docker.yml server/.github/workflows/
-          cp .github/workflows/terraform.yml server/.github/workflows/
-
-      - name: Get latest commit hash
-        run: |
-          echo "MASTER_COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "COMMIT_URL=https://github.com/${{ github.repository }}/commit/$(git rev-parse HEAD)" >> $GITHUB_ENV
-
-      - name: Push frontend
-        id: push_directory_frontend
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        with:
-          source-directory: client/build
-          destination-github-username: 'freight-capstone'
-          destination-repository-name: 'core1'
-          user-name: github-actions[bot]
-          user-email: github-actions[bot]@users.noreply.github.com
-          commit-message: "Build from ${{ env.COMMIT_URL }}"
-          target-branch: core1-frontend
-
-      - name: Push backend
-        id: push_directory_backend
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        with:
-          source-directory: server/
-          destination-github-username: 'freight-capstone'
-          destination-repository-name: 'core1'
-          user-name: github-actions[bot]
-          user-email: github-actions[bot]@users.noreply.github.com
-          commit-message: "Build from ${{ env.COMMIT_URL }}"
-          target-branch: core1-backend
+          cd client && npm run build
+          echo 'Build success'

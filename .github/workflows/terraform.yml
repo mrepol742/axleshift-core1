@@ -11,7 +11,7 @@ jobs:
     secrets: inherit
 
   terraform:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     needs: [ docker ]
     if: github.repository == 'freight-capstone/core1'
     
