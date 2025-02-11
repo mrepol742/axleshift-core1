@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { CContainer, CSpinner } from '@coreui/react'
+import { CSpinner } from '@coreui/react'
 import routes from '../routes'
 
 const AppContent = () => {
     return (
-        <CContainer className="px-4" lg>
+        <div className="px-4">
             <Suspense
                 fallback={
                     <div className="loading-overlay">
@@ -29,7 +29,7 @@ const AppContent = () => {
                     })}
                 </Routes>
             </Suspense>
-        </CContainer>
+        </div>
     )
 }
 

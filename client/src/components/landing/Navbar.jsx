@@ -79,7 +79,7 @@ const Navbar = () => {
                         </CDropdownMenu>
                     </CDropdown>
                     <CNavLink
-                        className="text-white mx-2 py-1 bg-primary px-4 rounded"
+                        className="text-white mx-2 py-1 bg-primary px-4 rounded-pill"
                         to="/login"
                         as={NavLink}
                     >
