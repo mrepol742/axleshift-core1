@@ -45,7 +45,7 @@ const AppSearch = ({ className }) => {
     )
 }
 
-export default AppSearch
+export default React.memo(AppSearch)
 
 AppSearch.propTypes = {
     className: PropTypes.string.isRequired,

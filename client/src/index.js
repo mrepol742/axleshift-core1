@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import 'core-js'
 import { AppToastProvider } from './components/AppToastProvider'
+import { AppModalProvider } from './components/AppModalProvider'
 import { AppNotificationProvider } from './components/AppNotificationProvider'
 import { UserProvider } from './components/UserProvider'
 import { VITE_APP_GOOGLE_OAUTH_CLIENT_ID } from './config'
@@ -18,9 +19,11 @@ createRoot(div).render(
         <Provider store={store}>
             <GoogleOAuthProvider clientId={VITE_APP_GOOGLE_OAUTH_CLIENT_ID}>
                 <AppToastProvider>
-                    <AppNotificationProvider>
-                        <App />
-                    </AppNotificationProvider>
+                    <AppModalProvider>
+                        <AppNotificationProvider>
+                            <App />
+                        </AppNotificationProvider>
+                    </AppModalProvider>
                 </AppToastProvider>
             </GoogleOAuthProvider>
         </Provider>

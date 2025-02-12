@@ -80,4 +80,4 @@ const Auth = (WrappedComponent) => {
     return AuthComponent
 }
 
-export default React.memo(Auth)
+export default Auth

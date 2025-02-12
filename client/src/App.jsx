@@ -6,6 +6,7 @@ import ReactGA from 'react-ga4'
 import { VITE_APP_NODE_ENV, VITE_APP_GOOGLE_ANALYTICS } from './config'
 import './scss/style.scss'
 import DocumentTitle from './components/middleware/DocumentTitle'
+import IdleTimeout from './components/middleware/IdleTimeout'
 import routes from './routes'
 import './bootstrap'
 
@@ -39,22 +40,24 @@ const App = () => {
                 }
             >
                 <DocumentTitle>
-                    <Routes>
-                        {routes.map((route, idx) => {
-                            return (
-                                route.external && (
-                                    <Route
-                                        key={idx}
-                                        path={route.path}
-                                        exact={route.exact}
-                                        name={route.name}
-                                        element={<route.element />}
-                                    />
+                    <IdleTimeout>
+                        <Routes>
+                            {routes.map((route, idx) => {
+                                return (
+                                    route.external && (
+                                        <Route
+                                            key={idx}
+                                            path={route.path}
+                                            exact={route.exact}
+                                            name={route.name}
+                                            element={<route.element />}
+                                        />
+                                    )
                                 )
-                            )
-                        })}
-                        <Route path="*" element={<DefaultLayout />} />
-                    </Routes>
+                            })}
+                            <Route path="*" element={<DefaultLayout />} />
+                        </Routes>
+                    </IdleTimeout>
                 </DocumentTitle>
             </Suspense>
         </Router>
