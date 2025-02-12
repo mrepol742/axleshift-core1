@@ -56,7 +56,9 @@ app.use(rateLimiter)
 app.use(pinoHttp({ logger }))
 
 app.get('/', (req, res) => res.send(Quotes.getRandomQuote()))
+// refer to /routes/v1/index
 app.use('/api/v1/', APIv1)
+// refer to /webhook/v1/index
 app.use('/webhook/v1/', Webhookv1)
 
 app.use(

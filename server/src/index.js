@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/node'
 import { nodeProfilingIntegration } from '@sentry/profiling-node'
 import * as config from './config.js'
-
-Sentry.init({
+ 
+if (config.NODE_ENV === 'production') Sentry.init({
     dsn: config.SENTRY_DNS,
     integrations: [nodeProfilingIntegration()],
     tracesSampleRate: 1.0,
@@ -34,4 +34,4 @@ for (const key in config) {
     }
 }
 
-Sentry.setupExpressErrorHandler(app)
+if (config.NODE_ENV === 'production') Sentry.setupExpressErrorHandler(app)

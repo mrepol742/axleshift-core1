@@ -89,7 +89,7 @@ const Sessions = () => {
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
-                                    User
+                                    User ID
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
                                     Location

@@ -21,7 +21,7 @@ const Services = () => {
                 </CCol>
                 <CCol xs={12} lg={7} className="order-md-2 mb-4">
                     <CRow xs={{ cols: 1, gutter: 4 }} md={{ cols: 2 }}>
-                        <CCol xs data-aos="zoom-out-up">
+                        <CCol xs data-aos="fade-up" data-aos-delay="500">
                             <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
@@ -36,7 +36,7 @@ const Services = () => {
                                 shipments in real-time to enhance visibility and efficiency.
                             </p>
                         </CCol>
-                        <CCol xs data-aos="zoom-out-up">
+                        <CCol xs data-aos="fade-up" data-aos-delay="700">
                             <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
@@ -51,7 +51,7 @@ const Services = () => {
                                 to real-time conditions for optimal performance.
                             </p>
                         </CCol>
-                        <CCol xs data-aos="zoom-out-up">
+                        <CCol xs data-aos="fade-up" data-aos-delay="900">
                             <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
@@ -66,7 +66,7 @@ const Services = () => {
                                 customer satisfaction through prompt and efficient communication.
                             </p>
                         </CCol>
-                        <CCol xs data-aos="zoom-out-up">
+                        <CCol xs data-aos="fade-up" data-aos-delay="1000">
                             <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}

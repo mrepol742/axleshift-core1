@@ -13,11 +13,11 @@ const Lead = () => {
             <div className="auth-bg position-absolute top-0 start-0 w-100 h-100" />
             <Navbar />
             <CRow className="flex-grow-1 justify-content-center align-items-center">
-                <CCol xs={12} md={6} className="px-4 mx-0 mx-md-4 text-center">
-                    <h1 className="text-white" data-aos="fade-right">
-                        Where Freight Meets Efficiency
+                <CCol xs={12} md={9} xl={6} className="px-4 mx-0 mx-md-4 text-center">
+                    <h1 className="text-white display-1 fw-bold" data-aos="fade-right">
+                        Where Freight <span className="text-primary d-block">Meets Efficiency</span>
                     </h1>
-                    <p className="text-white" data-aos="fade-right">
+                    <p className="text-muted fs-5" data-aos="fade-right">
                         Our cutting-edge platform empowers businesses to improve their shipping
                         strategies. Experience optimized routing without the complexities of
                         tracking.
@@ -25,7 +25,7 @@ const Lead = () => {
                     <CButton
                         to="/register"
                         as={NavLink}
-                        className="rounded-3 btn-primary text-white"
+                        className="rounded-3 btn-primary text-white py-2"
                         data-aos="fade-up"
                     >
                         Get started <FontAwesomeIcon icon={faArrowRightLong} />

@@ -6,7 +6,7 @@ const ToastContext = createContext()
 export const AppToastProvider = ({ children }) => {
     const [toasts, setToasts] = useState([])
 
-    const addToast = (message, header = 'Axleshift') => {
+    const addToast = (message = '', header = 'Axleshift') => {
         const newToast = {
             id: Date.now(),
             message,

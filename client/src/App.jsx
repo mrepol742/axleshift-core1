@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { CSpinner, useColorModes } from '@coreui/react'
 import ReactGA from 'react-ga4'
-import { VITE_APP_GOOGLE_ANALYTICS } from './config'
+import { VITE_APP_NODE_ENV, VITE_APP_GOOGLE_ANALYTICS } from './config'
 import './scss/style.scss'
 import DocumentTitle from './components/middleware/DocumentTitle'
+import IdleTimeout from './components/middleware/IdleTimeout'
 import routes from './routes'
 import './bootstrap'
 
@@ -14,7 +15,7 @@ const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 const App = () => {
     const { isColorModeSet, setColorMode } = useColorModes('theme')
     const storedTheme = useSelector((state) => state.theme)
-    ReactGA.initialize(VITE_APP_GOOGLE_ANALYTICS)
+    if (VITE_APP_NODE_ENV === 'production') ReactGA.initialize(VITE_APP_GOOGLE_ANALYTICS)
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.href.split('?')[1])
@@ -25,7 +26,8 @@ const App = () => {
 
         setColorMode(storedTheme)
 
-        ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
+        if (VITE_APP_NODE_ENV === 'production')
+            ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
     }, [])
 
     return (
@@ -38,22 +40,24 @@ const App = () => {
                 }
             >
                 <DocumentTitle>
-                    <Routes>
-                        {routes.map((route, idx) => {
-                            return (
-                                route.external && (
-                                    <Route
-                                        key={idx}
-                                        path={route.path}
-                                        exact={route.exact}
-                                        name={route.name}
-                                        element={<route.element />}
-                                    />
+                    <IdleTimeout>
+                        <Routes>
+                            {routes.map((route, idx) => {
+                                return (
+                                    route.external && (
+                                        <Route
+                                            key={idx}
+                                            path={route.path}
+                                            exact={route.exact}
+                                            name={route.name}
+                                            element={<route.element />}
+                                        />
+                                    )
                                 )
-                            )
-                        })}
-                        <Route path="*" element={<DefaultLayout />} />
-                    </Routes>
+                            })}
+                            <Route path="*" element={<DefaultLayout />} />
+                        </Routes>
+                    </IdleTimeout>
                 </DocumentTitle>
             </Suspense>
         </Router>

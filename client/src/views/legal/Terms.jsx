@@ -4,7 +4,6 @@ import { CCol, CContainer, CRow } from '@coreui/react'
 const Terms = () => {
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
-            <div className="auth-bg" />
             <CContainer>
                 <CRow className="justify-content-center mt-5">
                     <CCol md={8} lg={9} xl={10} className="mt-5">

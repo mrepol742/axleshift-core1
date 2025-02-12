@@ -20,7 +20,7 @@ const DocumentTitle = ({ children }) => {
     return <>{children}</>
 }
 
-export default DocumentTitle
+export default React.memo(DocumentTitle)
 
 DocumentTitle.propTypes = {
     children: PropTypes.node.isRequired,
