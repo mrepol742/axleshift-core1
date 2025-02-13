@@ -1,0 +1,189 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type FreightData {
+  consignee FreightDataConsignee
+  shipment  FreightDataShipment
+  shipper   FreightDataShipper
+  shipping  FreightDataShipping
+}
+
+type FreightDataConsignee {
+  consignee_company_address       String
+  consignee_company_name          String
+  consignee_contact_email_address String
+  consignee_contact_name          String
+  consignee_contact_phone_number  String
+}
+
+type FreightDataShipment {
+  shipment_description      String
+  shipment_dimension_height String
+  shipment_dimension_length String
+  shipment_dimension_width  String
+  shipment_instructions     String
+  shipment_value            String
+  shipment_volume           String
+  shipment_weight           String
+}
+
+type FreightDataShipper {
+  shipper_company_address       String
+  shipper_company_name          String
+  shipper_contact_email_address String
+  shipper_contact_name          String
+  shipper_contact_phone_number  String
+}
+
+type FreightDataShipping {
+  shipping_cargo_type               String?
+  shipping_delivery_date            String?
+  shipping_destination_address      String?
+  shipping_destination_airport      String?
+  shipping_discharge_port           String?
+  shipping_estimated_arrival_date   String?
+  shipping_flight_type              String?
+  shipping_loading_port             String?
+  shipping_origin_addresss          String?
+  shipping_origin_airport           String?
+  shipping_pickup_date              String?
+  shipping_preferred_arrival_date   String?
+  shipping_preferred_departure_date String?
+  shipping_sailing_date             String?
+  shipping_vehicle_type             String?
+}
+
+type UsersOauth2 {
+  github UsersOauth2Github?
+  google UsersOauth2Google?
+}
+
+type UsersOauth2Github {
+  created_at Float
+  email      String
+  updated_at Float
+}
+
+type UsersOauth2Google {
+  created_at Float
+  email      String
+  updated_at Float
+}
+
+model activityLog {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  event      String
+  ip_address String
+  session_id Json?
+  time       Float
+  user_agent String
+  user_id    String @db.ObjectId
+}
+
+model apiToken {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  active       Boolean
+  compromised  Boolean
+  created_at   Float
+  modified_by  String?
+  token        String
+  updated_at   Float
+  user_id      String  @db.ObjectId
+  whitelist_ip Json?
+}
+
+model couriers {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model freight {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  created_at  Float
+  data        FreightData
+  invoice_id  Json?
+  modified_by Json?
+  session_id  String      @db.ObjectId
+  status      String
+  type        String
+  updated_at  Float
+  user_id     String      @db.ObjectId
+}
+
+model invoices {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  amount      Int
+  created_at  Float
+  currency    String
+  external_id String
+  freight_id  String  @db.ObjectId
+  invoice_id  String
+  session_id  String? @db.ObjectId
+  status      String
+  updated_at  Float
+  user_id     String  @db.ObjectId
+}
+
+model newsletter {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  created_at  Float
+  email       String
+  is_subsribe Boolean
+  updated_at  Float
+}
+
+model otp {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  code        Int
+  created_at  Float
+  expired     Boolean
+  modified_by String
+  token       String
+  updated_at  Float
+  user_id     String  @db.ObjectId
+  verified    Boolean
+}
+
+model rates {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model sessions {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  active        Boolean
+  compromised   Boolean
+  ip_address    String
+  last_accessed Float
+  modified_by   String
+  token         String
+  user_agent    String
+  user_id       String  @db.ObjectId
+}
+
+model threats {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model users {
+  id                  String       @id @default(auto()) @map("_id") @db.ObjectId
+  avatar              String?
+  created_at          Float?
+  email               String
+  email_verify_at     String?
+  first_name          String
+  last_name           String
+  oauth2              UsersOauth2?
+  old_passwords       String[]
+  password            String?
+  password_changed_on Float?
+  ref                 String
+  registration_type   String
+  role                String
+  timezone            String?
+  updated_at          Float?
+}
