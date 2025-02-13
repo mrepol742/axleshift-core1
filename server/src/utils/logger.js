@@ -1,17 +1,27 @@
 import pino from 'pino'
 import { NODE_ENV } from '../config.js'
 
-let logger
+const isProduction = NODE_ENV === 'production'
 
-if (NODE_ENV !== 'production') {
-    logger = pino({
-        level: 'debug',
-        transport: {
-            target: 'pino-pretty',
+const logger = pino({
+    level: isProduction ? 'info' : 'debug',
+    formatters: {
+        level(label) {
+            return { level: label.toUpperCase() }
         },
-    })
-} else {
-    logger = pino()
-}
+    },
+    timestamp: pino.stdTimeFunctions.isoTime,
+    transport: !isProduction
+        ? {
+              target: 'pino-pretty',
+              options: {
+                  colorize: true,
+                  singleLine: true, 
+                  ignore: 'pid,hostname',
+                  translateTime: 'yyyy-mm-dd HH:MM:ss.l',
+              },
+          }
+        : undefined,
+})
 
 export default logger
