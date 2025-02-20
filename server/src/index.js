@@ -1,14 +1,15 @@
 import * as Sentry from '@sentry/node'
 import { nodeProfilingIntegration } from '@sentry/profiling-node'
 import * as config from './config.js'
- 
-if (config.NODE_ENV === 'production') Sentry.init({
-    dsn: config.SENTRY_DNS,
-    integrations: [nodeProfilingIntegration()],
-    tracesSampleRate: 1.0,
-    profilesSampleRate: 1.0,
-    disableInstrumentationWarnings: true,
-})
+
+if (config.NODE_ENV === 'production')
+    Sentry.init({
+        dsn: config.SENTRY_DNS,
+        integrations: [nodeProfilingIntegration()],
+        tracesSampleRate: 1.0,
+        profilesSampleRate: 1.0,
+        disableInstrumentationWarnings: true,
+    })
 
 import logger from './utils/logger.js'
 import app from './Server.js'

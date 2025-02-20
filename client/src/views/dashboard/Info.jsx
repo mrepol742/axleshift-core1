@@ -25,6 +25,7 @@ import LandForm from '../../components/forms/shipping/LandForm'
 import SeaForm from '../../components/forms/shipping/SeaForm'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../utils/ErrorMessages'
+import { useUserProvider } from '../../components/UserProvider'
 
 const FreightInfo = () => {
     const dataF = {
@@ -54,6 +55,7 @@ const FreightInfo = () => {
         },
         recaptcha_ref: '',
     }
+    const { user } = useUserProvider()
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [formData, setFormData] = useState(dataF)
@@ -249,7 +251,7 @@ const FreightInfo = () => {
                     </CButton>
                     {status !== 'cancelled' && status !== 'received' && (
                         <>
-                            {status === 'to_pay' && (
+                            {status === 'to_pay' && user.role === 'user' && (
                                 <CButton
                                     color="primary"
                                     className="me-2 rounded"

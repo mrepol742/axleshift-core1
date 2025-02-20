@@ -26,7 +26,7 @@ const Panel = ({ result, type }) => {
         <CCard>
             <CCardBody>
                 <CCardTitle>Rates</CCardTitle>
-                <CTable hover responsive>
+                <CTable hover responsive table-even-width>
                     <CTableHead>
                         <CTableRow>
                             <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">

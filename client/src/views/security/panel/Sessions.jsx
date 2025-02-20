@@ -85,7 +85,7 @@ const Sessions = () => {
             <CCard>
                 <CCardBody>
                     <CCardTitle>Sessions</CCardTitle>
-                    <CTable hover responsive>
+                    <CTable hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">

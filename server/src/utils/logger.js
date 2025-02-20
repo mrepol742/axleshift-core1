@@ -1,7 +1,7 @@
 import pino from 'pino'
 import { NODE_ENV } from '../config.js'
 
-const isProduction = NODE_ENV === 'production'
+const isProduction = NODE_ENV !== 'production'
 
 const logger = pino({
     level: isProduction ? 'info' : 'debug',
@@ -10,18 +10,33 @@ const logger = pino({
             return { level: label.toUpperCase() }
         },
     },
+    serializers: {
+        req(req) {
+            const { id, ...rest } = req
+            return {
+                method: rest.method,
+                url: rest.url,
+                headers: rest.headers,
+            }
+        },
+        res(res) {
+            return {
+                statusCode: res.statusCode,
+                responseTime: res.responseTime,
+            }
+        },
+    },
     timestamp: pino.stdTimeFunctions.isoTime,
-    transport: !isProduction
-        ? {
-              target: 'pino-pretty',
-              options: {
-                  colorize: true,
-                  singleLine: true, 
-                  ignore: 'pid,hostname',
-                  translateTime: 'yyyy-mm-dd HH:MM:ss.l',
-              },
-          }
-        : undefined,
+    transport: {
+        target: 'pino-pretty',
+        options: {
+            colorize: true,
+            singleLine: true,
+            ignore: 'pid,hostname,req,res,responseTime',
+            translateTime: 'yyyy-mm-dd HH:MM:ss.l',
+            messageFormat: '{msg}{req.url} ................ ~ {responseTime}ms',
+        },
+    },
 })
 
 export default logger

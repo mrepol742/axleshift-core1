@@ -48,7 +48,7 @@ const Activity = () => {
             <CCard>
                 <CCardBody>
                     <CCardTitle>Activity Logs</CCardTitle>
-                    <CTable hover responsive>
+                    <CTable hover responsive table-even-width>
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">

@@ -125,7 +125,7 @@ const Sentry = () => {
             <CCard>
                 <CCardBody>
                     <CCardTitle>Error Reports</CCardTitle>
-                    <CTable hover responsive>
+                    <CTable hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
