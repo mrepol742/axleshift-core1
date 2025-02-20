@@ -125,7 +125,7 @@ const Dependabot = () => {
             <CCard>
                 <CCardBody>
                     <CCardTitle>Vulnerability Alerts</CCardTitle>
-                    <CTable hover responsive table-even-width>
+                    <CTable hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">

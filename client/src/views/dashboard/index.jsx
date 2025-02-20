@@ -114,7 +114,7 @@ const Dashboard = () => {
                 <FontAwesomeIcon icon={faQuestion} />
             </button>
 
-            {data.length > 20 && (
+            {totalPages > 1 && (
                 <AppPagination
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}

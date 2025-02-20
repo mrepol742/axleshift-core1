@@ -14,16 +14,22 @@ import {
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../utils/ErrorMessages'
 import parseTimestamp from '../../../utils/Timestamp'
+import AppPagination from '../../../components/AppPagination'
 
 const Activity = () => {
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
     const [result, setResult] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0)
 
-    const fetchData = async () => {
+    const fetchData = async (page) => {
         axios
-            .get(`/sec/management/activity`)
-            .then((response) => setResult(response.data))
+            .post(`/sec/management/activity`, { page })
+            .then((response) => {
+                setResult(response.data.data)
+                setTotalPages(response.data.totalPages)
+            })
             .catch((error) => {
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
@@ -33,8 +39,8 @@ const Activity = () => {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData(currentPage)
+    }, [currentPage])
 
     if (loading)
         return (
@@ -45,10 +51,10 @@ const Activity = () => {
 
     return (
         <div>
-            <CCard>
+            <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Activity Logs</CCardTitle>
-                    <CTable hover responsive table-even-width>
+                    <CTable hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
@@ -91,6 +97,14 @@ const Activity = () => {
                     </CTable>
                 </CCardBody>
             </CCard>
+            {totalPages > 1 && (
+                <AppPagination
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                    setTotalPages={setTotalPages}
+                />
+            )}
         </div>
     )
 }

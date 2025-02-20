@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 
 const AppPagination = ({ currentPage, setCurrentPage, totalPages, setTotalPages }) => {
-    return React.memo(
-        <CPagination align="center" aria-label="Page navigation example">
+    return (
+        <CPagination aria-label="Page navigation">
             <CPaginationItem
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -77,7 +77,7 @@ const AppPagination = ({ currentPage, setCurrentPage, totalPages, setTotalPages 
             >
                 <FontAwesomeIcon aria-hidden={true} icon={faChevronRight} />
             </CPaginationItem>
-        </CPagination>,
+        </CPagination>
     )
 }
 

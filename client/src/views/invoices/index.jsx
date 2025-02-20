@@ -69,7 +69,7 @@ const Invoices = () => {
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Transactions</CCardTitle>
-                    <CTable hover responsive table-even-width>
+                    <CTable hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular">

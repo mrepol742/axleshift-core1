@@ -19,6 +19,7 @@ import parseTimestamp from '../../../utils/Timestamp'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../utils/ErrorMessages'
+import AppPagination from '../../../components/AppPagination'
 
 const AccessToken = () => {
     const recaptchaRef = React.useRef()
@@ -28,9 +29,10 @@ const AccessToken = () => {
         apiToken: [],
         deny: true,
     })
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0)
 
     const handleDeactivation = async () => {
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         axios
             .post(`/sec/management/apikeys/deactivate`, {
@@ -45,10 +47,13 @@ const AccessToken = () => {
             .finally(() => setLoading(false))
     }
 
-    const fetchData = async () => {
+    const fetchData = async (page) => {
         axios
-            .get(`/sec/management/apikeys`)
-            .then((response) => setResult(response.data))
+            .post(`/sec/management/apikeys`, { page })
+            .then((response) => {
+                setResult(response.data.data)
+                setTotalPages(response.data.totalPages)
+            })
             .catch((error) => {
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
@@ -58,8 +63,8 @@ const AccessToken = () => {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData(currentPage)
+    }, [currentPage])
 
     if (loading)
         return (
@@ -103,7 +108,7 @@ const AccessToken = () => {
             <CCard>
                 <CCardBody>
                     <CCardTitle>API keys</CCardTitle>
-                    <CTable hover responsive table-even-width>
+                    <CTable hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
@@ -149,6 +154,14 @@ const AccessToken = () => {
                     </CTable>
                 </CCardBody>
             </CCard>
+            {totalPages > 1 && (
+                <AppPagination
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                    setTotalPages={setTotalPages}
+                />
+            )}
         </div>
     )
 }
