@@ -27,7 +27,7 @@ const Navbar = () => {
         <CNavbar
             expand={false}
             colorScheme={colorMode}
-            className="fixed-top p-3"
+            className="fixed-top px-2 py-3"
             style={{
                 background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0))',
             }}
@@ -37,8 +37,8 @@ const Navbar = () => {
                 className="position-relative d-flex justify-content-between align-items-center"
             >
                 {/* Right Side - Navigation (Floating) */}
-                <div className="position-absolute top-0 end-0 mt-2 me-3 d-flex align-items-center">
-                    <CDropdown placement="bottom-end" className="px-3 mx-sm-0">
+                <div className="position-absolute top-0 end-0 mt-2 me-2 d-flex align-items-center">
+                    <CDropdown placement="bottom-end" className="px-1 mx-sm-0">
                         <CDropdownToggle caret={false} className="text-white">
                             {colorMode === 'dark' ? (
                                 <FontAwesomeIcon icon={faMoon} />
@@ -79,7 +79,7 @@ const Navbar = () => {
                         </CDropdownMenu>
                     </CDropdown>
                     <CNavLink
-                        className="text-white mx-2 py-1 bg-primary px-4 rounded-pill"
+                        className="text-white mx-0 py-1 bg-primary px-4 rounded-pill"
                         to="/login"
                         as={NavLink}
                     >

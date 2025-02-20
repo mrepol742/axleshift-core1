@@ -19,6 +19,7 @@ import {
     Maintenance,
     Sentry,
     Sessions,
+    IPFiltering,
 } from './panel/index'
 
 const SecurityManagement = () => {
@@ -119,6 +120,13 @@ const SecurityManagement = () => {
                     >
                         <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> Maintenance
                     </CTab>
+                     <CTab
+                        aria-controls="ip-filtering-tab-pane"
+                        itemKey={7}
+                        onClick={() => handleTabChange(6, 'ip-filtering')}
+                    >
+                        <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> IP Filtering
+                    </CTab>
                 </CTabList>
                 <CTabContent>
                     <CTabPanel className="py-3" aria-labelledby="dashboard-tab-pane" itemKey={0}>
@@ -133,14 +141,17 @@ const SecurityManagement = () => {
                     <CTabPanel className="py-3" aria-labelledby="sentry-tab-pane" itemKey={3}>
                         <Sentry />
                     </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={4}>
+                    <CTabPanel className="py-3" aria-labelledby="access-token-tab-pane" itemKey={4}>
                         <AccessToken />
                     </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={5}>
+                    <CTabPanel className="py-3" aria-labelledby="activity-tab-pane" itemKey={5}>
                         <Activity />
                     </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="api-tab-pane" itemKey={6}>
+                    <CTabPanel className="py-3" aria-labelledby="maintenance-tab-pane" itemKey={6}>
                         <Maintenance />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="ip-filtering-tab-pane" itemKey={7}>
+                        <IPFiltering />
                     </CTabPanel>
                 </CTabContent>
             </CTabs>

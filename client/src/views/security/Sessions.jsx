@@ -27,7 +27,6 @@ const Sessions = () => {
     })
 
     const handleLogout = async (id) => {
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         axios
             .post(`/sec/sessions/logout`, {
@@ -70,30 +69,6 @@ const Sessions = () => {
         <div>
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
-            {result.sessions.map((session, index) => (
-                <CCard key={index} className="mb-3">
-                    <CCardBody>
-                        <div className="d-flex justify-content-between align-items-center">
-                            <div>
-                                <CBadge color="primary" className="me-2">
-                                    {parseTimestamp(session.last_accessed)}
-                                </CBadge>
-                                <CCardTitle>{session.user_agent}</CCardTitle>
-                                <CCardText>
-                                    {session.ip_address === '::1' ||
-                                    session.ip_address === '::ffff:127.0.0.1'
-                                        ? 'localhost'
-                                        : session.ip_address}
-                                </CCardText>
-                            </div>
-                            <CButton color="danger" onClick={(e) => handleLogout(session._id)}>
-                                Logout
-                            </CButton>
-                        </div>
-                    </CCardBody>
-                </CCard>
-            ))}
-
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol className="mb-3">
                     <h4>This device</h4>
@@ -130,6 +105,30 @@ const Sessions = () => {
                     </CCard>
                 </CCol>
             </CRow>
+
+            {result.sessions.map((session, index) => (
+                <CCard key={index} className="mb-3">
+                    <CCardBody>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <div>
+                                <CBadge color="primary" className="me-2">
+                                    {parseTimestamp(session.last_accessed)}
+                                </CBadge>
+                                <CCardTitle>{session.user_agent}</CCardTitle>
+                                <CCardText>
+                                    {session.ip_address === '::1' ||
+                                    session.ip_address === '::ffff:127.0.0.1'
+                                        ? 'localhost'
+                                        : session.ip_address}
+                                </CCardText>
+                            </div>
+                            <CButton color="danger" onClick={(e) => handleLogout(session._id)}>
+                                Logout
+                            </CButton>
+                        </div>
+                    </CCardBody>
+                </CCard>
+            ))}
         </div>
     )
 }

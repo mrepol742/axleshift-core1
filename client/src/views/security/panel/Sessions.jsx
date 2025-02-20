@@ -17,15 +17,17 @@ import parseTimestamp from '../../../utils/Timestamp'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../utils/ErrorMessages'
+import AppPagination from '../../../components/AppPagination'
 
 const Sessions = () => {
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
     const [result, setResult] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0)
 
     const handleLogout = async () => {
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
         axios
             .post(`/sec/management/sessions/logout`, {
@@ -40,10 +42,13 @@ const Sessions = () => {
             .finally(() => setLoading(false))
     }
 
-    const fetchData = async () => {
+    const fetchData = async (page) => {
         axios
-            .get(`/sec/management/sessions`)
-            .then((response) => setResult(response.data))
+            .post(`/sec/management/sessions`, { page })
+            .then((response) => {
+                setResult(response.data.data)
+                setTotalPages(response.data.totalPages)
+            })
             .catch((error) => {
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
@@ -53,8 +58,8 @@ const Sessions = () => {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData(currentPage)
+    }, [currentPage])
 
     if (loading)
         return (
@@ -82,10 +87,10 @@ const Sessions = () => {
                 </CCardBody>
             </CCard>
 
-            <CCard>
+            <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Sessions</CCardTitle>
-                    <CTable hover responsive>
+                    <CTable hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
@@ -128,6 +133,14 @@ const Sessions = () => {
                     </CTable>
                 </CCardBody>
             </CCard>
+            {totalPages > 1 && (
+                <AppPagination
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                    setTotalPages={setTotalPages}
+                />
+            )}
         </div>
     )
 }

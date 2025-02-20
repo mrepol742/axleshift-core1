@@ -9,38 +9,57 @@ import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
 
 const router = express.Router()
+const limit = 20
 
 router.get('/', auth, async (req, res, next) => res.status(301).send())
 
-router.get('/sessions', auth, async (req, res, next) => {
+router.post('/sessions', auth, async (req, res, next) => {
     try {
-        const db = await database();
-        const sessions = await db.collection('sessions').aggregate([
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'user_id',
-                    foreignField: '_id',
-                    as: 'user'
-                }
-            },
-            {
-                $sort: { last_accessed: -1 }
-            }
-        ]).toArray();
+        const { page } = req.body
+        if (!page) return res.status(400).send()
+        const current_page = parseInt(page) || 1
+        const skip = (current_page - 1) * limit
 
-        sessions.forEach(session => {
-            const user_agent = session.user_agent;
-            const agent = useragent.parse(user_agent);
+        const db = await database()
+        const sessionsCollection = db.collection('sessions')
+
+        const [totalItems, sessions] = await Promise.all([
+            sessionsCollection.countDocuments({}),
+            sessionsCollection
+                .aggregate([
+                    {
+                        $lookup: {
+                            from: 'users',
+                            localField: 'user_id',
+                            foreignField: '_id',
+                            as: 'user',
+                        },
+                    },
+                    {
+                        $sort: { last_accessed: -1 },
+                    },
+                ])
+                .skip(skip)
+                .limit(limit)
+                .toArray(),
+        ])
+
+        sessions.forEach((session) => {
+            const user_agent = session.user_agent
+            const agent = useragent.parse(user_agent)
             session.user_agent = `${agent.os.family} ${agent.family}`
-        });
+        })
 
-        return res.status(200).json(sessions);
+        return res.status(200).json({
+            data: sessions,
+            totalPages: Math.ceil(totalItems / limit),
+            currentPage: current_page,
+        })
     } catch (e) {
-        logger.error(e);
-        return res.status(500).send();
+        logger.error(e)
+        return res.status(500).send()
     }
-});
+})
 
 router.post('/sessions/logout', [recaptcha, auth], async (req, res, next) => {
     try {
@@ -84,14 +103,19 @@ router.get('/sentry', auth, async (req, res, next) => {
     res.status(500).send()
 })
 
-router.get('/apikeys', auth, async (req, res, next) => {
+router.post('/apikeys', auth, async (req, res, next) => {
     try {
+        const { page } = req.body
+        if (!page) return res.status(400).send()
+        const current_page = parseInt(page) || 1
+        const skip = (current_page - 1) * limit
+
         const db = await database()
         const apiTokenCollection = await db.collection('apiToken')
 
-        const [apiToken, activeApiTokenCount] = await Promise.all([
-            apiTokenCollection.find().sort({ created_at: -1 }).toArray(),
+        const [activeApiTokenCount, apiToken] = await Promise.all([
             apiTokenCollection.countDocuments({ active: true, compromised: false }),
+            apiTokenCollection.find().sort({ created_at: -1 }).toArray(),
         ])
 
         for (let i = 0; i < apiToken.length; i++) {
@@ -103,8 +127,11 @@ router.get('/apikeys', auth, async (req, res, next) => {
             apiToken[i].user_agent = `${agent.os.family} ${agent.family}`
         }
 
-        if (apiToken)
-            return res.status(200).json({ apiToken: apiToken, deny: !(activeApiTokenCount > 0) })
+        return res.status(200).json({
+            data: { apiToken: apiToken, deny: !(activeApiTokenCount > 0) },
+            totalPages: Math.ceil(activeApiTokenCount / limit),
+            currentPage: current_page,
+        })
     } catch (e) {
         logger.error(e)
     }
@@ -133,10 +160,20 @@ router.post('/apikeys/deactivate', [recaptcha, auth], async (req, res, next) => 
     res.status(500).send()
 })
 
-router.get('/activity', auth, async (req, res, next) => {
+router.post('/activity', auth, async (req, res, next) => {
     try {
+        const { page } = req.body
+        if (!page) return res.status(400).send()
+        const current_page = parseInt(page) || 1
+        const skip = (current_page - 1) * limit
+
         const db = await database()
-        const activityLog = await db.collection('activityLog').find().sort({ time: -1 }).toArray()
+        const activityLogCollection = db.collection('activityLog')
+
+        const [totalItems, activityLog] = await Promise.all([
+            activityLogCollection.countDocuments({}),
+            activityLogCollection.find().sort({ time: -1 }).skip(skip).limit(limit).toArray(),
+        ])
 
         for (let i = 0; i < activityLog.length; i++) {
             const user_agent = activityLog[i].user_agent
@@ -144,7 +181,11 @@ router.get('/activity', auth, async (req, res, next) => {
             activityLog[i].user_agent = `${agent.os.family} ${agent.family}`
         }
 
-        return res.status(200).json(activityLog)
+        return res.status(200).json({
+            data: activityLog,
+            totalPages: Math.ceil(totalItems / limit),
+            currentPage: current_page,
+        })
     } catch (e) {
         logger.error(e)
     }

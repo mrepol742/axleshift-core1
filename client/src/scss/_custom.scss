@@ -164,3 +164,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.table-even-width th,
+.table-even-width td {
+    width: calc(100% / 7);
+}

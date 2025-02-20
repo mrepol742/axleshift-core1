@@ -13,9 +13,11 @@ import {
     CModalBody,
     CModalFooter,
 } from '@coreui/react'
+import { useUserProvider } from '../UserProvider'
 
 const IdleTimeout = ({ children }) => {
-    const IDLE_TIMEOUT = 5 * 60 * 1000 // 5 minutes
+    const { user } = useUserProvider()
+    const IDLE_TIMEOUT = 10 * 60 * 1000 // 5 minutes
     const COUNTDOWN_TIME = 30 // 30 seconds
     const [isIdle, setIsIdle] = useState(false)
     const [countdown, setCountdown] = useState(COUNTDOWN_TIME)
@@ -51,6 +53,7 @@ const IdleTimeout = ({ children }) => {
     }
 
     useEffect(() => {
+        if (!user) return 'Loading...'
         resetTimer()
         window.addEventListener('mousemove', resetTimer)
         window.addEventListener('keydown', resetTimer)
