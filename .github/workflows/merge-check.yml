@@ -1,12 +1,10 @@
 name: Merge PR if All Workflows Pass
 on:
-  workflow_run:
-    workflows:
-      - Label PR
-      - Greetings
-      - Test
+  pull_request:
     types:
-      - completed
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   check-status-and-merge:
@@ -19,14 +17,14 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.repo;
-            const prNumber = context.payload.workflow_run.pull_requests[0]?.number;
+            const prNumber = context.payload.pull_request.number;
             
             if (!prNumber) {
               console.log("No PR associated with this run.");
               return;
             }
 
-            const requiredWorkflows = ["Workflow 1", "Workflow 2", "Workflow 3"];
+            const requiredWorkflows = ["Test", "Label PR", "Greetings"];
             const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
               owner,
               repo,
