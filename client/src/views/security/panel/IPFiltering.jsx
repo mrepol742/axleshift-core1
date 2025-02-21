@@ -66,7 +66,7 @@ const IPFiltering = () => {
     }
 
     useEffect(() => {
-        // fetchData()
+        fetchData()
     }, [])
 
     const handleAddIp = () => {
