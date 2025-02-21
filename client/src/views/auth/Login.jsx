@@ -86,9 +86,8 @@ const Login = () => {
 
     const handleSubmit = async (e, type, credential) => {
         if (e) e.preventDefault()
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-
+        setLoading(true)
         const formData = new FormData()
         if (type === 'form') {
             formData.append('email', email)

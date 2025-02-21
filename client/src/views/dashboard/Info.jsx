@@ -82,8 +82,8 @@ const FreightInfo = () => {
     }
 
     const bookShipment = async () => {
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         axios
             .post(`/invoices`, {
                 id: id,
@@ -117,8 +117,8 @@ const FreightInfo = () => {
 
     const handleEditButton = async () => {
         if (disabled) return setDisabled(false)
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         const updatedFormData = {
             ...editedFormData,
             recaptcha_ref: recaptcha,
@@ -145,8 +145,8 @@ const FreightInfo = () => {
             setEditedFormData(formData)
             return
         }
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         axios
             .post(`/freight/c/${id}`, { recaptcha_ref: recaptcha })
             .then((response) => {

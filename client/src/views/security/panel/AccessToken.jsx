@@ -34,6 +34,7 @@ const AccessToken = () => {
 
     const handleDeactivation = async () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         axios
             .post(`/sec/management/apikeys/deactivate`, {
                 recaptcha_ref: recaptcha,

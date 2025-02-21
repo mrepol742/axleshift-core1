@@ -34,8 +34,8 @@ const API = () => {
     }
 
     const gen = async () => {
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         axios
             .post(`/auth/token/new`, {
                 recaptcha_ref: recaptcha,
@@ -92,8 +92,8 @@ const API = () => {
 
     const handleWhitelistIpSubmit = async (e) => {
         e.preventDefault()
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         axios
             .post(`/auth/token/whitelist-ip`, {
                 whitelist_ip: result.whitelist_ip.toString(),
@@ -124,17 +124,25 @@ const API = () => {
 
     if (!result.token) {
         return (
-            <CRow className="justify-content-center my-5">
-                <CCol md={6}>
-                    <div className="clearfix">
-                        <h1 className="float-start display-3 me-4">OOPS</h1>
-                        <h4>You have not generate a token yet.</h4>
-                        <CButton color="primary" size="sm" onClick={gen}>
-                            Generate Token
-                        </CButton>
-                    </div>
-                </CCol>
-            </CRow>
+            <>
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+
+                <CRow className="justify-content-center my-5">
+                    <CCol md={6}>
+                        <div className="clearfix">
+                            <h1 className="float-start display-3 me-4">OOPS</h1>
+                            <h4>You have not generate a token yet.</h4>
+                            <CButton color="primary" size="sm" onClick={gen}>
+                                Generate Token
+                            </CButton>
+                        </div>
+                    </CCol>
+                </CRow>
+            </>
         )
     }
 
@@ -174,7 +182,7 @@ const API = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <h4>Whitelisted IP</h4>
+                        <h4>Whitelist IP</h4>
                         <CButton
                             size="sm"
                             className="text-white"
@@ -186,12 +194,8 @@ const API = () => {
                     </div>
                     {result.whitelist_ip && result.whitelist_ip.length === 0 && (
                         <CCard className="mb-3">
-                            <CCardBody className="justify-content-center m-3">
-                                <div className="clearfix">
-                                    <h1 className="float-start display-3 me-4">OOPS</h1>
-                                    <h4>There was no Whitelisted IP Addresses.</h4>
-                                    <p>Add new one to begin</p>
-                                </div>
+                            <CCardBody className="justify-content-center">
+                                <h6>No IP addresses have been whitelisted yet.</h6>
                             </CCardBody>
                         </CCard>
                     )}
@@ -239,7 +243,9 @@ const API = () => {
                                     ? parseTimestamp(result.last_accessed)
                                     : 'Never'}
                             </p>
-                            <span className="lead">{result.user_agent}</span>
+                            <span className="lead">
+                                {result.user_agent ? result.user_agent : 'NaN'}
+                            </span>
                         </CCardBody>
                     </CCard>
                 </CCol>

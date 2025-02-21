@@ -74,8 +74,8 @@ const Air = () => {
 
     const handleSubmit = async () => {
         if (!confirmation) return setConfirmation(true)
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         const updatedFormData = {
             ...formData,
             recaptcha_ref: recaptcha,

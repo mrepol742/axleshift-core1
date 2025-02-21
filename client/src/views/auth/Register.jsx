@@ -86,8 +86,8 @@ const Register = () => {
 
     const handleSubmit = async (e, type, credential) => {
         if (e) e.preventDefault()
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         const formDataToSend = new FormData()
         if (type === 'form') {
             for (const key in formData) {

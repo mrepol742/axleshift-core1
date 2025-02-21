@@ -22,8 +22,8 @@ const Newsletter = ({ setLoading }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         axios
             .post(`/newsletter`, {
                 email: emailAddress,

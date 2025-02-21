@@ -45,9 +45,8 @@ const Security = () => {
 
     const handleSubmit = async (e) => {
         if (e) e.preventDefault()
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
-
+        setLoading(true)
         axios
             .post(`/auth/password`, {
                 ...formData,
