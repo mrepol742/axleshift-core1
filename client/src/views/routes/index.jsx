@@ -56,8 +56,8 @@ const MyMapComponent = () => {
         setCurrentLocation(null)
         setAddress('')
 
-        // setLoading(true)
         // const recaptcha = await recaptchaRef.current.executeAsync()
+        // setLoading(true)
 
         if (!pickup) return addToast('Invalid pickup')
 

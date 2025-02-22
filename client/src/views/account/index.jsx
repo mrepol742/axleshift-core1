@@ -66,8 +66,8 @@ const Account = () => {
     }
 
     const handleSubmit = async (formData) => {
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         const updatedFormData = {
             ...formData,
             recaptcha_ref: recaptcha,

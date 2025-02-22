@@ -16,7 +16,7 @@ const Chat = () => {
     const endOfMessagesRef = useRef(null)
     const [rows, setRows] = useState(1)
     const messagesRef = collection(database, 'messages')
-    const id = user.role === 'admin' ? useParams().id : user.ref
+    const id = user.role === 'admin' || user.role === 'super_admin' ? useParams().id : user.ref
 
     useEffect(() => {
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
@@ -91,12 +91,15 @@ const Chat = () => {
                             key={index}
                             className={`d-flex flex-row ${message.sender === (user.role === 'user' ? 'admin' : 'user') ? 'justify-content-start' : 'justify-content-end'}`}
                         >
-                            {message.sender === (user.role === 'admin' ? 'user' : 'admin') && (
+                            {message.sender ===
+                                (user.role === 'admin' || user.role === 'super_admin'
+                                    ? 'user'
+                                    : 'admin') && (
                                 <CImage
                                     crossOrigin="Anonymous"
                                     className="rounded-5 me-2"
                                     src={
-                                        user.role === 'admin'
+                                        user.role === 'admin' || user.role === 'super_admin'
                                             ? `${VITE_APP_API_URL}/u/${user.ref}.png`
                                             : `/images/default-avatar.jpg`
                                     }
@@ -120,12 +123,13 @@ const Chat = () => {
                                     {parseTimestamp(message.timestamp)}
                                 </p>
                             </div>
-                            {message.sender === (user.role === 'user' ? 'user' : 'admin') && (
+                            {message.sender === user.role && (
                                 <CImage
                                     crossOrigin="Anonymous"
                                     className="rounded-5 ms-2"
                                     src={`${VITE_APP_API_URL}/u/${user.ref}.png`}
                                     style={{ width: '45px', height: '100%' }}
+                                    alt="You"
                                     loading="lazy"
                                 />
                             )}

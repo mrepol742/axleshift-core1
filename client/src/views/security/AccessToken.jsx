@@ -14,6 +14,7 @@ const API = () => {
     const recaptchaRef = React.useRef()
     const [isBlurred, setIsBlurred] = useState(true)
     const [disabledAdd, setDisabledAdd] = useState(false)
+    const [_whitelistIp, _setWhitelistIp] = useState([])
     const [result, setResult] = useState({
         token: '',
         whitelist_ip: [],
@@ -34,8 +35,8 @@ const API = () => {
     }
 
     const gen = async () => {
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         axios
             .post(`/auth/token/new`, {
                 recaptcha_ref: recaptcha,
@@ -57,7 +58,10 @@ const API = () => {
     const fetchData = async () => {
         axios
             .get(`/auth/token/`)
-            .then((response) => setResult(response.data))
+            .then((response) => {
+                setResult(response.data)
+                _setWhitelistIp(response.data.whitelist_ip)
+            })
             .catch((error) => {
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
@@ -90,17 +94,27 @@ const API = () => {
         }))
     }
 
+    const handleDelete = (index) => {
+        const newInputs = result.whitelist_ip.filter((_, i) => i !== index)
+        setResult((prevResult) => ({
+            ...prevResult,
+            whitelist_ip: newInputs,
+        }))
+    }
+
     const handleWhitelistIpSubmit = async (e) => {
         e.preventDefault()
-        setLoading(true)
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         axios
             .post(`/auth/token/whitelist-ip`, {
-                whitelist_ip: result.whitelist_ip.toString(),
+                whitelist_ip:
+                    result.whitelist_ip.length === 0 ? '[]' : result.whitelist_ip.toString(),
                 recaptcha_ref: recaptcha,
             })
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
+                _setWhitelistIp(result.whitelist_ip)
                 addToast('Your changes has been saved.')
             })
             .catch((error) => {
@@ -124,17 +138,25 @@ const API = () => {
 
     if (!result.token) {
         return (
-            <CRow className="justify-content-center my-5">
-                <CCol md={6}>
-                    <div className="clearfix">
-                        <h1 className="float-start display-3 me-4">OOPS</h1>
-                        <h4>You have not generate a token yet.</h4>
-                        <CButton color="primary" size="sm" onClick={gen}>
-                            Generate Token
-                        </CButton>
-                    </div>
-                </CCol>
-            </CRow>
+            <>
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+
+                <CRow className="justify-content-center my-5">
+                    <CCol md={6}>
+                        <div className="clearfix">
+                            <h1 className="float-start display-3 me-4">OOPS</h1>
+                            <h4>You have not generate a token yet.</h4>
+                            <CButton color="primary" size="sm" onClick={gen}>
+                                Generate Token
+                            </CButton>
+                        </div>
+                    </CCol>
+                </CRow>
+            </>
         )
     }
 
@@ -174,7 +196,7 @@ const API = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <h4>Whitelisted IP</h4>
+                        <h4>Whitelist IP</h4>
                         <CButton
                             size="sm"
                             className="text-white"
@@ -184,52 +206,51 @@ const API = () => {
                             <FontAwesomeIcon icon={faPlus} /> Add
                         </CButton>
                     </div>
-                    {result.whitelist_ip && result.whitelist_ip.length === 0 && (
-                        <CCard className="mb-3">
-                            <CCardBody className="justify-content-center m-3">
-                                <div className="clearfix">
-                                    <h1 className="float-start display-3 me-4">OOPS</h1>
-                                    <h4>There was no Whitelisted IP Addresses.</h4>
-                                    <p>Add new one to begin</p>
-                                </div>
-                            </CCardBody>
-                        </CCard>
-                    )}
+                    {result.whitelist_ip &&
+                        result.whitelist_ip.length === 0 &&
+                        _whitelistIp.length === 0 && (
+                            <CCard className="mb-3">
+                                <CCardBody className="justify-content-center">
+                                    <h6>No IP addresses have been whitelisted yet.</h6>
+                                </CCardBody>
+                            </CCard>
+                        )}
 
-                    {result.whitelist_ip && result.whitelist_ip.length !== 0 && (
-                        <CCard className="mb-3">
-                            <CCardBody>
-                                <CForm onSubmit={handleWhitelistIpSubmit}>
-                                    {result.whitelist_ip.map((input, index) => (
-                                        <div className="d-flex mb-2" key={index}>
-                                            <CFormInput
-                                                value={input}
-                                                onChange={(e) =>
-                                                    handleIpChange(index, e.target.value)
-                                                }
-                                                placeholder={`192.168.0.${index + 1}`}
-                                            />
-                                            <CButton
-                                                color="danger"
-                                                className="text-white ms-2"
-                                                onClick={copyToClipboard}
-                                            >
-                                                <FontAwesomeIcon icon={faTrash} />
-                                            </CButton>
-                                        </div>
-                                    ))}
-                                    <CButton
-                                        size="sm"
-                                        type="submit"
-                                        color="primary"
-                                        className="d-block me-2 rounded"
-                                    >
-                                        Save changes
-                                    </CButton>
-                                </CForm>
-                            </CCardBody>
-                        </CCard>
-                    )}
+                    {result.whitelist_ip &&
+                        (result.whitelist_ip.length !== 0 || _whitelistIp.length !== 0) && (
+                            <CCard className="mb-3">
+                                <CCardBody>
+                                    <CForm onSubmit={handleWhitelistIpSubmit}>
+                                        {result.whitelist_ip.map((input, index) => (
+                                            <div className="d-flex mb-2" key={index}>
+                                                <CFormInput
+                                                    value={input}
+                                                    onChange={(e) =>
+                                                        handleIpChange(index, e.target.value)
+                                                    }
+                                                    placeholder={`192.168.0.${index + 1}`}
+                                                />
+                                                <CButton
+                                                    color="danger"
+                                                    className="text-white ms-2"
+                                                    onClick={(e) => handleDelete(index)}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} />
+                                                </CButton>
+                                            </div>
+                                        ))}
+                                        <CButton
+                                            size="sm"
+                                            type="submit"
+                                            color="primary"
+                                            className="d-block me-2 rounded"
+                                        >
+                                            Save changes
+                                        </CButton>
+                                    </CForm>
+                                </CCardBody>
+                            </CCard>
+                        )}
 
                     <h4>Last accessed</h4>
                     <CCard>
@@ -239,7 +260,9 @@ const API = () => {
                                     ? parseTimestamp(result.last_accessed)
                                     : 'Never'}
                             </p>
-                            <span className="lead">{result.user_agent}</span>
+                            <span className="lead">
+                                {result.user_agent ? result.user_agent : 'NaN'}
+                            </span>
                         </CCardBody>
                     </CCard>
                 </CCol>

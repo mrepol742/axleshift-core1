@@ -8,34 +8,13 @@ const Dashboard = () => {
     const [formData, setFormData] = useState(null)
     const [loading, setLoading] = useState(true)
     const { addToast } = useToast()
-    const [averageLoadData, setAverageLoadData] = useState(Array(10).fill(0))
-    const [totalAverageLoadData, setTotalAverageLoadData] = useState(0)
-    const [cpuUsageData, setCPUUsageData] = useState(Array(10).fill(0))
-    const [totalCPUUsageData, setTotalCPUUsageData] = useState(0)
+    const [cpuUsageData, setCpuUsageData] = useState([])
+    const [totalAverageLoadData, setTotalAverageLoadData] = useState([])
 
-    const calculateAverageLoad = (user, system, idle, startTime) => {
-        calculateCPUUsage(user, system, idle, startTime)
-        const uptime = Date.now() - startTime
-        const result = system / uptime
-        const average = parseFloat(result.toString().match(/^(\d+\.\d)/))
-        setAverageLoadData((prevData) => {
-            const newData = [...prevData, average]
-            if (newData.length > 10) newData.shift()
-            setTotalAverageLoadData(someMath(newData))
-            return newData
-        })
-    }
-
-    const calculateCPUUsage = (user, system, idle, startTime) => {
-        const uptime = (Date.now() - startTime) * 4
-        const result = (idle / uptime) * 100
-        const usage = parseFloat(result.toString().match(/^(\d+\.\d)/))
-        setCPUUsageData((prevData) => {
-            const newData = [...prevData, usage]
-            if (newData.length > 10) newData.shift()
-            setTotalCPUUsageData(someMath(newData))
-            return newData
-        })
+    const calculateAverageLoad = (userSeconds, systemSeconds, totalSeconds, startTime) => {
+        const uptime = Date.now() / 1000 - startTime
+        const averageLoad = (userSeconds + systemSeconds) / uptime
+        setTotalAverageLoadData((prevData) => [...prevData, parseFloat(averageLoad.toFixed(2))])
     }
 
     const someMath = (arr) => {
@@ -53,11 +32,15 @@ const Dashboard = () => {
                 const data = response.data
                 setFormData(data)
                 calculateAverageLoad(
-                    data.process_cpu_user_seconds_total[0].value,
-                    data.process_cpu_system_seconds_total[0].value,
-                    data.process_cpu_seconds_total[0].value,
-                    data.process_start_time_seconds[0].value,
+                    parseFloat(data.process_cpu_user_seconds_total[0].value),
+                    parseFloat(data.process_cpu_system_seconds_total[0].value),
+                    parseFloat(data.process_cpu_seconds_total[0].value),
+                    parseFloat(data.process_start_time_seconds[0].value),
                 )
+                setCpuUsageData((prevData) => [
+                    ...prevData,
+                    parseFloat(data.process_cpu_seconds_total[0].value.toFixed(2)),
+                ])
             })
             .catch((error) => {
                 const message =
@@ -86,15 +69,15 @@ const Dashboard = () => {
                     <Widgets
                         color="primary"
                         title="Average Load Time"
-                        value={totalAverageLoadData}
-                        data={averageLoadData}
+                        value={`${someMath(totalAverageLoadData).toFixed(2)}ms`}
+                        data={totalAverageLoadData}
                     />
                 </CCol>
                 <CCol sm={6} xl={4} xxl={3}>
                     <Widgets
                         color="danger"
                         title="CPU Usage"
-                        value={`${totalCPUUsageData}%`}
+                        value={`${someMath(cpuUsageData).toFixed(2)}%`}
                         data={cpuUsageData}
                     />
                 </CCol>

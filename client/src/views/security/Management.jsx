@@ -9,6 +9,7 @@ import {
     faKey,
     faList,
     faPersonDigging,
+    faGlobe,
 } from '@fortawesome/free-solid-svg-icons'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
@@ -120,12 +121,12 @@ const SecurityManagement = () => {
                     >
                         <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> Maintenance
                     </CTab>
-                     <CTab
+                    <CTab
                         aria-controls="ip-filtering-tab-pane"
                         itemKey={7}
                         onClick={() => handleTabChange(6, 'ip-filtering')}
                     >
-                        <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> IP Filtering
+                        <FontAwesomeIcon icon={faGlobe} className="me-1" /> IP Filtering
                     </CTab>
                 </CTabList>
                 <CTabContent>

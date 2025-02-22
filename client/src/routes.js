@@ -31,6 +31,7 @@ const Chat = auth(lazy(() => import('./views/support/customer-service/Chat')))
 const Account = auth(lazy(() => import('./views/account/index')))
 const _Security = auth(lazy(() => import('./views/account/Security')))
 
+const ShipNow = auth(lazy(() => import('./views/ship-now/index')))
 const Freight = auth(lazy(() => import('./views/freight/index')))
 const FreightAir = auth(lazy(() => import('./views/freight/panel/Air')))
 const FreightLand = auth(lazy(() => import('./views/freight/panel/Land')))
@@ -86,6 +87,8 @@ const routes = [
     { path: '/account/security', name: 'Security', element: _Security },
 
     // { path: '/documents', name: 'Freight Documents', element: Err500 },
+
+    { path: '/ship-now', name: 'Ship Now', element: ShipNow },
 
     { path: '/freight', name: 'Freight', element: Freight },
     { path: '/freight/air', name: 'Air', element: FreightAir },

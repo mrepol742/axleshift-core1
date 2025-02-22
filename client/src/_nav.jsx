@@ -33,6 +33,13 @@ const _nav = [
         role_exclude: [],
     },
     {
+        component: CNavItem,
+        name: 'Ship Now',
+        to: '/ship-now',
+        role_exclude: ['staff', 'admin'],
+        icon: <FontAwesomeIcon icon={faShip} className="nav-icon" />,
+    },
+    {
         component: CNavGroup,
         name: 'Freight',
         role_exclude: ['staff', 'admin'],

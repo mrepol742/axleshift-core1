@@ -29,6 +29,7 @@ const Sessions = () => {
 
     const handleLogout = async () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
         axios
             .post(`/sec/management/sessions/logout`, {
                 recaptcha_ref: recaptcha,
