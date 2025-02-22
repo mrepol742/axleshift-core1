@@ -65,7 +65,11 @@ const Inbox = () => {
                                     <small>{parseTimestamp(thread.timestamp)}</small>
                                 </div>
                                 <p className="mb-1">{thread.text}</p>
-                                <small>{thread.sender === 'admin' ? 'You' : 'Client'}</small>
+                                <small>
+                                    {thread.sender === 'admin' || thread.sender === 'super_admin'
+                                        ? 'You'
+                                        : 'Client'}
+                                </small>
                             </CListGroupItem>
                         ))}
                     </CListGroup>
