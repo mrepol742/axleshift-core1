@@ -63,7 +63,7 @@ const TrackInfo = () => {
                             </div>
                             <div
                                 className="d-flex justify-content-end align-items-center text-primary"
-                                onClick={(e) => navigate(`/v/${id}`)}
+                                onClick={(e) => navigate(`/shipment/${id}`)}
                             >
                                 View shipment information
                             </div>

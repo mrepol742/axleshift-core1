@@ -181,26 +181,43 @@ router.get('/:id', [auth, freight], async (req, res, next) => {
 /**
  * Create a Freight shipment
  */
-router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
+router.post('/book', [recaptcha, auth], async (req, res, next) => {
     try {
-        const { shipper, consignee, shipment, shipping } = req.body
-        const type = req.params.type
-        if (!shipper || !consignee || !shipment || !type || !shipping) return res.status(400).send()
-        if (!['air', 'land', 'sea'].includes(type)) return res.status(400).send()
+        const { isImport, isResidentialAddress, containsDangerGoods, containsDocuments, from, to, type, items } = req.body
+ 
+        if (typeof isImport !== 'boolean')
+            return res.status(400).send('Invalid value for isImport')
+        if (typeof isResidentialAddress !== 'boolean')
+            return res.status(400).send('Invalid value for isResidentialAddress')
+        if (typeof containsDangerGoods !== 'boolean')
+            return res.status(400).send('Invalid value for containsDangerGoods')
+        if (typeof containsDocuments !== 'boolean')
+            return res.status(400).send('Invalid value for containsDocuments')
+        if (typeof from !== 'object' || from === null)
+            return res.status(400).send('Invalid value for from')
+        if (typeof to !== 'object' || to === null)
+            return res.status(400).send('Invalid value for to')
+        if (typeof type !== 'string' || !['private', 'business'].includes(type))
+            return res.status(400).send('Invalid value for type')
+        if (!Array.isArray(items))
+            return res.status(400).send('Invalid value for items')
 
         const db = await database()
         const dateNow = Date.now()
+        const trackingNumber = `${to[0].countryCode}-${Date.now().toString()}`
         await db.collection('freight').insertOne({
             user_id: req.user._id,
-            data: {
-                shipper: shipper,
-                consignee: consignee,
-                shipment: shipment,
-                shipping: shipping,
-            },
+            is_import: isImport,
+            is_residential_address: isResidentialAddress,
+            contains_danger_goods: containsDangerGoods,
+            contains_documents: containsDocuments,
+            from: from,
+            to: to,
             type: type,
+            items: items,
             status: 'to_pay',
             session_id: req.session._id,
+            tracking_number: trackingNumber,
             created_at: dateNow,
             updated_at: dateNow,
         })
@@ -213,7 +230,7 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
             req.user.first_name,
         )
         activity(req, `created a shipment`)
-        return res.status(201).send()
+        return res.status(201).json({tracking_number: trackingNumber, message: 'Shipment has been created.'})
     } catch (e) {
         logger.error(e)
     }
@@ -223,7 +240,7 @@ router.post('/b/:type', [recaptcha, auth], async (req, res, next) => {
 /**
  * Update freight details
  */
-router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) => {
+router.post('/update/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const { shipper, consignee, shipment } = req.body
         const { type, id } = req.params
@@ -255,7 +272,7 @@ router.post('/u/:type/:id', [recaptcha, auth, freight], async (req, res, next) =
 /**
  * Cancel a Freight shipment
  */
-router.post('/c/:id', [recaptcha, auth, freight], async (req, res, next) => {
+router.post('/cancel/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
         const id = req.params.id
         const db = await database()

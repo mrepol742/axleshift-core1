@@ -58,7 +58,7 @@ const AppHeader = () => {
                 <CHeaderNav>
                     {['user', 'super_admin'].includes(user.role) && (
                         <CNavItem>
-                            <CButton onClick={(e) => navigate('/freight')}>
+                            <CButton onClick={(e) => navigate('/book-now')}>
                                 <FontAwesomeIcon icon={faPlus} />
                             </CButton>
                         </CNavItem>

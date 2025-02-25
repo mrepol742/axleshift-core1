@@ -31,7 +31,7 @@ const Chat = auth(lazy(() => import('./views/support/customer-service/Chat')))
 const Account = auth(lazy(() => import('./views/account/index')))
 const _Security = auth(lazy(() => import('./views/account/Security')))
 
-const ShipNow = auth(lazy(() => import('./views/ship-now/index')))
+const BookNow = auth(lazy(() => import('./views/book-now/index')))
 const Freight = auth(lazy(() => import('./views/freight/index')))
 const FreightAir = auth(lazy(() => import('./views/freight/panel/Air')))
 const FreightLand = auth(lazy(() => import('./views/freight/panel/Land')))
@@ -77,7 +77,7 @@ const routes = [
     { path: '/forgot-password', external: true, name: 'Forgot Password', element: ForgotPassword },
 
     { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-    { path: '/v/:id', name: 'Shipment Info', element: Info },
+    { path: '/shipment/:id', name: 'Shipment Info', element: Info },
     { path: '/search', name: 'Search Shipment', element: Search },
     { path: '/schedules', name: 'Schedules', element: Schedules },
 
@@ -88,7 +88,7 @@ const routes = [
 
     // { path: '/documents', name: 'Freight Documents', element: Err500 },
 
-    { path: '/ship-now', name: 'Ship Now', element: ShipNow },
+    { path: '/book-now', name: 'Ship Now', element: BookNow },
 
     { path: '/freight', name: 'Freight', element: Freight },
     { path: '/freight/air', name: 'Air', element: FreightAir },

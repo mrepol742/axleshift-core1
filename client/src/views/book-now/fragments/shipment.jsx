@@ -19,6 +19,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
+import { useToast } from '../../../components/AppToastProvider'
 import Review from './review'
 
 const Item = ({ index, form, setForm, removeItem }) => {
@@ -177,11 +178,14 @@ const Item = ({ index, form, setForm, removeItem }) => {
     )
 }
 
-const Shipment = ({ form, setForm }) => {
+const Shipment = ({ data }) => {
+    const { form, setForm, loading, setLoading } = data
     const navigate = useNavigate()
     const [items, setItems] = React.useState([{}])
     const formRef = React.useRef(null)
     const [shipping, setShipping] = useState(false)
+    const recaptchaRef = React.useRef()
+    const { addToast } = useToast()
 
     const addItem = () => {
         if (items.length < 5) {
@@ -194,6 +198,7 @@ const Shipment = ({ form, setForm }) => {
         const updatedItems = form.items.filter((_, i) => i !== index)
         setForm({ ...form, items: updatedItems })
     }
+
     const totalWeight = () => {
         return form.items.reduce((acc, item) => acc + item.weight * (item.quantity || 1), 0)
     }
@@ -256,7 +261,7 @@ const Shipment = ({ form, setForm }) => {
                                     if (formRef.current.checkValidity()) {
                                         setShipping(true)
                                         setTimeout(() => {
-                                            const element = document.getElementById('shipping')
+                                            const element = document.getElementById('review')
                                             if (element) {
                                                 element.scrollIntoView({ behavior: 'smooth' })
                                             }
@@ -272,7 +277,7 @@ const Shipment = ({ form, setForm }) => {
                     </CCol>
                 </CRow>
             </CForm>
-            {shipping && <Review form={form} setForm={setForm} />}
+            {shipping && <Review data={data} />}
         </>
     )
 }
@@ -280,8 +285,7 @@ const Shipment = ({ form, setForm }) => {
 export default Shipment
 
 Shipment.propTypes = {
-    form: PropTypes.object.isRequired,
-    setForm: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
 }
 
 Item.propTypes = {

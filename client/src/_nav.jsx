@@ -17,6 +17,7 @@ import {
     faTowerBroadcast,
     faTrailer,
     faRoute,
+    faPlus,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -34,33 +35,10 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Ship Now',
-        to: '/ship-now',
+        name: 'Book Now',
+        to: '/book-now',
         role_exclude: ['staff', 'admin'],
-        icon: <FontAwesomeIcon icon={faShip} className="nav-icon" />,
-    },
-    {
-        component: CNavGroup,
-        name: 'Freight',
-        role_exclude: ['staff', 'admin'],
-        icon: <FontAwesomeIcon icon={faShip} className="nav-icon" />,
-        items: [
-            {
-                component: CNavItem,
-                name: 'Sea Freight',
-                to: '/freight/sea',
-            },
-            {
-                component: CNavItem,
-                name: 'Air Freight',
-                to: '/freight/air',
-            },
-            {
-                component: CNavItem,
-                name: 'Land Freight',
-                to: '/freight/land',
-            },
-        ],
+        icon: <FontAwesomeIcon icon={faPlus} className="nav-icon" />,
     },
     {
         component: CNavItem,

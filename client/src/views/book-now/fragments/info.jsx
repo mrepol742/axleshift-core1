@@ -21,7 +21,8 @@ import PropTypes from 'prop-types'
 import Shipment from './shipment'
 import countries from './countries'
 
-const Form = ({ form, setForm, type }) => {
+const Form = ({ data, type }) => {
+    const { form, setForm, loading, setLoading } = data
     const formRef = React.useRef(null)
     const [shipment, setShipment] = useState(false)
 
@@ -33,6 +34,10 @@ const Form = ({ form, setForm, type }) => {
         const [prefix, index, key] = field.split('.')
         const updatedField = [...form[prefix]]
         updatedField[index] = { ...updatedField[index], [key]: e.target.value }
+        if (key === 'country') {
+            const country = countries.find((c) => c.name === e.target.value)
+            if (country) updatedField[index].countryCode = country.code
+        }
         setForm({ ...form, [prefix]: updatedField })
     }
 
@@ -131,12 +136,15 @@ const Form = ({ form, setForm, type }) => {
                     </div>
                 )}
             </CForm>
-            {shipment && <Shipment form={form} setForm={setForm} />}
+
+            {shipment && <Shipment data={data} />}
         </>
     )
 }
 
-const ShippingAs = ({ form, setForm }) => {
+const ShippingAs = ({ data }) => {
+    const { form, setForm, loading, setLoading } = data
+
     return (
         <>
             <h3 className="text-primary">Ship Now</h3>
@@ -160,10 +168,10 @@ const ShippingAs = ({ form, setForm }) => {
                 </CTabList>
                 <CTabContent>
                     <CTabPanel className="p-2" aria-labelledby="private-tab-pane" itemKey={1}>
-                        <Form form={form} setForm={setForm} type="private" />
+                        <Form data={data} type="private" />
                     </CTabPanel>
                     <CTabPanel className="p-2" aria-labelledby="business-tab-pane" itemKey={2}>
-                        <Form form={form} setForm={setForm} type="business" />
+                        <Form data={data} type="business" />
                     </CTabPanel>
                 </CTabContent>
             </CTabs>
@@ -174,12 +182,10 @@ const ShippingAs = ({ form, setForm }) => {
 export default ShippingAs
 
 ShippingAs.propTypes = {
-    form: PropTypes.object.isRequired,
-    setForm: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
 }
 
 Form.propTypes = {
-    form: PropTypes.object.isRequired,
-    setForm: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
 }

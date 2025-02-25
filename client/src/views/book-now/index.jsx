@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CCard, CCardBody, CCardText, CCardHeader } from '@coreui/react'
+import { CSpinner } from '@coreui/react'
 import Masonry from 'react-masonry-css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlaneDeparture, faTruck, faShip } from '@fortawesome/free-solid-svg-icons'
@@ -8,6 +8,7 @@ import Info from './fragments/info'
 
 const ShipNow = () => {
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         isImport: false,
         isResidentialAddress: false,
@@ -18,6 +19,7 @@ const ShipNow = () => {
                 name: '',
                 company: '',
                 country: '',
+                countryCode: '',
                 city: '',
                 zipCode: '',
                 address: '',
@@ -33,6 +35,7 @@ const ShipNow = () => {
                 name: '',
                 company: '',
                 country: '',
+                countryCode: '',
                 city: '',
                 zipCode: '',
                 address: '',
@@ -49,7 +52,12 @@ const ShipNow = () => {
 
     return (
         <div>
-            <Info form={form} setForm={setForm} />
+            {loading && (
+                <div className="loading-overlay">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            )}
+            <Info data={{ form, setForm, loading, setLoading }} />
         </div>
     )
 }

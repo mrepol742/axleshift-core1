@@ -125,7 +125,7 @@ const FreightInfo = () => {
         }
 
         axios
-            .post(`/freight/u/${type}/${id}`, updatedFormData)
+            .post(`/freight/update/${id}`, updatedFormData)
             .then((response) => addToast('Your changes has been saved.'))
             .catch((error) => {
                 const message =
@@ -148,7 +148,7 @@ const FreightInfo = () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
-            .post(`/freight/c/${id}`, { recaptcha_ref: recaptcha })
+            .post(`/freight/cancel/${id}`, { recaptcha_ref: recaptcha })
             .then((response) => {
                 addToast('Shipment has been cancelled.')
                 navigate('/dashboard')
