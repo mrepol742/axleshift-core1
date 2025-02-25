@@ -19,7 +19,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
-import ShippingOptions from './shipping-options'
+import Review from './review'
 
 const Item = ({ index, form, setForm, removeItem }) => {
     const sizes = {
@@ -195,7 +195,7 @@ const Shipment = ({ form, setForm }) => {
         setForm({ ...form, items: updatedItems })
     }
     const totalWeight = () => {
-        return form.items.reduce((acc, item) => acc + (item.weight * item.quantity || 0), 0)
+        return form.items.reduce((acc, item) => acc + item.weight * (item.quantity || 1), 0)
     }
 
     return (
@@ -272,7 +272,7 @@ const Shipment = ({ form, setForm }) => {
                     </CCol>
                 </CRow>
             </CForm>
-            {shipping && <ShippingOptions form={form} setForm={setForm} />}
+            {shipping && <Review form={form} setForm={setForm} />}
         </>
     )
 }
