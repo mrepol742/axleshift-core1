@@ -21,7 +21,7 @@ import { useToast } from '../../components/AppToastProvider'
 
 const Track = () => {
     const { addToast } = useToast()
-    const [trackingID, setTrackingID] = useState('')
+    const [trackingNumber, setTrackingNumber] = useState('')
     const [image, setImage] = useState(null)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
@@ -41,8 +41,8 @@ const Track = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if (!trackingID || trackingID.trim().length === 0) return null
-        if (/^[a-fA-F0-9]{24}$/.test(trackingID)) return navigate(`/track/${trackingID}`)
+        if (!trackingNumber || trackingNumber.trim().length === 0) return null
+        if (/^[A-Z]{2}-\d+$/.test(trackingNumber)) return navigate(`/track/${trackingNumber}`)
         addToast('Invalid Tracking ID Number.')
     }
 
@@ -60,17 +60,18 @@ const Track = () => {
             context.drawImage(imgElement, 0, 0)
 
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
-            const trackingID = jsqr(imageData.data, canvas.width, canvas.height)
+            const trackingNumber = jsqr(imageData.data, canvas.width, canvas.height)
 
-            if (!trackingID) return addToast('No QR code found.')
+            if (!trackingNumber) return addToast('No QR code found.')
 
-            const _trackinID = trackingID.data
-            setTrackingID(_trackinID)
+            const _trackinNumber = trackingNumber.data
+            setTrackingNumber(_trackinNumber)
             setLoading(true)
             setTimeout(() => {
                 setLoading(false)
-                if (!_trackinID || _trackinID.trim().length === 0) return null
-                if (/^[a-fA-F0-9]{24}$/.test(_trackinID)) return navigate(`/track/${_trackinID}`)
+                if (!_trackinNumber || _trackinNumber.trim().length === 0) return null
+                if (/^[A-Z]{2}-\d+$/.test(_trackinNumber))
+                    return navigate(`/track/${_trackinNumber}`)
                 addToast('Invalid Tracking ID Number.')
             }, 2000)
         }
@@ -84,7 +85,7 @@ const Track = () => {
             )}
 
             <CRow>
-                <CCol xs={3} className="image-container d-none d-md-flex">
+                <CCol xs={4} className="image-container d-none d-md-flex">
                     <CImage
                         fluid
                         rounded
@@ -94,14 +95,15 @@ const Track = () => {
                     />
                 </CCol>
                 <CCol md={7} className="mb-4">
-                    <h1>Enter Tracking ID</h1>
+                    <h1>Tracking Number</h1>
                     <CForm className="mb-3" onSubmit={handleSubmit}>
                         <CInputGroup>
                             <CFormInput
                                 aria-label="Track shipment"
                                 aria-describedby="basic-addon"
-                                value={trackingID}
-                                onChange={(e) => setTrackingID(e.target.value)}
+                                value={trackingNumber}
+                                onChange={(e) => setTrackingNumber(e.target.value)}
+                                placeholder="XX-XXXXXX"
                             />
                             <CInputGroupText id="basic-addon" onClick={handleSubmit}>
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />

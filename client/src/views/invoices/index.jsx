@@ -93,7 +93,7 @@ const Invoices = () => {
                             {result.map((invoice, index) => (
                                 <CTableRow key={index}>
                                     <CTableDataCell
-                                        onClick={(e) => navigate(`/v/${invoice.freight_id}`)}
+                                        onClick={(e) => navigate(`/shipment/${invoice.freight_id}`)}
                                     >
                                         {invoice.freight_id}
                                     </CTableDataCell>

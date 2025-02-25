@@ -45,8 +45,8 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
                 .send({ r_url: `https://checkout-staging.xendit.co/web/${req.invoice.invoice_id}` })
         const redirectUrl =
             NODE_ENV !== 'production'
-                ? `http://localhost:3000/v/${req.freight._id}`
-                : `https://core1.axleshift.com/v/${req.freight._id}`
+                ? `http://localhost:3000/shipment/${req.freight._id}`
+                : `https://core1.axleshift.com/shipment/${req.freight._id}`
         const invoice = await Invoice.createInvoice({
             data: {
                 amount: 24463,

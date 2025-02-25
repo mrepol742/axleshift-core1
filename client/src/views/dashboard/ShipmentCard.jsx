@@ -30,8 +30,8 @@ const ShipmentCard = ({ shipment }) => {
         <CCard
             color={getCardColor(shipment.status)}
             className="mb-3"
-            key={shipment._id}
-            onClick={() => navigate(`/v/${shipment._id}`)}
+            key={shipment.tracking_number}
+            onClick={() => navigate(`/shipment/${shipment.tracking_number}`)}
             style={{ cursor: 'pointer' }}
         >
             <CCardHeader
@@ -43,11 +43,7 @@ const ShipmentCard = ({ shipment }) => {
                 }}
             >
                 <div>{getStatus(shipment.status)}</div>
-                <div>
-                    {shipment.type == 'air' && <FontAwesomeIcon icon={faPlaneDeparture} />}
-                    {shipment.type == 'land' && <FontAwesomeIcon icon={faTruck} />}
-                    {shipment.type == 'sea' && <FontAwesomeIcon icon={faShip} />}
-                </div>
+                <div>{parseTimestamp(shipment.updated_at)}</div>
             </CCardHeader>
             <CCardBody>
                 <CCardText>
@@ -57,30 +53,16 @@ const ShipmentCard = ({ shipment }) => {
                     </div>
                     <div className="mb-2">
                         <small className="text-muted d-block">Shipment</small>
-                        {shipment.data.shipment.shipment_description}
+                        {shipment.tracking_number || 'N/A'}
                     </div>
                 </CCardText>
             </CCardBody>
-            <CCardFooter className="border-0 small bg-transparent">
-                <small className="text-muted d-block">Last update</small>
-                {parseTimestamp(shipment.updated_at)} ago
-            </CCardFooter>
         </CCard>
     )
 }
 
 ShipmentCard.propTypes = {
-    shipment: PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        status: PropTypes.string.isRequired,
-        type: PropTypes.oneOf(['air', 'land', 'sea']).isRequired,
-        data: PropTypes.shape({
-            shipment: PropTypes.shape({
-                shipment_description: PropTypes.string.isRequired,
-            }).isRequired,
-        }).isRequired,
-        updated_at: PropTypes.string.isRequired,
-    }).isRequired,
+    shipment: PropTypes.object.isRequired,
 }
 
 export default ShipmentCard

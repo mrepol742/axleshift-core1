@@ -17,49 +17,16 @@ import { QRCodeSVG } from 'qrcode.react'
 import html2canvas from 'html2canvas'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
-import ShipperForm from '../../components/forms/ShipperForm'
-import ConsineeForm from '../../components/forms/ConsineeForm'
-import ShipmentForm from '../../components/forms/ShipmentForm'
-import AirForm from '../../components/forms/shipping/AirForm'
-import LandForm from '../../components/forms/shipping/LandForm'
-import SeaForm from '../../components/forms/shipping/SeaForm'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../utils/ErrorMessages'
 import { useUserProvider } from '../../components/UserProvider'
 
 const FreightInfo = () => {
-    const dataF = {
-        shipper: {
-            shipper_company_name: '',
-            shipper_contact_name: '',
-            shipper_contact_email_address: '',
-            shipper_contact_phone_number: '',
-            shipper_company_address: '',
-        },
-        consignee: {
-            consignee_company_name: '',
-            consignee_contact_name: '',
-            consignee_contact_email_address: '',
-            consignee_contact_phone_number: '',
-            consignee_company_address: '',
-        },
-        shipment: {
-            shipment_description: '',
-            shipment_weight: '',
-            shipment_dimension_length: '',
-            shipment_dimension_width: '',
-            shipment_dimension_height: '',
-            shipment_volume: '',
-            shipment_value: '',
-            shipment_instructions: '',
-        },
-        recaptcha_ref: '',
-    }
     const { user } = useUserProvider()
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
-    const [formData, setFormData] = useState(dataF)
-    const [editedFormData, setEditedFormData] = useState(dataF)
+    const [formData, setFormData] = useState({})
+    const [editedFormData, setEditedFormData] = useState({})
     const [type, setType] = useState('')
     const [status, setStatus] = useState('')
     const [loading, setLoading] = useState(false)
@@ -84,6 +51,11 @@ const FreightInfo = () => {
     const bookShipment = async () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
+        /*
+         * Even tho the system no longer uses mongodb generated object id as tracking number
+         * the backend still uses it to find the shipment
+         * and assign neccessary data
+         */
         axios
             .post(`/invoices`, {
                 id: id,
@@ -103,10 +75,8 @@ const FreightInfo = () => {
         axios
             .get(`/freight/${id}`)
             .then((response) => {
-                setType(response.data.data.type)
-                setStatus(response.data.data.status)
-                setFormData(response.data.data.data)
-                setEditedFormData(response.data.data.data)
+                setFormData(response.data)
+                setEditedFormData(response.data)
             })
             .catch((error) => {
                 console.error(error)
@@ -125,7 +95,7 @@ const FreightInfo = () => {
         }
 
         axios
-            .post(`/freight/u/${type}/${id}`, updatedFormData)
+            .post(`/freight/update/${id}`, updatedFormData)
             .then((response) => addToast('Your changes has been saved.'))
             .catch((error) => {
                 const message =
@@ -148,7 +118,7 @@ const FreightInfo = () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
-            .post(`/freight/c/${id}`, { recaptcha_ref: recaptcha })
+            .post(`/freight/cancel/${id}`, { recaptcha_ref: recaptcha })
             .then((response) => {
                 addToast('Shipment has been cancelled.')
                 navigate('/dashboard')
@@ -174,19 +144,6 @@ const FreightInfo = () => {
             link.click()
             document.body.removeChild(link)
         })
-    }
-
-    const renderForm = () => {
-        switch (type) {
-            case 'air':
-                return <AirForm isInfo={true} formData={formData} isDisabled={true} />
-            case 'land':
-                return <LandForm isInfo={true} formData={formData} isDisabled={true} />
-            case 'sea':
-                return <SeaForm isInfo={true} formData={formData} isDisabled={true} />
-            default:
-                return null
-        }
     }
 
     useEffect(() => {
@@ -240,7 +197,7 @@ const FreightInfo = () => {
             )}
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
-                <span className="d-block">#{id}</span>
+                <span className="d-block">{id}</span>
                 <CButtonGroup className="mb-2 mb-sm-0">
                     <CButton
                         color="primary"
@@ -280,35 +237,7 @@ const FreightInfo = () => {
                     )}
                 </CButtonGroup>
             </div>
-            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                <CCol>
-                    <ShipperForm
-                        isInfo={true}
-                        formData={editedFormData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={disabled}
-                    />
-                </CCol>
-                <CCol>
-                    <ConsineeForm
-                        isInfo={true}
-                        formData={editedFormData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={disabled}
-                    />
-                </CCol>
-            </CRow>
-            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                <CCol>
-                    <ShipmentForm
-                        isInfo={true}
-                        formData={editedFormData}
-                        handleInputChange={handleInputChange}
-                        isDisabled={disabled}
-                    />
-                </CCol>
-                <CCol>{renderForm()}</CCol>
-            </CRow>
+            {JSON.stringify(formData)}
         </div>
     )
 }
