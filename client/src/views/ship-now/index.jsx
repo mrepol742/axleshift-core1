@@ -20,6 +20,7 @@ const ShipNow = () => {
         toCity: '',
         toZipCode: '',
         type: 'private',
+        items: [],
     })
 
     return (

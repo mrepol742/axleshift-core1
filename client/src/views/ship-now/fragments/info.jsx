@@ -99,20 +99,30 @@ const Form = ({ form, setForm, type }) => {
                     {renderLocationFields('to')}
                 </>
             )}
-            <div className="d-flex justify-content-center mb-4">
-                <CButton
-                    className="btn btn-primary px-5"
-                    onClick={() => {
-                        if (formRef.current.checkValidity()) {
-                            setShipment(true)
-                        } else {
-                            formRef.current.reportValidity()
-                        }
-                    }}
-                >
-                    Continue
-                </CButton>
-            </div>
+
+            {!shipment && (
+                <div className="d-flex justify-content-center mb-4">
+                    <CButton
+                        className="btn btn-primary px-5"
+                        onClick={() => {
+                            if (formRef.current.checkValidity()) {
+                                setShipment(true)
+                                setTimeout(() => {
+                                    const element = document.getElementById('shipment')
+                                    if (element) {
+                                        element.scrollIntoView({ behavior: 'smooth' })
+                                    }
+                                }, 0)
+                            } else {
+                                formRef.current.reportValidity()
+                            }
+                        }}
+                    >
+                        Continue
+                    </CButton>
+                </div>
+            )}
+
             {shipment && <Shipment form={form} setForm={setForm} />}
         </CForm>
     )
