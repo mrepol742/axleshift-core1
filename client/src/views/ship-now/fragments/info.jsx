@@ -83,55 +83,56 @@ const Form = ({ form, setForm, type }) => {
     )
 
     return (
-        <CForm ref={formRef}>
-            <div className="d-flex justify-content-end">
-                <CFormSwitch
-                    label="Import Statement"
-                    checked={form.isImport}
-                    onChange={handleSwitchChange}
-                />
-            </div>
-            {form.isImport ? (
-                <>
-                    <span className="fw-bold">To</span>
-                    {renderLocationFields('to')}
-                    <span className="fw-bold">From</span>
-                    {renderLocationFields('from')}
-                </>
-            ) : (
-                <>
-                    <span className="fw-bold">From</span>
-                    {renderLocationFields('from')}
-                    <span className="fw-bold">To</span>
-                    {renderLocationFields('to')}
-                </>
-            )}
-
-            {!shipment && (
-                <div className="d-flex justify-content-center mb-4">
-                    <CButton
-                        className="btn btn-primary px-5"
-                        onClick={() => {
-                            if (formRef.current.checkValidity()) {
-                                setShipment(true)
-                                setTimeout(() => {
-                                    const element = document.getElementById('shipment')
-                                    if (element) {
-                                        element.scrollIntoView({ behavior: 'smooth' })
-                                    }
-                                }, 0)
-                            } else {
-                                formRef.current.reportValidity()
-                            }
-                        }}
-                    >
-                        Continue
-                    </CButton>
+        <>
+            <CForm ref={formRef}>
+                <div className="d-flex justify-content-end">
+                    <CFormSwitch
+                        label="Import Statement"
+                        checked={form.isImport}
+                        onChange={handleSwitchChange}
+                    />
                 </div>
-            )}
+                {form.isImport ? (
+                    <>
+                        <span className="fw-bold">To</span>
+                        {renderLocationFields('to')}
+                        <span className="fw-bold">From</span>
+                        {renderLocationFields('from')}
+                    </>
+                ) : (
+                    <>
+                        <span className="fw-bold">From</span>
+                        {renderLocationFields('from')}
+                        <span className="fw-bold">To</span>
+                        {renderLocationFields('to')}
+                    </>
+                )}
 
+                {!shipment && (
+                    <div className="d-flex justify-content-center mb-4">
+                        <CButton
+                            className="btn btn-primary px-5"
+                            onClick={() => {
+                                if (formRef.current.checkValidity()) {
+                                    setShipment(true)
+                                    setTimeout(() => {
+                                        const element = document.getElementById('shipment')
+                                        if (element) {
+                                            element.scrollIntoView({ behavior: 'smooth' })
+                                        }
+                                    }, 0)
+                                } else {
+                                    formRef.current.reportValidity()
+                                }
+                            }}
+                        >
+                            Continue
+                        </CButton>
+                    </div>
+                )}
+            </CForm>
             {shipment && <Shipment form={form} setForm={setForm} />}
-        </CForm>
+        </>
     )
 }
 

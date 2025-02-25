@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     CForm,
@@ -19,6 +19,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
+import ShippingOptions from './shipping-options'
 
 const Item = ({ index, form, setForm, removeItem }) => {
     const sizes = {
@@ -102,6 +103,8 @@ const Item = ({ index, form, setForm, removeItem }) => {
                         className="mb-2"
                         value={form.items[index]?.weight || ''}
                         onChange={(e) => handleInputChange(e, 'weight')}
+                        max={form.type === 'business' ? 2500 : 70}
+                        min={1}
                     />
                 </CCol>
                 <CCol md={3}>
@@ -112,6 +115,8 @@ const Item = ({ index, form, setForm, removeItem }) => {
                         className="mb-2"
                         value={form.items[index]?.length || ''}
                         onChange={(e) => handleInputChange(e, 'length')}
+                        max={form.type === 'business' ? 302 : 120}
+                        min={1}
                     />
                 </CCol>
                 <CCol md={3}>
@@ -122,6 +127,8 @@ const Item = ({ index, form, setForm, removeItem }) => {
                         className="mb-2"
                         value={form.items[index]?.width || ''}
                         onChange={(e) => handleInputChange(e, 'width')}
+                        max={form.type === 'business' ? 223 : 80}
+                        min={1}
                     />
                 </CCol>
                 <CCol md={3}>
@@ -132,18 +139,24 @@ const Item = ({ index, form, setForm, removeItem }) => {
                         className="mb-2"
                         value={form.items[index]?.height || ''}
                         onChange={(e) => handleInputChange(e, 'height')}
+                        max={form.type === 'business' ? 220 : 80}
+                        min={1}
                     />
                 </CCol>
-                <CCol md={3}>
-                    <CFormInput
-                        type="number"
-                        floatingLabel="Quantity"
-                        required
-                        className="mb-2"
-                        value={form.items[index]?.quantity || ''}
-                        onChange={(e) => handleInputChange(e, 'quantity')}
-                    />
-                </CCol>
+                {form.type === 'business' && (
+                    <CCol md={3}>
+                        <CFormInput
+                            type="number"
+                            floatingLabel="Quantity"
+                            required
+                            className="mb-2"
+                            value={form.items[index]?.quantity || ''}
+                            onChange={(e) => handleInputChange(e, 'quantity')}
+                            max={99}
+                            min={1}
+                        />
+                    </CCol>
+                )}
             </CRow>
             <hr />
             <h6>Need help with sizes?</h6>
@@ -167,6 +180,8 @@ const Item = ({ index, form, setForm, removeItem }) => {
 const Shipment = ({ form, setForm }) => {
     const navigate = useNavigate()
     const [items, setItems] = React.useState([{}])
+    const formRef = React.useRef(null)
+    const [shipping, setShipping] = useState(false)
 
     const addItem = () => {
         if (items.length < 5) {
@@ -185,59 +200,79 @@ const Shipment = ({ form, setForm }) => {
 
     return (
         <>
-            <h3 className="text-primary mt-4" id="shipment">
-                Shipment
-            </h3>
-            {items.map((item, index) => (
-                <Item
-                    key={index}
-                    index={index}
-                    form={form}
-                    setForm={setForm}
-                    removeItem={removeItem}
-                />
-            ))}
-
-            <CRow>
-                <CCol md>
-                    {form.type === 'business' && (
-                        <CButton
-                            color="primary"
-                            onClick={addItem}
-                            className={items.length >= 5 ? 'disabled' : ''}
-                        >
-                            Add Item
-                        </CButton>
-                    )}
-                    <span className="d-block">Total Weight: {totalWeight()} kg</span>
-                </CCol>
-                <CCol md>
-                    This shipment contains:
-                    {form.type === 'business' && (
-                        <CFormCheck
-                            label="Danger Goods"
-                            checked={form.containsDangerGoods}
-                            onChange={(e) =>
-                                setForm({ ...form, containsDangerGoods: e.target.checked })
-                            }
-                        />
-                    )}
-                    <CFormCheck
-                        label="Documents"
-                        checked={form.containsDocuments}
-                        onChange={(e) => setForm({ ...form, containsDocuments: e.target.checked })}
-                        className="mb-2"
+            <CForm ref={formRef}>
+                <h3 className="text-primary mt-4" id="shipment">
+                    Shipment
+                </h3>
+                {items.map((item, index) => (
+                    <Item
+                        key={index}
+                        index={index}
+                        form={form}
+                        setForm={setForm}
+                        removeItem={removeItem}
                     />
-                    <CButton
-                        className="btn btn-primary px-5"
-                        onClick={() => {
-                            alert(JSON.stringify(form))
-                        }}
-                    >
-                        Ship Now
-                    </CButton>
-                </CCol>
-            </CRow>
+                ))}
+
+                <CRow>
+                    <CCol md>
+                        {form.type === 'business' && (
+                            <CButton
+                                color="primary"
+                                onClick={addItem}
+                                className={items.length >= 5 ? 'disabled' : ''}
+                            >
+                                Add Item
+                            </CButton>
+                        )}
+                        <span className="d-block">Total Weight: {totalWeight()} kg</span>
+                    </CCol>
+                    <CCol md>
+                        This shipment contains:
+                        {form.type === 'business' && (
+                            <CFormCheck
+                                label="Danger Goods"
+                                checked={form.containsDangerGoods}
+                                onChange={(e) =>
+                                    setForm({ ...form, containsDangerGoods: e.target.checked })
+                                }
+                            />
+                        )}
+                        <CFormCheck
+                            label="Documents"
+                            checked={form.containsDocuments}
+                            onChange={(e) =>
+                                setForm({ ...form, containsDocuments: e.target.checked })
+                            }
+                            className="mb-2"
+                        />
+                        {!shipping && (
+                            <CButton
+                                className="btn btn-primary px-5"
+                                onClick={() => {
+                                    // if (form.type === 'private' && form.items.length > 1) {
+                                    //     setForm({ ...form, items: [form.items[0]] })
+                                    // }
+                                    if (formRef.current.checkValidity()) {
+                                        setShipping(true)
+                                        setTimeout(() => {
+                                            const element = document.getElementById('shipping')
+                                            if (element) {
+                                                element.scrollIntoView({ behavior: 'smooth' })
+                                            }
+                                        }, 0)
+                                    } else {
+                                        formRef.current.reportValidity()
+                                    }
+                                }}
+                            >
+                                Ship Now
+                            </CButton>
+                        )}
+                    </CCol>
+                </CRow>
+            </CForm>
+            {shipping && <ShippingOptions form={form} setForm={setForm} />}
         </>
     )
 }
