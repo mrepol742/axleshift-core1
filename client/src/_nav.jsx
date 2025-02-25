@@ -113,14 +113,14 @@ const _nav = [
         component: CNavItem,
         name: 'Access Token',
         to: '/security/access-token',
-        role_exclude: ['staff', 'user', 'admin'],
+        role_exclude: ['staff', 'user'],
         icon: <FontAwesomeIcon icon={faKey} className="nav-icon" />,
     },
     {
         component: CNavItem,
         name: 'Sessions',
         to: '/security/sessions',
-        role_exclude: ['staff'],
+        role_exclude: [],
         icon: <FontAwesomeIcon icon={faTowerBroadcast} className="nav-icon" />,
     },
     {
