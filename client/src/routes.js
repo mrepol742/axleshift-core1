@@ -32,10 +32,6 @@ const Account = auth(lazy(() => import('./views/account/index')))
 const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const BookNow = auth(lazy(() => import('./views/book-now/index')))
-const Freight = auth(lazy(() => import('./views/freight/index')))
-const FreightAir = auth(lazy(() => import('./views/freight/panel/Air')))
-const FreightLand = auth(lazy(() => import('./views/freight/panel/Land')))
-const FreightSea = auth(lazy(() => import('./views/freight/panel/Sea')))
 
 const Rates = auth(lazy(() => import('./views/rates/index')))
 const Couriers = auth(lazy(() => import('./views/couriers/index')))
@@ -89,11 +85,6 @@ const routes = [
     // { path: '/documents', name: 'Freight Documents', element: Err500 },
 
     { path: '/book-now', name: 'Ship Now', element: BookNow },
-
-    { path: '/freight', name: 'Freight', element: Freight },
-    { path: '/freight/air', name: 'Air', element: FreightAir },
-    { path: '/freight/land', name: 'Land', element: FreightLand },
-    { path: '/freight/sea', name: 'Sea', element: FreightSea },
 
     { path: '/invoices', name: 'Invoices', element: Invoices },
     //  { path: '/payment/invoice', name: 'Invoice', element: Err500 },

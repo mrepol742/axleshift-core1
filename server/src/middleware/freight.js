@@ -1,11 +1,10 @@
 import axios from 'axios'
-import { ObjectId } from 'mongodb'
 import logger from '../utils/logger.js'
 import database from '../models/mongodb.js'
 
 const freight = async (req, res, next) => {
     const id = req.params.id
-        ? /[a-fA-F0-9]{24}/.test(req.params.id)
+        ? /^[A-Z]{2}-\d+$/.test(req.params.id)
             ? req.params.id
             : req.body.id
         : req.body.id
@@ -16,7 +15,7 @@ const freight = async (req, res, next) => {
 
         const freightCollection = db.collection('freight')
 
-        const _freight = await freightCollection.findOne({ _id: new ObjectId(id) })
+        const _freight = await freightCollection.findOne({ tracking_number: id })
         if (!_freight) return res.status(404).send()
 
         req.freight = _freight

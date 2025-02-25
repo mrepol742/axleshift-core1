@@ -30,8 +30,8 @@ const ShipmentCard = ({ shipment }) => {
         <CCard
             color={getCardColor(shipment.status)}
             className="mb-3"
-            key={shipment._id}
-            onClick={() => navigate(`/shipment/${shipment._id}`)}
+            key={shipment.tracking_number}
+            onClick={() => navigate(`/shipment/${shipment.tracking_number}`)}
             style={{ cursor: 'pointer' }}
         >
             <CCardHeader
