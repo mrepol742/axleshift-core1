@@ -72,10 +72,21 @@ const Item = ({ index, form, setForm, removeItem }) => {
         setForm({ ...form, items: updatedItems })
     }
 
+    const handleSizeClick = (size) => {
+        const updatedItems = [...form.items]
+        updatedItems[index] = {
+            ...updatedItems[index],
+            length: size[0],
+            width: size[1],
+            height: size[2] || '',
+        }
+        setForm({ ...form, items: updatedItems })
+    }
+
     return (
         <CCard className="mb-3 p-3">
             <div className="d-flex justify-content-between">
-                {form.type === 'business' && <h3 className="text-primary">Item #{index + 1}</h3>}
+                {form.type === 'business' && <h5 className="text-primary">Item #{index + 1}</h5>}
                 {index > 0 && (
                     <CButton color="danger" onClick={() => removeItem(index)}>
                         <FontAwesomeIcon icon={faXmark} />
@@ -138,7 +149,12 @@ const Item = ({ index, form, setForm, removeItem }) => {
             <h6>Need help with sizes?</h6>
             <div className="d-block d-md-flex justify-content-between">
                 {sizes[form.type].map((item, idx) => (
-                    <div key={idx} className="border rounded p-2 mb-2 me-2 w-100">
+                    <div
+                        key={idx}
+                        className="border rounded p-2 mb-2 me-2 w-100"
+                        onClick={() => handleSizeClick(item.value)}
+                        style={{ cursor: 'pointer' }}
+                    >
                         {item.label}
                         <span className="d-block text-muted">{item.value.join(' x ')} cm</span>
                     </div>

@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlaneDeparture, faTruck, faShip } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import Shipment from './shipment'
+import countries from './countries'
 
 const Form = ({ form, setForm, type }) => {
     const formRef = React.useRef(null)
@@ -29,38 +30,44 @@ const Form = ({ form, setForm, type }) => {
     }
 
     const handleInputChange = (e, field) => {
-        setForm({ ...form, [field]: e.target.value })
+        const [prefix, index, key] = field.split('.')
+        const updatedField = [...form[prefix]]
+        updatedField[index] = { ...updatedField[index], [key]: e.target.value }
+        setForm({ ...form, [prefix]: updatedField })
     }
 
     const renderLocationFields = (prefix) => (
         <>
             <CRow xs={{ gutter: 2 }}>
                 <CCol md>
-                    <CFormSelect
+                    <CFormInput
+                        type="text"
                         floatingLabel="Country"
-                        value={form[`${prefix}Country`]}
-                        onChange={(e) => handleInputChange(e, `${prefix}Country`)}
+                        list={`${prefix}-country-list`}
+                        value={form[prefix][0].country}
+                        onChange={(e) => handleInputChange(e, `${prefix}.0.country`)}
                         required
-                    >
-                        <option value="1">Philippines</option>
-                        <option value="2">The Philippines</option>
-                        <option value="3">The da Philippines</option>
-                    </CFormSelect>
+                    />
+                    <datalist id={`${prefix}-country-list`}>
+                        {countries.map((country, index) => (
+                            <option key={index} value={country.name} />
+                        ))}
+                    </datalist>
                 </CCol>
                 <CCol md>
                     <CFormInput
                         type="text"
                         floatingLabel={type === 'business' ? 'City' : 'City (Optional)'}
                         className="mb-2"
-                        value={form[`${prefix}City`]}
-                        onChange={(e) => handleInputChange(e, `${prefix}City`)}
+                        value={form[prefix][0].city}
+                        onChange={(e) => handleInputChange(e, `${prefix}.0.city`)}
                         required={type === 'business'}
                     />
                     <CFormInput
                         type="number"
                         floatingLabel={type === 'business' ? 'Zip Code' : 'Zip Code (Optional)'}
-                        value={form[`${prefix}ZipCode`]}
-                        onChange={(e) => handleInputChange(e, `${prefix}ZipCode`)}
+                        value={form[prefix][0].zipCode}
+                        onChange={(e) => handleInputChange(e, `${prefix}.0.zipCode`)}
                         required={type === 'business'}
                     />
                 </CCol>
