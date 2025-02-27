@@ -7,56 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-type FreightData {
-  consignee FreightDataConsignee
-  shipment  FreightDataShipment
-  shipper   FreightDataShipper
-  shipping  FreightDataShipping
+type FreightFrom {
+  address     String
+  address2    String
+  address3    String
+  city        String
+  company     String
+  country     String
+  countryCode String
+  email       String
+  name        String
+  phone       String
+  taxId       String
+  zipCode     String
 }
 
-type FreightDataConsignee {
-  consignee_company_address       String
-  consignee_company_name          String
-  consignee_contact_email_address String
-  consignee_contact_name          String
-  consignee_contact_phone_number  String
+type FreightItems {
+  height Int
+  length Int
+  weight String
+  width  Int
 }
 
-type FreightDataShipment {
-  shipment_description      String
-  shipment_dimension_height String
-  shipment_dimension_length String
-  shipment_dimension_width  String
-  shipment_instructions     String
-  shipment_value            String
-  shipment_volume           String
-  shipment_weight           String
-}
-
-type FreightDataShipper {
-  shipper_company_address       String
-  shipper_company_name          String
-  shipper_contact_email_address String
-  shipper_contact_name          String
-  shipper_contact_phone_number  String
-}
-
-type FreightDataShipping {
-  shipping_cargo_type               String?
-  shipping_delivery_date            String?
-  shipping_destination_address      String?
-  shipping_destination_airport      String?
-  shipping_discharge_port           String?
-  shipping_estimated_arrival_date   String?
-  shipping_flight_type              String?
-  shipping_loading_port             String?
-  shipping_origin_addresss          String?
-  shipping_origin_airport           String?
-  shipping_pickup_date              String?
-  shipping_preferred_arrival_date   String?
-  shipping_preferred_departure_date String?
-  shipping_sailing_date             String?
-  shipping_vehicle_type             String?
+type FreightTo {
+  address     String
+  address2    String
+  address3    String
+  city        String
+  company     String
+  country     String
+  countryCode String
+  email       String
+  employerId  String
+  name        String
+  phone       String
+  zipCode     String
 }
 
 type UsersOauth2 {
@@ -77,25 +62,25 @@ type UsersOauth2Google {
 }
 
 model activityLog {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
   event      String
   ip_address String
-  session_id Json?
+  session_id String? @db.ObjectId
   time       Float
   user_agent String
-  user_id    String @db.ObjectId
+  user_id    String  @db.ObjectId
 }
 
 model apiToken {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   active       Boolean
   compromised  Boolean
   created_at   Float
-  modified_by  String?
+  modified_by  String
   token        String
   updated_at   Float
-  user_id      String  @db.ObjectId
-  whitelist_ip Json?
+  user_id      String   @db.ObjectId
+  whitelist_ip String[]
 }
 
 model couriers {
@@ -103,16 +88,21 @@ model couriers {
 }
 
 model freight {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  created_at  Float
-  data        FreightData
-  invoice_id  Json?
-  modified_by Json?
-  session_id  String      @db.ObjectId
-  status      String
-  type        String
-  updated_at  Float
-  user_id     String      @db.ObjectId
+  id                     String         @id @default(auto()) @map("_id") @db.ObjectId
+  contains_danger_goods  Boolean
+  contains_documents     Boolean
+  created_at             Float
+  from                   FreightFrom[]
+  is_import              Boolean
+  is_residential_address Boolean
+  items                  FreightItems[]
+  session_id             String         @db.ObjectId
+  status                 String
+  to                     FreightTo[]
+  tracking_number        String
+  type                   String
+  updated_at             Float
+  user_id                String         @db.ObjectId
 }
 
 model invoices {
@@ -159,7 +149,7 @@ model sessions {
   compromised   Boolean
   ip_address    String
   last_accessed Float
-  modified_by   String
+  modified_by   String?
   token         String
   user_agent    String
   user_id       String  @db.ObjectId
@@ -171,11 +161,12 @@ model threats {
 
 model users {
   id                  String       @id @default(auto()) @map("_id") @db.ObjectId
-  avatar              String?
   created_at          Float?
+  devices             String[]
   email               String
-  email_verify_at     String?
+  email_verify_at     Float
   first_name          String
+  last_accessed       Float?
   last_name           String
   oauth2              UsersOauth2?
   old_passwords       String[]
@@ -184,6 +175,5 @@ model users {
   ref                 String
   registration_type   String
   role                String
-  timezone            String?
   updated_at          Float?
 }
