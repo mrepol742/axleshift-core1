@@ -47,7 +47,7 @@ router.post('/', auth, async (req, res, next) => {
         const freightCollection = db.collection('freight')
 
         const [totalItems, items] = await Promise.all([
-            freightCollection.countDocuments({ user_id: req.user._id }),
+            freightCollection.countDocuments(filter),
             freightCollection
                 .find(filter)
                 .sort({ created_at: -1 })
@@ -70,19 +70,7 @@ router.post('/', auth, async (req, res, next) => {
 /**
  * Get Freight by freight id
  */
-router.get('/:id', [auth, freight], async (req, res, next) => {
-    try {
-        // even tho there are 0.0000% changes this throws an error
-        // i dont care
-        // ait gonna dleete this try catch!
-        return res.status(200).json({
-            data: req.freight,
-        })
-    } catch (e) {
-        logger.error(e)
-    }
-    res.status(500).send()
-})
+router.get('/:id', [auth, freight], (req, res) => res.status(200).json(req.freight))
 
 /**
  * Create a Freight shipment
