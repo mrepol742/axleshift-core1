@@ -19,18 +19,24 @@ import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../utils/ErrorMessages'
 import parseTimestamp from '../../utils/Timestamp'
+import AppPagination from '../../components/AppPagination'
 
 const Invoices = () => {
     const recaptchaRef = React.useRef()
     const navigate = useNavigate()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
-    const [result, setResult] = useState([])
+    const [data, setData] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0)
 
-    const fetchData = async () => {
+    const fetchData = async (page) => {
         axios
-            .get(`/invoices`)
-            .then((response) => setResult(response.data))
+            .post(`/invoices`, { page })
+            .then((response) => {
+                setData(response.data.data)
+                setTotalPages(response.data.totalPages)
+            })
             .catch((error) => {
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
@@ -40,8 +46,8 @@ const Invoices = () => {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData(currentPage)
+    }, [currentPage])
 
     if (loading)
         return (
@@ -50,7 +56,7 @@ const Invoices = () => {
             </div>
         )
 
-    if (result.length === 0)
+    if (data.length === 0)
         return (
             <CRow className="justify-content-center my-5">
                 <CCol md={6}>
@@ -90,7 +96,7 @@ const Invoices = () => {
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {result.map((invoice, index) => (
+                            {data.map((invoice, index) => (
                                 <CTableRow key={index}>
                                     <CTableDataCell
                                         onClick={(e) => navigate(`/shipment/${invoice.freight_id}`)}
@@ -115,6 +121,15 @@ const Invoices = () => {
                     </CTable>
                 </CCardBody>
             </CCard>
+            {totalPages > 1 && (
+                <AppPagination
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                    setTotalPages={setTotalPages}
+                    className="mb-3"
+                />
+            )}
         </div>
     )
 }
