@@ -6,6 +6,7 @@ import database from '../../models/mongodb.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import freight from '../../middleware/freight.js'
+import shipmentForm from '../../middleware/shipmentForm.js'
 import { send } from '../../components/mail.js'
 import activity from '../../components/activity.js'
 import { GOOGLE_MAP } from '../../config.js'
@@ -75,7 +76,7 @@ router.get('/:id', [auth, freight], (req, res) => res.status(200).json(req.freig
 /**
  * Create a Freight shipment
  */
-router.post('/book', [recaptcha, auth], async (req, res, next) => {
+router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => {
     try {
         const {
             isImport,
@@ -87,21 +88,6 @@ router.post('/book', [recaptcha, auth], async (req, res, next) => {
             type,
             items,
         } = req.body
-
-        if (typeof isImport !== 'boolean') return res.status(400).send('Invalid value for isImport')
-        if (typeof isResidentialAddress !== 'boolean')
-            return res.status(400).send('Invalid value for isResidentialAddress')
-        if (typeof containsDangerGoods !== 'boolean')
-            return res.status(400).send('Invalid value for containsDangerGoods')
-        if (typeof containsDocuments !== 'boolean')
-            return res.status(400).send('Invalid value for containsDocuments')
-        if (typeof from !== 'object' || from === null)
-            return res.status(400).send('Invalid value for from')
-        if (typeof to !== 'object' || to === null)
-            return res.status(400).send('Invalid value for to')
-        if (typeof type !== 'string' || !['private', 'business'].includes(type))
-            return res.status(400).send('Invalid value for type')
-        if (!Array.isArray(items)) return res.status(400).send('Invalid value for items')
 
         const db = await database()
         const dateNow = Date.now()
@@ -145,19 +131,31 @@ router.post('/book', [recaptcha, auth], async (req, res, next) => {
  */
 router.post('/update/:id', [recaptcha, auth, freight], async (req, res, next) => {
     try {
-        const { shipper, consignee, shipment } = req.body
-        const { type, id } = req.params
-        if (!shipper || !consignee || !shipment) return res.status(400).send()
-        if (!['air', 'land', 'sea'].includes(type)) return res.status(400).send()
+        const {
+            _id,
+            isImport,
+            isResidentialAddress,
+            containsDangerGoods,
+            containsDocuments,
+            from,
+            to,
+            type,
+            items,
+        } = req.body
 
         const db = await database()
         await db.collection('freight').updateOne(
-            { _id: new ObjectId(id) },
+            { _id: new ObjectId(_id) },
             {
                 $set: {
-                    'data.shipper': shipper,
-                    'data.consignee': consignee,
-                    'data.shipment': shipment,
+                    isImport,
+                    isResidentialAddress
+                    containsDangerGoods,
+                    containsDocuments,
+                    from,
+                    to,
+                    type,
+                    items,
                     updated_at: Date.now(),
                     modified_by: req.user._id,
                 },
