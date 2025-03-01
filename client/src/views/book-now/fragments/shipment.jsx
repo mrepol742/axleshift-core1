@@ -183,7 +183,7 @@ const Shipment = ({ data }) => {
     const navigate = useNavigate()
     const [items, setItems] = React.useState([{}])
     const formRef = React.useRef(null)
-    const [shipping, setShipping] = useState(false)
+    const [shipping, setShipping] = useState(form.internal)
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
 

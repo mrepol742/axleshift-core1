@@ -11,8 +11,8 @@ const router = express.Router()
 
 router.post('/', auth, async function (req, res, next) {
     const { _id, email_verify_at, ...filter } = req.user
-    filter.is_email_verified = email_verify_at !== ''
-    if (req.user.email_verify_at !== '') return res.status(200).json(filter)
+    filter.is_email_verified = email_verify_at !== null
+    if (filter.is_email_verified) return res.status(200).json(filter)
 
     const db = await database()
     const otpCollection = db.collection('otp')
