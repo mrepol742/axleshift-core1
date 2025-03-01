@@ -20,13 +20,56 @@ import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 import errorMessages from '../../utils/ErrorMessages'
 import { useUserProvider } from '../../components/UserProvider'
+import ShipmentInfo from '../book-now/fragments/info'
+import ShipmentReview from '../book-now/fragments/review'
+import Shipment from '../book-now/fragments/shipment'
 
 const FreightInfo = () => {
+    const _FREIGHT_ = {
+        isImport: false,
+        isResidentialAddress: false,
+        containsDangerGoods: false,
+        containsDocuments: false,
+        from: [
+            {
+                name: '',
+                company: '',
+                country: '',
+                countryCode: '',
+                city: '',
+                zipCode: '',
+                address: '',
+                address2: '',
+                address3: '',
+                phone: '',
+                email: '',
+                taxId: '',
+            },
+        ],
+        to: [
+            {
+                name: '',
+                company: '',
+                country: '',
+                countryCode: '',
+                city: '',
+                zipCode: '',
+                address: '',
+                address2: '',
+                address3: '',
+                phone: '',
+                email: '',
+                employerId: '',
+            },
+        ],
+        type: 'private',
+        items: [],
+    }
     const { user } = useUserProvider()
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
-    const [formData, setFormData] = useState({})
-    const [editedFormData, setEditedFormData] = useState({})
+    const [form, setForm] = useState(_FREIGHT_)
+    const [editedform, setEditedform] = useState(_FREIGHT_)
     const [type, setType] = useState('')
     const [status, setStatus] = useState('')
     const [loading, setLoading] = useState(false)
@@ -39,7 +82,7 @@ const FreightInfo = () => {
 
     const handleInputChange = (e, section) => {
         const { id, value } = e.target
-        setEditedFormData((prev) => ({
+        setEditedform((prev) => ({
             ...prev,
             [section]: {
                 ...prev[section],
@@ -75,8 +118,8 @@ const FreightInfo = () => {
         axios
             .get(`/freight/${id}`)
             .then((response) => {
-                setFormData(response.data)
-                setEditedFormData(response.data)
+                setForm(response.data)
+                setEditedform(response.data)
             })
             .catch((error) => {
                 console.error(error)
@@ -89,19 +132,19 @@ const FreightInfo = () => {
         if (disabled) return setDisabled(false)
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
-        const updatedFormData = {
-            ...editedFormData,
+        const updatedform = {
+            ...editedform,
             recaptcha_ref: recaptcha,
         }
 
         axios
-            .post(`/freight/update/${id}`, updatedFormData)
+            .post(`/freight/update/${id}`, updatedform)
             .then((response) => addToast('Your changes has been saved.'))
             .catch((error) => {
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
-                setEditedFormData(formData)
+                setEditedform(form)
             })
             .finally(() => {
                 setLoading(false)
@@ -112,7 +155,7 @@ const FreightInfo = () => {
     const handleDeleteButton = async () => {
         if (!disabled) {
             setDisabled(true)
-            setEditedFormData(formData)
+            setEditedform(form)
             return
         }
         const recaptcha = await recaptchaRef.current.executeAsync()
@@ -127,7 +170,7 @@ const FreightInfo = () => {
                 const message =
                     errorMessages[error.status] || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
-                setEditedFormData(formData)
+                setEditedform(form)
             })
             .finally(() => setLoading(false))
     }
@@ -237,7 +280,8 @@ const FreightInfo = () => {
                     )}
                 </CButtonGroup>
             </div>
-            {JSON.stringify(formData)}
+
+            <ShipmentInfo data={{ form, setForm, loading, setLoading }} />
         </div>
     )
 }
