@@ -24,7 +24,7 @@ import countries from './countries'
 const Form = ({ data, type }) => {
     const { form, setForm, loading, setLoading } = data
     const formRef = React.useRef(null)
-    const [shipment, setShipment] = useState(false)
+    const [shipment, setShipment] = useState(form.internal)
 
     const handleSwitchChange = (e) => {
         setForm({ ...form, isImport: e.target.checked })

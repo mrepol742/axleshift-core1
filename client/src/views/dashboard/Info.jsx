@@ -118,8 +118,8 @@ const FreightInfo = () => {
         axios
             .get(`/freight/${id}`)
             .then((response) => {
-                setForm(response.data)
-                setEditedform(response.data)
+                setForm({ ...response.data, internal: true })
+                setEditedform({ ...response.data, internal: true })
             })
             .catch((error) => {
                 console.error(error)
