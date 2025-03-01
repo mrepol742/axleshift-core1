@@ -4,7 +4,7 @@ import auth from './components/middleware/Auth'
 /*
  * GLOBAL ROUTE
  */
-const MailOTP = lazy(() => import('./views/auth/otp/Mail'))
+const OTP = lazy(() => import('./views/auth/OTP'))
 const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
 const Logout = lazy(() => import('./views/auth/Logout'))
 
@@ -63,7 +63,7 @@ const routes = [
     { path: '/login', external: true, name: 'Login', element: Login },
     { path: '/register', external: true, name: 'Register', element: Register },
     { path: '/logout', external: true, name: 'Logout', element: Logout },
-    { path: '/otp', external: true, name: 'OTP', element: MailOTP },
+    { path: '/one-time-password', external: true, name: 'One Time Password', element: OTP },
     {
         path: '/auth/github/callback',
         external: true,

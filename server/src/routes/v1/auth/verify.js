@@ -5,7 +5,7 @@ import logger from '../../../utils/logger.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
 import activity from '../../../components/activity.js'
-import sendOTPEmail from '../../../components/otp/email.js'
+import sendOTP from '../../../components/otp.js'
 
 const router = express.Router()
 
@@ -24,7 +24,7 @@ router.post('/', auth, async function (req, res, next) {
         if (!(Date.now() - past > ten))
             return res.status(200).json({ otp: true, email: req.user.email })
     }
-    sendOTPEmail(req, otpCollection)
+    sendOTP(req, otpCollection)
 
     return res.status(200).json({ otp: true, email: req.user.email })
 })
@@ -49,7 +49,7 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
         }
 
         if (theOtp.code !== parseInt(otp.replace(/[^0-9]/g, '')))
-            return res.status(200).json({ error: 'Invalid OTP' })
+            return res.status(200).json({ error: 'Invalid One Time Password!' })
 
         // mark the otp
         await Promise.all([
@@ -108,7 +108,7 @@ router.post('/otp/new', [recaptcha, auth], async function (req, res, next) {
                 },
             )
 
-            sendOTPEmail(req, otpCollection)
+            sendOTP(req, otpCollection)
             activity(req, 'generate new mail otp')
         }
         return res.status(200).send()

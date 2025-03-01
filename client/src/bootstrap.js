@@ -4,7 +4,13 @@ import { VITE_APP_API_URL, VITE_APP_SESSION } from './config.js'
 
 const _axios = axios.create()
 let userIP = null
-const excludedPaths = ['/login', '/register', '/auth/github/callback', '/forgot-password', '/otp']
+const excludedPaths = [
+    '/login',
+    '/register',
+    '/auth/github/callback',
+    '/forgot-password',
+    '/one-time-password',
+]
 
 _axios.defaults.baseURL = `${VITE_APP_API_URL}/api/v1`
 _axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
