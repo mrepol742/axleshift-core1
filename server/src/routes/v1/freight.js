@@ -148,14 +148,14 @@ router.post('/update/:id', [recaptcha, auth, freight], async (req, res, next) =>
             { _id: new ObjectId(_id) },
             {
                 $set: {
-                    isImport,
-                    isResidentialAddress
-                    containsDangerGoods,
-                    containsDocuments,
-                    from,
-                    to,
-                    type,
-                    items,
+                    is_import: isImport,
+                    is_residential_address: isResidentialAddress,
+                    contains_danger_goods: containsDangerGoods,
+                    contains_documents: containsDocuments,
+                    from: from,
+                    to: to,
+                    type: type,
+                    items: items,
                     updated_at: Date.now(),
                     modified_by: req.user._id,
                 },
