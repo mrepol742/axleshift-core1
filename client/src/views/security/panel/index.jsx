@@ -6,5 +6,16 @@ import Maintenance from './Maintenance'
 import Sentry from './Sentry'
 import Sessions from './Sessions'
 import IPFiltering from './IPFiltering'
+import GEO from './GEO'
 
-export { Activity, AccessToken, Dashboard, Dependabot, Maintenance, Sentry, Sessions, IPFiltering }
+export {
+    Activity,
+    AccessToken,
+    Dashboard,
+    Dependabot,
+    Maintenance,
+    Sentry,
+    Sessions,
+    IPFiltering,
+    GEO,
+}

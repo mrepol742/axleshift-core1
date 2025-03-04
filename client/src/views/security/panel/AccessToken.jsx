@@ -15,6 +15,8 @@ import {
     CTableHeaderCell,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import parseTimestamp from '../../../utils/Timestamp'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
@@ -102,7 +104,8 @@ const AccessToken = () => {
                         disabled={result.deny}
                         onClick={handleDeactivation}
                     >
-                        Deactivate all apikeys
+                        <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> Deactivate
+                        all apikeys
                     </CButton>
                 </CCardBody>
             </CCard>

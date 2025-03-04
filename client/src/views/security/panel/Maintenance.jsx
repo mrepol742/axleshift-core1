@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { CCard, CCardBody, CButton, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import errorMessages from '../../../utils/ErrorMessages'
@@ -51,7 +53,8 @@ const Maintenance = () => {
                         className="mt-4 d-block me-2 rounded"
                         disabled={maintenance}
                     >
-                        Enable maintenance
+                        <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> Enable
+                        maintenance
                     </CButton>
                 </CCardBody>
             </CCard>

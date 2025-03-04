@@ -13,6 +13,8 @@ import {
     CTableHeaderCell,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import parseTimestamp from '../../../utils/Timestamp'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
@@ -83,7 +85,8 @@ const Sessions = () => {
                         className="mt-4 d-block me-2 rounded"
                         onClick={handleLogout}
                     >
-                        Logout all sessions
+                        <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> Logout all
+                        sessions
                     </CButton>
                 </CCardBody>
             </CCard>

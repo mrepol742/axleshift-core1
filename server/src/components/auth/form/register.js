@@ -9,6 +9,8 @@ import { APP_KEY } from '../../../config.js'
 const FormRegister = async (req, res) => {
     try {
         const { email, first_name, last_name, password, newsletter } = req.body
+        if (!email || !first_name || !last_name || !password || !newsletter)
+            return res.status(400).send()
         const db = await database()
         const usersCollection = db.collection('users')
         const existingUser = await usersCollection.findOne({

@@ -9,7 +9,8 @@ import device from '../../../components/device.js'
 
 const FormLogin = async (req, res) => {
     try {
-        const { email, password } = req.body
+        const { email, password, location } = req.body
+        if (!email || !password || !location) return res.status(400).send()
         const db = await database()
         const theUser = await db.collection('users').findOne({
             $or: [
@@ -26,7 +27,7 @@ const FormLogin = async (req, res) => {
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'
         const newDevice = crypto.createHmac('sha256', userAgent).update(APP_KEY).digest('hex')
-        addSession(theUser, session_token, getClientIp(req), userAgent)
+        addSession(theUser, session_token, getClientIp(req), userAgent, location)
 
         if (theUser.devices) {
             const isNewDevice = theUser.devices.some((device) => {

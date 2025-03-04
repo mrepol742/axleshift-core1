@@ -240,7 +240,11 @@ const FreightInfo = () => {
             )}
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
-                <span className="d-block">{id}</span>
+                <span className="d-block">
+                    <span className="text-primary fw-bold small">Tracking Number:</span>
+                    <br />
+                    {id}
+                </span>
                 <CButtonGroup className="mb-2 mb-sm-0">
                     <CButton
                         color="primary"
