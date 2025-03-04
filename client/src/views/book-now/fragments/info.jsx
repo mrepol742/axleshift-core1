@@ -148,12 +148,16 @@ const ShippingAs = ({ data }) => {
     return (
         <>
             <h3 className="text-primary">Ship Now</h3>
-            <p>You are a</p>
-            <CTabs activeItemKey={1} className="mb-2">
+            {!form.internal && <p>You are a</p>}
+            <CTabs
+                activeItemKey={form.internal ? (form.type === 'private' ? 1 : 2) : 1}
+                className="mb-2"
+            >
                 <CTabList variant="underline-border">
                     <CTab
                         aria-controls="private-tab-pane"
                         itemKey={1}
+                        disabled={form.internal}
                         onClick={(e) => setForm({ ...form, type: 'private' })}
                     >
                         Private Person
@@ -161,6 +165,7 @@ const ShippingAs = ({ data }) => {
                     <CTab
                         aria-controls="business-tab-pane"
                         itemKey={2}
+                        disabled={form.internal}
                         onClick={(e) => setForm({ ...form, type: 'business' })}
                     >
                         Business

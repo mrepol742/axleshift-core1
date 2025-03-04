@@ -32,18 +32,18 @@ const Widgets = (props) => {
 
     return (
         <CRow className={props.className} xs={{ gutter: 4 }}>
-            <CCol sm={6} xl={4} xxl={3}>
+            <CCol sm={6} xl={3}>
                 <CWidgetStatsA
                     color="primary"
                     value={
                         <>
-                            26Hrs{' '}
+                            95%{' '}
                             <span className="fs-6 fw-normal">
                                 (-12.4% <FontAwesomeIcon icon={faArrowDownLong} />)
                             </span>
                         </>
                     }
-                    title="Route Optimization"
+                    title="Fleet"
                     action={
                         <CDropdown alignment="end">
                             <CDropdownToggle
@@ -126,18 +126,18 @@ const Widgets = (props) => {
                     }
                 />
             </CCol>
-            <CCol sm={6} xl={4} xxl={3}>
+            <CCol sm={6} xl={3}>
                 <CWidgetStatsA
                     color="info"
                     value={
                         <>
-                            $6.200{' '}
+                            10%{' '}
                             <span className="fs-6 fw-normal">
                                 (40.9% <FontAwesomeIcon icon={faArrowUpLong} />)
                             </span>
                         </>
                     }
-                    title="Freight Cost"
+                    title="Delivery Status"
                     action={
                         <CDropdown alignment="end">
                             <CDropdownToggle
@@ -219,18 +219,94 @@ const Widgets = (props) => {
                     }
                 />
             </CCol>
-            <CCol sm={6} xl={4} xxl={3}>
+            <CCol sm={6} xl={3}>
                 <CWidgetStatsA
                     color="warning"
                     value={
                         <>
-                            92%{' '}
+                            1 Ton{' '}
                             <span className="fs-6 fw-normal">
                                 (84.7% <FontAwesomeIcon icon={faArrowUpLong} />)
                             </span>
                         </>
                     }
-                    title="Performance"
+                    title="Weight"
+                    action={
+                        <CDropdown alignment="end">
+                            <CDropdownToggle
+                                color="transparent"
+                                caret={false}
+                                className="text-white p-0"
+                            ></CDropdownToggle>
+                        </CDropdown>
+                    }
+                    chart={
+                        <CChartLine
+                            className="mt-3"
+                            style={{ height: '70px' }}
+                            data={{
+                                labels: [
+                                    'January',
+                                    'February',
+                                    'March',
+                                    'April',
+                                    'May',
+                                    'June',
+                                    'July',
+                                ],
+                                datasets: [
+                                    {
+                                        label: 'Score',
+                                        backgroundColor: 'rgba(255,255,255,.2)',
+                                        borderColor: 'rgba(255,255,255,.55)',
+                                        data: [78, 81, 80, 45, 34, 12, 40],
+                                        fill: true,
+                                    },
+                                ],
+                            }}
+                            options={{
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                    },
+                                },
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: {
+                                        display: false,
+                                    },
+                                    y: {
+                                        display: false,
+                                    },
+                                },
+                                elements: {
+                                    line: {
+                                        borderWidth: 2,
+                                        tension: 0.4,
+                                    },
+                                    point: {
+                                        radius: 0,
+                                        hitRadius: 10,
+                                        hoverRadius: 4,
+                                    },
+                                },
+                            }}
+                        />
+                    }
+                />
+            </CCol>
+            <CCol sm={6} xl={3}>
+                <CWidgetStatsA
+                    color="warning"
+                    value={
+                        <>
+                            1 Ton{' '}
+                            <span className="fs-6 fw-normal">
+                                (84.7% <FontAwesomeIcon icon={faArrowUpLong} />)
+                            </span>
+                        </>
+                    }
+                    title="Deliveries by Destination"
                     action={
                         <CDropdown alignment="end">
                             <CDropdownToggle

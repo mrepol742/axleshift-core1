@@ -33,7 +33,6 @@ const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const BookNow = auth(lazy(() => import('./views/book-now/index')))
 
-const Rates = auth(lazy(() => import('./views/rates/index')))
 const Couriers = auth(lazy(() => import('./views/couriers/index')))
 const Routes = auth(lazy(() => import('./views/routes/index')))
 
@@ -89,7 +88,6 @@ const routes = [
     { path: '/invoices', name: 'Invoices', element: Invoices },
     //  { path: '/payment/invoice', name: 'Invoice', element: Err500 },
 
-    { path: '/rates', name: 'Rates', element: Rates },
     { path: '/couriers', name: 'Couriers', element: Couriers },
     { path: '/routes', name: 'Routes', element: Routes },
 
