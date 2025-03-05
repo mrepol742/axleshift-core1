@@ -17,7 +17,6 @@ import { faLock, faEyeSlash, faEye, faXmark } from '@fortawesome/free-solid-svg-
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useUserProvider } from '../../components/UserProvider'
-import errorMessages from '../../utils/ErrorMessages'
 
 const Security = () => {
     const { user } = useUserProvider()
@@ -61,7 +60,7 @@ const Security = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
 
                 setError({
                     error: true,

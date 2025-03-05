@@ -69,7 +69,7 @@ app.use(
     }),
 )
 
-app.use((err, req, res, next) => res.status(500).send())
+app.use((err, req, res, next) => res.status(500).json({ error: 'Internal server error' }))
 
 if (NODE_ENV !== 'production')
     app.get('/debug-sentry', (req, res) => {

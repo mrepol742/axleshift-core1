@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../config'
-import errorMessages from '../../../utils/ErrorMessages'
 
 const Callback = () => {
     const navigate = useNavigate()
@@ -66,7 +65,7 @@ const Callback = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 setError(message)
             })
             .finally(() => setLoading(false))

@@ -8,7 +8,8 @@ const adminRoute = ['/metrics/v1/prometheus', '/api/v1/sec/management']
 const exludeRoute = ['/api/v1/auth/verify']
 
 const internal = async (req, res, next) => {
-    if (REACT_APP_ORIGIN !== req.socket.remoteAddress) return res.status(401).send()
+    if (REACT_APP_ORIGIN !== req.socket.remoteAddress)
+        return res.status(401).json({ error: 'Unauthorized' })
 
     const authHeader = req.headers['authorization']
     const token = authHeader.split(' ')[1]
@@ -16,9 +17,9 @@ const internal = async (req, res, next) => {
     const [theUser, session] = await Promise.all([getUser(token), getSession(token)])
 
     if (!theUser || (adminRoute.includes(req.path) && theUser.role !== 'admin'))
-        return res.status(401).send()
+        return res.status(401).json({ error: 'Unauthorized' })
 
-    if (!session.active) return res.status(401).send()
+    if (!session.active) return res.status(401).json({ error: 'Unauthorized' })
     let user_a = req.headers['user-agent'] || 'unknown'
 
     const diff = Date.now() - session.last_accessed
@@ -48,7 +49,7 @@ const internal = async (req, res, next) => {
         })(),
     ])
 
-    if (session.user_agent !== user_a) return res.status(401).send()
+    if (session.user_agent !== user_a) return res.status(401).json({ error: 'Unauthorized' })
 
     req.token = token
     req.user = theUser

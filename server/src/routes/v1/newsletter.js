@@ -13,7 +13,7 @@ const router = express.Router()
 router.post('/', [ipwhitelist, recaptcha], async (req, res, next) => {
     try {
         const email = req.body.email
-        if (!email) return res.status(400).send()
+        if (!email) return res.status(400).json({ error: 'Invalid request' })
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             return res.status(200).json({ message: 'Invalid email address' })
@@ -38,7 +38,7 @@ router.post('/', [ipwhitelist, recaptcha], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

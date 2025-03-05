@@ -10,7 +10,7 @@ const FormRegister = async (req, res) => {
     try {
         const { email, first_name, last_name, password, newsletter } = req.body
         if (!email || !first_name || !last_name || !password || !newsletter)
-            return res.status(400).send()
+            return res.status(400).json({ error: 'Invalid request' })
         const db = await database()
         const usersCollection = db.collection('users')
         const existingUser = await usersCollection.findOne({
@@ -80,7 +80,7 @@ const FormRegister = async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    return res.status(500).send()
+    return res.status(500).json({ error: 'Internal server error' })
 }
 
 export default FormRegister

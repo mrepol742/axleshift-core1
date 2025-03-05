@@ -9,7 +9,7 @@ import {
     DirectionsRenderer,
 } from '@react-google-maps/api'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../utils/ErrorMessages'
+
 import { VITE_APP_GOOGLE_MAP, VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 
 /*
@@ -69,7 +69,7 @@ const MyMapComponent = () => {
             .then((response) => setDirections(response.data))
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -100,7 +100,7 @@ const MyMapComponent = () => {
     //         .then((response) => setDirections(response.data))
     //         .catch((error) => {
     //             const message =
-    //                 errorMessages[error.status] || 'Server is offline or restarting please wait'
+    //                 error.response?.data?.error || 'Server is offline or restarting please wait'
     //             addToast(message)
     //         })
     //         .finally(() => setLoading(false))

@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../utils/ErrorMessages'
 
 const Maintenance = () => {
     const recaptchaRef = React.useRef()
@@ -19,7 +18,7 @@ const Maintenance = () => {
             .then((response) => setMaintenance(response.data.maintenance || 'a'))
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))

@@ -44,7 +44,7 @@ const rateLimiter = (req, res, next) => {
         Math.ceil((TIME_WINDOW - (currentTime - requestCounts[key][0] || currentTime)) / 1000),
     ) // Reset time in seconds
 
-    if (remainingRequests <= 0) return res.status(429).send()
+    if (remainingRequests <= 0) return res.status(429).json({ error: 'Rate limit exceeded' })
 
     requestCounts[key].push(currentTime)
     next()

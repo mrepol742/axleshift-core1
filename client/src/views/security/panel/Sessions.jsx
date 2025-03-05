@@ -18,7 +18,7 @@ import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import parseTimestamp from '../../../utils/Timestamp'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../utils/ErrorMessages'
+
 import AppPagination from '../../../components/AppPagination'
 
 const Sessions = () => {
@@ -39,7 +39,7 @@ const Sessions = () => {
             .then((response) => window.location.reload)
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -54,7 +54,7 @@ const Sessions = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))

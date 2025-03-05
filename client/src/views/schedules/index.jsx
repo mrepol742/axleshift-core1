@@ -3,7 +3,7 @@ import { CSpinner } from '@coreui/react'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../utils/ErrorMessages'
+
 import parseTimestamp from '../../utils/Timestamp'
 
 const localizer = momentLocalizer(moment)
@@ -19,7 +19,7 @@ const Schedules = () => {
             .then((response) => setResult(response.data))
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))

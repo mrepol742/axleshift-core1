@@ -17,7 +17,7 @@ const external = async (req, res, next) => {
         return regex.test(requestPath)
     })
 
-    if (!isAllowed) return res.status(401).send()
+    if (!isAllowed) return res.status(401).json({ error: 'Unauthorized' })
 
     const db = await database()
     const apiTokenCollection = db.collection('apiToken')
@@ -29,12 +29,12 @@ const external = async (req, res, next) => {
 
     if (!existingApiToken) {
         logger.info(`invalid or denied api token: ${token}`)
-        return res.status(401).send()
+        return res.status(401).json({ error: 'Unauthorized' })
     }
 
     const ip = getClientIp(req)
     const w_ip = existingApiToken.whitelist_ip
-    if (!w_ip.includes(ip)) return res.status(401).send()
+    if (!w_ip.includes(ip)) return res.status(401).json({ error: 'Unauthorized' })
 
     let user_a = req.headers['user-agent'] || 'unknown'
     Promise.all([

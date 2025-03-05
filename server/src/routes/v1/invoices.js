@@ -23,7 +23,7 @@ const limit = 20
 router.post('/', [auth], async (req, res) => {
     try {
         const { page } = req.body
-        if (!page) return res.status(400).send()
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
         const isUser = !['super_admin', 'admin', 'staff'].includes(req.user.role)
@@ -50,7 +50,7 @@ router.post('/', [auth], async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -118,7 +118,7 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -142,7 +142,7 @@ router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

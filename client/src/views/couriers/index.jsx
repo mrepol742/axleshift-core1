@@ -14,7 +14,6 @@ import Masonry from 'react-masonry-css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlaneDeparture, faTruck, faShip } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../utils/ErrorMessages'
 
 const Couriers = () => {
     const { addToast } = useToast()
@@ -28,7 +27,7 @@ const Couriers = () => {
             .then((response) => setResult(response.data))
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -52,9 +51,7 @@ const Couriers = () => {
                     <h4 className="mb-0">Partner Couriers</h4>
                 </CCol>
                 <CCol className="text-right d-flex justify-content-end">
-                    <CButton color="primary">
-                        New
-                    </CButton>
+                    <CButton color="primary">New</CButton>
                     <CButton color="danger" className="ms-2">
                         Delete
                     </CButton>

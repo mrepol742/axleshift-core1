@@ -16,7 +16,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../config'
-import errorMessages from '../../utils/ErrorMessages'
 
 const OTP = () => {
     const [loading, setLoading] = useState(true)
@@ -98,7 +97,7 @@ const OTP = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
 
                 setError({
                     error: true,

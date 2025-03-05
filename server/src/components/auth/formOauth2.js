@@ -77,7 +77,7 @@ const FormOauth2 = async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    return res.status(500).json({ error: 'Internal server error' })
 }
 
 export default FormOauth2

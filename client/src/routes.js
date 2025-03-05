@@ -23,6 +23,7 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
  */
 const Dashboard = auth(lazy(() => import('./views/dashboard/index')))
 const Info = auth(lazy(() => import('./views/dashboard/Info')))
+const Forms = auth(lazy(() => import('./views/dashboard/Forms')))
 const Search = auth(lazy(() => import('./views/dashboard/Search')))
 const Schedules = auth(lazy(() => import('./views/schedules/index')))
 
@@ -73,6 +74,7 @@ const routes = [
 
     { path: '/dashboard', name: 'Dashboard', element: Dashboard },
     { path: '/shipment/:id', name: 'Shipment Info', element: Info },
+    { path: '/shipment/:id/forms', name: 'Shipment Forms', element: Forms },
     { path: '/search', name: 'Search Shipment', element: Search },
     { path: '/schedules', name: 'Schedules', element: Schedules },
 

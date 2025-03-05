@@ -33,7 +33,6 @@ import {
     VITE_APP_SESSION,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
-import errorMessages from '../../utils/ErrorMessages'
 
 const Register = () => {
     const navigate = useNavigate()
@@ -160,7 +159,7 @@ const Register = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
 
                 setError({
                     error: true,

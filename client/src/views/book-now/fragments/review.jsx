@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faPrint, faCopy } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
-import errorMessages from '../../../utils/ErrorMessages'
+
 import { useToast } from '../../../components/AppToastProvider'
 
 // TODO: do rate stuff here
@@ -31,26 +31,24 @@ const Review = ({ data }) => {
     const formRef = React.useRef(null)
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
+    const [showFormDetails, setShowFormDetails] = useState(false)
 
     const handleSubmit = async (action) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         // should return the shipment id
         setLoading(true)
         axios
-            .post(`/freight/book`, {
+            .post(action === 'book' ? `/freight/book` : `/freight/update/${form.tracking_number}`, {
                 ...form,
                 recaptcha_ref: recaptcha,
             })
             .then((response) => {
-                addToast('Shipment has been created.', 'Shipment')
-
-                setTimeout(() => {
-                    if (action === 'book') navigate(`/shipment/${response.data.tracking_number}`)
-                }, 1000)
+                addToast(response.data.message, 'Shipment')
+                navigate(`/shipment/${response.data.tracking_number}/forms`)
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))
@@ -107,13 +105,9 @@ const Review = ({ data }) => {
                 <CCol md>
                     <div className="d-flex justify-content-end flex-column">
                         <span className="text-decoration-line-through">
-                            {form.isImport ? form.to[0].countryCode : form.from[0].countryCode}{' '}
-                            {totalWeight(form.items) * totalDimensions(form.items) + 18}
+                            $ {totalWeight(form.items) * totalDimensions(form.items) + 18}
                         </span>
-                        <h4>
-                            {form.isImport ? form.to[0].countryCode : form.from[0].countryCode}{' '}
-                            {totalWeight(form.items) * totalDimensions(form.items)}
-                        </h4>
+                        <h4>$ {totalWeight(form.items) * totalDimensions(form.items)}</h4>
                         <CButton
                             className="btn btn-primary mt-2"
                             onClick={() => handleSubmit('book')}

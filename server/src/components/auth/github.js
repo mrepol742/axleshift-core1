@@ -7,9 +7,9 @@ import FormOauth2 from './formOauth2.js'
 const Github = async (req, res) => {
     try {
         const { code, location } = req.body
-        if (!code || !location) return res.status(400).send()
+        if (!code || !location) return res.status(400).json({ error: 'Invalid request' })
         const accessToken = await GithubAccessToken(code)
-        if (!accessToken) return res.status(400).send()
+        if (!accessToken) return res.status(400).json({ error: 'Invalid request' })
 
         const response = await axios.get('https://api.github.com/user', {
             headers: {
@@ -31,7 +31,7 @@ const Github = async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    return res.status(500).send()
+    return res.status(500).json({ error: 'Internal server error' })
 }
 
 export default Github

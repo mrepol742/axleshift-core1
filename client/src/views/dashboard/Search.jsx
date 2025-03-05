@@ -26,7 +26,7 @@ const Search = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))

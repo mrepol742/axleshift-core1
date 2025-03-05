@@ -10,7 +10,7 @@ const limit = 20
 router.post('/', auth, async (req, res) => {
     try {
         const { page } = req.body
-        if (!page) return res.status(400).send()
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
 
@@ -41,7 +41,7 @@ router.post('/', auth, async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

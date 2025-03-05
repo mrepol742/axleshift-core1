@@ -9,8 +9,9 @@ const router = express.Router()
 router.post('/', async (req, res) => {
     try {
         const token = req.headers['x-callback-token']
-        if (!token) return res.status(400).send()
-        if (token !== XENDIT_WEBHOOK_VERIFICATION_TOKEN) return res.status(401).send()
+        if (!token) return res.status(400).json({ error: 'Invalid request' })
+        if (token !== XENDIT_WEBHOOK_VERIFICATION_TOKEN)
+            return res.status(401).json({ error: 'Unauthorized' })
 
         const db = await database()
         db.collection('invoices').updateOne(
@@ -29,7 +30,7 @@ router.post('/', async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

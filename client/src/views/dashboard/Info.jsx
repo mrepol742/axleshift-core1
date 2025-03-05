@@ -18,7 +18,7 @@ import html2canvas from 'html2canvas'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../utils/ErrorMessages'
+
 import { useUserProvider } from '../../components/UserProvider'
 import ShipmentInfo from '../book-now/fragments/info'
 import ShipmentReview from '../book-now/fragments/review'
@@ -107,7 +107,7 @@ const FreightInfo = () => {
             .then((response) => (window.location.href = response.data.r_url))
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -142,7 +142,7 @@ const FreightInfo = () => {
             .then((response) => addToast('Your changes has been saved.'))
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
                 setEditedform(form)
             })
@@ -168,7 +168,7 @@ const FreightInfo = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
                 setEditedform(form)
             })
