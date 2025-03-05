@@ -6,8 +6,8 @@ import FormOauth2 from './formOauth2.js'
 // its beefy isnt it?
 const Github = async (req, res) => {
     try {
-        const code = req.body.code
-        if (!code) return res.status(400).send()
+        const { code, location } = req.body
+        if (!code || !location) return res.status(400).send()
         const accessToken = await GithubAccessToken(code)
         if (!accessToken) return res.status(400).send()
 

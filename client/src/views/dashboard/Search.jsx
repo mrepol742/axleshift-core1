@@ -7,46 +7,6 @@ import AppSearch from '../../components/AppSearch'
 import ShipmentCard from './ShipmentCard'
 import AppPagination from '../../components/AppPagination'
 
-const AppBar = () => {
-    return (
-        <>
-            <AppSearch className="mb-3 d-block d-md-none" />
-
-            <CForm className="d-block d-sm-flex justify-content-left">
-                <CFormSelect
-                    options={[
-                        { label: 'Select status', value: '0' },
-                        { label: 'To Pay', value: '1' },
-                        { label: 'To Ship', value: '2' },
-                        { label: 'To Receive', value: '3' },
-                        { label: 'Received', value: '4' },
-                        { label: 'Cancelled', value: '5' },
-                    ]}
-                    className="mb-3"
-                />
-                <div className="mx-2"></div>
-                <CFormSelect
-                    options={[
-                        { label: 'Select data', value: '0' },
-                        { label: 'Newer', value: '1' },
-                        { label: 'Older', value: '2' },
-                    ]}
-                    className="mb-3"
-                />
-                <div className="mx-2"></div>
-                <CFormSelect
-                    options={[
-                        { label: 'Select freight', value: '0' },
-                        { label: 'Sea Freight', value: '1' },
-                        { label: 'Land Freight', value: '2' },
-                        { label: 'Air Freight', value: '3' },
-                    ]}
-                    className="mb-3"
-                />
-            </CForm>
-        </>
-    )
-}
 const Search = () => {
     const [data, setData] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -86,7 +46,7 @@ const Search = () => {
     if (data.length == 0)
         return (
             <>
-                <AppBar />
+                <AppSearch className="mb-3 d-block d-md-none" />
                 <CRow className="justify-content-center my-5">
                     <CCol md={6}>
                         <div className="clearfix">
@@ -101,7 +61,7 @@ const Search = () => {
 
     return (
         <div>
-            <AppBar />
+            <AppSearch className="mb-3 d-block d-md-none" />
             <Masonry
                 breakpointCols={{
                     default: 4,

@@ -86,6 +86,44 @@ const Login = () => {
 
     const handleSubmit = async (e, type, credential) => {
         if (e) e.preventDefault()
+        if (!navigator.geolocation)
+            setError({
+                error: true,
+                message: 'Geolocation is not supported by this browser. Login failed!',
+            })
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                login(e, type, credential, {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                })
+            },
+            (error) => {
+                let errorMessage
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = 'We need your location to continue.'
+                        break
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = 'Location information is unavailable.'
+                        break
+                    case error.TIMEOUT:
+                        errorMessage = 'Timeout occurred while getting your location.'
+                        break
+                    default:
+                        errorMessage = 'An unknown error occurred. Please try again later.'
+                }
+                setError({
+                    error: true,
+                    message: errorMessage,
+                })
+                return true
+            },
+        )
+    }
+
+    const login = async (e, type, credential, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         const formData = new FormData()
@@ -104,6 +142,7 @@ const Login = () => {
         }
         formData.append('type', type)
         formData.append('recaptcha_ref', recaptcha)
+        formData.append('location', JSON.stringify([location]))
 
         axios
             .post(`/auth/login`, formData)

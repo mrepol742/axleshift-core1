@@ -56,14 +56,23 @@ const Review = ({ data }) => {
             .finally(() => setLoading(false))
     }
 
+    const totalWeight = (items) => {
+        return items.reduce((acc, item) => acc + parseFloat(item.weight), 0)
+    }
+
+    const totalDimensions = (items) => {
+        return items.reduce((acc, item) => {
+            const quantity = item.quantity || 1
+            return acc + (item.length * item.width * item.height * quantity) / 1000
+        }, 0)
+    }
+
     return (
         <div ref={formRef}>
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-
             <h3 className="text-primary mt-4" id="review">
                 Review
             </h3>
-
             <CRow>
                 <CCol md className="mb-4">
                     <CFormInput
@@ -97,8 +106,14 @@ const Review = ({ data }) => {
                 </CCol>
                 <CCol md>
                     <div className="d-flex justify-content-end flex-column">
-                        <span className="text-decoration-line-through">PHP 4,000.97</span>
-                        <h4>PHP 2,777.6</h4>
+                        <span className="text-decoration-line-through">
+                            {form.isImport ? form.to[0].countryCode : form.from[0].countryCode}{' '}
+                            {totalWeight(form.items) * totalDimensions(form.items) + 18}
+                        </span>
+                        <h4>
+                            {form.isImport ? form.to[0].countryCode : form.from[0].countryCode}{' '}
+                            {totalWeight(form.items) * totalDimensions(form.items)}
+                        </h4>
                         <CButton
                             className="btn btn-primary mt-2"
                             onClick={() => handleSubmit('book')}

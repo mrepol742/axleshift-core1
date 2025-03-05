@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CCard, CCardBody, CCardText, CCardHeader, CSpinner } from '@coreui/react'
+import {
+    CCard,
+    CCardBody,
+    CCardText,
+    CCardHeader,
+    CSpinner,
+    CRow,
+    CCol,
+    CButton,
+} from '@coreui/react'
 import Masonry from 'react-masonry-css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlaneDeparture, faTruck, faShip } from '@fortawesome/free-solid-svg-icons'
@@ -29,48 +38,58 @@ const Couriers = () => {
         fetchData()
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
     return (
         <div>
-            {loading && (
-                <div className="loading-overlay">
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )}
-            {!loading && (
-                <Masonry
-                    breakpointCols={{
-                        default: 4,
-                        1100: 3,
-                        700: 2,
-                        500: 1,
-                    }}
-                    className="my-masonry-grid"
-                    columnClassName="my-masonry-grid_column"
-                >
-                    {result.map((courier, index) => (
-                        <div key={index}>
-                            <CCard
-                                className="bg-dark text-white mb-3"
-                                style={{ cursor: 'pointer' }}
+            <CRow className="align-items-center mb-2">
+                <CCol>
+                    <h4 className="mb-0">Partner Couriers</h4>
+                </CCol>
+                <CCol className="text-right d-flex justify-content-end">
+                    <CButton color="primary">
+                        New
+                    </CButton>
+                    <CButton color="danger" className="ms-2">
+                        Delete
+                    </CButton>
+                </CCol>
+            </CRow>
+            <Masonry
+                breakpointCols={{
+                    default: 4,
+                    1100: 3,
+                    700: 2,
+                    500: 1,
+                }}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+            >
+                {result.map((courier, index) => (
+                    <div key={index}>
+                        <CCard className="bg-dark text-white mb-3" style={{ cursor: 'pointer' }}>
+                            <CCardHeader
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}
                             >
-                                <CCardHeader
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <div></div>
-                                    <div>{courier.name}</div>
-                                </CCardHeader>
-                                <CCardBody>
-                                    <CCardText></CCardText>
-                                </CCardBody>
-                            </CCard>
-                        </div>
-                    ))}
-                </Masonry>
-            )}
+                                <div></div>
+                                <div>{courier.name}</div>
+                            </CCardHeader>
+                            <CCardBody>
+                                <CCardText></CCardText>
+                            </CCardBody>
+                        </CCard>
+                    </div>
+                ))}
+            </Masonry>
         </div>
     )
 }

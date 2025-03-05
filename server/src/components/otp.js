@@ -1,6 +1,6 @@
-import { send } from '../mail.js'
+import { send } from './mail.js'
 
-const sendOTPEmail = (req, otpCollection) => {
+const OneTimePassword = (req, otpCollection, otpType) => {
     const otp = Math.floor(100000 + Math.random() * 900000)
     const dateNow = Date.now()
     Promise.all([
@@ -10,6 +10,7 @@ const sendOTPEmail = (req, otpCollection) => {
             code: otp,
             verified: false,
             expired: false,
+            type: otpType,
             created_at: dateNow,
             updated_at: dateNow,
         }),
@@ -24,4 +25,4 @@ const sendOTPEmail = (req, otpCollection) => {
     ])
 }
 
-export default sendOTPEmail
+export default OneTimePassword
