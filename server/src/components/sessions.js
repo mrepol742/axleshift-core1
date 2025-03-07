@@ -3,7 +3,7 @@ import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import activity from './activity.js'
 
-export const addSession = async (theUser, sessionToken, ip, userAgent, location) => {
+export const addSession = async (theUser, sessionToken, ip, userAgent, location, key) => {
     try {
         const db = await database()
         const sessionsCollection = db.collection('sessions')
@@ -15,6 +15,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
             user_agent: userAgent,
             compromised: false,
             location: location,
+            key: key,
             last_accessed: Date.now(),
         })
         const req = {

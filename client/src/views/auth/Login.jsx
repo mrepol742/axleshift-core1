@@ -170,6 +170,7 @@ const Login = () => {
                     })
 
                 cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })
+                alert(JSON.stringify(response.data))
                 window.location.href = url
             })
             .catch((error) => {

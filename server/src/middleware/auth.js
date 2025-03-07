@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 import validateInternalToken from '../components/token/internal.js'
 import validateExternalToken from '../components/token/external.js'
 

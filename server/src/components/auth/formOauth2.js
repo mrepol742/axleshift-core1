@@ -72,8 +72,8 @@ const FormOauth2 = async (req, res) => {
         const theUser = await usersCollection.findOne({ email: credential.email })
         theUser.log = 'created account'
         theUser.log1 = `bind ${provider} as authentication credentials`
-        const session_token = await Token(theUser, req)
-        return res.status(200).json({ token: session_token })
+        const { token, key } = await Token(theUser, req)
+        return res.status(200).json({ token, key })
     } catch (e) {
         logger.error(e)
     }

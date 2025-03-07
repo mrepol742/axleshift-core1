@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import crypto from 'crypto'
 import logger from '../../utils/logger.js'
 import { getUser, getSession } from '../sessions.js'
 import database from '../../models/mongodb.js'
@@ -20,6 +21,13 @@ const internal = async (req, res, next) => {
         return res.status(401).json({ error: 'Unauthorized' })
 
     if (!session.active) return res.status(401).json({ error: 'Unauthorized' })
+    // const encryptedData = req.body.data
+    // const decryptedData = crypto.privateDecrypt({
+    //     key: session.key.privateKey, padding: crypto.constants.RSA_PKCS1_PADDING
+    // }, Buffer.from(encryptedData, 'base64'))
+
+    // req.body.data = JSON.parse(decryptedData.toString())
+
     let user_a = req.headers['user-agent'] || 'unknown'
 
     const diff = Date.now() - session.last_accessed

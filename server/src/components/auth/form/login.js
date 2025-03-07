@@ -29,7 +29,12 @@ const FormLogin = async (req, res) => {
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'
         const newDevice = crypto.createHmac('sha256', userAgent).update(APP_KEY).digest('hex')
-        addSession(theUser, session_token, getClientIp(req), userAgent, location)
+        const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 })
+        const key = {
+            publicKey: btoa(publicKey.export({ type: 'pkcs1', format: 'pem' })),
+            privateKey: btoa(privateKey.export({ type: 'pkcs1', format: 'pem' })),
+        }
+        addSession(theUser, session_token, getClientIp(req), userAgent, location, key)
 
         if (theUser.devices) {
             const isNewDevice = theUser.devices.some((device) => {
@@ -43,6 +48,7 @@ const FormLogin = async (req, res) => {
 
         return res.status(200).json({
             token: session_token,
+            key,
         })
     } catch (err) {
         logger.error(err)
