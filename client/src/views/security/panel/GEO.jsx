@@ -28,7 +28,7 @@ import { faMagnifyingGlass, faCircleExclamation } from '@fortawesome/free-solid-
 import parseTimestamp from '../../../utils/Timestamp'
 import { useToast } from '../../../components/AppToastProvider'
 
-const IPFiltering = () => {
+const GEO = () => {
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
@@ -37,7 +37,7 @@ const IPFiltering = () => {
     const [order, setOrder] = useState(0)
     const [priority, setPriority] = useState(0)
     const [state, setState] = useState(0)
-    const [ipList, setIpList] = useState([])
+    const [geoLocationList, setgeoLocationList] = useState([])
 
     const fetchData = async () => {
         axios
@@ -55,7 +55,7 @@ const IPFiltering = () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
-            .post(`/sec/management/ip-filtering`, { recaptcha_ref: recaptcha, ipList })
+            .post(`/sec/management/ip-filtering`, { recaptcha_ref: recaptcha, geoLocationList })
             .then((response) => addToast('Changes saved successfully', 'Success'))
             .catch((error) => {
                 const message =
@@ -69,24 +69,24 @@ const IPFiltering = () => {
         fetchData()
     }, [])
 
-    const handleAddIp = () => {
-        setIpList([...ipList, { ip: '', checked: false }])
+    const handleAddGeo = () => {
+        setgeoLocationList([...geoLocationList, { ip: '', checked: false }])
     }
 
-    const handleIpChange = (index, value) => {
-        const newIpList = [...ipList]
-        newIpList[index].ip = value
-        setIpList(newIpList)
+    const handleGeoChange = (index, value) => {
+        const newgeoLocationList = [...geoLocationList]
+        newgeoLocationList[index].ip = value
+        setgeoLocationList(newgeoLocationList)
     }
 
     const handleCheckboxChange = (index, checked) => {
-        const newIpList = [...ipList]
-        newIpList[index].checked = checked
-        setIpList(newIpList)
+        const newgeoLocationList = [...geoLocationList]
+        newgeoLocationList[index].checked = checked
+        setgeoLocationList(newgeoLocationList)
     }
 
-    const handleDeleteIp = () => {
-        setIpList(ipList.filter((item) => !item.checked))
+    const handleDeleteGeo = () => {
+        setgeoLocationList(geoLocationList.filter((item) => !item.checked))
     }
 
     if (loading)
@@ -102,18 +102,18 @@ const IPFiltering = () => {
 
             <CAlert color="warning" className="small">
                 <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> Block or allow
-                specific set of address on who can access this platform.
+                specific set of geolocation on who can access this platform.
             </CAlert>
 
             <CRow className="align-items-center mb-2">
                 <CCol>
-                    <h4 className="mb-0">IP Filtering</h4>
+                    <h4 className="mb-0">GeoLocation Filtering</h4>
                 </CCol>
                 <CCol className="text-right d-flex justify-content-end">
-                    <CButton color="primary" onClick={handleAddIp}>
+                    <CButton color="primary" onClick={handleAddGeo}>
                         New
                     </CButton>
-                    <CButton color="danger" onClick={handleDeleteIp} className="ms-2">
+                    <CButton color="danger" onClick={handleDeleteGeo} className="ms-2">
                         Delete
                     </CButton>
                 </CCol>
@@ -131,7 +131,7 @@ const IPFiltering = () => {
                     </CFormSelect>
                 </CCol>
             </CRow>
-            {ipList.map((item, index) => (
+            {geoLocationList.map((item, index) => (
                 <div key={index} className="d-flex mb-2">
                     <input
                         className="me-3"
@@ -141,25 +141,24 @@ const IPFiltering = () => {
                     />
                     <CFormInput
                         type="text"
-                        value={item.ip}
-                        onChange={(e) => handleIpChange(index, e.target.value)}
-                        placeholder="Enter IP address"
+                        value={item.latitude}
+                        onChange={(e) => handleGeoChange(index, e.target.value, 'latitude')}
+                        placeholder="Enter Latitude"
+                        className="me-2"
+                    />
+                    <CFormInput
+                        type="text"
+                        value={item.longitude}
+                        onChange={(e) => handleGeoChange(index, e.target.value, 'longitude')}
+                        placeholder="Enter Longitude"
                     />
                 </div>
             ))}
             <CButton color="primary" onClick={saveData}>
                 Apply all changes
             </CButton>
-            <div className="text-muted">
-                Examples:
-                <ul>
-                    <li>Single IP: 192.168.100.1</li>
-                    <li>Prefix IP: 192.168.100.1/24</li>
-                    <li>IP Range: 192.168.100.1-192.168.100.200</li>
-                </ul>
-            </div>
         </div>
     )
 }
 
-export default IPFiltering
+export default GEO

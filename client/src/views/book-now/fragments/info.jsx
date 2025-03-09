@@ -16,7 +16,6 @@ import {
     CFormInput,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlaneDeparture, faTruck, faShip } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import Shipment from './shipment'
 import countries from './countries'
@@ -24,7 +23,7 @@ import countries from './countries'
 const Form = ({ data, type }) => {
     const { form, setForm, loading, setLoading } = data
     const formRef = React.useRef(null)
-    const [shipment, setShipment] = useState(false)
+    const [shipment, setShipment] = useState(form.internal)
 
     const handleSwitchChange = (e) => {
         setForm({ ...form, isImport: e.target.checked })
@@ -148,12 +147,16 @@ const ShippingAs = ({ data }) => {
     return (
         <>
             <h3 className="text-primary">Ship Now</h3>
-            <p>You are a</p>
-            <CTabs activeItemKey={1} className="mb-2">
+            {!form.internal && <p>You are a</p>}
+            <CTabs
+                activeItemKey={form.internal ? (form.type === 'private' ? 1 : 2) : 1}
+                className="mb-2"
+            >
                 <CTabList variant="underline-border">
                     <CTab
                         aria-controls="private-tab-pane"
                         itemKey={1}
+                        disabled={form.internal}
                         onClick={(e) => setForm({ ...form, type: 'private' })}
                     >
                         Private Person
@@ -161,6 +164,7 @@ const ShippingAs = ({ data }) => {
                     <CTab
                         aria-controls="business-tab-pane"
                         itemKey={2}
+                        disabled={form.internal}
                         onClick={(e) => setForm({ ...form, type: 'business' })}
                     >
                         Business

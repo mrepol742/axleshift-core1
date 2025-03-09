@@ -42,8 +42,9 @@ const Auth = (WrappedComponent) => {
             axios
                 .post(`/auth/verify`, null)
                 .then((response) => {
-                    if (response.data.otp) return (window.location.href = '/otp')
+                    if (response.data.otp) return (window.location.href = '/one-time-password')
                     setUser(response.data)
+                    alert(JSON.stringify(response.data))
                     setResult(response.data)
                 })
                 .catch((err) => {

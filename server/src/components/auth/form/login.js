@@ -9,7 +9,9 @@ import device from '../../../components/device.js'
 
 const FormLogin = async (req, res) => {
     try {
-        const { email, password } = req.body
+        const { email, password, location } = req.body
+        if (!email || !password || !location)
+            return res.status(400).json({ error: 'Invalid request' })
         const db = await database()
         const theUser = await db.collection('users').findOne({
             $or: [
@@ -18,10 +20,11 @@ const FormLogin = async (req, res) => {
                 { email: email },
             ],
         })
-        if (!theUser) return res.status(404).send()
+        if (!theUser) return res.status(404).json({ error: 'User not found' })
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
-        if (passwordHash !== theUser.password) return res.status(401).send()
+        if (passwordHash !== theUser.password)
+            return res.status(401).json({ error: 'Invalid login credentials' })
         
         if (NODE_ENV === 'production' && theUser.role === 'user') 
             res.status(200).json({ error: 'You have no permission to continue. Please contact the admin to allow non user login.' })
@@ -29,7 +32,12 @@ const FormLogin = async (req, res) => {
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'
         const newDevice = crypto.createHmac('sha256', userAgent).update(APP_KEY).digest('hex')
-        addSession(theUser, session_token, getClientIp(req), userAgent)
+        const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 })
+        const key = {
+            publicKey: btoa(publicKey.export({ type: 'pkcs1', format: 'pem' })),
+            privateKey: btoa(privateKey.export({ type: 'pkcs1', format: 'pem' })),
+        }
+        addSession(theUser, session_token, getClientIp(req), userAgent, location, key)
 
         if (theUser.devices) {
             const isNewDevice = theUser.devices.some((device) => {
@@ -43,11 +51,12 @@ const FormLogin = async (req, res) => {
 
         return res.status(200).json({
             token: session_token,
+            key,
         })
     } catch (err) {
         logger.error(err)
     }
-    return res.status(500).send()
+    return res.status(500).json({ error: 'Internal server error' })
 }
 
 export default FormLogin

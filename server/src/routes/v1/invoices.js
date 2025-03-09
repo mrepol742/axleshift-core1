@@ -15,23 +15,42 @@ const { Invoice } = new Xendit({
     xenditURL: XENDIT_API_GATEWAY_URL,
 })
 const router = express.Router()
+const limit = 20
 
 /**
  * Get all Invoices
  */
-router.get('/', [auth], async (req, res) => {
+router.post('/', [auth], async (req, res) => {
     try {
+        const { page } = req.body
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
+        const current_page = parseInt(page) || 1
+        const skip = (current_page - 1) * limit
+        const isUser = !['super_admin', 'admin', 'staff'].includes(req.user.role)
+
         const db = await database()
-        const response = await db
-            .collection('invoices')
-            .find({ user_id: req.user._id })
-            .sort({ updated_at: -1 })
-            .toArray()
-        return res.status(200).send(response)
+        const invoicesCollection = await db.collection('invoices')
+        const filter = isUser ? { user_id: req.user._id } : {}
+
+        const [totalItems, items] = await Promise.all([
+            invoicesCollection.countDocuments(filter),
+            invoicesCollection
+                .find(filter)
+                .sort({ updated_at: -1 })
+                .skip(skip)
+                .limit(limit)
+                .toArray(),
+        ])
+
+        return res.status(200).json({
+            data: items,
+            totalPages: Math.ceil(totalItems / limit),
+            currentPage: current_page,
+        })
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -70,12 +89,13 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
         const _invoice = await invoicesCollection.insertOne({
             user_id: req.user._id,
             freight_id: req.freight._id,
+            freight_tracking_number: req.freight.tracking_number,
             invoice_id: invoice.id,
-            external_id: invoice.externalId,
-            session_id: req.session._id,
+            invoice_external_id: invoice.externalId,
             amount: invoice.amount,
             status: invoice.status,
             currency: invoice.currency,
+            session_id: req.session._id,
             created_at: dateNow,
             updated_at: dateNow,
         })
@@ -98,7 +118,7 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -122,7 +142,7 @@ router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

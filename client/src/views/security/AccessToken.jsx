@@ -1,11 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import { CFormInput, CForm, CRow, CCol, CCard, CButton, CSpinner, CCardBody } from '@coreui/react'
+import {
+    CFormInput,
+    CForm,
+    CRow,
+    CCol,
+    CCard,
+    CButton,
+    CSpinner,
+    CCardBody,
+    CAlert,
+} from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCopy, faEye, faEyeSlash, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {
+    faCopy,
+    faEye,
+    faEyeSlash,
+    faPlus,
+    faTrash,
+    faCircleExclamation,
+} from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../utils/ErrorMessages'
+
 import parseTimestamp from '../../utils/Timestamp'
 
 const API = () => {
@@ -49,7 +66,7 @@ const API = () => {
             )
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -64,7 +81,7 @@ const API = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -119,7 +136,7 @@ const API = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -163,6 +180,10 @@ const API = () => {
     return (
         <div>
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+            <CAlert color="warning" className="small">
+                <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> You will only be
+                able to use our API by using the token and list of IP Addresses:
+            </CAlert>
 
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol className="mb-3">

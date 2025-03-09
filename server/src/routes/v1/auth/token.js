@@ -19,7 +19,7 @@ router.get('/', auth, async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/new', [recaptcha, auth], async function (req, res, next) {
@@ -60,13 +60,13 @@ router.post('/new', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/whitelist-ip', [recaptcha, auth], async function (req, res, next) {
     try {
         let whitelist_ip = req.body.whitelist_ip
-        if (!whitelist_ip) return res.status(400).send()
+        if (!whitelist_ip) return res.status(400).json({ error: 'Invalid request' })
         whitelist_ip = whitelist_ip.split(',')
         if (whitelist_ip.length > 6)
             return res.status(200).json({ error: 'Max number of whitelisted ip address reached' })
@@ -89,7 +89,7 @@ router.post('/whitelist-ip', [recaptcha, auth], async function (req, res, next) 
         const apiTokenCollection = db.collection('apiToken')
         const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id })
 
-        if (!apiToken) return res.status(500).send()
+        if (!apiToken) return res.status(500).json({ error: 'Internal server error' })
 
         const oldWhitelistIp = apiToken.whitelist_ip || []
         const newWhitelistIp = whitelist_ip[0] !== '[]' ? whitelist_ip : []
@@ -116,7 +116,7 @@ router.post('/whitelist-ip', [recaptcha, auth], async function (req, res, next) 
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

@@ -33,7 +33,6 @@ import {
     VITE_APP_SESSION,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
-import errorMessages from '../../utils/ErrorMessages'
 
 const Register = () => {
     const navigate = useNavigate()
@@ -86,6 +85,44 @@ const Register = () => {
 
     const handleSubmit = async (e, type, credential) => {
         if (e) e.preventDefault()
+        if (!navigator.geolocation)
+            setError({
+                error: true,
+                message: 'Geolocation is not supported by this browser. Registration halted!',
+            })
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                register(e, type, credential, {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                })
+            },
+            (error) => {
+                let errorMessage
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = 'We need your location to continue.'
+                        break
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = 'Location information is unavailable.'
+                        break
+                    case error.TIMEOUT:
+                        errorMessage = 'Timeout occurred while getting your location.'
+                        break
+                    default:
+                        errorMessage = 'An unknown error occurred. Please try again later.'
+                }
+                setError({
+                    error: true,
+                    message: errorMessage,
+                })
+                return true
+            },
+        )
+    }
+
+    const register = async (e, type, credential, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         const formDataToSend = new FormData()
@@ -106,6 +143,7 @@ const Register = () => {
         formDataToSend.append('type', type)
         formDataToSend.append('recaptcha_ref', recaptcha)
         formDataToSend.append('newsletter', isChecked)
+        formDataToSend.append('location', JSON.stringify(location))
 
         axios
             .post(`/auth/register`, formDataToSend)
@@ -121,7 +159,7 @@ const Register = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
 
                 setError({
                     error: true,

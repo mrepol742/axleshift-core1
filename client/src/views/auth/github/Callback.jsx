@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../config'
-import errorMessages from '../../../utils/ErrorMessages'
 
 const Callback = () => {
     const navigate = useNavigate()
@@ -12,11 +11,51 @@ const Callback = () => {
     const [error, setError] = useState('')
 
     const fetchData = async (code) => {
+        if (e) e.preventDefault()
+        if (!navigator.geolocation)
+            setError({
+                error: true,
+                message: 'Geolocation is not supported by this browser. Login failed!',
+            })
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                github(code, {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                })
+            },
+            (error) => {
+                let errorMessage
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = 'We need your location to continue.'
+                        break
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = 'Location information is unavailable.'
+                        break
+                    case error.TIMEOUT:
+                        errorMessage = 'Timeout occurred while getting your location.'
+                        break
+                    default:
+                        errorMessage = 'An unknown error occurred. Please try again later.'
+                }
+                setError({
+                    error: true,
+                    message: errorMessage,
+                })
+                return true
+            },
+        )
+    }
+
+    const github = async (code, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         axios
             .post(`/auth/login`, {
                 type: 'github',
-                code: code,
+                code,
+                location: JSON.stringify(location),
                 recaptcha_ref: recaptcha,
             })
             .then((response) => {
@@ -26,7 +65,7 @@ const Callback = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 setError(message)
             })
             .finally(() => setLoading(false))

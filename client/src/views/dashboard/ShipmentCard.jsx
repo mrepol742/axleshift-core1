@@ -26,6 +26,10 @@ const ShipmentCard = ({ shipment }) => {
         return 'To Pay'
     }
 
+    const totalWeight = (items) => {
+        return `${items.reduce((acc, item) => acc + parseFloat(item.weight), 0)} kg`
+    }
+
     return (
         <CCard
             color={getCardColor(shipment.status)}
@@ -46,16 +50,27 @@ const ShipmentCard = ({ shipment }) => {
                 <div>{parseTimestamp(shipment.updated_at)}</div>
             </CCardHeader>
             <CCardBody>
-                <CCardText>
+                <div className="mb-2">
+                    <small className="text-muted d-block">Courier</small>
+                    Shoppe SPX
+                </div>
+                <div className="mb-2">
+                    <small className="text-muted d-block">Tracing number</small>
+                    {shipment.tracking_number || 'N/A'}
+                </div>
+                {(shipment.status === 'to_ship' || shipment.status === 'to_receive') && (
                     <div className="mb-2">
-                        <small className="text-muted d-block">Courier</small>
-                        Shoppe SPX
+                        <small className="text-muted d-block">Delivery on</small>
+                        Today
                     </div>
-                    <div className="mb-2">
-                        <small className="text-muted d-block">Shipment</small>
-                        {shipment.tracking_number || 'N/A'}
-                    </div>
-                </CCardText>
+                )}
+
+                <div className="mb-2">
+                    <small className="text-muted d-block">
+                        {shipment.to[0].country} | {totalWeight(shipment.items)} |{' '}
+                        {shipment.amount?.currency + ' ' + shipment.amount?.value}
+                    </small>
+                </div>
             </CCardBody>
         </CCard>
     )

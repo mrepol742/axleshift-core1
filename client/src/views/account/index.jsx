@@ -18,7 +18,6 @@ import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL } from '../../config'
 import { useUserProvider } from '../../components/UserProvider'
-import errorMessages from '../../utils/ErrorMessages'
 import { useToast } from '../../components/AppToastProvider'
 
 const Account = () => {
@@ -82,7 +81,7 @@ const Account = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message, 'Fetch failed!')
             })
             .finally(() => setLoading(false))

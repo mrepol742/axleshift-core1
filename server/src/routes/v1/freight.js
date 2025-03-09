@@ -6,6 +6,7 @@ import database from '../../models/mongodb.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import freight from '../../middleware/freight.js'
+import shipmentForm from '../../middleware/shipmentForm.js'
 import { send } from '../../components/mail.js'
 import activity from '../../components/activity.js'
 import { GOOGLE_MAP } from '../../config.js'
@@ -18,9 +19,9 @@ const limit = 20
  */
 router.post('/', auth, async (req, res, next) => {
     try {
-        // if (!req.user) return res.status(401).send()
+        // if (!req.user) return res.status(401).json({ error: 'Unauthorized' })
         const { page, query, status, type } = req.body
-        if (!page) return res.status(400).send()
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
         const isUser = !['super_admin', 'admin', 'staff'].includes(req.user.role)
@@ -47,7 +48,7 @@ router.post('/', auth, async (req, res, next) => {
         const freightCollection = db.collection('freight')
 
         const [totalItems, items] = await Promise.all([
-            freightCollection.countDocuments({ user_id: req.user._id }),
+            freightCollection.countDocuments(filter),
             freightCollection
                 .find(filter)
                 .sort({ created_at: -1 })
@@ -64,30 +65,18 @@ router.post('/', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
  * Get Freight by freight id
  */
-router.get('/:id', [auth, freight], async (req, res, next) => {
-    try {
-        // even tho there are 0.0000% changes this throws an error
-        // i dont care
-        // ait gonna dleete this try catch!
-        return res.status(200).json({
-            data: req.freight,
-        })
-    } catch (e) {
-        logger.error(e)
-    }
-    res.status(500).send()
-})
+router.get('/:id', [auth, freight], (req, res) => res.status(200).json(req.freight))
 
 /**
  * Create a Freight shipment
  */
-router.post('/book', [recaptcha, auth], async (req, res, next) => {
+router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => {
     try {
         const {
             isImport,
@@ -99,21 +88,6 @@ router.post('/book', [recaptcha, auth], async (req, res, next) => {
             type,
             items,
         } = req.body
-
-        if (typeof isImport !== 'boolean') return res.status(400).send('Invalid value for isImport')
-        if (typeof isResidentialAddress !== 'boolean')
-            return res.status(400).send('Invalid value for isResidentialAddress')
-        if (typeof containsDangerGoods !== 'boolean')
-            return res.status(400).send('Invalid value for containsDangerGoods')
-        if (typeof containsDocuments !== 'boolean')
-            return res.status(400).send('Invalid value for containsDocuments')
-        if (typeof from !== 'object' || from === null)
-            return res.status(400).send('Invalid value for from')
-        if (typeof to !== 'object' || to === null)
-            return res.status(400).send('Invalid value for to')
-        if (typeof type !== 'string' || !['private', 'business'].includes(type))
-            return res.status(400).send('Invalid value for type')
-        if (!Array.isArray(items)) return res.status(400).send('Invalid value for items')
 
         const db = await database()
         const dateNow = Date.now()
@@ -149,27 +123,39 @@ router.post('/book', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
  * Update freight details
  */
-router.post('/update/:id', [recaptcha, auth, freight], async (req, res, next) => {
+router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req, res, next) => {
     try {
-        const { shipper, consignee, shipment } = req.body
-        const { type, id } = req.params
-        if (!shipper || !consignee || !shipment) return res.status(400).send()
-        if (!['air', 'land', 'sea'].includes(type)) return res.status(400).send()
+        const {
+            _id,
+            isImport,
+            isResidentialAddress,
+            containsDangerGoods,
+            containsDocuments,
+            from,
+            to,
+            type,
+            items,
+        } = req.body
 
         const db = await database()
         await db.collection('freight').updateOne(
-            { _id: new ObjectId(id) },
+            { _id: new ObjectId(_id) },
             {
                 $set: {
-                    'data.shipper': shipper,
-                    'data.consignee': consignee,
-                    'data.shipment': shipment,
+                    is_import: isImport,
+                    is_residential_address: isResidentialAddress,
+                    contains_danger_goods: containsDangerGoods,
+                    contains_documents: containsDocuments,
+                    from: from,
+                    to: to,
+                    type: type,
+                    items: items,
                     updated_at: Date.now(),
                     modified_by: req.user._id,
                 },
@@ -177,11 +163,11 @@ router.post('/update/:id', [recaptcha, auth, freight], async (req, res, next) =>
         )
 
         activity(req, `updated a shipment information #${id}`)
-        return res.status(200).send()
+        return res.status(200).json({ tracking_number: id, message: 'Shipment has been updated.' })
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -203,11 +189,11 @@ router.post('/cancel/:id', [recaptcha, auth, freight], async (req, res, next) =>
         )
 
         activity(req, `cancelled a shipment #${id}`)
-        return res.status(200).send()
+        return res.status(200).json({ message: 'Shipment has been cancelled.' })
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/optimized-route', [auth], async (req, res, next) => {
@@ -229,7 +215,7 @@ router.post('/optimized-route', [auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

@@ -16,7 +16,7 @@ router.get('/', auth, async (req, res, next) => res.status(301).send())
 router.post('/sessions', auth, async (req, res, next) => {
     try {
         const { page } = req.body
-        if (!page) return res.status(400).send()
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
 
@@ -57,7 +57,7 @@ router.post('/sessions', auth, async (req, res, next) => {
         })
     } catch (e) {
         logger.error(e)
-        return res.status(500).send()
+        return res.status(500).json({ error: 'Internal server error' })
     }
 })
 
@@ -80,7 +80,7 @@ router.post('/sessions/logout', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.get('/dependabot', auth, async (req, res, next) => {
@@ -90,7 +90,7 @@ router.get('/dependabot', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.get('/sentry', auth, async (req, res, next) => {
@@ -100,13 +100,13 @@ router.get('/sentry', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/apikeys', auth, async (req, res, next) => {
     try {
         const { page } = req.body
-        if (!page) return res.status(400).send()
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
 
@@ -135,7 +135,7 @@ router.post('/apikeys', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/apikeys/deactivate', [recaptcha, auth], async (req, res, next) => {
@@ -157,13 +157,13 @@ router.post('/apikeys/deactivate', [recaptcha, auth], async (req, res, next) => 
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/activity', auth, async (req, res, next) => {
     try {
         const { page } = req.body
-        if (!page) return res.status(400).send()
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
 
@@ -189,7 +189,7 @@ router.post('/activity', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.get('/maintenance', auth, async (req, res, next) => res.status(200).send())

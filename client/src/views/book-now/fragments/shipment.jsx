@@ -183,7 +183,7 @@ const Shipment = ({ data }) => {
     const navigate = useNavigate()
     const [items, setItems] = React.useState([{}])
     const formRef = React.useRef(null)
-    const [shipping, setShipping] = useState(false)
+    const [shipping, setShipping] = useState(form.internal)
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
 
@@ -277,7 +277,19 @@ const Shipment = ({ data }) => {
                     </CCol>
                 </CRow>
             </CForm>
-            {shipping && <Review data={data} />}
+            {!form.status ||
+            (form.status !== 'to_receive' && form.status !== 'received' && shipping) ? (
+                <Review data={data} />
+            ) : (
+                <div className="d-flex align-items-right justify-content-end">
+                    <CButton
+                        className="btn btn-primary px-4 mt-3"
+                        onClick={(e) => navigate(`/track/${form.tracking_number}`)}
+                    >
+                        Track your shipment
+                    </CButton>
+                </div>
+            )}
         </>
     )
 }

@@ -15,10 +15,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../config'
-import errorMessages from '../../../utils/ErrorMessages'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../config'
 
-const MailOTP = () => {
+const OTP = () => {
     const [loading, setLoading] = useState(true)
     const [email, setEmail] = useState('')
     const [error, setError] = useState({
@@ -98,7 +97,7 @@ const MailOTP = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
 
                 setError({
                     error: true,
@@ -194,4 +193,4 @@ const MailOTP = () => {
     )
 }
 
-export default MailOTP
+export default OTP

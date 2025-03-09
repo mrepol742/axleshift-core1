@@ -4,7 +4,7 @@ import auth from './components/middleware/Auth'
 /*
  * GLOBAL ROUTE
  */
-const MailOTP = lazy(() => import('./views/auth/otp/Mail'))
+const OTP = lazy(() => import('./views/auth/OTP'))
 const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
 const Logout = lazy(() => import('./views/auth/Logout'))
 
@@ -23,6 +23,7 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
  */
 const Dashboard = auth(lazy(() => import('./views/dashboard/index')))
 const Info = auth(lazy(() => import('./views/dashboard/Info')))
+const Forms = auth(lazy(() => import('./views/dashboard/Forms')))
 const Search = auth(lazy(() => import('./views/dashboard/Search')))
 const Schedules = auth(lazy(() => import('./views/schedules/index')))
 
@@ -33,7 +34,6 @@ const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const BookNow = auth(lazy(() => import('./views/book-now/index')))
 
-const Rates = auth(lazy(() => import('./views/rates/index')))
 const Couriers = auth(lazy(() => import('./views/couriers/index')))
 const Routes = auth(lazy(() => import('./views/routes/index')))
 
@@ -63,7 +63,7 @@ const routes = [
     { path: '/login', external: true, name: 'Login', element: Login },
     { path: '/register', external: true, name: 'Register', element: Register },
     { path: '/logout', external: true, name: 'Logout', element: Logout },
-    { path: '/otp', external: true, name: 'OTP', element: MailOTP },
+    { path: '/one-time-password', external: true, name: 'One Time Password', element: OTP },
     {
         path: '/auth/github/callback',
         external: true,
@@ -74,6 +74,7 @@ const routes = [
 
     { path: '/dashboard', name: 'Dashboard', element: Dashboard },
     { path: '/shipment/:id', name: 'Shipment Info', element: Info },
+    { path: '/shipment/:id/forms', name: 'Shipment Forms', element: Forms },
     { path: '/search', name: 'Search Shipment', element: Search },
     { path: '/schedules', name: 'Schedules', element: Schedules },
 
@@ -89,7 +90,6 @@ const routes = [
     { path: '/invoices', name: 'Invoices', element: Invoices },
     //  { path: '/payment/invoice', name: 'Invoice', element: Err500 },
 
-    { path: '/rates', name: 'Rates', element: Rates },
     { path: '/couriers', name: 'Couriers', element: Couriers },
     { path: '/routes', name: 'Routes', element: Routes },
 

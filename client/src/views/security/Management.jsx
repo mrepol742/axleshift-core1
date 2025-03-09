@@ -21,6 +21,7 @@ import {
     Sentry,
     Sessions,
     IPFiltering,
+    GEO,
 } from './panel/index'
 
 const SecurityManagement = () => {
@@ -56,6 +57,12 @@ const SecurityManagement = () => {
                 break
             case 'maintenance':
                 setActiveItemKey(6)
+                break
+            case 'ip-filtering':
+                setActiveItemKey(7)
+                break
+            case 'geo':
+                setActiveItemKey(8)
                 break
         }
         setLoading(false)
@@ -128,6 +135,13 @@ const SecurityManagement = () => {
                     >
                         <FontAwesomeIcon icon={faGlobe} className="me-1" /> IP Filtering
                     </CTab>
+                    <CTab
+                        aria-controls="geo-tab-pane"
+                        itemKey={8}
+                        onClick={() => handleTabChange(6, 'geo')}
+                    >
+                        <FontAwesomeIcon icon={faGlobe} className="me-1" /> Geo
+                    </CTab>
                 </CTabList>
                 <CTabContent>
                     <CTabPanel className="py-3" aria-labelledby="dashboard-tab-pane" itemKey={0}>
@@ -153,6 +167,9 @@ const SecurityManagement = () => {
                     </CTabPanel>
                     <CTabPanel className="py-3" aria-labelledby="ip-filtering-tab-pane" itemKey={7}>
                         <IPFiltering />
+                    </CTabPanel>
+                    <CTabPanel className="py-3" aria-labelledby="geo-tab-pane" itemKey={8}>
+                        <GEO />
                     </CTabPanel>
                 </CTabContent>
             </CTabs>

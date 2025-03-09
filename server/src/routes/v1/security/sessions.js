@@ -41,7 +41,7 @@ router.get('/', auth, async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/logout', [recaptcha, auth], async (req, res) => {
@@ -67,7 +67,7 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(501).send()
+    return res.status(500).json({ error: 'Not yet implemented' })
 })
 
 export default router

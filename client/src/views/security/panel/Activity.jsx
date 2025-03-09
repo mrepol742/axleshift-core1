@@ -12,7 +12,7 @@ import {
     CCardTitle,
 } from '@coreui/react'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../utils/ErrorMessages'
+
 import parseTimestamp from '../../../utils/Timestamp'
 import AppPagination from '../../../components/AppPagination'
 
@@ -32,7 +32,7 @@ const Activity = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))

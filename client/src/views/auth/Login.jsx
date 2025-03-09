@@ -37,8 +37,6 @@ import {
     VITE_APP_SESSION,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
-import errorMessages from '../../utils/ErrorMessages'
-import generateUUID from '../../utils/UUID'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -77,6 +75,24 @@ const Login = () => {
         setLoading(false)
     }, [])
 
+    const generateUUID = () => {
+        const array = new Uint8Array(16)
+        window.crypto.getRandomValues(array)
+        array[6] = (array[6] & 0x0f) | 0x40
+        // Set the 8th byte (variant) to 8, 9, A, or B
+        array[8] = (array[8] & 0x3f) | 0x80
+
+        const uuid = array.reduce((str, byte, index) => {
+            if (index === 4 || index === 6 || index === 8 || index === 10) {
+                str += '-'
+            }
+            str += byte.toString(16).padStart(2, '0')
+            return str
+        }, '')
+
+        return uuid
+    }
+
     const getUUID = () => {
         const _uuid = cookies.get('uuid')
         const uuid = _uuid ? _uuid : generateUUID()
@@ -86,6 +102,44 @@ const Login = () => {
 
     const handleSubmit = async (e, type, credential) => {
         if (e) e.preventDefault()
+        if (!navigator.geolocation)
+            setError({
+                error: true,
+                message: 'Geolocation is not supported by this browser. Login failed!',
+            })
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                login(e, type, credential, {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                })
+            },
+            (error) => {
+                let errorMessage
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = 'We need your location to continue.'
+                        break
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = 'Location information is unavailable.'
+                        break
+                    case error.TIMEOUT:
+                        errorMessage = 'Timeout occurred while getting your location.'
+                        break
+                    default:
+                        errorMessage = 'An unknown error occurred. Please try again later.'
+                }
+                setError({
+                    error: true,
+                    message: errorMessage,
+                })
+                return true
+            },
+        )
+    }
+
+    const login = async (e, type, credential, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         const formData = new FormData()
@@ -104,6 +158,7 @@ const Login = () => {
         }
         formData.append('type', type)
         formData.append('recaptcha_ref', recaptcha)
+        formData.append('location', JSON.stringify([location]))
 
         axios
             .post(`/auth/login`, formData)
@@ -115,12 +170,12 @@ const Login = () => {
                     })
 
                 cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })
+                alert(JSON.stringify(response.data))
                 window.location.href = url
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
-
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 setError({
                     error: true,
                     message,

@@ -28,10 +28,10 @@ const Lead = () => {
                     <CButton
                         to="/register"
                         as={NavLink}
-                        className="rounded-3 btn-primary text-white py-2"
+                        className="rounded-3 btn-primary text-white py-2 me-2"
                         data-aos="fade-up"
                     >
-                        Get started <FontAwesomeIcon icon={faArrowRightLong} />
+                        Get Started <FontAwesomeIcon icon={faArrowRightLong} />
                     </CButton>
                 </CCol>
             </CRow>

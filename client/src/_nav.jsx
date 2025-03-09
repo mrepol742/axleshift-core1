@@ -49,13 +49,6 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Rates',
-        to: '/rates',
-        role_exclude: [],
-        icon: <FontAwesomeIcon icon={faPercent} className="nav-icon" />,
-    },
-    {
-        component: CNavItem,
         name: 'Couriers',
         to: '/couriers',
         role_exclude: [],

@@ -4,7 +4,7 @@ import { RECAPTCHA_SECRET } from '../config.js'
 
 const recaptcha = async (req, res, next) => {
     const { recaptcha_ref } = req.body
-    if (!recaptcha_ref) return res.status(400).send()
+    if (!recaptcha_ref) return res.status(400).json({ error: 'Invalid request' })
 
     try {
         const response = await axios.post(`https://www.google.com/recaptcha/api/siteverify`, null, {
@@ -15,13 +15,14 @@ const recaptcha = async (req, res, next) => {
         })
 
         const { success, score } = response.data
-        if (!success || score < 0.5) return res.status(403).send()
+        if (!success || score < 0.5)
+            return res.status(403).json({ error: 'Please mark the recaptcha' })
 
         return next()
     } catch (err) {
         logger.error(err)
     }
-    res.status(401).send()
+    res.status(401).json({ error: 'Unauthorized' })
 }
 
 export default recaptcha

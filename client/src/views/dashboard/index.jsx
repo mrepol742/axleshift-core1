@@ -17,7 +17,7 @@ import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './Widgets'
 import AppPagination from '../../components/AppPagination'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../utils/ErrorMessages'
+
 import AppSearch from '../../components/AppSearch'
 import ShipmentCard from './ShipmentCard'
 
@@ -38,7 +38,7 @@ const Dashboard = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))

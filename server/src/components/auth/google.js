@@ -5,7 +5,7 @@ import FormOauth2 from './formOauth2.js'
 const Google = async (req, res) => {
     try {
         const access_token = req.body.credential
-        if (!access_token) return res.status(400).send()
+        if (!access_token) return res.status(400).json({ error: 'Invalid request' })
 
         const response = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
             headers: { Authorization: `Bearer ${access_token}` },
@@ -21,7 +21,7 @@ const Google = async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    return res.status(500).send()
+    return res.status(500).json({ error: 'Internal server error' })
 }
 
 export default Google
