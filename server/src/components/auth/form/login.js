@@ -4,7 +4,7 @@ import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
 import { addSession } from '../../../components/sessions.js'
 import { getClientIp } from '../../ip.js'
-import { APP_KEY } from '../../../config.js'
+import { APP_KEY, NODE_ENV } from '../../../config.js'
 import device from '../../../components/device.js'
 
 const FormLogin = async (req, res) => {
@@ -22,6 +22,9 @@ const FormLogin = async (req, res) => {
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         if (passwordHash !== theUser.password) return res.status(401).send()
+        
+        if (NODE_ENV === 'production' && theUser.role === 'user') 
+            res.status(200).json({ error: 'You have no permission to continue. Please contact the admin to allow non user login.' })
 
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'

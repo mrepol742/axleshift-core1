@@ -6,6 +6,7 @@ import Token from './token.js'
 import { send } from '../mail.js'
 import Download from '../../utils/download.js'
 import activity from '../activity.js'
+import { NODE_ENV } from '../../config.js'
 
 const FormOauth2 = async (req, res) => {
     try {
@@ -32,6 +33,9 @@ const FormOauth2 = async (req, res) => {
                 return res.status(200).json({ token: session_token })
             }
         }
+
+        if (NODE_ENV === 'production') 
+            res.status(200).json({ error: 'You have no permission to continue. Please contact the admin.' })
 
         const existingUser = await usersCollection.findOne({ email: credential.email })
         if (!existingUser) {

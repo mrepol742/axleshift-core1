@@ -4,7 +4,7 @@ import logger from '../../../utils/logger.js'
 import { addSession } from '../../../components/sessions.js'
 import { send } from '../../mail.js'
 import activity from '../../activity.js'
-import { APP_KEY } from '../../../config.js'
+import { APP_KEY, NODE_ENV } from '../../../config.js'
 
 const FormRegister = async (req, res) => {
     try {
@@ -23,6 +23,9 @@ const FormRegister = async (req, res) => {
             return res.status(200).json({
                 error: 'Email address already registered',
             })
+        
+        if (NODE_ENV === 'production') 
+            res.status(200).json({ error: 'You have no permission to continue. Please contact the admin to allow registration.' })
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         const ref = crypto.randomBytes(4).toString('hex')
