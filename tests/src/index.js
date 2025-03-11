@@ -7,14 +7,29 @@ const app = express()
 const port = process.env.APP_EXPRESS_PORT || 3000
 
 app.get('/', async (req, res) => {
-    res.send('/freight - get all shipments<br>/invoices - get all invoices')
+    res.send('/freight - get all shipments<br>/freight/id - get freight details by id<br>/invoices - get all invoices')
 })
 
 app.get('/freight', async (req, res) => {
     try {
-        const response = await axios.post(`${process.env.CORE1_ENDPOINT}/api/v1/freight`, {
+        const response = await axios.post(`${process.env.CORE1_ENDPOINT}/api/v1/freight/`, {
             page: 1,
         }, {
+            headers: {
+                'Authorization': `Bearer ${process.env.CORE1_API_KEY}`,
+            },
+        })
+        
+        return res.json(response.data)
+    } catch (error) {
+        console.error('Error fetching data:', error)
+    }
+    res.status(500).send('Error fetching data')
+})
+
+app.get('/freight/id', async (req, res) => {
+    try {
+        const response = await axios.get(`${process.env.CORE1_ENDPOINT}/api/v1/freight/AU-1741183347164`, {
             headers: {
                 'Authorization': `Bearer ${process.env.CORE1_API_KEY}`,
             },
