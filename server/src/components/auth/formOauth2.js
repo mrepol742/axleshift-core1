@@ -34,8 +34,10 @@ const FormOauth2 = async (req, res) => {
             }
         }
 
-        if (NODE_ENV === 'production') 
-            res.status(200).json({ error: 'You have no permission to continue. Please contact the admin.' })
+        if (NODE_ENV === 'production')
+            res.status(200).json({
+                error: 'You have no permission to continue. Please contact the admin.',
+            })
 
         const existingUser = await usersCollection.findOne({ email: credential.email })
         if (!existingUser) {

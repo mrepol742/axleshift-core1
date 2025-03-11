@@ -4,7 +4,7 @@ import database from '../../models/mongodb.js'
 import { getClientIp } from '../ip.js'
 import { API_EXTERNAL_RATE_DELAY } from '../../config.js'
 
-const allowedRoutes = ['/:id']
+const allowedRoutes = ['/', '/:id']
 
 const external = async (req, res, next) => {
     const authHeader = req.headers['authorization']
@@ -17,7 +17,10 @@ const external = async (req, res, next) => {
         return regex.test(requestPath)
     })
 
-    if (!isAllowed) return res.status(401).json({ error: 'Unauthorized' })
+    if (!isAllowed)
+        return res
+            .status(401)
+            .json({ error: 'Unauthorized', message: `access denied to route: ${requestPath}` })
 
     const db = await database()
     const apiTokenCollection = db.collection('apiToken')
@@ -27,14 +30,21 @@ const external = async (req, res, next) => {
         compromised: false,
     })
 
-    if (!existingApiToken) {
-        logger.info(`invalid or denied api token: ${token}`)
-        return res.status(401).json({ error: 'Unauthorized' })
-    }
+    if (!existingApiToken)
+        return res
+            .status(401)
+            .json({ error: 'Unauthorized', message: 'invalid or denied api token' })
 
     const ip = getClientIp(req)
     const w_ip = existingApiToken.whitelist_ip
-    if (!w_ip.includes(ip)) return res.status(401).json({ error: 'Unauthorized' })
+    if (!w_ip.includes(ip))
+        return res
+            .status(401)
+            .json({
+                error: 'Unauthorized',
+                message: 'Request denied your current ip address is not on whitelist',
+                ip,
+            })
 
     let user_a = req.headers['user-agent'] || 'unknown'
     Promise.all([

@@ -25,9 +25,11 @@ const FormRegister = async (req, res) => {
             return res.status(200).json({
                 error: 'Email address already registered',
             })
-        
-        if (NODE_ENV === 'production') 
-            res.status(200).json({ error: 'You have no permission to continue. Please contact the admin to allow registration.' })
+
+        if (NODE_ENV === 'production')
+            res.status(200).json({
+                error: 'You have no permission to continue. Please contact the admin to allow registration.',
+            })
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         const ref = crypto.randomBytes(4).toString('hex')

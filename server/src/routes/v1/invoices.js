@@ -26,7 +26,7 @@ router.post('/', [auth], async (req, res) => {
         if (!page) return res.status(400).json({ error: 'Invalid request' })
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
-        const isUser = !['super_admin', 'admin', 'staff'].includes(req.user.role)
+        const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
 
         const db = await database()
         const invoicesCollection = await db.collection('invoices')

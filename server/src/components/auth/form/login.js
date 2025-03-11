@@ -25,9 +25,11 @@ const FormLogin = async (req, res) => {
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         if (passwordHash !== theUser.password)
             return res.status(401).json({ error: 'Invalid login credentials' })
-        
-        if (NODE_ENV === 'production' && theUser.role === 'user') 
-            res.status(200).json({ error: 'You have no permission to continue. Please contact the admin to allow non user login.' })
+
+        if (NODE_ENV === 'production' && theUser.role === 'user')
+            res.status(200).json({
+                error: 'You have no permission to continue. Please contact the admin to allow non user login.',
+            })
 
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'
