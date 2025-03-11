@@ -32,7 +32,7 @@ router.post('/', auth, async function (req, res, next) {
 router.post('/otp', [recaptcha, auth], async function (req, res, next) {
     try {
         const otp = req.body.otp.toString()
-        if (!otp) return res.status(400).send()
+        if (!otp) return res.status(400).json({ error: 'Invalid request' })
 
         const db = await database()
         const otpCollection = db.collection('otp')
@@ -78,7 +78,7 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/otp/new', [recaptcha, auth], async function (req, res, next) {
@@ -90,7 +90,7 @@ router.post('/otp/new', [recaptcha, auth], async function (req, res, next) {
             verified: false,
             expired: false,
         })
-        if (!theOtp) return res.status(401).send()
+        if (!theOtp) return res.status(401).json({ error: 'Unauthorized' })
 
         const past = new Date(theOtp.created_at)
         const ten = 10 * 60 * 1000
@@ -115,7 +115,7 @@ router.post('/otp/new', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

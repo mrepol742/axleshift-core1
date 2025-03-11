@@ -29,14 +29,16 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
             credential,
             code,
         } = req.body
-        if (!type || !['form', 'google', 'github'].includes(type)) return res.status(400).send()
+        if (!type || !['form', 'google', 'github'].includes(type))
+            return res.status(400).json({ error: 'Invalid request' })
         if (
             type === 'form' &&
             (!email || !first_name || !last_name || !password || !repeat_password || !newsletter)
         )
-            return res.status(400).send()
-        if (type === 'google' && !credential) return res.status(400).send()
-        if (type === 'github' && !code) return res.status(400).send()
+            return res.status(400).json({ error: 'Invalid request' })
+        if (type === 'google' && !credential)
+            return res.status(400).json({ error: 'Invalid request' })
+        if (type === 'github' && !code) return res.status(400).json({ error: 'Invalid request' })
 
         // hehe i need to save a bit of line of code here
         // its getting quite bit complex
@@ -58,7 +60,7 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -67,10 +69,13 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
 router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
     try {
         const { email, password, credential, type, code } = req.body
-        if (!type || !['form', 'google', 'github'].includes(type)) return res.status(400).send()
-        if (type === 'form' && (!email || !password)) return res.status(400).send()
-        if (type === 'google' && !credential) return res.status(400).send()
-        if (type === 'github' && !code) return res.status(400).send()
+        if (!type || !['form', 'google', 'github'].includes(type))
+            return res.status(400).json({ error: 'Invalid request' })
+        if (type === 'form' && (!email || !password))
+            return res.status(400).json({ error: 'Invalid request' })
+        if (type === 'google' && !credential)
+            return res.status(400).json({ error: 'Invalid request' })
+        if (type === 'github' && !code) return res.status(400).json({ error: 'Invalid request' })
 
         if (type === 'google') return await Google(req, res)
         if (type === 'github') return await Github(req, res)
@@ -80,7 +85,7 @@ router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -138,7 +143,7 @@ router.post('/user', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -147,14 +152,16 @@ router.post('/user', [recaptcha, auth], async (req, res, next) => {
 router.post('/password', [recaptcha, auth], async (req, res, next) => {
     try {
         const { password, new_password, repeat_password } = req.body
-        if (!new_password || !repeat_password) return res.status(400).send()
-        if (req.user.password === 'OK' && !password) return res.status(400).send()
+        if (!new_password || !repeat_password)
+            return res.status(400).json({ error: 'Invalid request' })
+        if (req.user.password === 'OK' && !password)
+            return res.status(400).json({ error: 'Invalid request' })
 
         const db = await database()
         const usersCollection = db.collection('users')
         const theUser = await usersCollection.findOne({ _id: new ObjectId(req.user._id) })
         // return 401 instead of 404 to remove the cookies
-        if (!theUser) return res.status(401).send()
+        if (!theUser) return res.status(401).json({ error: 'Unauthorized' })
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         if (req.user.password === 'OK') {
@@ -211,7 +218,7 @@ router.post('/password', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**

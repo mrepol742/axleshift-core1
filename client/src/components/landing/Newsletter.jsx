@@ -12,7 +12,6 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import errorMessages from '../../utils/ErrorMessages'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 
 const Newsletter = ({ setLoading }) => {
@@ -33,7 +32,7 @@ const Newsletter = ({ setLoading }) => {
             .catch((error) => {
                 console.error(error)
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 setMessage(message)
             })
             .finally(() => setLoading(false))

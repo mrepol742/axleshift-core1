@@ -4,13 +4,13 @@ import logger from '../../../utils/logger.js'
 import { addSession } from '../../../components/sessions.js'
 import { send } from '../../mail.js'
 import activity from '../../activity.js'
-import { APP_KEY } from '../../../config.js'
+import { APP_KEY, NODE_ENV } from '../../../config.js'
 
 const FormRegister = async (req, res) => {
     try {
         const { email, first_name, last_name, password, newsletter } = req.body
         if (!email || !first_name || !last_name || !password || !newsletter)
-            return res.status(400).send()
+            return res.status(400).json({ error: 'Invalid request' })
         const db = await database()
         const usersCollection = db.collection('users')
         const existingUser = await usersCollection.findOne({
@@ -24,6 +24,11 @@ const FormRegister = async (req, res) => {
         if (existingUser)
             return res.status(200).json({
                 error: 'Email address already registered',
+            })
+
+        if (NODE_ENV === 'production')
+            res.status(200).json({
+                error: 'You have no permission to continue. Please contact the admin to allow registration.',
             })
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
@@ -80,7 +85,7 @@ const FormRegister = async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    return res.status(500).send()
+    return res.status(500).json({ error: 'Internal server error' })
 }
 
 export default FormRegister

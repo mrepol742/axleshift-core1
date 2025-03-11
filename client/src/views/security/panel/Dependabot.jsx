@@ -22,7 +22,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import parseTimestamp from '../../../utils/Timestamp'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../utils/ErrorMessages'
 
 const Dependabot = () => {
     const { addToast } = useToast()
@@ -39,7 +38,7 @@ const Dependabot = () => {
             .then((response) => setResult(response.data))
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))

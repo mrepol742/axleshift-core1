@@ -17,7 +17,7 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
-import errorMessages from '../../utils/ErrorMessages'
+
 import parseTimestamp from '../../utils/Timestamp'
 import AppPagination from '../../components/AppPagination'
 
@@ -39,7 +39,7 @@ const Invoices = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))

@@ -16,7 +16,6 @@ import {
     CFormInput,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlaneDeparture, faTruck, faShip } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types'
 import Shipment from './shipment'
 import countries from './countries'

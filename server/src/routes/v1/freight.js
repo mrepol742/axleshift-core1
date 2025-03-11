@@ -19,12 +19,12 @@ const limit = 20
  */
 router.post('/', auth, async (req, res, next) => {
     try {
-        // if (!req.user) return res.status(401).send()
+        // if (!req.user) return res.status(401).json({ error: 'Unauthorized' })
         const { page, query, status, type } = req.body
-        if (!page) return res.status(400).send()
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
-        const isUser = !['super_admin', 'admin', 'staff'].includes(req.user.role)
+        const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
 
         let filter
         if (!query) {
@@ -65,7 +65,7 @@ router.post('/', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -123,13 +123,13 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
  * Update freight details
  */
-router.post('/update/:id', [recaptcha, auth, freight], async (req, res, next) => {
+router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req, res, next) => {
     try {
         const {
             _id,
@@ -163,11 +163,11 @@ router.post('/update/:id', [recaptcha, auth, freight], async (req, res, next) =>
         )
 
         activity(req, `updated a shipment information #${id}`)
-        return res.status(200).send()
+        return res.status(200).json({ tracking_number: id, message: 'Shipment has been updated.' })
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -189,11 +189,11 @@ router.post('/cancel/:id', [recaptcha, auth, freight], async (req, res, next) =>
         )
 
         activity(req, `cancelled a shipment #${id}`)
-        return res.status(200).send()
+        return res.status(200).json({ message: 'Shipment has been cancelled.' })
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/optimized-route', [auth], async (req, res, next) => {
@@ -215,7 +215,7 @@ router.post('/optimized-route', [auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

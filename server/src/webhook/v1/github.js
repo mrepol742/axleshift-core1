@@ -10,7 +10,7 @@ const router = express.Router()
 router.post('/', async (req, res) => {
     try {
         const github_signature = req.headers['x-hub-signature-256']
-        if (!github_signature) return res.status(400).send()
+        if (!github_signature) return res.status(400).json({ error: 'Invalid request' })
         const hash =
             'sha256=' +
             crypto
@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
                 .update(JSON.stringify(req.body))
                 .digest('hex')
 
-        if (hash !== github_signature) return res.status(401).send()
+        if (hash !== github_signature) return res.status(401).json({ error: 'Unauthorized' })
 
         if (req.body.ref === 'refs/heads/core1-backend')
             run('git pull origin core1-backend && npm i && npm run pm2:restart')
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

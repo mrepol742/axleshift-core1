@@ -37,8 +37,6 @@ import {
     VITE_APP_SESSION,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
 } from '../../config'
-import errorMessages from '../../utils/ErrorMessages'
-import generateUUID from '../../utils/UUID'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -76,6 +74,24 @@ const Login = () => {
         if (cookies.get(VITE_APP_SESSION) !== undefined) return (window.location.href = url)
         setLoading(false)
     }, [])
+
+    const generateUUID = () => {
+        const array = new Uint8Array(16)
+        window.crypto.getRandomValues(array)
+        array[6] = (array[6] & 0x0f) | 0x40
+        // Set the 8th byte (variant) to 8, 9, A, or B
+        array[8] = (array[8] & 0x3f) | 0x80
+
+        const uuid = array.reduce((str, byte, index) => {
+            if (index === 4 || index === 6 || index === 8 || index === 10) {
+                str += '-'
+            }
+            str += byte.toString(16).padStart(2, '0')
+            return str
+        }, '')
+
+        return uuid
+    }
 
     const getUUID = () => {
         const _uuid = cookies.get('uuid')
@@ -154,12 +170,12 @@ const Login = () => {
                     })
 
                 cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })
+                alert(JSON.stringify(response.data))
                 window.location.href = url
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
-
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 setError({
                     error: true,
                     message,

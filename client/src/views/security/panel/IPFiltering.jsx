@@ -27,7 +27,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import parseTimestamp from '../../../utils/Timestamp'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../utils/ErrorMessages'
 
 const IPFiltering = () => {
     const recaptchaRef = React.useRef()
@@ -46,7 +45,7 @@ const IPFiltering = () => {
             .then((response) => setResult(response.data))
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -60,7 +59,7 @@ const IPFiltering = () => {
             .then((response) => addToast('Changes saved successfully', 'Success'))
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))

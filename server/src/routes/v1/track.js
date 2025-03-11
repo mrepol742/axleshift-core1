@@ -69,7 +69,7 @@ router.get('/:id', [auth, freight], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).send()
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

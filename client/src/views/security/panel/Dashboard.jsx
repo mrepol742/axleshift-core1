@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { CRow, CCol } from '@coreui/react'
 import { useToast } from '../../../components/AppToastProvider'
-import errorMessages from '../../../utils/ErrorMessages'
+
 import Widgets from './dashboard/Widgets'
 
 const Dashboard = () => {
@@ -44,7 +44,7 @@ const Dashboard = () => {
             })
             .catch((error) => {
                 const message =
-                    errorMessages[error.status] || 'Server is offline or restarting please wait'
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))

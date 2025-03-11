@@ -6,6 +6,7 @@ import Token from './token.js'
 import { send } from '../mail.js'
 import Download from '../../utils/download.js'
 import activity from '../activity.js'
+import { NODE_ENV } from '../../config.js'
 
 const FormOauth2 = async (req, res) => {
     try {
@@ -32,6 +33,11 @@ const FormOauth2 = async (req, res) => {
                 return res.status(200).json({ token: session_token })
             }
         }
+
+        if (NODE_ENV === 'production')
+            res.status(200).json({
+                error: 'You have no permission to continue. Please contact the admin.',
+            })
 
         const existingUser = await usersCollection.findOne({ email: credential.email })
         if (!existingUser) {
@@ -72,12 +78,12 @@ const FormOauth2 = async (req, res) => {
         const theUser = await usersCollection.findOne({ email: credential.email })
         theUser.log = 'created account'
         theUser.log1 = `bind ${provider} as authentication credentials`
-        const session_token = await Token(theUser, req)
-        return res.status(200).json({ token: session_token })
+        const { token, key } = await Token(theUser, req)
+        return res.status(200).json({ token, key })
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).send()
+    return res.status(500).json({ error: 'Internal server error' })
 }
 
 export default FormOauth2

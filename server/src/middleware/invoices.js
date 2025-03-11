@@ -5,7 +5,7 @@ import database from '../models/mongodb.js'
 
 const invoices = async (req, res, next) => {
     const id = /^\/[a-fA-F0-9]{24}$/.test(req.path) ? req.params.id : req.body.id
-    if (!id) return res.status(400).send()
+    if (!id) return res.status(400).json({ error: 'Invalid request' })
 
     try {
         const db = await database()
@@ -15,7 +15,7 @@ const invoices = async (req, res, next) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(400).send()
+    res.status(400).json({ error: 'Invalid request' })
 }
 
 export default invoices
