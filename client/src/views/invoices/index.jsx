@@ -13,16 +13,14 @@ import {
     CCard,
     CCardBody,
     CCardTitle,
+    CButton,
 } from '@coreui/react'
-import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 
 import parseTimestamp from '../../utils/Timestamp'
 import AppPagination from '../../components/AppPagination'
 
 const Invoices = () => {
-    const recaptchaRef = React.useRef()
     const navigate = useNavigate()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
@@ -71,7 +69,6 @@ const Invoices = () => {
 
     return (
         <div>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Transactions</CCardTitle>
@@ -79,10 +76,7 @@ const Invoices = () => {
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-muted poppins-regular">
-                                    Shipment ID
-                                </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular">
-                                    Invoice ID
+                                    Ref Number
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-muted poppins-regular">
                                     Amount
@@ -91,7 +85,7 @@ const Invoices = () => {
                                     Status
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-muted poppins-regular">
-                                    Last Update
+                                    Action
                                 </CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
@@ -99,21 +93,30 @@ const Invoices = () => {
                             {data.map((invoice, index) => (
                                 <CTableRow key={index}>
                                     <CTableDataCell
-                                        onClick={(e) => navigate(`/shipment/${invoice.freight_id}`)}
-                                    >
-                                        {invoice.freight_id}
-                                    </CTableDataCell>
-                                    <CTableDataCell
                                         onClick={(e) =>
                                             (window.location.href = `https://checkout-staging.xendit.co/web/${invoice.invoice_id}`)
                                         }
                                     >
-                                        {invoice.invoice_id}
+                                        {invoice.invoice_id.slice(-8)}
                                     </CTableDataCell>
-                                    <CTableDataCell>{`${invoice.amount} ${invoice.currency}`}</CTableDataCell>
+                                    <CTableDataCell>
+                                        {new Intl.NumberFormat('en-US', {
+                                            style: 'currency',
+                                            currency: invoice.currency,
+                                        }).format(invoice.amount)}
+                                    </CTableDataCell>
                                     <CTableDataCell>{invoice.status}</CTableDataCell>
                                     <CTableDataCell>
-                                        {parseTimestamp(invoice.updated_at)}
+                                        <CButton
+                                            className="btn btn-primary"
+                                            onClick={(e) =>
+                                                navigate(
+                                                    `/invoices/${invoice.freight_tracking_number}`,
+                                                )
+                                            }
+                                        >
+                                            View
+                                        </CButton>
                                     </CTableDataCell>
                                 </CTableRow>
                             ))}

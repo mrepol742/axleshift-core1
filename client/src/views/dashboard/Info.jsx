@@ -72,7 +72,7 @@ const FreightInfo = () => {
     const [editedform, setEditedform] = useState(_FREIGHT_)
     const [type, setType] = useState('')
     const [status, setStatus] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [disabled, setDisabled] = useState(true)
     const [error, setError] = useState(false)
     const [showQR, setShowQR] = useState(false)
@@ -114,7 +114,6 @@ const FreightInfo = () => {
     }
 
     const fetchData = async () => {
-        setLoading(true)
         axios
             .get(`/freight/${id}`)
             .then((response) => {
@@ -207,7 +206,7 @@ const FreightInfo = () => {
                     <div className="clearfix">
                         <h1 className="float-start display-3 me-4">OOPS</h1>
                         <h4>There was no shipment found.</h4>
-                        <p>Double check tracking id for any mistake.</p>
+                        <p>Double check tracking number for any mistake.</p>
                     </div>
                 </CCol>
             </CRow>

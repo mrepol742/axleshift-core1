@@ -47,6 +47,7 @@ const Track = auth(lazy(() => import('./views/track/index')))
 const TrackInfo = auth(lazy(() => import('./views/track/Info')))
 
 const Invoices = auth(lazy(() => import('./views/invoices/index')))
+const InvoiceInfo = auth(lazy(() => import('./views/invoices/Info')))
 
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 
@@ -88,7 +89,7 @@ const routes = [
     { path: '/book-now', name: 'Ship Now', element: BookNow },
 
     { path: '/invoices', name: 'Invoices', element: Invoices },
-    //  { path: '/payment/invoice', name: 'Invoice', element: Err500 },
+    { path: '/invoices/:id', name: 'Invoice', element: InvoiceInfo },
 
     { path: '/couriers', name: 'Couriers', element: Couriers },
     { path: '/routes', name: 'Routes', element: Routes },

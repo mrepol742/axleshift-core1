@@ -69,7 +69,7 @@ router.post('/', auth, async (req, res, next) => {
 })
 
 /**
- * Get Freight by freight id
+ * Get Freight by tracking number
  */
 router.get('/:id', [auth, freight], (req, res) => res.status(200).json(req.freight))
 

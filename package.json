@@ -24,7 +24,7 @@
     "client:env": "cd client && [ ! -f .env ] && cp .env.example .env",
     "post:production": "concurrently \"cd server && npm run production\" \"npm run client:post\"",
     "client:post": "cd client && npm run build && cd build && python3 -m http.server",
-    "pretty": "concurrently \"npm run server:pretty\" \"npm run client:pretty\"",
+    "prettier": "concurrently \"npm run server:pretty\" \"npm run client:pretty\"",
     "server:pretty": "cd server && npm run pretty",
     "client:pretty": "cd client && npm run pretty",
     "test": "concurrently \"npm run server:test\" \"npm run client:test\"",
