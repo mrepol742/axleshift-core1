@@ -65,6 +65,16 @@ const Review = ({ data }) => {
         }, 0)
     }
 
+    const price = (form, discount) => {
+        let amount = totalWeight(form.items) * totalDimensions(form.items)
+        if (!amount) return '$0'
+        if (discount) amount += 2
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        }).format(amount)
+    }
+
     return (
         <div ref={formRef}>
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
@@ -104,10 +114,8 @@ const Review = ({ data }) => {
                 </CCol>
                 <CCol md>
                     <div className="d-flex justify-content-end flex-column">
-                        <span className="text-decoration-line-through">
-                            $ {totalWeight(form.items) * totalDimensions(form.items) + 18}
-                        </span>
-                        <h4>$ {totalWeight(form.items) * totalDimensions(form.items)}</h4>
+                        <span className="text-decoration-line-through">{price(form, true)}</span>
+                        <h4>{price(form, false)}</h4>
                         <CButton
                             className="btn btn-primary mt-2"
                             onClick={() => handleSubmit('book')}
