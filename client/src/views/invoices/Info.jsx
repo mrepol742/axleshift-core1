@@ -32,13 +32,27 @@ const Receipt = () => {
     const generatePDF = () => {
         pdfRef.current.style.display = 'none'
         footer.current.style.display = 'block'
+        const bgColor = getComputedStyle(document.body).backgroundColor
 
-        html2canvas(invoiceRef.current, { scale: 2 })
+        html2canvas(invoiceRef.current, {
+            scale: 2,
+            backgroundColor: bgColor,
+        })
             .then((canvas) => {
                 const imgData = canvas.toDataURL('image/png')
                 const pdf = new jsPDF('p', 'mm', 'a4')
                 const imgWidth = 210
                 const imgHeight = (canvas.height * imgWidth) / canvas.width
+
+                pdf.setFillColor(bgColor)
+                pdf.rect(
+                    0,
+                    0,
+                    pdf.internal.pageSize.getWidth(),
+                    pdf.internal.pageSize.getHeight(),
+                    'F',
+                )
+
                 pdf.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight)
                 pdf.save(`Invoice-${id}.pdf`)
             })

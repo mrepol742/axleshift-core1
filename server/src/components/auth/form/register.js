@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
 import { send } from '../../mail.js'
-import activity from '../../activity.js'
+import activity, { sendNotification } from '../../activity.js'
 import { APP_KEY, NODE_ENV } from '../../../config.js'
 
 const FormRegister = async (req, res) => {
@@ -80,6 +80,9 @@ const FormRegister = async (req, res) => {
         ])
 
         activity(req, 'created account')
+        const title = 'Account Created Successfully'
+        const message = `Welcome ${first_name} ${last_name}, your account has been created successfully.`
+        sendNotification(req, { title, message })
         return res.status(201).json({ type: 'form' })
     } catch (err) {
         logger.error(err)

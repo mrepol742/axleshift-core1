@@ -87,10 +87,17 @@ const Item = ({ index, form, setForm, removeItem }) => {
 
     return (
         <CCard className="mb-3 p-3">
-            <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between mb-2">
                 {form.type === 'business' && <h5 className="text-primary">Item #{index + 1}</h5>}
+                {form.type === 'private' && form.status !== 'to_pay' && (
+                    <h5 className="text-primary">Item #{index + 1}</h5>
+                )}
                 {index > 0 && (
-                    <CButton color="danger" onClick={() => removeItem(index)}>
+                    <CButton
+                        color="danger"
+                        onClick={() => removeItem(index)}
+                        disabled={form.status !== 'to_pay'}
+                    >
                         <FontAwesomeIcon icon={faXmark} />
                     </CButton>
                 )}
@@ -106,6 +113,7 @@ const Item = ({ index, form, setForm, removeItem }) => {
                         onChange={(e) => handleInputChange(e, 'weight')}
                         max={form.type === 'business' ? 2500 : 70}
                         min={1}
+                        disabled={form.status !== 'to_pay'}
                     />
                 </CCol>
                 <CCol md={3}>
@@ -118,6 +126,7 @@ const Item = ({ index, form, setForm, removeItem }) => {
                         onChange={(e) => handleInputChange(e, 'length')}
                         max={form.type === 'business' ? 302 : 120}
                         min={1}
+                        disabled={form.status !== 'to_pay'}
                     />
                 </CCol>
                 <CCol md={3}>
@@ -130,6 +139,7 @@ const Item = ({ index, form, setForm, removeItem }) => {
                         onChange={(e) => handleInputChange(e, 'width')}
                         max={form.type === 'business' ? 223 : 80}
                         min={1}
+                        disabled={form.status !== 'to_pay'}
                     />
                 </CCol>
                 <CCol md={3}>
@@ -142,6 +152,7 @@ const Item = ({ index, form, setForm, removeItem }) => {
                         onChange={(e) => handleInputChange(e, 'height')}
                         max={form.type === 'business' ? 220 : 80}
                         min={1}
+                        disabled={form.status !== 'to_pay'}
                     />
                 </CCol>
                 {form.type === 'business' && (
@@ -155,30 +166,37 @@ const Item = ({ index, form, setForm, removeItem }) => {
                             onChange={(e) => handleInputChange(e, 'quantity')}
                             max={99}
                             min={1}
+                            disabled={form.status !== 'to_pay'}
                         />
                     </CCol>
                 )}
             </CRow>
-            <hr />
-            <h6>Need help with sizes?</h6>
-            <div className="d-block d-md-flex justify-content-between">
-                {sizes[form.type].map((item, idx) => (
-                    <div
-                        key={idx}
-                        className="border rounded p-2 mb-2 me-2 w-100"
-                        onClick={() => handleSizeClick(item.value)}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        {item.label}
-                        <span className="d-block text-muted">{item.value.join(' x ')} cm</span>
+            {form.status === 'to_pay' && (
+                <>
+                    <hr />
+                    <h6>Need help with sizes?</h6>
+                    <div className="d-block d-md-flex justify-content-between">
+                        {sizes[form.type].map((item, idx) => (
+                            <div
+                                key={idx}
+                                className="border rounded p-2 mb-2 me-2 w-100"
+                                onClick={() => handleSizeClick(item.value)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                {item.label}
+                                <span className="d-block text-muted">
+                                    {item.value.join(' x ')} cm
+                                </span>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </>
+            )}
         </CCard>
     )
 }
 
-const Shipment = ({ data }) => {
+const Shipment = ({ data, shipmentRef }) => {
     const { form, setForm, loading, setLoading } = data
     const navigate = useNavigate()
     const [items, setItems] = React.useState([{}])
@@ -241,6 +259,7 @@ const Shipment = ({ data }) => {
                                 onChange={(e) =>
                                     setForm({ ...form, containsDangerGoods: e.target.checked })
                                 }
+                                disabled={form.status !== 'to_pay'}
                             />
                         )}
                         <CFormCheck
@@ -250,6 +269,7 @@ const Shipment = ({ data }) => {
                                 setForm({ ...form, containsDocuments: e.target.checked })
                             }
                             className="mb-2"
+                            disabled={form.status !== 'to_pay'}
                         />
                         {!shipping && (
                             <CButton
@@ -277,9 +297,11 @@ const Shipment = ({ data }) => {
                     </CCol>
                 </CRow>
             </CForm>
-            {form.status === 'to_pay' && shipping && <Review data={data} />}
+            {form.status === 'to_pay' && shipping && (
+                <Review data={data} shipmentRef={shipmentRef} />
+            )}
 
-            {form.status !== 'to_pay' && (
+            {!['to_pay', 'cancelled'].includes(form.status) && (
                 <div className="d-flex align-items-right justify-content-end">
                     <CButton
                         className="btn btn-primary px-4 mt-3"
@@ -297,6 +319,7 @@ export default Shipment
 
 Shipment.propTypes = {
     data: PropTypes.object.isRequired,
+    shipmentRef: PropTypes.object.isRequired,
 }
 
 Item.propTypes = {

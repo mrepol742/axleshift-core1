@@ -5,7 +5,14 @@ const totalWeight = (items) => {
 const totalDimensions = (items) => {
     return items.reduce((acc, item) => {
         const quantity = parseFloat(item.quantity) || 1
-        return acc + (parseFloat(item.length) * parseFloat(item.width) * parseFloat(item.height) * quantity) / 1000
+        return (
+            acc +
+            (parseFloat(item.length) *
+                parseFloat(item.width) *
+                parseFloat(item.height) *
+                quantity) /
+                1000
+        )
     }, 0)
 }
 

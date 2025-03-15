@@ -25,55 +25,11 @@ import ShipmentReview from '../book-now/fragments/review'
 import Shipment from '../book-now/fragments/shipment'
 
 const FreightInfo = () => {
-    const _FREIGHT_ = {
-        isImport: false,
-        isResidentialAddress: false,
-        containsDangerGoods: false,
-        containsDocuments: false,
-        from: [
-            {
-                name: '',
-                company: '',
-                country: '',
-                countryCode: '',
-                city: '',
-                zipCode: '',
-                address: '',
-                address2: '',
-                address3: '',
-                phone: '',
-                email: '',
-                taxId: '',
-            },
-        ],
-        to: [
-            {
-                name: '',
-                company: '',
-                country: '',
-                countryCode: '',
-                city: '',
-                zipCode: '',
-                address: '',
-                address2: '',
-                address3: '',
-                phone: '',
-                email: '',
-                employerId: '',
-            },
-        ],
-        type: 'private',
-        items: [],
-    }
     const { user } = useUserProvider()
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
-    const [form, setForm] = useState(_FREIGHT_)
-    const [editedform, setEditedform] = useState(_FREIGHT_)
-    const [type, setType] = useState('')
-    const [status, setStatus] = useState('')
+    const [form, setForm] = useState([])
     const [loading, setLoading] = useState(true)
-    const [disabled, setDisabled] = useState(true)
     const [error, setError] = useState(false)
     const [showQR, setShowQR] = useState(false)
     const svgRef = useRef(null)
@@ -82,7 +38,7 @@ const FreightInfo = () => {
 
     const handleInputChange = (e, section) => {
         const { id, value } = e.target
-        setEditedform((prev) => ({
+        form((prev) => ({
             ...prev,
             [section]: {
                 ...prev[section],
@@ -91,35 +47,10 @@ const FreightInfo = () => {
         }))
     }
 
-    const bookShipment = async () => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
-        setLoading(true)
-        /*
-         * Even tho the system no longer uses mongodb generated object id as tracking number
-         * the backend still uses it to find the shipment
-         * and assign neccessary data
-         */
-        axios
-            .post(`/invoices`, {
-                id: id,
-                recaptcha_ref: recaptcha,
-            })
-            .then((response) => (window.location.href = response.data.r_url))
-            .catch((error) => {
-                const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
-                addToast(message)
-            })
-            .finally(() => setLoading(false))
-    }
-
     const fetchData = async () => {
         axios
             .get(`/freight/${id}`)
-            .then((response) => {
-                setForm({ ...response.data, internal: true })
-                setEditedform({ ...response.data, internal: true })
-            })
+            .then((response) => setForm({ ...response.data, internal: true }))
             .catch((error) => {
                 console.error(error)
                 setError(true)
@@ -127,49 +58,21 @@ const FreightInfo = () => {
             .finally(() => setLoading(false))
     }
 
-    const handleEditButton = async () => {
-        if (disabled) return setDisabled(false)
-        const recaptcha = await recaptchaRef.current.executeAsync()
-        setLoading(true)
-        const updatedform = {
-            ...editedform,
-            recaptcha_ref: recaptcha,
-        }
-
-        axios
-            .post(`/freight/update/${id}`, updatedform)
-            .then((response) => addToast('Your changes has been saved.'))
-            .catch((error) => {
-                const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
-                addToast(message, 'Submit failed!')
-                setEditedform(form)
-            })
-            .finally(() => {
-                setLoading(false)
-                setDisabled(true)
-            })
-    }
-
     const handleDeleteButton = async () => {
-        if (!disabled) {
-            setDisabled(true)
-            setEditedform(form)
-            return
-        }
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
             .post(`/freight/cancel/${id}`, { recaptcha_ref: recaptcha })
             .then((response) => {
                 addToast('Shipment has been cancelled.')
-                navigate('/dashboard')
+                setTimeout(() => {
+                    window.location.reload()
+                }, 3000)
             })
             .catch((error) => {
                 const message =
                     error.response?.data?.error || 'Server is offline or restarting please wait'
                 addToast(message, 'Submit failed!')
-                setEditedform(form)
             })
             .finally(() => setLoading(false))
     }
@@ -237,7 +140,6 @@ const FreightInfo = () => {
                     </CModalFooter>
                 </CModal>
             )}
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
                 <span className="d-block">
                     <span className="text-primary fw-bold small">Tracking Number:</span>
@@ -252,39 +154,20 @@ const FreightInfo = () => {
                     >
                         <FontAwesomeIcon icon={faQrcode} />
                     </CButton>
-                    {status !== 'cancelled' && status !== 'received' && (
-                        <>
-                            {status === 'to_pay' && user.role === 'user' && (
-                                <CButton
-                                    color="primary"
-                                    className="me-2 rounded"
-                                    onClick={bookShipment}
-                                >
-                                    Book shipment
-                                </CButton>
-                            )}
-                            <CButton
-                                color="primary"
-                                className="me-2 rounded"
-                                onClick={handleEditButton}
-                                disabled={['to_receive', 'received'].includes(status)}
-                            >
-                                {!disabled ? 'Save' : 'Edit'}
-                            </CButton>
-                            <CButton
-                                color={!disabled ? 'warn' : 'danger'}
-                                className="me-2 rounded"
-                                onClick={handleDeleteButton}
-                                disabled={['to_receive', 'received'].includes(status)}
-                            >
-                                Cancel
-                            </CButton>
-                        </>
+                    {form.status === 'to_pay' && (
+                        <CButton
+                            color="danger"
+                            className="me-2 rounded"
+                            onClick={handleDeleteButton}
+                        >
+                            Cancel
+                        </CButton>
                     )}
                 </CButtonGroup>
             </div>
 
             <ShipmentInfo data={{ form, setForm, loading, setLoading }} />
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }

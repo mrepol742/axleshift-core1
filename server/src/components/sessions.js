@@ -43,25 +43,25 @@ export const getUser = async (sessionToken) => {
             .collection(endpoint)
             .findOne({ token: sessionToken, active: true }, { projection: { user_id: 1 } })
         if (!tokenCollection) return null
-        const theUser = await db
-            .collection('users')
-            .findOne(
-                { _id: new ObjectId(tokenCollection.user_id) },
-                {
-                    projection: {
-                        _id: 1,
-                        email: 1,
-                        first_name: 1,
-                        last_name: 1,
-                        role: 1,
-                        email_verify_at: 1,
-                        oauth2: 1,
-                        password: { $cond: { if: { $ne: ['$password', null] }, then: 'OK', else: null } },
-                        timezone: 1,
-                        ref: 1,
+        const theUser = await db.collection('users').findOne(
+            { _id: new ObjectId(tokenCollection.user_id) },
+            {
+                projection: {
+                    _id: 1,
+                    email: 1,
+                    first_name: 1,
+                    last_name: 1,
+                    role: 1,
+                    email_verify_at: 1,
+                    oauth2: 1,
+                    password: {
+                        $cond: { if: { $ne: ['$password', null] }, then: 'OK', else: null },
                     },
-                }
-            )
+                    timezone: 1,
+                    ref: 1,
+                },
+            },
+        )
 
         if (theUser) return theUser
     } catch (e) {
@@ -88,15 +88,16 @@ export const removeSession = async (sessionToken) => {
     }
 }
 
-
 export const getSession = async (sessionToken) => {
     try {
         const db = await database()
-        const session = await db.collection('sessions').findOneAndUpdate(
-            { token: sessionToken },
-            { $set: { last_accessed: Date.now() } },
-            { returnDocument: 'after' }
-        )
+        const session = await db
+            .collection('sessions')
+            .findOneAndUpdate(
+                { token: sessionToken },
+                { $set: { last_accessed: Date.now() } },
+                { returnDocument: 'after' },
+            )
         return session
     } catch (e) {
         logger.error(e)

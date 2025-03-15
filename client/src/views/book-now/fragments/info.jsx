@@ -20,7 +20,7 @@ import PropTypes from 'prop-types'
 import Shipment from './shipment'
 import countries from './countries'
 
-const Form = ({ data, type }) => {
+const Form = ({ data, type, shipmentRef }) => {
     const { form, setForm, loading, setLoading } = data
     const formRef = React.useRef(null)
     const [shipment, setShipment] = useState(form.internal)
@@ -51,6 +51,7 @@ const Form = ({ data, type }) => {
                         value={form[prefix][0].country}
                         onChange={(e) => handleInputChange(e, `${prefix}.0.country`)}
                         required
+                        disabled={form.status !== 'to_pay'}
                     />
                     <datalist id={`${prefix}-country-list`}>
                         {countries.map((country, index) => (
@@ -66,6 +67,7 @@ const Form = ({ data, type }) => {
                         value={form[prefix][0].city}
                         onChange={(e) => handleInputChange(e, `${prefix}.0.city`)}
                         required={type === 'business'}
+                        disabled={form.status !== 'to_pay'}
                     />
                     <CFormInput
                         type="number"
@@ -73,6 +75,7 @@ const Form = ({ data, type }) => {
                         value={form[prefix][0].zipCode}
                         onChange={(e) => handleInputChange(e, `${prefix}.0.zipCode`)}
                         required={type === 'business'}
+                        disabled={form.status !== 'to_pay'}
                     />
                 </CCol>
             </CRow>
@@ -81,6 +84,7 @@ const Form = ({ data, type }) => {
                     label="Residential Address"
                     checked={form.isResidentialAddress}
                     onChange={(e) => setForm({ ...form, isResidentialAddress: e.target.checked })}
+                    disabled={form.status !== 'to_pay'}
                 />
             )}
         </>
@@ -94,6 +98,7 @@ const Form = ({ data, type }) => {
                         label="Import Statement"
                         checked={form.isImport}
                         onChange={handleSwitchChange}
+                        disabled={form.status !== 'to_pay'}
                     />
                 </div>
                 {form.isImport ? (
@@ -136,18 +141,23 @@ const Form = ({ data, type }) => {
                 )}
             </CForm>
 
-            {shipment && <Shipment data={data} />}
+            {shipment && <Shipment data={data} shipmentRef={shipmentRef} />}
         </>
     )
 }
 
 const ShippingAs = ({ data }) => {
     const { form, setForm, loading, setLoading } = data
+    const shipmentRef = React.useRef()
 
     return (
-        <>
-            <h3 className="text-primary">Ship Now</h3>
-            {!form.internal && <p>You are a</p>}
+        <div ref={shipmentRef}>
+            {!form.internal && (
+                <>
+                    <h3 className="text-primary">Ship Now</h3>
+                    <p>You are a</p>
+                </>
+            )}
             <CTabs
                 activeItemKey={form.internal ? (form.type === 'private' ? 1 : 2) : 1}
                 className="mb-2"
@@ -172,14 +182,14 @@ const ShippingAs = ({ data }) => {
                 </CTabList>
                 <CTabContent>
                     <CTabPanel className="p-2" aria-labelledby="private-tab-pane" itemKey={1}>
-                        <Form data={data} type="private" />
+                        <Form data={data} shipmentRef={shipmentRef} type="private" />
                     </CTabPanel>
                     <CTabPanel className="p-2" aria-labelledby="business-tab-pane" itemKey={2}>
-                        <Form data={data} type="business" />
+                        <Form data={data} shipmentRef={shipmentRef} type="business" />
                     </CTabPanel>
                 </CTabContent>
             </CTabs>
-        </>
+        </div>
     )
 }
 
@@ -192,4 +202,5 @@ ShippingAs.propTypes = {
 Form.propTypes = {
     data: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
+    shipmentRef: PropTypes.object.isRequired,
 }

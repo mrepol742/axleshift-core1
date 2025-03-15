@@ -87,7 +87,10 @@ router.post('/whitelist-ip', [recaptcha, auth], async function (req, res, next) 
         }
         const db = await database()
         const apiTokenCollection = db.collection('apiToken')
-        const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id }, { projection: { _id: 1, whitelist_ip: 1 } })
+        const apiToken = await apiTokenCollection.findOne(
+            { user_id: req.user._id },
+            { projection: { _id: 1, whitelist_ip: 1 } },
+        )
 
         if (!apiToken) return res.status(500).json({ error: 'Internal server error' })
 

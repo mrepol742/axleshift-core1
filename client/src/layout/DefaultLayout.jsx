@@ -33,8 +33,16 @@ const DefaultLayout = () => {
     }
 
     useEffect(() => {
-        addToast('Welcome to axleshift', 'Hello World')
-        addNotif('Welcome to core 1 axleshift')
+        const fetchNotifications = async () => {
+            try {
+                const response = await axios.get('/notifications')
+                response.data.forEach((notif) => addNotif(notif))
+            } catch (error) {
+                console.error('Error fetching notifications:', error)
+            }
+        }
+
+        fetchNotifications()
     }, [])
 
     return (

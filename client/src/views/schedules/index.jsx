@@ -15,7 +15,7 @@ const Schedules = () => {
 
     const fetchData = async () => {
         axios
-            .get(`/schedules`)
+            .get(`/freight/calendar`)
             .then((response) => setResult(response.data))
             .catch((error) => {
                 const message =
@@ -37,6 +37,7 @@ const Schedules = () => {
                 </div>
             )}
 
+            {JSON.stringify(result)}
             <Calendar
                 events={result}
                 localizer={localizer}

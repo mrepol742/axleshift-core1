@@ -6,13 +6,19 @@ const NotificationContext = createContext()
 export const AppNotificationProvider = ({ children }) => {
     const [notifs, setNotifications] = useState([])
 
-    const addNotif = (message, header = 'Axleshift') => {
-        const newNotif = {
-            id: Date.now(),
-            message,
-            header,
-        }
-        setNotifications((preveNotif) => [...preveNotif, newNotif])
+    const addNotif = (notif) => {
+        setNotifications((prevNotifs) => {
+            if (prevNotifs.some((n) => notif._id === n._id)) {
+                return prevNotifs
+            }
+
+            const updatedNotifs = [...prevNotifs, notif]
+            if (updatedNotifs.length > 20) {
+                updatedNotifs.shift()
+            }
+
+            return updatedNotifs
+        })
     }
 
     return (
