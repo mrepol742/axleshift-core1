@@ -11,6 +11,8 @@ import {
     CButton,
     CCol,
     CRow,
+    CFormCheck,
+    CButtonGroup,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faUser, faClock } from '@fortawesome/free-solid-svg-icons'
@@ -151,7 +153,7 @@ const Account = () => {
                                         </CInputGroup>
                                     </CCol>
                                 </CRow>
-                                <CInputGroup className="mb-3">
+                                <CInputGroup className="mb-2">
                                     <CInputGroupText>
                                         <FontAwesomeIcon icon={faClock} />
                                     </CInputGroupText>

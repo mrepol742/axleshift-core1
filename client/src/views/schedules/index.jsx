@@ -37,7 +37,6 @@ const Schedules = () => {
                 </div>
             )}
 
-            {JSON.stringify(result)}
             <Calendar
                 events={result}
                 localizer={localizer}

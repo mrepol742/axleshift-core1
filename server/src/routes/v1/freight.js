@@ -87,17 +87,13 @@ router.get('/calendar', auth, async (req, res) => {
             .sort({ created_at: -1 })
             .toArray()
 
-            logger.info(freight)
-
         const events = []
 
         for (let i = 0; i < freight.length; i++) {
-            logger.info(freight[i])
             events.push({
-                tracking_number: freight[i].tracking_number,
-                start: freight[i].created_at,
+                title: freight[i].tracking_number,
+                start: freight[i].expected_delivery_date,
                 end: freight[i].expected_delivery_date,
-                allDay: false,
             })
         }
         return res.status(200).json(events)
