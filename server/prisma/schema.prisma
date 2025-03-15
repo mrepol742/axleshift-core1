@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type FreightAmount {
+  currency String
+  value    Float
+}
+
 type FreightFrom {
   address     String
   address2    String
@@ -25,7 +30,7 @@ type FreightFrom {
 type FreightItems {
   height Int
   length Int
-  weight String
+  weight String?
   width  Int
 }
 
@@ -42,6 +47,13 @@ type FreightTo {
   name        String
   phone       String
   zipCode     String
+}
+
+type SessionsKey {
+  /// Multiple data types found: String: 68.2%, SessionsKeyPrivateKey: 31.8% out of 22 sampled entries
+  privateKey Json
+  /// Multiple data types found: String: 68.2%, SessionsKeyPublicKey: 31.8% out of 22 sampled entries
+  publicKey  Json
 }
 
 type UsersOauth2 {
@@ -72,15 +84,17 @@ model activityLog {
 }
 
 model apiToken {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  active       Boolean
-  compromised  Boolean
-  created_at   Float
-  modified_by  String
-  token        String
-  updated_at   Float
-  user_id      String   @db.ObjectId
-  whitelist_ip String[]
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  active        Boolean
+  compromised   Boolean
+  created_at    Float
+  last_accessed Float?
+  modified_by   String
+  token         String
+  updated_at    Float
+  user_agent    String?
+  user_id       String   @db.ObjectId
+  whitelist_ip  String[]
 }
 
 model couriers {
@@ -89,16 +103,21 @@ model couriers {
 
 model freight {
   id                     String         @id @default(auto()) @map("_id") @db.ObjectId
-  contains_danger_goods  Boolean
-  contains_documents     Boolean
+  amount                 FreightAmount?
+  contains_danger_goods  Boolean?
+  contains_documents     Boolean?
+  country                String?
   created_at             Float
   from                   FreightFrom[]
-  is_import              Boolean
-  is_residential_address Boolean
+  is_import              Boolean?
+  is_residential_address Boolean?
   items                  FreightItems[]
+  modified_by            String?        @db.ObjectId
+  number_of_items        Int?
   session_id             String         @db.ObjectId
   status                 String
   to                     FreightTo[]
+  total_weight           Int?
   tracking_number        String
   type                   String
   updated_at             Float
@@ -106,17 +125,18 @@ model freight {
 }
 
 model invoices {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  amount      Int
-  created_at  Float
-  currency    String
-  external_id String
-  freight_id  String  @db.ObjectId
-  invoice_id  String
-  session_id  String? @db.ObjectId
-  status      String
-  updated_at  Float
-  user_id     String  @db.ObjectId
+  id                      String @id @default(auto()) @map("_id") @db.ObjectId
+  amount                  Int
+  created_at              Float
+  currency                String
+  external_id             String
+  freight_id              String @db.ObjectId
+  freight_tracking_number String
+  invoice_id              String
+  session_id              String @db.ObjectId
+  status                  String
+  updated_at              Float
+  user_id                 String @db.ObjectId
 }
 
 model newsletter {
@@ -144,15 +164,17 @@ model rates {
 }
 
 model sessions {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   active        Boolean
   compromised   Boolean
   ip_address    String
+  key           SessionsKey?
   last_accessed Float
+  location      String?
   modified_by   String?
   token         String
   user_agent    String
-  user_id       String  @db.ObjectId
+  user_id       String       @db.ObjectId
 }
 
 model threats {
@@ -161,10 +183,12 @@ model threats {
 
 model users {
   id                  String       @id @default(auto()) @map("_id") @db.ObjectId
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  avatar              Json?
   created_at          Float?
   devices             String[]
   email               String
-  email_verify_at     Float
+  email_verify_at     Float?
   first_name          String
   last_accessed       Float?
   last_name           String
@@ -175,5 +199,6 @@ model users {
   ref                 String
   registration_type   String
   role                String
+  timezone            String?
   updated_at          Float?
 }

@@ -52,8 +52,7 @@ const FormLogin = async (req, res) => {
         if (!theUser.devices) device(theUser, newDevice)
 
         return res.status(200).json({
-            token: session_token,
-            key,
+            token: session_token
         })
     } catch (err) {
         logger.error(err)
