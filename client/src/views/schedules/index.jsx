@@ -36,7 +36,6 @@ const Schedules = () => {
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )}
-
             <Calendar
                 events={result}
                 localizer={localizer}

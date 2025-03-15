@@ -83,7 +83,9 @@ router.get('/calendar', auth, async (req, res) => {
             ...(isUser ? { user_id: req.user._id } : {}),
         }
         const freight = await freightCollection
-            .find(filter, { projection: { tracking_number: 1, expected_delivery_date: 1, status: 1, type: 1 } })
+            .find(filter, {
+                projection: { tracking_number: 1, expected_delivery_date: 1, status: 1, type: 1 },
+            })
             .sort({ created_at: -1 })
             .toArray()
 

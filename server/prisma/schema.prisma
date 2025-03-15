@@ -97,10 +97,6 @@ model apiToken {
   whitelist_ip  String[]
 }
 
-model couriers {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-}
-
 model freight {
   id                     String         @id @default(auto()) @map("_id") @db.ObjectId
   amount                 FreightAmount?

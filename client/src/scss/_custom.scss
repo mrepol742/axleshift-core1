@@ -201,6 +201,16 @@
     border: none !important;
 }
 
+.rbc-btn-group>button:first-child:not(:last-child) {
+    border-top-left-radius: 20px !important;
+    border-bottom-left-radius: 20px !important;
+}
+
+.rbc-btn-group>button:last-child:not(:first-child) {
+    border-top-right-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+}
+
 .rbc-month-view,
 .rbc-month-row,
 .rbc-day-bg+.rbc-day-bg,

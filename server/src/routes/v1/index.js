@@ -11,7 +11,6 @@ import prometheus from './metrics/prometheus.js'
 import insights from './insights.js'
 import newsletter from './newsletter.js'
 import invoices from './invoices.js'
-import couriers from './couriers.js'
 import notifications from './notifications.js'
 
 const router = express.Router()
@@ -32,7 +31,6 @@ router.use('/notifications', notifications)
 router.use('/insights', insights)
 router.use('/newsletter', newsletter)
 
-router.use('/couriers', couriers)
 router.use('/invoices', invoices)
 
 export default router

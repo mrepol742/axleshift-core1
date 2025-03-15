@@ -20,11 +20,14 @@ const FormLogin = async (req, res) => {
                 { email: email },
             ],
         })
-        if (!theUser) return res.status(404).json({ error: 'User not found' })
+        if (!theUser)
+            return res
+                .status(404)
+                .json({ error: "The email you entered isn't connected to an account." })
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         if (passwordHash !== theUser.password)
-            return res.status(401).json({ error: 'Invalid login credentials' })
+            return res.status(401).json({ error: "The password you've entered is incorrect." })
 
         if (NODE_ENV === 'production' && theUser.role === 'user')
             res.status(200).json({
