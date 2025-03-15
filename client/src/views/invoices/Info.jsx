@@ -131,7 +131,9 @@ const Receipt = () => {
                             </CTableRow>
                         </CTableBody>
                     </CTable>
-                    <div ref={footer} className="text-center">https://core1.axleshift.com/invoices/{id}</div>
+                    <div ref={footer} className="text-center">
+                        https://core1.axleshift.com/invoices/{id}
+                    </div>
                     <CButton className="btn btn-primary px-4" ref={pdfRef} onClick={generatePDF}>
                         Print
                     </CButton>

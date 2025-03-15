@@ -48,6 +48,7 @@ const ShipNow = () => {
         ],
         type: 'private',
         items: [],
+        status: 'to_pay',
     })
 
     return (

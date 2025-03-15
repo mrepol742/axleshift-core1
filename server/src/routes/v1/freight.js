@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb'
 import express from 'express'
 import axios from 'axios'
 import logger from '../../utils/logger.js'
+import { totalWeight, price } from '../../utils/freight.js'
 import database from '../../models/mongodb.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
@@ -50,11 +51,11 @@ router.post('/', auth, async (req, res, next) => {
         const [totalItems, items] = await Promise.all([
             freightCollection.countDocuments(filter),
             freightCollection
-                .find(filter)
-                .sort({ created_at: -1 })
-                .skip(skip)
-                .limit(limit)
-                .toArray(),
+            .find(filter, { projection: { from: 0, to: 0, items: 0 } })
+            .sort({ created_at: -1 })
+            .skip(skip)
+            .limit(limit)
+            .toArray(),
         ])
 
         return res.status(200).json({
@@ -92,6 +93,11 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
         const db = await database()
         const dateNow = Date.now()
         const trackingNumber = `${to[0].countryCode}-${Date.now().toString()}`
+        const shipmentWeight = totalWeight(items)
+        const numberOfItems = items.length
+        const shipmentPrice = price(items)
+        const country = to[0].country
+
         await db.collection('freight').insertOne({
             user_id: req.user._id,
             is_import: isImport,
@@ -103,6 +109,13 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
             type: type,
             items: items,
             status: 'to_pay',
+            total_weight: shipmentWeight,
+            number_of_items: numberOfItems,
+            amount: {
+                currency: 'USD',
+                value: shipmentPrice,
+            },
+            country: country,
             session_id: req.session._id,
             tracking_number: trackingNumber,
             created_at: dateNow,

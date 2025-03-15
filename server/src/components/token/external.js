@@ -14,7 +14,7 @@ const external = async (req, res, next) => {
         token: token,
         active: true,
         compromised: false,
-    })
+    }, { projection: { whitelist_ip: 1 } })
 
     if (!existingApiToken)
         return res
@@ -50,6 +50,7 @@ const external = async (req, res, next) => {
         })(),
     ])
 
+    req.request_type = 'external'
     req.token = token
 
     setTimeout(() => {

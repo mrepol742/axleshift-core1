@@ -108,8 +108,6 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
             },
         })
 
-        logger.info(invoice)
-
         const db = await database()
         const invoicesCollection = db.collection('invoices')
         const dateNow = Date.now()

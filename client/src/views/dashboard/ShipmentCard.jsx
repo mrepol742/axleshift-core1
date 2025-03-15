@@ -67,8 +67,12 @@ const ShipmentCard = ({ shipment }) => {
 
                 <div className="mb-2">
                     <small className="text-muted d-block">
-                        {shipment.to[0].country} | {totalWeight(shipment.items)} |{' '}
-                        {shipment.amount?.currency + ' ' + shipment.amount?.value}
+                        {JSON.stringify(shipment.to)}
+                        {shipment.country} | {shipment.total_weight + 'kg'}
+                        {shipment.number_of_items > 1
+                            ? ' | ' + shipment.number_of_items + ' items |'
+                            : ''}
+                        | {shipment.amount?.currency + ' ' + shipment.amount?.value}
                     </small>
                 </div>
             </CCardBody>

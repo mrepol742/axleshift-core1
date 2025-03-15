@@ -1,7 +1,6 @@
 import crypto from 'crypto'
 import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
-import { addSession } from '../../../components/sessions.js'
 import { send } from '../../mail.js'
 import activity from '../../activity.js'
 import { APP_KEY, NODE_ENV } from '../../../config.js'

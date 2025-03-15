@@ -15,7 +15,7 @@ router.get('/', auth, async function (req, res, next) {
         const apiToken = await db.collection('apiToken').findOne({ user_id: req.user._id })
         if (!apiToken) return res.status(200).json({ error: 'No API Token found' })
 
-        return res.status(200).json({ token: apiToken.token, whitelist_ip: apiToken.whitelist_ip })
+        return res.status(200).json(apiToken)
     } catch (e) {
         logger.error(e)
     }
@@ -42,7 +42,7 @@ router.post('/new', [recaptcha, auth], async function (req, res, next) {
                     },
                 },
             )
-            return res.status(200).json({ token: apiT })
+            return res.status(200).json(apiToken)
         }
         const dateNow = Date.now()
         await apiTokenCollection.insertOne({
@@ -87,7 +87,7 @@ router.post('/whitelist-ip', [recaptcha, auth], async function (req, res, next) 
         }
         const db = await database()
         const apiTokenCollection = db.collection('apiToken')
-        const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id })
+        const apiToken = await apiTokenCollection.findOne({ user_id: req.user._id }, { projection: { _id: 1, whitelist_ip: 1 } })
 
         if (!apiToken) return res.status(500).json({ error: 'Internal server error' })
 

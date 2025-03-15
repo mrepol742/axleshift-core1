@@ -277,10 +277,9 @@ const Shipment = ({ data }) => {
                     </CCol>
                 </CRow>
             </CForm>
-            {!form.status ||
-            (form.status !== 'to_receive' && form.status !== 'received' && shipping) ? (
-                <Review data={data} />
-            ) : (
+            {form.status === 'to_pay' && shipping && <Review data={data} />}
+
+            {form.status !== 'to_pay' && (
                 <div className="d-flex align-items-right justify-content-end">
                     <CButton
                         className="btn btn-primary px-4 mt-3"
