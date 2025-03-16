@@ -209,7 +209,7 @@ router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req,
 
         // TODO: calculate expected delivery date
         // and draw a estimated route
-        let expectedDelivery = req.freight.expected_delivery_date
+        let expectedDelivery = new Date(req.freight.expected_delivery_date)
         if (
             countryTo != req.freight.to[0].country ||
             from[0].country != req.freight.from[0].country

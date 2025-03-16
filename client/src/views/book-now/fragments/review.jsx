@@ -15,6 +15,11 @@ import {
     CButton,
     CFormInput,
     CCard,
+    CModal,
+    CModalBody,
+    CModalFooter,
+    CModalHeader,
+    CModalTitle,
 } from '@coreui/react'
 import PropTypes from 'prop-types'
 import jsPDF from 'jspdf'
@@ -109,6 +114,17 @@ const Review = ({ data, shipmentRef }) => {
         }).format(amount)
     }
 
+    const [showModal, setShowModal] = useState(false)
+
+    const handleContinueBooking = () => {
+        form.internal ? handleSubmit('update') : setShowModal(true)
+    }
+
+    const handleModalConfirm = () => {
+        setShowModal(false)
+        handleSubmit('book')
+    }
+
     return (
         <div ref={formRef}>
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
@@ -140,15 +156,39 @@ const Review = ({ data, shipmentRef }) => {
                 <CCol md>
                     <div className="d-flex justify-content-end flex-column">
                         <h4>{price(form)}</h4>
-                        <CButton
-                            className="btn btn-primary mt-2"
-                            onClick={() => handleSubmit(form.internal ? 'update' : 'book')}
-                        >
+                        <CButton className="btn btn-primary mt-2" onClick={handleContinueBooking}>
                             Continue booking
                         </CButton>
                     </div>
                 </CCol>
             </CRow>
+            {showModal && (
+                <CModal
+                    alignment="center"
+                    scrollable
+                    visible={showModal}
+                    onClose={() => setShowModal(false)}
+                    aria-labelledby="ScheduleShipment"
+                >
+                    <CModalHeader>
+                        <CModalTitle>Schedule Shipment</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <p>
+                            Continuing will generate a tracking number and you will not be allowed
+                            to change the shipment type.
+                        </p>
+                    </CModalBody>
+                    <CModalFooter>
+                        <CButton className="btn" onClick={() => setShowModal(false)}>
+                            Close
+                        </CButton>
+                        <CButton className="btn btn-primary" onClick={handleModalConfirm}>
+                            Confirm
+                        </CButton>
+                    </CModalFooter>
+                </CModal>
+            )}
         </div>
     )
 }
