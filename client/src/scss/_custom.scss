@@ -102,7 +102,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    opacity: 0.5;
+    opacity: 0.2;
 }
 
 /*
@@ -216,4 +216,19 @@
 .rbc-day-bg+.rbc-day-bg,
 .rbc-header {
     border: none !important;
+}
+
+/*
+ * shipment background
+ */
+.shipment-bg {
+    background-image: url('https://static.wixstatic.com/media/3f1d50_e8cb5218cd7645798f420f89b1311d7f~mv2.gif');
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.2;
 }
