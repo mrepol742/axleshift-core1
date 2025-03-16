@@ -10,10 +10,10 @@ const ShipNow = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
-        isImport: false,
-        isResidentialAddress: false,
-        containsDangerGoods: false,
-        containsDocuments: false,
+        is_import: false,
+        is_residential_address: false,
+        contains_danger_goods: false,
+        contains_documents: false,
         from: [
             {
                 name: '',
@@ -48,6 +48,7 @@ const ShipNow = () => {
         ],
         type: 'private',
         items: [],
+        status: 'to_pay',
     })
 
     return (

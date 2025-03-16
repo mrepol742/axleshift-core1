@@ -24,4 +24,23 @@ const activity = async (req, event) => {
     }
 }
 
+export const sendNotification = async (req, event) => {
+    try {
+        Promise.all([
+            (async () => {
+                const db = await database()
+                db.collection('notifications').insertOne({
+                    user_id: req.user._id,
+                    session_id: req.session._id,
+                    is_read: false,
+                    event: event,
+                    time: Date.now(),
+                })
+            })(),
+        ])
+    } catch (e) {
+        logger.error(e)
+    }
+}
+
 export default activity

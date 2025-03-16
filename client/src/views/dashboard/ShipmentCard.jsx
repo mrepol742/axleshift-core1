@@ -50,27 +50,35 @@ const ShipmentCard = ({ shipment }) => {
                 <div>{parseTimestamp(shipment.updated_at)}</div>
             </CCardHeader>
             <CCardBody>
-                <div className="mb-2">
-                    <small className="text-muted d-block">Courier</small>
-                    Shoppe SPX
-                </div>
-                <div className="mb-2">
-                    <small className="text-muted d-block">Tracing number</small>
-                    {shipment.tracking_number || 'N/A'}
-                </div>
-                {(shipment.status === 'to_ship' || shipment.status === 'to_receive') && (
+                {shipment.courier !== 'none' && (
                     <div className="mb-2">
-                        <small className="text-muted d-block">Delivery on</small>
-                        Today
+                        <small className="text-muted d-block">Courier</small>
+                        {shipment.courier}
                     </div>
                 )}
 
                 <div className="mb-2">
-                    <small className="text-muted d-block">
-                        {shipment.to[0].country} | {totalWeight(shipment.items)} |{' '}
-                        {shipment.amount?.currency + ' ' + shipment.amount?.value}
-                    </small>
+                    <small className="text-muted d-block">Tracing number</small>
+                    {shipment.tracking_number}
                 </div>
+
+                <p className="text-muted d-block">
+                    <span className="badge bg-dark me-2">{shipment.country}</span>
+                    <span className="badge bg-dark me-2">{shipment.total_weight + 'kg '}</span>
+                    {shipment.number_of_items > 1 && (
+                        <>
+                            <span className="badge bg-dark me-2">
+                                {shipment.number_of_items + ' items'}
+                            </span>
+                        </>
+                    )}
+                    <span className="badge bg-dark me-2">
+                        {new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: shipment.amount.currency,
+                        }).format(shipment.amount.value)}
+                    </span>
+                </p>
             </CCardBody>
         </CCard>
     )

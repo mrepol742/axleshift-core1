@@ -2,13 +2,14 @@ import { ObjectId } from 'mongodb'
 import express from 'express'
 import axios from 'axios'
 import logger from '../../utils/logger.js'
+import { totalWeight, price } from '../../utils/freight.js'
 import database from '../../models/mongodb.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import freight from '../../middleware/freight.js'
 import shipmentForm from '../../middleware/shipmentForm.js'
 import { send } from '../../components/mail.js'
-import activity from '../../components/activity.js'
+import activity, { sendNotification } from '../../components/activity.js'
 import { GOOGLE_MAP } from '../../config.js'
 
 const router = express.Router()
@@ -50,7 +51,7 @@ router.post('/', auth, async (req, res, next) => {
         const [totalItems, items] = await Promise.all([
             freightCollection.countDocuments(filter),
             freightCollection
-                .find(filter)
+                .find(filter, { projection: { from: 0, to: 0, items: 0 } })
                 .sort({ created_at: -1 })
                 .skip(skip)
                 .limit(limit)
@@ -69,7 +70,43 @@ router.post('/', auth, async (req, res, next) => {
 })
 
 /**
- * Get Freight by freight id
+ * Get Freight schedules
+ */
+router.get('/calendar', auth, async (req, res) => {
+    try {
+        const db = await database()
+        const freightCollection = db.collection('freight')
+        const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
+
+        const filter = {
+            status: { $ne: 'cancelled' },
+            ...(isUser ? { user_id: req.user._id } : {}),
+        }
+        const freight = await freightCollection
+            .find(filter, {
+                projection: { tracking_number: 1, expected_delivery_date: 1, status: 1, type: 1 },
+            })
+            .sort({ created_at: -1 })
+            .toArray()
+
+        const events = []
+
+        for (let i = 0; i < freight.length; i++) {
+            events.push({
+                title: freight[i].tracking_number,
+                start: freight[i].expected_delivery_date,
+                end: freight[i].expected_delivery_date,
+            })
+        }
+        return res.status(200).json(events)
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
+
+/**
+ * Get Freight by tracking number
  */
 router.get('/:id', [auth, freight], (req, res) => res.status(200).json(req.freight))
 
@@ -79,10 +116,10 @@ router.get('/:id', [auth, freight], (req, res) => res.status(200).json(req.freig
 router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => {
     try {
         const {
-            isImport,
-            isResidentialAddress,
-            containsDangerGoods,
-            containsDocuments,
+            is_import,
+            is_residential_address,
+            contains_danger_goods,
+            contains_documents,
             from,
             to,
             type,
@@ -92,17 +129,34 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
         const db = await database()
         const dateNow = Date.now()
         const trackingNumber = `${to[0].countryCode}-${Date.now().toString()}`
+        const shipmentWeight = totalWeight(items)
+        const numberOfItems = items.length
+        const shipmentPrice = price(items)
+        const country = to[0].country
+        // TODO: calculate expected delivery date
+        // and draw a estimated route
+        const expectedDelivery = new Date(dateNow + 3 * 24 * 60 * 60 * 1000)
+
         await db.collection('freight').insertOne({
             user_id: req.user._id,
-            is_import: isImport,
-            is_residential_address: isResidentialAddress,
-            contains_danger_goods: containsDangerGoods,
-            contains_documents: containsDocuments,
+            is_import: is_import,
+            is_residential_address: is_residential_address,
+            contains_danger_goods: contains_danger_goods,
+            contains_documents: contains_documents,
             from: from,
             to: to,
             type: type,
             items: items,
             status: 'to_pay',
+            courier: 'none',
+            total_weight: shipmentWeight,
+            number_of_items: numberOfItems,
+            amount: {
+                currency: 'USD',
+                value: shipmentPrice,
+            },
+            expected_delivery_date: expectedDelivery.getTime(),
+            country: country,
             session_id: req.session._id,
             tracking_number: trackingNumber,
             created_at: dateNow,
@@ -117,6 +171,10 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
             req.user.first_name,
         )
         activity(req, `created a shipment`)
+        sendNotification(req, {
+            title: 'Shipment Created',
+            message: `Shipment has been created with tracking number ${trackingNumber}.`,
+        })
         return res
             .status(201)
             .json({ tracking_number: trackingNumber, message: 'Shipment has been created.' })
@@ -132,30 +190,59 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
 router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req, res, next) => {
     try {
         const {
-            _id,
-            isImport,
-            isResidentialAddress,
-            containsDangerGoods,
-            containsDocuments,
+            is_import,
+            is_residential_address,
+            contains_danger_goods,
+            contains_documents,
             from,
             to,
             type,
             items,
         } = req.body
+        const id = req.params.id
+
+        const shipmentWeight = totalWeight(items)
+        const numberOfItems = items.length
+        const shipmentPrice = price(items)
+        const countryTo = to[0].country
+        // TODO: update courier here
+
+        // TODO: calculate expected delivery date
+        // and draw a estimated route
+        let expectedDelivery = req.freight.expected_delivery_date
+        if (
+            countryTo != req.freight.to[0].country ||
+            from[0].country != req.freight.from[0].country
+        ) {
+            expectedDelivery = new Date(expectedDelivery)
+            expectedDelivery.setDate(expectedDelivery.getDate() + 1)
+        }
+        if (from[0].city != req.freight.from[0].city || to[0].city != req.freight.to[0].city) {
+            expectedDelivery = new Date(expectedDelivery)
+            expectedDelivery.setHours(expectedDelivery.getHours() + 12)
+        }
 
         const db = await database()
         await db.collection('freight').updateOne(
-            { _id: new ObjectId(_id) },
+            { tracking_number: id },
             {
                 $set: {
-                    is_import: isImport,
-                    is_residential_address: isResidentialAddress,
-                    contains_danger_goods: containsDangerGoods,
-                    contains_documents: containsDocuments,
+                    is_import: is_import,
+                    is_residential_address: is_residential_address,
+                    contains_danger_goods: contains_danger_goods,
+                    contains_documents: contains_documents,
                     from: from,
                     to: to,
                     type: type,
                     items: items,
+                    total_weight: shipmentWeight,
+                    number_of_items: numberOfItems,
+                    amount: {
+                        currency: 'USD',
+                        value: shipmentPrice,
+                    },
+                    expected_delivery_date: expectedDelivery.getTime(),
+                    country: countryTo,
                     updated_at: Date.now(),
                     modified_by: req.user._id,
                 },
@@ -178,7 +265,7 @@ router.post('/cancel/:id', [recaptcha, auth, freight], async (req, res, next) =>
         const id = req.params.id
         const db = await database()
         await db.collection('freight').updateOne(
-            { _id: new ObjectId(id) },
+            { tracking_number: id },
             {
                 $set: {
                     status: 'cancelled',
@@ -189,6 +276,10 @@ router.post('/cancel/:id', [recaptcha, auth, freight], async (req, res, next) =>
         )
 
         activity(req, `cancelled a shipment #${id}`)
+        sendNotification(req, {
+            title: 'Shipment Cancelled',
+            message: `Shipment has been cancelled with tracking number ${id}.`,
+        })
         return res.status(200).json({ message: 'Shipment has been cancelled.' })
     } catch (e) {
         logger.error(e)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     CDropdown,
     CDropdownMenu,
@@ -10,26 +10,53 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { useNotif } from './AppNotificationProvider'
 import parseTimestamp from '../utils/Timestamp'
+import { useUserProvider } from '../components/UserProvider'
 
 const AppNotificationDropdown = () => {
     const { notifs } = useNotif()
+    const { user } = useUserProvider()
+    const [hasUnread, setHasUnread] = useState(false)
+
+    useEffect(() => {
+        setHasUnread(notifs.some((notif) => !notif.is_read))
+    }, [notifs])
+
+    const markAllAsRead = async () => {
+        try {
+            await axios.post('/notifications')
+            setHasUnread(false)
+        } catch (error) {
+            console.error('Error fetching notifications:', error)
+        }
+    }
 
     return (
         <CDropdown variant="nav-item">
             <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
                 <FontAwesomeIcon icon={faBell} />
             </CDropdownToggle>
-            <CDropdownMenu className="p-0" placement="bottom-end">
+            <CDropdownMenu
+                className="p-0"
+                placement="bottom-end"
+                style={{ width: '350px', maxHeight: '500px', overflowY: 'auto' }}
+            >
                 <CListGroup>
-                    <CListGroupItem active>
-                        <FontAwesomeIcon icon={faBell} /> Notifications
+                    <CListGroupItem className="bg-body-secondary d-flex justify-content-between align-items-center">
+                        <FontAwesomeIcon icon={faBell} />
+                        <small
+                            onClick={markAllAsRead}
+                            disabled={hasUnread}
+                            style={{ cursor: hasUnread ? 'pointer' : 'not-allowed' }}
+                        >
+                            Mark all as read
+                        </small>
                     </CListGroupItem>
                     {notifs &&
                         notifs.map((notif) => (
-                            <CListGroupItem key={notif.id}>
-                                <h6 className="mb-1">{notif.header}</h6>
-                                <p className="mb-1">{notif.message}</p>
-                                <small>{parseTimestamp(notif.id)}</small>
+                            <CListGroupItem key={notif.id} disabled={notif.is_read}>
+                                <h6 className="mb-1">{notif.event.title}</h6>
+                                <p className="mb-1">{notif.event.message}</p>
+                                <small className="text-muted">{parseTimestamp(notif.time)}</small>
                             </CListGroupItem>
                         ))}
 

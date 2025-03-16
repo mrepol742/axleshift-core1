@@ -59,6 +59,7 @@ const internal = async (req, res, next) => {
 
     if (session.user_agent !== user_a) return res.status(401).json({ error: 'Unauthorized' })
 
+    req.request_type = 'internal'
     req.token = token
     req.user = theUser
     req.session = session

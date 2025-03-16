@@ -17,6 +17,8 @@ import {
     CCard,
 } from '@coreui/react'
 import PropTypes from 'prop-types'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faPrint, faCopy } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
@@ -25,13 +27,46 @@ import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 
 // TODO: do rate stuff here
-const Review = ({ data }) => {
+const Review = ({ data, shipmentRef }) => {
     const navigate = useNavigate()
     const { form, setForm, loading, setLoading } = data
     const formRef = React.useRef(null)
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [showFormDetails, setShowFormDetails] = useState(false)
+    const pdfRef = React.useRef()
+
+    const generatePDF = () => {
+        pdfRef.current.style.display = 'none'
+        const bgColor = getComputedStyle(document.body).backgroundColor
+
+        html2canvas(shipmentRef.current, {
+            scale: 2,
+            backgroundColor: bgColor,
+        })
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/png')
+                const pdf = new jsPDF('p', 'mm', 'a4')
+                const imgWidth = 210
+                const imgHeight = (canvas.height * imgWidth) / canvas.width
+
+                pdf.setFillColor(bgColor)
+                pdf.rect(
+                    0,
+                    0,
+                    pdf.internal.pageSize.getWidth(),
+                    pdf.internal.pageSize.getHeight(),
+                    'F',
+                )
+
+                pdf.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight)
+                pdf.save(`Shipment-${form.tracking_number ? form.tracking_number : Date.now()}.pdf`)
+            })
+            .catch((error) => console.error('Error generating PDF:', error))
+            .finally(() => {
+                pdfRef.current.style.display = 'block'
+            })
+    }
 
     const handleSubmit = async (action) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
@@ -65,6 +100,15 @@ const Review = ({ data }) => {
         }, 0)
     }
 
+    const price = (form) => {
+        let amount = totalWeight(form.items) * totalDimensions(form.items)
+        if (!amount) return '$0'
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        }).format(amount)
+    }
+
     return (
         <div ref={formRef}>
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
@@ -77,40 +121,28 @@ const Review = ({ data }) => {
                         type="text"
                         floatingLabel="Shipment Date"
                         className="mb-2"
-                        value={'25 Feb 2025'}
+                        value={
+                            form.expected_delivery_date
+                                ? new Date(form.expected_delivery_date).toDateString()
+                                : new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toDateString()
+                        }
                         disabled
                     />
                     <CButton
-                        className="btn btn-outline-primary mt-2 me-2"
-                        // onClick={() => handleSubmit('email')}
-                    >
-                        <FontAwesomeIcon icon={faEnvelope} className="me-2" />
-                        Email Quotes
-                    </CButton>
-                    <CButton
-                        className="btn btn-outline-primary mt-2 me-2"
-                        // onClick={() => handleSubmit('print')}
+                        ref={pdfRef}
+                        className="btn btn-outline-primary mt-2 me-2 d-none"
+                        onClick={generatePDF}
                     >
                         <FontAwesomeIcon icon={faPrint} className="me-2" />
                         Print Quotes
                     </CButton>
-                    <CButton
-                        className="btn btn-outline-primary mt-2 me-2"
-                        // onClick={() => handleSubmit('copy')}
-                    >
-                        <FontAwesomeIcon icon={faCopy} className="me-2" />
-                        Copy
-                    </CButton>
                 </CCol>
                 <CCol md>
                     <div className="d-flex justify-content-end flex-column">
-                        <span className="text-decoration-line-through">
-                            $ {totalWeight(form.items) * totalDimensions(form.items) + 18}
-                        </span>
-                        <h4>$ {totalWeight(form.items) * totalDimensions(form.items)}</h4>
+                        <h4>{price(form)}</h4>
                         <CButton
                             className="btn btn-primary mt-2"
-                            onClick={() => handleSubmit('book')}
+                            onClick={() => handleSubmit(form.internal ? 'update' : 'book')}
                         >
                             Continue booking
                         </CButton>
@@ -125,4 +157,5 @@ export default Review
 
 Review.propTypes = {
     data: PropTypes.object.isRequired,
+    shipmentRef: PropTypes.object.isRequired,
 }

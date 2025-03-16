@@ -54,6 +54,33 @@ router.post('/', [auth], async (req, res) => {
 })
 
 /**
+ * Get Invoice by tracking number
+ */
+router.get('/:id', [auth], async (req, res) => {
+    const id = req.params.id
+        ? /^[A-Z]{2}-\d+$/.test(req.params.id)
+            ? req.params.id
+            : req.body.id
+        : req.body.id
+    if (!id) return res.status(400).json({ error: 'Invalid request' })
+
+    try {
+        const db = await database()
+        const invoicesCollection = db.collection('invoices')
+        const invoice = await invoicesCollection.findOne({ freight_tracking_number: id })
+        if (!invoice)
+            return res
+                .status(404)
+                .json({ error: 'Shipment invoice not found', tracking_number: id })
+
+        return res.status(200).json(invoice)
+    } catch (err) {
+        logger.error(err)
+    }
+    res.status(400).json({ error: 'Invalid request' })
+})
+
+/**
  * Create an Invoice
  */
 router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
@@ -80,8 +107,6 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
                 successRedirectUrl: redirectUrl,
             },
         })
-
-        logger.info(invoice)
 
         const db = await database()
         const invoicesCollection = db.collection('invoices')

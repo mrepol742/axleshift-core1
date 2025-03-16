@@ -1,7 +1,6 @@
 import crypto from 'crypto'
 import database from '../../models/mongodb.js'
 import logger from '../../utils/logger.js'
-import { addSession } from '../sessions.js'
 import Token from './token.js'
 import { send } from '../mail.js'
 import Download from '../../utils/download.js'
@@ -15,71 +14,88 @@ const FormOauth2 = async (req, res) => {
 
         const db = await database()
         const usersCollection = db.collection('users')
-        if (/^\/login$/.test(req.url)) {
-            const theUser = await usersCollection.findOne({
-                [`oauth2.${provider}.email`]: credential.email,
-            })
-            if (theUser) {
-                if (
-                    !theUser.oauth2 ||
-                    !theUser.oauth2[provider] ||
-                    theUser.oauth2[provider].email !== credential.email
-                )
-                    return res
-                        .status(200)
-                        .json({ error: 'Please Login using your account password' })
-
-                const session_token = await Token(theUser, req)
-                return res.status(200).json({ token: session_token })
-            }
-        }
+        const theUser = await usersCollection.findOne({
+            $or: [
+                { [`oauth2.google.email`]: credential.email },
+                { [`oauth2.github.email`]: credential.email },
+                { email: credential.email },
+            ],
+        })
 
         if (NODE_ENV === 'production')
             res.status(200).json({
                 error: 'You have no permission to continue. Please contact the admin.',
             })
 
-        const existingUser = await usersCollection.findOne({ email: credential.email })
-        if (!existingUser) {
-            const ref = crypto.randomBytes(4).toString('hex')
-            const dateNow = Date.now()
-
-            await Promise.all([
-                usersCollection.insertOne({
-                    email: credential.email,
-                    first_name: credential.given_name,
-                    last_name: credential.family_name,
-                    role: 'user',
-                    registration_type: provider,
-                    oauth2: {
-                        [provider]: {
-                            email: credential.email,
-                            created_at: dateNow,
-                            updated_at: dateNow,
+        // login
+        if (theUser) {
+            if (theUser.oauth2[provider] && theUser.oauth2[provider].email === credential.email) {
+                const token = await Token(theUser, req)
+                return res.status(200).json(token)
+            } else if (!theUser.oauth2[provider]) {
+                await Promise.all([
+                    usersCollection.updateOne(
+                        { _id: theUser._id },
+                        {
+                            $set: {
+                                [`oauth2.${provider}.email`]: credential.email,
+                                [`oauth2.${provider}.created_at`]: Date.now(),
+                                [`oauth2.${provider}.updated_at`]: Date.now(),
+                            },
                         },
-                    },
-                    password: null,
-                    email_verify_at: dateNow,
-                    ref: ref,
-                    created_at: dateNow,
-                    updated_at: dateNow,
-                }),
-                send(
-                    {
-                        to: credential.email,
-                        subject: 'Welcome to Core 1 at Axleshift',
-                        text: `<h2>We're excited to have you on board.</h2><p>Our platform is designed to streamline your management and enhance your shipping experience. With tools to manage shipments, track deliveries, and optimize routes, you'll have everything you need at your fingertips.</p><p>If you have any questions or need assistance getting started, don't hesitate to reach out. We're here to help!</p><p>Looking forward to a successful journey together!</p><br/>Best regards,<br/>Melvin Jones Repol<br/>The Developer<br/>Core 1 Axleshift`,
-                    },
-                    credential.given_name,
-                ),
-                Download(credential.picture, ref),
-            ])
+                    ),
+                    send(
+                        {
+                            to: credential.email,
+                            subject: `Successfully bind ${provider} | Axleshift`,
+                            text: `You have successfully bind ${provider} as your authentication credentials. If you have any questions or need assistance, don't hesitate to reach out. We're here to help!`,
+                        },
+                        credential.given_name,
+                    ),
+                ])
+                const token = await Token(theUser, req)
+                return res.status(200).json(token)
+            }
         }
-        const theUser = await usersCollection.findOne({ email: credential.email })
+        // register
+        const ref = crypto.randomBytes(4).toString('hex')
+        const dateNow = Date.now()
+
+        await Promise.all([
+            usersCollection.insertOne({
+                email: credential.email,
+                first_name: credential.given_name,
+                last_name: credential.family_name,
+                role: 'user',
+                registration_type: provider,
+                oauth2: {
+                    [provider]: {
+                        email: credential.email,
+                        created_at: dateNow,
+                        updated_at: dateNow,
+                    },
+                },
+                password: null,
+                email_verify_at: dateNow,
+                ref: ref,
+                created_at: dateNow,
+                updated_at: dateNow,
+            }),
+            send(
+                {
+                    to: credential.email,
+                    subject: 'Welcome to Core 1 at Axleshift',
+                    text: `<h2>We're excited to have you on board.</h2><p>Our platform is designed to streamline your management and enhance your shipping experience. With tools to manage shipments, track deliveries, and optimize routes, you'll have everything you need at your fingertips.</p><p>If you have any questions or need assistance getting started, don't hesitate to reach out. We're here to help!</p><p>Looking forward to a successful journey together!</p><br/>Best regards,<br/>Melvin Jones Repol<br/>The Developer<br/>Core 1 Axleshift`,
+                },
+                credential.given_name,
+            ),
+            Download(credential.picture, ref),
+        ])
+
         theUser.log = 'created account'
         theUser.log1 = `bind ${provider} as authentication credentials`
-        const { token, key } = await Token(theUser, req)
-        return res.status(200).json({ token, key })
+        const token = await Token(theUser, req)
+        return res.status(200).json(token)
     } catch (e) {
         logger.error(e)
     }

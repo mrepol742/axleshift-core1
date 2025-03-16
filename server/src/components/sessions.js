@@ -3,7 +3,7 @@ import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import activity from './activity.js'
 
-export const addSession = async (theUser, sessionToken, ip, userAgent, location, key) => {
+export const addSession = async (theUser, sessionToken, ip, userAgent, location) => {
     try {
         const db = await database()
         const sessionsCollection = db.collection('sessions')
@@ -15,7 +15,6 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location,
             user_agent: userAgent,
             compromised: false,
             location: location,
-            key: key,
             last_accessed: Date.now(),
         })
         const req = {
@@ -42,27 +41,29 @@ export const getUser = async (sessionToken) => {
         const endpoint = isApiToken ? 'apiToken' : 'sessions'
         const tokenCollection = await db
             .collection(endpoint)
-            .findOne({ token: sessionToken, active: true })
+            .findOne({ token: sessionToken, active: true }, { projection: { user_id: 1 } })
         if (!tokenCollection) return null
-        const theUser = await db
-            .collection('users')
-            .findOne({ _id: new ObjectId(tokenCollection.user_id) })
+        const theUser = await db.collection('users').findOne(
+            { _id: new ObjectId(tokenCollection.user_id) },
+            {
+                projection: {
+                    _id: 1,
+                    email: 1,
+                    first_name: 1,
+                    last_name: 1,
+                    role: 1,
+                    email_verify_at: 1,
+                    oauth2: 1,
+                    password: {
+                        $cond: { if: { $ne: ['$password', null] }, then: 'OK', else: null },
+                    },
+                    timezone: 1,
+                    ref: 1,
+                },
+            },
+        )
 
-        // i have trust issues
-        // with database admins
-        if (theUser)
-            return {
-                _id: theUser._id,
-                email: theUser.email,
-                first_name: theUser.first_name,
-                last_name: theUser.last_name,
-                role: theUser.role,
-                email_verify_at: theUser.email_verify_at,
-                oauth2: theUser.oauth2,
-                password: theUser.password ? 'OK' : null,
-                timezone: theUser.timezone,
-                ref: theUser.ref,
-            }
+        if (theUser) return theUser
     } catch (e) {
         logger.error(e)
     }
@@ -90,15 +91,12 @@ export const removeSession = async (sessionToken) => {
 export const getSession = async (sessionToken) => {
     try {
         const db = await database()
-        const session = await db.collection('sessions').findOne({ token: sessionToken })
-        if (session.active)
-            db.collection('sessions').updateOne(
+        const session = await db
+            .collection('sessions')
+            .findOneAndUpdate(
                 { token: sessionToken },
-                {
-                    $set: {
-                        last_accessed: Date.now(),
-                    },
-                },
+                { $set: { last_accessed: Date.now() } },
+                { returnDocument: 'after' },
             )
         return session
     } catch (e) {

@@ -10,7 +10,10 @@ const invoices = async (req, res, next) => {
     try {
         const db = await database()
         const invoicesCollection = db.collection('invoices')
-        req.invoice = await invoicesCollection.findOne({ freight_id: new ObjectId(id) })
+        req.invoice = await invoicesCollection.findOne(
+            { freight_id: new ObjectId(id) },
+            { projection: { invoice_id: 1 } },
+        )
         return next()
     } catch (err) {
         logger.error(err)

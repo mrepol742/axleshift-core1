@@ -15,7 +15,7 @@ const Schedules = () => {
 
     const fetchData = async () => {
         axios
-            .get(`/schedules`)
+            .get(`/freight/calendar`)
             .then((response) => setResult(response.data))
             .catch((error) => {
                 const message =
@@ -36,7 +36,6 @@ const Schedules = () => {
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )}
-
             <Calendar
                 events={result}
                 localizer={localizer}

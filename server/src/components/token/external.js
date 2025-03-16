@@ -10,11 +10,14 @@ const external = async (req, res, next) => {
 
     const db = await database()
     const apiTokenCollection = db.collection('apiToken')
-    const existingApiToken = await apiTokenCollection.findOne({
-        token: token,
-        active: true,
-        compromised: false,
-    })
+    const existingApiToken = await apiTokenCollection.findOne(
+        {
+            token: token,
+            active: true,
+            compromised: false,
+        },
+        { projection: { whitelist_ip: 1 } },
+    )
 
     if (!existingApiToken)
         return res
@@ -50,6 +53,7 @@ const external = async (req, res, next) => {
         })(),
     ])
 
+    req.request_type = 'external'
     req.token = token
 
     setTimeout(() => {

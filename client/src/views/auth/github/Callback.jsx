@@ -11,7 +11,6 @@ const Callback = () => {
     const [error, setError] = useState('')
 
     const fetchData = async (code) => {
-        if (e) e.preventDefault()
         if (!navigator.geolocation)
             setError({
                 error: true,
@@ -59,7 +58,6 @@ const Callback = () => {
                 recaptcha_ref: recaptcha,
             })
             .then((response) => {
-                if (response.data.error) return setError(response.data.error)
                 cookies.set(VITE_APP_SESSION, response.data.token, { expires: 30 })
                 window.location.href = '/'
             })
@@ -67,6 +65,9 @@ const Callback = () => {
                 const message =
                     error.response?.data?.error || 'Server is offline or restarting please wait'
                 setError(message)
+                setTimeout(() => {
+                    navigate(`/login`)
+                }, 1500)
             })
             .finally(() => setLoading(false))
     }
@@ -94,7 +95,7 @@ const Callback = () => {
                     size="invisible"
                     sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
                 />
-                <p className="text-center">{error ? error : 'Processing...'}</p>
+                <h1 className="text-center">{error ? error : 'Processing...'}</h1>
             </CContainer>
         </div>
     )
