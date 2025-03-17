@@ -2,8 +2,14 @@ import axios from 'axios'
 import cookies from 'js-cookie'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from './config.js'
 
-const _axios = axios.create()
-let userIP = null
+const _axios = axios.create({
+    baseURL: `${VITE_APP_API_URL}/api/v1`,
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+    },
+    timeout: 60000,
+})
+
 const excludedPaths = [
     '/login',
     '/register',
@@ -12,27 +18,10 @@ const excludedPaths = [
     '/one-time-password',
 ]
 
-_axios.defaults.baseURL = `${VITE_APP_API_URL}/api/v1`
-_axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-_axios.defaults.timeout = 60000
-
-async function getUserIP() {
-    try {
-        const response = await axios.get('https://api64.ipify.org?format=json')
-        return response.data.ip
-    } catch (error) {
-        console.error('Failed to fetch IP', error)
-    }
-    return null
-}
-
 _axios.interceptors.request.use(
     async (config) => {
         const token = cookies.get(VITE_APP_SESSION)
         config.headers['Authorization'] = `Bearer ${token}`
-
-        if (!userIP) userIP = await getUserIP()
-        config.headers['X-Client-IP'] = btoa(userIP)
         return config
     },
     (error) => {

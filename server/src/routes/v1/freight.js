@@ -165,7 +165,7 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
         send(
             {
                 to: req.user.email,
-                subject: 'Shipment has been created',
+                subject: `${trackingNumber} | Shipment has been created`,
                 text: `We have arranged your shipment schedules please proceed to payment so we can processed your shipment as soon as possible.<br><br>If you need assistance feel free to contact us.`,
             },
             req.user.first_name,
@@ -275,6 +275,14 @@ router.post('/cancel/:id', [recaptcha, auth, freight], async (req, res, next) =>
             },
         )
 
+        send(
+            {
+                to: req.user.email,
+                subject: `${id} | Shipment has been cancelled`,
+                text: `We have cancelled your shipment schedules. If you have any questions or need assistance feel free to contact us.`,
+            },
+            req.user.first_name,
+        )
         activity(req, `cancelled a shipment #${id}`)
         sendNotification(req, {
             title: 'Shipment Cancelled',

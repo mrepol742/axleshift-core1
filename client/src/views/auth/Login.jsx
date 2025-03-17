@@ -318,33 +318,31 @@ const Login = () => {
                                             </CButton>
                                         </CButtonGroup>
                                     </div>
-                                    <div className="text-center">
-                                        <CButton className="me-2" onClick={(e) => setShowQR(true)}>
+                                    {/* <CButton className="me-2" onClick={(e) => setShowQR(true)}>
                                             Login using <FontAwesomeIcon icon={faQrcode} /> QRCode
-                                        </CButton>
-                                        <span className="text-muted d-block mb-1">
-                                            Or continue with
-                                        </span>
-                                        <CButton
-                                            color="outline-primary"
-                                            className="me-2"
-                                            onClick={handleGoogleLogin}
-                                        >
-                                            <FontAwesomeIcon icon={faGoogle} />
-                                        </CButton>
-                                        <CButton
-                                            color="outline-primary"
-                                            className="me-2"
-                                            onClick={() =>
-                                                (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
-                                            }
-                                        >
-                                            <FontAwesomeIcon icon={faGithub} />
-                                        </CButton>
-                                        <CButton color="outline-primary" className="me-2" disabled>
-                                            <FontAwesomeIcon icon={faMicrosoft} />
-                                        </CButton>
-                                    </div>
+                                        </CButton> */}
+                                    <span className="small text-muted d-block mb-1">
+                                        or continue with
+                                    </span>
+                                    <CButton
+                                        color="outline-primary"
+                                        className="me-2"
+                                        onClick={handleGoogleLogin}
+                                    >
+                                        <FontAwesomeIcon icon={faGoogle} />
+                                    </CButton>
+                                    <CButton
+                                        color="outline-primary"
+                                        className="me-2"
+                                        onClick={() =>
+                                            (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
+                                        }
+                                    >
+                                        <FontAwesomeIcon icon={faGithub} />
+                                    </CButton>
+                                    <CButton color="outline-primary" className="me-2" disabled>
+                                        <FontAwesomeIcon icon={faMicrosoft} />
+                                    </CButton>
                                     <CButton
                                         color="link"
                                         className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"

@@ -19,26 +19,6 @@ const app = express()
 const upload = multer()
 
 app.use(cors())
-app.use(
-    '/api/pmz',
-    createProxyMiddleware({
-        target: `http://localhost:${EXT_EXPRESS_PORT}`,
-        changeOrigin: true,
-        pathRewrite: {
-            '^/api/pmz': '',
-        },
-    }),
-)
-app.use(
-    '/frontend/webhook',
-    createProxyMiddleware({
-        target: `http://localhost:${EXT_EXPRESS_PORT_1}`,
-        changeOrigin: true,
-        pathRewrite: {
-            '^/frontend/webhook': '',
-        },
-    }),
-)
 app.use(compression())
 app.use(
     mongoSanitize({
