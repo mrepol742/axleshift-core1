@@ -91,16 +91,16 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
                 .send({ r_url: `https://checkout-staging.xendit.co/web/${req.invoice.invoice_id}` })
         const redirectUrl =
             NODE_ENV !== 'production'
-                ? `http://localhost:3000/shipment/${req.freight._id}`
-                : `https://core1.axleshift.com/shipment/${req.freight._id}`
+                ? `http://localhost:3000/shipment/${req.freight.tracking_number}`
+                : `https://core1.axleshift.com/shipment/${req.freight.tracking_number}`
         const invoice = await Invoice.createInvoice({
             data: {
-                amount: 24463,
+                amount: req.freight.amount.value,
                 payerEmail: req.user.email,
                 invoiceDuration: 172800,
                 externalId: `core1-axleshift-${Date.now()}`,
-                description: req.freight.data.shipment.shipment_description,
-                currency: 'PHP',
+                description: `Shipment #${req.freight.tracking_number}`,
+                currency: req.freight.amount.currency,
                 reminderTime: 1,
                 shouldSendEmail: true,
                 failureRedirectUrl: redirectUrl,
@@ -135,6 +135,14 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
             },
         )
 
+        send(
+            {
+                to: req.user.email,
+                subject: `${req.freight.tracking_number} | Payment Received`,
+                text: `Thank you for your payment. Your shipment is now ready for processing.<br><br>If you need assistance feel free to contact us.`,
+            },
+            req.user.first_name,
+        )
         activity(
             req,
             `create invoice for shipment #${req.freight._id} with invoice id #${_invoice._id}`,

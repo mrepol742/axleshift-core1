@@ -9,7 +9,7 @@ const Terms = () => {
                     <CCol md={8} lg={9} xl={10} className="mt-5">
                         <h1 className="display-4 text-white">Terms of Service</h1>
                         Last Updated: Mon, Oct 21 2024
-                        <p className="lead text-white">
+                        <p className="text-white">
                             By accessing or using our services, you agree to comply with these Terms
                             of Service. If you do not agree, please do not use our services.
                         </p>
@@ -28,18 +28,22 @@ const Terms = () => {
                         <div className="mb-3">
                             <h3> User Responsibilities</h3>
                             You are responsible for maintaining the confidentiality of your account
-                            information. You agree to use our services only for lawful purposes and
-                            in accordance with these Terms.
+                            login credentials and informations. You agree to use our services only
+                            for lawful purposes and in accordance with these Terms.
                         </div>
                         <div className="mb-3">
                             <h3> Intellectual Property </h3>
                             All content, features, and functionality are the exclusive property of
-                            Axleshift Core 1 and are protected by copyright, trademark, and other
-                            intellectual property laws.
+                            Axleshift Core 1 and are protected by copyright and other intellectual
+                            property laws. All third-party trademarks, service marks, and logos used
+                            in our services are the trademarks, service marks, or logos of their
+                            respective owners.
                         </div>
                         <div className="mb-3">
                             <h3>Limitation of Liability</h3>
-                            Axleshift Core 1 shall not be liable for any direct, indirect,
+                            Axleshift Core 1 or any of its respective parents, affiliates,
+                            successors, assigns, employees, agents, directors, developers, officers
+                            and shareholders, shall not be liable for any direct, indirect,
                             incidental, or consequential damages arising from your use of our
                             services.
                         </div>

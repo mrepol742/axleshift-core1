@@ -257,7 +257,7 @@ const Register = () => {
                                             id="password"
                                             type={showPassword ? 'text' : 'password'}
                                             placeholder="Password"
-                                            autoComplete="current-password"
+                                            autoComplete="current"
                                             value={formData.password}
                                             onChange={(e) => handleInputChange(e)}
                                             required
@@ -292,7 +292,7 @@ const Register = () => {
                                     </CInputGroup>
                                     <CFormCheck
                                         id="newsletter"
-                                        className="mb-1"
+                                        className="mb-1 small"
                                         checked={isChecked}
                                         onChange={(e) => setIsChecked(event.target.checked)}
                                         label="Subscribe to our newsletter"
@@ -336,30 +336,28 @@ const Register = () => {
                                             </CButton>
                                         </CButtonGroup>
                                     </div>
-                                    <div className="text-center">
-                                        <span className="text-muted d-block mb-1">
-                                            Or continue with
-                                        </span>
-                                        <CButton
-                                            color="outline-primary"
-                                            className="me-2"
-                                            onClick={handleGoogleLogin}
-                                        >
-                                            <FontAwesomeIcon icon={faGoogle} />
-                                        </CButton>
-                                        <CButton
-                                            color="outline-primary"
-                                            className="me-2"
-                                            onClick={() =>
-                                                (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
-                                            }
-                                        >
-                                            <FontAwesomeIcon icon={faGithub} />
-                                        </CButton>
-                                        <CButton color="outline-primary" className="me-2" disabled>
-                                            <FontAwesomeIcon icon={faMicrosoft} />
-                                        </CButton>
-                                    </div>
+                                    <span className="small text-muted d-block mb-1">
+                                        or continue with
+                                    </span>
+                                    <CButton
+                                        color="outline-primary"
+                                        className="me-2"
+                                        onClick={handleGoogleLogin}
+                                    >
+                                        <FontAwesomeIcon icon={faGoogle} />
+                                    </CButton>
+                                    <CButton
+                                        color="outline-primary"
+                                        className="me-2"
+                                        onClick={() =>
+                                            (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
+                                        }
+                                    >
+                                        <FontAwesomeIcon icon={faGithub} />
+                                    </CButton>
+                                    <CButton color="outline-primary" className="me-2" disabled>
+                                        <FontAwesomeIcon icon={faMicrosoft} />
+                                    </CButton>
                                 </CForm>
                             </CCardBody>
                         </CCard>
