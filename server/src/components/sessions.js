@@ -2,6 +2,9 @@ import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import activity from './activity.js'
+import redis from '../models/redis.js'
+
+const SESSION_TTL = 7 * 24 * 60 * 60 * 1000
 
 export const addSession = async (theUser, sessionToken, ip, userAgent, location) => {
     try {
@@ -17,13 +20,18 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
             location: location,
             last_accessed: Date.now(),
         })
+
+        const cacheKey = `axleshift-core1:${sessionToken}`
+        const redisClient = await redis()
+        await redisClient.set(cacheKey, JSON.stringify(session.ops[0]), 'EX', SESSION_TTL)
+
         const req = {
             headers: {
                 'user-agent': userAgent,
                 'x-forwarded-for': ip,
             },
             user: { _id: theUser._id },
-            session: { _id: session._id },
+            session: { _id: session.insertedId },
         }
 
         if (theUser.log) activity(req, theUser.log)
@@ -72,6 +80,12 @@ export const getUser = async (sessionToken) => {
 
 export const removeSession = async (sessionToken) => {
     try {
+        const cacheKey = `axleshift-core1:${sessionToken}`
+        const redisClient = await redis()
+        const cachedSession = await redisClient.get(cacheKey)
+
+        if (cachedSession) await redisClient.del(cacheKey)
+
         const db = await database()
         await db.collection('sessions').updateOne(
             { token: sessionToken },
@@ -90,6 +104,12 @@ export const removeSession = async (sessionToken) => {
 
 export const getSession = async (sessionToken) => {
     try {
+        const cacheKey = `axleshift-core1:${sessionToken}`
+
+        const redisClient = await redis()
+        const cachedSession = await redisClient.get(cacheKey)
+        if (cachedSession) return JSON.parse(cachedSession)
+
         const db = await database()
         const session = await db
             .collection('sessions')
@@ -98,9 +118,13 @@ export const getSession = async (sessionToken) => {
                 { $set: { last_accessed: Date.now() } },
                 { returnDocument: 'after' },
             )
+
+        if (session) await redisClient.set(cacheKey, JSON.stringify(session), 'EX', SESSION_TTL)
+
         return session
     } catch (e) {
         logger.error(e)
     }
+
     return null
 }

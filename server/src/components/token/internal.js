@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import logger from '../../utils/logger.js'
 import { getUser, getSession } from '../sessions.js'
 import database from '../../models/mongodb.js'
-import { REACT_APP_ORIGIN, API_RATE_DELAY } from '../../config.js'
+import { REACT_APP_ORIGIN } from '../../config.js'
 
 const adminRoute = ['/metrics/v1/prometheus', '/api/v1/sec/management']
 const exludeRoute = ['/api/v1/auth/verify']
@@ -67,9 +67,7 @@ const internal = async (req, res, next) => {
     if (theUser.role === 'admin') return next()
     if (exludeRoute.includes(req.path)) return next()
 
-    setTimeout(() => {
-        return next()
-    }, API_RATE_DELAY)
+    return next()
 }
 
 export default internal

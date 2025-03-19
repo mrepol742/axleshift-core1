@@ -7,6 +7,7 @@ import dependabot from '../../../components/dependabot.js'
 import sentry from '../../../components/sentry.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
+import redis, { clearRedisCache } from '../../../models/redis.js'
 
 const router = express.Router()
 const limit = 20
@@ -76,6 +77,7 @@ router.post('/sessions/logout', [recaptcha, auth], async (req, res, next) => {
                 },
             },
         )
+        clearRedisCache()
         return res.status(200).send()
     } catch (e) {
         logger.error(e)

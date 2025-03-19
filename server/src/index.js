@@ -7,6 +7,7 @@ import app from './Server.js'
 import db from './models/mongodb.js'
 import mail from './components/mail.js'
 import cron from './components/cron.js'
+import redis from './models/redis.js'
 
 if (config.NODE_ENV === 'production')
     Sentry.init({
@@ -24,7 +25,7 @@ const startServer = async () => {
     app.listen(config.EXPRESS_PORT, async (err) => {
         if (err) return logger.error(err)
         logger.info(`server running on port ${config.EXPRESS_PORT}`)
-        await Promise.all([db(), mail(), cron()])
+        await Promise.all([db(), mail(), cron(), redis()])
     })
 }
 

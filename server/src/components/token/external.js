@@ -2,7 +2,6 @@ import { ObjectId } from 'mongodb'
 import logger from '../../utils/logger.js'
 import database from '../../models/mongodb.js'
 import { getClientIp } from '../ip.js'
-import { API_EXTERNAL_RATE_DELAY } from '../../config.js'
 
 const external = async (req, res, next) => {
     const authHeader = req.headers['authorization']
@@ -56,9 +55,7 @@ const external = async (req, res, next) => {
     req.request_type = 'external'
     req.token = token
 
-    setTimeout(() => {
-        return next()
-    }, API_EXTERNAL_RATE_DELAY)
+    return next()
 }
 
 export default external

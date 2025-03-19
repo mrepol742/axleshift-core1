@@ -5,6 +5,7 @@ import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
+import redis from '../../../models/redis.js'
 
 const router = express.Router()
 
@@ -49,6 +50,11 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
         const session_id = req.body.session_id
         logger.info(session_id)
         const db = await database()
+        const redisClient = await redis()
+        const cacheKey = `axleshift-core1:${req.token}`
+        const cachedSession = await redisClient.get(cacheKey)
+        if (cachedSession) await redisClient.del(cacheKey)
+
         await db.collection('sessions').updateMany(
             {
                 _id: session_id ? new ObjectId(session_id) : { $ne: '0' },
@@ -67,7 +73,7 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    return res.status(500).json({ error: 'Not yet implemented' })
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router
