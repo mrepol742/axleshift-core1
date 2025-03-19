@@ -95,10 +95,10 @@ const Dashboard = () => {
 
     return (
         <div>
+            <AppSearch className="mb-3 d-block d-md-none" />
             <WidgetsDropdown className="mb-4" />
 
             <h4>Shipments</h4>
-            <AppSearch className="mb-3 d-block d-md-none" />
             <Masonry
                 breakpointCols={{
                     default: 4,

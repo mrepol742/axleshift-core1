@@ -31,12 +31,33 @@ const AppHeaderDropdown = () => {
                     className="rounded-5"
                     fluid
                     width="40px"
+                    height="40px"
                     loading="lazy"
                 />
             </CDropdownToggle>
             <CDropdownMenu className="pt-0" placement="bottom-end">
-                <CDropdownHeader className="bg-body-secondary fw-semibold mb-2 fs-6 px-5">
-                    {user.first_name} {user.last_name}
+                <CDropdownHeader className="bg-body-secondary fw-semibold text-center">
+                    <CImage
+                        crossOrigin="Anonymous"
+                        src={
+                            user.ref
+                                ? `${VITE_APP_API_URL}/u/${user.ref}.png`
+                                : '/images/default-avatar.jpg'
+                        }
+                        className="rounded mb-2"
+                        fluid
+                        width="70px"
+                        height="70px"
+                        loading="lazy"
+                    />
+                    <div>
+                        <span className="d-block text-truncate" style={{ maxWidth: '200px' }}>
+                            {user.first_name} {user.last_name}
+                        </span>
+                        <span className="text-truncate" style={{ maxWidth: '200px' }}>
+                            {user.email}
+                        </span>
+                    </div>
                 </CDropdownHeader>
                 <CDropdownItem onClick={() => navigate('/account')}>
                     <FontAwesomeIcon icon={faCircleUser} className="me-2" />

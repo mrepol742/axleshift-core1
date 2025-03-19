@@ -184,7 +184,7 @@ const Login = () => {
     }
 
     return (
-        <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+        <div className="bg-dark min-vh-100 d-flex flex-row align-items-center">
             <div className="auth-bg" />
             <CContainer>
                 {loading && (
@@ -318,9 +318,6 @@ const Login = () => {
                                             </CButton>
                                         </CButtonGroup>
                                     </div>
-                                    {/* <CButton className="me-2" onClick={(e) => setShowQR(true)}>
-                                            Login using <FontAwesomeIcon icon={faQrcode} /> QRCode
-                                        </CButton> */}
                                     <span className="small text-muted d-block mb-1">
                                         or continue with
                                     </span>
@@ -343,13 +340,15 @@ const Login = () => {
                                     <CButton color="outline-primary" className="me-2" disabled>
                                         <FontAwesomeIcon icon={faMicrosoft} />
                                     </CButton>
-                                    <CButton
-                                        color="link"
-                                        className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                        onClick={() => navigate('/forgot-password')}
-                                    >
-                                        Forgot password?
-                                    </CButton>
+                                    <div className="d-flex justify-content-end small">
+                                        <a
+                                            color="link"
+                                            className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                            onClick={() => navigate('/forgot-password')}
+                                        >
+                                            Forgot password?
+                                        </a>
+                                    </div>
                                 </CForm>
                             </CCardBody>
                         </CCard>

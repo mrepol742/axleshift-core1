@@ -42,7 +42,7 @@ const Login = () => {
         )
 
     return (
-        <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+        <div className="bg-dark min-vh-100 d-flex flex-row align-items-center">
             <div className="auth-bg" />
             <CContainer>
                 {loading && (
@@ -80,7 +80,7 @@ const Login = () => {
                                                 color="primary"
                                                 className="me-2 rounded"
                                             >
-                                                Submit
+                                                Continue
                                             </CButton>
                                             <CButton
                                                 color="outline-primary"
