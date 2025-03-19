@@ -46,6 +46,12 @@ const XENDIT_API_GATEWAY_URL = process.env.XENDIT_API_GATEWAY_URL ?? 'https://ap
 const XENDIT_API_KEY = process.env.XENDIT_API_KEY ?? ''
 const XENDIT_WEBHOOK_VERIFICATION_TOKEN = process.env.XENDIT_WEBHOOK_VERIFICATION_TOKEN ?? ''
 
+const AWS_REGION = process.env.AWS_REGION ?? ''
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID ?? ''
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY ?? ''
+const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME ?? ''
+const AUTO_CONTENT_TYPE = process.env.AUTO_CONTENT_TYPE ?? ''
+
 export {
     MONGO_URL,
     MONGO_DB,
@@ -83,4 +89,9 @@ export {
     XENDIT_API_GATEWAY_URL,
     XENDIT_API_KEY,
     XENDIT_WEBHOOK_VERIFICATION_TOKEN,
+    AWS_REGION,
+    AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY,
+    AWS_BUCKET_NAME,
+    AUTO_CONTENT_TYPE,
 }
