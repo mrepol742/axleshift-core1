@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
+import redis from '../models/redis.js'
 
 const sessions = () => {
     Promise.all([

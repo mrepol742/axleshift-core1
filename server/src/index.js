@@ -1,6 +1,5 @@
 import * as Sentry from '@sentry/node'
 import { nodeProfilingIntegration } from '@sentry/profiling-node'
-import chokidar from 'chokidar'
 import * as config from './config.js'
 import logger from './utils/logger.js'
 import app from './Server.js'
