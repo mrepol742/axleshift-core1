@@ -20,21 +20,23 @@ import { getClientIp } from './components/ip.js'
 const app = express()
 const upload = multer()
 
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            imgSrc: ["'self'", 'https://memes.memedrop.io'],
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                imgSrc: ["'self'", 'https://memes.memedrop.io'],
+            },
         },
-    },
-}));
-app.use(cors());
-app.use(express.json());
-app.use(upload.none());
-app.use(mongoSanitize());
-app.use(compression());
-app.use(rateLimiter);
-app.use(pinoHttp({ logger }));
+    }),
+)
+app.use(cors())
+app.use(express.json())
+app.use(upload.none())
+app.use(mongoSanitize())
+app.use(compression())
+app.use(rateLimiter)
+app.use(pinoHttp({ logger }))
 
 app.get('/', (req, res) => {
     let commitHash = 'N/A'

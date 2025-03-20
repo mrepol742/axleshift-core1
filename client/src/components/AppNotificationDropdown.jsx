@@ -53,7 +53,7 @@ const AppNotificationDropdown = () => {
                     </CListGroupItem>
                     {notifs &&
                         notifs.map((notif) => (
-                            <CListGroupItem key={notif.id} disabled={notif.is_read}>
+                            <CListGroupItem key={notif._id} disabled={notif.is_read}>
                                 <h6 className="mb-1">{notif.event.title}</h6>
                                 <p className="mb-1">{notif.event.message}</p>
                                 <small className="text-muted">{parseTimestamp(notif.time)}</small>

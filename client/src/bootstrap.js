@@ -1,7 +1,9 @@
 import axios from 'axios'
 import cookies from 'js-cookie'
+import pako from 'pako'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from './config.js'
 
+const token = cookies.get(VITE_APP_SESSION)
 const _axios = axios.create({
     baseURL: `${VITE_APP_API_URL}/api/v1`,
     headers: {
@@ -20,8 +22,13 @@ const excludedPaths = [
 
 _axios.interceptors.request.use(
     async (config) => {
-        const token = cookies.get(VITE_APP_SESSION)
         config.headers['Authorization'] = `Bearer ${token}`
+
+        if (config.data) {
+            config.data = pako.gzip(JSON.stringify(config.data), { to: 'string' })
+            config.headers['Content-Encoding'] = 'gzip'
+            config.headers['Content-Type'] = 'application/json'
+        }
         return config
     },
     (error) => {
