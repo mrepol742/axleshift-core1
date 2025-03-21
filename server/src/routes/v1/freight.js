@@ -11,6 +11,8 @@ import shipmentForm from '../../middleware/shipmentForm.js'
 import { send } from '../../components/mail.js'
 import activity, { sendNotification } from '../../components/activity.js'
 import { GOOGLE_MAP } from '../../config.js'
+import cache from '../../middleware/cache.js'
+import { setCache } from '../../models/redis.js'
 
 const router = express.Router()
 const limit = 20
@@ -18,7 +20,7 @@ const limit = 20
 /**
  * Get all Freight Shipments & search
  */
-router.post('/', auth, async (req, res, next) => {
+router.post('/', [auth, cache], async (req, res, next) => {
     try {
         // if (!req.user) return res.status(401).json({ error: 'Unauthorized' })
         const { page, query, status, type } = req.body
@@ -58,11 +60,14 @@ router.post('/', auth, async (req, res, next) => {
                 .toArray(),
         ])
 
-        return res.status(200).json({
+        const data = {
             data: items,
             totalPages: Math.ceil(totalItems / limit),
             currentPage: current_page,
-        })
+        }
+
+        if (req.cacheKey) setCache(req.cacheKey, data, 30 * 60 * 1000)
+        return res.status(200).json(data)
     } catch (e) {
         logger.error(e)
     }

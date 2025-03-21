@@ -21,7 +21,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
             last_accessed: Date.now(),
         }
         const session = await sessionsCollection.insertOne(data)
-        setCache(`internal-${sessionToken}`, JSON.stringify(data))
+        setCache(`internal-${sessionToken}`, data)
 
         const req = {
             headers: {

@@ -2,7 +2,7 @@ import Redis from 'ioredis'
 import logger from '../utils/logger.js'
 
 let redisInstance = null
-const SESSION_TTL = 7 * 24 * 60 * 60 * 1000
+const DEFAULT_SESSION_TTL = 7 * 24 * 60 * 60 * 1000
 
 const redis = async () => {
     if (redisInstance) return redisInstance
@@ -46,10 +46,15 @@ export const getCache = async (key) => {
     return null
 }
 
-export const setCache = async (key, value) => {
+export const setCache = async (key, value, SESSION_TTL) => {
     try {
         const redisClient = await redis()
-        await redisClient.set(`axleshift-core1:${key}`, value, 'EX', SESSION_TTL)
+        await redisClient.set(
+            `axleshift-core1:${key}`,
+            JSON.stringify(value),
+            'EX',
+            SESSION_TTL ? SESSION_TTL : DEFAULT_SESSION_TTL,
+        )
         return true
     } catch (e) {
         logger.error(e)

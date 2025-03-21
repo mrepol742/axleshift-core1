@@ -6,7 +6,7 @@ import app from './Server.js'
 import db from './models/mongodb.js'
 import mail from './components/mail.js'
 import cron from './components/cron.js'
-import redis from './models/redis.js'
+import redis, { clearRedisCache } from './models/redis.js'
 
 if (config.NODE_ENV === 'production')
     Sentry.init({
