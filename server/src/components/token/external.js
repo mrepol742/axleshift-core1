@@ -11,7 +11,10 @@ const external = async (req, res, next) => {
     const db = await database()
 
     let existingApiToken = await getCache(`external-${token}`)
-    if (!existingApiToken || (existingApiToken && !existingApiToken.active && !existingApiToken.compromised)) {
+    if (
+        !existingApiToken ||
+        (existingApiToken && !existingApiToken.active && !existingApiToken.compromised)
+    ) {
         existingApiToken = await db.collection('apiToken').findOne(
             {
                 token: token,
@@ -40,16 +43,21 @@ const external = async (req, res, next) => {
     Promise.all([
         (async () => {
             try {
+                const date = Date.now()
                 const db = await database()
                 db.collection('apiToken').updateOne(
                     { token: token },
                     {
                         $set: {
                             user_agent: user_a,
-                            last_accessed: Date.now(),
+                            last_accessed: date,
                         },
                     },
                 )
+
+                existingApiToken.user_agent = user_a
+                existingApiToken.last_accessed = date
+                setCache(`external-${token}`, existingApiToken)
             } catch (e) {
                 logger.error(e)
             }

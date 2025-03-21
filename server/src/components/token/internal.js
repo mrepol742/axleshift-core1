@@ -4,6 +4,7 @@ import logger from '../../utils/logger.js'
 import { getUser, getSession } from '../sessions.js'
 import database from '../../models/mongodb.js'
 import { REACT_APP_ORIGIN } from '../../config.js'
+import { setCache } from '../../models/redis.js'
 
 const adminRoute = ['/metrics/v1/prometheus', '/api/v1/sec/management']
 const exludeRoute = ['/api/v1/auth/verify']
@@ -40,17 +41,24 @@ const internal = async (req, res, next) => {
             try {
                 const db = await database()
                 const value = session.user_agent === user_a
+                const date = Date.now()
                 db.collection('sessions').updateOne(
                     { token: token },
                     {
                         $set: {
                             active: value,
                             compromised: !value,
-                            last_accessed: Date.now(),
+                            last_accessed: date,
                             modified_by: 'system',
                         },
                     },
                 )
+
+                session.active = value
+                session.compromised = !value
+                session.last_accessed = date
+                session.modified_by = 'system'
+                setCache(`internal-${token}`, session)
             } catch (e) {
                 logger.error(e)
             }
