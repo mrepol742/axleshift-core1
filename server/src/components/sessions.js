@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import activity from './activity.js'
-import redis from '../models/redis.js'
+import redis, { getCache, setCache, remCache } from '../models/redis.js'
 
 const SESSION_TTL = 7 * 24 * 60 * 60 * 1000
 
@@ -10,7 +10,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
     try {
         const db = await database()
         const sessionsCollection = db.collection('sessions')
-        const session = await sessionsCollection.insertOne({
+        const data = {
             user_id: theUser._id,
             token: sessionToken,
             active: true,
@@ -19,11 +19,9 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
             compromised: false,
             location: location,
             last_accessed: Date.now(),
-        })
-
-        const cacheKey = `axleshift-core1:${sessionToken}`
-        const redisClient = await redis()
-        await redisClient.set(cacheKey, JSON.stringify(session.ops[0]), 'EX', SESSION_TTL)
+        }
+        const session = await sessionsCollection.insertOne(data)
+        setCache(`internal-${sessionToken}`, JSON.stringify(data))
 
         const req = {
             headers: {
@@ -50,6 +48,7 @@ export const getUser = async (sessionToken) => {
         const tokenCollection = await db
             .collection(endpoint)
             .findOne({ token: sessionToken, active: true }, { projection: { user_id: 1 } })
+
         if (!tokenCollection) return null
         const theUser = await db.collection('users').findOne(
             { _id: new ObjectId(tokenCollection.user_id) },
@@ -80,11 +79,7 @@ export const getUser = async (sessionToken) => {
 
 export const removeSession = async (sessionToken) => {
     try {
-        const cacheKey = `axleshift-core1:${sessionToken}`
-        const redisClient = await redis()
-        const cachedSession = await redisClient.get(cacheKey)
-
-        if (cachedSession) await redisClient.del(cacheKey)
+        remCache(`internal-${sessionToken}`)
 
         const db = await database()
         await db.collection('sessions').updateOne(
@@ -104,11 +99,8 @@ export const removeSession = async (sessionToken) => {
 
 export const getSession = async (sessionToken) => {
     try {
-        const cacheKey = `axleshift-core1:${sessionToken}`
-
-        const redisClient = await redis()
-        const cachedSession = await redisClient.get(cacheKey)
-        if (cachedSession) return JSON.parse(cachedSession)
+        const cachedSession = await getCache(`internal-${sessionToken}`)
+        if (cachedSession) return cachedSession
 
         const db = await database()
         const session = await db
@@ -119,7 +111,7 @@ export const getSession = async (sessionToken) => {
                 { returnDocument: 'after' },
             )
 
-        if (session) await redisClient.set(cacheKey, JSON.stringify(session), 'EX', SESSION_TTL)
+        if (session) setCache(`internal-${sessionToken}`, JSON.stringify(session))
 
         return session
     } catch (e) {

@@ -41,6 +41,7 @@
         "boolean-pro": "^1.0.0",
         "chart.js": "^4.4.3",
         "core-js": "^3.37.1",
+        "dompurify": "^3.2.4",
         "dotenv": "^16.4.5",
         "firebase": "^11.2.0",
         "html2canvas": "^1.4.1",

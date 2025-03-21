@@ -2,26 +2,30 @@ import { ObjectId } from 'mongodb'
 import logger from '../../utils/logger.js'
 import database from '../../models/mongodb.js'
 import { getClientIp } from '../ip.js'
+import { getCache, setCache } from '../../models/redis.js'
 
 const external = async (req, res, next) => {
     const authHeader = req.headers['authorization']
     const token = authHeader.split(' ')[1]
 
     const db = await database()
-    const apiTokenCollection = db.collection('apiToken')
-    const existingApiToken = await apiTokenCollection.findOne(
-        {
-            token: token,
-            active: true,
-            compromised: false,
-        },
-        { projection: { whitelist_ip: 1 } },
-    )
 
-    if (!existingApiToken)
-        return res
-            .status(401)
-            .json({ error: 'Unauthorized', message: 'invalid or denied api token' })
+    let existingApiToken = await getCache(`external-${token}`)
+    if (!existingApiToken || (existingApiToken && !existingApiToken.active && !existingApiToken.compromised)) {
+        existingApiToken = await db.collection('apiToken').findOne(
+            {
+                token: token,
+                active: true,
+                compromised: false,
+            },
+            { projection: { whitelist_ip: 1 } },
+        )
+
+        if (!existingApiToken)
+            return res
+                .status(401)
+                .json({ error: 'Unauthorized', message: 'invalid or denied api token' })
+    }
 
     const ip = getClientIp(req)
     const w_ip = existingApiToken.whitelist_ip

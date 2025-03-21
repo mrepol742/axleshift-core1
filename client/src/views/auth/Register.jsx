@@ -125,13 +125,13 @@ const Register = () => {
     const register = async (e, type, credential, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
-        const formDataToSend = new FormData()
+        const formDataToSend = {}
         if (type === 'form') {
             for (const key in formData) {
-                formDataToSend.append(key, formData[key])
+                formDataToSend[key] = formData[key]
             }
         } else if (type === 'google') {
-            formDataToSend.append('credential', credential)
+            formDataToSend['credential'] = credential
         } else {
             setLoading(false)
             setError({
@@ -140,10 +140,10 @@ const Register = () => {
             })
             return
         }
-        formDataToSend.append('type', type)
-        formDataToSend.append('recaptcha_ref', recaptcha)
-        formDataToSend.append('newsletter', isChecked)
-        formDataToSend.append('location', JSON.stringify(location))
+        formDataToSend['type'] = type
+        formDataToSend['recaptcha_ref'] = recaptcha
+        formDataToSend['newsletter'] = isChecked
+        formDataToSend['location'] = JSON.stringify(location)
 
         axios
             .post(`/auth/register`, formDataToSend)

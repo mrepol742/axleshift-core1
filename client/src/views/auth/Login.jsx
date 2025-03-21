@@ -142,12 +142,12 @@ const Login = () => {
     const login = async (e, type, credential, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
-        const formData = new FormData()
+        const formData = {}
         if (type === 'form') {
-            formData.append('email', email)
-            formData.append('password', password)
+            formData.email = email
+            formData.password = password
         } else if (type === 'google') {
-            formData.append('credential', credential)
+            formData.credential = credential
         } else {
             setLoading(false)
             setError({
@@ -156,9 +156,9 @@ const Login = () => {
             })
             return
         }
-        formData.append('type', type)
-        formData.append('recaptcha_ref', recaptcha)
-        formData.append('location', JSON.stringify([location]))
+        formData.type = type
+        formData.recaptcha_ref = recaptcha
+        formData.location = JSON.stringify([location])
 
         axios
             .post(`/auth/login`, formData)
