@@ -102,37 +102,6 @@ const _nav = [
         role_exclude: [],
         icon: <FontAwesomeIcon icon={faHeadset} className="nav-icon" />,
     },
-    {
-        component: CNavTitle,
-        name: 'Policies',
-        role_exclude: ['staff'],
-    },
-    {
-        component: CNavItem,
-        name: 'Terms of Service',
-        to: '/terms-of-service',
-        role_exclude: ['staff'],
-        icon: <FontAwesomeIcon icon={faFile} className="nav-icon" />,
-    },
-    {
-        component: CNavItem,
-        name: 'Privacy Policy',
-        to: '/privacy-policy',
-        role_exclude: ['staff'],
-        icon: <FontAwesomeIcon icon={faFile} className="nav-icon" />,
-    },
-    {
-        component: CNavTitle,
-        name: 'System',
-        role_exclude: ['staff'],
-    },
-    {
-        component: CNavItem,
-        name: 'Network Status',
-        to: 'https://stats.uptimerobot.com/5l58Mua0Wi',
-        role_exclude: ['staff'],
-        icon: <FontAwesomeIcon icon={faServer} className="nav-icon" />,
-    },
 ]
 
 export default _nav

@@ -35,13 +35,7 @@ const Account = () => {
     const [contactInfo, setContactInfo] = useState({
         email: user.email,
     })
-    const [loading, setLoading] = useState(true)
-    const [avatar, setAvatar] = useState('/images/default-avatar.jpg')
-
-    useEffect(() => {
-        if (user && user.ref) setAvatar(`${VITE_APP_API_URL}/u/${user.ref}.png`)
-        setLoading(false)
-    }, [])
+    const [loading, setLoading] = useState(false)
 
     const getInitials = (name) => {
         return name ? name.charAt(0).toUpperCase() : ''
