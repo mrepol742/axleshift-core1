@@ -41,6 +41,7 @@ const FormOauth2 = async (req, res) => {
                                 [`oauth2.${provider}.email`]: credential.email,
                                 [`oauth2.${provider}.created_at`]: Date.now(),
                                 [`oauth2.${provider}.updated_at`]: Date.now(),
+                                email_verify_at: null,
                             },
                         },
                     ),
