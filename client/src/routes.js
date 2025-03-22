@@ -61,7 +61,7 @@ const routes = [
     { path: '/login', external: true, name: 'Login', element: Login },
     { path: '/register', external: true, name: 'Register', element: Register },
     { path: '/logout', external: true, name: 'Logout', element: Logout },
-    { path: '/one-time-password', external: true, name: 'One Time Password', element: OTP },
+    { path: '/auth/verify', external: true, name: 'Verify Account', element: OTP },
     {
         path: '/auth/github/callback',
         external: true,
