@@ -16,7 +16,7 @@ import { useToast } from '../../components/AppToastProvider'
 import parseTimestamp from '../../utils/Timestamp'
 import AppPagination from '../../components/AppPagination'
 
-const Activity = () => {
+const AccountLogs = () => {
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
     const [result, setResult] = useState([])
@@ -53,7 +53,7 @@ const Activity = () => {
         <div>
             <CCard className="mb-4">
                 <CCardBody>
-                    <CCardTitle>Activity Logs</CCardTitle>
+                    <CCardTitle>Account Logs</CCardTitle>
                     <CTable hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
@@ -101,4 +101,4 @@ const Activity = () => {
     )
 }
 
-export default Activity
+export default AccountLogs

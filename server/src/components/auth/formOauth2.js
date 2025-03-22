@@ -68,6 +68,7 @@ const FormOauth2 = async (req, res) => {
                 last_name: credential.family_name,
                 role: 'user',
                 registration_type: provider,
+                avatar: ref,
                 oauth2: {
                     [provider]: {
                         email: credential.email,

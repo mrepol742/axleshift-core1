@@ -15,7 +15,6 @@ import {
     faKey,
     faRectangleList,
     faTowerBroadcast,
-    faRoute,
     faPlus,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -47,13 +46,6 @@ const _nav = [
         icon: <FontAwesomeIcon icon={faLocationDot} className="nav-icon" />,
     },
     {
-        component: CNavItem,
-        name: 'Routes',
-        to: '/routes',
-        role_exclude: [],
-        icon: <FontAwesomeIcon icon={faRoute} className="nav-icon" />,
-    },
-    {
         component: CNavTitle,
         name: 'Security',
         role_exclude: ['staff'],
@@ -67,8 +59,8 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'Activity',
-        to: '/security/activity',
+        name: 'Account Logs',
+        to: '/security/account-logs',
         role_exclude: ['staff'],
         icon: <FontAwesomeIcon icon={faRectangleList} className="nav-icon" />,
     },

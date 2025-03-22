@@ -7,7 +7,7 @@ import dependabot from '../../../components/dependabot.js'
 import sentry from '../../../components/sentry.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
-import redis, { clearRedisCache } from '../../../models/redis.js'
+import redis, { clearRedisCache, setCache } from '../../../models/redis.js'
 
 const router = express.Router()
 const limit = 20
@@ -21,64 +21,64 @@ router.post('/sessions', auth, async (req, res, next) => {
         const current_page = parseInt(page) || 1
         const skip = (current_page - 1) * limit
 
-        const db = await database()
-        const sessionsCollection = db.collection('sessions')
+        const redisClient = await redis()
+        const stream = redisClient.scanStream()
+        const allData = []
 
-        const [totalItems, sessions] = await Promise.all([
-            sessionsCollection.countDocuments({}),
-            sessionsCollection
-                .aggregate([
-                    {
-                        $lookup: {
-                            from: 'users',
-                            localField: 'user_id',
-                            foreignField: '_id',
-                            as: 'user',
-                        },
-                    },
-                    {
-                        $sort: { last_accessed: -1 },
-                    },
-                ])
-                .skip(skip)
-                .limit(limit)
-                .toArray(),
-        ])
-
-        sessions.forEach((session) => {
-            const user_agent = session.user_agent
-            const agent = useragent.parse(user_agent)
-            session.user_agent = `${agent.os.family} ${agent.family}`
-        })
+        for await (const keys of stream) {
+            if (keys.length > 0) {
+                const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
+                const values = await redisClient.mget(filteredKeys)
+                keys.forEach((key, index) => {
+                    const value = JSON.parse(values[index])
+                    if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
+                        const agent = useragent.parse(value.user_agent)
+                        value.user_agent = `${agent.os.family} ${agent.family}`
+                        value.token = null
+                        if (value.active == true) {
+                            allData.push(value)
+                        }
+                    }
+                })
+            }
+        }
+        const allDataCount = allData.length
+        const sortedAllData = allData.sort(
+            (a, b) => new Date(b.last_accessed) - new Date(a.last_accessed),
+        )
+        const paginatedData = sortedAllData.slice(skip, skip + limit)
 
         return res.status(200).json({
-            data: sessions,
-            totalPages: Math.ceil(totalItems / limit),
+            data: paginatedData,
+            totalPages: Math.ceil(allDataCount / limit),
             currentPage: current_page,
         })
     } catch (e) {
         logger.error(e)
-        return res.status(500).json({ error: 'Internal server error' })
     }
+    res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/sessions/logout', [recaptcha, auth], async (req, res, next) => {
     try {
-        const db = await database()
-        await db.collection('sessions').updateMany(
-            {
-                active: true,
-            },
-            {
-                $set: {
-                    active: false,
-                    last_accessed: Date.now(),
-                    modified_by: 'system',
-                },
-            },
-        )
-        clearRedisCache()
-        return res.status(200).send()
+        const redisClient = await redis()
+        const stream = redisClient.scanStream()
+        let sessionData = null
+
+        for await (const keys of stream) {
+            if (keys.length > 0) {
+                const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
+                const values = await redisClient.mget(filteredKeys)
+                keys.forEach((key, index) => {
+                    const value = JSON.parse(values[index])
+                    if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
+                        value.active = false
+                        setCache(`internal-${value.token}`, value)
+                    }
+                })
+            }
+        }
+        return res.status(200).json({ message: 'All sessions have been logged out' })
     } catch (e) {
         logger.error(e)
     }

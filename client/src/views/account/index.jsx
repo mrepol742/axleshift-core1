@@ -43,6 +43,10 @@ const Account = () => {
         setLoading(false)
     }, [])
 
+    const getInitials = (name) => {
+        return name ? name.charAt(0).toUpperCase() : ''
+    }
+
     const handleInputChange = (e, type) => {
         const { id, value } = e.target
         if (type === 'accountDetails')
@@ -104,13 +108,24 @@ const Account = () => {
                     <CCard className="mb-3">
                         <CCardBody>
                             <CForm onSubmit={handleAccountDetails}>
-                                <CImage
-                                    crossOrigin="Anonymous"
-                                    src={avatar}
-                                    className="border border-5 mb-3 rounded-2"
-                                    width="90px"
-                                    loading="lazy"
-                                />
+                                {user.avatar ? (
+                                    <CImage
+                                        crossOrigin="Anonymous"
+                                        src={`${VITE_APP_API_URL}/u/${user.avatar}.png`}
+                                        className="rounded-5"
+                                        fluid
+                                        width="40px"
+                                        height="40px"
+                                        loading="lazy"
+                                    />
+                                ) : (
+                                    <div
+                                        className="rounded-pill bg-primary d-flex align-items-center justify-content-center mb-3 fs-4"
+                                        style={{ width: '70px', height: '70px', color: 'white' }}
+                                    >
+                                        {getInitials(user.first_name)}
+                                    </div>
+                                )}
                                 <CFormInput
                                     id="profile_pic"
                                     type="file"

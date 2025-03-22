@@ -38,7 +38,7 @@ export const clearRedisCache = async () => {
 export const getCache = async (key) => {
     try {
         const redisClient = await redis()
-        const cache = await redisClient.get(`axleshift-core1:${key}`)
+        const cache = await redisClient.get(key)
         if (cache) return JSON.parse(cache)
     } catch (e) {
         logger.error(e)
@@ -50,7 +50,7 @@ export const setCache = async (key, value, SESSION_TTL) => {
     try {
         const redisClient = await redis()
         await redisClient.set(
-            `axleshift-core1:${key}`,
+            key,
             JSON.stringify(value),
             'EX',
             SESSION_TTL ? SESSION_TTL : DEFAULT_SESSION_TTL,
@@ -65,7 +65,7 @@ export const setCache = async (key, value, SESSION_TTL) => {
 export const remCache = async (key) => {
     try {
         const redisClient = await redis()
-        await redisClient.del(`axleshift-core1:${key}`)
+        await redisClient.del(key)
         return true
     } catch (e) {
         logger.error(e)

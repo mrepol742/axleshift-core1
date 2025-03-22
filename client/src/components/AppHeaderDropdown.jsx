@@ -18,46 +18,58 @@ const AppHeaderDropdown = () => {
     const navigate = useNavigate()
     const { user } = useUserProvider()
 
+    const getInitials = (name) => {
+        return name ? name.charAt(0).toUpperCase() : ''
+    }
+
     return (
         <CDropdown variant="nav-item">
             <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
-                <CImage
-                    crossOrigin="Anonymous"
-                    src={
-                        user.ref
-                            ? `${VITE_APP_API_URL}/u/${user.ref}.png`
-                            : '/images/default-avatar.jpg'
-                    }
-                    className="rounded-5"
-                    fluid
-                    width="40px"
-                    height="40px"
-                    loading="lazy"
-                />
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-                <CDropdownHeader className="bg-body-secondary fw-semibold text-center">
+                {user.avatar ? (
                     <CImage
                         crossOrigin="Anonymous"
-                        src={
-                            user.ref
-                                ? `${VITE_APP_API_URL}/u/${user.ref}.png`
-                                : '/images/default-avatar.jpg'
-                        }
-                        className="rounded mb-2"
+                        src={`${VITE_APP_API_URL}/u/${user.avatar}.png`}
+                        className="rounded-5"
                         fluid
-                        width="70px"
-                        height="70px"
+                        width="40px"
+                        height="40px"
                         loading="lazy"
                     />
-                    <div>
-                        <span className="d-block text-truncate" style={{ maxWidth: '200px' }}>
-                            {user.first_name} {user.last_name}
-                        </span>
-                        <span className="text-truncate" style={{ maxWidth: '200px' }}>
-                            {user.email}
-                        </span>
+                ) : (
+                    <div
+                        className="rounded-pill bg-primary d-flex align-items-center justify-content-center"
+                        style={{ width: '40px', height: '40px', color: 'white' }}
+                    >
+                        {getInitials(user.first_name)}
                     </div>
+                )}
+            </CDropdownToggle>
+            <CDropdownMenu className="pt-0" placement="bottom-end">
+                <CDropdownHeader className="bg-body-secondary fw-semibold">
+                    {user.avatar ? (
+                        <CImage
+                            crossOrigin="Anonymous"
+                            src={`${VITE_APP_API_URL}/u/${user.avatar}.png`}
+                            className="rounded mb-2"
+                            fluid
+                            width="70px"
+                            height="70px"
+                            loading="lazy"
+                        />
+                    ) : (
+                        <div
+                            className="rounded-pill bg-primary d-flex align-items-center justify-content-center mb-2 fs-4"
+                            style={{ width: '70px', height: '70px', color: 'white' }}
+                        >
+                            {getInitials(user.first_name)}
+                        </div>
+                    )}
+                    <span className="d-block text-truncate" style={{ maxWidth: '250px' }}>
+                        {user.first_name} {user.last_name}
+                    </span>
+                    <span className="d-block text-truncate" style={{ maxWidth: '250px' }}>
+                        {user.email}
+                    </span>
                 </CDropdownHeader>
                 <CDropdownItem onClick={() => navigate('/account')}>
                     <FontAwesomeIcon icon={faCircleUser} className="me-2" />

@@ -8,26 +8,14 @@ const external = async (req, res, next) => {
     const authHeader = req.headers['authorization']
     const token = authHeader.split(' ')[1]
 
-    const db = await database()
-
-    let existingApiToken = await getCache(`external-${token}`)
+    const existingApiToken = await getCache(`external-${token}`)
     if (
         !existingApiToken ||
         (existingApiToken && !existingApiToken.active && !existingApiToken.compromised)
     ) {
-        existingApiToken = await db.collection('apiToken').findOne(
-            {
-                token: token,
-                active: true,
-                compromised: false,
-            },
-            { projection: { whitelist_ip: 1 } },
-        )
-
-        if (!existingApiToken)
-            return res
-                .status(401)
-                .json({ error: 'Unauthorized', message: 'invalid or denied api token' })
+        return res
+            .status(401)
+            .json({ error: 'Unauthorized', message: 'invalid or denied api token' })
     }
 
     const ip = getClientIp(req)
@@ -39,25 +27,14 @@ const external = async (req, res, next) => {
             ip,
         })
 
-    let user_a = req.headers['user-agent'] || 'unknown'
     Promise.all([
         (async () => {
             try {
-                const date = Date.now()
-                const db = await database()
-                db.collection('apiToken').updateOne(
-                    { token: token },
-                    {
-                        $set: {
-                            user_agent: user_a,
-                            last_accessed: date,
-                        },
-                    },
-                )
-
-                existingApiToken.user_agent = user_a
-                existingApiToken.last_accessed = date
-                setCache(`external-${token}`, existingApiToken)
+                const now = Date.now()
+                if (now - cachedSession.last_accessed > 60 * 1000) {
+                    existingApiToken.last_accessed = now
+                    setCache(`external-${token}`, existingApiToken)
+                }
             } catch (e) {
                 logger.error(e)
             }

@@ -7,7 +7,6 @@ import { REACT_APP_ORIGIN } from '../../config.js'
 import { setCache } from '../../models/redis.js'
 
 const adminRoute = ['/metrics/v1/prometheus', '/api/v1/sec/management']
-const exludeRoute = ['/api/v1/auth/verify']
 
 const internal = async (req, res, next) => {
     if (REACT_APP_ORIGIN !== req.socket.remoteAddress)
@@ -21,7 +20,7 @@ const internal = async (req, res, next) => {
     if (!theUser || (adminRoute.includes(req.path) && theUser.role !== 'admin'))
         return res.status(401).json({ error: 'Unauthorized' })
 
-    if (!session.active) return res.status(401).json({ error: 'Unauthorized' })
+    if (!session || !session.active) return res.status(401).json({ error: 'Unauthorized' })
     // const encryptedData = req.body.data
     // const decryptedData = crypto.privateDecrypt({
     //     key: session.key.privateKey, padding: crypto.constants.RSA_PKCS1_PADDING
@@ -29,52 +28,10 @@ const internal = async (req, res, next) => {
 
     // req.body.data = JSON.parse(decryptedData.toString())
 
-    let user_a = req.headers['user-agent'] || 'unknown'
-
-    const diff = Date.now() - session.last_accessed
-    const week = 7 * 24 * 60 * 60 * 1000
-
-    if (diff >= week) user_a = null
-
-    Promise.all([
-        (async () => {
-            try {
-                const db = await database()
-                const value = session.user_agent === user_a
-                const date = Date.now()
-                db.collection('sessions').updateOne(
-                    { token: token },
-                    {
-                        $set: {
-                            active: value,
-                            compromised: !value,
-                            last_accessed: date,
-                            modified_by: 'system',
-                        },
-                    },
-                )
-
-                session.active = value
-                session.compromised = !value
-                session.last_accessed = date
-                session.modified_by = 'system'
-                setCache(`internal-${token}`, session)
-            } catch (e) {
-                logger.error(e)
-            }
-        })(),
-    ])
-
-    if (session.user_agent !== user_a) return res.status(401).json({ error: 'Unauthorized' })
-
     req.request_type = 'internal'
     req.token = token
     req.user = theUser
     req.session = session
-
-    if (theUser.role === 'admin') return next()
-    if (exludeRoute.includes(req.path)) return next()
-
     return next()
 }
 

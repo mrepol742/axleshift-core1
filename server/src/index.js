@@ -25,7 +25,11 @@ const startServer = async () => {
 
     Object.entries(config).forEach(([key, value]) => {
         if (value === undefined || value === null || value === '') {
-            logger.warn(`The value for ${key} is empty.`)
+            if (config.NODE_ENV === 'production') {
+                logger.error(`The value for ${key} is empty.`)
+            } else {
+                logger.warn(`The value for ${key} is empty.`)
+            }
         }
     })
 

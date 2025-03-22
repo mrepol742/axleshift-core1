@@ -5,40 +5,65 @@ import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
-import redis from '../../../models/redis.js'
+import redis, { setCache } from '../../../models/redis.js'
 
 const router = express.Router()
+const limit = 20
 
-router.get('/', auth, async (req, res) => {
+router.post('/', auth, async (req, res) => {
     try {
-        const db = await database()
-        const sessionsCollection = await db.collection('sessions')
+        const { page } = req.body
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
+        const current_page = parseInt(page) || 1
+        const skip = (current_page - 1) * limit
 
-        const filter = { user_id: req.user._id, active: true }
-        const [sessions, session, activeSessionsCount] = await Promise.all([
-            sessionsCollection.find(filter).sort({ last_accessed: -1 }).toArray(),
-            sessionsCollection.findOne({ token: req.session.token }),
-            sessionsCollection.countDocuments(filter),
-        ])
+        const redisClient = await redis()
+        const stream = redisClient.scanStream()
+        const allData = []
+        let currentSession = null
 
-        const agent = useragent.parse(session.user_agent)
-        session.user_agent = `${agent.os.family} ${agent.family}`
-
-        for (let i = 0; i < sessions.length; i++) {
-            const agent = useragent.parse(sessions[i].user_agent)
-            sessions[i].user_agent = `${agent.os.family} ${agent.family}`
+        for await (const keys of stream) {
+            if (keys.length > 0) {
+                const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
+                const values = await redisClient.mget(filteredKeys)
+                keys.forEach((key, index) => {
+                    const value = JSON.parse(values[index])
+                    // validate its internal token
+                    if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
+                        const agent = useragent.parse(value.user_agent)
+                        value.user_agent = `${agent.os.family} ${agent.family}`
+                        const _tt = value.token
+                        value.token = null
+                        if (_tt === req.session.token) {
+                            currentSession = value
+                        } else if (
+                            value.active == true &&
+                            value.user_id === req.user._id.toString()
+                        ) {
+                            allData.push(value)
+                        }
+                    }
+                })
+            }
         }
-        const _sessions = sessions.filter((item) => item.token !== req.session.token)
+        const allDataCount = allData.length
+        const sortedAllData = allData.sort(
+            (a, b) => new Date(b.last_accessed) - new Date(a.last_accessed),
+        )
+        const paginatedData = sortedAllData.slice(skip, skip + limit)
 
-        if (session)
-            return res.status(200).json({
-                sessions: _sessions,
+        return res.status(200).json({
+            data: {
+                sessions: paginatedData,
                 current_session: {
-                    ip_address: session.ip_address,
-                    user_agent: session.user_agent,
+                    ip_address: currentSession.ip_address,
+                    user_agent: currentSession.user_agent,
                 },
-                logout: !(activeSessionsCount > 1),
-            })
+                logout: !(allDataCount > 0),
+            },
+            totalPages: Math.ceil(allDataCount / limit),
+            currentPage: current_page,
+        })
     } catch (e) {
         logger.error(e)
     }
@@ -48,28 +73,41 @@ router.get('/', auth, async (req, res) => {
 router.post('/logout', [recaptcha, auth], async (req, res) => {
     try {
         const session_id = req.body.session_id
-        logger.info(session_id)
-        const db = await database()
         const redisClient = await redis()
-        const cacheKey = `axleshift-core1:${req.token}`
-        const cachedSession = await redisClient.get(cacheKey)
-        if (cachedSession) await redisClient.del(cacheKey)
+        const stream = redisClient.scanStream()
+        let sessionData = null
 
-        await db.collection('sessions').updateMany(
-            {
-                _id: session_id ? new ObjectId(session_id) : { $ne: '0' },
-                user_id: session_id ? { $ne: '0' } : req.user._id,
-                token: { $ne: req.token },
-            },
-            {
-                $set: {
-                    active: false,
-                    last_accessed: Date.now(),
-                    modified_by: 'system',
-                },
-            },
-        )
-        return res.status(200).send()
+        for await (const keys of stream) {
+            if (keys.length > 0) {
+                const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
+                const values = await redisClient.mget(filteredKeys)
+                keys.forEach((key, index) => {
+                    if (/^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
+                        const value = JSON.parse(values[index])
+                        if (value && value._id === session_id) {
+                            sessionData = value
+                        }
+                        if (
+                            !session_id &&
+                            value.active == true &&
+                            value.user_id === req.user._id.toString() &&
+                            value.token !== req.session.token
+                        ) {
+                            value.active = false
+                            setCache(`internal-${value.token}`, value)
+                        }
+                    }
+                })
+            }
+        }
+
+        if (sessionData) {
+            sessionData.active = false
+            setCache(`internal-${sessionData.token}`, sessionData)
+            return res.status(200).json({ message: 'Session logout' })
+        }
+
+        return res.status(200).json({ message: 'Other sessions have been logged out' })
     } catch (e) {
         logger.error(e)
     }

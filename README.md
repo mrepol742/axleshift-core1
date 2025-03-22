@@ -5,12 +5,14 @@
 [![Terraform CI](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml)
 
 ## Pre-requisites
-- Node.js v20.^ `sudo pacman -Sy nodejs`
-- Docker `sudo pacman -Sy docker`
-- Terraform `sudo pacman -Sy terraform`
-- Grafana `sudo pacman -Sy grafana`
-- PM2 `sudo pacman -Sy pm2`
-- smee `sudo npm i --global smee-client`
+- Node.js v23.^
+- Mongodb v8^
+- Redis v7.^
+- Docker
+- Terraform
+- Grafana 
+- PM2 
+- smee
 
 ---
 
