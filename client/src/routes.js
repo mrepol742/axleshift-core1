@@ -34,13 +34,11 @@ const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const BookNow = auth(lazy(() => import('./views/book-now/index')))
 
-const Routes = auth(lazy(() => import('./views/routes/index')))
-
 const Security = auth(lazy(() => import('./views/security/index')))
 const Management = auth(lazy(() => import('./views/security/Management')))
 const Sessions = auth(lazy(() => import('./views/security/Sessions')))
 const AccessToken = auth(lazy(() => import('./views/security/AccessToken')))
-const Activity = auth(lazy(() => import('./views/security/Activity')))
+const ActivityLogs = auth(lazy(() => import('./views/security/AccountLogs')))
 
 const Track = auth(lazy(() => import('./views/track/index')))
 const TrackInfo = auth(lazy(() => import('./views/track/Info')))
@@ -90,11 +88,9 @@ const routes = [
     { path: '/invoices', name: 'Invoices', element: Invoices },
     { path: '/invoices/:id', name: 'Invoice', element: InvoiceInfo },
 
-    { path: '/routes', name: 'Routes', element: Routes },
-
     { path: '/security', name: 'Security', element: Security },
     { path: '/security/management', name: 'Management', element: Management },
-    { path: '/security/activity', name: 'Activity', element: Activity },
+    { path: '/security/account-logs', name: 'Account Logs', element: ActivityLogs },
     { path: '/security/sessions', name: 'Sessions', element: Sessions },
     { path: '/security/access-token', name: 'Access Token', element: AccessToken },
 

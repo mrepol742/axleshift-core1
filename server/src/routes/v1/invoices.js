@@ -9,6 +9,8 @@ import invoices from '../../middleware/invoices.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY, NODE_ENV } from '../../config.js'
 import activity from '../../components/activity.js'
+import cache from '../../middleware/cache.js'
+import { setCache } from '../../models/redis.js'
 
 const { Invoice } = new Xendit({
     secretKey: XENDIT_API_KEY,
@@ -20,7 +22,7 @@ const limit = 20
 /**
  * Get all Invoices
  */
-router.post('/', [auth], async (req, res) => {
+router.post('/', [auth, cache], async (req, res) => {
     try {
         const { page } = req.body
         if (!page) return res.status(400).json({ error: 'Invalid request' })
@@ -42,11 +44,13 @@ router.post('/', [auth], async (req, res) => {
                 .toArray(),
         ])
 
-        return res.status(200).json({
+        const data = {
             data: items,
             totalPages: Math.ceil(totalItems / limit),
             currentPage: current_page,
-        })
+        }
+        if (req.cacheKey) setCache(req.cacheKey, data, 30 * 60 * 1000)
+        return res.status(200).json(data)
     } catch (err) {
         logger.error(err)
     }

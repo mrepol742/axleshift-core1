@@ -82,7 +82,7 @@ const Callback = () => {
     }, [])
 
     return (
-        <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+        <div className="bg-dark min-vh-100 d-flex flex-row align-items-center">
             <div className="auth-bg" />
             <CContainer>
                 {loading && (

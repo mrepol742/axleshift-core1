@@ -13,18 +13,16 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
-
+import AppPagination from '../../components/AppPagination'
 import parseTimestamp from '../../utils/Timestamp'
 
 const Sessions = () => {
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
-    const [result, setResult] = useState({
-        sessions: [],
-        current_session: [],
-        logout: true,
-    })
+    const [result, setResult] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0)
 
     const handleLogout = async (id) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
@@ -34,7 +32,10 @@ const Sessions = () => {
                 session_id: id,
                 recaptcha_ref: recaptcha,
             })
-            .then((response) => window.location.reload())
+            .then((response) => {
+                fetchData()
+                addToast(response.data.message)
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error || 'Server is offline or restarting please wait'
@@ -43,10 +44,13 @@ const Sessions = () => {
             .finally(() => setLoading(false))
     }
 
-    const fetchData = async () => {
+    const fetchData = async (page) => {
         axios
-            .get(`/sec/sessions`)
-            .then((response) => setResult(response.data))
+            .post(`/sec/sessions`, { page })
+            .then((response) => {
+                setResult(response.data.data)
+                setTotalPages(response.data.totalPages)
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error || 'Server is offline or restarting please wait'
@@ -56,8 +60,8 @@ const Sessions = () => {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData(currentPage)
+    }, [currentPage])
 
     if (loading)
         return (
@@ -106,29 +110,38 @@ const Sessions = () => {
                     </CCard>
                 </CCol>
             </CRow>
-
             {result.sessions.map((session, index) => (
-                <CCard key={index} className="mb-3">
-                    <CCardBody>
-                        <div className="d-flex justify-content-between align-items-center">
-                            <div>
-                                <CBadge color="primary" className="me-2">
-                                    {parseTimestamp(session.last_accessed)}
-                                </CBadge>
-                                <CCardTitle>{session.user_agent}</CCardTitle>
-                                <CCardText>
-                                    {session.ip_address === '::1' ||
-                                    session.ip_address === '::ffff:127.0.0.1'
-                                        ? 'localhost'
-                                        : session.ip_address}
-                                </CCardText>
+                <>
+                    <CCard key={index} className="mb-3">
+                        <CCardBody>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <CBadge color="primary" className="me-2">
+                                        {parseTimestamp(session.last_accessed)}
+                                    </CBadge>
+                                    <CCardTitle>{session.user_agent}</CCardTitle>
+                                    <CCardText>
+                                        {session.ip_address === '::1' ||
+                                        session.ip_address === '::ffff:127.0.0.1'
+                                            ? 'localhost'
+                                            : session.ip_address}
+                                    </CCardText>
+                                </div>
+                                <CButton color="danger" onClick={(e) => handleLogout(session._id)}>
+                                    Logout
+                                </CButton>
                             </div>
-                            <CButton color="danger" onClick={(e) => handleLogout(session._id)}>
-                                Logout
-                            </CButton>
-                        </div>
-                    </CCardBody>
-                </CCard>
+                        </CCardBody>
+                    </CCard>
+                    {totalPages > 1 && (
+                        <AppPagination
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            totalPages={totalPages}
+                            setTotalPages={setTotalPages}
+                        />
+                    )}
+                </>
             ))}
         </div>
     )

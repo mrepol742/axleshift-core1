@@ -53,7 +53,7 @@ jobs:
           npm run setup
 
       - name: Executing lint test
-        run: npm run pretty
+        run: npm run prettier
       
       - name: Executing jest & mocha
         run: npm run test

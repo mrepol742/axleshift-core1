@@ -2,27 +2,21 @@ import { ObjectId } from 'mongodb'
 import logger from '../../utils/logger.js'
 import database from '../../models/mongodb.js'
 import { getClientIp } from '../ip.js'
-import { API_EXTERNAL_RATE_DELAY } from '../../config.js'
+import { getCache, setCache } from '../../models/redis.js'
 
 const external = async (req, res, next) => {
     const authHeader = req.headers['authorization']
     const token = authHeader.split(' ')[1]
 
-    const db = await database()
-    const apiTokenCollection = db.collection('apiToken')
-    const existingApiToken = await apiTokenCollection.findOne(
-        {
-            token: token,
-            active: true,
-            compromised: false,
-        },
-        { projection: { whitelist_ip: 1 } },
-    )
-
-    if (!existingApiToken)
+    const existingApiToken = await getCache(`external-${token}`)
+    if (
+        !existingApiToken ||
+        (existingApiToken && !existingApiToken.active && !existingApiToken.compromised)
+    ) {
         return res
             .status(401)
             .json({ error: 'Unauthorized', message: 'invalid or denied api token' })
+    }
 
     const ip = getClientIp(req)
     const w_ip = existingApiToken.whitelist_ip
@@ -33,20 +27,14 @@ const external = async (req, res, next) => {
             ip,
         })
 
-    let user_a = req.headers['user-agent'] || 'unknown'
     Promise.all([
         (async () => {
             try {
-                const db = await database()
-                db.collection('apiToken').updateOne(
-                    { token: token },
-                    {
-                        $set: {
-                            user_agent: user_a,
-                            last_accessed: Date.now(),
-                        },
-                    },
-                )
+                const now = Date.now()
+                if (now - cachedSession.last_accessed > 60 * 1000) {
+                    existingApiToken.last_accessed = now
+                    setCache(`external-${token}`, existingApiToken)
+                }
             } catch (e) {
                 logger.error(e)
             }
@@ -56,9 +44,7 @@ const external = async (req, res, next) => {
     req.request_type = 'external'
     req.token = token
 
-    setTimeout(() => {
-        return next()
-    }, API_EXTERNAL_RATE_DELAY)
+    return next()
 }
 
 export default external

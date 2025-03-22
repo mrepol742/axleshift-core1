@@ -1,12 +1,14 @@
 import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
+import redis from '../models/redis.js'
 
 const sessions = () => {
     Promise.all([
         (async () => {
             try {
                 const db = await database()
+                const redisClient = await redis()
                 const sessionsCollection = db.collection('sessions')
                 const sessions = await sessionsCollection.find({ active: false }).toArray()
 
@@ -18,6 +20,12 @@ const sessions = () => {
                     const week = 7 * 24 * 60 * 60 * 1000
 
                     if (diff >= week) {
+                        const cacheKey = `axleshift-core1:${session.token}`
+                        const cachedSession = await redisClient.get(cacheKey)
+                        if (cachedSession) {
+                            await redisClient.del(cacheKey)
+                        }
+
                         sessionsCollection.updateOne(
                             { _id: new ObjectId(session._id) },
                             {

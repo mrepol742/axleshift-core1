@@ -2,12 +2,14 @@ import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import activity from './activity.js'
+import redis, { getCache, setCache, remCache } from '../models/redis.js'
+
+const SESSION_TTL = 7 * 24 * 60 * 60 * 1000
 
 export const addSession = async (theUser, sessionToken, ip, userAgent, location) => {
     try {
-        const db = await database()
-        const sessionsCollection = db.collection('sessions')
-        const session = await sessionsCollection.insertOne({
+        const data = {
+            _id: new ObjectId(),
             user_id: theUser._id,
             token: sessionToken,
             active: true,
@@ -16,14 +18,16 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
             compromised: false,
             location: location,
             last_accessed: Date.now(),
-        })
+        }
+        setCache(`internal-${sessionToken}`, data)
+
         const req = {
             headers: {
                 'user-agent': userAgent,
                 'x-forwarded-for': ip,
             },
             user: { _id: theUser._id },
-            session: { _id: session._id },
+            session: { _id: data._id },
         }
 
         if (theUser.log) activity(req, theUser.log)
@@ -36,15 +40,13 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
 
 export const getUser = async (sessionToken) => {
     try {
+        const cachePrefix = /^core1_[0-9a-f]{16}$/.test(sessionToken) ? 'external' : 'internal'
+        const cachedSession = await getCache(`${cachePrefix}-${sessionToken}`)
+        if (!cachedSession || !cachedSession.active) return null
+
         const db = await database()
-        const isApiToken = /^core1_[0-9a-f]{16}$/.test(sessionToken)
-        const endpoint = isApiToken ? 'apiToken' : 'sessions'
-        const tokenCollection = await db
-            .collection(endpoint)
-            .findOne({ token: sessionToken, active: true }, { projection: { user_id: 1 } })
-        if (!tokenCollection) return null
         const theUser = await db.collection('users').findOne(
-            { _id: new ObjectId(tokenCollection.user_id) },
+            { _id: new ObjectId(cachedSession.user_id) },
             {
                 projection: {
                     _id: 1,
@@ -72,17 +74,7 @@ export const getUser = async (sessionToken) => {
 
 export const removeSession = async (sessionToken) => {
     try {
-        const db = await database()
-        await db.collection('sessions').updateOne(
-            { token: sessionToken },
-            {
-                $set: {
-                    active: false,
-                    last_accessed: Date.now(),
-                    modified_by: 'system',
-                },
-            },
-        )
+        remCache(`internal-${sessionToken}`)
     } catch (e) {
         logger.error(e)
     }
@@ -90,15 +82,19 @@ export const removeSession = async (sessionToken) => {
 
 export const getSession = async (sessionToken) => {
     try {
-        const db = await database()
-        const session = await db
-            .collection('sessions')
-            .findOneAndUpdate(
-                { token: sessionToken },
-                { $set: { last_accessed: Date.now() } },
-                { returnDocument: 'after' },
-            )
-        return session
+        const cachedSession = await getCache(`internal-${sessionToken}`)
+        if (!cachedSession) return null
+
+        const diff = Date.now() - cachedSession.last_accessed
+        const week = 7 * 24 * 60 * 60 * 1000
+        if (diff >= week) return null
+
+        const now = Date.now()
+        if (now - cachedSession.last_accessed > 60 * 1000) {
+            cachedSession.last_accessed = now
+            setCache(`internal-${sessionToken}`, cachedSession)
+        }
+        return cachedSession
     } catch (e) {
         logger.error(e)
     }

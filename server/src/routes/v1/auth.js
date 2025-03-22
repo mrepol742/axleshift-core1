@@ -127,7 +127,7 @@ router.post('/user', [recaptcha, auth], async (req, res, next) => {
             },
         )
         activity(req, 'update user account information')
-        const theUser = await usersCollection.findOne({ _id: req.session.user_id })
+        const theUser = await usersCollection.findOne({ _id: new ObjectId(req.session.user_id) })
         return res.status(200).json({
             _id: theUser._id,
             email: theUser.email,

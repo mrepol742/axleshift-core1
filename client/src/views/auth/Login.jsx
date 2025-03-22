@@ -142,12 +142,12 @@ const Login = () => {
     const login = async (e, type, credential, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
-        const formData = new FormData()
+        const formData = {}
         if (type === 'form') {
-            formData.append('email', email)
-            formData.append('password', password)
+            formData.email = email
+            formData.password = password
         } else if (type === 'google') {
-            formData.append('credential', credential)
+            formData.credential = credential
         } else {
             setLoading(false)
             setError({
@@ -156,9 +156,9 @@ const Login = () => {
             })
             return
         }
-        formData.append('type', type)
-        formData.append('recaptcha_ref', recaptcha)
-        formData.append('location', JSON.stringify([location]))
+        formData.type = type
+        formData.recaptcha_ref = recaptcha
+        formData.location = JSON.stringify([location])
 
         axios
             .post(`/auth/login`, formData)
@@ -184,7 +184,7 @@ const Login = () => {
     }
 
     return (
-        <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+        <div className="bg-dark min-vh-100 d-flex flex-row align-items-center">
             <div className="auth-bg" />
             <CContainer>
                 {loading && (
@@ -318,9 +318,6 @@ const Login = () => {
                                             </CButton>
                                         </CButtonGroup>
                                     </div>
-                                    {/* <CButton className="me-2" onClick={(e) => setShowQR(true)}>
-                                            Login using <FontAwesomeIcon icon={faQrcode} /> QRCode
-                                        </CButton> */}
                                     <span className="small text-muted d-block mb-1">
                                         or continue with
                                     </span>
@@ -343,13 +340,15 @@ const Login = () => {
                                     <CButton color="outline-primary" className="me-2" disabled>
                                         <FontAwesomeIcon icon={faMicrosoft} />
                                     </CButton>
-                                    <CButton
-                                        color="link"
-                                        className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                        onClick={() => navigate('/forgot-password')}
-                                    >
-                                        Forgot password?
-                                    </CButton>
+                                    <div className="d-flex justify-content-end small">
+                                        <a
+                                            color="link"
+                                            className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                            onClick={() => navigate('/forgot-password')}
+                                        >
+                                            Forgot password?
+                                        </a>
+                                    </div>
                                 </CForm>
                             </CCardBody>
                         </CCard>

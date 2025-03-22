@@ -68,9 +68,9 @@ const AppHeader = () => {
                             <FontAwesomeIcon icon={faCalendarDays} />
                         </CButton>
                     </CNavItem>
-                    <AppSearch className="mx-auto d-none d-md-flex ms-2" />
                 </CHeaderNav>
                 <CHeaderNav className="ms-auto px-2">
+                    <AppSearch className="mx-auto d-none d-md-flex me-2" />
                     <AppNotifcationDropdown />
                 </CHeaderNav>
                 <CHeaderNav>
