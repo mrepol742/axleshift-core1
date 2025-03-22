@@ -37,7 +37,7 @@
         "@react-oauth/google": "^0.12.1",
         "@sentry/react": "^8.33.1",
         "aos": "^2.3.4",
-        "axios": "^1.7.7",
+        "axios": "^1.8.2",
         "boolean-pro": "^1.0.0",
         "chart.js": "^4.4.3",
         "core-js": "^3.37.1",
@@ -47,7 +47,7 @@
         "html2canvas": "^1.4.1",
         "is-spaghetti-code": "^1.0.0",
         "js-cookie": "^3.0.5",
-        "jspdf": "^3.0.0",
+        "jspdf": "^3.0.1",
         "jsqr": "^1.4.0",
         "moment": "^2.30.1",
         "pako": "^2.1.0",
@@ -73,7 +73,7 @@
         "@babel/preset-react": "^7.25.7",
         "@testing-library/jest-dom": "^6.6.2",
         "@testing-library/react": "^16.0.1",
-        "@vitejs/plugin-react": "^4.3.1",
+        "@vitejs/plugin-react": "^4.3.4",
         "autoprefixer": "^10.4.19",
         "babel-jest": "^29.7.0",
         "babel-preset-vite": "^1.1.3",
@@ -90,8 +90,8 @@
         "prettier": "3.3.2",
         "sass": "^1.77.5",
         "terser": "^5.36.0",
-        "vite": "^5.4.14",
-        "vite-plugin-html-minifier": "^1.0.4"
+        "vite": "^6.2.2",
+        "vite-plugin-html-minifier": "^1.0.5"
     },
     "engines": {
         "node": ">=20.x"
