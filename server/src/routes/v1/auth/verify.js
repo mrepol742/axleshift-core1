@@ -10,23 +10,7 @@ import sendOTP from '../../../components/otp.js'
 const router = express.Router()
 
 router.post('/', auth, async function (req, res, next) {
-    const { _id, email_verify_at, ...filter } = req.user
-    filter.is_email_verified = email_verify_at !== null
-    if (filter.is_email_verified) return res.status(200).json(filter)
-
-    const db = await database()
-    const otpCollection = db.collection('otp')
-    const theOtp = await otpCollection.findOne({ token: req.token, verified: false })
-    if (theOtp) {
-        const past = new Date(theOtp.created_at)
-        const ten = 10 * 60 * 1000
-
-        if (!(Date.now() - past > ten))
-            return res.status(200).json({ otp: true, email: req.user.email })
-    }
-    sendOTP(req, otpCollection)
-
-    return res.status(200).json({ otp: true, email: req.user.email })
+    res.status(200).json(req.user)
 })
 
 router.post('/otp', [recaptcha, auth], async function (req, res, next) {

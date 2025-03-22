@@ -35,14 +35,8 @@ const OTP = () => {
         axios
             .post(`/auth/verify`, null)
             .then((response) => {
-                if (response.data.is_email_verified) return navigate('/dashboard')
+                if (!response.data.otp) return navigate('/dashboard')
                 setEmail(response.data.email)
-            })
-            .catch((err) => {
-                if (err.response) {
-                    cookies.remove(VITE_APP_SESSION)
-                    navigate('/login')
-                }
             })
             .finally(() => setLoading(false))
     }

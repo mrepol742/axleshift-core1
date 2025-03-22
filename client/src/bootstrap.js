@@ -17,16 +17,14 @@ const excludedPaths = [
     '/login',
     '/register',
     '/auth/github/callback',
+    '/auth/verify',
     '/forgot-password',
-    '/one-time-password',
 ]
 
 _axios.interceptors.request.use(
     async (config) => {
         if (config.data) {
-            console.log(JSON.stringify(config.data))
             const sanitizedData = DOMPurify.sanitize(JSON.stringify(config.data))
-            console.log(sanitizedData)
             config.data = pako.gzip(sanitizedData, { to: 'string' })
             config.headers['Content-Encoding'] = 'gzip'
             config.headers['Content-Type'] = 'application/json'
@@ -42,6 +40,8 @@ _axios.interceptors.request.use(
 
 _axios.interceptors.response.use(
     (response) => {
+        if (window.location.pathname !== '/auth/verify' && response.data.otp)
+            return (window.location.href = '/auth/verify')
         return response
     },
     (error) => {
@@ -51,10 +51,8 @@ _axios.interceptors.response.use(
             error.response.status === 401 &&
             !excludedPaths.includes(window.location.pathname)
         ) {
-            if (!excludedPaths.includes(window.location.pathname)) {
-                cookies.remove(VITE_APP_SESSION)
-                window.location.reload()
-            }
+            cookies.remove(VITE_APP_SESSION)
+            window.location.reload()
         }
         return Promise.reject(error)
     },
