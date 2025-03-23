@@ -101,6 +101,31 @@ const OTP = () => {
             .finally(() => setLoading(false))
     }
 
+    const handleResend = async () => {
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
+        axios
+            .post(`/auth/verify/otp/new`, {
+                recaptcha_ref: recaptcha,
+            })
+            .then((response) =>
+                setError({
+                    error: true,
+                    message: response.data.message,
+                }),
+            )
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
+
+                setError({
+                    error: true,
+                    message,
+                })
+            })
+            .finally(() => setLoading(false))
+    }
+
     if (loading)
         return (
             <div className="loading-overlay">
@@ -161,13 +186,24 @@ const OTP = () => {
                                             ))}
                                         </div>
                                         <div className="d-flex justify-content-center">
-                                            <CButton
-                                                type="submit"
-                                                color="primary"
-                                                className="me-2 rounded"
-                                            >
-                                                Submit
-                                            </CButton>
+                                            <div className="d-flex justify-content-center">
+                                                <CButton
+                                                    type="submit"
+                                                    color="primary"
+                                                    className="me-2 rounded"
+                                                >
+                                                    Verify
+                                                </CButton>
+                                            </div>
+                                            <div className="d-flex justify-content-center">
+                                                <CButton
+                                                    color="primary-outline"
+                                                    className="me-2 rounded"
+                                                    onClick={handleResend}
+                                                >
+                                                    Resend OTP
+                                                </CButton>
+                                            </div>
                                         </div>
                                         <CButton
                                             color="link"

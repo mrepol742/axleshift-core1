@@ -1,19 +1,22 @@
 import { send } from './mail.js'
+import { setCache } from '../models/redis.js'
 
-const OneTimePassword = (req, otpCollection, otpType) => {
+const ten = 10 * 60 * 1000
+
+const OneTimePassword = (req, otpType) => {
     const otp = Math.floor(100000 + Math.random() * 900000)
     const dateNow = Date.now()
+    const data = {
+        user_id: req.user._id,
+        code: otp,
+        verified: false,
+        expired: false,
+        type: otpType,
+        created_at: dateNow,
+        updated_at: dateNow,
+    }
     Promise.all([
-        otpCollection.insertOne({
-            user_id: req.user._id,
-            token: req.token,
-            code: otp,
-            verified: false,
-            expired: false,
-            type: otpType,
-            created_at: dateNow,
-            updated_at: dateNow,
-        }),
+        setCache(`user-id-${req.user._id}`, data, ten),
         send(
             {
                 to: req.user.email,

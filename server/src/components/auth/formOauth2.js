@@ -78,7 +78,7 @@ const FormOauth2 = async (req, res) => {
                     },
                 },
                 password: null,
-                email_verify_at: dateNow,
+                email_verify_at: null,
                 ref: ref,
                 created_at: dateNow,
                 updated_at: dateNow,
@@ -94,9 +94,10 @@ const FormOauth2 = async (req, res) => {
             Download(credential.picture, ref),
         ])
 
-        theUser.log = 'created account'
-        theUser.log1 = `bind ${provider} as authentication credentials`
-        const token = await Token(theUser, req)
+        const _theUser = await usersCollection.findOne({ email: credential.email })
+        _theUser.log = 'created account'
+        _theUser.log1 = `bind ${provider} as authentication credentials`
+        const token = await Token(_theUser, req)
         return res.status(200).json(token)
     } catch (e) {
         logger.error(e)

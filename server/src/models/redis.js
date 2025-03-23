@@ -49,12 +49,16 @@ export const getCache = async (key) => {
 export const setCache = async (key, value, SESSION_TTL) => {
     try {
         const redisClient = await redis()
-        await redisClient.set(
-            key,
-            JSON.stringify(value),
-            'EX',
-            SESSION_TTL ? SESSION_TTL : DEFAULT_SESSION_TTL,
-        )
+        if (SESSION_TTL === 'none') {
+            await redisClient.set(key, JSON.stringify(value), 'EX')
+        } else {
+            await redisClient.set(
+                key,
+                JSON.stringify(value),
+                'EX',
+                SESSION_TTL ? SESSION_TTL : DEFAULT_SESSION_TTL,
+            )
+        }
         return true
     } catch (e) {
         logger.error(e)

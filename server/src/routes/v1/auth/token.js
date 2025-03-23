@@ -93,7 +93,7 @@ router.post('/new', [recaptcha, auth], async function (req, res, next) {
             updated_at: dateNow,
             last_accessed: dateNow,
         }
-        setCache(`external-${apiT}`, data)
+        setCache(`external-${apiT}`, data, 'none')
 
         activity(req, 'generate new auth token')
         return res.status(200).json({ token: apiT })

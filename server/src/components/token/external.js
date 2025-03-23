@@ -34,7 +34,7 @@ const external = async (req, res, next) => {
                 if (now - existingApiToken.last_accessed > 60 * 1000) {
                     existingApiToken.user_agent = req.headers['user-agent'] || 'unknown'
                     existingApiToken.last_accessed = now
-                    setCache(`external-${token}`, existingApiToken)
+                    setCache(`external-${token}`, existingApiToken, 'none')
                 }
             } catch (e) {
                 logger.error(e)

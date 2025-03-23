@@ -24,7 +24,6 @@ import {
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
     Activity,
-    AccessToken,
     Dashboard,
     Dependabot,
     Maintenance,
@@ -60,20 +59,17 @@ const SecurityManagement = () => {
             case 'sentry':
                 setActiveItemKey(3)
                 break
-            case 'access-token':
+            case 'activity':
                 setActiveItemKey(4)
                 break
-            case 'activity':
+            case 'maintenance':
                 setActiveItemKey(5)
                 break
-            case 'maintenance':
+            case 'ip-filtering':
                 setActiveItemKey(6)
                 break
-            case 'ip-filtering':
-                setActiveItemKey(7)
-                break
             case 'geo':
-                setActiveItemKey(8)
+                setActiveItemKey(7)
                 break
         }
         setLoading(false)
@@ -125,39 +121,31 @@ const SecurityManagement = () => {
                     <CNavItem>
                         <CNavLink
                             className={`${activeItemKey === 4 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(4, 'access-token')}
-                        >
-                            <FontAwesomeIcon icon={faKey} className="me-1" /> Access Token
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 5 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(5, 'activity')}
+                            onClick={() => handleTabChange(4, 'activity')}
                         >
                             <FontAwesomeIcon icon={faList} className="me-1" /> Activity
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>
                         <CNavLink
-                            className={`${activeItemKey === 6 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(6, 'maintenance')}
+                            className={`${activeItemKey === 5 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(5, 'maintenance')}
                         >
                             <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> Maintenance
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>
                         <CNavLink
-                            className={`${activeItemKey === 7 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(7, 'ip-filtering')}
+                            className={`${activeItemKey === 6 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(6, 'ip-filtering')}
                         >
                             <FontAwesomeIcon icon={faGlobe} className="me-1" /> IP Filtering
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>
                         <CNavLink
-                            className={`${activeItemKey === 8 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(8, 'geo')}
+                            className={`${activeItemKey === 7 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(7, 'geo')}
                         >
                             <FontAwesomeIcon icon={faGlobe} className="me-1" /> Geo
                         </CNavLink>
@@ -168,11 +156,10 @@ const SecurityManagement = () => {
                     {activeItemKey === 1 && <Sessions />}
                     {activeItemKey === 2 && <Dependabot />}
                     {activeItemKey === 3 && <Sentry />}
-                    {activeItemKey === 4 && <AccessToken />}
-                    {activeItemKey === 5 && <Activity />}
-                    {activeItemKey === 6 && <Maintenance />}
-                    {activeItemKey === 7 && <IPFiltering />}
-                    {activeItemKey === 8 && <GEO />}
+                    {activeItemKey === 4 && <Activity />}
+                    {activeItemKey === 5 && <Maintenance />}
+                    {activeItemKey === 6 && <IPFiltering />}
+                    {activeItemKey === 7 && <GEO />}
                 </div>
             </CNavbarNav>
         </div>
