@@ -9,10 +9,7 @@ const external = async (req, res, next) => {
     const token = authHeader.split(' ')[1]
 
     const existingApiToken = await getCache(`external-${token}`)
-    if (
-        !existingApiToken ||
-        (existingApiToken && !existingApiToken.active && !existingApiToken.compromised)
-    ) {
+    if (!existingApiToken) {
         return res
             .status(401)
             .json({ error: 'Unauthorized', message: 'invalid or denied api token' })

@@ -93,7 +93,7 @@ router.post('/new', [recaptcha, auth], async function (req, res, next) {
             updated_at: dateNow,
             last_accessed: dateNow,
         }
-        setCache(`external-${apiT}`, data, 'none')
+        await setCache(`external-${apiT}`, data, 'none')
 
         activity(req, 'generate new auth token')
         return res.status(200).json({ token: apiT })
@@ -127,7 +127,7 @@ router.post('/delete', [recaptcha, auth], async function (req, res, next) {
         }
 
         if (!sessionData) return res.status(200).json({ error: 'Unable to find access token' })
-        remCache(`external-${sessionData.token}`)
+        await remCache(`external-${sessionData.token}`)
         return res.status(200).send()
     } catch (e) {
         logger.error(e)

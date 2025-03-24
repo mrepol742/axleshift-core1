@@ -50,7 +50,7 @@ export const setCache = async (key, value, SESSION_TTL) => {
     try {
         const redisClient = await redis()
         if (SESSION_TTL === 'none') {
-            await redisClient.set(key, JSON.stringify(value), 'EX')
+            await redisClient.set(key, JSON.stringify(value))
         } else {
             await redisClient.set(
                 key,
