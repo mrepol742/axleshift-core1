@@ -45,23 +45,20 @@ const Search = () => {
 
     if (data.length == 0)
         return (
-            <>
-                <AppSearch className="mb-3 d-block d-md-none" />
-                <CRow className="justify-content-center my-5">
-                    <CCol md={6}>
-                        <div className="clearfix">
-                            <h1 className="float-start display-3 me-4">OOPS</h1>
-                            <h4>There was no shipment found.</h4>
-                            <p>Double check your search query.</p>
-                        </div>
-                    </CCol>
-                </CRow>
-            </>
+            <CRow className="justify-content-center my-5">
+                <CCol md={6}>
+                    <h1 className="text-truncate text-center">`{query}`</h1>
+                    <div className="clearfix">
+                        <h1 className="float-start display-3 me-4 text-danger">OOPS</h1>
+                        <h4>There was no shipment found.</h4>
+                        <p>Double check your search query.</p>
+                    </div>
+                </CCol>
+            </CRow>
         )
 
     return (
         <div>
-            <AppSearch className="mb-3 d-block d-md-none" />
             <Masonry
                 breakpointCols={{
                     default: 4,

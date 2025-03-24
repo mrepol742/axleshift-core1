@@ -120,7 +120,7 @@ const API = () => {
                         <CRow className="justify-content-center">
                             <CCol md={6}>
                                 <div className="clearfix">
-                                    <h1 className="float-start display-3 me-4">404</h1>
+                                    <h1 className="float-start display-3 me-4 text-danger">404</h1>
                                     <h4>Oops! No Access Tokens Found</h4>
                                     <p className="text-body-secondary float-start">
                                         You have not generated any access tokens yet.

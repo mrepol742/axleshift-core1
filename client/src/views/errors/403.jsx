@@ -16,7 +16,7 @@ const Page403 = () => {
                 <CRow className="justify-content-center">
                     <CCol md={6}>
                         <div className="clearfix">
-                            <h1 className="float-start display-3 me-4">403</h1>
+                            <h1 className="float-start display-3 me-4 text-danger">403</h1>
                             <h4>Oops! Forbidden.</h4>
                             <p className="text-body-secondary float-start">
                                 You don&apos;t have permission to view this content.
