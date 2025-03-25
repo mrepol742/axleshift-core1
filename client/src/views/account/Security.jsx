@@ -77,7 +77,6 @@ const Security = () => {
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )}
-
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol>

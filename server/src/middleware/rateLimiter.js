@@ -12,8 +12,17 @@ const limitedRequestRoute = [
     '/api/v1/newsletter',
     '/api/v1/auth/verify/otp/new',
     '/api/v1/auth/verify/otp',
+    '/api/v1/addresses/new',
+    '/api/v1/addresses/edit',
 ]
-const exteralRequestRoute = ['/api/v1/freight/', '/api/v1/freight/:id', '/api/v1/invoices/', '/api/v1/invoices/:id']
+const exteralRequestRoute = [
+    '/api/v1/freight/',
+    '/api/v1/freight/:id',
+    '/api/v1/invoices/',
+    '/api/v1/invoices/:id',
+    '/api/v1/addresses/',
+    '/api/v1/addresses/:id',
+]
 
 const rateLimiter = (req, res, next) => {
     const path = req.path

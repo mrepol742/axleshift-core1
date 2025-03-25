@@ -96,7 +96,7 @@ const auth = () => {
 
     it('POST /api/v1/auth/token', (done) => {
         request(app)
-            .post('/api/v1/auth/token', { page: 1})
+            .post('/api/v1/auth/token', { page: 1 })
             .set('Authorization', `Bearer ${TOKEN}`)
             .expect(401)
             .end((err, res) => {

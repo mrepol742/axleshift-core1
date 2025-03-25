@@ -10,7 +10,12 @@ import {
     CDropdownToggle,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRightFromBracket, faShield, faCircleUser } from '@fortawesome/free-solid-svg-icons'
+import {
+    faArrowRightFromBracket,
+    faShield,
+    faCircleUser,
+    faLocationDot,
+} from '@fortawesome/free-solid-svg-icons'
 import { useUserProvider } from '../components/UserProvider'
 import { VITE_APP_API_URL } from '../config.js'
 
@@ -78,6 +83,10 @@ const AppHeaderDropdown = () => {
                 <CDropdownItem onClick={() => navigate('/account/security')}>
                     <FontAwesomeIcon icon={faShield} className="me-2" />
                     Security
+                </CDropdownItem>
+                <CDropdownItem onClick={() => navigate('/my-addresses')}>
+                    <FontAwesomeIcon icon={faLocationDot} className="me-2" />
+                    My Addresses
                 </CDropdownItem>
                 <CDropdownDivider />
                 <CDropdownItem onClick={() => navigate('/logout')}>
