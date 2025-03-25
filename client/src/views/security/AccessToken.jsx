@@ -154,10 +154,18 @@ const API = () => {
                                         | {token.user_agent ? token.user_agent : 'NaN'}
                                     </span>
                                 </div>
-                                <div>
+                                <div className="me-3 mb-2">
                                     <span className="text-muted">Date created</span>
                                     <span className="d-block small">
                                         {new Date(token.created_at).toLocaleString()}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="text-muted">IP Address</span>
+                                    <span className="d-block small text-capitalize">
+                                        {token.ip_address === '::1'
+                                            ? 'localhost'
+                                            : token.ip_address}
                                     </span>
                                 </div>
                             </div>

@@ -17,8 +17,8 @@ import { useUserProvider } from '../UserProvider'
 
 const IdleTimeout = ({ children }) => {
     const { user } = useUserProvider()
-    const IDLE_TIMEOUT = 10 * 60 * 1000 // 5 minutes
-    const COUNTDOWN_TIME = 30 // 30 seconds
+    const IDLE_TIMEOUT = 10 * 60 * 1000
+    const COUNTDOWN_TIME = 30
     const [isIdle, setIsIdle] = useState(false)
     const [countdown, setCountdown] = useState(COUNTDOWN_TIME)
     let timeout, countdownInterval
@@ -53,7 +53,7 @@ const IdleTimeout = ({ children }) => {
     }
 
     useEffect(() => {
-        if (!user) return 'Loading...'
+        if (!user.role) return 'Loading...'
         resetTimer()
         window.addEventListener('mousemove', resetTimer)
         window.addEventListener('keydown', resetTimer)
@@ -77,7 +77,6 @@ const IdleTimeout = ({ children }) => {
                 >
                     <CModal
                         alignment="center"
-                        scrollable
                         visible={isIdle}
                         onClose={(e) => setIsIdle(false)}
                         aria-labelledby="warningModal"

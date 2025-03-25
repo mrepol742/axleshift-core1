@@ -3,6 +3,7 @@ import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import activity from './activity.js'
 import redis, { getCache, setCache, remCache } from '../models/redis.js'
+import { getClientIp } from './ip.js'
 
 const SESSION_TTL = 7 * 24 * 60 * 60 * 1000
 
@@ -80,7 +81,7 @@ export const removeSession = async (sessionToken) => {
     }
 }
 
-export const getSession = async (sessionToken) => {
+export const getSession = async (req, sessionToken) => {
     try {
         const cachedSession = await getCache(`internal-${sessionToken}`)
         if (!cachedSession) return null
@@ -92,7 +93,9 @@ export const getSession = async (sessionToken) => {
         const now = Date.now()
         if (now - cachedSession.last_accessed > 60 * 1000) {
             cachedSession.last_accessed = now
-            setCache(`internal-${sessionToken}`, cachedSession)
+            ;(cachedSession.ip_address = getClientIp(req)),
+                (cachedSession.user_agent = req.headers['user-agent'] || 'unknown'),
+                setCache(`internal-${sessionToken}`, cachedSession)
         }
         return cachedSession
     } catch (e) {

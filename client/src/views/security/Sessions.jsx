@@ -72,8 +72,6 @@ const Sessions = () => {
 
     return (
         <div>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol className="mb-3">
                     <h4>This device</h4>
@@ -114,22 +112,33 @@ const Sessions = () => {
                 <>
                     <CCard key={index} className="mb-3">
                         <CCardBody>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <CBadge color="primary" className="me-2">
-                                        {parseTimestamp(session.last_accessed)}
-                                    </CBadge>
-                                    <CCardTitle>{session.user_agent}</CCardTitle>
-                                    <CCardText>
-                                        {session.ip_address === '::1' ||
-                                        session.ip_address === '::ffff:127.0.0.1'
-                                            ? 'localhost'
-                                            : session.ip_address}
-                                    </CCardText>
-                                </div>
-                                <CButton color="danger" onClick={(e) => handleLogout(session._id)}>
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                                <h3 className="text-primary text-truncate">{session.user_agent}</h3>
+                                <CButton
+                                    color="outline-danger"
+                                    className="border-danger ms-auto"
+                                    onClick={(e) => handleLogout(session._id)}
+                                >
                                     Logout
                                 </CButton>
+                            </div>
+                            <div className="d-block d-sm-flex">
+                                <div className="me-3 mb-2">
+                                    <span className="text-muted">Last accessed</span>
+                                    <span className="d-block small">
+                                        {session.last_accessed
+                                            ? parseTimestamp(session.last_accessed)
+                                            : 'Never'}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="text-muted">IP Address</span>
+                                    <span className="d-block small text-capitalize">
+                                        {session.ip_address === '::1'
+                                            ? 'localhost'
+                                            : session.ip_address}
+                                    </span>
+                                </div>
                             </div>
                         </CCardBody>
                     </CCard>
@@ -143,6 +152,7 @@ const Sessions = () => {
                     )}
                 </>
             ))}
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }
