@@ -16,6 +16,7 @@ import {
     faRectangleList,
     faTowerBroadcast,
     faPlus,
+    faGlobe,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -70,6 +71,13 @@ const _nav = [
         to: '/security/access-token',
         role_exclude: ['staff', 'user'],
         icon: <FontAwesomeIcon icon={faKey} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Webhooks',
+        to: '/security/webhooks',
+        role_exclude: ['staff', 'user'],
+        icon: <FontAwesomeIcon icon={faGlobe} className="nav-icon" />,
     },
     {
         component: CNavItem,

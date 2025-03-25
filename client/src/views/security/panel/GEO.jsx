@@ -55,7 +55,7 @@ const GEO = () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
-            .post(`/sec/management/ip-filtering`, { recaptcha_ref: recaptcha, geoLocationList })
+            .post(`/sec/management/geo-filtering`, { recaptcha_ref: recaptcha, geoLocationList })
             .then((response) => addToast('Changes saved successfully', 'Success'))
             .catch((error) => {
                 const message =
@@ -154,9 +154,11 @@ const GEO = () => {
                     />
                 </div>
             ))}
-            <CButton color="primary" onClick={saveData}>
-                Apply all changes
-            </CButton>
+            {geoLocationList.length != 0 && (
+                <CButton color="primary" onClick={saveData} className="mb-4">
+                    Apply all changes
+                </CButton>
+            )}
         </div>
     )
 }
