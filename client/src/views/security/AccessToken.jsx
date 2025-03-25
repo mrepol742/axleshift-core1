@@ -134,23 +134,33 @@ const API = () => {
                 result.map((token, index) => (
                     <CCard key={index} className="mb-3">
                         <CCardBody>
-                            <div className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex justify-content-between align-items-center mb-2">
                                 <h3 className="text-primary text-truncate">{token.note}</h3>
                                 <CButton
                                     color="outline-danger"
                                     onClick={(e) => handleDelete(token._id)}
-                                    className="border-secondary ms-auto"
+                                    className="border-danger ms-auto"
                                 >
                                     Delete
                                 </CButton>
                             </div>
-                            <span className="text-muted">Last accessed</span>
-                            <span className="d-block small">
-                                {token.last_accessed
-                                    ? parseTimestamp(token.last_accessed)
-                                    : 'Never'}{' '}
-                                | {token.user_agent ? token.user_agent : 'NaN'}
-                            </span>
+                            <div className="d-block d-sm-flex">
+                                <div className="me-3 mb-2">
+                                    <span className="text-muted">Last accessed</span>
+                                    <span className="d-block small">
+                                        {token.last_accessed
+                                            ? parseTimestamp(token.last_accessed)
+                                            : 'Never'}{' '}
+                                        | {token.user_agent ? token.user_agent : 'NaN'}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="text-muted">Date created</span>
+                                    <span className="d-block small">
+                                        {new Date(token.created_at).toLocaleString()}
+                                    </span>
+                                </div>
+                            </div>
                         </CCardBody>
                     </CCard>
                 ))}
