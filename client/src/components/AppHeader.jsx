@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -13,6 +13,11 @@ import {
     CNavItem,
     useColorModes,
     CButton,
+    CModal,
+    CModalHeader,
+    CModalTitle,
+    CModalBody,
+    CModalFooter,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -22,6 +27,7 @@ import {
     faCircleHalfStroke,
     faCalendarDays,
     faPlus,
+    faSearch,
 } from '@fortawesome/free-solid-svg-icons'
 import { AppBreadcrumb, AppHeaderDropdown } from './index'
 import AppNotifcationDropdown from './AppNotificationDropdown'
@@ -45,6 +51,8 @@ const AppHeader = () => {
                 )
         })
     }, [])
+
+    const [modalVisible, setModalVisible] = useState(false)
 
     return (
         <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
@@ -71,6 +79,9 @@ const AppHeader = () => {
                 </CHeaderNav>
                 <CHeaderNav className="ms-auto px-2">
                     <AppSearch className="mx-auto d-none d-md-flex me-2" />
+                    <div onClick={(e) => setModalVisible(true)} className="d-block d-md-none me-2">
+                        <FontAwesomeIcon icon={faSearch} />
+                    </div>
                     <AppNotifcationDropdown />
                 </CHeaderNav>
                 <CHeaderNav>
@@ -120,6 +131,17 @@ const AppHeader = () => {
             <CContainer className="px-4" fluid>
                 <AppBreadcrumb />
             </CContainer>
+
+            <CModal
+                alignment="top"
+                scrollable
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+            >
+                <CModalBody>
+                    <AppSearch className="mx-auto me-2" />
+                </CModalBody>
+            </CModal>
         </CHeader>
     )
 }

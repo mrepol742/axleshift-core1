@@ -94,9 +94,9 @@ const auth = () => {
             })
     })
 
-    it('GET /api/v1/auth/token', (done) => {
+    it('POST /api/v1/auth/token', (done) => {
         request(app)
-            .get('/api/v1/auth/token')
+            .post('/api/v1/auth/token', { page: 1 })
             .set('Authorization', `Bearer ${TOKEN}`)
             .expect(401)
             .end((err, res) => {
@@ -108,18 +108,6 @@ const auth = () => {
     it('POST /api/v1/auth/token/new', (done) => {
         request(app)
             .post('/api/v1/auth/token/new')
-            .set('Authorization', `Bearer ${TOKEN}`)
-            .send({ recaptcha_ref: 'test' })
-            .expect(403)
-            .end((err, res) => {
-                if (err) return done(err)
-                done()
-            })
-    })
-
-    it('POST /api/v1/auth/token/whitelist-ip', (done) => {
-        request(app)
-            .post('/api/v1/auth/token/whitelist-ip')
             .set('Authorization', `Bearer ${TOKEN}`)
             .send({ recaptcha_ref: 'test' })
             .expect(403)

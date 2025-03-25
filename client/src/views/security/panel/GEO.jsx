@@ -37,11 +37,11 @@ const GEO = () => {
     const [order, setOrder] = useState(0)
     const [priority, setPriority] = useState(0)
     const [state, setState] = useState(0)
-    const [geoLocationList, setgeoLocationList] = useState([])
+    const [geoLocationList, setGeoLocationList] = useState([])
 
     const fetchData = async () => {
         axios
-            .get(`/sec/management/ip-filtering`)
+            .get(`/sec/management/geo`)
             .then((response) => setResult(response.data))
             .catch((error) => {
                 const message =
@@ -70,23 +70,23 @@ const GEO = () => {
     }, [])
 
     const handleAddGeo = () => {
-        setgeoLocationList([...geoLocationList, { ip: '', checked: false }])
+        setGeoLocationList([...geoLocationList, { ip: '', checked: false }])
     }
 
     const handleGeoChange = (index, value) => {
         const newgeoLocationList = [...geoLocationList]
         newgeoLocationList[index].ip = value
-        setgeoLocationList(newgeoLocationList)
+        setGeoLocationList(newgeoLocationList)
     }
 
     const handleCheckboxChange = (index, checked) => {
         const newgeoLocationList = [...geoLocationList]
         newgeoLocationList[index].checked = checked
-        setgeoLocationList(newgeoLocationList)
+        setGeoLocationList(newgeoLocationList)
     }
 
     const handleDeleteGeo = () => {
-        setgeoLocationList(geoLocationList.filter((item) => !item.checked))
+        setGeoLocationList(geoLocationList.filter((item) => !item.checked))
     }
 
     if (loading)

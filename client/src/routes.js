@@ -34,10 +34,15 @@ const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const BookNow = auth(lazy(() => import('./views/book-now/index')))
 
+const Address = auth(lazy(() => import('./views/my-addresses/index')))
+const NewAddress = auth(lazy(() => import('./views/my-addresses/New')))
+const EditAddress = auth(lazy(() => import('./views/my-addresses/Edit')))
+
 const Security = auth(lazy(() => import('./views/security/index')))
 const Management = auth(lazy(() => import('./views/security/Management')))
 const Sessions = auth(lazy(() => import('./views/security/Sessions')))
 const AccessToken = auth(lazy(() => import('./views/security/AccessToken')))
+const NewAccessToken = auth(lazy(() => import('./views/security/access-token/New')))
 const ActivityLogs = auth(lazy(() => import('./views/security/AccountLogs')))
 
 const Track = auth(lazy(() => import('./views/track/index')))
@@ -48,12 +53,6 @@ const InvoiceInfo = auth(lazy(() => import('./views/invoices/Info')))
 
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 
-/*
- * `external` = true will mark the route for non admin only, any
- * attemp of accessing unauthorized route path will return 404
- * and any attemp using unauthorized api endpoint will logout
- * the account.
- */
 const routes = [
     { path: '/', external: true, name: '', element: Landing },
     { path: '/privacy-policy', external: true, name: 'Privacy Policy', element: Privacy },
@@ -88,11 +87,16 @@ const routes = [
     { path: '/invoices', name: 'Invoices', element: Invoices },
     { path: '/invoices/:id', name: 'Invoice', element: InvoiceInfo },
 
+    { path: '/my-addresses', name: 'My Addresses', element: Address },
+    { path: '/my-addresses/new', name: 'New Address', element: NewAddress },
+    { path: '/my-addresses/:id', name: 'Address', element: EditAddress },
+
     { path: '/security', name: 'Security', element: Security },
     { path: '/security/management', name: 'Management', element: Management },
     { path: '/security/account-logs', name: 'Account Logs', element: ActivityLogs },
     { path: '/security/sessions', name: 'Sessions', element: Sessions },
     { path: '/security/access-token', name: 'Access Token', element: AccessToken },
+    { path: '/security/access-token/new', name: 'New Access Token', element: NewAccessToken },
 
     { path: '/track', name: 'Track', element: Track },
     { path: '/track/:id', name: 'Track', element: TrackInfo },

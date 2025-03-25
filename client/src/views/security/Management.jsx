@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CTabs, CTabList, CTab, CTabContent, CTabPanel, CSpinner } from '@coreui/react'
+import {
+    CTabs,
+    CTabList,
+    CTab,
+    CTabContent,
+    CTabPanel,
+    CSpinner,
+    CNavItem,
+    CNavLink,
+    CNavbarNav,
+} from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faChartLine,
@@ -14,7 +24,6 @@ import {
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
     Activity,
-    AccessToken,
     Dashboard,
     Dependabot,
     Maintenance,
@@ -31,6 +40,7 @@ const SecurityManagement = () => {
     const tab = window.location.hash ? window.location.hash.substring(1) : ''
 
     const handleTabChange = (itemKey, tabName) => {
+        setActiveItemKey(itemKey)
         navigate(`#${tabName}`)
     }
 
@@ -49,24 +59,21 @@ const SecurityManagement = () => {
             case 'sentry':
                 setActiveItemKey(3)
                 break
-            case 'access-token':
+            case 'activity':
                 setActiveItemKey(4)
                 break
-            case 'activity':
+            case 'maintenance':
                 setActiveItemKey(5)
                 break
-            case 'maintenance':
+            case 'ip-filtering':
                 setActiveItemKey(6)
                 break
-            case 'ip-filtering':
-                setActiveItemKey(7)
-                break
             case 'geo':
-                setActiveItemKey(8)
+                setActiveItemKey(7)
                 break
         }
         setLoading(false)
-    }, [])
+    }, [tab])
 
     if (loading)
         return (
@@ -77,102 +84,84 @@ const SecurityManagement = () => {
 
     return (
         <div>
-            <CTabs activeItemKey={activeItemKey} className="mb-4">
-                <CTabList variant="underline-border">
-                    <CTab
-                        aria-controls="dashboard-tab-pane"
-                        itemKey={0}
-                        onClick={() => handleTabChange(0, 'dashboard')}
-                    >
-                        <FontAwesomeIcon icon={faChartLine} className="me-1" /> Dashboard
-                    </CTab>
-                    <CTab
-                        aria-controls="sessions-tab-pane"
-                        itemKey={1}
-                        onClick={() => handleTabChange(1, 'sessions')}
-                    >
-                        <FontAwesomeIcon icon={faTowerBroadcast} className="me-1" /> Sessions
-                    </CTab>
-                    <CTab
-                        aria-controls="dependabot-tab-pane"
-                        itemKey={2}
-                        onClick={() => handleTabChange(2, 'dependabot')}
-                    >
-                        <FontAwesomeIcon icon={faGithub} className="me-1" /> Dependabot
-                    </CTab>
-                    <CTab
-                        aria-controls="sentry-tab-pane"
-                        itemKey={3}
-                        onClick={() => handleTabChange(3, 'sentry')}
-                    >
-                        <FontAwesomeIcon icon={faBug} className="me-1" /> Sentry
-                    </CTab>
-                    <CTab
-                        aria-controls="access-token-tab-pane"
-                        itemKey={4}
-                        onClick={() => handleTabChange(4, 'access-token')}
-                    >
-                        <FontAwesomeIcon icon={faKey} className="me-1" /> Access Token
-                    </CTab>
-                    <CTab
-                        aria-controls="activity-tab-pane"
-                        itemKey={5}
-                        onClick={() => handleTabChange(5, 'activity')}
-                    >
-                        <FontAwesomeIcon icon={faList} className="me-1" /> Activity
-                    </CTab>
-                    <CTab
-                        aria-controls="maintenance-tab-pane"
-                        itemKey={6}
-                        onClick={() => handleTabChange(6, 'maintenance')}
-                    >
-                        <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> Maintenance
-                    </CTab>
-                    <CTab
-                        aria-controls="ip-filtering-tab-pane"
-                        itemKey={7}
-                        onClick={() => handleTabChange(6, 'ip-filtering')}
-                    >
-                        <FontAwesomeIcon icon={faGlobe} className="me-1" /> IP Filtering
-                    </CTab>
-                    <CTab
-                        aria-controls="geo-tab-pane"
-                        itemKey={8}
-                        onClick={() => handleTabChange(6, 'geo')}
-                    >
-                        <FontAwesomeIcon icon={faGlobe} className="me-1" /> Geo
-                    </CTab>
-                </CTabList>
-                <CTabContent>
-                    <CTabPanel className="py-3" aria-labelledby="dashboard-tab-pane" itemKey={0}>
-                        <Dashboard />
-                    </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="sessions-tab-pane" itemKey={1}>
-                        <Sessions />
-                    </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="dependabot-tab-pane" itemKey={2}>
-                        <Dependabot />
-                    </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="sentry-tab-pane" itemKey={3}>
-                        <Sentry />
-                    </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="access-token-tab-pane" itemKey={4}>
-                        <AccessToken />
-                    </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="activity-tab-pane" itemKey={5}>
-                        <Activity />
-                    </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="maintenance-tab-pane" itemKey={6}>
-                        <Maintenance />
-                    </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="ip-filtering-tab-pane" itemKey={7}>
-                        <IPFiltering />
-                    </CTabPanel>
-                    <CTabPanel className="py-3" aria-labelledby="geo-tab-pane" itemKey={8}>
-                        <GEO />
-                    </CTabPanel>
-                </CTabContent>
-            </CTabs>
+            <CNavbarNav className="mb-4">
+                <div className="d-flex overflow-auto">
+                    <CNavItem>
+                        <CNavLink
+                            className={`${activeItemKey === 0 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(0, 'dashboard')}
+                        >
+                            <FontAwesomeIcon icon={faChartLine} className="me-1" /> Dashboard
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem>
+                        <CNavLink
+                            className={`${activeItemKey === 1 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(1, 'sessions')}
+                        >
+                            <FontAwesomeIcon icon={faTowerBroadcast} className="me-1" /> Sessions
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem>
+                        <CNavLink
+                            className={`${activeItemKey === 2 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(2, 'dependabot')}
+                        >
+                            <FontAwesomeIcon icon={faGithub} className="me-1" /> Dependabot
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem>
+                        <CNavLink
+                            className={`${activeItemKey === 3 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(3, 'sentry')}
+                        >
+                            <FontAwesomeIcon icon={faBug} className="me-1" /> Sentry
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem>
+                        <CNavLink
+                            className={`${activeItemKey === 4 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(4, 'activity')}
+                        >
+                            <FontAwesomeIcon icon={faList} className="me-1" /> Activity
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem>
+                        <CNavLink
+                            className={`${activeItemKey === 5 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(5, 'maintenance')}
+                        >
+                            <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> Maintenance
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem>
+                        <CNavLink
+                            className={`${activeItemKey === 6 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(6, 'ip-filtering')}
+                        >
+                            <FontAwesomeIcon icon={faGlobe} className="me-1" /> IP Filtering
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem>
+                        <CNavLink
+                            className={`${activeItemKey === 7 ? 'active' : ''} text-nowrap me-3`}
+                            onClick={() => handleTabChange(7, 'geo')}
+                        >
+                            <FontAwesomeIcon icon={faGlobe} className="me-1" /> Geo
+                        </CNavLink>
+                    </CNavItem>
+                </div>
+                <div className="tab-content mt-4">
+                    {activeItemKey === 0 && <Dashboard />}
+                    {activeItemKey === 1 && <Sessions />}
+                    {activeItemKey === 2 && <Dependabot />}
+                    {activeItemKey === 3 && <Sentry />}
+                    {activeItemKey === 4 && <Activity />}
+                    {activeItemKey === 5 && <Maintenance />}
+                    {activeItemKey === 6 && <IPFiltering />}
+                    {activeItemKey === 7 && <GEO />}
+                </div>
+            </CNavbarNav>
         </div>
     )
 }

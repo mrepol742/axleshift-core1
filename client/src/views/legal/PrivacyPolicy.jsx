@@ -1,15 +1,15 @@
 import React from 'react'
 import { CCol, CContainer, CRow } from '@coreui/react'
 
-const Terms = () => {
+const PrivacyPolicy = () => {
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
                 <CRow className="justify-content-center mt-5">
                     <CCol md={8} lg={9} xl={10} className="mt-5">
-                        <h1 className="display-4 text-white">Privacy Policy</h1>
+                        <h1 className="display-4">Privacy Policy</h1>
                         Last Updated: Sun, March 16 2025
-                        <p className="text-white">
+                        <p>
                             At Axleshift Core 1, your privacy is important to us. This Privacy
                             Policy outlines how we collect, use, and protect your information.
                         </p>
@@ -18,7 +18,7 @@ const Terms = () => {
                             <div className="ms-3">
                                 <h5>Personal Information:</h5>
                                 We may collect personal information that you provide directly to us,
-                                such as your name, email address, password and shipment information.
+                                such as your name, email address and shipment information.
                                 <div className="mb-3" />
                                 <h5>Usage Data:</h5>
                                 We may collect information about how you use our services, including
@@ -72,4 +72,4 @@ const Terms = () => {
     )
 }
 
-export default Terms
+export default PrivacyPolicy

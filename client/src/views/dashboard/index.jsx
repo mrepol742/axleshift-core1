@@ -12,8 +12,6 @@ import {
     CCardTitle,
 } from '@coreui/react'
 import Masonry from 'react-masonry-css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 import WidgetsDropdown from './Widgets'
 import AppPagination from '../../components/AppPagination'
 import { useToast } from '../../components/AppToastProvider'
@@ -95,7 +93,6 @@ const Dashboard = () => {
 
     return (
         <div>
-            <AppSearch className="mb-3 d-block d-md-none" />
             <WidgetsDropdown className="mb-4" />
 
             <h4>Shipments</h4>
@@ -113,14 +110,6 @@ const Dashboard = () => {
                     <ShipmentCard key={index} shipment={item} />
                 ))}
             </Masonry>
-
-            <button
-                className="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-3"
-                style={{ width: '50px', height: '50px', fontSize: '20px' }}
-                onClick={(e) => navigate('/customer')}
-            >
-                <FontAwesomeIcon icon={faQuestion} />
-            </button>
 
             {totalPages > 1 && (
                 <AppPagination

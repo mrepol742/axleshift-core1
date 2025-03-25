@@ -54,9 +54,8 @@ const Auth = (WrappedComponent) => {
         }
 
         useEffect(() => {
-            window.scrollTo(0, 0)
             checkAuthentication()
-        }, [navigate])
+        }, [])
 
         if (isAuth === null)
             return (

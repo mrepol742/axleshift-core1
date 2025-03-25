@@ -9,10 +9,7 @@ const external = async (req, res, next) => {
     const token = authHeader.split(' ')[1]
 
     const existingApiToken = await getCache(`external-${token}`)
-    if (
-        !existingApiToken ||
-        (existingApiToken && !existingApiToken.active && !existingApiToken.compromised)
-    ) {
+    if (!existingApiToken) {
         return res
             .status(401)
             .json({ error: 'Unauthorized', message: 'invalid or denied api token' })
@@ -31,9 +28,10 @@ const external = async (req, res, next) => {
         (async () => {
             try {
                 const now = Date.now()
-                if (now - cachedSession.last_accessed > 60 * 1000) {
+                if (now - existingApiToken.last_accessed > 60 * 1000) {
+                    existingApiToken.user_agent = req.headers['user-agent'] || 'unknown'
                     existingApiToken.last_accessed = now
-                    setCache(`external-${token}`, existingApiToken)
+                    setCache(`external-${token}`, existingApiToken, 'none')
                 }
             } catch (e) {
                 logger.error(e)

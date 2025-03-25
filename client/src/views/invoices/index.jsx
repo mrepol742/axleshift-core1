@@ -59,7 +59,7 @@ const Invoices = () => {
             <CRow className="justify-content-center my-5">
                 <CCol md={6}>
                     <div className="clearfix">
-                        <h1 className="float-start display-3 me-4">OOPS</h1>
+                        <h1 className="float-start display-3 me-4 text-danger">OOPS</h1>
                         <h4>There was no invoices yet.</h4>
                         <p>Check it out later</p>
                     </div>

@@ -195,5 +195,7 @@ router.post('/activity', auth, async (req, res, next) => {
 })
 
 router.get('/maintenance', auth, async (req, res, next) => res.status(200).send())
+router.get('/ip-filtering', auth, async (req, res, next) => res.status(200).send())
+router.get('/geo', auth, async (req, res, next) => res.status(200).send())
 
 export default router

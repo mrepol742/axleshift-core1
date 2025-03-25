@@ -8,8 +8,10 @@ import {
     CButton,
     CSpinner,
     CCardBody,
+    CContainer,
     CAlert,
 } from '@coreui/react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -22,62 +24,26 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
-
+import AppPagination from '../../components/AppPagination'
 import parseTimestamp from '../../utils/Timestamp'
 
 const API = () => {
+    const navigate = useNavigate()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
     const recaptchaRef = React.useRef()
-    const [isBlurred, setIsBlurred] = useState(true)
-    const [disabledAdd, setDisabledAdd] = useState(false)
-    const [_whitelistIp, _setWhitelistIp] = useState([])
-    const [result, setResult] = useState({
-        token: '',
-        whitelist_ip: [],
-    })
+    const [result, setResult] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0)
+    const location = useLocation()
+    const token = location.state?.token
 
-    const handleIconClick = () => {
-        setIsBlurred((prev) => !prev)
-    }
-
-    const copyToClipboard = async () => {
-        try {
-            await navigator.clipboard.writeText(result)
-            addToast('API Key copied!')
-        } catch (err) {
-            console.log(err)
-            addToast('Failed... no idea why.')
-        }
-    }
-
-    const gen = async () => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
-        setLoading(true)
+    const fetchData = async (page) => {
         axios
-            .post(`/auth/token/new`, {
-                recaptcha_ref: recaptcha,
-            })
-            .then((response) =>
-                setResult((prevResult) => ({
-                    ...prevResult,
-                    token: response.data.token,
-                })),
-            )
-            .catch((error) => {
-                const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
-                addToast(message)
-            })
-            .finally(() => setLoading(false))
-    }
-
-    const fetchData = async () => {
-        axios
-            .get(`/auth/token/`)
+            .post(`/auth/token/`, { page })
             .then((response) => {
-                setResult(response.data)
-                _setWhitelistIp(response.data.whitelist_ip)
+                setResult(response.data.data)
+                setTotalPages(response.data.totalPages)
             })
             .catch((error) => {
                 const message =
@@ -87,53 +53,12 @@ const API = () => {
             .finally(() => setLoading(false))
     }
 
-    const handleAddIp = () => {
-        if (!Array.isArray(result.whitelist_ip))
-            return setResult((prev) => ({
-                ...prev,
-                whitelist_ip: [''],
-            }))
-        if (result.whitelist_ip.length < 6)
-            return setResult((prev) => ({
-                ...prev,
-                whitelist_ip: [...prev.whitelist_ip, ''],
-            }))
-        addToast('Max number of whitelisted ip address reached')
-    }
-
-    const handleIpChange = (index, value) => {
-        const newInputs = [...result.whitelist_ip]
-        newInputs[index] = value
-
-        setResult((prevResult) => ({
-            ...prevResult,
-            whitelist_ip: newInputs,
-        }))
-    }
-
-    const handleDelete = (index) => {
-        const newInputs = result.whitelist_ip.filter((_, i) => i !== index)
-        setResult((prevResult) => ({
-            ...prevResult,
-            whitelist_ip: newInputs,
-        }))
-    }
-
-    const handleWhitelistIpSubmit = async (e) => {
-        e.preventDefault()
+    const handleDelete = async (id) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
-            .post(`/auth/token/whitelist-ip`, {
-                whitelist_ip:
-                    result.whitelist_ip.length === 0 ? '[]' : result.whitelist_ip.toString(),
-                recaptcha_ref: recaptcha,
-            })
-            .then((response) => {
-                if (response.data.error) return addToast(response.data.error)
-                _setWhitelistIp(result.whitelist_ip)
-                addToast('Your changes has been saved.')
-            })
+            .post(`/auth/token/delete`, { id, recaptcha_ref: recaptcha })
+            .then((response) => fetchData(1))
             .catch((error) => {
                 const message =
                     error.response?.data?.error || 'Server is offline or restarting please wait'
@@ -143,8 +68,8 @@ const API = () => {
     }
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData(currentPage)
+    }, [currentPage])
 
     if (loading)
         return (
@@ -153,141 +78,100 @@ const API = () => {
             </div>
         )
 
-    if (!result.token) {
-        return (
-            <>
-                <ReCAPTCHA
-                    ref={recaptchaRef}
-                    size="invisible"
-                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                />
-
-                <CRow className="justify-content-center my-5">
-                    <CCol md={6}>
-                        <div className="clearfix">
-                            <h1 className="float-start display-3 me-4">OOPS</h1>
-                            <h4>You have not generate a token yet.</h4>
-                            <CButton color="primary" size="sm" onClick={gen}>
-                                Generate Token
-                            </CButton>
-                        </div>
-                    </CCol>
-                </CRow>
-            </>
-        )
-    }
-
     return (
         <div>
+            {token && (
+                <div>
+                    Make sure to copy your personal access token now. You won’t be able to see it
+                    again!
+                    <CAlert
+                        color="info"
+                        className="d-flex justify-content-between align-items-center"
+                    >
+                        <span>{token}</span>
+                        <CButton
+                            color="primary"
+                            size="sm"
+                            onClick={() => {
+                                navigator.clipboard.writeText(token)
+                                addToast('Token copied to clipboard')
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faCopy} />
+                        </CButton>
+                    </CAlert>
+                </div>
+            )}
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-            <CAlert color="warning" className="small">
-                <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> You will only be
-                able to use our API by using the token and list of IP Addresses:
-            </CAlert>
-
-            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                <CCol className="mb-3">
-                    <h4>Auth token</h4>
-                    <CCard>
+            <div className="d-block d-sm-flex justify-content-between align-items-center mb-3">
+                <h4>Access token</h4>
+                <CButton
+                    color="primary"
+                    size="sm"
+                    onClick={(e) => navigate('/security/access-token/new')}
+                    className="ms-auto"
+                >
+                    Generate new token
+                </CButton>
+            </div>
+            {!result ||
+                (result.length == 0 && (
+                    <CContainer className="mt-5">
+                        <CRow className="justify-content-center">
+                            <CCol md={6}>
+                                <div className="clearfix">
+                                    <h1 className="float-start display-3 me-4 text-danger">404</h1>
+                                    <h4>Oops! No Access Tokens Found</h4>
+                                    <p className="text-body-secondary float-start">
+                                        You have not generated any access tokens yet.
+                                    </p>
+                                </div>
+                            </CCol>
+                        </CRow>
+                    </CContainer>
+                ))}
+            {result &&
+                result.map((token, index) => (
+                    <CCard key={index} className="mb-3">
                         <CCardBody>
-                            <div className="d-flex mb-3">
-                                <CFormInput
-                                    className={isBlurred ? 'blurred' : ''}
-                                    value={result.token}
-                                    aria-describedby="basic-addon"
-                                />
-                                <CButton className="ms-2" onClick={handleIconClick}>
-                                    <FontAwesomeIcon icon={isBlurred ? faEye : faEyeSlash} />
-                                </CButton>
-                                <CButton className="ms-2" onClick={copyToClipboard}>
-                                    <FontAwesomeIcon icon={faCopy} />
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                                <h3 className="text-primary text-truncate">{token.note}</h3>
+                                <CButton
+                                    color="outline-danger"
+                                    onClick={(e) => handleDelete(token._id)}
+                                    className="border-danger ms-auto"
+                                >
+                                    Delete
                                 </CButton>
                             </div>
-                            <CButton color="primary" size="sm" onClick={gen}>
-                                New token
-                            </CButton>
+                            <div className="d-block d-sm-flex">
+                                <div className="me-3 mb-2">
+                                    <span className="text-muted">Last accessed</span>
+                                    <span className="d-block small">
+                                        {token.last_accessed
+                                            ? parseTimestamp(token.last_accessed)
+                                            : 'Never'}{' '}
+                                        | {token.user_agent ? token.user_agent : 'NaN'}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="text-muted">Date created</span>
+                                    <span className="d-block small">
+                                        {new Date(token.created_at).toLocaleString()}
+                                    </span>
+                                </div>
+                            </div>
                         </CCardBody>
                     </CCard>
-                </CCol>
-                <CCol className="mb-3">
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <h4>Whitelist IP</h4>
-                        <CButton
-                            size="sm"
-                            className="text-white"
-                            onClick={handleAddIp}
-                            disabled={disabledAdd}
-                        >
-                            <FontAwesomeIcon icon={faPlus} /> Add
-                        </CButton>
-                    </div>
-                    {result.whitelist_ip &&
-                        result.whitelist_ip.length === 0 &&
-                        _whitelistIp.length === 0 && (
-                            <CCard className="mb-3">
-                                <CCardBody className="justify-content-center">
-                                    <h6>No IP addresses have been whitelisted yet.</h6>
-                                </CCardBody>
-                            </CCard>
-                        )}
-
-                    {result.whitelist_ip &&
-                        (result.whitelist_ip.length !== 0 || _whitelistIp.length !== 0) && (
-                            <CCard className="mb-3">
-                                <CCardBody>
-                                    <CForm onSubmit={handleWhitelistIpSubmit}>
-                                        {result.whitelist_ip.map((input, index) => (
-                                            <div className="d-flex mb-2" key={index}>
-                                                <CFormInput
-                                                    value={input}
-                                                    onChange={(e) =>
-                                                        handleIpChange(index, e.target.value)
-                                                    }
-                                                    placeholder={`192.168.0.${index + 1}`}
-                                                />
-                                                <CButton
-                                                    color="danger"
-                                                    className="text-white ms-2"
-                                                    onClick={(e) => handleDelete(index)}
-                                                >
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </CButton>
-                                            </div>
-                                        ))}
-                                        <CButton
-                                            size="sm"
-                                            type="submit"
-                                            color="primary"
-                                            className="d-block me-2 rounded"
-                                        >
-                                            Save changes
-                                        </CButton>
-                                    </CForm>
-                                </CCardBody>
-                            </CCard>
-                        )}
-
-                    <h4>Last accessed</h4>
-                    <CCard>
-                        <CCardBody>
-                            <p className="display-5">
-                                {result.last_accessed
-                                    ? parseTimestamp(result.last_accessed)
-                                    : 'Never'}
-                            </p>
-                            <span className="lead">
-                                {result.user_agent ? result.user_agent : 'NaN'}
-                            </span>
-                        </CCardBody>
-                    </CCard>
-                </CCol>
-            </CRow>
+                ))}
+            {totalPages > 1 && (
+                <AppPagination
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                    setTotalPages={setTotalPages}
+                />
+            )}
         </div>
     )
 }

@@ -22,35 +22,36 @@ const Freight = () => {
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column"
             >
-                {user.role === 'admin' && (
-                    <div>
-                        <CCard
-                            className="bg-dark text-white mb-3"
-                            onClick={() => navigate('/security/management')}
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <CCardHeader
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
+                {user.role === 'admin' ||
+                    (user.role === 'super_admin' && (
+                        <div>
+                            <CCard
+                                className="bg-dark text-white mb-3"
+                                onClick={() => navigate('/security/management')}
+                                style={{ cursor: 'pointer' }}
                             >
-                                <div>
-                                    <FontAwesomeIcon icon={faServer} />
-                                </div>
-                                <div>Management</div>
-                            </CCardHeader>
-                            <CCardBody>
-                                <CCardText>Your All in One Security Dashboard</CCardText>
-                            </CCardBody>
-                        </CCard>
-                    </div>
-                )}
+                                <CCardHeader
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <div>
+                                        <FontAwesomeIcon icon={faServer} />
+                                    </div>
+                                    <div>Management</div>
+                                </CCardHeader>
+                                <CCardBody>
+                                    <CCardText>Your All in One Security Dashboard</CCardText>
+                                </CCardBody>
+                            </CCard>
+                        </div>
+                    ))}
                 <div>
                     <CCard
                         className="bg-dark text-white mb-3"
-                        onClick={() => navigate('/security/activity')}
+                        onClick={() => navigate('/security/account-logs')}
                         style={{ cursor: 'pointer' }}
                     >
                         <CCardHeader
@@ -63,36 +64,39 @@ const Freight = () => {
                             <div>
                                 <FontAwesomeIcon icon={faCircleNotch} />
                             </div>
-                            <div>Activity</div>
+                            <div>Account Logs</div>
                         </CCardHeader>
                         <CCardBody>
                             <CCardText>Logs account changes for security audits.</CCardText>
                         </CCardBody>
                     </CCard>
                 </div>
-                <div>
-                    <CCard
-                        className="bg-dark text-white mb-3"
-                        onClick={() => navigate('/security/apikey')}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <CCardHeader
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <div>
-                                <FontAwesomeIcon icon={faKey} />
-                            </div>
-                            <div>API Key</div>
-                        </CCardHeader>
-                        <CCardBody>
-                            <CCardText>Create Auth token & whitelisted ip addresses.</CCardText>
-                        </CCardBody>
-                    </CCard>
-                </div>
+                {user.role === 'admin' ||
+                    (user.role === 'super_admin' && (
+                        <div>
+                            <CCard
+                                className="bg-dark text-white mb-3"
+                                onClick={() => navigate('/security/apikey')}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <CCardHeader
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <div>
+                                        <FontAwesomeIcon icon={faKey} />
+                                    </div>
+                                    <div>Access Token</div>
+                                </CCardHeader>
+                                <CCardBody>
+                                    <CCardText>Make integration secure, fast and easy.</CCardText>
+                                </CCardBody>
+                            </CCard>
+                        </div>
+                    ))}
                 <div>
                     <CCard
                         className="bg-dark text-white mb-3"
@@ -109,11 +113,12 @@ const Freight = () => {
                             <div>
                                 <FontAwesomeIcon icon={faLock} />
                             </div>
-                            <div>Device Lock</div>
+                            <div>Sessions</div>
                         </CCardHeader>
                         <CCardBody>
                             <CCardText>
-                                Manage your account session & remove unauthorized access
+                                Manage your account session, remove unauthorized, unused and unknown
+                                session.
                             </CCardText>
                         </CCardBody>
                     </CCard>

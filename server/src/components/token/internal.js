@@ -6,6 +6,7 @@ import database from '../../models/mongodb.js'
 import { REACT_APP_ORIGIN } from '../../config.js'
 import { setCache } from '../../models/redis.js'
 import sendOTP from '../otp.js'
+import { getCache } from '../../models/redis.js'
 
 const adminRoute = ['/metrics/v1/prometheus', '/api/v1/sec/management']
 
@@ -35,20 +36,12 @@ const internal = async (req, res, next) => {
     req.session = session
 
     if (!theUser.email_verify_at) {
-        const db = await database()
-        const otpCollection = db.collection('otp')
-        const theOtp = await otpCollection.findOne({ token: req.token, verified: false })
-        if (theOtp) {
-            const past = new Date(theOtp.created_at)
-            const ten = 10 * 60 * 1000
-
-            if (!(Date.now() - past > ten))
-                return res
-                    .status(200)
-                    .json({ otp: true, email: req.user.email, message: 'OTP already sent' })
-        }
-        sendOTP(req, otpCollection)
-        return res.status(200).json({ otp: true, email: req.user.email })
+        if (req.path === '/otp' || req.path === '/otp/new') return next()
+        const theOtp = await getCache(`user-id-${req.user._id.toString()}`)
+        if (!theOtp) sendOTP(req)
+        return res
+            .status(200)
+            .json({ otp: true, email: req.user.email, message: 'OTP sent to your email' })
     }
 
     return next()
