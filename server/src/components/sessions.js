@@ -39,14 +39,10 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
     }
 }
 
-export const getUser = async (sessionToken) => {
+export const getUser = async (cachedSession, sessionToken) => {
     try {
-        const cachePrefix = /^core1_[0-9a-f]{16}$/.test(sessionToken) ? 'external' : 'internal'
-        const cachedSession = await getCache(`${cachePrefix}-${sessionToken}`)
-        if (!cachedSession || !cachedSession.active) return null
-
         const db = await database()
-        const theUser = await db.collection('users').findOne(
+        const user = await db.collection('users').findOne(
             { _id: new ObjectId(cachedSession.user_id) },
             {
                 projection: {
@@ -65,8 +61,7 @@ export const getUser = async (sessionToken) => {
                 },
             },
         )
-
-        if (theUser) return theUser
+        return user
     } catch (e) {
         logger.error(e)
     }
