@@ -34,7 +34,7 @@ const DatabaseSeeders = async () => {
                         email: 'admin@axleshift.com',
                         password: '!N)Admin?@33',
                         role: 'admin',
-                        first_name: 'Super Admin',
+                        first_name: 'Admin',
                         last_name: 'Axleshift',
                     },
                     {

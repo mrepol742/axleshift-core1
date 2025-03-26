@@ -35,9 +35,7 @@ router.post('/sessions', auth, async (req, res, next) => {
                         const agent = useragent.parse(value.user_agent)
                         value.user_agent = `${agent.os.family} ${agent.family}`
                         value.token = null
-                        if (value.active == true) {
-                            allData.push(value)
-                        }
+                        allData.push(value)
                     }
                 })
             }
@@ -72,8 +70,7 @@ router.post('/sessions/logout', [recaptcha, auth], async (req, res, next) => {
                 keys.forEach((key, index) => {
                     const value = JSON.parse(values[index])
                     if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
-                        value.active = false
-                        setCache(`internal-${value.token}`, value)
+                        remCache(`internal-${value.token}`)
                     }
                 })
             }

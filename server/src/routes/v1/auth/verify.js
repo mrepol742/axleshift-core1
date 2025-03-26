@@ -90,7 +90,6 @@ router.post('/otp/new', [recaptcha, auth], async function (req, res, next) {
         if (!theOtp) return res.status(401).json({ error: 'Unauthorized' })
         const past = new Date(theOtp.created_at)
 
-        logger.info(theOtp)
         if (Date.now() - past > ten) {
             sendOTP(req)
             activity(req, 'generate new mail otp')

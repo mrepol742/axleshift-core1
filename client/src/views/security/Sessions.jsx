@@ -113,7 +113,13 @@ const Sessions = () => {
                     <CCard key={index} className="mb-3">
                         <CCardBody>
                             <div className="d-flex justify-content-between align-items-center mb-2">
-                                <h3 className="text-primary text-truncate">{session.user_agent}</h3>
+                                <h3
+                                    className={
+                                        (session.active ? 'text-primary' : '') + ' text-truncate'
+                                    }
+                                >
+                                    {session.user_agent}
+                                </h3>
                                 <CButton
                                     color="outline-danger"
                                     className="border-danger ms-auto"
@@ -128,7 +134,8 @@ const Sessions = () => {
                                     <span className="d-block small">
                                         {session.last_accessed
                                             ? parseTimestamp(session.last_accessed)
-                                            : 'Never'}
+                                            : 'Never'}{' '}
+                                        | {session.active ? 'Verified' : 'Not verified'}
                                     </span>
                                 </div>
                                 <div>
