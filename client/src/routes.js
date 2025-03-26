@@ -36,7 +36,7 @@ const BookNow = auth(lazy(() => import('./views/book-now/index')))
 
 const Address = auth(lazy(() => import('./views/my-addresses/index')))
 const NewAddress = auth(lazy(() => import('./views/my-addresses/New')))
-const EditAddress = auth(lazy(() => import('./views/my-addresses/Edit')))
+const ViewAddress = auth(lazy(() => import('./views/my-addresses/View')))
 
 const Security = auth(lazy(() => import('./views/security/index')))
 const Management = auth(lazy(() => import('./views/security/Management')))
@@ -90,7 +90,7 @@ const routes = [
 
     { path: '/my-addresses', name: 'My Addresses', element: Address },
     { path: '/my-addresses/new', name: 'New Address', element: NewAddress },
-    { path: '/my-addresses/:id', name: 'Address', element: EditAddress },
+    { path: '/my-addresses/view', name: 'Address', element: ViewAddress },
 
     { path: '/security', name: 'Security', element: Security },
     { path: '/security/management', name: 'Management', element: Management },

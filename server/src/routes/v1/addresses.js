@@ -19,9 +19,36 @@ const limit = 20
  */
 router.post('/', auth, async (req, res) => {
     try {
-        return res.status(200).send({})
-    } catch (err) {
-        logger.error(err)
+        // if (!req.user) return res.status(401).json({ error: 'Unauthorized' })
+        const { page } = req.body
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
+        const current_page = parseInt(page) || 1
+        const skip = (current_page - 1) * limit
+        const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
+
+        let filter = isUser ? { user_id: req.user._id } : {}
+        const db = await database()
+        const addressesCollection = db.collection('addresses')
+
+        const [totalItems, items] = await Promise.all([
+            addressesCollection.countDocuments(filter),
+            addressesCollection
+                .find(filter)
+                .sort({ updated_at: -1 })
+                .skip(skip)
+                .limit(limit)
+                .toArray(),
+        ])
+
+        const data = {
+            data: items,
+            totalPages: Math.ceil(totalItems / limit),
+            currentPage: current_page,
+        }
+
+        return res.status(200).json(data)
+    } catch (e) {
+        logger.error(e)
     }
     res.status(500).json({ error: 'Internal server error' })
 })
@@ -29,21 +56,28 @@ router.post('/', auth, async (req, res) => {
 /**
  * Get address by ID
  */
-router.get('/id', [auth, address], async (req, res) => {
-    try {
-        return res.status(200).send({})
-    } catch (err) {
-        logger.error(err)
-    }
-    res.status(500).json({ error: 'Internal server error' })
-})
+router.get('/id', [auth, address], async (req, res) => res.status(200).json(req.address))
 
 /**
  * Create an address
  */
-router.post('/', [recaptcha, auth], async (req, res) => {
+router.post('/add', [recaptcha, auth], async (req, res) => {
     try {
-        return res.status(200).send({})
+        const { from, to } = req.body
+        const db = await database()
+        const date = Date.now()
+        await db.collection('addresses').insertOne({
+            user_id: req.user._id,
+            session_id: req.session._id,
+            from,
+            to,
+            created_at: date,
+            updated_at: date,
+        })
+        activity(req, `created an address`)
+        return res
+            .status(201)
+            .json({ message: 'Address has been created.' })
     } catch (err) {
         logger.error(err)
     }

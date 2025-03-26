@@ -1,18 +1,28 @@
-import React from 'react'
-import { CForm, CButton, CFormInput, CInputGroup, CInputGroupText, CFormCheck } from '@coreui/react'
+import React, { useState } from 'react'
+import {
+    CSpinner,
+    CForm,
+    CButton,
+    CFormInput,
+    CInputGroup,
+    CInputGroupText,
+    CFormCheck,
+} from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../components/AppToastProvider'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config.js'
 
 const FormAddress = ({ data }) => {
     const { formData, setFormData } = data
     const recaptchaRef = React.useRef()
     const navigate = useNavigate()
+    const { addToast } = useToast()
+    const [loading, setLoading] = useState(false)
 
     const handleChange = (section, e) => {
         const { name, value } = e.target
-        alert(name)
         setFormData((prev) => ({
             ...prev,
             [section]: {
@@ -25,11 +35,31 @@ const FormAddress = ({ data }) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         const recaptcha = await recaptchaRef.current.executeAsync()
-        const action = formData._id ? 'update' : ''
+        const action = formData._id ? `/update/${formData._id}` : '/add'
+        setLoading(true)
+        axios
+            .post(`/addresses${action}`, { ...formData, recaptcha_ref: recaptcha })
+            .then((response) => {
+                addToast(response.data.message)
+                navigate('/my-addresses')
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                addToast(message, 'Submit failed!')
+            })
+            .finally(() => setLoading(false))
     }
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
     return (
-        <CForm handleSubmit={handleSubmit}>
+        <CForm onSubmit={handleSubmit}>
             <div className="d-block d-lg-flex gap-5">
                 <div>
                     <h4>From</h4>
@@ -60,7 +90,6 @@ const FormAddress = ({ data }) => {
                         label="Business Contract"
                         checked={formData.from?.business_contract}
                         onChange={(e) => handleChange('from', e)}
-                        required
                     />
                     <CInputGroup className="mb-3">
                         <CInputGroupText>Country</CInputGroupText>
@@ -279,9 +308,9 @@ const FormAddress = ({ data }) => {
                     <CInputGroup className="mb-3">
                         <CInputGroupText>ID Number</CInputGroupText>
                         <CFormInput
-                            type="number"
-                            name="phone_number"
-                            value={formData.to?.phone_number}
+                            type="text"
+                            name="id_number"
+                            value={formData.to?.id_number}
                             onChange={(e) => handleChange('to', e)}
                             required
                         />

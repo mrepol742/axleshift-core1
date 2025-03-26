@@ -112,7 +112,7 @@ export const isNewIP = async (ip, theUser) => {
                 keys.forEach((key, index) => {
                     const value = JSON.parse(values[index])
                     if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
-                        if (value.user_id.toString() === theUser._id.toString()) {
+                        if (value.user_id === theUser._id.toString()) {
                             IP.push(value.ip_address)
                         }
                     }
