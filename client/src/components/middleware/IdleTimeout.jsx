@@ -52,12 +52,16 @@ const IdleTimeout = ({ children }) => {
         window.location.href = '/logout'
     }
 
-    useEffect(() => {
-        if (!user.role) return 'Loading...'
+    const time = () => {
+        if (!user.role) return
         resetTimer()
         window.addEventListener('mousemove', resetTimer)
         window.addEventListener('keydown', resetTimer)
         window.addEventListener('click', resetTimer)
+    }
+
+    useEffect(() => {
+        time()
 
         return () => {
             clearTimeout(timeout)

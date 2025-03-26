@@ -7,7 +7,7 @@ import dependabot from '../../../components/dependabot.js'
 import sentry from '../../../components/sentry.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
-import redis, { clearRedisCache, setCache } from '../../../models/redis.js'
+import redis, { clearRedisCache, setCache, remCache } from '../../../models/redis.js'
 
 const router = express.Router()
 const limit = 20
@@ -67,10 +67,10 @@ router.post('/sessions/logout', [recaptcha, auth], async (req, res, next) => {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach((key, index) => {
+                keys.forEach(async (key, index) => {
                     const value = JSON.parse(values[index])
                     if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
-                        remCache(`internal-${value.token}`)
+                        await remCache(`internal-${value.token}`)
                     }
                 })
             }
@@ -96,63 +96,6 @@ router.get('/sentry', auth, async (req, res, next) => {
     try {
         const response = await sentry()
         return res.status(200).json(response)
-    } catch (e) {
-        logger.error(e)
-    }
-    res.status(500).json({ error: 'Internal server error' })
-})
-
-router.post('/apikeys', auth, async (req, res, next) => {
-    try {
-        const { page } = req.body
-        if (!page) return res.status(400).json({ error: 'Invalid request' })
-        const current_page = parseInt(page) || 1
-        const skip = (current_page - 1) * limit
-
-        const db = await database()
-        const apiTokenCollection = await db.collection('apiToken')
-
-        const [activeApiTokenCount, apiToken] = await Promise.all([
-            apiTokenCollection.countDocuments({ active: true, compromised: false }),
-            apiTokenCollection.find().sort({ created_at: -1 }).toArray(),
-        ])
-
-        for (let i = 0; i < apiToken.length; i++) {
-            const token = apiToken[i].token
-            apiToken[i].token = token.match(/(?<=core1_)\w{14}/)[0]
-
-            const user_agent = apiToken[i].user_agent
-            const agent = useragent.parse(user_agent)
-            apiToken[i].user_agent = `${agent.os.family} ${agent.family}`
-        }
-
-        return res.status(200).json({
-            data: { apiToken: apiToken, deny: !(activeApiTokenCount > 0) },
-            totalPages: Math.ceil(activeApiTokenCount / limit),
-            currentPage: current_page,
-        })
-    } catch (e) {
-        logger.error(e)
-    }
-    res.status(500).json({ error: 'Internal server error' })
-})
-
-router.post('/apikeys/deactivate', [recaptcha, auth], async (req, res, next) => {
-    try {
-        const db = await database()
-        await db.collection('apiToken').updateMany(
-            {
-                active: true,
-            },
-            {
-                $set: {
-                    active: false,
-                    updated_at: Date.now(),
-                    modified_by: 'system',
-                },
-            },
-        )
-        return res.status(200).send()
     } catch (e) {
         logger.error(e)
     }

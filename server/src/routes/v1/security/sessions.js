@@ -80,7 +80,7 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach((key, index) => {
+                keys.forEach(async (key, index) => {
                     if (/^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
                         const value = JSON.parse(values[index])
                         if (value && value._id === session_id) {
@@ -91,7 +91,7 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
                             value.user_id === req.user._id.toString() &&
                             value.token !== req.session.token
                         ) {
-                            remCache(`internal-${value.token}`)
+                            await remCache(`internal-${value.token}`)
                         }
                     }
                 })
@@ -99,7 +99,7 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
         }
 
         if (sessionData) {
-            remCache(`internal-${sessionData.token}`)
+            await remCache(`internal-${sessionData.token}`)
             return res.status(200).json({ message: 'Session logout' })
         }
 
