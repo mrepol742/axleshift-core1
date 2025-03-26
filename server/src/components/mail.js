@@ -60,11 +60,9 @@ const body = (subject, email, name, message) => {
             padding: 25px;
         }
         .logo {
-            max-width: 250px;
-            padding: 20px;
+            max-width: 550px;
         }
         .header {
-            padding: 10px 20px;
             text-align: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
@@ -94,7 +92,7 @@ const body = (subject, email, name, message) => {
 <body>
     <div class="container">
      <div class="header">
-        <img src="https://core1.axleshift.com/images/banner.png" alt="Logo" class="logo">
+        <img src="https://core1.axleshift.com/images/banner.png" alt="Banner" class="logo">
         </div>
          <div class="body">
     <div class="content">

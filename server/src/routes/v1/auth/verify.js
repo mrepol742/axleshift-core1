@@ -10,6 +10,7 @@ import redis, { getCache, setCache, remCache } from '../../../models/redis.js'
 
 const router = express.Router()
 const ten = 10 * 60 * 1000
+const five = 5 * 60 * 1000
 
 router.post('/', auth, async function (req, res, next) {
     res.status(200).json(req.user)
@@ -45,8 +46,6 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
             return res.status(200).json({ error: 'Invalid One Time Password!' })
 
         const past = new Date(theOtp.created_at)
-        const ten = 10 * 60 * 1000
-
         if (Date.now() - past > ten) return res.status(200).json({ error: 'Expired OTP' })
 
         await Promise.all([
@@ -90,13 +89,15 @@ router.post('/otp/new', [recaptcha, auth], async function (req, res, next) {
         if (!theOtp) return res.status(401).json({ error: 'Unauthorized' })
         const past = new Date(theOtp.created_at)
 
-        if (Date.now() - past > ten) {
+        if (Date.now() - past > five) {
             sendOTP(req)
             activity(req, 'generate new mail otp')
-            return res.status(200).json({ message: `Please check your inbox` })
+            return res
+                .status(200)
+                .json({ message: `Please check your email inbox or spam folder.` })
         }
 
-        return res.status(200).json({ message: `OTP already sent` })
+        return res.status(200).json({ message: `Please wait 5 minutes before requesting new one.` })
     } catch (e) {
         logger.error(e)
     }

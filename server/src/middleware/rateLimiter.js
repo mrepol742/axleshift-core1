@@ -2,7 +2,7 @@ import { getClientIp } from '../components/ip.js'
 import logger from '../utils/logger.js'
 import { API_RATE_LIMIT, API_EXTERNAL_RATE_LIMIT } from '../config.js'
 
-const TIME_WINDOW = 60 * 3 * 1000
+const TIME_WINDOW = 60 * 1 * 1000
 const requestCounts = {}
 const exludeRoute = ['/api/v1/auth/verify', '/api/v1/metrics/prometheus']
 const limitedRequestRoute = [
@@ -52,7 +52,10 @@ const rateLimiter = (req, res, next) => {
         Math.ceil((TIME_WINDOW - (currentTime - requestCounts[key][0] || currentTime)) / 1000),
     ) // Reset time in seconds
 
-    if (remainingRequests <= 0) return res.status(429).json({ error: 'Rate limit exceeded' })
+    if (remainingRequests <= 0)
+        return res
+            .status(429)
+            .json({ error: 'Too many requests. Please wait 1 minute before trying again.' })
 
     requestCounts[key].push(currentTime)
     next()
