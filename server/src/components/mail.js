@@ -28,7 +28,7 @@ const mail = async () => {
 
 export const send = (options, name) => {
     options.from = MAIL_FROM_ADDRESS
-    options.html = body(options.subject, name, options.text)
+    options.html = body(`[Axleshift] ${options.subject}`, name, options.text)
 
     mailInstance.sendMail(options, (error, info) => {
         if (error) return logger.error(error)
@@ -42,7 +42,7 @@ const body = (subject, name, message) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${subject}</title>
+    <title>[Axleshift] ${subject}</title>
     <style>
         body {
             font-family: Arial, sans-serif;

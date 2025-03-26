@@ -2,10 +2,9 @@ import { ObjectId } from 'mongodb'
 import crypto from 'crypto'
 import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
-import { addSession } from '../../../components/sessions.js'
+import { addSession, isNewIP } from '../../../components/sessions.js'
 import { getClientIp } from '../../ip.js'
 import { APP_KEY, NODE_ENV } from '../../../config.js'
-import device from '../../../components/device.js'
 
 const FormLogin = async (req, res) => {
     try {
@@ -36,23 +35,10 @@ const FormLogin = async (req, res) => {
 
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'
-        const newDevice = crypto.createHmac('sha256', userAgent).update(APP_KEY).digest('hex')
-        // const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 })
-        // const key = {
-        //     publicKey: btoa(publicKey.export({ type: 'pkcs1', format: 'pem' })),
-        //     privateKey: btoa(privateKey.export({ type: 'pkcs1', format: 'pem' })),
-        // }
-        addSession(theUser, session_token, getClientIp(req), userAgent, location)
+        const ip = getClientIp(req)
 
-        if (theUser.devices) {
-            const isNewDevice = theUser.devices.some((device) => {
-                return newDevice === device
-            })
-
-            if (!isNewDevice) return device(theUser, newDevice)
-            // otp here
-        }
-        if (!theUser.devices) device(theUser, newDevice)
+        addSession(theUser, session_token, ip, userAgent, location)
+        isNewIP(ip, theUser)
 
         return res.status(200).json({
             token: session_token,

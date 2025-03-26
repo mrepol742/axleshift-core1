@@ -30,11 +30,12 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
                 const values = await redisClient.mget(filteredKeys)
                 keys.forEach((key, index) => {
                     const value = JSON.parse(values[index])
-                    logger.info(key)
-                    if (value && /^axleshift-core1:user-id-[a-f0-9]{24}$/.test(key)) {
-                        if (value.user_id === req.user._id.toString()) {
-                            theOtp = value
-                        }
+                    if (
+                        value &&
+                        /^axleshift-core1:user-id-[a-f0-9]{24}$/.test(key) &&
+                        value.user_id === req.user._id.toString()
+                    ) {
+                        theOtp = value
                     }
                 })
             }
@@ -49,18 +50,33 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
         if (theOtp.code !== parseInt(otp.replace(/[^0-9]/g, '')))
             return res.status(200).json({ error: 'Invalid One Time Password!' })
 
-        remCache(`user-id-${theOtp.user_id}`)
-
-        const db = await database()
-        await db.collection('users').updateOne(
-            { _id: new ObjectId(req.user._id) },
-            {
-                $set: {
-                    email_verify_at: Date.now(),
-                    updated_at: Date.now(),
-                },
-            },
-        )
+        await Promise.all([
+            remCache(`user-id-${theOtp.user_id}`),
+            (async () => {
+                try {
+                    const db = await database()
+                    await db.collection('users').updateOne(
+                        { _id: new ObjectId(req.user._id) },
+                        {
+                            $set: {
+                                email_verify_at: Date.now(),
+                                updated_at: Date.now(),
+                            },
+                        },
+                    )
+                } catch (e) {
+                    logger.error(e)
+                }
+            })(),
+            (async () => {
+                try {
+                    req.session.active = true
+                    await setCache(`internal-${req.session.token}`, req.session)
+                } catch (e) {
+                    logger.error(e)
+                }
+            })(),
+        ])
         // oh god its 21:51!
         return res.status(200).send()
     } catch (e) {

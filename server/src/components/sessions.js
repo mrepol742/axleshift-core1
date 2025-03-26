@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import activity from './activity.js'
+import { send } from './mail.js'
 import redis, { getCache, setCache, remCache } from '../models/redis.js'
 import { getClientIp } from './ip.js'
 
@@ -13,10 +14,9 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
             _id: new ObjectId(),
             user_id: theUser._id,
             token: sessionToken,
-            active: true,
+            active: false,
             ip_address: ip,
             user_agent: userAgent,
-            compromised: false,
             location: location,
             last_accessed: Date.now(),
         }
@@ -97,4 +97,40 @@ export const getSession = async (req, sessionToken) => {
         logger.error(e)
     }
     return null
+}
+
+export const isNewIP = async (ip, theUser) => {
+    try {
+        const redisClient = await redis()
+        const stream = redisClient.scanStream()
+        const IP = []
+
+        for await (const keys of stream) {
+            if (keys.length > 0) {
+                const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
+                const values = await redisClient.mget(filteredKeys)
+                keys.forEach((key, index) => {
+                    const value = JSON.parse(values[index])
+                    if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
+                        if (value.user_id.toString() === theUser._id.toString()) {
+                            IP.push(value.ip_address)
+                        }
+                    }
+                })
+            }
+        }
+
+        if (IP.includes(ip)) return
+        const date = new Date().toUTCString()
+        send(
+            {
+                to: theUser.email,
+                subject: `Login Attempted from New IP address ${ip} - ${date}`,
+                text: `We notice a login from a New Device or Location.<br/>Your axleshift account <b><u>${theUser.email}</u></b> was accessed from a new IP address.<br/><br/><b>Date</b> : ${date} <br/><b>IP Address</b> : ${ip}<br /><br /><i>This is an automated message, please do not reply.`,
+            },
+            theUser.first_name,
+        )
+    } catch (e) {
+        logger.error(e)
+    }
 }

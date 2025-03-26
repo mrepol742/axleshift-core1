@@ -20,8 +20,8 @@ const OneTimePassword = (req, otpType) => {
         send(
             {
                 to: req.user.email,
-                subject: 'Core 1: One Time Password (OTP)',
-                text: `<h2>Your One Time Password is:</h2><h4>${otp}</h4><p>This OTP is valid only for 10 mins, if you did not intend to log in to core 1, please ignore this email.</p><p>OTP is an extra layer of security used when logging into websites or apps. <b>DO NOT SHARE YOUR OTP CODE</b>.</p>`,
+                subject: 'One Time Password',
+                text: `<h2>Your One Time Password is:</h2><h4>${otp}</h4><p>This OTP is valid only for 10 mins, if you did not intend to log in to axleshift, please ignore this email.</p><p>OTP is an extra layer of security used when logging into websites or apps. <b>DO NOT SHARE YOUR OTP CODE</b>.</p>`,
             },
             req.user.first_name,
         ),
