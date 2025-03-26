@@ -41,14 +41,13 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
             }
         }
 
-        if (theOtp) {
-            const past = new Date(theOtp.created_at)
-            const ten = 10 * 60 * 1000
-
-            if (Date.now() - past > ten) return res.status(200).json({ error: 'Expired OTP' })
-        }
         if (theOtp.code !== parseInt(otp.replace(/[^0-9]/g, '')))
             return res.status(200).json({ error: 'Invalid One Time Password!' })
+
+        const past = new Date(theOtp.created_at)
+        const ten = 10 * 60 * 1000
+
+        if (Date.now() - past > ten) return res.status(200).json({ error: 'Expired OTP' })
 
         await Promise.all([
             remCache(`user-id-${theOtp.user_id}`),

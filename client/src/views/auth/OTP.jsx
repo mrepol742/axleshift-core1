@@ -13,7 +13,7 @@ import {
     CForm,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faXmark, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../config'
 
@@ -162,15 +162,18 @@ const OTP = () => {
                                         </CAlert>
                                     )}
                                     <CForm onSubmit={handleSubmit}>
-                                        <h1>OTP</h1>
-                                        <p className="text-body-secondary">
-                                            Enter the 6 digit code that was sent to <b>{email}</b>.
-                                        </p>
                                         <ReCAPTCHA
                                             ref={recaptchaRef}
                                             size="invisible"
                                             sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
                                         />
+                                        <div className="text-center">
+                                            <h1>Verify Your Account</h1>
+                                            <p className="text-body-secondary small">
+                                                Enter the 6 digit code that was sent to{' '}
+                                                <b>{email}</b>.
+                                            </p>
+                                        </div>
                                         <div className="d-flex justify-content-center gap-2 mb-3">
                                             {otp.map((digit, index) => (
                                                 <CFormInput
@@ -185,33 +188,27 @@ const OTP = () => {
                                                 />
                                             ))}
                                         </div>
-                                        <div className="d-flex justify-content-center">
-                                            <div className="d-flex justify-content-center">
-                                                <CButton
-                                                    type="submit"
-                                                    color="primary"
-                                                    className="me-2 rounded"
-                                                >
-                                                    Verify
-                                                </CButton>
-                                            </div>
-                                            <div className="d-flex justify-content-center">
-                                                <CButton
-                                                    color="primary-outline"
-                                                    className="me-2 rounded"
-                                                    onClick={handleResend}
-                                                >
-                                                    Resend OTP
-                                                </CButton>
-                                            </div>
+                                        <p className="text-center text-muted small">
+                                            Want to switch account? <a href="/logout">Logout</a>
+                                        </p>
+                                        <div className="d-flex justify-content-center mb-3">
+                                            <CButton
+                                                type="submit"
+                                                color="primary"
+                                                className="px-4 rounded-pill"
+                                            >
+                                                Confirm Code
+                                            </CButton>
                                         </div>
-                                        <CButton
-                                            color="link"
-                                            className="px-0 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                            onClick={handleLogout}
-                                        >
-                                            Logout
-                                        </CButton>
+                                        <div className="d-flex justify-content-center">
+                                            <CButton
+                                                color="primary-outline"
+                                                className="rounded-pill"
+                                                onClick={handleResend}
+                                            >
+                                                Resend OTP
+                                            </CButton>
+                                        </div>
                                     </CForm>
                                 </CCardBody>
                             </CCard>
