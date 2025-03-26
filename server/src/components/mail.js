@@ -28,14 +28,14 @@ const mail = async () => {
 
 export const send = (options, name) => {
     options.from = MAIL_FROM_ADDRESS
-    options.html = body(`[Axleshift] ${options.subject}`, name, options.text)
+    options.html = body(`[Axleshift] ${options.subject}`, options.to, name, options.text)
 
     mailInstance.sendMail(options, (error, info) => {
         if (error) return logger.error(error)
     })
 }
 
-const body = (subject, name, message) => {
+const body = (subject, email, name, message) => {
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -46,17 +46,18 @@ const body = (subject, name, message) => {
     <style>
         body {
             font-family: Arial, sans-serif;
-            color: #ffffff;
             margin: 0;
             padding: 20px;
         }
         .container {
             max-width: 600px;
             margin: auto;
-            background: #323a49;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 5px;
+        }
+        .body {
+            max-width: 600px;
+            margin: auto;
+            padding: 25px;
         }
         .logo {
             max-width: 250px;
@@ -65,7 +66,7 @@ const body = (subject, name, message) => {
         .header {
             padding: 10px 20px;
             text-align: center;
-            border-radius: 5px 5px 0 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
         .footer {
             text-align: center;
@@ -82,19 +83,32 @@ const body = (subject, name, message) => {
             border-radius: 5px;
             margin-top: 10px;
         }
+        .small {
+           font-size: 0.8em;
+        }
+        .text-center {
+           text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://core1.axleshift.com/images/logo.png" alt="Logo" class="logo">
-    </div>
+     <div class="header">
+        <img src="https://core1.axleshift.com/images/banner.png" alt="Logo" class="logo">
+        </div>
+         <div class="body">
     <div class="content">
         <p>Hi ${name},</p>
         <p>${message}</p>
+        <hr>
+        <p class="text-center small">
+This email was intended for ${email}. This is a system generated message, please do not reply to this email.</p>
     </div>
     <div class="footer">
         <p>&copy; 2025 Axleshift Core 1. All rights reserved.</p>
     </div>
+    </div>
+        </div>
 </body>
 </html>
     `

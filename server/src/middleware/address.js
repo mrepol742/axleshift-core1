@@ -2,7 +2,7 @@ import axios from 'axios'
 import logger from '../utils/logger.js'
 
 const Address = async (req, res, next) => {
-     const id = req.params.id
+    const id = req.params.id
         ? /^[A-Z]{2}-\d+$/.test(req.params.id)
             ? req.params.id
             : req.body.id
@@ -15,8 +15,7 @@ const Address = async (req, res, next) => {
         const addressesCollection = db.collection('addresses')
 
         const address = await addressesCollection.findOne({ _id: new ObjectId(id) })
-        if (!address)
-            return res.status(404).json({ error: 'Address not found', id: id })
+        if (!address) return res.status(404).json({ error: 'Address not found', id: id })
 
         req.address = address
         return next()

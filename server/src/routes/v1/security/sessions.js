@@ -36,9 +36,7 @@ router.post('/', auth, async (req, res) => {
                         value.token = null
                         if (_tt === req.session.token) {
                             currentSession = value
-                        } else if (
-                            value.user_id === req.user._id.toString()
-                        ) {
+                        } else if (value.user_id === req.user._id.toString()) {
                             allData.push(value)
                         }
                     }

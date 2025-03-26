@@ -75,9 +75,7 @@ router.post('/add', [recaptcha, auth], async (req, res) => {
             updated_at: date,
         })
         activity(req, `created an address`)
-        return res
-            .status(201)
-            .json({ message: 'Address has been created.' })
+        return res.status(201).json({ message: 'Address has been created.' })
     } catch (err) {
         logger.error(err)
     }
