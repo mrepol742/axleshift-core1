@@ -85,7 +85,7 @@ const IdleTimeout = ({ children }) => {
                         onClose={(e) => setIsIdle(false)}
                         aria-labelledby="warningModal"
                     >
-                        <CModalHeader>
+                        <CModalHeader closeButton={false}>
                             <CModalTitle id="warningModal">Are you still here?</CModalTitle>
                         </CModalHeader>
                         <CModalBody>You will be logged out in {countdown} seconds.</CModalBody>

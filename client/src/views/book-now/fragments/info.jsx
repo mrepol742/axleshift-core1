@@ -35,7 +35,7 @@ const Form = ({ data, type, shipmentRef }) => {
         updatedField[index] = { ...updatedField[index], [key]: e.target.value }
         if (key === 'country') {
             const country = countries.find((c) => c.name === e.target.value)
-            if (country) updatedField[index].countryCode = country.code
+            if (country) updatedField[index].country_code = country.code
         }
         setForm({ ...form, [prefix]: updatedField })
     }
@@ -72,8 +72,8 @@ const Form = ({ data, type, shipmentRef }) => {
                     <CFormInput
                         type="number"
                         floatingLabel={type === 'business' ? 'Zip Code' : 'Zip Code (Optional)'}
-                        value={form[prefix][0].zipCode}
-                        onChange={(e) => handleInputChange(e, `${prefix}.0.zipCode`)}
+                        value={form[prefix][0].zip_code}
+                        onChange={(e) => handleInputChange(e, `${prefix}.0.zip_code`)}
                         required={type === 'business'}
                         disabled={form.status !== 'to_pay'}
                     />

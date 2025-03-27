@@ -51,7 +51,7 @@ const Register = () => {
         message: '',
     })
     const urlParams = new URLSearchParams(window.location.search)
-    const url = urlParams.get('n') ? urlParams.get('n') : '/'
+    const url = urlParams.get('n') ? urlParams.get('n') : '/auth/verify'
     const [showPassword, setShowPassword] = useState(false)
 
     const togglePasswordVisibility = () => {
@@ -194,7 +194,7 @@ const Register = () => {
                                     </CAlert>
                                 )}
                                 <CForm onSubmit={(e) => handleSubmit(e, 'form', null)}>
-                                    <h1>Register</h1>
+                                    <h1>Axleshift</h1>
                                     <p className="text-body-secondary">Create your account</p>
                                     <ReCAPTCHA
                                         ref={recaptchaRef}

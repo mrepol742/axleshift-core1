@@ -56,7 +56,8 @@ const Login = () => {
                         <CCard className="p-1 p-sm-4 shadow">
                             <CCardBody>
                                 <CForm onSubmit={handleSubmit}>
-                                    <h1>Forgot Password</h1>
+                                    <h1>Axleshift</h1>
+                                    <p className="text-body-secondary">Forgot password</p>
                                     <ReCAPTCHA
                                         ref={recaptchaRef}
                                         size="invisible"

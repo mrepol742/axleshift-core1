@@ -34,7 +34,7 @@ router.post('/', auth, async (req, res) => {
             addressesCollection.countDocuments(filter),
             addressesCollection
                 .find(filter)
-                .sort({ updated_at: -1 })
+                .sort({ last_accessed: -1 })
                 .skip(skip)
                 .limit(limit)
                 .toArray(),
@@ -56,7 +56,7 @@ router.post('/', auth, async (req, res) => {
 /**
  * Get address by ID
  */
-router.get('/id', [auth, address], async (req, res) => res.status(200).json(req.address))
+router.get('/:id', [auth, address], async (req, res) => res.status(200).json(req.address))
 
 /**
  * Create an address
@@ -73,6 +73,7 @@ router.post('/add', [recaptcha, auth], async (req, res) => {
             to,
             created_at: date,
             updated_at: date,
+            last_accessed: date,
         })
         activity(req, `created an address`)
         return res.status(201).json({ message: 'Address has been created.' })
@@ -87,7 +88,21 @@ router.post('/add', [recaptcha, auth], async (req, res) => {
  */
 router.post('/update/:id', [recaptcha, auth, address], async (req, res) => {
     try {
-        return res.status(200).send({})
+        const { from, to } = req.body
+        const db = await database()
+        const date = Date.now()
+        await db.collection('addresses').updateOne(
+            { _id: new ObjectId(req.params.id) },
+            {
+                $set: {
+                    from,
+                    to,
+                    updated_at: date,
+                },
+            },
+        )
+        activity(req, `update an address`)
+        return res.status(201).json({ message: 'Address has been updated.' })
     } catch (err) {
         logger.error(err)
     }

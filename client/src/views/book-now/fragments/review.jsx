@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     CForm,
@@ -17,9 +17,11 @@ import {
     CCard,
     CModal,
     CModalBody,
+    CCardBody,
     CModalFooter,
     CModalHeader,
     CModalTitle,
+    CSpinner,
 } from '@coreui/react'
 import PropTypes from 'prop-types'
 import jsPDF from 'jspdf'
@@ -28,18 +30,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faPrint, faCopy } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
-
+import AppPagination from '../../../components/AppPagination'
 import { useToast } from '../../../components/AppToastProvider'
 
 // TODO: do rate stuff here
 const Review = ({ data, shipmentRef }) => {
     const navigate = useNavigate()
-    const { form, setForm, loading, setLoading } = data
+    const { form, setForm } = data
     const formRef = React.useRef(null)
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
-    const [showFormDetails, setShowFormDetails] = useState(false)
     const pdfRef = React.useRef()
+    const [result, setResult] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0)
 
     const generatePDF = () => {
         pdfRef.current.style.display = 'none'
@@ -84,7 +89,6 @@ const Review = ({ data, shipmentRef }) => {
             })
             .then((response) => {
                 addToast(response.data.message, 'Shipment')
-                navigate(`/shipment/${response.data.tracking_number}/forms`)
             })
             .catch((error) => {
                 const message =
@@ -117,13 +121,39 @@ const Review = ({ data, shipmentRef }) => {
     const [showModal, setShowModal] = useState(false)
 
     const handleContinueBooking = () => {
-        form.internal ? handleSubmit('update') : setShowModal(true)
+        setShowModal(true)
     }
 
     const handleModalConfirm = () => {
         setShowModal(false)
-        handleSubmit('book')
+        form.internal ? handleSubmit('update') : handleSubmit('book')
     }
+
+    const fetchShippingAddress = async (page) => {
+        if (!showModal) return
+        setLoading(true)
+        axios
+            .post(`/addresses/`, { page })
+            .then((response) => {
+                setResult(response.data.data)
+                setTotalPages(response.data.totalPages)
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
+    }
+
+    const handleShippingForm = async (address) => {
+        if (form.selected_address !== address._id)
+            setForm({ ...form, selected_address: address._id })
+    }
+
+    useEffect(() => {
+        fetchShippingAddress(currentPage)
+    }, [showModal, currentPage])
 
     return (
         <div ref={formRef}>
@@ -155,8 +185,11 @@ const Review = ({ data, shipmentRef }) => {
                 </CCol>
                 <CCol md>
                     <div className="d-flex justify-content-end flex-column">
-                        <h4>{price(form)}</h4>
-                        <CButton className="btn btn-primary mt-2" onClick={handleContinueBooking}>
+                        <h2>{price(form)}</h2>
+                        <CButton
+                            className="btn btn-primary mt-2 w-75"
+                            onClick={handleContinueBooking}
+                        >
                             Continue booking
                         </CButton>
                     </div>
@@ -165,25 +198,92 @@ const Review = ({ data, shipmentRef }) => {
             {showModal && (
                 <CModal
                     alignment="center"
+                    fullscreen="sm"
                     scrollable
                     visible={showModal}
                     onClose={() => setShowModal(false)}
                     aria-labelledby="ScheduleShipment"
                 >
-                    <CModalHeader>
-                        <CModalTitle>Schedule Shipment</CModalTitle>
+                    <CModalHeader closeButton={false}>
+                        <CModalTitle>Select Shipping Forms</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
-                        <p>
-                            Continuing will generate a tracking number and you will not be allowed
-                            to change the shipment type.
-                        </p>
+                        {loading && (
+                            <div className="loading-overlay">
+                                <CSpinner color="primary" variant="grow" />
+                            </div>
+                        )}
+                        {!loading &&
+                            result &&
+                            result.map((address, index) => (
+                                <CCard
+                                    key={index}
+                                    className={`mb-3 ${form.selected_address === address._id ? 'active' : ''}`}
+                                    onClick={() => handleShippingForm(address)}
+                                    style={{
+                                        cursor: 'pointer',
+                                        border:
+                                            form.selected_address === address._id
+                                                ? '2px solid #0d6efd'
+                                                : '1px solid #ced4da',
+                                    }}
+                                >
+                                    <CCardBody>
+                                        <div className="mb-2">
+                                            <div className="mb-2 mb-sm-0">
+                                                <div className="mb-2">
+                                                    <h5 className="text-truncate">
+                                                        {' '}
+                                                        <span className="text-primary fw-medium text-uppercase me-1">
+                                                            From
+                                                        </span>{' '}
+                                                        {address.from.name}
+                                                    </h5>
+                                                    <span className="text-muted text-truncate">
+                                                        {address.from.phone_number} •{' '}
+                                                        {address.from.address}
+                                                        {', '}
+                                                        {address.from.country}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="mb-2">
+                                                    <h5 className="text-truncate">
+                                                        <span className="text-primary fw-medium text-uppercase me-1">
+                                                            To
+                                                        </span>
+                                                        {address.to.name}
+                                                    </h5>
+                                                    <span className="text-muted text-truncate">
+                                                        {address.to.phone_number} •{' '}
+                                                        {address.to.address} {', '}{' '}
+                                                        {address.to.country}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </CCardBody>
+                                </CCard>
+                            ))}
+                        {totalPages > 1 && (
+                            <AppPagination
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                                totalPages={totalPages}
+                                setTotalPages={setTotalPages}
+                            />
+                        )}
                     </CModalBody>
                     <CModalFooter>
                         <CButton className="btn" onClick={() => setShowModal(false)}>
                             Close
                         </CButton>
-                        <CButton className="btn btn-primary" onClick={handleModalConfirm}>
+                        <CButton
+                            className="btn btn-primary"
+                            onClick={handleModalConfirm}
+                            disabled={!form.selected_address}
+                        >
                             Confirm
                         </CButton>
                     </CModalFooter>

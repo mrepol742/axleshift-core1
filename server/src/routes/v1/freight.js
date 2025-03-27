@@ -129,11 +129,12 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
             to,
             type,
             items,
+            selected_address,
         } = req.body
 
         const db = await database()
         const dateNow = Date.now()
-        const trackingNumber = `${to[0].countryCode}-${Date.now().toString()}`
+        const trackingNumber = `${to[0].country_code}-${Date.now().toString()}`
         const shipmentWeight = totalWeight(items)
         const numberOfItems = items.length
         const shipmentPrice = price(items)
@@ -164,6 +165,7 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
             country: country,
             session_id: req.session._id,
             tracking_number: trackingNumber,
+            selected_address: selected_address,
             created_at: dateNow,
             updated_at: dateNow,
         })
@@ -203,6 +205,7 @@ router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req,
             to,
             type,
             items,
+            selected_address,
         } = req.body
         const id = req.params.id
 
@@ -248,6 +251,7 @@ router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req,
                     },
                     expected_delivery_date: expectedDelivery.getTime(),
                     country: countryTo,
+                    selected_address: selected_address,
                     updated_at: Date.now(),
                     modified_by: req.user._id,
                 },

@@ -137,11 +137,6 @@ const OTP = () => {
         <div className="bg-dark min-vh-100 d-flex flex-row align-items-center">
             <div className="auth-bg" />
             <CContainer>
-                {loading && (
-                    <div className="loading-overlay">
-                        <CSpinner color="primary" variant="grow" />
-                    </div>
-                )}
                 {!email && <p className="text-center">Processing...</p>}
                 {email && (
                     <CRow className="justify-content-center">

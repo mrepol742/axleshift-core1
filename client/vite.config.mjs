@@ -19,10 +19,10 @@ export default defineConfig(() => {
             },
             rollupOptions: {
                 onwarn(warning, warn) {
-                if (warning.plugin === 'vite:esbuild') {
-                    throw new Error(`Vite ESBuild error: ${warning.message}`);
-                }
-                warn(warning);
+                    if (warning.plugin === 'vite:esbuild') {
+                        throw new Error(`Vite ESBuild error: ${warning.message}`)
+                    }
+                    warn(warning)
                 },
                 output: {
                     entryFileNames: 'assets/[hash].js',
