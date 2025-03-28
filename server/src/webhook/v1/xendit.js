@@ -22,7 +22,6 @@ router.post('/', async (req, res) => {
                     payment_method: req.body.payment_method,
                     adjusted_amount: req.body.adjusted_received_amount,
                     updated_at: Date.now(),
-                    modified_by: 'system',
                 },
             },
         )

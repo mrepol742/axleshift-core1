@@ -11,7 +11,9 @@ const invoices = async (req, res, next) => {
         const db = await database()
         const invoicesCollection = db.collection('invoices')
         req.invoice = await invoicesCollection.findOne(
-            { freight_id: new ObjectId(id) },
+            {
+                $or: [{ freight_id: id }, { freight_tracking_number: id }],
+            },
             { projection: { invoice_id: 1 } },
         )
         return next()

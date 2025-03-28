@@ -32,6 +32,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import AppPagination from '../../../components/AppPagination'
 import { useToast } from '../../../components/AppToastProvider'
+import Form from '../../my-addresses/Form'
 
 // TODO: do rate stuff here
 const Review = ({ data, shipmentRef }) => {
@@ -45,6 +46,7 @@ const Review = ({ data, shipmentRef }) => {
     const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
+    const [viewForm, setViewForm] = useState(false)
 
     const generatePDF = () => {
         pdfRef.current.style.display = 'none'
@@ -80,7 +82,6 @@ const Review = ({ data, shipmentRef }) => {
 
     const handleSubmit = async (action) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
-        // should return the shipment id
         setLoading(true)
         axios
             .post(action === 'book' ? `/freight/book` : `/freight/update/${form.tracking_number}`, {
@@ -120,12 +121,7 @@ const Review = ({ data, shipmentRef }) => {
 
     const [showModal, setShowModal] = useState(false)
 
-    const handleContinueBooking = () => {
-        setShowModal(true)
-    }
-
     const handleModalConfirm = () => {
-        setShowModal(false)
         form.internal ? handleSubmit('update') : handleSubmit('book')
     }
 
@@ -148,12 +144,48 @@ const Review = ({ data, shipmentRef }) => {
 
     const handleShippingForm = async (address) => {
         if (form.selected_address !== address._id)
-            setForm({ ...form, selected_address: address._id })
+            setForm({
+                ...form,
+                from: [address.from],
+                to: [address.to],
+                selected_address: address._id,
+            })
+    }
+
+    const fetchAutoFill = async () => {
+        if (form.selected_address) return
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
+        axios
+            .post(`/addresses/find/`, {
+                from: form.from[0],
+                to: form.to[0],
+                recaptcha_ref: recaptcha,
+            })
+            .then((response) => {
+                if (!response.data.error)
+                    setForm({
+                        ...form,
+                        to: [response.data.to],
+                        from: [response.data.from],
+                        selected_address: address._id,
+                    })
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {
         fetchShippingAddress(currentPage)
     }, [showModal, currentPage])
+
+    useEffect(() => {
+        fetchAutoFill()
+    }, [])
 
     return (
         <div ref={formRef}>
@@ -163,6 +195,79 @@ const Review = ({ data, shipmentRef }) => {
             </h3>
             <CRow>
                 <CCol md className="mb-4">
+                    <CCard className="mb-2">
+                        <CCardBody>
+                            <div>
+                                {!form.selected_address ? (
+                                    <div className="text-center">
+                                        <span className="d-block text-danger">
+                                            Unable to find a shipment address base on above address.{' '}
+                                        </span>
+                                        <span className="d-block text-muted">
+                                            {' '}
+                                            Click &quot;Choose&quot; to select an address from the
+                                            list.
+                                        </span>
+                                        <CButton
+                                            size="sm"
+                                            className="btn btn-primary mt-2"
+                                            onClick={() => fetchAutoFill()}
+                                        >
+                                            Refresh
+                                        </CButton>
+                                        <CButton
+                                            size="sm"
+                                            className="btn btn-primary mt-2"
+                                            onClick={() => setShowModal(true)}
+                                        >
+                                            Choose
+                                        </CButton>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div className="mb-2 mb-sm-0">
+                                            <div className="mb-2">
+                                                <h5 className="text-truncate">
+                                                    {' '}
+                                                    <span className="text-primary fw-medium text-uppercase me-1">
+                                                        From
+                                                    </span>{' '}
+                                                    {form.from[0].name}
+                                                </h5>
+                                                <p className="text-muted text-truncate">
+                                                    {form.from[0].phone_number} •{' '}
+                                                    {form.from[0].address}
+                                                    {', '}
+                                                    {form.from[0].country}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="mb-2">
+                                                <h5 className="text-truncate">
+                                                    <span className="text-primary fw-medium text-uppercase me-1">
+                                                        To
+                                                    </span>
+                                                    {form.to[0].name}
+                                                </h5>
+                                                <p className="text-muted text-truncate">
+                                                    {form.to[0].phone_number} • {form.to[0].address}{' '}
+                                                    {', '} {form.to[0].country}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <CButton
+                                            size="sm"
+                                            className="btn btn-small"
+                                            onClick={() => setViewForm(true)}
+                                        >
+                                            View Shipping Form
+                                        </CButton>
+                                    </div>
+                                )}
+                            </div>
+                        </CCardBody>
+                    </CCard>
                     <CFormInput
                         type="text"
                         floatingLabel="Shipment Date"
@@ -176,6 +281,7 @@ const Review = ({ data, shipmentRef }) => {
                     />
                     <CButton
                         ref={pdfRef}
+                        size="sm"
                         className="btn btn-outline-primary mt-2 me-2 d-none"
                         onClick={generatePDF}
                     >
@@ -183,18 +289,50 @@ const Review = ({ data, shipmentRef }) => {
                         Print Quotes
                     </CButton>
                 </CCol>
-                <CCol md>
+                <CCol md={2}>
                     <div className="d-flex justify-content-end flex-column">
-                        <h2>{price(form)}</h2>
+                        <h2 className="text-primary">{price(form)}</h2>
                         <CButton
-                            className="btn btn-primary mt-2 w-75"
-                            onClick={handleContinueBooking}
+                            size="sm"
+                            className="btn btn-primary mt-2"
+                            onClick={handleModalConfirm}
                         >
-                            Continue booking
+                            Continue
                         </CButton>
                     </div>
                 </CCol>
+                <CCol md></CCol>
             </CRow>
+            {viewForm && (
+                <CModal
+                    alignment="center"
+                    fullscreen
+                    scrollable
+                    visible={viewForm}
+                    onClose={() => setViewForm(false)}
+                    aria-labelledby="ViewForm"
+                >
+                    <CModalHeader>
+                        <CModalTitle>Shipping Form</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <Form
+                            data={{
+                                formData: { from: form.from[0], to: form.to[0], internal: true },
+                                setFormData: setForm,
+                            }}
+                            callback={(updatedData) => {
+                                if (updatedData === 'cancel') return setViewForm(false)
+                                setForm({
+                                    ...form,
+                                    from: [updatedData.from],
+                                    to: [updatedData.to],
+                                })
+                            }}
+                        />
+                    </CModalBody>
+                </CModal>
+            )}
             {showModal && (
                 <CModal
                     alignment="center"
@@ -204,7 +342,7 @@ const Review = ({ data, shipmentRef }) => {
                     onClose={() => setShowModal(false)}
                     aria-labelledby="ScheduleShipment"
                 >
-                    <CModalHeader closeButton={false}>
+                    <CModalHeader>
                         <CModalTitle>Select Shipping Forms</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
@@ -275,18 +413,6 @@ const Review = ({ data, shipmentRef }) => {
                             />
                         )}
                     </CModalBody>
-                    <CModalFooter>
-                        <CButton className="btn" onClick={() => setShowModal(false)}>
-                            Close
-                        </CButton>
-                        <CButton
-                            className="btn btn-primary"
-                            onClick={handleModalConfirm}
-                            disabled={!form.selected_address}
-                        >
-                            Confirm
-                        </CButton>
-                    </CModalFooter>
                 </CModal>
             )}
         </div>

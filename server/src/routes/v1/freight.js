@@ -253,7 +253,6 @@ router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req,
                     country: countryTo,
                     selected_address: selected_address,
                     updated_at: Date.now(),
-                    modified_by: req.user._id,
                 },
             },
         )
@@ -279,7 +278,6 @@ router.post('/cancel/:id', [recaptcha, auth, freight], async (req, res, next) =>
                 $set: {
                     status: 'cancelled',
                     updated_at: Date.now(),
-                    modified_by: req.user._id,
                 },
             },
         )

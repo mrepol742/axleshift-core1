@@ -28,6 +28,7 @@ const mail = async () => {
 
 export const send = (options, name) => {
     options.from = MAIL_FROM_ADDRESS
+    options.subject = `[Axleshift] ${options.subject}`
     options.html = body(`[Axleshift] ${options.subject}`, options.to, name, options.text)
 
     mailInstance.sendMail(options, (error, info) => {
@@ -68,7 +69,7 @@ const body = (subject, email, name, message) => {
         }
         .footer {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 15px;
             font-size: 12px;
             color: #6c757d;
         }
@@ -96,7 +97,7 @@ const body = (subject, email, name, message) => {
         </div>
          <div class="body">
     <div class="content">
-        <p>Hi ${name},</p>
+        <h1>Hi ${name},</h1>
         <p>${message}</p>
         <hr>
         <p class="text-center small">

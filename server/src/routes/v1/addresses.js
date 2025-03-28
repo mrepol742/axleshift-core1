@@ -110,6 +110,37 @@ router.post('/update/:id', [recaptcha, auth, address], async (req, res) => {
 })
 
 /**
+ * Find an address base on country, city and zip code
+ */
+router.post('/find/', [recaptcha, auth], async (req, res) => {
+    try {
+        const { from, to } = req.body
+        const db = await database()
+        const address = await db.collection('addresses').findOne({
+            $or: [
+                { 'from.country': from.country },
+                { 'from.city': from.city },
+                { 'from.zip_code': from.zip_code },
+                { 'to.country': to.country },
+                { 'to.city': to.city },
+                { 'to.zip_code': to.zip_code },
+            ],
+        })
+
+        if (!address)
+            return res
+                .status(404)
+                .json({
+                    error: 'Unable to auto fill the necessary form, manual intervention required.',
+                })
+        return res.status(200).json(address)
+    } catch (err) {
+        logger.error(err)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
+
+/**
  * Remove a address
  */
 router.post('/remove/:id', [recaptcha, auth, address], async (req, res, next) => {

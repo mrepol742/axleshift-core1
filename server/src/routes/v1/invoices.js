@@ -93,6 +93,7 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
             return res
                 .status(200)
                 .send({ r_url: `https://checkout-staging.xendit.co/web/${req.invoice.invoice_id}` })
+
         const redirectUrl =
             NODE_ENV !== 'production'
                 ? `http://localhost:3000/shipment/${req.freight.tracking_number}`
@@ -134,7 +135,6 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
                 $set: {
                     invoice_id: _invoice._id,
                     updated_at: dateNow,
-                    modified_by: 'system',
                 },
             },
         )
@@ -170,7 +170,6 @@ router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
                 $set: {
                     status: 'CANCELLED',
                     updated_at: Date.now(),
-                    modified_by: 'system',
                 },
             },
         )

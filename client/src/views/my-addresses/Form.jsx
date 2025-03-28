@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { useToast } from '../../components/AppToastProvider'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config.js'
 
-const FormAddress = ({ data }) => {
+const FormAddress = ({ data, callback }) => {
     const { formData, setFormData } = data
     const recaptchaRef = React.useRef()
     const navigate = useNavigate()
@@ -23,6 +23,18 @@ const FormAddress = ({ data }) => {
 
     const handleChange = (section, e) => {
         const { name, value } = e.target
+
+        if (callback) {
+            const updatedData = {
+                ...formData,
+                [section]: {
+                    ...formData[section],
+                    [name]: value,
+                },
+            }
+            setFormData(updatedData)
+            return callback(updatedData)
+        }
         setFormData((prev) => ({
             ...prev,
             [section]: {
@@ -33,6 +45,7 @@ const FormAddress = ({ data }) => {
     }
 
     const handleSubmit = async (e) => {
+        if (callback) return
         e.preventDefault()
         const recaptcha = await recaptchaRef.current.executeAsync()
         const action = formData._id ? `/update/${formData._id}` : '/add'
@@ -292,20 +305,28 @@ const FormAddress = ({ data }) => {
                     />
                 </div>
             </div>
-            <div className="d-flex mt-4 mb-3">
-                <CButton type="submit" color="primary" className="me-2 rounded">
-                    Save
-                </CButton>
-                <CButton
-                    type="button"
-                    color="outline-secondary"
-                    className="rounded"
-                    onClick={(e) => navigate('/my-addresses')}
-                >
-                    Cancel
-                </CButton>
-            </div>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+            {!callback && (
+                <>
+                    <div className="d-flex mt-4 mb-3">
+                        <CButton type="submit" color="primary" className="me-2 rounded">
+                            Save
+                        </CButton>
+                        <CButton
+                            type="button"
+                            color="outline-secondary"
+                            className="rounded"
+                            onClick={(e) => navigate('/my-addresses')}
+                        >
+                            Cancel
+                        </CButton>
+                    </div>
+                    <ReCAPTCHA
+                        ref={recaptchaRef}
+                        size="invisible"
+                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                    />
+                </>
+            )}
         </CForm>
     )
 }
@@ -314,4 +335,5 @@ export default FormAddress
 
 FormAddress.propTypes = {
     data: PropTypes.object.isRequired,
+    callback: PropTypes.func,
 }
