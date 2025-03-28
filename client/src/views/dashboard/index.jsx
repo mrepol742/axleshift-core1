@@ -95,7 +95,7 @@ const Dashboard = () => {
         <div>
             <WidgetsDropdown className="mb-4" />
 
-            <h4>Shipments</h4>
+            {/* <h4>Shipments</h4>
             <Masonry
                 breakpointCols={{
                     default: 4,
@@ -119,7 +119,7 @@ const Dashboard = () => {
                     setTotalPages={setTotalPages}
                     className="mb-3"
                 />
-            )}
+            )} */}
         </div>
     )
 }
