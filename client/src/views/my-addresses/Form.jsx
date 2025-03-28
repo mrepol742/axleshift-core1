@@ -13,6 +13,7 @@ import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../../components/AppToastProvider'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config.js'
+import countries from '../book-now/fragments/countries.jsx'
 
 const FormAddress = ({ data, callback }) => {
     const { formData, setFormData } = data

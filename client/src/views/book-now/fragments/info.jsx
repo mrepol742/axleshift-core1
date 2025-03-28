@@ -33,10 +33,6 @@ const Form = ({ data, type, shipmentRef }) => {
         const [prefix, index, key] = field.split('.')
         const updatedField = [...form[prefix]]
         updatedField[index] = { ...updatedField[index], [key]: e.target.value }
-        if (key === 'country') {
-            const country = countries.find((c) => c.name === e.target.value)
-            if (country) updatedField[index].country_code = country.code
-        }
         setForm({ ...form, [prefix]: updatedField })
     }
 

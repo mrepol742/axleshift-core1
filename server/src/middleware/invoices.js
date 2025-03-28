@@ -4,7 +4,7 @@ import logger from '../utils/logger.js'
 import database from '../models/mongodb.js'
 
 const invoices = async (req, res, next) => {
-    const id = /^\/[a-fA-F0-9]{24}$/.test(req.path) ? req.params.id : req.body.id
+    const id = req.params.id ? req.params.id : req.body.id
     if (!id) return res.status(400).json({ error: 'Invalid request' })
 
     try {

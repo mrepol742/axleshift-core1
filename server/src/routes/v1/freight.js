@@ -134,11 +134,11 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
 
         const db = await database()
         const dateNow = Date.now()
-        const trackingNumber = `${to[0].country_code}-${Date.now().toString()}`
         const shipmentWeight = totalWeight(items)
         const numberOfItems = items.length
         const shipmentPrice = price(items)
         const country = to[0].country
+        const trackingNumber = `AX-${dateNow.toString()}`
         // TODO: calculate expected delivery date
         // and draw a estimated route
         const expectedDelivery = new Date(dateNow + 3 * 24 * 60 * 60 * 1000)

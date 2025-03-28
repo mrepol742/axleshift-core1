@@ -88,8 +88,19 @@ const Review = ({ data, shipmentRef }) => {
                 ...form,
                 recaptcha_ref: recaptcha,
             })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                addToast(message, 'Submit failed!')
+            })
+               const recaptcha1 = await recaptchaRef.current.executeAsync()
+        axios
+            .post('/invoices/create', {
+                id: form.tracking_number,
+                recaptcha_ref: recaptcha1,
+            })
             .then((response) => {
-                addToast(response.data.message, 'Shipment')
+                window.location.href = response.data.r_url
             })
             .catch((error) => {
                 const message =

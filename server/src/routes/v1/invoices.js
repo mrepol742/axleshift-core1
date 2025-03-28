@@ -11,6 +11,7 @@ import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY, NODE_ENV } from '../../config.j
 import activity from '../../components/activity.js'
 import cache from '../../middleware/cache.js'
 import { setCache } from '../../models/redis.js'
+import { send } from '../../components/mail.js'
 
 const { Invoice } = new Xendit({
     secretKey: XENDIT_API_KEY,
@@ -87,7 +88,7 @@ router.get('/:id', [auth], async (req, res) => {
 /**
  * Create an Invoice
  */
-router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
+router.post('/create', [recaptcha, auth, freight, invoices], async (req, res) => {
     try {
         if (req.invoice)
             return res
@@ -100,12 +101,12 @@ router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
                 : `https://core1.axleshift.com/shipment/${req.freight.tracking_number}`
         const invoice = await Invoice.createInvoice({
             data: {
-                amount: req.freight.amount.value,
+                amount: (req.freight.amount.value * 57.3).toFixed(2),
                 payerEmail: req.user.email,
                 invoiceDuration: 172800,
                 externalId: `core1-axleshift-${Date.now()}`,
                 description: `Shipment #${req.freight.tracking_number}`,
-                currency: req.freight.amount.currency,
+                currency: 'PHP',
                 reminderTime: 1,
                 shouldSendEmail: true,
                 failureRedirectUrl: redirectUrl,
