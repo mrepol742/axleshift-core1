@@ -25,6 +25,17 @@ router.post('/', async (req, res) => {
                 },
             },
         )
+
+        if (req.body.status === "PAID")
+            db.collection('freight').updateOne(
+                { invoice_id: req.body.id },
+                {
+                    $set: {
+                        status: 'to_ship',
+                        updated_at: Date.now(),
+                    },
+                },
+            )
         return res.status(200).send()
     } catch (err) {
         logger.error(err)
