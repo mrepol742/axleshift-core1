@@ -13,6 +13,7 @@ import activity, { sendNotification } from '../../components/activity.js'
 import { GOOGLE_MAP } from '../../config.js'
 import cache from '../../middleware/cache.js'
 import { setCache } from '../../models/redis.js'
+import InvoiceGenerator from '../../components/invoice.js'
 
 const router = express.Router()
 const limit = 20
@@ -142,7 +143,7 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
         // TODO: calculate expected delivery date
         // and draw a estimated route
         const expectedDelivery = new Date(dateNow + 3 * 24 * 60 * 60 * 1000)
-
+        
         await db.collection('freight').insertOne({
             user_id: req.user._id,
             is_import: is_import,
@@ -158,8 +159,8 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
             total_weight: shipmentWeight,
             number_of_items: numberOfItems,
             amount: {
-                currency: 'USD',
-                value: shipmentPrice,
+            currency: 'PHP',
+            value: shipmentPrice,
             },
             expected_delivery_date: expectedDelivery.getTime(),
             country: country,
@@ -182,9 +183,8 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
             title: 'Shipment Created',
             message: `Shipment has been created with tracking number ${trackingNumber}.`,
         })
-        return res
-            .status(201)
-            .json({ tracking_number: trackingNumber, message: 'Shipment has been created.' })
+
+        return await InvoiceGenerator(res, req, trackingNumber)
     } catch (e) {
         logger.error(e)
     }
@@ -246,7 +246,7 @@ router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req,
                     total_weight: shipmentWeight,
                     number_of_items: numberOfItems,
                     amount: {
-                        currency: 'USD',
+                        currency: 'PHP',
                         value: shipmentPrice,
                     },
                     expected_delivery_date: expectedDelivery.getTime(),
@@ -258,7 +258,7 @@ router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req,
         )
 
         activity(req, `updated a shipment information #${id}`)
-        return res.status(200).json({ tracking_number: id, message: 'Shipment has been updated.' })
+        return await InvoiceGenerator(res, req, id)
     } catch (e) {
         logger.error(e)
     }
@@ -272,15 +272,26 @@ router.post('/cancel/:id', [recaptcha, auth, freight], async (req, res, next) =>
     try {
         const id = req.params.id
         const db = await database()
+        const freight = await db.collection('freight').findOne({ tracking_number: id })
+        if (!freight)
+            return res.status(404).json({ error: 'Shipment not found.' })
+
+        if (['to_receive', 'received', 'cancelled'].includes(freight.status))
+            return res.status(400).json({ error: 'Shipment cannot be cancelled.' })
+
         await db.collection('freight').updateOne(
             { tracking_number: id },
             {
-                $set: {
-                    status: 'cancelled',
-                    updated_at: Date.now(),
-                },
+            $set: {
+                status: 'cancelled',
+                updated_at: Date.now(),
+            },
             },
         )
+
+        // TODO: dont forget to process the refund
+        // procedure here 
+        // if the status is to_ship
 
         send(
             {

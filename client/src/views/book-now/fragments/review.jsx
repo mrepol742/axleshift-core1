@@ -88,18 +88,8 @@ const Review = ({ data, shipmentRef }) => {
                 ...form,
                 recaptcha_ref: recaptcha,
             })
-            .catch((error) => {
-                const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
-                addToast(message, 'Submit failed!')
-            })
-               const recaptcha1 = await recaptchaRef.current.executeAsync()
-        axios
-            .post('/invoices/create', {
-                id: form.tracking_number,
-                recaptcha_ref: recaptcha1,
-            })
             .then((response) => {
+                if (response.data.error) return addToast(response.data.error)
                 window.location.href = response.data.r_url
             })
             .catch((error) => {
@@ -122,11 +112,11 @@ const Review = ({ data, shipmentRef }) => {
     }
 
     const price = (form) => {
-        let amount = totalWeight(form.items) * totalDimensions(form.items)
+        let amount = totalWeight(form.items) * totalDimensions(form.items) * 57
         if (!amount) return '$0'
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD',
+            currency: 'PHP',
         }).format(amount)
     }
 
@@ -190,6 +180,25 @@ const Review = ({ data, shipmentRef }) => {
             .finally(() => setLoading(false))
     }
 
+    const handleCancelButton = async () => {
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
+        axios
+            .post(`/freight/cancel/${form.tracking_number}`, { recaptcha_ref: recaptcha })
+            .then((response) => {
+                addToast('Shipment has been cancelled.')
+                setTimeout(() => {
+                    window.location.reload()
+                }, 3000)
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                addToast(message, 'Submit failed!')
+            })
+            .finally(() => setLoading(false))
+    }
+
     useEffect(() => {
         fetchShippingAddress(currentPage)
     }, [showModal, currentPage])
@@ -214,21 +223,21 @@ const Review = ({ data, shipmentRef }) => {
                                         <span className="d-block text-danger">
                                             Unable to find a shipment address base on above address.{' '}
                                         </span>
-                                        <span className="d-block text-muted">
+                                        <span className="d-block text-muted small">
                                             {' '}
                                             Click &quot;Choose&quot; to select an address from the
                                             list.
                                         </span>
                                         <CButton
                                             size="sm"
-                                            className="btn btn-primary mt-2"
+                                            className="btn btn-primary mt-2 me-2 rounded"
                                             onClick={() => fetchAutoFill()}
                                         >
                                             Refresh
                                         </CButton>
                                         <CButton
                                             size="sm"
-                                            className="btn btn-primary mt-2"
+                                            className="btn btn-primary mt-2 rounded"
                                             onClick={() => setShowModal(true)}
                                         >
                                             Choose
@@ -300,19 +309,33 @@ const Review = ({ data, shipmentRef }) => {
                         Print Quotes
                     </CButton>
                 </CCol>
-                <CCol md={2}>
+                <CCol md>
                     <div className="d-flex justify-content-end flex-column">
-                        <h2 className="text-primary">{price(form)}</h2>
-                        <CButton
-                            size="sm"
-                            className="btn btn-primary mt-2"
-                            onClick={handleModalConfirm}
-                        >
-                            Continue
-                        </CButton>
+                        <h1 className="text-primary">{price(form)}</h1>
+                        <div className="d-flex">
+                            {form.internal &&
+                                !['to_receive', 'received', 'cancelled'].includes(form.status) && (
+                                    <CButton
+                                        size="sm"
+                                        color="danger"
+                                        className="me-2 rounded"
+                                        onClick={handleCancelButton}
+                                    >
+                                        Cancel
+                                    </CButton>
+                                )}
+                            {form.status === 'to_pay' && (
+                                <CButton
+                                    size="sm"
+                                    className="btn btn-primary rounded px-4"
+                                    onClick={handleModalConfirm}
+                                >
+                                    Ship Now
+                                </CButton>
+                            )}
+                        </div>
                     </div>
                 </CCol>
-                <CCol md></CCol>
             </CRow>
             {viewForm && (
                 <CModal
