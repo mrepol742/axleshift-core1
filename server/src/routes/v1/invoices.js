@@ -11,6 +11,7 @@ import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY, NODE_ENV } from '../../config.j
 import activity from '../../components/activity.js'
 import cache from '../../middleware/cache.js'
 import { setCache } from '../../models/redis.js'
+import { send } from '../../components/mail.js'
 
 const { Invoice } = new Xendit({
     secretKey: XENDIT_API_KEY,
@@ -84,79 +85,8 @@ router.get('/:id', [auth], async (req, res) => {
     res.status(400).json({ error: 'Invalid request' })
 })
 
-/**
- * Create an Invoice
- */
-router.post('/', [recaptcha, auth, freight, invoices], async (req, res) => {
-    try {
-        if (req.invoice)
-            return res
-                .status(200)
-                .send({ r_url: `https://checkout-staging.xendit.co/web/${req.invoice.invoice_id}` })
-        const redirectUrl =
-            NODE_ENV !== 'production'
-                ? `http://localhost:3000/shipment/${req.freight.tracking_number}`
-                : `https://core1.axleshift.com/shipment/${req.freight.tracking_number}`
-        const invoice = await Invoice.createInvoice({
-            data: {
-                amount: req.freight.amount.value,
-                payerEmail: req.user.email,
-                invoiceDuration: 172800,
-                externalId: `core1-axleshift-${Date.now()}`,
-                description: `Shipment #${req.freight.tracking_number}`,
-                currency: req.freight.amount.currency,
-                reminderTime: 1,
-                shouldSendEmail: true,
-                failureRedirectUrl: redirectUrl,
-                successRedirectUrl: redirectUrl,
-            },
-        })
-
-        const db = await database()
-        const invoicesCollection = db.collection('invoices')
-        const dateNow = Date.now()
-        const _invoice = await invoicesCollection.insertOne({
-            user_id: req.user._id,
-            freight_id: req.freight._id,
-            freight_tracking_number: req.freight.tracking_number,
-            invoice_id: invoice.id,
-            invoice_external_id: invoice.externalId,
-            amount: invoice.amount,
-            status: invoice.status,
-            currency: invoice.currency,
-            session_id: req.session._id,
-            created_at: dateNow,
-            updated_at: dateNow,
-        })
-        await db.collection('freight').updateOne(
-            { _id: new ObjectId(req.freight._id) },
-            {
-                $set: {
-                    invoice_id: _invoice._id,
-                    updated_at: dateNow,
-                    modified_by: 'system',
-                },
-            },
-        )
-
-        send(
-            {
-                to: req.user.email,
-                subject: `${req.freight.tracking_number} | Payment Received`,
-                text: `Thank you for your payment. Your shipment is now ready for processing.<br><br>If you need assistance feel free to contact us.`,
-            },
-            req.user.first_name,
-        )
-        activity(
-            req,
-            `create invoice for shipment #${req.freight._id} with invoice id #${_invoice._id}`,
-        )
-        return res.status(200).send({ r_url: invoice.invoiceUrl })
-    } catch (err) {
-        logger.error(err)
-    }
-    res.status(500).json({ error: 'Internal server error' })
-})
+/* WARNING CREATE HAS BEEN REMOVED */
+/* WARNING UPDATE HAS BEEN REMOVED */
 
 /**
  * Cancel an Invoice
@@ -170,7 +100,6 @@ router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
                 $set: {
                     status: 'CANCELLED',
                     updated_at: Date.now(),
-                    modified_by: 'system',
                 },
             },
         )

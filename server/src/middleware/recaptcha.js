@@ -16,7 +16,7 @@ const recaptcha = async (req, res, next) => {
 
         const { success, score } = response.data
         if (!success || score < 0.5)
-            return res.status(403).json({ error: 'Please mark the recaptcha' })
+            return res.status(403).json({ error: 'Recaptcha verification failed' })
 
         return next()
     } catch (err) {

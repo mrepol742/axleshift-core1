@@ -3,6 +3,7 @@ import database from '../../models/mongodb.js'
 import logger from '../../utils/logger.js'
 import { XENDIT_WEBHOOK_VERIFICATION_TOKEN } from '../../config.js'
 import { run } from '../../utils/cmd.js'
+import { send } from '../../components/mail.js'
 
 const router = express.Router()
 
@@ -22,10 +23,21 @@ router.post('/', async (req, res) => {
                     payment_method: req.body.payment_method,
                     adjusted_amount: req.body.adjusted_received_amount,
                     updated_at: Date.now(),
-                    modified_by: 'system',
                 },
             },
         )
+
+        if (req.body.status === "PAID") {
+            db.collection('freight').updateOne(
+                { invoice_id: req.body.id },
+                {
+                    $set: {
+                        status: 'to_ship',
+                        updated_at: Date.now(),
+                    },
+                },
+            )
+        }
         return res.status(200).send()
     } catch (err) {
         logger.error(err)

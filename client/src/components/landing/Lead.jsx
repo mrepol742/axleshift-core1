@@ -16,14 +16,14 @@ const Lead = () => {
             <div className="auth-bg position-absolute top-0 start-0 w-100 h-100" />
             <Navbar />
             <CRow className="flex-grow-1 justify-content-center align-items-center">
-                <CCol xs={12} md={9} xl={7} className="px-4 mx-0 mx-md-4 text-center">
+                <CCol xs={12} md={8} xl={6} className="px-4 mx-0 mx-md-4 text-center">
                     <h1 className="text-white display-4 fw-bold" data-aos="fade-right">
-                        Where Freight <span className="text-primary d-block">Meets Efficiency</span>
+                        Your Shippment
+                        <span className="text-primary d-block">Our Platform</span>
                     </h1>
                     <p className="text-white fs-5" data-aos="fade-right">
-                        Our cutting-edge platform empowers businesses to improve their shipping
-                        strategies. Experience optimized routing without the complexities of
-                        tracking.
+                        Connecting businesses with smarter, faster, and more secure shipping. From
+                        first mile to last, we move your world forward.
                     </p>
                     <CButton
                         to="/register"

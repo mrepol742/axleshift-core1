@@ -85,7 +85,6 @@ router.post('/new', [recaptcha, auth], async function (req, res, next) {
             user_id: req.user._id,
             note: note,
             active: true,
-            compromised: false,
             token: apiT,
             whitelist_ip: allowedIp[0] !== '[]' ? allowedIp : [],
             user_agent: 'unknown',

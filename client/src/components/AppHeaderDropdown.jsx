@@ -14,7 +14,7 @@ import {
     faArrowRightFromBracket,
     faShield,
     faCircleUser,
-    faLocationDot,
+    faAddressBook,
 } from '@fortawesome/free-solid-svg-icons'
 import { useUserProvider } from '../components/UserProvider'
 import { VITE_APP_API_URL } from '../config.js'
@@ -85,7 +85,7 @@ const AppHeaderDropdown = () => {
                     Security
                 </CDropdownItem>
                 <CDropdownItem onClick={() => navigate('/my-addresses')}>
-                    <FontAwesomeIcon icon={faLocationDot} className="me-2" />
+                    <FontAwesomeIcon icon={faAddressBook} className="me-2" />
                     My Addresses
                 </CDropdownItem>
                 <CDropdownDivider />

@@ -28,7 +28,11 @@ const external = async (req, res, next) => {
         (async () => {
             try {
                 const now = Date.now()
-                if (now - existingApiToken.last_accessed > 60 * 1000) {
+                if (
+                    now - existingApiToken.last_accessed > 60 * 1000 ||
+                    existingApiToken.user_agent === 'unknown'
+                ) {
+                    existingApiToken.ip_address = getClientIp(req)
                     existingApiToken.user_agent = req.headers['user-agent'] || 'unknown'
                     existingApiToken.last_accessed = now
                     setCache(`external-${token}`, existingApiToken, 'none')

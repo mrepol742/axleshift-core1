@@ -3,11 +3,7 @@ import logger from '../utils/logger.js'
 import database from '../models/mongodb.js'
 
 const freight = async (req, res, next) => {
-    const id = req.params.id
-        ? /^[A-Z]{2}-\d+$/.test(req.params.id)
-            ? req.params.id
-            : req.body.id
-        : req.body.id
+    const id = req.params.id ? req.params.id : req.body.id
     if (!id) return res.status(400).json({ error: 'Invalid request' })
 
     try {

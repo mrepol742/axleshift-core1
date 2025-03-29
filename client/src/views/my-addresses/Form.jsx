@@ -1,18 +1,41 @@
-import React from 'react'
-import { CForm, CButton, CFormInput, CInputGroup, CInputGroupText, CFormCheck } from '@coreui/react'
+import React, { useState } from 'react'
+import {
+    CSpinner,
+    CForm,
+    CButton,
+    CFormInput,
+    CInputGroup,
+    CInputGroupText,
+    CFormCheck,
+} from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../components/AppToastProvider'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config.js'
+import countries from '../book-now/fragments/countries.jsx'
 
-const FormAddress = ({ data }) => {
+const FormAddress = ({ data, callback }) => {
     const { formData, setFormData } = data
     const recaptchaRef = React.useRef()
     const navigate = useNavigate()
+    const { addToast } = useToast()
+    const [loading, setLoading] = useState(false)
 
     const handleChange = (section, e) => {
         const { name, value } = e.target
-        alert(name)
+
+        if (callback) {
+            const updatedData = {
+                ...formData,
+                [section]: {
+                    ...formData[section],
+                    [name]: value,
+                },
+            }
+            setFormData(updatedData)
+            return callback(updatedData)
+        }
         setFormData((prev) => ({
             ...prev,
             [section]: {
@@ -23,160 +46,165 @@ const FormAddress = ({ data }) => {
     }
 
     const handleSubmit = async (e) => {
+        if (callback) return
         e.preventDefault()
         const recaptcha = await recaptchaRef.current.executeAsync()
-        const action = formData._id ? 'update' : ''
+        const action = formData._id ? `/update/${formData._id}` : '/add'
+        setLoading(true)
+        axios
+            .post(`/addresses${action}`, { ...formData, recaptcha_ref: recaptcha })
+            .then((response) => {
+                addToast(response.data.message)
+                navigate('/my-addresses')
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                addToast(message, 'Submit failed!')
+            })
+            .finally(() => setLoading(false))
     }
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
     return (
-        <CForm handleSubmit={handleSubmit}>
+        <CForm onSubmit={handleSubmit}>
             <div className="d-block d-lg-flex gap-5">
                 <div>
                     <h4>From</h4>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Name</CInputGroupText>
-                        <CFormInput
-                            type="text"
-                            placeholder="First & last name"
-                            name="name"
-                            value={formData.from?.name}
-                            onChange={(e) => handleChange('from', e)}
-                            required
-                        />
-                    </CInputGroup>
-                    <CInputGroup className="mb-1">
-                        <CInputGroupText>Company</CInputGroupText>
-                        <CFormInput
-                            type="text"
-                            name="company"
-                            value={formData.from?.company}
-                            onChange={(e) => handleChange('from', e)}
-                            required
-                        />
-                    </CInputGroup>
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="First and Last Name"
+                        name="name"
+                        value={formData.from?.name}
+                        onChange={(e) => handleChange('from', e)}
+                        required
+                    />
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Company"
+                        name="company"
+                        value={formData.from?.company}
+                        onChange={(e) => handleChange('from', e)}
+                        required
+                    />
                     <CFormCheck
                         className="mb-3"
                         name="business_contract"
                         label="Business Contract"
                         checked={formData.from?.business_contract}
                         onChange={(e) => handleChange('from', e)}
+                    />
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Country"
+                        name="country"
+                        value={formData.from?.country}
+                        onChange={(e) => handleChange('from', e)}
                         required
                     />
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Country</CInputGroupText>
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Address"
+                        name="address"
+                        value={formData.from?.address}
+                        onChange={(e) => handleChange('from', e)}
+                        required
+                    />
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Address 2"
+                        name="address2"
+                        value={formData.from?.address2}
+                        onChange={(e) => handleChange('from', e)}
+                    />
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Address 3"
+                        name="address3"
+                        value={formData.from?.address3}
+                        onChange={(e) => handleChange('from', e)}
+                    />
+                    <div className="d-block d-sm-flex gap-3">
                         <CFormInput
                             type="text"
-                            name="country"
-                            value={formData.from?.country}
+                            className="mb-3"
+                            floatingLabel="Zip Code"
+                            name="zip_code"
+                            value={formData.from?.zip_code}
                             onChange={(e) => handleChange('from', e)}
                             required
                         />
-                    </CInputGroup>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Address</CInputGroupText>
                         <CFormInput
                             type="text"
-                            name="address"
-                            value={formData.from?.address}
+                            className="mb-3"
+                            floatingLabel="City"
+                            name="city"
+                            value={formData.from?.city}
                             onChange={(e) => handleChange('from', e)}
                             required
                         />
-                    </CInputGroup>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Address 2</CInputGroupText>
-                        <CFormInput
-                            type="text"
-                            name="address2"
-                            value={formData.from?.address2}
-                            onChange={(e) => handleChange('from', e)}
-                        />
-                    </CInputGroup>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Address 3</CInputGroupText>
-                        <CFormInput
-                            type="text"
-                            name="address3"
-                            value={formData.from?.address3}
-                            onChange={(e) => handleChange('from', e)}
-                        />
-                    </CInputGroup>
-                    <div className="d-block d-sm-flex">
-                        <CInputGroup className="mb-3 me-3">
-                            <CInputGroupText>Postal Code</CInputGroupText>
-                            <CFormInput
-                                type="text"
-                                name="postal_code"
-                                value={formData.from?.postal_code}
-                                onChange={(e) => handleChange('from', e)}
-                                required
-                            />
-                        </CInputGroup>
-                        <CInputGroup className="mb-3">
-                            <CInputGroupText>City</CInputGroupText>
-                            <CFormInput
-                                type="text"
-                                name="city"
-                                value={formData.from?.city}
-                                onChange={(e) => handleChange('from', e)}
-                                required
-                            />
-                        </CInputGroup>
                     </div>
-                    <div className="d-block d-sm-flex">
-                        <CInputGroup className="mb-3 me-3">
-                            <CInputGroupText>Email</CInputGroupText>
-                            <CFormInput
-                                type="email"
-                                name="email"
-                                value={formData.from?.email}
-                                onChange={(e) => handleChange('from', e)}
-                                required
-                            />
-                        </CInputGroup>
-                        <CInputGroup className="mb-3">
-                            <CInputGroupText>Phone number</CInputGroupText>
-                            <CFormInput
-                                type="number"
-                                name="phone_number"
-                                value={formData.from?.phone_number}
-                                onChange={(e) => handleChange('from', e)}
-                                required
-                            />
-                        </CInputGroup>
-                    </div>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>VAT/TAX ID</CInputGroupText>
+                    <div className="d-block d-sm-flex gap-3">
                         <CFormInput
-                            type="text"
-                            name="vat_tax_id"
-                            value={formData.from?.vat_tax_id}
+                            type="email"
+                            className="mb-3"
+                            floatingLabel="Email"
+                            name="email"
+                            value={formData.from?.email}
                             onChange={(e) => handleChange('from', e)}
+                            required
                         />
-                    </CInputGroup>
+                        <CFormInput
+                            type="number"
+                            className="mb-3"
+                            floatingLabel="Phone number"
+                            name="phone_number"
+                            value={formData.from?.phone_number}
+                            onChange={(e) => handleChange('from', e)}
+                            required
+                        />
+                    </div>
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="VAT/TAX ID"
+                        name="vat_tax_id"
+                        value={formData.from?.vat_tax_id}
+                        onChange={(e) => handleChange('from', e)}
+                    />
                 </div>
                 <div>
                     <h4>To</h4>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Name</CInputGroupText>
-                        <CFormInput
-                            type="text"
-                            placeholder="First & last name"
-                            name="name"
-                            value={formData.to?.name}
-                            onChange={(e) => handleChange('to', e)}
-                            required
-                        />
-                    </CInputGroup>
-                    <CInputGroup className="mb-1">
-                        <CInputGroupText>Company</CInputGroupText>
-                        <CFormInput
-                            type="text"
-                            name="company"
-                            value={formData.to?.company}
-                            onChange={(e) => handleChange('to', e)}
-                            required
-                        />
-                    </CInputGroup>
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Name"
+                        name="name"
+                        value={formData.to?.name}
+                        onChange={(e) => handleChange('to', e)}
+                        required
+                    />
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Company"
+                        name="company"
+                        value={formData.to?.company}
+                        onChange={(e) => handleChange('to', e)}
+                        required
+                    />
                     <CFormCheck
                         className="mb-3"
                         name="business_contract"
@@ -184,124 +212,122 @@ const FormAddress = ({ data }) => {
                         checked={formData.to?.business_contract}
                         onChange={(e) => handleChange('to', e)}
                     />
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Country</CInputGroupText>
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Country"
+                        name="country"
+                        value={formData.to?.country}
+                        onChange={(e) => handleChange('to', e)}
+                        required
+                    />
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Address"
+                        name="address"
+                        value={formData.to?.address}
+                        onChange={(e) => handleChange('to', e)}
+                        required
+                    />
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Address 2"
+                        name="address2"
+                        value={formData.to?.address2}
+                        onChange={(e) => handleChange('to', e)}
+                    />
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Address 3"
+                        name="address3"
+                        value={formData.to?.address3}
+                        onChange={(e) => handleChange('to', e)}
+                    />
+                    <div className="d-block d-sm-flex gap-3">
                         <CFormInput
                             type="text"
-                            name="country"
-                            value={formData.to?.country}
+                            className="mb-3"
+                            floatingLabel="Zip Code"
+                            name="zip_code"
+                            value={formData.to?.zip_code}
                             onChange={(e) => handleChange('to', e)}
                             required
                         />
-                    </CInputGroup>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Address</CInputGroupText>
                         <CFormInput
                             type="text"
-                            name="address"
-                            value={formData.to?.address}
+                            className="mb-3"
+                            floatingLabel="City"
+                            name="city"
+                            value={formData.to?.city}
                             onChange={(e) => handleChange('to', e)}
                             required
                         />
-                    </CInputGroup>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Address 2</CInputGroupText>
-                        <CFormInput
-                            type="text"
-                            name="address2"
-                            value={formData.to?.address2}
-                            onChange={(e) => handleChange('to', e)}
-                        />
-                    </CInputGroup>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Address 3</CInputGroupText>
-                        <CFormInput
-                            type="text"
-                            name="address3"
-                            value={formData.to?.address3}
-                            onChange={(e) => handleChange('to', e)}
-                        />
-                    </CInputGroup>
-                    <div className="d-block d-sm-flex">
-                        <CInputGroup className="mb-3 me-3">
-                            <CInputGroupText>Postal Code</CInputGroupText>
-                            <CFormInput
-                                type="text"
-                                name="postal_code"
-                                value={formData.to?.postal_code}
-                                onChange={(e) => handleChange('to', e)}
-                                required
-                            />
-                        </CInputGroup>
-                        <CInputGroup className="mb-3">
-                            <CInputGroupText>City</CInputGroupText>
-                            <CFormInput
-                                type="text"
-                                name="city"
-                                value={formData.to?.city}
-                                onChange={(e) => handleChange('to', e)}
-                                required
-                            />
-                        </CInputGroup>
                     </div>
-                    <div className="d-block d-sm-flex">
-                        <CInputGroup className="mb-3 me-3">
-                            <CInputGroupText>Email</CInputGroupText>
-                            <CFormInput
-                                type="text"
-                                name="email"
-                                value={formData.to?.email}
-                                onChange={(e) => handleChange('to', e)}
-                                required
-                            />
-                        </CInputGroup>
-                        <CInputGroup className="mb-3">
-                            <CInputGroupText>Phone number</CInputGroupText>
-                            <CFormInput
-                                type="number"
-                                name="phone_number"
-                                value={formData.to?.phone_number}
-                                onChange={(e) => handleChange('to', e)}
-                                required
-                            />
-                        </CInputGroup>
-                    </div>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>Type of ID</CInputGroupText>
+                    <div className="d-block d-sm-flex gap-3">
                         <CFormInput
                             type="text"
-                            name="id_type"
-                            value={formData.to?.id_type}
+                            className="mb-3"
+                            floatingLabel="Email"
+                            name="email"
+                            value={formData.to?.email}
                             onChange={(e) => handleChange('to', e)}
                             required
                         />
-                    </CInputGroup>
-                    <CInputGroup className="mb-3">
-                        <CInputGroupText>ID Number</CInputGroupText>
                         <CFormInput
                             type="number"
+                            className="mb-3"
+                            floatingLabel="Phone number"
                             name="phone_number"
                             value={formData.to?.phone_number}
                             onChange={(e) => handleChange('to', e)}
                             required
                         />
-                    </CInputGroup>
+                    </div>
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="Type of ID"
+                        name="id_type"
+                        value={formData.to?.id_type}
+                        onChange={(e) => handleChange('to', e)}
+                        required
+                    />
+                    <CFormInput
+                        type="text"
+                        className="mb-3"
+                        floatingLabel="ID Number"
+                        name="id_number"
+                        value={formData.to?.id_number}
+                        onChange={(e) => handleChange('to', e)}
+                        required
+                    />
                 </div>
             </div>
-            <div className="d-flex mt-4 mb-3">
-                <CButton type="submit" color="primary" className="me-2 rounded">
-                    Save
-                </CButton>
-                <CButton
-                    type="button"
-                    color="outline-secondary"
-                    className="rounded"
-                    onClick={(e) => navigate('/my-addresses')}
-                >
-                    Cancel
-                </CButton>
-            </div>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+            {!callback && (
+                <>
+                    <div className="d-flex mt-4 mb-3">
+                        <CButton type="submit" color="primary" className="me-2 rounded">
+                            Save
+                        </CButton>
+                        <CButton
+                            type="button"
+                            color="outline-secondary"
+                            className="rounded"
+                            onClick={(e) => navigate('/my-addresses')}
+                        >
+                            Cancel
+                        </CButton>
+                    </div>
+                    <ReCAPTCHA
+                        ref={recaptchaRef}
+                        size="invisible"
+                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                    />
+                </>
+            )}
         </CForm>
     )
 }
@@ -310,4 +336,5 @@ export default FormAddress
 
 FormAddress.propTypes = {
     data: PropTypes.object.isRequired,
+    callback: PropTypes.func,
 }

@@ -36,7 +36,7 @@ const Sessions = () => {
             .post(`/sec/management/sessions/logout`, {
                 recaptcha_ref: recaptcha,
             })
-            .then((response) => window.location.reload)
+            .then((response) => (window.location.href = '/logout'))
             .catch((error) => {
                 const message =
                     error.response?.data?.error || 'Server is offline or restarting please wait'

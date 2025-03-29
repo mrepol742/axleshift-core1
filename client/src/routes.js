@@ -23,8 +23,7 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
  */
 const Dashboard = auth(lazy(() => import('./views/dashboard/index')))
 const Info = auth(lazy(() => import('./views/dashboard/Info')))
-const Forms = auth(lazy(() => import('./views/dashboard/Forms')))
-const Search = auth(lazy(() => import('./views/dashboard/Search')))
+const Search = auth(lazy(() => import('./views/search')))
 const Schedules = auth(lazy(() => import('./views/schedules/index')))
 
 const Inbox = auth(lazy(() => import('./views/support/customer-service/index')))
@@ -36,13 +35,14 @@ const BookNow = auth(lazy(() => import('./views/book-now/index')))
 
 const Address = auth(lazy(() => import('./views/my-addresses/index')))
 const NewAddress = auth(lazy(() => import('./views/my-addresses/New')))
-const EditAddress = auth(lazy(() => import('./views/my-addresses/Edit')))
+const ViewAddress = auth(lazy(() => import('./views/my-addresses/View')))
 
 const Security = auth(lazy(() => import('./views/security/index')))
 const Management = auth(lazy(() => import('./views/security/Management')))
 const Sessions = auth(lazy(() => import('./views/security/Sessions')))
 const AccessToken = auth(lazy(() => import('./views/security/AccessToken')))
 const NewAccessToken = auth(lazy(() => import('./views/security/access-token/New')))
+const Webhooks = auth(lazy(() => import('./views/security/Webhooks')))
 const ActivityLogs = auth(lazy(() => import('./views/security/AccountLogs')))
 
 const Track = auth(lazy(() => import('./views/track/index')))
@@ -71,7 +71,7 @@ const routes = [
 
     { path: '/dashboard', name: 'Dashboard', element: Dashboard },
     { path: '/shipment/:id', name: 'Shipment Info', element: Info },
-    { path: '/shipment/:id/forms', name: 'Shipment Forms', element: Forms },
+
     { path: '/search', name: 'Search Shipment', element: Search },
     { path: '/schedules', name: 'Schedules', element: Schedules },
 
@@ -89,7 +89,7 @@ const routes = [
 
     { path: '/my-addresses', name: 'My Addresses', element: Address },
     { path: '/my-addresses/new', name: 'New Address', element: NewAddress },
-    { path: '/my-addresses/:id', name: 'Address', element: EditAddress },
+    { path: '/my-addresses/view', name: 'Address', element: ViewAddress },
 
     { path: '/security', name: 'Security', element: Security },
     { path: '/security/management', name: 'Management', element: Management },
@@ -97,6 +97,7 @@ const routes = [
     { path: '/security/sessions', name: 'Sessions', element: Sessions },
     { path: '/security/access-token', name: 'Access Token', element: AccessToken },
     { path: '/security/access-token/new', name: 'New Access Token', element: NewAccessToken },
+    { path: '/security/webhooks', name: 'Webhooks', element: Webhooks },
 
     { path: '/track', name: 'Track', element: Track },
     { path: '/track/:id', name: 'Track', element: TrackInfo },

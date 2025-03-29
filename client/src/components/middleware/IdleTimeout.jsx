@@ -17,8 +17,8 @@ import { useUserProvider } from '../UserProvider'
 
 const IdleTimeout = ({ children }) => {
     const { user } = useUserProvider()
-    const IDLE_TIMEOUT = 10 * 60 * 1000 // 5 minutes
-    const COUNTDOWN_TIME = 30 // 30 seconds
+    const IDLE_TIMEOUT = 10 * 60 * 1000
+    const COUNTDOWN_TIME = 30
     const [isIdle, setIsIdle] = useState(false)
     const [countdown, setCountdown] = useState(COUNTDOWN_TIME)
     let timeout, countdownInterval
@@ -52,12 +52,16 @@ const IdleTimeout = ({ children }) => {
         window.location.href = '/logout'
     }
 
-    useEffect(() => {
-        if (!user) return 'Loading...'
+    const time = () => {
+        if (!user.role) return
         resetTimer()
         window.addEventListener('mousemove', resetTimer)
         window.addEventListener('keydown', resetTimer)
         window.addEventListener('click', resetTimer)
+    }
+
+    useEffect(() => {
+        time()
 
         return () => {
             clearTimeout(timeout)
@@ -77,12 +81,11 @@ const IdleTimeout = ({ children }) => {
                 >
                     <CModal
                         alignment="center"
-                        scrollable
                         visible={isIdle}
                         onClose={(e) => setIsIdle(false)}
                         aria-labelledby="warningModal"
                     >
-                        <CModalHeader>
+                        <CModalHeader closeButton={false}>
                             <CModalTitle id="warningModal">Are you still here?</CModalTitle>
                         </CModalHeader>
                         <CModalBody>You will be logged out in {countdown} seconds.</CModalBody>

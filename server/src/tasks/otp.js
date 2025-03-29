@@ -23,7 +23,6 @@ const otp = () => {
                                 $set: {
                                     expired: true,
                                     updated_at: Date.now(),
-                                    modified_by: 'system',
                                 },
                             },
                         )

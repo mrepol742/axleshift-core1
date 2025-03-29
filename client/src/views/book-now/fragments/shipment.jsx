@@ -50,15 +50,15 @@ const Item = ({ index, form, setForm, removeItem }) => {
         // can only ship dangerous goods
         business: [
             {
-                value: [120, 80],
+                value: [120, 80, 5],
                 label: 'Pallet-1',
             },
             {
-                value: [120, 100],
+                value: [120, 100, 10],
                 label: 'Pallet-2',
             },
             {
-                value: [80, 60],
+                value: [80, 60, 20],
                 label: 'Pallet-3',
             },
             {
@@ -239,7 +239,7 @@ const Shipment = ({ data, shipmentRef }) => {
 
                 <CRow>
                     <CCol md>
-                        {form.type === 'business' && (
+                        {form.status === 'to_pay' && form.type === 'business' && (
                             <CButton
                                 color="primary"
                                 onClick={addItem}

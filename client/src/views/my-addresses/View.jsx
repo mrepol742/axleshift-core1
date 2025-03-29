@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { CButton, CFormInput, CInputGroup, CInputGroupText, CFormCheck } from '@coreui/react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router-dom'
 import Form from './Form'
 
-const NewAddress = () => {
-    const [formData, setFormData] = useState({})
+const View = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+    const address = location.state?.address
+    const [formData, setFormData] = React.useState(address ? address : {})
+
+    useEffect(() => {
+        if (!address) navigate('/my-addresses')
+    }, [address])
 
     return (
         <div>
@@ -24,4 +30,4 @@ const NewAddress = () => {
     )
 }
 
-export default NewAddress
+export default View

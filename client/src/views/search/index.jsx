@@ -4,7 +4,7 @@ import { CForm, CFormSelect, CSpinner, CRow, CCol } from '@coreui/react'
 import Masonry from 'react-masonry-css'
 import { useToast } from '../../components/AppToastProvider'
 import AppSearch from '../../components/AppSearch'
-import ShipmentCard from './ShipmentCard'
+import ShipmentCard from '../dashboard/ShipmentCard'
 import AppPagination from '../../components/AppPagination'
 
 const Search = () => {

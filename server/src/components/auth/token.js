@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { addSession } from '../sessions.js'
+import { addSession, isNewIP } from '../sessions.js'
 import { getClientIp } from '../ip.js'
 
 const Token = (theUser, req) => {
@@ -12,6 +12,7 @@ const Token = (theUser, req) => {
     //     privateKey: btoa(privateKey.export({ type: 'pkcs1', format: 'pem' })),
     // }
     addSession(theUser, session_token, clientIp, userAgent, null)
+    isNewIP(clientIp, theUser)
     return {
         token: session_token,
     }

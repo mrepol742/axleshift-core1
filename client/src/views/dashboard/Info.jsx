@@ -57,26 +57,7 @@ const FreightInfo = () => {
             })
             .finally(() => setLoading(false))
     }
-
-    const handleDeleteButton = async () => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
-        setLoading(true)
-        axios
-            .post(`/freight/cancel/${id}`, { recaptcha_ref: recaptcha })
-            .then((response) => {
-                addToast('Shipment has been cancelled.')
-                setTimeout(() => {
-                    window.location.reload()
-                }, 3000)
-            })
-            .catch((error) => {
-                const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
-                addToast(message, 'Submit failed!')
-            })
-            .finally(() => setLoading(false))
-    }
-
+    
     const handleQRDownload = () => {
         setShowQR(false)
         html2canvas(svgRef.current, { useCORS: true }).then((canvas) => {
@@ -140,7 +121,7 @@ const FreightInfo = () => {
                     </CModalFooter>
                 </CModal>
             )}
-            <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
+            <div className="d-flex flex-row justify-content-between align-items-center mb-4">
                 <span className="d-block">
                     <span className="text-primary fw-bold small">Tracking Number:</span>
                     <br />
@@ -154,15 +135,6 @@ const FreightInfo = () => {
                     >
                         <FontAwesomeIcon icon={faQrcode} />
                     </CButton>
-                    {form.status === 'to_pay' && (
-                        <CButton
-                            color="danger"
-                            className="me-2 rounded"
-                            onClick={handleDeleteButton}
-                        >
-                            Cancel
-                        </CButton>
-                    )}
                 </CButtonGroup>
             </div>
 

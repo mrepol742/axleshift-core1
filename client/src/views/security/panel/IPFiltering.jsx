@@ -147,9 +147,11 @@ const IPFiltering = () => {
                     />
                 </div>
             ))}
-            <CButton color="primary" onClick={saveData}>
-                Apply all changes
-            </CButton>
+            {ipList.length != 0 && (
+                <CButton color="primary" onClick={saveData} className="mb-4">
+                    Apply all changes
+                </CButton>
+            )}
             <div className="text-muted">
                 Examples:
                 <ul>

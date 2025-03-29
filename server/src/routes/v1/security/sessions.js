@@ -5,7 +5,7 @@ import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
-import redis, { setCache } from '../../../models/redis.js'
+import redis, { setCache, remCache } from '../../../models/redis.js'
 
 const router = express.Router()
 const limit = 20
@@ -36,10 +36,7 @@ router.post('/', auth, async (req, res) => {
                         value.token = null
                         if (_tt === req.session.token) {
                             currentSession = value
-                        } else if (
-                            value.active == true &&
-                            value.user_id === req.user._id.toString()
-                        ) {
+                        } else if (value.user_id === req.user._id.toString()) {
                             allData.push(value)
                         }
                     }
@@ -81,7 +78,7 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach((key, index) => {
+                keys.forEach(async (key, index) => {
                     if (/^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
                         const value = JSON.parse(values[index])
                         if (value && value._id === session_id) {
@@ -89,12 +86,10 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
                         }
                         if (
                             !session_id &&
-                            value.active == true &&
                             value.user_id === req.user._id.toString() &&
                             value.token !== req.session.token
                         ) {
-                            value.active = false
-                            setCache(`internal-${value.token}`, value)
+                            await remCache(`internal-${value.token}`)
                         }
                     }
                 })
@@ -102,8 +97,7 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
         }
 
         if (sessionData) {
-            sessionData.active = false
-            setCache(`internal-${sessionData.token}`, sessionData)
+            await remCache(`internal-${sessionData.token}`)
             return res.status(200).json({ message: 'Session logout' })
         }
 

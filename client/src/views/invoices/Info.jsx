@@ -27,11 +27,8 @@ const Receipt = () => {
     const [data, setData] = useState(null)
     const invoiceRef = React.useRef()
     const pdfRef = React.useRef()
-    const footer = React.useRef()
-
     const generatePDF = () => {
         pdfRef.current.style.display = 'none'
-        footer.current.style.display = 'block'
         const bgColor = getComputedStyle(document.body).backgroundColor
 
         html2canvas(invoiceRef.current, {
@@ -59,7 +56,6 @@ const Receipt = () => {
             .catch((error) => console.error('Error generating PDF:', error))
             .finally(() => {
                 pdfRef.current.style.display = 'block'
-                footer.current.style.display = 'none'
             })
     }
 
@@ -145,7 +141,7 @@ const Receipt = () => {
                             </CTableRow>
                         </CTableBody>
                     </CTable>
-                    <div ref={footer} className="text-center">
+                    <div className="small text-center">
                         https://core1.axleshift.com/invoices/{id}
                     </div>
                     <CButton className="btn btn-primary px-4" ref={pdfRef} onClick={generatePDF}>
