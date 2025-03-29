@@ -12,12 +12,10 @@ import {
     CCardTitle,
 } from '@coreui/react'
 import Masonry from 'react-masonry-css'
-import WidgetsDropdown from './Widgets'
 import AppPagination from '../../components/AppPagination'
 import { useToast } from '../../components/AppToastProvider'
-
 import AppSearch from '../../components/AppSearch'
-import ShipmentCard from '../shipment/ShipmentCard'
+import ShipmentCard from './ShipmentCard'
 
 const Dashboard = () => {
     const [data, setData] = useState([])
@@ -93,9 +91,6 @@ const Dashboard = () => {
 
     return (
         <div>
-            <WidgetsDropdown className="mb-4" />
-
-            {/* <h4>Shipments</h4>
             <Masonry
                 breakpointCols={{
                     default: 4,
@@ -119,7 +114,7 @@ const Dashboard = () => {
                     setTotalPages={setTotalPages}
                     className="mb-3"
                 />
-            )} */}
+            )}
         </div>
     )
 }

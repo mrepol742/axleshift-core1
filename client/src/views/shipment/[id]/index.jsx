@@ -16,13 +16,11 @@ import { faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { QRCodeSVG } from 'qrcode.react'
 import html2canvas from 'html2canvas'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
-import { useToast } from '../../components/AppToastProvider'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../../config'
+import { useToast } from '../../../../components/AppToastProvider'
 
-import { useUserProvider } from '../../components/UserProvider'
-import ShipmentInfo from '../book-now/fragments/info'
-import ShipmentReview from '../book-now/fragments/review'
-import Shipment from '../book-now/fragments/shipment'
+import { useUserProvider } from '../../../../components/UserProvider'
+import ShipmentInfo from '../../../book-now/fragments/info'
 
 const FreightInfo = () => {
     const { user } = useUserProvider()
@@ -57,7 +55,7 @@ const FreightInfo = () => {
             })
             .finally(() => setLoading(false))
     }
-    
+
     const handleQRDownload = () => {
         setShowQR(false)
         html2canvas(svgRef.current, { useCORS: true }).then((canvas) => {
