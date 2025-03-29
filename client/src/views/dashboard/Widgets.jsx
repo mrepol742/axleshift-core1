@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { CRow, CCol, CDropdown, CDropdownToggle, CWidgetStatsA } from '@coreui/react'
 import { getStyle } from '@coreui/utils'
@@ -9,6 +9,86 @@ import { faArrowUpLong, faArrowDownLong } from '@fortawesome/free-solid-svg-icon
 const Widgets = (props) => {
     const widgetChartRef1 = useRef(null)
     const widgetChartRef2 = useRef(null)
+       const widgetChartRef3 = useRef(null)
+    const widgetChartRef4 = useRef(null)
+    const [insights, setInsights] = useState({})
+    const calculateAverage = (data) => {
+        if (!data || data.length === 0) return 0
+        const sum = data.reduce((acc, value) => acc + value, 0)
+        return (sum / data.length).toFixed(2)
+    }
+
+    const widgetData = [
+        {
+            color: 'primary',
+            value: <>{calculateAverage(insights.shipmetOvertime?.data)}</>,
+            title: 'Shipments',
+            chartRef: widgetChartRef1,
+            pointColor: getStyle('--cui-primary'),
+            labels: insights.shipmetOvertime?.labels || [],
+            data: insights.shipmetOvertime?.data || [],
+            yScale: { min: -9, max: 39 },
+        },
+        {
+            color: 'info',
+            value: <>{calculateAverage(insights.costOvertime?.data)}</>,
+            title: 'Average Cost',
+            chartRef: widgetChartRef2,
+            pointColor: getStyle('--cui-info'),
+            labels: insights.costOvertime?.labels || [],
+            data: insights.costOvertime?.data || [],
+            yScale: { min: -9, max: 39 },
+        },
+        {
+            color: 'info',
+            value: <>{calculateAverage(insights.itemsOvertime?.data)}</>,
+            title: 'Items',
+            chartRef: widgetChartRef3,
+            pointColor: getStyle('--cui-info'),
+            labels: insights.itemsOvertime?.labels || [],
+            data: insights.itemsOvertime?.data || [],
+            yScale: { min: -9, max: 39 },
+        },
+        {
+            color: 'info',
+            value: <>{calculateAverage(insights.weightOvertime?.data)}</>,
+            title: 'Weight',
+            chartRef: widgetChartRef4,
+            pointColor: getStyle('--cui-info'),
+            labels: insights.weightOvertime?.labels || [],
+            data: insights.weightOvertime?.data || [],
+            yScale: { min: -9, max: 39 },
+        },
+    ]
+
+    const fetch = (url) => {
+        return axios
+            .get(url)
+            .then((response) => response.data)
+            .catch((error) => {
+                console.error('Error fetching dashboard data:', error)
+                throw error
+            })
+    }
+
+    const fetchInsights = async () => {
+        const [shipmetOvertime, costOvertime, itemsOvertime, weightOvertime] = await Promise.all([
+            fetch('/insights/shipment-overtime'),
+            fetch('/insights/cost-overtime'),
+            fetch('/insights/items-overtime'),
+            fetch('/insights/weight-overtime'),
+        ])
+        setInsights({
+            shipmetOvertime,
+            costOvertime,
+            itemsOvertime,
+            weightOvertime,
+        })
+    }
+
+    useEffect(() => {
+        fetchInsights()
+    }, [])
 
     useEffect(() => {
         document.documentElement.addEventListener('ColorSchemeChange', () => {
@@ -27,44 +107,29 @@ const Widgets = (props) => {
                     widgetChartRef2.current.update()
                 })
             }
-        })
-    }, [widgetChartRef1, widgetChartRef2])
 
-    const widgetData = [
-        {
-            color: 'primary',
-            value: (
-                <>
-                    95%
-                </>
-            ),
-            title: 'Shipments',
-            chartRef: widgetChartRef1,
-            pointColor: getStyle('--cui-primary'),
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            data: [65, 59, 84, 84, 51, 55, 40],
-            yScale: { min: 30, max: 89 },
-        },
-        {
-            color: 'info',
-            value: (
-                <>
-                    10%{' '}
-                </>
-            ),
-            title: 'Average Cost',
-            chartRef: widgetChartRef2,
-            pointColor: getStyle('--cui-info'),
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            data: [1334, 18545, 9454, 1447, 34444, 2442, 1441],
-            yScale: { min: -9, max: 39 },
-        },
-    ]
+            if (widgetChartRef3.current) {
+                setTimeout(() => {
+                    widgetChartRef3.current.data.datasets[0].pointBackgroundColor =
+                        getStyle('--cui-info')
+                    widgetChartRef3.current.update()
+                })
+            }
+
+            if (widgetChartRef4.current) {
+                setTimeout(() => {
+                    widgetChartRef4.current.data.datasets[0].pointBackgroundColor =
+                        getStyle('--cui-info')
+                    widgetChartRef4.current.update()
+                })
+            }
+        })
+    }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, widgetChartRef4])
 
     return (
         <CRow className={props.className} xs={{ gutter: 4 }}>
             {widgetData.map((widget, index) => (
-                <CCol key={index} sm={6} xl={3}>
+                <CCol key={index} sm={6} xl={4}>
                     <CWidgetStatsA
                         color={widget.color}
                         value={widget.value}
