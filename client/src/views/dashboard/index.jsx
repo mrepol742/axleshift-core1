@@ -8,6 +8,10 @@ import {
     CWidgetStatsA,
     CWidgetStatsF,
     CButton,
+    CModal,
+    CModalHeader,
+    CModalTitle,
+    CModalBody,
 } from '@coreui/react'
 import { getStyle } from '@coreui/utils'
 import { CChartLine } from '@coreui/react-chartjs'
@@ -33,8 +37,8 @@ const Dashboard = () => {
             title: 'Shipments',
             chartRef: widgetChartRef1,
             pointColor: getStyle('--cui-primary'),
-            labels: insights.shipmetOvertime?.labels || [],
-            data: insights.shipmetOvertime?.data || [],
+            labels: insights.shipmetOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: insights.shipmetOvertime?.data || [0, 0, 0, 0, 0, 0],
             yScale: { min: -9, max: 39 },
         },
         {
@@ -43,8 +47,8 @@ const Dashboard = () => {
             title: 'Average Cost',
             chartRef: widgetChartRef2,
             pointColor: getStyle('--cui-info'),
-            labels: insights.costOvertime?.labels || [],
-            data: insights.costOvertime?.data || [],
+            labels: insights.costOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: insights.costOvertime?.data || [0, 0, 0, 0, 0, 0],
             yScale: { min: -9, max: 39 },
         },
         {
@@ -53,8 +57,8 @@ const Dashboard = () => {
             title: 'Items',
             chartRef: widgetChartRef3,
             pointColor: getStyle('--cui-warning'),
-            labels: insights.itemsOvertime?.labels || [],
-            data: insights.itemsOvertime?.data || [],
+            labels: insights.itemsOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: insights.itemsOvertime?.data || [0, 0, 0, 0, 0, 0],
             yScale: { min: -9, max: 39 },
         },
         {
@@ -63,8 +67,8 @@ const Dashboard = () => {
             title: 'Weight',
             chartRef: widgetChartRef4,
             pointColor: getStyle('--cui-danger'),
-            labels: insights.weightOvertime?.labels || [],
-            data: insights.weightOvertime?.data || [],
+            labels: insights.weightOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: insights.weightOvertime?.data || [0, 0, 0, 0, 0, 0],
             yScale: { min: -9, max: 39 },
         },
     ]
@@ -134,6 +138,8 @@ const Dashboard = () => {
         })
     }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, widgetChartRef4])
 
+    const [visible, setVisible] = useState(false)
+
     return (
         <>
             <CRow className="mb-4" xs={{ gutter: 4 }}>
@@ -144,7 +150,7 @@ const Dashboard = () => {
                             value={widget.value}
                             title={widget.title}
                             action={
-                                <CButton className="btn ">
+                                <CButton className="btn" onClick={() => setVisible(true)}>
                                     <FontAwesomeIcon
                                         icon={faEllipsisVertical}
                                         size="lg"
@@ -220,7 +226,7 @@ const Dashboard = () => {
                 ))}
             </CRow>
             <CRow>
-                <CCol xs={6}>
+                <CCol xs={6} md={4}>
                     <CWidgetStatsF
                         icon={<FontAwesomeIcon icon={faChartPie} />}
                         className="mb-3"
@@ -229,7 +235,7 @@ const Dashboard = () => {
                         value="50%"
                     />
                 </CCol>
-                <CCol xs={6}>
+                <CCol xs={6} md={4}>
                     <CWidgetStatsF
                         icon={<FontAwesomeIcon icon={faChartPie} />}
                         className="mb-3"
@@ -238,7 +244,7 @@ const Dashboard = () => {
                         value="50%"
                     />
                 </CCol>
-                <CCol xs={6}>
+                <CCol xs={6} md={4}>
                     <CWidgetStatsF
                         icon={<FontAwesomeIcon icon={faChartPie} />}
                         className="mb-3"
@@ -247,7 +253,7 @@ const Dashboard = () => {
                         value="50%"
                     />
                 </CCol>
-                <CCol xs={6}>
+                <CCol xs={6} md={4}>
                     <CWidgetStatsF
                         icon={<FontAwesomeIcon icon={faChartPie} />}
                         className="mb-3"
@@ -256,7 +262,7 @@ const Dashboard = () => {
                         value="50%"
                     />
                 </CCol>
-                <CCol xs={6}>
+                <CCol xs={6} md={4}>
                     <CWidgetStatsF
                         icon={<FontAwesomeIcon icon={faChartPie} />}
                         className="mb-3"
@@ -265,7 +271,7 @@ const Dashboard = () => {
                         value="50%"
                     />
                 </CCol>
-                <CCol xs={6}>
+                <CCol xs={6} md={4}>
                     <CWidgetStatsF
                         icon={<FontAwesomeIcon icon={faChartPie} />}
                         className="mb-3"
@@ -275,6 +281,19 @@ const Dashboard = () => {
                     />
                 </CCol>
             </CRow>
+
+            <CModal
+                alignment="center"
+                scrollable
+                visible={visible}
+                onClose={() => setVisible(false)}
+                aria-labelledby=""
+            >
+                <CModalHeader>
+                    <CModalTitle id="">Test</CModalTitle>
+                </CModalHeader>
+                <CModalBody>Hello World</CModalBody>
+            </CModal>
         </>
     )
 }
