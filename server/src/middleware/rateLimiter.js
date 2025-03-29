@@ -15,7 +15,11 @@ const limitedRequestRoute = [
     '/api/v1/addresses/new',
     '/api/v1/addresses/edit',
 ]
-const exteralRequestRoute = [
+export const exteralRequestRoute = [
+    '/api/v1/insights/shipment-overtime/',
+    '/api/v1/insights/cost-overtime/',
+    '/api/v1/insights/items-overtime/',
+    '/api/v1/insights/weight-overtime/',
     '/api/v1/freight/',
     '/api/v1/freight/:id',
     '/api/v1/invoices/',
@@ -25,7 +29,7 @@ const exteralRequestRoute = [
 ]
 
 const rateLimiter = (req, res, next) => {
-    const path = req.path
+    const path = req.originalUrl
     if (
         exludeRoute.includes(path) ||
         /^\/u\/.*\.png$/.test(path) ||
@@ -62,16 +66,12 @@ const rateLimiter = (req, res, next) => {
 }
 
 const getRateLimit = (req) => {
-    let path = req.path
+    let path = req.originalUrl
     path = path.endsWith('/') ? path.slice(0, -1) : path
+
     if (limitedRequestRoute.includes(path)) return 5
     const authHeader = req.headers['authorization']
-    const isAllowed = exteralRequestRoute.some((route) => {
-        if (route === path) return true
-        const regex = new RegExp(`^${route.replace(/:\w+/, '\\w+')}$`)
-        return regex.test(path)
-    })
-    if (isAllowed || (authHeader && /^Bearer\score1_/.test(authHeader)))
+    if (authHeader && /^core1_[0-9a-f]{16}$/.test(authHeader))
         return API_EXTERNAL_RATE_LIMIT
     return API_RATE_LIMIT
 }
