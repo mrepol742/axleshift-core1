@@ -71,8 +71,7 @@ const getRateLimit = (req) => {
 
     if (limitedRequestRoute.includes(path)) return 5
     const authHeader = req.headers['authorization']
-    if (authHeader && /^core1_[0-9a-f]{16}$/.test(authHeader))
-        return API_EXTERNAL_RATE_LIMIT
+    if (authHeader && /^core1_[0-9a-f]{16}$/.test(authHeader)) return API_EXTERNAL_RATE_LIMIT
     return API_RATE_LIMIT
 }
 

@@ -23,7 +23,7 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
  */
 const Dashboard = auth(lazy(() => import('./views/dashboard')))
 const Shipment = auth(lazy(() => import('./views/shipment')))
-const ShipmentInfo = auth(lazy(() => import('./views/shipment/[id]')))
+const ShipmentInfo = auth(lazy(() => import('./views/shipment/[id]/')))
 const Search = auth(lazy(() => import('./views/search')))
 const Schedules = auth(lazy(() => import('./views/schedules')))
 

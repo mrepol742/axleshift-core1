@@ -128,11 +128,9 @@ router.post('/find/', [recaptcha, auth], async (req, res) => {
         })
 
         if (!address)
-            return res
-                .status(404)
-                .json({
-                    error: 'Unable to auto fill the necessary form, manual intervention required.',
-                })
+            return res.status(404).json({
+                error: 'Unable to auto fill the necessary form, manual intervention required.',
+            })
         return res.status(200).json(address)
     } catch (err) {
         logger.error(err)
