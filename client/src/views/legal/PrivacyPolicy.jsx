@@ -15,7 +15,7 @@ const PrivacyPolicy = () => {
                                 Privacy Policy
                             </h1>
                             <p className="text-muted">
-                                At Axleshift Core 1, your privacy is important to us. This Privacy
+                                At Axleshift, your privacy is important to us. This Privacy
                                 Policy outlines how we collect, use, and protect your information.
                                 <br />
                                 Last Updated: Sun, March 16 2025

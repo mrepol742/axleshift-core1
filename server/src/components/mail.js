@@ -104,7 +104,7 @@ const body = (subject, email, name, message) => {
 This email was intended for ${email}. This is a system generated message, please do not reply to this email.</p>
     </div>
     <div class="footer">
-        <p>&copy; 2025 Axleshift Core 1. All rights reserved.</p>
+        <p>&copy; 2025 Axleshift. All rights reserved.</p>
     </div>
     </div>
         </div>

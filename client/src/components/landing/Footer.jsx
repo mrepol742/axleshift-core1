@@ -9,7 +9,7 @@ const Footer = () => {
         <CContainer fluid>
             <footer className="p-2 p-md-5 ">
                 <div className="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-                    <p>Axleshift Core 1 © {new Date().getFullYear()}</p>
+                    <p>Axleshift © {new Date().getFullYear()}</p>
                     <ul className="list-unstyled d-flex">
                         <li className="ms-3">
                             <span
