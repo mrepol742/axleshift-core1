@@ -103,15 +103,12 @@ const MessageBox = ({
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                borderTopRightRadius: isMobile ? '0' : '12px',
-                borderBottomRightRadius: isMobile ? '0' : '12px',
-                borderBottomLeftRadius: isMobile ? '12px' : '0',
                 height: isMobile ? '100%' : 'auto',
             }}
         >
             {selectedUser ? (
                 <div className="d-flex flex-column justify-content-between h-100">
-                    <div className="d-flex align-items-center p-2 bg-body-secondary rounded-top">
+                    <div className="d-flex align-items-center px-2 py-1 m-1 rounded bg-body-secondary">
                         {showBackButton && (
                             <Button variant="link" onClick={handleBackToList}>
                                 <FontAwesomeIcon icon={faArrowLeft} />
@@ -147,7 +144,7 @@ const MessageBox = ({
                     </div>
 
                     <div
-                        className="flex-grow-1 border-start border-end p-3"
+                        className="flex-grow-1 p-3"
                         style={{
                             overflowY: 'auto',
                         }}
@@ -195,9 +192,9 @@ const MessageBox = ({
                         <InputGroup className="mt-2">
                             <FormControl
                                 as="textarea"
-                                placeholder="Type message..."
+                                placeholder="Type a message..."
                                 value={newMessage}
-                                className="border-primary border-2"
+                                className="border-primary border"
                                 onChange={(e) => setNewMessage(e.target.value)}
                                 style={{
                                     padding: '10px',

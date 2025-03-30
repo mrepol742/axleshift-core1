@@ -20,6 +20,7 @@ import {
     faBoxesPacking,
     faQuestion,
     faUser,
+    faFolder,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -55,6 +56,13 @@ const _nav = [
         to: '/track',
         role_exclude: [],
         icon: <FontAwesomeIcon icon={faLocationDot} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Documents',
+        to: '/documents',
+        role_exclude: [],
+        icon: <FontAwesomeIcon icon={faFolder} className="nav-icon" />,
     },
     {
         component: CNavTitle,

@@ -5,12 +5,10 @@ import PropTypes from 'prop-types'
 const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
     return (
         <div
+            className="border-end"
             style={{
                 width: isMobile ? '100%' : '30%',
                 overflowY: 'auto',
-                borderTopLeftRadius: '12px',
-                borderBottomLeftRadius: isMobile ? '0' : '12px',
-                borderTopRightRadius: isMobile ? '12px' : '0',
                 height: isMobile ? '100%' : 'auto',
             }}
         >
@@ -18,14 +16,14 @@ const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
                 <div
                     key={thread.sender_id}
                     onClick={() => handleSelectUser(thread)}
-                    className={`${selectedUser?.ref === thread.sender_id && 'bg-body-secondary fw-bold'} d-flex align-items-center px-3 py-2 border-bottom`}
+                    className={`${selectedUser?.sender_id === thread.sender_id && 'bg-body-secondary'} d-flex align-items-center px-3 py-2 border-bottom`}
                     style={{
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                     }}
                 >
                     <div
-                        className="bg-primary fw-bold rounded-pill me-3 d-flex justify-content-center align-items-center text-white"
+                        className="bg-primary rounded-pill me-3 d-flex justify-content-center align-items-center text-white"
                         style={{
                             width: '36px',
                             height: '36px',
@@ -34,7 +32,10 @@ const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
                         {thread.sender_id.slice(0, 1).toUpperCase()}
                     </div>
                     <div className="flex-grow-1">
-                        <div className="fw-bold" style={{ fontSize: '14px' }}>
+                        <div
+                            className={`${selectedUser?.sender_id === thread.sender_id && 'fw-bold'}`}
+                            style={{ fontSize: '14px' }}
+                        >
                             {thread.sender_id.slice(0, 6).toUpperCase()}
                         </div>
                         <div style={{ fontSize: '11px' }} className="text-muted">
@@ -57,7 +58,7 @@ Inbox.propTypes = {
         }),
     ).isRequired,
     selectedUser: PropTypes.shape({
-        ref: PropTypes.string,
+        sender_id: PropTypes.string,
     }),
     handleSelectUser: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,

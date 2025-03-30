@@ -35,6 +35,8 @@ const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const BookNow = auth(lazy(() => import('./views/book-now')))
 
+const Documents = auth(lazy(() => import('./views/documents')))
+
 const Address = auth(lazy(() => import('./views/my-addresses')))
 const NewAddress = auth(lazy(() => import('./views/my-addresses/New')))
 const ViewAddress = auth(lazy(() => import('./views/my-addresses/View')))
@@ -76,6 +78,7 @@ const routes = [
     { path: '/shipment/:id', name: 'Shipment Info', element: ShipmentInfo },
 
     { path: '/search', name: 'Search Shipment', element: Search },
+    { path: '/documents', name: 'Documents', element: Documents },
     { path: '/schedules', name: 'Schedules', element: Schedules },
 
     { path: '/customer', name: 'Customer Service', element: SupportCustomerService },
