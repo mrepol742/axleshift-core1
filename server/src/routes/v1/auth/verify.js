@@ -33,7 +33,7 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
                     const value = JSON.parse(values[index])
                     if (
                         value &&
-                        /^axleshift-core1:user-id-[a-f0-9]{24}$/.test(key) &&
+                        /^axleshift-core1:otp-[a-f0-9]{24}$/.test(key) &&
                         value.user_id === req.user._id.toString()
                     ) {
                         theOtp = value
@@ -49,7 +49,7 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
         if (Date.now() - past > ten) return res.status(200).json({ error: 'Expired OTP' })
 
         await Promise.all([
-            remCache(`user-id-${theOtp.user_id}`),
+            remCache(`otp-${theOtp.user_id}`),
             (async () => {
                 try {
                     const db = await database()
@@ -85,7 +85,7 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
 
 router.post('/otp/new', [recaptcha, auth], async function (req, res, next) {
     try {
-        const theOtp = await getCache(`user-id-${req.user._id}`)
+        const theOtp = await getCache(`otp-${req.user._id}`)
         if (!theOtp) return res.status(401).json({ error: 'Unauthorized' })
         const past = new Date(theOtp.created_at)
 

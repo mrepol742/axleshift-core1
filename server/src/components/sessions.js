@@ -41,6 +41,9 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
 
 export const getUser = async (cachedSession, sessionToken) => {
     try {
+        const cachedUser = await getCache(`user-id-${cachedSession.user_id}`)
+        if (cachedUser) return cachedUser
+
         const db = await database()
         const user = await db.collection('users').findOne(
             { _id: new ObjectId(cachedSession.user_id) },
@@ -61,6 +64,7 @@ export const getUser = async (cachedSession, sessionToken) => {
                 },
             },
         )
+        await setCache(`user-id-${user._id.toString()}`, user)
         return user
     } catch (e) {
         logger.error(e)

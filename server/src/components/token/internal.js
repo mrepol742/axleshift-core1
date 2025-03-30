@@ -34,7 +34,7 @@ const knownClients = [
 /* Redis naming prefix
  * internal - for internal session
  * external - for api access tokens
- * user-id - for otp value
+ * otp - for otp value
  */
 
 const internal = async (req, res, next) => {
@@ -79,7 +79,7 @@ const internal = async (req, res, next) => {
 
     if (session.active !== true || !theUser.email_verify_at) {
         if (req.path === '/otp' || req.path === '/otp/new') return next()
-        const theOtp = await getCache(`user-id-${req.user._id.toString()}`)
+        const theOtp = await getCache(`otp-${req.user._id.toString()}`)
         if (!theOtp) sendOTP(req)
         return res
             .status(200)
