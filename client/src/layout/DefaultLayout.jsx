@@ -20,6 +20,7 @@ import { useUserProvider } from '../components/UserProvider'
 import parseTimestamp from '../utils/Timestamp'
 import database from '../firebase'
 import { collection, addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
+import FloatingChat from '../components/FloatingChat'
 
 const DefaultLayout = () => {
     const { toasts, addToast } = useToast()
@@ -114,6 +115,11 @@ const DefaultLayout = () => {
                     </div>
                 ))}
             </div>
+            {user.role === 'user' && (
+                <div className="position-fixed bottom-0 end-0 p-3" style={{ zIndex: 2050 }}>
+                    <FloatingChat />
+                </div>
+            )}
         </div>
     )
 }

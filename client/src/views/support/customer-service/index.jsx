@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { CCard, CSpinner } from '@coreui/react'
+import PropTypes from 'prop-types'
 import database from '../../../firebase'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { useUserProvider } from '../../../components/UserProvider'
 import Inbox from './Inbox'
 import MessageBox from './MessageBox'
 
-const Messages = () => {
+const Messages = ({ float }) => {
     const [loading, setLoading] = useState(true)
     const [selectedUser, setselectedUser] = useState(null)
     const [isMobile, setIsMobile] = useState(false)
@@ -17,6 +18,7 @@ const Messages = () => {
 
     useEffect(() => {
         if (!user._id) return
+        if (user && !selectedUser && float) setselectedUser({ id: user._id })
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -87,14 +89,16 @@ const Messages = () => {
                         flexDirection: isMobile ? 'column' : 'row',
                     }}
                 >
-                    {user?.role !== 'user' && (!isMobile || (isMobile && showUserList)) && (
-                        <Inbox
-                            threadsID={threadsID}
-                            selectedUser={selectedUser}
-                            handleSelectUser={handleSelectUser}
-                            isMobile={isMobile}
-                        />
-                    )}
+                    {user?.role !== 'user' &&
+                        (!isMobile || (isMobile && showUserList)) &&
+                        !float && (
+                            <Inbox
+                                threadsID={threadsID}
+                                selectedUser={selectedUser}
+                                handleSelectUser={handleSelectUser}
+                                isMobile={isMobile}
+                            />
+                        )}
 
                     {(user?.role === 'user' || !isMobile || (isMobile && !showUserList)) && (
                         <MessageBox
@@ -114,3 +118,7 @@ const Messages = () => {
 }
 
 export default Messages
+
+Messages.propTypes = {
+    float: PropTypes.bool,
+}
