@@ -18,6 +18,8 @@ import {
     faPlus,
     faGlobe,
     faBoxesPacking,
+    faQuestion,
+    faUser,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -109,14 +111,21 @@ const _nav = [
     {
         component: CNavTitle,
         name: 'Support',
-        role_exclude: ['user', 'staff'],
+        role_exclude: [],
     },
     {
         component: CNavItem,
         name: 'Customer Service',
         to: '/customer',
-        role_exclude: ['user', 'staff'],
-        icon: <FontAwesomeIcon icon={faHeadset} className="nav-icon" />,
+        role_exclude: [],
+        icon: <FontAwesomeIcon icon={faUser} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'FAQ',
+        to: '/faq',
+        role_exclude: [],
+        icon: <FontAwesomeIcon icon={faQuestion} className="nav-icon" />,
     },
 ]
 

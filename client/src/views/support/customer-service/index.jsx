@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { CCard, CButton, CSpinner } from '@coreui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTooth, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { CCard, CSpinner } from '@coreui/react'
 import database from '../../../firebase'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { useUserProvider } from '../../../components/UserProvider'
@@ -12,12 +10,13 @@ const Messages = () => {
     const [loading, setLoading] = useState(true)
     const [selectedUser, setselectedUser] = useState(null)
     const [isMobile, setIsMobile] = useState(false)
-    const [showPatientList, setShowPatientList] = useState(true)
+    const [showUserList, setshowUserList] = useState(true)
     const [threadsID, setThreadsID] = useState([])
     const { user } = useUserProvider()
     const messagesRef = collection(database, 'messages')
 
     useEffect(() => {
+        if (!user._id) return
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -46,29 +45,19 @@ const Messages = () => {
         return () => {
             window.removeEventListener('resize', checkMobile), unsubscribe()
         }
-    }, [])
+    }, [user])
 
     const handleSelectUser = (patient) => {
         setselectedUser(patient)
-
-        // const updatedPatients = patients.map((p) =>
-        //     p.id === patient.id ? { ...p, unread: false } : p,
-        // )
-        // setPatients(updatedPatients)
-
         if (isMobile) {
-            setShowPatientList(false)
+            setshowUserList(false)
         }
     }
 
     const handleBackToList = () => {
         if (isMobile) {
-            setShowPatientList(true)
+            setshowUserList(true)
         }
-    }
-
-    const handleNewMessage = () => {
-        alert('New message button clicked - This would open a new message form')
     }
 
     if (loading)
@@ -89,16 +78,16 @@ const Messages = () => {
         )
 
     return (
-        <div>
+        <div className="mb-3">
             <CCard>
                 <div
-                    className="d-flex gap-3"
+                    className="d-flex"
                     style={{
                         height: isMobile ? 'calc(100vh - 180px)' : '75vh',
                         flexDirection: isMobile ? 'column' : 'row',
                     }}
                 >
-                    {user?.role !== 'patient' && (!isMobile || (isMobile && showPatientList)) && (
+                    {user?.role !== 'user' && (!isMobile || (isMobile && showUserList)) && (
                         <Inbox
                             threadsID={threadsID}
                             selectedUser={selectedUser}
@@ -107,15 +96,11 @@ const Messages = () => {
                         />
                     )}
 
-                    {(user?.role === 'patient' || !isMobile || (isMobile && !showPatientList)) && (
+                    {(user?.role === 'user' || !isMobile || (isMobile && !showUserList)) && (
                         <MessageBox
                             messagesRef={messagesRef}
                             selectedUser={
-                                selectedUser
-                                    ? selectedUser
-                                    : user.role === 'user'
-                                      ? user
-                                      : null
+                                selectedUser ? selectedUser : user.role === 'user' ? user : null
                             }
                             handleBackToList={handleBackToList}
                             isMobile={isMobile}

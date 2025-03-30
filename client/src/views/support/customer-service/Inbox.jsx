@@ -1,13 +1,12 @@
 import React from 'react'
 import parseTimestamp from '../../../utils/Timestamp'
+import PropTypes from 'prop-types'
 
 const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
     return (
         <div
             style={{
                 width: isMobile ? '100%' : '30%',
-                borderRight: isMobile ? 'none' : '1px solid #c2d68a',
-                borderBottom: isMobile ? '1px solid #c2d68a' : 'none',
                 overflowY: 'auto',
                 borderTopLeftRadius: '12px',
                 borderBottomLeftRadius: isMobile ? '0' : '12px',
@@ -19,15 +18,10 @@ const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
                 <div
                     key={thread.id}
                     onClick={() => handleSelectUser(thread)}
-                    className="d-flex align-items-center px-3 py-2"
+                    className={`${selectedUser?.id === thread.id && 'bg-body-secondary fw-bold'} d-flex align-items-center px-3 py-2 border-bottom`}
                     style={{
                         cursor: 'pointer',
-                        fontWeight: selectedUser?.id === thread.id ? 'bold' : 'normal',
-                        backgroundColor:
-                            selectedUser?.id === thread.id ? '#e0f19c80' : 'transparent',
-                        borderLeft: thread.unread ? '3px solid #55785E' : '3px solid transparent',
                         transition: 'all 0.2s ease',
-                        borderBottom: '1px solid #d9e6c480',
                     }}
                 >
                     <div
@@ -40,11 +34,10 @@ const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
                         {thread.id.slice(0, 1).toUpperCase()}
                     </div>
                     <div className="flex-grow-1">
-                        <div className="fw-bold" style={{ color: '#2d4739', fontSize: '14px' }}>
+                        <div className="fw-bold" style={{ fontSize: '14px' }}>
                             {thread.id.slice(0, 6).toUpperCase()}
                         </div>
-                        <div style={{ fontSize: '12px', color: '#55785E' }}></div>
-                        <div style={{ fontSize: '11px', color: 'gray' }}>
+                        <div style={{ fontSize: '11px' }} className="text-muted">
                             {parseTimestamp(thread.timestamp)}
                         </div>
                     </div>
@@ -55,3 +48,17 @@ const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
 }
 
 export default Inbox
+
+Inbox.propTypes = {
+    threadsID: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            timestamp: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+        }),
+    ).isRequired,
+    selectedUser: PropTypes.shape({
+        id: PropTypes.string,
+    }),
+    handleSelectUser: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool.isRequired,
+}

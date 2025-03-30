@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Button, InputGroup, FormControl, OverlayTrigger, Popover } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane, faPlusCircle, faArrowLeft, faTooth } from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane, faPlusCircle, faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons'
 import { addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
-import { useSelector } from 'react-redux'
+import { useUserProvider } from '../../../components/UserProvider'
 import parseTimestamp from '../../../utils/Timestamp'
+import PropTypes from 'prop-types'
 
 const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, showBackButton }) => {
     const [messagesNew, setMessagesNew] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [showPresets, setShowPresets] = useState(false)
     const messageA = React.useRef(null)
-    const user = useSelector((state) => state.user)
+    const { user } = useUserProvider()
 
     useEffect(() => {
         if (!selectedUser) return
@@ -102,20 +103,10 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
             }}
         >
             {selectedUser ? (
-                <div
-                className="d-flex flex-column justify-content-between h-100"
-                 
-                >
-                    <div className="d-flex align-items-center p-2 bg-secondary rounded-top">
+                <div className="d-flex flex-column justify-content-between h-100">
+                    <div className="d-flex align-items-center p-2 bg-body-secondary rounded-top">
                         {showBackButton && (
-                            <Button
-                                variant="link"
-                                onClick={handleBackToList}
-                                style={{
-                                    color: '#2d4739',
-                                    padding: '0 10px 0 0',
-                                }}
-                            >
+                            <Button variant="link" onClick={handleBackToList}>
                                 <FontAwesomeIcon icon={faArrowLeft} />
                             </Button>
                         )}
@@ -149,10 +140,9 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
                     </div>
 
                     <div
-                        className="d-flex flex-grow-1 border-start border-end"
+                        className="flex-grow-1 border-start border-end p-3"
                         style={{
                             overflowY: 'auto',
-                            padding: '15px 10px',
                         }}
                     >
                         {messagesNew.map((msg, index) => (
@@ -164,56 +154,16 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
                                 }}
                             >
                                 <div
+                                    className={`${role(msg) ? 'bg-primary' : 'bg-body-secondary'} text-white rounded p-2`}
                                     style={{
                                         display: 'inline-block',
-                                        padding: '10px 14px',
-                                        borderRadius: '12px',
-                                        backgroundColor: role(msg) ? '#4285f4' : '#fff',
-                                        border: role(msg) ? 'none' : '1px solid #4285f4',
                                         maxWidth: isMobile ? '85%' : '80%',
                                         boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                                        color: '#2d4739',
                                         position: 'relative',
                                         wordBreak: 'break-word',
                                     }}
                                 >
-                                    {/* {msg.type === 'appointment' && (
-                                        <div
-                                            style={{
-                                                backgroundColor: '#55785E',
-                                                color: 'white',
-                                                padding: '1px 6px',
-                                                borderRadius: '6px',
-                                                fontSize: '11px',
-                                                marginBottom: '6px',
-                                                display: 'inline-block',
-                                            }}
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faCalendarAlt}
-                                                className="me-1"
-                                            />
-                                            APPOINTMENT
-                                        </div>
-                                    )}
-                                    {msg.type === 'confirmation' && (
-                                        <div
-                                            style={{
-                                                backgroundColor: '#55785E',
-                                                color: 'white',
-                                                padding: '1px 6px',
-                                                borderRadius: '6px',
-                                                fontSize: '11px',
-                                                marginBottom: '6px',
-                                                display: 'inline-block',
-                                            }}
-                                        >
-                                            <FontAwesomeIcon icon={faBell} className="me-1" />
-                                            CONFIRMATION
-                                        </div>
-                                    )} */}
                                     <div style={{ fontSize: isMobile ? '13px' : '14px' }}>
-                                        {JSON.stringify(msg)}
                                         {msg.message}
                                     </div>
                                 </div>
@@ -234,7 +184,7 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
                         <div ref={messageA} />
                     </div>
 
-                    <div className="mt-2" style={{ borderTop: '1px solid #f0f0f0' }}>
+                    <div className="mt-2">
                         <InputGroup className="mt-2">
                             <FormControl
                                 as="textarea"
@@ -281,23 +231,15 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
             ) : (
                 <div className="d-flex justify-content-center align-items-center h-100 flex-column">
                     <div
+                        className="bg-primary rounded-pill d-flex justify-content-center align-items-center mb-3"
                         style={{
                             width: '70px',
                             height: '70px',
-                            backgroundColor: '#e0f19c80',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginBottom: '15px',
-                            border: '1px solid #c2d68a',
                         }}
                     >
-                        <FontAwesomeIcon icon={faTooth} size="2x" style={{ color: '#55785E' }} />
+                        <FontAwesomeIcon icon={faUser} size="2x" />
                     </div>
-                    <p style={{ color: '#55785E', fontSize: '16px' }}>
-                        Select a user to view conversation
-                    </p>
+                    <p>Select a user to view conversation</p>
                 </div>
             )}
         </div>
@@ -305,3 +247,13 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
 }
 
 export default MessageBox
+
+MessageBox.propTypes = {
+    messagesRef: PropTypes.object.isRequired,
+    selectedUser: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+    }),
+    handleBackToList: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool.isRequired,
+    showBackButton: PropTypes.bool.isRequired,
+}

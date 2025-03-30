@@ -28,6 +28,8 @@ const Search = auth(lazy(() => import('./views/search')))
 const Schedules = auth(lazy(() => import('./views/schedules')))
 
 const SupportCustomerService = auth(lazy(() => import('./views/support/customer-service')))
+const Faq = auth(lazy(() => import('./views/support/Faq')))
+
 const Account = auth(lazy(() => import('./views/account')))
 const _Security = auth(lazy(() => import('./views/account/Security')))
 
@@ -77,6 +79,7 @@ const routes = [
     { path: '/schedules', name: 'Schedules', element: Schedules },
 
     { path: '/customer', name: 'Customer Service', element: SupportCustomerService },
+    { path: '/faq', name: 'Frequently Ask Question', element: Faq },
 
     { path: '/account', name: 'Account', element: Account },
     { path: '/account/security', name: 'Security', element: _Security },
