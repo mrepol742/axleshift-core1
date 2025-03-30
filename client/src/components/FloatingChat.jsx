@@ -13,9 +13,9 @@ const FloatingChat = () => {
             {isOpen && (
                 <div
                     className="position-fixed bottom-0 translate-middle-y start-50 bg-white shadow rounded p-3"
-                    style={{ width: '375px', height: '400px' }}
+                    style={{ width: '380px', height: '400px' }}
                 >
-                    <Support float="true" />
+                    <Support float="true" isOpen={isOpen} />
                 </div>
             )}
         </div>

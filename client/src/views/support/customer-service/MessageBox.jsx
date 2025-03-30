@@ -7,7 +7,14 @@ import { useUserProvider } from '../../../components/UserProvider'
 import parseTimestamp from '../../../utils/Timestamp'
 import PropTypes from 'prop-types'
 
-const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, showBackButton }) => {
+const MessageBox = ({
+    isOpen,
+    messagesRef,
+    selectedUser,
+    handleBackToList,
+    isMobile,
+    showBackButton,
+}) => {
     const [messagesNew, setMessagesNew] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [showPresets, setShowPresets] = useState(false)
@@ -19,7 +26,7 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const msgs = snapshot.docs
                 .map((doc) => ({ id: doc.id, ...doc.data() }))
-                .filter((msg) => msg.sender_id === selectedUser.id)
+                .filter((msg) => msg.sender_id === selectedUser.sender_id)
             setMessagesNew(msgs)
         })
         return () => unsubscribe()
@@ -53,7 +60,7 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
                 message: newMessage,
                 role: user.role,
                 timestamp: Date.now(),
-                sender_id: selectedUser.id,
+                sender_id: selectedUser.sender_id,
             })
             setNewMessage('')
         }
@@ -117,7 +124,7 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
                                 height: '40px',
                             }}
                         >
-                            {selectedUser.id.slice(0, 1).toUpperCase()}
+                            {selectedUser.sender_id.slice(0, 1).toUpperCase()}
                         </div>
                         <div>
                             <h4
@@ -126,7 +133,7 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
                                     fontSize: isMobile ? '16px' : '18px',
                                 }}
                             >
-                                {selectedUser.id.slice(0, 6).toUpperCase()}
+                                {selectedUser.sender_id.slice(0, 6).toUpperCase()}
                             </h4>
                             <div
                                 className="text-muted"
@@ -134,7 +141,7 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
                                     fontSize: '13px',
                                 }}
                             >
-                                {selectedUser.id}
+                                {selectedUser.sender_id}
                             </div>
                         </div>
                     </div>
@@ -202,20 +209,22 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
                                 }}
                             />
 
-                            <OverlayTrigger
-                                trigger="click"
-                                placement="top"
-                                overlay={presetsPopover}
-                                rootClose
-                            >
-                                <Button
-                                    style={{
-                                        height: isMobile ? '45px' : '45px',
-                                    }}
+                            {user.role === 'user' && (
+                                <OverlayTrigger
+                                    trigger="click"
+                                    placement="top"
+                                    overlay={presetsPopover}
+                                    rootClose
                                 >
-                                    <FontAwesomeIcon icon={faPlusCircle} />
-                                </Button>
-                            </OverlayTrigger>
+                                    <Button
+                                        style={{
+                                            height: isMobile ? '45px' : '45px',
+                                        }}
+                                    >
+                                        <FontAwesomeIcon icon={faPlusCircle} />
+                                    </Button>
+                                </OverlayTrigger>
+                            )}
 
                             <Button
                                 style={{
@@ -249,9 +258,10 @@ const MessageBox = ({ messagesRef, selectedUser, handleBackToList, isMobile, sho
 export default MessageBox
 
 MessageBox.propTypes = {
+    isOpen: PropTypes.bool,
     messagesRef: PropTypes.object.isRequired,
     selectedUser: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        sender_id: PropTypes.string.isRequired,
     }),
     handleBackToList: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,

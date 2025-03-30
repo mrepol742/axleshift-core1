@@ -51,6 +51,10 @@ const DefaultLayout = () => {
     useEffect(() => {
         if (!user._id) return
         fetchNotifications()
+        Notification.requestPermission().then((permission) => {
+            if (permission !== 'granted')
+                addToast('Please allow notifications to receive updates', 'Notification')
+        })
 
         // const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
         //     const msgs = snapshot.docs

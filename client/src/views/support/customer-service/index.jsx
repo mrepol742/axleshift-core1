@@ -7,7 +7,7 @@ import { useUserProvider } from '../../../components/UserProvider'
 import Inbox from './Inbox'
 import MessageBox from './MessageBox'
 
-const Messages = ({ float }) => {
+const Messages = ({ float, isOpen }) => {
     const [loading, setLoading] = useState(true)
     const [selectedUser, setselectedUser] = useState(null)
     const [isMobile, setIsMobile] = useState(false)
@@ -18,7 +18,7 @@ const Messages = ({ float }) => {
 
     useEffect(() => {
         if (!user._id) return
-        if (user && !selectedUser && float) setselectedUser({ id: user._id })
+        if (user && !selectedUser && float) setselectedUser({ sender_id: user.ref })
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -85,7 +85,7 @@ const Messages = ({ float }) => {
                 <div
                     className="d-flex"
                     style={{
-                        height: isMobile ? 'calc(100vh - 180px)' : '75vh',
+                        height: isMobile ? 'calc(100vh - 180px)' : float ? '40vh' : '70vh',
                         flexDirection: isMobile ? 'column' : 'row',
                     }}
                 >
@@ -102,6 +102,7 @@ const Messages = ({ float }) => {
 
                     {(user?.role === 'user' || !isMobile || (isMobile && !showUserList)) && (
                         <MessageBox
+                            isOpen={isOpen}
                             messagesRef={messagesRef}
                             selectedUser={
                                 selectedUser ? selectedUser : user.role === 'user' ? user : null
@@ -121,4 +122,5 @@ export default Messages
 
 Messages.propTypes = {
     float: PropTypes.bool,
+    isOpen: PropTypes.bool,
 }
