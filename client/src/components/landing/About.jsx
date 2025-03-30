@@ -13,7 +13,7 @@ const About = () => {
                         ABOUT US
                     </span>
                     <h1 className="text-white" data-aos="zoom-out-up">
-                        Axleshift Core 1
+                        Axleshift
                     </h1>
                     <p className="lead text-white" data-aos="zoom-out-up">
                         We focus on enhancing the safety and efficiency of freight management

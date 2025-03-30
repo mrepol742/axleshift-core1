@@ -17,7 +17,7 @@ import {
 } from '@coreui/react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
-import { useToast } from '../../components/AppToastProvider'
+import { useToast } from '../../../components/AppToastProvider'
 
 const Receipt = () => {
     const { id } = useParams()

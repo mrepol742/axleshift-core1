@@ -1,126 +1,300 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 import {
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
-    CCol,
     CRow,
-    CSpinner,
-    CCardText,
-    CCardTitle,
+    CCol,
+    CDropdown,
+    CDropdownToggle,
+    CWidgetStatsA,
+    CWidgetStatsF,
+    CButton,
+    CModal,
+    CModalHeader,
+    CModalTitle,
+    CModalBody,
 } from '@coreui/react'
-import Masonry from 'react-masonry-css'
-import WidgetsDropdown from './Widgets'
-import AppPagination from '../../components/AppPagination'
-import { useToast } from '../../components/AppToastProvider'
-
-import AppSearch from '../../components/AppSearch'
-import ShipmentCard from './ShipmentCard'
+import { getStyle } from '@coreui/utils'
+import { CChartLine } from '@coreui/react-chartjs'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEllipsisVertical, faChartPie } from '@fortawesome/free-solid-svg-icons'
 
 const Dashboard = () => {
-    const [data, setData] = useState([])
-    const [currentPage, setCurrentPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(0)
-    const [loading, setLoading] = useState(true)
-    const { addToast } = useToast()
-    const navigate = useNavigate()
+    const widgetChartRef1 = useRef(null)
+    const widgetChartRef2 = useRef(null)
+    const widgetChartRef3 = useRef(null)
+    const widgetChartRef4 = useRef(null)
+    const [insights, setInsights] = useState({})
+    const calculateAverage = (data) => {
+        if (!data || data.length === 0) return 0
+        const sum = data.reduce((acc, value) => acc + value, 0)
+        return (sum / data.length).toFixed(2)
+    }
 
-    const fetchData = async (page) => {
-        axios
-            .post(`/freight`, { page })
-            .then((response) => {
-                setData(response.data.data)
-                setTotalPages(response.data.totalPages)
-            })
+    const widgetData = [
+        {
+            color: 'primary',
+            value: <>{calculateAverage(insights.shipmetOvertime?.data)}</>,
+            title: 'Shipments',
+            chartRef: widgetChartRef1,
+            pointColor: getStyle('--cui-primary'),
+            labels: insights.shipmetOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: insights.shipmetOvertime?.data || [0, 0, 0, 0, 0, 0],
+            yScale: { min: -9, max: 39 },
+        },
+        {
+            color: 'info',
+            value: <>{calculateAverage(insights.costOvertime?.data)}</>,
+            title: 'Average Cost',
+            chartRef: widgetChartRef2,
+            pointColor: getStyle('--cui-info'),
+            labels: insights.costOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: insights.costOvertime?.data || [0, 0, 0, 0, 0, 0],
+            yScale: { min: -9, max: 39 },
+        },
+        {
+            color: 'warning',
+            value: <>{calculateAverage(insights.itemsOvertime?.data)}</>,
+            title: 'Items',
+            chartRef: widgetChartRef3,
+            pointColor: getStyle('--cui-warning'),
+            labels: insights.itemsOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: insights.itemsOvertime?.data || [0, 0, 0, 0, 0, 0],
+            yScale: { min: -9, max: 39 },
+        },
+        {
+            color: 'danger',
+            value: <>{calculateAverage(insights.weightOvertime?.data)}</>,
+            title: 'Weight',
+            chartRef: widgetChartRef4,
+            pointColor: getStyle('--cui-danger'),
+            labels: insights.weightOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: insights.weightOvertime?.data || [0, 0, 0, 0, 0, 0],
+            yScale: { min: -9, max: 39 },
+        },
+    ]
+
+    const fetch = (url) => {
+        return axios
+            .get(url)
+            .then((response) => response.data)
             .catch((error) => {
-                const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
-                addToast(message, 'Submit failed!')
+                console.error('Error fetching dashboard data:', error)
+                throw error
             })
-            .finally(() => setLoading(false))
+    }
+
+    const fetchInsights = async () => {
+        const [shipmetOvertime, costOvertime, itemsOvertime, weightOvertime] = await Promise.all([
+            fetch('/insights/shipment-overtime'),
+            fetch('/insights/cost-overtime'),
+            fetch('/insights/items-overtime'),
+            fetch('/insights/weight-overtime'),
+        ])
+        setInsights({
+            shipmetOvertime,
+            costOvertime,
+            itemsOvertime,
+            weightOvertime,
+        })
     }
 
     useEffect(() => {
-        fetchData(currentPage)
-    }, [currentPage])
+        fetchInsights()
+    }, [])
 
-    if (loading)
-        return (
-            <div className="loading-overlay">
-                <CSpinner color="primary" variant="grow" />
-            </div>
-        )
+    useEffect(() => {
+        document.documentElement.addEventListener('ColorSchemeChange', () => {
+            if (widgetChartRef1.current) {
+                setTimeout(() => {
+                    widgetChartRef1.current.data.datasets[0].pointBackgroundColor =
+                        getStyle('--cui-primary')
+                    widgetChartRef1.current.update()
+                })
+            }
 
-    if (data.length == 0)
-        return (
-            <>
-                <div className="shipment-bg position-absolute top-0 start-0 w-100 h-100" />
-                <CRow className="justify-content-center my-5">
-                    <CCol md={7}>
-                        <div className="text-center">
-                            <h1 className="display-4 fw-bold">
-                                Welcome to
-                                <span className="text-primary d-block">Your Dashboard</span>
-                            </h1>
-                            <p className="lead">
-                                It looks like you haven&apos;t created any shipments yet. Let&apos;s
-                                get started!
-                            </p>
-                            <AppSearch className="mb-3" />
-                        </div>
-                        <CRow xs={{ cols: 1 }} sm={{ cols: 3 }}>
-                            <CCol onClick={(e) => navigate('/book-now')} className="mb-3">
-                                <h4>Ship Right Now</h4>
-                                <p>Create a new shipment and get started with our services.</p>
-                            </CCol>
-                            <CCol onClick={(e) => navigate('/support')} className="mb-3">
-                                <h4>Customer Support</h4>
-                                <p>
-                                    Get help with your shipments or learn more about our services.
-                                </p>
-                            </CCol>
-                            <CCol onClick={(e) => navigate('/learn-more')} className="mb-3">
-                                <h4>Learn More</h4>
-                                <p>Find out more about our services and how we can help you.</p>
-                            </CCol>
-                        </CRow>
-                    </CCol>
-                </CRow>
-            </>
-        )
+            if (widgetChartRef2.current) {
+                setTimeout(() => {
+                    widgetChartRef2.current.data.datasets[0].pointBackgroundColor =
+                        getStyle('--cui-info')
+                    widgetChartRef2.current.update()
+                })
+            }
+
+            if (widgetChartRef3.current) {
+                setTimeout(() => {
+                    widgetChartRef3.current.data.datasets[0].pointBackgroundColor =
+                        getStyle('--cui-info')
+                    widgetChartRef3.current.update()
+                })
+            }
+
+            if (widgetChartRef4.current) {
+                setTimeout(() => {
+                    widgetChartRef4.current.data.datasets[0].pointBackgroundColor =
+                        getStyle('--cui-info')
+                    widgetChartRef4.current.update()
+                })
+            }
+        })
+    }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, widgetChartRef4])
+
+    const [visible, setVisible] = useState(false)
 
     return (
-        <div>
-            <WidgetsDropdown className="mb-4" />
-
-            {/* <h4>Shipments</h4>
-            <Masonry
-                breakpointCols={{
-                    default: 4,
-                    1100: 3,
-                    700: 2,
-                    500: 1,
-                }}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column"
-            >
-                {data.map((item, index) => (
-                    <ShipmentCard key={index} shipment={item} />
+        <>
+            <CRow className="mb-4" xs={{ gutter: 4 }}>
+                {widgetData.map((widget, index) => (
+                    <CCol key={index} sm={6} xl={4}>
+                        <CWidgetStatsA
+                            color={widget.color}
+                            value={widget.value}
+                            title={widget.title}
+                            action={
+                                <CButton className="btn" onClick={() => setVisible(true)}>
+                                    <FontAwesomeIcon
+                                        icon={faEllipsisVertical}
+                                        size="lg"
+                                        className="text-white"
+                                    />
+                                </CButton>
+                            }
+                            chart={
+                                <CChartLine
+                                    ref={widget.chartRef}
+                                    className="mt-3 mx-3"
+                                    style={{ height: '70px' }}
+                                    data={{
+                                        labels: widget.labels,
+                                        datasets: [
+                                            {
+                                                label: widget.title,
+                                                backgroundColor: 'transparent',
+                                                borderColor: 'rgba(255,255,255,.55)',
+                                                pointBackgroundColor: widget.pointColor,
+                                                data: widget.data,
+                                            },
+                                        ],
+                                    }}
+                                    options={{
+                                        plugins: {
+                                            legend: {
+                                                display: false,
+                                            },
+                                        },
+                                        maintainAspectRatio: false,
+                                        scales: {
+                                            x: {
+                                                border: {
+                                                    display: false,
+                                                },
+                                                grid: {
+                                                    display: false,
+                                                    drawBorder: false,
+                                                },
+                                                ticks: {
+                                                    display: false,
+                                                },
+                                            },
+                                            y: {
+                                                min: widget.yScale.min,
+                                                max: widget.yScale.max,
+                                                display: false,
+                                                grid: {
+                                                    display: false,
+                                                },
+                                                ticks: {
+                                                    display: false,
+                                                },
+                                            },
+                                        },
+                                        elements: {
+                                            line: {
+                                                borderWidth: 2,
+                                                tension: 0.4,
+                                            },
+                                            point: {
+                                                radius: 6,
+                                                hitRadius: 10,
+                                                hoverRadius: 4,
+                                            },
+                                        },
+                                    }}
+                                />
+                            }
+                        />
+                    </CCol>
                 ))}
-            </Masonry>
+            </CRow>
+            <CRow>
+                <CCol xs={6} md={4}>
+                    <CWidgetStatsF
+                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                        className="mb-3"
+                        color="primary"
+                        title="Shipments"
+                        value="50%"
+                    />
+                </CCol>
+                <CCol xs={6} md={4}>
+                    <CWidgetStatsF
+                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                        className="mb-3"
+                        color="warning"
+                        title="Shipments"
+                        value="50%"
+                    />
+                </CCol>
+                <CCol xs={6} md={4}>
+                    <CWidgetStatsF
+                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                        className="mb-3"
+                        color="primary"
+                        title="Shipments"
+                        value="50%"
+                    />
+                </CCol>
+                <CCol xs={6} md={4}>
+                    <CWidgetStatsF
+                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                        className="mb-3"
+                        color="warning"
+                        title="Shipments"
+                        value="50%"
+                    />
+                </CCol>
+                <CCol xs={6} md={4}>
+                    <CWidgetStatsF
+                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                        className="mb-3"
+                        color="primary"
+                        title="Shipments"
+                        value="50%"
+                    />
+                </CCol>
+                <CCol xs={6} md={4}>
+                    <CWidgetStatsF
+                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                        className="mb-3"
+                        color="warning"
+                        title="Shipments"
+                        value="50%"
+                    />
+                </CCol>
+            </CRow>
 
-            {totalPages > 1 && (
-                <AppPagination
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    totalPages={totalPages}
-                    setTotalPages={setTotalPages}
-                    className="mb-3"
-                />
-            )} */}
-        </div>
+            <CModal
+                alignment="center"
+                scrollable
+                visible={visible}
+                onClose={() => setVisible(false)}
+                aria-labelledby=""
+            >
+                <CModalHeader>
+                    <CModalTitle id="">Test</CModalTitle>
+                </CModalHeader>
+                <CModalBody>Hello World</CModalBody>
+            </CModal>
+        </>
     )
 }
 

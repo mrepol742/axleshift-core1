@@ -11,7 +11,7 @@ const Logout = lazy(() => import('./views/auth/Logout'))
 /*
  * EXTERNAL ROUTE
  */
-const Landing = lazy(() => import('./views/landing/index'))
+const Landing = lazy(() => import('./views/landing'))
 const Privacy = lazy(() => import('./views/legal/PrivacyPolicy'))
 const Terms = lazy(() => import('./views/legal/Terms'))
 const Login = lazy(() => import('./views/auth/Login'))
@@ -21,23 +21,24 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
 /*
  * INTERNAL ROUTE
  */
-const Dashboard = auth(lazy(() => import('./views/dashboard/index')))
-const Info = auth(lazy(() => import('./views/dashboard/Info')))
+const Dashboard = auth(lazy(() => import('./views/dashboard')))
+const Shipment = auth(lazy(() => import('./views/shipment')))
+const ShipmentInfo = auth(lazy(() => import('./views/shipment/[id]/')))
 const Search = auth(lazy(() => import('./views/search')))
-const Schedules = auth(lazy(() => import('./views/schedules/index')))
+const Schedules = auth(lazy(() => import('./views/schedules')))
 
-const Inbox = auth(lazy(() => import('./views/support/customer-service/index')))
+const Inbox = auth(lazy(() => import('./views/support/customer-service')))
 const Chat = auth(lazy(() => import('./views/support/customer-service/Chat')))
-const Account = auth(lazy(() => import('./views/account/index')))
+const Account = auth(lazy(() => import('./views/account')))
 const _Security = auth(lazy(() => import('./views/account/Security')))
 
-const BookNow = auth(lazy(() => import('./views/book-now/index')))
+const BookNow = auth(lazy(() => import('./views/book-now')))
 
-const Address = auth(lazy(() => import('./views/my-addresses/index')))
+const Address = auth(lazy(() => import('./views/my-addresses')))
 const NewAddress = auth(lazy(() => import('./views/my-addresses/New')))
 const ViewAddress = auth(lazy(() => import('./views/my-addresses/View')))
 
-const Security = auth(lazy(() => import('./views/security/index')))
+const Security = auth(lazy(() => import('./views/security')))
 const Management = auth(lazy(() => import('./views/security/Management')))
 const Sessions = auth(lazy(() => import('./views/security/Sessions')))
 const AccessToken = auth(lazy(() => import('./views/security/AccessToken')))
@@ -45,11 +46,11 @@ const NewAccessToken = auth(lazy(() => import('./views/security/access-token/New
 const Webhooks = auth(lazy(() => import('./views/security/Webhooks')))
 const ActivityLogs = auth(lazy(() => import('./views/security/AccountLogs')))
 
-const Track = auth(lazy(() => import('./views/track/index')))
-const TrackInfo = auth(lazy(() => import('./views/track/Info')))
+const Track = auth(lazy(() => import('./views/track')))
+const TrackInfo = auth(lazy(() => import('./views/track/[id]')))
 
-const Invoices = auth(lazy(() => import('./views/invoices/index')))
-const InvoiceInfo = auth(lazy(() => import('./views/invoices/Info')))
+const Invoices = auth(lazy(() => import('./views/invoices')))
+const InvoiceInfo = auth(lazy(() => import('./views/invoices/[id]')))
 
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 
@@ -70,7 +71,8 @@ const routes = [
     { path: '/forgot-password', external: true, name: 'Forgot Password', element: ForgotPassword },
 
     { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-    { path: '/shipment/:id', name: 'Shipment Info', element: Info },
+    { path: '/shipment', name: 'Shipment', element: Shipment },
+    { path: '/shipment/:id', name: 'Shipment Info', element: ShipmentInfo },
 
     { path: '/search', name: 'Search Shipment', element: Search },
     { path: '/schedules', name: 'Schedules', element: Schedules },

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { CRow, CCol, CCard, CCardText, CSpinner } from '@coreui/react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
-import { VITE_APP_GOOGLE_MAP } from '../../config'
+import { VITE_APP_GOOGLE_MAP } from '../../../config'
 
 const TrackInfo = () => {
     const [loading, setLoading] = useState(true)

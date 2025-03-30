@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
             },
         )
 
-        if (req.body.status === "PAID") {
+        if (req.body.status === 'PAID') {
             db.collection('freight').updateOne(
                 { invoice_id: req.body.id },
                 {

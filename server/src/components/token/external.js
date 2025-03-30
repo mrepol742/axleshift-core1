@@ -3,10 +3,19 @@ import logger from '../../utils/logger.js'
 import database from '../../models/mongodb.js'
 import { getClientIp } from '../ip.js'
 import { getCache, setCache } from '../../models/redis.js'
+import { exteralRequestRoute } from '../../middleware/rateLimiter.js'
 
 const external = async (req, res, next) => {
     const authHeader = req.headers['authorization']
     const token = authHeader.split(' ')[1]
+    let path = req.originalUrl
+
+    const isAllowed = exteralRequestRoute.some((route) => {
+        if (route === path) return true
+        const regex = new RegExp(`^${route.replace(/:\w+/, '\\w+')}$`)
+        return regex.test(path)
+    })
+    if (!isAllowed) return res.status(403).json({ error: 'Forbidden' })
 
     const existingApiToken = await getCache(`external-${token}`)
     if (!existingApiToken) {

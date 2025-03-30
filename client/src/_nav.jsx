@@ -17,6 +17,7 @@ import {
     faTowerBroadcast,
     faPlus,
     faGlobe,
+    faBoxesPacking,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -38,6 +39,13 @@ const _nav = [
         to: '/book-now',
         role_exclude: ['staff', 'admin'],
         icon: <FontAwesomeIcon icon={faPlus} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Shipment',
+        to: '/shipment',
+        role_exclude: [],
+        icon: <FontAwesomeIcon icon={faBoxesPacking} className="nav-icon" />,
     },
     {
         component: CNavItem,

@@ -44,18 +44,18 @@ const Terms = () => {
                             <div className="mb-3">
                                 <h3> Intellectual Property </h3>
                                 All content, features, and functionality are the exclusive property
-                                of Axleshift Core 1 and are protected by copyright and other
-                                intellectual property laws. All third-party trademarks, service
-                                marks, and logos used in our services are the trademarks, service
-                                marks, or logos of their respective owners.
+                                of Axleshift and are protected by copyright and other intellectual
+                                property laws. All third-party trademarks, service marks, and logos
+                                used in our services are the trademarks, service marks, or logos of
+                                their respective owners.
                             </div>
                             <div className="mb-3">
                                 <h3>Limitation of Liability</h3>
-                                Axleshift Core 1 or any of its respective parents, affiliates,
-                                successors, assigns, employees, agents, directors, developers,
-                                officers and shareholders, shall not be liable for any direct,
-                                indirect, incidental, or consequential damages arising from your use
-                                of our services.
+                                Axleshift or any of its respective parents, affiliates, successors,
+                                assigns, employees, agents, directors, developers, officers and
+                                shareholders, shall not be liable for any direct, indirect,
+                                incidental, or consequential damages arising from your use of our
+                                services.
                             </div>
                             <div className="mb-3">
                                 <h3>Governing Law</h3>

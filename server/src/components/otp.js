@@ -16,7 +16,7 @@ const OneTimePassword = (req, otpType) => {
         updated_at: dateNow,
     }
     Promise.all([
-        setCache(`user-id-${req.user._id}`, data, ten),
+        setCache(`otp-${req.user._id}`, data, ten),
         send(
             {
                 to: req.user.email,

@@ -25,7 +25,7 @@ const AppFooter = () => {
                 <CNav className="justify-content-center">
                     <CNavItem>
                         <CNavLink href="/privacy-policy" className="px-2 text-body-secondary">
-                            &copy; {new Date().getFullYear()} Axleshift Core 1
+                            &copy; {new Date().getFullYear()} Axleshift
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>

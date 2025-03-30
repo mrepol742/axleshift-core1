@@ -10,16 +10,19 @@ const { Invoice } = new Xendit({
 })
 
 const InvoiceGenerator = async (res, req, tracking_number) => {
-      try {
+    try {
         const db = await database()
         const freightCollection = db.collection('freight')
         const freight = await freightCollection.findOne({ tracking_number })
         if (!freight) return res.status(404).json({ error: 'Shipment not found' })
         req.freight = freight
-        
+
         const invoiceCollection = db.collection('invoices')
         const invoice = await invoiceCollection.findOne({ freight_id: freight._id })
-        if (invoice) return res.status(200).send({ r_url: `https://checkout-staging.xendit.co/web/${invoice.invoice_id}` })
+        if (invoice)
+            return res
+                .status(200)
+                .send({ r_url: `https://checkout-staging.xendit.co/web/${invoice.invoice_id}` })
 
         const redirectUrl =
             NODE_ENV !== 'production'

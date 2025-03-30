@@ -10,6 +10,7 @@ import ipwhitelist from '../../middleware/ipwhitelist.js'
 import { Github, Google, FormLogin, FormRegister, FormOauth2 } from '../../components/auth/index.js'
 import activity from '../../components/activity.js'
 import { APP_KEY } from '../../config.js'
+import { remCache } from '../../models/redis.js'
 
 const router = express.Router()
 
@@ -120,14 +121,18 @@ router.post('/user', [recaptcha, auth], async (req, res, next) => {
                 return res.status(200).json({ error: 'The email address is already used' })
         }
 
-        await usersCollection.updateOne(
-            { _id: new ObjectId(req.user._id) },
-            {
-                $set: set,
-            },
-        )
-        activity(req, 'update user account information')
-        const theUser = await usersCollection.findOne({ _id: new ObjectId(req.session.user_id) })
+        const [remove, userUpdate, log, theUser] = await Promise.all([
+            remCache(`user-id-${req.user._id}`),
+            await usersCollection.updateOne(
+                { _id: new ObjectId(req.user._id) },
+                {
+                    $set: set,
+                },
+            ),
+            activity(req, 'update user account information'),
+            usersCollection.findOne({ _id: new ObjectId(req.session.user_id) }),
+        ])
+
         return res.status(200).json({
             _id: theUser._id,
             email: theUser.email,
@@ -159,7 +164,10 @@ router.post('/password', [recaptcha, auth], async (req, res, next) => {
 
         const db = await database()
         const usersCollection = db.collection('users')
-        const theUser = await usersCollection.findOne({ _id: new ObjectId(req.user._id) })
+        const theUser = await usersCollection.findOne(
+            { _id: new ObjectId(req.user._id) },
+            { projection: { password: 1 } },
+        )
         // return 401 instead of 404 to remove the cookies
         if (!theUser) return res.status(401).json({ error: 'Unauthorized' })
 
@@ -197,23 +205,26 @@ router.post('/password', [recaptcha, auth], async (req, res, next) => {
         }
 
         const dateNow = Date.now()
-        await usersCollection.updateOne(
-            { _id: new ObjectId(req.user._id) },
-            {
-                $set: {
-                    password: newPasswordHash,
-                    password_changed_on: dateNow,
-                    updated_at: dateNow,
-                },
-                $push: {
-                    old_passwords: {
-                        $each: [passwordHash],
-                        $position: 0,
-                        $slice: -5,
+        await Promise.all([
+            remCache(`user-id-${req.user._id}`),
+            usersCollection.updateOne(
+                { _id: new ObjectId(req.user._id) },
+                {
+                    $set: {
+                        password: newPasswordHash,
+                        password_changed_on: dateNow,
+                        updated_at: dateNow,
+                    },
+                    $push: {
+                        old_passwords: {
+                            $each: [passwordHash],
+                            $position: 0,
+                            $slice: -5,
+                        },
                     },
                 },
-            },
-        )
+            ),
+        ])
         return res.status(200).send()
     } catch (e) {
         logger.error(e)
