@@ -16,13 +16,19 @@ import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/inde
 import { useToast } from '../components/AppToastProvider'
 import { useModal } from '../components/AppModalProvider'
 import { useNotif } from '../components/AppNotificationProvider'
+import { useUserProvider } from '../components/UserProvider'
 import parseTimestamp from '../utils/Timestamp'
+import database from '../firebase'
+import { collection, addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
 
 const DefaultLayout = () => {
     const { toasts, addToast } = useToast()
     const { modal, addModal } = useModal()
     const { addNotif } = useNotif()
     const [visibleModals, setVisibleModals] = useState({})
+    const { user } = useUserProvider()
+    const messagesRef = collection(database, 'messages')
+    const [messages, setMessages] = useState([])
 
     const handleOpen = (id) => {
         setVisibleModals((prev) => ({ ...prev, [id]: true }))
@@ -32,18 +38,27 @@ const DefaultLayout = () => {
         setVisibleModals((prev) => ({ ...prev, [id]: false }))
     }
 
-    useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                const response = await axios.get('/notifications')
-                response.data.forEach((notif) => addNotif(notif))
-            } catch (error) {
-                console.error('Error fetching notifications:', error)
-            }
+    const fetchNotifications = async () => {
+        try {
+            const response = await axios.get('/notifications')
+            response.data.forEach((notif) => addNotif(notif))
+        } catch (error) {
+            console.error('Error fetching notifications:', error)
         }
+    }
 
+    useEffect(() => {
+        if (!user._id) return
         fetchNotifications()
-    }, [])
+
+        // const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
+        //     const msgs = snapshot.docs
+        //         .map((doc) => ({ id: doc.id, ...doc.data() }))
+        //         .filter((msg) => msg.ref === user._id)
+        //     setMessages(msgs)
+        // })
+        // return () => unsubscribe()
+    }, [user])
 
     return (
         <div>

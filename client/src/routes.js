@@ -27,8 +27,7 @@ const ShipmentInfo = auth(lazy(() => import('./views/shipment/[id]/')))
 const Search = auth(lazy(() => import('./views/search')))
 const Schedules = auth(lazy(() => import('./views/schedules')))
 
-const Inbox = auth(lazy(() => import('./views/support/customer-service')))
-const Chat = auth(lazy(() => import('./views/support/customer-service/Chat')))
+const SupportCustomerService = auth(lazy(() => import('./views/support/customer-service')))
 const Account = auth(lazy(() => import('./views/account')))
 const _Security = auth(lazy(() => import('./views/account/Security')))
 
@@ -77,8 +76,8 @@ const routes = [
     { path: '/search', name: 'Search Shipment', element: Search },
     { path: '/schedules', name: 'Schedules', element: Schedules },
 
-    { path: '/customer', name: 'Inbox', element: Inbox },
-    { path: '/customer/:id', name: 'Chat', element: Chat },
+    { path: '/customer', name: 'Customer Service', element: SupportCustomerService },
+
     { path: '/account', name: 'Account', element: Account },
     { path: '/account/security', name: 'Security', element: _Security },
 

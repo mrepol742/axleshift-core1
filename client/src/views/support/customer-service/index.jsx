@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { CSpinner, CListGroup, CListGroupItem } from '@coreui/react'
+import { CCard, CButton, CSpinner } from '@coreui/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTooth, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import database from '../../../firebase'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
-
 import { useUserProvider } from '../../../components/UserProvider'
-import parseTimestamp from '../../../utils/Timestamp'
+import Inbox from './Inbox'
+import MessageBox from './MessageBox'
 
-const Inbox = () => {
-    const { user } = useUserProvider()
-    const navigate = useNavigate()
+const Messages = () => {
+    const [loading, setLoading] = useState(true)
+    const [selectedUser, setselectedUser] = useState(null)
+    const [isMobile, setIsMobile] = useState(false)
+    const [showPatientList, setShowPatientList] = useState(true)
     const [threadsID, setThreadsID] = useState([])
-    const [loading, setLoading] = useState(false)
+    const { user } = useUserProvider()
     const messagesRef = collection(database, 'messages')
 
-    const fetchData = () => {
-        const isAdmin = ['super_admin', 'admin', 'staff'].includes(user.role)
-        if (!isAdmin) navigate(`/customer/${user.ref}`)
-
+    useEffect(() => {
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -34,13 +34,42 @@ const Inbox = () => {
             // i need coffeeeeeeeeee
             const latestMessagesArray = Array.from(latestMessagesMap.values())
             setThreadsID(latestMessagesArray)
+            setLoading(false)
         })
-        return () => unsubscribe()
+
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768)
+        }
+
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+        return () => {
+            window.removeEventListener('resize', checkMobile), unsubscribe()
+        }
+    }, [])
+
+    const handleSelectUser = (patient) => {
+        setselectedUser(patient)
+
+        // const updatedPatients = patients.map((p) =>
+        //     p.id === patient.id ? { ...p, unread: false } : p,
+        // )
+        // setPatients(updatedPatients)
+
+        if (isMobile) {
+            setShowPatientList(false)
+        }
     }
 
-    useEffect(() => {
-        fetchData()
-    }, [])
+    const handleBackToList = () => {
+        if (isMobile) {
+            setShowPatientList(true)
+        }
+    }
+
+    const handleNewMessage = () => {
+        alert('New message button clicked - This would open a new message form')
+    }
 
     if (loading)
         return (
@@ -49,34 +78,54 @@ const Inbox = () => {
             </div>
         )
 
+    if (!messagesRef)
+        return (
+            <div
+                className="d-flex justify-content-center align-items-center"
+                style={{ height: '70vh' }}
+            >
+                <p>No messages yet</p>
+            </div>
+        )
+
     return (
         <div>
-            {['super_admin', 'admin', 'staff'].includes(user.role) && (
-                <div className="row d-flex justify-content-center mx-0 mb-4">
-                    <CListGroup>
-                        {threadsID.map((thread, index) => (
-                            <CListGroupItem
-                                as="a"
-                                key={index}
-                                onClick={() => navigate(`/customer/${thread.ref}`)}
-                            >
-                                <div className="d-flex w-100 justify-content-between">
-                                    <h5 className="mb-1">#{thread.ref}</h5>
-                                    <small>{parseTimestamp(thread.timestamp)}</small>
-                                </div>
-                                <p className="mb-1">{thread.text}</p>
-                                <small>
-                                    {thread.sender === 'admin' || thread.sender === 'super_admin'
-                                        ? 'You'
-                                        : 'Client'}
-                                </small>
-                            </CListGroupItem>
-                        ))}
-                    </CListGroup>
+            <CCard>
+                <div
+                    className="d-flex gap-3"
+                    style={{
+                        height: isMobile ? 'calc(100vh - 180px)' : '75vh',
+                        flexDirection: isMobile ? 'column' : 'row',
+                    }}
+                >
+                    {user?.role !== 'patient' && (!isMobile || (isMobile && showPatientList)) && (
+                        <Inbox
+                            threadsID={threadsID}
+                            selectedUser={selectedUser}
+                            handleSelectUser={handleSelectUser}
+                            isMobile={isMobile}
+                        />
+                    )}
+
+                    {(user?.role === 'patient' || !isMobile || (isMobile && !showPatientList)) && (
+                        <MessageBox
+                            messagesRef={messagesRef}
+                            selectedUser={
+                                selectedUser
+                                    ? selectedUser
+                                    : user.role === 'user'
+                                      ? user
+                                      : null
+                            }
+                            handleBackToList={handleBackToList}
+                            isMobile={isMobile}
+                            showBackButton={isMobile && user?.role !== 'user'}
+                        />
+                    )}
                 </div>
-            )}
+            </CCard>
         </div>
     )
 }
 
-export default Inbox
+export default Messages

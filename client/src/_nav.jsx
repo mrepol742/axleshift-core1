@@ -109,13 +109,13 @@ const _nav = [
     {
         component: CNavTitle,
         name: 'Support',
-        role_exclude: [],
+        role_exclude: ['user', 'staff'],
     },
     {
         component: CNavItem,
         name: 'Customer Service',
         to: '/customer',
-        role_exclude: [],
+        role_exclude: ['user', 'staff'],
         icon: <FontAwesomeIcon icon={faHeadset} className="nav-icon" />,
     },
 ]
