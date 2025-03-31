@@ -15,7 +15,8 @@ router.post('/', async (req, res) => {
             return res.status(401).json({ error: 'Unauthorized' })
 
         const db = await database()
-        db.collection('invoices').updateOne(
+        Promise.all([
+            db.collection('invoices').updateOne(
             { invoice_id: req.body.id },
             {
                 $set: {
@@ -25,9 +26,9 @@ router.post('/', async (req, res) => {
                     updated_at: Date.now(),
                 },
             },
-        )
-
-        if (req.body.status === 'PAID') {
+        ),
+        (async () => {
+            if (req.body.status === 'PAID') {
             db.collection('freight').updateOne(
                 { invoice_id: req.body.id },
                 {
@@ -38,6 +39,8 @@ router.post('/', async (req, res) => {
                 },
             )
         }
+        })
+        ])
         return res.status(200).send()
     } catch (err) {
         logger.error(err)

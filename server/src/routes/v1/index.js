@@ -13,6 +13,7 @@ import newsletter from './newsletter.js'
 import invoices from './invoices.js'
 import notifications from './notifications.js'
 import addresses from './addresses.js'
+import document from './freight/documents.js'
 
 const router = express.Router()
 router.use('/auth', auth)
@@ -20,6 +21,7 @@ router.use('/auth/token', authToken)
 router.use('/auth/verify', authVerify)
 
 router.use('/freight', freight)
+router.use('/documents', document)
 router.use('/track', track)
 
 router.use('/sec/management', securityManagement)
