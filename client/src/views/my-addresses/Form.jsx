@@ -7,6 +7,11 @@ import {
     CInputGroup,
     CInputGroupText,
     CFormCheck,
+    CModal,
+    CModalBody,
+    CModalHeader,
+    CModalTitle,
+    CModalFooter,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import PropTypes from 'prop-types'
@@ -21,6 +26,7 @@ const FormAddress = ({ data, callback }) => {
     const navigate = useNavigate()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(false)
+    const [modal, setModal] = useState(false)
 
     const handleChange = (section, e) => {
         const { name, value } = e.target
@@ -45,6 +51,10 @@ const FormAddress = ({ data, callback }) => {
         }))
     }
 
+    const toggleModal = () => {
+        setModal(!modal)
+    }
+
     const handleSubmit = async (e) => {
         if (callback) return
         e.preventDefault()
@@ -56,6 +66,25 @@ const FormAddress = ({ data, callback }) => {
             .then((response) => {
                 addToast(response.data.message)
                 navigate('/my-addresses')
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                addToast(message, 'Submit failed!')
+            })
+            .finally(() => setLoading(false))
+    }
+
+    const handleDelete = async (e) => {
+        if (callback) return
+        e.preventDefault()
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
+        axios
+            .post(`/addresses/delete/${formData._id}`, { recaptcha_ref: recaptcha })
+            .then((response) => {
+                addToast(response.data.message)
+                navigate(`/my-addresses`)
             })
             .catch((error) => {
                 const message =
@@ -308,19 +337,57 @@ const FormAddress = ({ data, callback }) => {
             </div>
             {!callback && (
                 <>
-                    <div className="d-flex mt-4 mb-3">
-                        <CButton type="submit" color="primary" className="me-2 rounded">
-                            Save
-                        </CButton>
-                        <CButton
-                            type="button"
-                            color="outline-secondary"
-                            className="rounded"
-                            onClick={(e) => navigate('/my-addresses')}
-                        >
-                            Cancel
-                        </CButton>
+                    <div className="d-flex justify-content-between">
+                        <div className="d-flex2 mt-4 mb-3">
+                            <CButton
+                                color="danger"
+                                className="me-2 rounded"
+                                onClick={(e) => setModal(true)}
+                            >
+                                Delete
+                            </CButton>
+                        </div>
+                        <div className="d-flex mt-4 mb-3">
+                            <CButton type="submit" color="primary" className="me-2 rounded">
+                                Save
+                            </CButton>
+                            <CButton
+                                type="button"
+                                color="outline-secondary"
+                                className="rounded"
+                                onClick={(e) => navigate('/my-addresses')}
+                            >
+                                Cancel
+                            </CButton>
+                        </div>
                     </div>
+
+                    <CModal
+                        backdrop="static"
+                        alignment="center"
+                        visible={modal}
+                        scrollable
+                        aria-labelledby="delete-confirmation"
+                    >
+                        <CModalHeader onClose={toggleModal}>
+                            <CModalTitle id="delete-confirmation">Confirm Delete</CModalTitle>
+                        </CModalHeader>
+                        <CModalBody>
+                            Do you really want to delete this address?
+                            <br />
+                            <b className="small">
+                                <u>This is irreversable!</u>
+                            </b>
+                        </CModalBody>
+                        <CModalFooter>
+                            <CButton color="secondary" onClick={toggleModal}>
+                                Cancel
+                            </CButton>
+                            <CButton color="danger" onClick={handleDelete}>
+                                Delete
+                            </CButton>
+                        </CModalFooter>
+                    </CModal>
                     <ReCAPTCHA
                         ref={recaptchaRef}
                         size="invisible"

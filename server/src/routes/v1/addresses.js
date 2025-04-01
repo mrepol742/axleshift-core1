@@ -92,7 +92,7 @@ router.post('/update/:id', [recaptcha, auth, address], async (req, res) => {
         const db = await database()
         const date = Date.now()
         await db.collection('addresses').updateOne(
-            { _id: new ObjectId(req.params.id) },
+            { _id: new ObjectId(req.address._id) },
             {
                 $set: {
                     from,
@@ -139,11 +139,14 @@ router.post('/find/', [recaptcha, auth], async (req, res) => {
 })
 
 /**
- * Remove a address
+ * Delete a address
  */
-router.post('/remove/:id', [recaptcha, auth, address], async (req, res, next) => {
+router.post('/delete/:id', [recaptcha, auth, address], async (req, res, next) => {
     try {
-        return res.status(200).send({})
+        const db = await database()
+        await db.collection('addresses').deleteOne({ _id: new ObjectId(req.address._id) })
+        activity(req, `deleted an address`)
+        return res.status(200).send({ message: 'Address has been deleted.' })
     } catch (e) {
         logger.error(e)
     }
