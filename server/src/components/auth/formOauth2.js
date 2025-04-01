@@ -29,7 +29,11 @@ const FormOauth2 = async (req, res) => {
 
         // login
         if (theUser) {
-            if (theUser.oauth2 && theUser.oauth2[provider] && theUser.oauth2[provider].email === credential.email) {
+            if (
+                theUser.oauth2 &&
+                theUser.oauth2[provider] &&
+                theUser.oauth2[provider].email === credential.email
+            ) {
                 const token = await Token(theUser, req)
                 return res.status(200).json(token)
             } else {

@@ -58,11 +58,25 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
             return res.status(200).json({ error: 'Username must only contain letters and numbers' })
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             return res.status(200).json({ error: 'Invalid email address' })
+
+        // password
         if (password.length < 8)
             return res.status(200).json({ error: 'Password must be at least 8 characters long' })
-        if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).+$/.test(password))
+        if (!/[A-Z]/.test(password))
             return res.status(200).json({
-                error: 'Password must contain letters, numbers, and symbols.',
+                error: 'Password must contain at least one uppercase letter',
+            })
+        if (!/[a-z]/.test(password))
+            return res.status(200).json({
+                error: 'Password must contain at least one lowercase letter',
+            })
+        if (!/[0-9]/.test(password))
+            return res.status(200).json({
+                error: 'Password must contain at least one number letter',
+            })
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password))
+            return res.status(200).json({
+                error: 'Password must contain at least one special character',
             })
         if (password != repeat_password)
             return res.status(200).json({ error: 'Password does not match' })
@@ -248,10 +262,23 @@ router.post('/password', [recaptcha, auth], async (req, res, next) => {
 
         if (new_password.length < 8)
             return res.status(200).json({ error: 'Password must be at least 8 characters long' })
-        if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).+$/.test(new_password))
+        if (!/[A-Z]/.test(new_password))
             return res.status(200).json({
-                error: 'Password must contain letters, numbers, and symbols.',
+                error: 'Password must contain at least one uppercase letter',
             })
+        if (!/[a-z]/.test(new_password))
+            return res.status(200).json({
+                error: 'Password must contain at least one lowercase letter',
+            })
+        if (!/[0-9]/.test(new_password))
+            return res.status(200).json({
+                error: 'Password must contain at least one number letter',
+            })
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(new_password))
+            return res.status(200).json({
+                error: 'Password must contain at least one special character',
+            })
+
         if (new_password != repeat_password)
             return res.status(200).json({ error: 'Password does not match' })
 

@@ -39,7 +39,7 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
     }
 }
 
-export const getUser = async (cachedSession, sessionToken) => {
+export const getUser = async (cachedSession) => {
     try {
         const cachedUser = await getCache(`user-id-${cachedSession.user_id}`)
         if (cachedUser) return cachedUser
@@ -62,12 +62,13 @@ export const getUser = async (cachedSession, sessionToken) => {
                     password: {
                         $cond: { if: { $ne: ['$password', null] }, then: 'OK', else: null },
                     },
+                    password_changed_on: 1,
                     timezone: 1,
                     ref: 1,
                 },
             },
         )
-        await setCache(`user-id-${user._id.toString()}`, user)
+        await setCache(`user-id-${user._id.toString()}`, user, 24 * 60 * 60 * 1000)
         return user
     } catch (e) {
         logger.error(e)

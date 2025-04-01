@@ -58,7 +58,7 @@ const internal = async (req, res, next) => {
     const session = await getSession(req, token)
     if (!session) return res.status(401).json({ error: 'Unauthorized' })
 
-    const theUser = await getUser(session, token)
+    const theUser = await getUser(session)
     if (
         !theUser ||
         (adminRoute.includes(req.path) && !['super_admin', 'admin'].includes(theUser.role))

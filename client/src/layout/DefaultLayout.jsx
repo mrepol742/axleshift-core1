@@ -124,6 +124,37 @@ const DefaultLayout = () => {
                     <FloatingChat />
                 </div>
             )}
+            {/* 90 Days */}
+            {user.password_changed_on &&
+                Date.now() - user.password_changed_on > 90 * 24 * 60 * 60 * 1000 &&
+                window.location.pathname !== '/account/security' && (
+                    <div className="position-fixed bottom-0 end-0 p-3" style={{ zIndex: 2050 }}>
+                        <CModal
+                            backdrop="static"
+                            alignment="center"
+                            scrollable
+                            visible={true}
+                            onClose={() => handleClose('password')}
+                            aria-labelledby="password"
+                        >
+                            <CModalHeader>
+                                <CModalTitle id="password">Password Change Required</CModalTitle>
+                            </CModalHeader>
+                            <CModalBody>
+                                Your password has not been changed in a while. Please consider
+                                changing it.
+                            </CModalBody>
+                            <CModalFooter>
+                                <CButton
+                                    color="success"
+                                    onClick={() => navigate(`/account/security`)}
+                                >
+                                    Change Password
+                                </CButton>
+                            </CModalFooter>
+                        </CModal>
+                    </div>
+                )}
         </div>
     )
 }

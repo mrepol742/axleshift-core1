@@ -350,7 +350,10 @@ const Review = ({ data, shipmentRef }) => {
                                                 <CButton color="secondary" onClick={toggleModal}>
                                                     No
                                                 </CButton>
-                                                <CButton color="danger" onClick={handleCancelButton}>
+                                                <CButton
+                                                    color="danger"
+                                                    onClick={handleCancelButton}
+                                                >
                                                     Yes, I am sure
                                                 </CButton>
                                             </CModalFooter>

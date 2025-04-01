@@ -70,6 +70,44 @@ const Security = () => {
             .finally(() => setLoading(false))
     }
 
+    const passwordRequirements = [
+        { id: 1, text: 'At least 8 characters', test: (password) => password.length >= 8 },
+        {
+            id: 2,
+            text: 'At least one uppercase letter',
+            test: (password) => /[A-Z]/.test(password),
+        },
+        {
+            id: 3,
+            text: 'At least one lowercase letter',
+            test: (password) => /[a-z]/.test(password),
+        },
+        { id: 4, text: 'At least one number', test: (password) => /[0-9]/.test(password) },
+        {
+            id: 5,
+            text: 'At least one special character',
+            test: (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password),
+        },
+    ]
+
+    const checkRequirements = (password) => {
+        return passwordRequirements.map((req) => ({
+            ...req,
+            passed: req.test(password),
+        }))
+    }
+
+    const [requirementsStatus, setRequirementsStatus] = useState(
+        checkRequirements(formData.new_password),
+    )
+
+    const handlePasswordChange = (e) => {
+        handleInputChange(e)
+        if (e.target.id === 'new_password') {
+            setRequirementsStatus(checkRequirements(e.target.value))
+        }
+    }
+
     return (
         <div>
             {loading && (
@@ -132,7 +170,8 @@ const Security = () => {
                                         type={showPassword1 ? 'text' : 'password'}
                                         placeholder="New Password"
                                         autoComplete="new-password"
-                                        onChange={(e) => handleInputChange(e)}
+                                        value={formData.new_password}
+                                        onChange={(e) => handlePasswordChange(e)}
                                         required
                                     />
                                     <CInputGroupText>
@@ -149,6 +188,18 @@ const Security = () => {
                                         </span>
                                     </CInputGroupText>
                                 </CInputGroup>
+                                <ul>
+                                    {requirementsStatus.map((req) => (
+                                        <li
+                                            key={req.id}
+                                            style={{
+                                                color: req.passed ? 'green' : 'red',
+                                            }}
+                                        >
+                                            {req.text}
+                                        </li>
+                                    ))}
+                                </ul>
                                 <CInputGroup className="mb-3">
                                     <CInputGroupText>
                                         <FontAwesomeIcon icon={faLock} />
