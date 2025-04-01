@@ -47,6 +47,7 @@ const Review = ({ data, shipmentRef }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
     const [viewForm, setViewForm] = useState(false)
+    const [modal, setModal] = useState(false)
 
     const generatePDF = () => {
         pdfRef.current.style.display = 'none'
@@ -187,9 +188,7 @@ const Review = ({ data, shipmentRef }) => {
             .post(`/freight/cancel/${form.tracking_number}`, { recaptcha_ref: recaptcha })
             .then((response) => {
                 addToast('Shipment has been cancelled.')
-                setTimeout(() => {
-                    window.location.reload()
-                }, 3000)
+                window.location.reload()
             })
             .catch((error) => {
                 const message =
@@ -197,6 +196,10 @@ const Review = ({ data, shipmentRef }) => {
                 addToast(message, 'Submit failed!')
             })
             .finally(() => setLoading(false))
+    }
+
+    const toggleModal = () => {
+        setModal(!modal)
     }
 
     useEffect(() => {
@@ -315,14 +318,44 @@ const Review = ({ data, shipmentRef }) => {
                         <div className="d-flex">
                             {form.internal &&
                                 !['to_receive', 'received', 'cancelled'].includes(form.status) && (
-                                    <CButton
-                                        size="sm"
-                                        color="danger"
-                                        className="me-2 rounded"
-                                        onClick={handleCancelButton}
-                                    >
-                                        Cancel
-                                    </CButton>
+                                    <>
+                                        <CButton
+                                            size="sm"
+                                            color="danger"
+                                            className="me-2 rounded"
+                                            onClick={(e) => setModal(true)}
+                                        >
+                                            Cancel
+                                        </CButton>
+                                        <CModal
+                                            backdrop="static"
+                                            alignment="center"
+                                            visible={modal}
+                                            scrollable
+                                            aria-labelledby="delete-confirmation"
+                                        >
+                                            <CModalHeader onClose={toggleModal}>
+                                                <CModalTitle id="delete-confirmation">
+                                                    Confirm Cancel
+                                                </CModalTitle>
+                                            </CModalHeader>
+                                            <CModalBody>
+                                                Do you really want to cancel this shipment?
+                                                <br />
+                                                <b className="small">
+                                                    <u>This is irreversable!</u>
+                                                </b>
+                                            </CModalBody>
+                                            <CModalFooter>
+                                                <CButton color="secondary" onClick={toggleModal}>
+                                                    No
+                                                </CButton>
+                                                <CButton color="danger" onClick={handleCancelButton}>
+                                                    Yes, I am sure
+                                                </CButton>
+                                            </CModalFooter>
+                                        </CModal>
+                                    </>
                                 )}
                             {form.status === 'to_pay' && (
                                 <CButton
