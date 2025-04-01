@@ -5,7 +5,7 @@ const Faq = () => {
     return (
         <div>
             <h1 className="text-center mb-4">Frequently Asked Questions</h1>
-            <CAccordion>
+            <CAccordion className="mb-3">
                 <CAccordionItem itemKey={1}>
                     <CAccordionHeader>What is a Freight Management System?</CAccordionHeader>
                     <CAccordionBody>

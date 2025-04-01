@@ -54,19 +54,19 @@ const AccountLogs = () => {
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Account Logs</CCardTitle>
-                    <CTable hover responsive className="table-even-width">
+                    <CTable stripedColumns hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Event
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Location
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Device
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Time
                                 </CTableHeaderCell>
                             </CTableRow>

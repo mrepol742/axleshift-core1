@@ -94,22 +94,22 @@ const Sessions = () => {
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Sessions</CCardTitle>
-                    <CTable hover responsive className="table-even-width">
+                    <CTable stripedColumns hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     User ID
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Location
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Device
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Status
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Last Accessed
                                 </CTableHeaderCell>
                             </CTableRow>

@@ -69,28 +69,28 @@ const Dependabot = () => {
             <CCard>
                 <CCardBody>
                     <CCardTitle>Vulnerability Alerts</CCardTitle>
-                    <CTable hover responsive className="table-even-width">
+                    <CTable stripedColumns hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     State
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Scope
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Manifest
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     CVE
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Summary
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Severity
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Last Updated
                                 </CTableHeaderCell>
                             </CTableRow>

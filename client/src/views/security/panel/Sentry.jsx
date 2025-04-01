@@ -69,28 +69,28 @@ const Sentry = () => {
             <CCard>
                 <CCardBody>
                     <CCardTitle>Error Reports</CCardTitle>
-                    <CTable hover responsive className="table-even-width">
+                    <CTable stripedColumns hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Title
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Culprit
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Level
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Status
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Priority
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Count
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular table-header-cell-no-wrap">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Last Updated
                                 </CTableHeaderCell>
                             </CTableRow>
