@@ -39,7 +39,6 @@ const Dashboard = () => {
             pointColor: getStyle('--cui-primary'),
             labels: insights.shipmetOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.shipmetOvertime?.data || [0, 0, 0, 0, 0, 0],
-            yScale: { min: -9, max: 39 },
         },
         {
             color: 'info',
@@ -49,7 +48,6 @@ const Dashboard = () => {
             pointColor: getStyle('--cui-info'),
             labels: insights.costOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.costOvertime?.data || [0, 0, 0, 0, 0, 0],
-            yScale: { min: -9, max: 39 },
         },
         {
             color: 'warning',
@@ -59,7 +57,6 @@ const Dashboard = () => {
             pointColor: getStyle('--cui-warning'),
             labels: insights.itemsOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.itemsOvertime?.data || [0, 0, 0, 0, 0, 0],
-            yScale: { min: -9, max: 39 },
         },
         {
             color: 'danger',
@@ -69,7 +66,6 @@ const Dashboard = () => {
             pointColor: getStyle('--cui-danger'),
             labels: insights.weightOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.weightOvertime?.data || [0, 0, 0, 0, 0, 0],
-            yScale: { min: -9, max: 39 },
         },
     ]
 
@@ -196,8 +192,6 @@ const Dashboard = () => {
                                                 },
                                             },
                                             y: {
-                                                min: widget.yScale.min,
-                                                max: widget.yScale.max,
                                                 display: false,
                                                 grid: {
                                                     display: false,
