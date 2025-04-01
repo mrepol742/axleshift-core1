@@ -201,20 +201,40 @@ const Register = () => {
                                         size="invisible"
                                         sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
                                     />
-                                    <CInputGroup className="mb-3">
-                                        <CInputGroupText>
-                                            <FontAwesomeIcon icon={faEnvelope} />
-                                        </CInputGroupText>
-                                        <CFormInput
-                                            id="email"
-                                            type="email"
-                                            placeholder="Email"
-                                            autoComplete="email"
-                                            value={formData.email}
-                                            onChange={(e) => handleInputChange(e)}
-                                            required
-                                        />
-                                    </CInputGroup>
+                                    <CRow>
+                                        <CCol md={6} className="mb-3">
+                                            <CInputGroup>
+                                                <CInputGroupText>
+                                                    <FontAwesomeIcon icon={faUser} />
+                                                </CInputGroupText>
+                                                <CFormInput
+                                                    id="username"
+                                                    type="text"
+                                                    placeholder="Username"
+                                                    autoComplete="username"
+                                                    value={formData.username}
+                                                    onChange={(e) => handleInputChange(e)}
+                                                    required
+                                                />
+                                            </CInputGroup>
+                                        </CCol>
+                                        <CCol md={6} className="mb-3">
+                                            <CInputGroup>
+                                                <CInputGroupText>
+                                                    <FontAwesomeIcon icon={faEnvelope} />
+                                                </CInputGroupText>
+                                                <CFormInput
+                                                    id="email"
+                                                    type="email"
+                                                    placeholder="Email"
+                                                    autoComplete="email"
+                                                    value={formData.email}
+                                                    onChange={(e) => handleInputChange(e)}
+                                                    required
+                                                />
+                                            </CInputGroup>
+                                        </CCol>
+                                    </CRow>
                                     <CRow>
                                         <CCol md={6} className="mb-3">
                                             <CInputGroup>
@@ -224,7 +244,7 @@ const Register = () => {
                                                 <CFormInput
                                                     id="first_name"
                                                     type="text"
-                                                    placeholder="First Name"
+                                                    placeholder="First name"
                                                     autoComplete="given-name"
                                                     value={formData.first_name}
                                                     onChange={(e) => handleInputChange(e)}
@@ -240,7 +260,7 @@ const Register = () => {
                                                 <CFormInput
                                                     id="last_name"
                                                     type="text"
-                                                    placeholder="Last Name"
+                                                    placeholder="Last name"
                                                     autoComplete="family-name"
                                                     value={formData.last_name}
                                                     onChange={(e) => handleInputChange(e)}

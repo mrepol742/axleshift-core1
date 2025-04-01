@@ -9,20 +9,22 @@ import { APP_KEY, NODE_ENV } from '../../../config.js'
 const FormLogin = async (req, res) => {
     try {
         const { email, password, location } = req.body
-        if (!email || !password || !location)
-            return res.status(400).json({ error: 'Invalid request' })
         const db = await database()
         const theUser = await db.collection('users').findOne({
             $or: [
                 { [`oauth2.google.email`]: email },
                 { [`oauth2.github.email`]: email },
                 { email: email },
+                { username: email },
             ],
         })
+
         if (!theUser)
-            return res
-                .status(404)
-                .json({ error: "The email you entered isn't connected to an account." })
+            return res.status(404).json({
+                error: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+                    ? "The email you entered isn't connected to an account."
+                    : "The username you entered isn't connected to an account.",
+            })
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         if (passwordHash !== theUser.password)

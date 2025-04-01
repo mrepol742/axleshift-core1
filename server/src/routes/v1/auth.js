@@ -13,6 +13,7 @@ import { APP_KEY } from '../../config.js'
 import { remCache } from '../../models/redis.js'
 
 const router = express.Router()
+const thirtyDays = 30 * 24 * 60 * 60 * 1000
 
 /**
  * Account registration
@@ -20,6 +21,7 @@ const router = express.Router()
 router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
     try {
         const {
+            username,
             email,
             first_name,
             last_name,
@@ -34,7 +36,13 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
             return res.status(400).json({ error: 'Invalid request' })
         if (
             type === 'form' &&
-            (!email || !first_name || !last_name || !password || !repeat_password || !newsletter)
+            (!username ||
+                !email ||
+                !first_name ||
+                !last_name ||
+                !password ||
+                !repeat_password ||
+                !newsletter)
         )
             return res.status(400).json({ error: 'Invalid request' })
         if (type === 'google' && !credential)
@@ -46,6 +54,8 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
         if (type === 'google') return await Google(req, res)
         if (type === 'github') return await Github(req, res)
 
+        if (!/^[a-zA-Z0-9]+$/.test(username))
+            return res.status(200).json({ error: 'Username must only contain letters and numbers' })
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             return res.status(200).json({ error: 'Invalid email address' })
         if (password.length < 8)
@@ -69,8 +79,8 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
  */
 router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
     try {
-        const { email, password, credential, type, code } = req.body
-        if (!type || !['form', 'google', 'github'].includes(type))
+        const { email, password, credential, type, code, location } = req.body
+        if (!type || !location || !['form', 'google', 'github'].includes(type))
             return res.status(400).json({ error: 'Invalid request' })
         if (type === 'form' && (!email || !password))
             return res.status(400).json({ error: 'Invalid request' })
@@ -94,56 +104,115 @@ router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
  */
 router.post('/user', [recaptcha, auth], async (req, res, next) => {
     try {
-        const { first_name, last_name, timezone, email } = req.body
+        const { username, email, first_name, last_name, timezone } = req.body
         const set = {}
+
         if (first_name && req.user.first_name !== first_name) set.first_name = first_name
         if (last_name && req.user.last_name !== last_name) set.last_name = last_name
         if (timezone && req.user.timezone !== timezone) set.timezone = timezone
-        if (email && req.user.email !== email) set.email = email
+
         if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             return res.status(200).json({ error: 'Invalid email address' })
+        if (email && req.user.email !== email) {
+            set.email = email
+            set.email_verify_at = null
+            set.email_last_updated_at = Date.now()
+        }
+
+        if (username && !/^[a-zA-Z0-9]+$/.test(username))
+            return res.status(200).json({ error: 'Username must only contain letters and numbers' })
+        if (username && req.user.username !== username) {
+            set.username = username
+            set.username_last_updated_at = Date.now()
+        }
 
         if (Object.keys(set).length === 0)
             return res.status(200).json({ error: 'No changes detected' })
-        set.updated_at = Date.now()
+
+        if (
+            set.username &&
+            req.user.username_last_updated_at &&
+            Date.now() - req.user.username_last_updated_at < thirtyDays
+        )
+            return res
+                .status(200)
+                .json({ error: 'Username can only be changed once every 30 days' })
+
+        if (
+            set.email &&
+            req.user.email_last_updated_at &&
+            Date.now() - req.user.email_last_updated_at < thirtyDays
+        )
+            return res.status(200).json({ error: 'Email can only be changed once every 30 days' })
 
         const db = await database()
         const usersCollection = db.collection('users')
-        if (email) {
-            const existingUser = await usersCollection.findOne({
-                $or: [
-                    { [`oauth2.google.email`]: email },
-                    { [`oauth2.github.email`]: email },
-                    { email: email },
-                ],
-            })
-            if (existingUser)
-                return res.status(200).json({ error: 'The email address is already used' })
-        }
+        const [usernameRes, emailRes] = await Promise.all([
+            async () => {
+                if (set.username) {
+                    const existingUser = await usersCollection.findOne({
+                        username: username,
+                    })
+                    if (existingUser) return true
+                }
+                return false
+            },
+            async () => {
+                if (set.email) {
+                    const existingUser = await usersCollection.findOne({
+                        $or: [
+                            { [`oauth2.google.email`]: email },
+                            { [`oauth2.github.email`]: email },
+                            { email: email },
+                        ],
+                    })
+                    if (existingUser) return true
+                }
+                return false
+            },
+        ])
 
-        const [remove, userUpdate, log, theUser] = await Promise.all([
+        if (usernameRes === true)
+            return res.status(200).json({
+                error: 'Username already taken',
+            })
+
+        if (emailRes === true)
+            return res.status(200).json({
+                error: 'Email address already registered',
+            })
+
+        set.updated_at = Date.now()
+
+        await Promise.all([
             remCache(`user-id-${req.user._id}`),
-            await usersCollection.updateOne(
+            usersCollection.updateOne(
                 { _id: new ObjectId(req.user._id) },
                 {
                     $set: set,
                 },
             ),
             activity(req, 'update user account information'),
-            usersCollection.findOne({ _id: new ObjectId(req.session.user_id) }),
         ])
 
         return res.status(200).json({
-            _id: theUser._id,
-            email: theUser.email,
-            first_name: theUser.first_name,
-            last_name: theUser.last_name,
-            role: theUser.role,
-            email_verify_at: theUser.email_verify_at,
-            oauth2: theUser.oauth2,
-            password: theUser.password ? 'OK' : null,
-            timezone: theUser.timezone,
-            ref: theUser.ref,
+            _id: req.user._id,
+            username: set.username ? set.username : req.user.username,
+            username_last_updated_at: set.username_last_updated_at
+                ? set.username_last_updated_at
+                : req.user.username_last_updated_at,
+            email: set.email ? set.email : req.user.email,
+            email_last_updated_at: set.email_last_updated_at
+                ? set.email_last_updated_at
+                : req.user.email_last_updated_at,
+            first_name: set.first_name ? set.first_name : req.user.first_name,
+            last_name: set.last_name ? set.last_name : req.user.last_name,
+            role: req.user.role,
+            email_verify_at: set.email_verify_at ? set.email_verify_at : req.user.email_verify_at,
+            oauth2: req.user.oauth2,
+            password: req.user.password,
+            timezone: set.timezone ? set.timezone : req.user.timezone,
+            ref: req.user.ref,
         })
     } catch (e) {
         logger.error(e)

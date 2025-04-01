@@ -7,9 +7,7 @@ import { APP_KEY, NODE_ENV } from '../../../config.js'
 
 const FormRegister = async (req, res) => {
     try {
-        const { email, first_name, last_name, password, newsletter } = req.body
-        if (!email || !first_name || !last_name || !password || !newsletter)
-            return res.status(400).json({ error: 'Invalid request' })
+        const { username, email, first_name, last_name, password, newsletter } = req.body
         const db = await database()
         const usersCollection = db.collection('users')
         const existingUser = await usersCollection.findOne({
@@ -17,13 +15,20 @@ const FormRegister = async (req, res) => {
                 { [`oauth2.google.email`]: email },
                 { [`oauth2.github.email`]: email },
                 { email: email },
+                { username: username },
             ],
         })
 
-        if (existingUser)
+        if (existingUser) {
+            if (existingUser.username === username) {
+                return res.status(200).json({
+                    error: 'Username already taken',
+                })
+            }
             return res.status(200).json({
                 error: 'Email address already registered',
             })
+        }
 
         if (NODE_ENV === 'production')
             res.status(200).json({

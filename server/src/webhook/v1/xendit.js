@@ -17,29 +17,29 @@ router.post('/', async (req, res) => {
         const db = await database()
         Promise.all([
             db.collection('invoices').updateOne(
-            { invoice_id: req.body.id },
-            {
-                $set: {
-                    status: req.body.status,
-                    payment_method: req.body.payment_method,
-                    adjusted_amount: req.body.adjusted_received_amount,
-                    updated_at: Date.now(),
-                },
-            },
-        ),
-        (async () => {
-            if (req.body.status === 'PAID') {
-            db.collection('freight').updateOne(
                 { invoice_id: req.body.id },
                 {
                     $set: {
-                        status: 'to_ship',
+                        status: req.body.status,
+                        payment_method: req.body.payment_method,
+                        adjusted_amount: req.body.adjusted_received_amount,
                         updated_at: Date.now(),
                     },
                 },
-            )
-        }
-        })
+            ),
+            async () => {
+                if (req.body.status === 'PAID') {
+                    db.collection('freight').updateOne(
+                        { invoice_id: req.body.id },
+                        {
+                            $set: {
+                                status: 'to_ship',
+                                updated_at: Date.now(),
+                            },
+                        },
+                    )
+                }
+            },
         ])
         return res.status(200).send()
     } catch (err) {

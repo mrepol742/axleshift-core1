@@ -28,12 +28,11 @@ const Account = () => {
     const timezones = Intl.supportedValuesOf('timeZone')
     const { addToast } = useToast()
     const [accountDetails, setAccountDetails] = useState({
+        username: user.username,
+        email: user.email,
         first_name: user.first_name,
         last_name: user.last_name,
         timezone: user.timezone,
-    })
-    const [contactInfo, setContactInfo] = useState({
-        email: user.email,
     })
     const [loading, setLoading] = useState(false)
 
@@ -41,39 +40,33 @@ const Account = () => {
         return name ? name.charAt(0).toUpperCase() : ''
     }
 
-    const handleInputChange = (e, type) => {
-        const { id, value } = e.target
-        if (type === 'accountDetails')
-            return setAccountDetails((prev) => ({
-                ...prev,
-                [id]: value,
-            }))
-        setContactInfo((prev) => ({
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        return setAccountDetails((prev) => ({
             ...prev,
-            [id]: value,
+            [name]: value,
         }))
     }
 
-    const handleAccountDetails = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        handleSubmit(accountDetails)
-    }
+        if (
+            accountDetails.username === user.username &&
+            accountDetails.email === user.email &&
+            accountDetails.first_name === user.first_name &&
+            accountDetails.last_name === user.last_name &&
+            accountDetails.timezone === user.timezone
+        )
+            return addToast('No changes detected.')
 
-    const handleContactInfo = (e) => {
-        e.preventDefault()
-        handleSubmit(contactInfo)
-    }
-
-    const handleSubmit = async (formData) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
-        const updatedFormData = {
-            ...formData,
-            recaptcha_ref: recaptcha,
-        }
 
         axios
-            .post(`/auth/user`, updatedFormData)
+            .post(`/auth/user`, {
+                ...accountDetails,
+                recaptcha_ref: recaptcha,
+            })
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
                 setUser(response.data)
@@ -101,7 +94,7 @@ const Account = () => {
                     <h4>Account details</h4>
                     <CCard className="mb-3">
                         <CCardBody>
-                            <CForm onSubmit={handleAccountDetails}>
+                            <CForm onSubmit={(e) => handleSubmit(e)}>
                                 {user.avatar ? (
                                     <CImage
                                         crossOrigin="Anonymous"
@@ -121,11 +114,37 @@ const Account = () => {
                                     </div>
                                 )}
                                 <CFormInput
-                                    id="profile_pic"
+                                    name="profile_pic"
                                     type="file"
                                     className="mb-3"
                                     disabled
                                 />
+                                <CInputGroup className="mb-3">
+                                    <CInputGroupText>
+                                        <FontAwesomeIcon icon={faUser} />
+                                    </CInputGroupText>
+                                    <CFormInput
+                                        type="text"
+                                        name="username"
+                                        placeholder="Username"
+                                        autoComplete="username"
+                                        value={accountDetails.username}
+                                        onChange={(e) => handleInputChange(e)}
+                                    />
+                                </CInputGroup>
+                                <CInputGroup className="mb-3">
+                                    <CInputGroupText>
+                                        <FontAwesomeIcon icon={faEnvelope} />
+                                    </CInputGroupText>
+                                    <CFormInput
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        autoComplete="email"
+                                        value={accountDetails.email}
+                                        onChange={(e) => handleInputChange(e)}
+                                    />
+                                </CInputGroup>
                                 <CRow>
                                     <CCol md={6} className="mb-3">
                                         <CInputGroup>
@@ -133,14 +152,12 @@ const Account = () => {
                                                 <FontAwesomeIcon icon={faUser} />
                                             </CInputGroupText>
                                             <CFormInput
-                                                id="first_name"
+                                                name="first_name"
                                                 type="text"
                                                 placeholder="First Name"
                                                 autoComplete="given-name"
                                                 value={accountDetails.first_name}
-                                                onChange={(e) =>
-                                                    handleInputChange(e, 'accountDetails')
-                                                }
+                                                onChange={(e) => handleInputChange(e)}
                                             />
                                         </CInputGroup>
                                     </CCol>
@@ -150,14 +167,12 @@ const Account = () => {
                                                 <FontAwesomeIcon icon={faUser} />
                                             </CInputGroupText>
                                             <CFormInput
-                                                id="last_name"
+                                                name="last_name"
                                                 type="text"
                                                 placeholder="Last Name"
                                                 autoComplete="family-name"
                                                 value={accountDetails.last_name}
-                                                onChange={(e) =>
-                                                    handleInputChange(e, 'accountDetails')
-                                                }
+                                                onChange={(e) => handleInputChange(e)}
                                             />
                                         </CInputGroup>
                                     </CCol>
@@ -168,11 +183,11 @@ const Account = () => {
                                     </CInputGroupText>
                                     <CFormInput
                                         type="text"
-                                        id="timezone"
+                                        name="timezone"
                                         placeholder="Timezone"
                                         list="timezone-options"
                                         value={accountDetails.timezone}
-                                        onChange={(e) => handleInputChange(e, 'accountDetails')}
+                                        onChange={(e) => handleInputChange(e)}
                                     />
                                     <datalist id="timezone-options">
                                         {timezones.map((tz) => (
@@ -217,38 +232,7 @@ const Account = () => {
                         </CCardBody>
                     </CCard>
                 </CCol>
-                <CCol>
-                    <h4>Contact info</h4>
-                    <CCard className="mb-3">
-                        <CCardBody>
-                            <CForm onSubmit={handleContactInfo}>
-                                <CInputGroup>
-                                    <CInputGroupText>
-                                        <FontAwesomeIcon icon={faEnvelope} />
-                                    </CInputGroupText>
-                                    <CFormInput
-                                        disabled={user.role !== 'user'}
-                                        type="email"
-                                        id="email"
-                                        placeholder="Email"
-                                        autoComplete="email"
-                                        value={contactInfo.email}
-                                        onChange={(e) => handleInputChange(e, 'contactInfo')}
-                                    />
-                                </CInputGroup>
-                                {user.role === 'user' && (
-                                    <CButton
-                                        type="submit"
-                                        color="primary"
-                                        className="mt-3 me-2 rounded"
-                                    >
-                                        Save changes
-                                    </CButton>
-                                )}
-                            </CForm>
-                        </CCardBody>
-                    </CCard>
-                </CCol>
+                <CCol></CCol>
             </CRow>
             {user.role === 'user' && (
                 <>

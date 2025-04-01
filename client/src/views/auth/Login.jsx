@@ -245,8 +245,8 @@ const Login = () => {
                                             <FontAwesomeIcon icon={faEnvelope} />
                                         </CInputGroupText>
                                         <CFormInput
-                                            type="email"
-                                            placeholder="Email"
+                                            type="text"
+                                            placeholder="Username or email"
                                             autoComplete="email"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
