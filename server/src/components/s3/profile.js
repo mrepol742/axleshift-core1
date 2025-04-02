@@ -1,8 +1,6 @@
 import multer from 'multer'
 import { Upload } from '@aws-sdk/lib-storage'
-import {
-    AWS_BUCKET_NAME
-} from '../../config.js'
+import { AWS_BUCKET_NAME } from '../../config.js'
 import s3 from '../../models/s3.js'
 
 const storage = multer.memoryStorage()

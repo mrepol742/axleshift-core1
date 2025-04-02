@@ -106,12 +106,24 @@ const Documents = () => {
                     <CTable stripedColumns hover responsive>
                         <CTableHead>
                             <CTableRow>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Tracking Number</CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Type</CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Items</CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Import</CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Danger Goods</CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Status</CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                    Tracking Number
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                    Type
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                    Items
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                    Import
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                    Danger Goods
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                    Status
+                                </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"></CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>

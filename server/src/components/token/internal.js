@@ -14,6 +14,7 @@ const adminRoute = [
     '/auth/token',
     '/auth/token/new',
     '/auth/token/delete',
+    '/mail/send'
 ]
 const knownClients = [
     'PostmanRuntime',

@@ -21,6 +21,7 @@ import {
     faQuestion,
     faUser,
     faFolder,
+    faEnvelope,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -127,6 +128,13 @@ const _nav = [
         to: '/customer',
         role_exclude: [],
         icon: <FontAwesomeIcon icon={faUser} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Send Email',
+        to: '/send-email',
+        role_exclude: ['user', 'staff'],
+        icon: <FontAwesomeIcon icon={faEnvelope} className="nav-icon" />,
     },
     {
         component: CNavItem,

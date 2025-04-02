@@ -72,28 +72,30 @@ router.get('/:id', [auth], async (req, res) => {
     try {
         const db = await database()
         const invoicesCollection = db.collection('invoices')
-        const invoice = await invoicesCollection.aggregate([
-            { 
-            $match: { 
-                freight_tracking_number: id, 
-                status: { $ne: 'EXPIRED' } 
-            } 
-            },
-            {
-            $lookup: {
-                from: 'freight',
-                localField: 'freight_tracking_number',
-                foreignField: 'tracking_number',
-                as: 'freight_details',
-            },
-            },
-            { $unwind: { path: '$freight_details', preserveNullAndEmptyArrays: true } },
-        ]).next()
+        const invoice = await invoicesCollection
+            .aggregate([
+                {
+                    $match: {
+                        freight_tracking_number: id,
+                        status: { $ne: 'EXPIRED' },
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'freight',
+                        localField: 'freight_tracking_number',
+                        foreignField: 'tracking_number',
+                        as: 'freight_details',
+                    },
+                },
+                { $unwind: { path: '$freight_details', preserveNullAndEmptyArrays: true } },
+            ])
+            .next()
 
         if (!invoice)
             return res
-            .status(404)
-            .json({ error: 'Shipment invoice not found', tracking_number: id })
+                .status(404)
+                .json({ error: 'Shipment invoice not found', tracking_number: id })
 
         return res.status(200).json(invoice)
     } catch (err) {
