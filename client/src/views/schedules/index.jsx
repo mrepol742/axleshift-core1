@@ -42,6 +42,7 @@ const Schedules = () => {
                 startAccessor="start"
                 endAccessor="end"
                 style={{ height: 500 }}
+                popup
             />
         </div>
     )

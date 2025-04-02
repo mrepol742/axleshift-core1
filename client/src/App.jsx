@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect, lazy } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import AOS from 'aos'
 import { CSpinner, useColorModes } from '@coreui/react'
 import ReactGA from 'react-ga4'
 import PropTypes from 'prop-types'
@@ -52,6 +53,7 @@ ErrorBoundary.propTypes = {
 }
 
 const App = () => {
+    AOS.init()
     const { isColorModeSet, setColorMode } = useColorModes('theme')
     const storedTheme = useSelector((state) => state.theme)
     if (VITE_APP_NODE_ENV === 'production') ReactGA.initialize(VITE_APP_GOOGLE_ANALYTICS)

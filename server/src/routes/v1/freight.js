@@ -90,7 +90,13 @@ router.get('/calendar', auth, async (req, res) => {
         }
         const freight = await freightCollection
             .find(filter, {
-                projection: { tracking_number: 1, expected_delivery_date: 1, status: 1, type: 1 },
+                projection: {
+                    tracking_number: 1,
+                    created_at: 1,
+                    expected_delivery_date: 1,
+                    status: 1,
+                    type: 1,
+                },
             })
             .sort({ created_at: -1 })
             .toArray()
@@ -100,7 +106,7 @@ router.get('/calendar', auth, async (req, res) => {
         for (let i = 0; i < freight.length; i++) {
             events.push({
                 title: freight[i].tracking_number,
-                start: freight[i].expected_delivery_date,
+                start: freight[i].created_at,
                 end: freight[i].expected_delivery_date,
             })
         }

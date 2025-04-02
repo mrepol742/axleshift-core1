@@ -6,6 +6,8 @@ import {
     CDropdown,
     CDropdownToggle,
     CWidgetStatsA,
+    CWidgetStatsB,
+    CWidgetStatsC,
     CWidgetStatsF,
     CButton,
     CModal,
@@ -23,7 +25,20 @@ const Dashboard = () => {
     const widgetChartRef2 = useRef(null)
     const widgetChartRef3 = useRef(null)
     const widgetChartRef4 = useRef(null)
-    const [insights, setInsights] = useState({})
+    const [insights, setInsights] = useState({
+        smallDetailWidgets: {
+            cancelled: [0, '0%'],
+            toPay: [0, '0%'],
+            toShip: [0, '0%'],
+            toReceive: [0, '0%'],
+            received: [0, '0%'],
+        },
+        invoicesInfoWidgets: {
+            success: [0, '0%'],
+            expired: [0, '0%'],
+        },
+    })
+
     const calculateAverage = (data) => {
         if (!data || data.length === 0) return 0
         const sum = data.reduce((acc, value) => acc + value, 0)
@@ -80,17 +95,28 @@ const Dashboard = () => {
     }
 
     const fetchInsights = async () => {
-        const [shipmetOvertime, costOvertime, itemsOvertime, weightOvertime] = await Promise.all([
+        const [
+            shipmetOvertime,
+            costOvertime,
+            itemsOvertime,
+            weightOvertime,
+            smallDetailWidgets,
+            invoicesInfoWidgets,
+        ] = await Promise.all([
             fetch('/insights/shipment-overtime'),
             fetch('/insights/cost-overtime'),
             fetch('/insights/items-overtime'),
             fetch('/insights/weight-overtime'),
+            fetch('/insights/shipment-info-widgets'),
+            fetch('/insights/invoices-info-widgets'),
         ])
         setInsights({
             shipmetOvertime,
             costOvertime,
             itemsOvertime,
             weightOvertime,
+            smallDetailWidgets,
+            invoicesInfoWidgets,
         })
     }
 
@@ -142,6 +168,7 @@ const Dashboard = () => {
                 {widgetData.map((widget, index) => (
                     <CCol key={index} sm={6} xl={4}>
                         <CWidgetStatsA
+                            data-aos="fade-up"
                             color={widget.color}
                             value={widget.value}
                             title={widget.title}
@@ -222,56 +249,88 @@ const Dashboard = () => {
             <CRow>
                 <CCol xs={6} md={4}>
                     <CWidgetStatsF
+                        data-aos="fade-up"
+                        data-aos-delay="200"
                         icon={<FontAwesomeIcon icon={faChartPie} />}
                         className="mb-3"
-                        color="primary"
-                        title="Shipments"
-                        value="50%"
+                        color="danger"
+                        title="Cancelled Shipments"
+                        value={insights.smallDetailWidgets.cancelled[1]}
                     />
                 </CCol>
                 <CCol xs={6} md={4}>
                     <CWidgetStatsF
+                        data-aos="fade-up"
+                        data-aos-delay="300"
+                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                        className="mb-3"
+                        color="info"
+                        title="Waiting For Payments"
+                        value={insights.smallDetailWidgets.toPay[1]}
+                    />
+                </CCol>
+                <CCol xs={6} md={4}>
+                    <CWidgetStatsF
+                        data-aos="fade-up"
+                        data-aos-delay="400"
+                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                        className="mb-3"
+                        color="secondary"
+                        title="Waiting For Pickup"
+                        value={insights.smallDetailWidgets.toShip[1]}
+                    />
+                </CCol>
+                <CCol xs={6} md={4}>
+                    <CWidgetStatsF
+                        data-aos="fade-up"
+                        data-aos-delay="500"
                         icon={<FontAwesomeIcon icon={faChartPie} />}
                         className="mb-3"
                         color="warning"
-                        title="Shipments"
-                        value="50%"
+                        title="On the Way"
+                        value={insights.smallDetailWidgets.toReceive[1]}
                     />
                 </CCol>
                 <CCol xs={6} md={4}>
                     <CWidgetStatsF
+                        data-aos="fade-up"
+                        data-aos-delay="600"
                         icon={<FontAwesomeIcon icon={faChartPie} />}
                         className="mb-3"
                         color="primary"
-                        title="Shipments"
-                        value="50%"
+                        title="Completed Shipments"
+                        value={insights.smallDetailWidgets.received[1]}
                     />
                 </CCol>
-                <CCol xs={6} md={4}>
-                    <CWidgetStatsF
-                        icon={<FontAwesomeIcon icon={faChartPie} />}
+            </CRow>
+            <h5>Invoices</h5>
+            <CRow>
+                <CCol xs={6}>
+                    <CWidgetStatsC
+                        data-aos="fade-up"
+                        data-aos-delay="700"
                         className="mb-3"
-                        color="warning"
-                        title="Shipments"
-                        value="50%"
+                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                        progress={{
+                            color: 'success',
+                            value: insights.invoicesInfoWidgets.success[0],
+                        }}
+                        title="Successful"
+                        value={insights.invoicesInfoWidgets.success[1]}
                     />
                 </CCol>
-                <CCol xs={6} md={4}>
-                    <CWidgetStatsF
-                        icon={<FontAwesomeIcon icon={faChartPie} />}
+                <CCol xs={6}>
+                    <CWidgetStatsC
+                        data-aos="fade-up"
+                        data-aos-delay="800"
                         className="mb-3"
-                        color="primary"
-                        title="Shipments"
-                        value="50%"
-                    />
-                </CCol>
-                <CCol xs={6} md={4}>
-                    <CWidgetStatsF
                         icon={<FontAwesomeIcon icon={faChartPie} />}
-                        className="mb-3"
-                        color="warning"
-                        title="Shipments"
-                        value="50%"
+                        progress={{
+                            color: 'danger',
+                            value: insights.invoicesInfoWidgets.expired[0],
+                        }}
+                        title="Expired"
+                        value={insights.invoicesInfoWidgets.expired[1]}
                     />
                 </CCol>
             </CRow>

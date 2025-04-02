@@ -106,8 +106,8 @@ const Sessions = () => {
                 </CCol>
             </CRow>
             {result.sessions.map((session, index) => (
-                <>
-                    <CCard key={index} className="mb-3">
+                <div key={index}>
+                    <CCard className="mb-3">
                         <CCardBody>
                             <div className="d-flex justify-content-between align-items-center mb-2">
                                 <h3
@@ -154,7 +154,7 @@ const Sessions = () => {
                             setTotalPages={setTotalPages}
                         />
                     )}
-                </>
+                </div>
             ))}
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
