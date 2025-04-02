@@ -40,8 +40,9 @@ const Sessions = () => {
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
-                    error.message ||
-                    'Server is offline or restarting please wait'
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -57,8 +58,9 @@ const Sessions = () => {
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
-                    error.message ||
-                    'Server is offline or restarting please wait'
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
                 addToast(message)
             })
             .finally(() => setLoading(false))

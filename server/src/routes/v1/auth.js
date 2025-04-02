@@ -341,7 +341,7 @@ router.post('/upload', [auth, upload.single('profile_pic')], async (req, res) =>
         await Promise.all([
             uploadToS3(req.file, ref),
             (async () => {
-                if (req.user.avatar) return
+                if (!req.user.avatar) return
                 const db = await database()
                 const usersCollection = db.collection('users')
                 remCache(`user-id-${req.user._id}`),

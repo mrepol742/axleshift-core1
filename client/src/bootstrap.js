@@ -23,12 +23,12 @@ const excludedPaths = [
 
 _axios.interceptors.request.use(
     async (config) => {
-        // if (config.data) {
-        //     const sanitizedData = DOMPurify.sanitize(JSON.stringify(config.data))
-        //     config.data = pako.gzip(sanitizedData, { to: 'string' })
-        //     config.headers['Content-Encoding'] = 'gzip'
-        //     config.headers['Content-Type'] = 'application/json'
-        // }
+        if (config.data && !(config.data instanceof FormData)) {
+            const sanitizedData = DOMPurify.sanitize(JSON.stringify(config.data))
+            config.data = pako.gzip(sanitizedData, { to: 'string' })
+            config.headers['Content-Encoding'] = 'gzip'
+            config.headers['Content-Type'] = 'application/json'
+        }
         config.headers['Authorization'] = `Bearer ${token}`
         return config
     },

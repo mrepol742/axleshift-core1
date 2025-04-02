@@ -33,8 +33,9 @@ const Newsletter = ({ setLoading }) => {
                 console.error(error)
                 const message =
                     error.response?.data?.error ||
-                    error.message ||
-                    'Server is offline or restarting please wait'
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
                 setMessage(message)
             })
             .finally(() => setLoading(false))

@@ -76,8 +76,9 @@ const Account = () => {
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
-                    error.message ||
-                    'Server is offline or restarting please wait'
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -88,19 +89,16 @@ const Account = () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
 
+        const formData = new FormData()
+        formData.append('profile_pic', profilePic)
+        formData.append('recaptcha_ref', recaptcha)
+
         axios
-            .post(
-                `/auth/upload`,
-                {
-                    profile_pic: profilePic,
-                    recaptcha_ref: recaptcha,
+            .post(`/auth/upload`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
                 },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                },
-            )
+            })
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
                 addToast('Your profile picture has been updated.')
@@ -108,8 +106,9 @@ const Account = () => {
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
-                    error.message ||
-                    'Server is offline or restarting please wait'
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
                 addToast(message)
             })
             .finally(() => setLoading(false))
