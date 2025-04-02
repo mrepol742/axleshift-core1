@@ -131,14 +131,19 @@ const Receipt = () => {
                         <span>{data.freight_details.from[0].country}</span>
                     </>
                 )}
-                <div className="d-flex justify-content-between mt-5">
-                    <span>Date Paid</span>
-                    <span>{new Date(data.updated_at).toLocaleString()}</span>
-                </div>
-                <div className="d-flex justify-content-between">
-                    <span>Payment Method</span>
-                    <span>{data.payment_method}</span>
-                </div>
+                <div className="mb-4" />
+                {data.status === 'PAID' && (
+                    <>
+                        <div className="d-flex justify-content-between">
+                            <span>Date Paid</span>
+                            <span>{new Date(data.updated_at).toLocaleString()}</span>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                            <span>Payment Method</span>
+                            <span>{data.payment_method}</span>
+                        </div>
+                    </>
+                )}
                 <div className="d-flex justify-content-between">
                     <span>Amount Due</span>
                     <span>
@@ -153,9 +158,21 @@ const Receipt = () => {
             <div className="bg-body-secondary p-2 small mb-2">
                 https://core1.axleshift.com/invoices/{id}
             </div>
-            <CButton className="btn btn-primary px-4 mb-3" ref={pdfRef} onClick={generatePDF}>
-                PDF
-            </CButton>
+            <div className="d-flex">
+                {data.status === 'PENDING' && (
+                    <CButton
+                        className="btn btn-primary px-4 mb-3 me-2"
+                        onClick={(e) =>
+                            (window.location.href = `https://checkout-staging.xendit.co/web/${data.invoice_id}`)
+                        }
+                    >
+                        PAY NOW
+                    </CButton>
+                )}
+                <CButton className="btn btn-primary px-4 mb-3" ref={pdfRef} onClick={generatePDF}>
+                    PDF
+                </CButton>
+            </div>
         </div>
     )
 }

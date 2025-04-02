@@ -73,7 +73,12 @@ router.get('/:id', [auth], async (req, res) => {
         const db = await database()
         const invoicesCollection = db.collection('invoices')
         const invoice = await invoicesCollection.aggregate([
-            { $match: { freight_tracking_number: id } },
+            { 
+            $match: { 
+                freight_tracking_number: id, 
+                status: { $ne: 'EXPIRED' } 
+            } 
+            },
             {
             $lookup: {
                 from: 'freight',
