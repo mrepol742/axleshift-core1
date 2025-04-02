@@ -46,10 +46,10 @@ const XENDIT_API_GATEWAY_URL = process.env.XENDIT_API_GATEWAY_URL ?? 'https://ap
 const XENDIT_API_KEY = process.env.XENDIT_API_KEY ?? ''
 const XENDIT_WEBHOOK_VERIFICATION_TOKEN = process.env.XENDIT_WEBHOOK_VERIFICATION_TOKEN ?? ''
 
-const AWS_REGION = process.env.AWS_REGION ?? ''
+const AWS_REGION = process.env.AWS_REGION ?? 'ap-southeast-2'
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID ?? ''
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY ?? ''
-const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME ?? ''
+const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME ?? 'axleshift'
 const AUTO_CONTENT_TYPE = process.env.AUTO_CONTENT_TYPE ?? ''
 
 export {
