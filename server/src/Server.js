@@ -32,7 +32,7 @@ app.use(
 )
 app.use(cors())
 app.use(express.json())
-app.use(upload.none())
+// app.use(upload.none())
 app.use(mongoSanitize())
 app.use(compression())
 app.use(rateLimiter)

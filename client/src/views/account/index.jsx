@@ -35,6 +35,7 @@ const Account = () => {
         timezone: user.timezone,
     })
     const [loading, setLoading] = useState(false)
+    const [profilePic, setProfilePic] = useState(null)
 
     const getInitials = (name) => {
         return name ? name.charAt(0).toUpperCase() : ''
@@ -74,8 +75,43 @@ const Account = () => {
             })
             .catch((error) => {
                 const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
-                addToast(message, 'Fetch failed!')
+                    error.response?.data?.error ||
+                    error.message ||
+                    'Server is offline or restarting please wait'
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
+    }
+
+    const uploadProfile = async (e) => {
+        e.preventDefault()
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
+
+        axios
+            .post(
+                `/auth/upload`,
+                {
+                    profile_pic: profilePic,
+                    recaptcha_ref: recaptcha,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            )
+            .then((response) => {
+                if (response.data.error) return addToast(response.data.error)
+                addToast(response.data.message)
+                addToast('Your profile picture has been updated.')
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error ||
+                    error.message ||
+                    'Server is offline or restarting please wait'
+                addToast(message)
             })
             .finally(() => setLoading(false))
     }
@@ -98,7 +134,7 @@ const Account = () => {
                                 {user.avatar ? (
                                     <CImage
                                         crossOrigin="Anonymous"
-                                        src={`${VITE_APP_API_URL}/u/${user.avatar}.png`}
+                                        src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
                                         className="rounded-5"
                                         fluid
                                         width="40px"
@@ -113,12 +149,35 @@ const Account = () => {
                                         {getInitials(user.first_name)}
                                     </div>
                                 )}
-                                <CFormInput
-                                    name="profile_pic"
-                                    type="file"
-                                    className="mb-3"
-                                    disabled
-                                />
+                                <CInputGroup className="mb-3">
+                                    <CFormInput
+                                        name="profile_pic"
+                                        type="file"
+                                        onChange={(e) => {
+                                            setProfilePic(e.target.files[0])
+                                            const uploadButton =
+                                                document.getElementById('upload-button')
+                                            if (e.target.files.length > 0) {
+                                                uploadButton.style.display = 'inline-block'
+                                            } else {
+                                                uploadButton.style.display = 'none'
+                                            }
+                                        }}
+                                    />
+                                    <CButton
+                                        id="upload-button"
+                                        color="primary"
+                                        className="ms-2 rounded"
+                                        style={{ display: 'none' }}
+                                        onClick={(e) => {
+                                            if (profilePic) {
+                                                uploadProfile(e)
+                                            }
+                                        }}
+                                    >
+                                        Upload
+                                    </CButton>
+                                </CInputGroup>
                                 <CInputGroup className="mb-3">
                                     <CInputGroupText>
                                         <FontAwesomeIcon icon={faUser} />

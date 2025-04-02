@@ -23,7 +23,9 @@ const MyAddresses = () => {
             })
             .catch((error) => {
                 const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                    error.response?.data?.error ||
+                    error.message ||
+                    'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))

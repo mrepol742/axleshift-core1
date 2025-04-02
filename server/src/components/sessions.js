@@ -50,6 +50,7 @@ export const getUser = async (cachedSession) => {
             {
                 projection: {
                     _id: 1,
+                    avatar: 1,
                     username: 1,
                     username_last_updated_at: 1,
                     email: 1,

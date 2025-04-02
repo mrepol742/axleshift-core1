@@ -2,12 +2,24 @@ import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 import logger from './logger.js'
+import { uploadToS3 } from '../components/s3/profile.js'
 
-const download = (url, name) => {
-    const savePath = path.join(process.cwd(), 'public', 'u', `${name}.png`)
+const download = (url, ref) => {
+    const savePath = path.join(process.cwd(), 'temp', `${ref}.png`)
     downloadImage(url, savePath)
         .then(() => {
             logger.info('Finished downloading user avatar.')
+            return uploadToS3(savePath, ref)
+        })
+        .then(() => {
+            logger.info('Uploaded user avatar to S3.')
+            fs.unlink(savePath, (err) => {
+                if (err) {
+                    logger.error(`Failed to delete file: ${err}`)
+                } else {
+                    logger.info('Deleted local file after upload.')
+                }
+            })
         })
         .catch((err) => {
             logger.error(err)

@@ -11,6 +11,7 @@ import { Github, Google, FormLogin, FormRegister, FormOauth2 } from '../../compo
 import activity from '../../components/activity.js'
 import { APP_KEY } from '../../config.js'
 import { remCache } from '../../models/redis.js'
+import { upload, uploadToS3 } from '../../components/s3/profile.js'
 
 const router = express.Router()
 const thirtyDays = 30 * 24 * 60 * 60 * 1000
@@ -326,6 +327,40 @@ router.post('/password', [recaptcha, auth], async (req, res, next) => {
         logger.error(e)
     }
     res.status(500).json({ error: 'Internal server error' })
+})
+
+/**
+ * Change profile pic
+ */
+router.post('/upload', [auth, upload.single('profile_pic')], async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: 'No file uploaded' })
+
+        const ref = req.user.avatar ? req.user.avatar : crypto.randomBytes(4).toString('hex')
+
+        await Promise.all([
+            uploadToS3(req.file, ref),
+            (async () => {
+                if (req.user.avatar) return
+                const db = await database()
+                const usersCollection = db.collection('users')
+                remCache(`user-id-${req.user._id}`),
+                    usersCollection.updateOne(
+                        { _id: new ObjectId(req.user._id) },
+                        {
+                            $set: {
+                                avatar: ref,
+                                updated_at: Date.now(),
+                            },
+                        },
+                    )
+            })(),
+        ])
+        return res.status(200).json()
+    } catch (e) {
+        logger.error(e)
+        res.status(500).json({ error: 'Internal server error' })
+    }
 })
 
 /**

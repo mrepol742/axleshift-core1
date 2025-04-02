@@ -6,6 +6,7 @@ import { send } from '../mail.js'
 import Download from '../../utils/download.js'
 import activity from '../activity.js'
 import { NODE_ENV } from '../../config.js'
+import { upload, uploadToS3 } from '../../components/s3/profile.js'
 
 const FormOauth2 = async (req, res) => {
     try {

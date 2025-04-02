@@ -33,7 +33,7 @@ const AppHeaderDropdown = () => {
                 {user.avatar ? (
                     <CImage
                         crossOrigin="Anonymous"
-                        src={`${VITE_APP_API_URL}/u/${user.avatar}.png`}
+                        src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
                         className="rounded-5"
                         fluid
                         width="40px"
@@ -54,7 +54,7 @@ const AppHeaderDropdown = () => {
                     {user.avatar ? (
                         <CImage
                             crossOrigin="Anonymous"
-                            src={`${VITE_APP_API_URL}/u/${user.avatar}.png`}
+                            src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
                             className="rounded mb-2"
                             fluid
                             width="70px"

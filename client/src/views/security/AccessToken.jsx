@@ -47,7 +47,9 @@ const API = () => {
             })
             .catch((error) => {
                 const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                    error.response?.data?.error ||
+                    error.message ||
+                    'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
@@ -61,7 +63,9 @@ const API = () => {
             .then((response) => fetchData(1))
             .catch((error) => {
                 const message =
-                    error.response?.data?.error || 'Server is offline or restarting please wait'
+                    error.response?.data?.error ||
+                    error.message ||
+                    'Server is offline or restarting please wait'
                 addToast(message)
             })
             .finally(() => setLoading(false))
