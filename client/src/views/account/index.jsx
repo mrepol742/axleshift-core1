@@ -103,7 +103,6 @@ const Account = () => {
             )
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
-                addToast(response.data.message)
                 addToast('Your profile picture has been updated.')
             })
             .catch((error) => {
