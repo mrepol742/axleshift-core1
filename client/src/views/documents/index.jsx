@@ -100,55 +100,64 @@ const Documents = () => {
 
     return (
         <div>
-            <CTable stripedColumns hover responsive>
-                <CTableHead>
-                    <CTableRow>
-                        <CTableHeaderCell scope="col">Tracking Number</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Type</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Items</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Import</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Danger Goods</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                        <CTableHeaderCell scope="col"></CTableHeaderCell>
-                    </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                    {data.map((item, index) => (
-                        <CTableRow key={index}>
-                            <CTableDataCell>{item.tracking_number}</CTableDataCell>
-                            <CTableDataCell className="text-capitalize">{item.type}</CTableDataCell>
-                            <CTableDataCell>{item.number_of_items}</CTableDataCell>
-                            <CTableDataCell>
-                                {item.is_import === 'true' ? 'Yes' : 'No'}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                                {item.contains_danger_goods === 'true' ? 'Yes' : 'No'}
-                            </CTableDataCell>
-                            <CTableDataCell className="text-capitalize">
-                                {item.status.replace('_', ' ')}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                                <CButton
-                                    className="btn btn-primary"
-                                    onClick={(e) => navigate(`/documents/${item.tracking_number}`)}
-                                >
-                                    Upload
-                                </CButton>
-                            </CTableDataCell>
-                        </CTableRow>
-                    ))}
-                </CTableBody>
-            </CTable>
+            <CCard className="mb-4">
+                <CCardBody>
+                    <CCardTitle>Shipment Documents</CCardTitle>
+                    <CTable stripedColumns hover responsive>
+                        <CTableHead>
+                            <CTableRow>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Tracking Number</CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Type</CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Items</CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Import</CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Danger Goods</CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">Status</CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"></CTableHeaderCell>
+                            </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                            {data.map((item, index) => (
+                                <CTableRow key={index}>
+                                    <CTableDataCell>{item.tracking_number}</CTableDataCell>
+                                    <CTableDataCell className="text-capitalize">
+                                        {item.type}
+                                    </CTableDataCell>
+                                    <CTableDataCell>{item.number_of_items}</CTableDataCell>
+                                    <CTableDataCell>
+                                        {item.is_import === 'true' ? 'Yes' : 'No'}
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                        {item.contains_danger_goods === 'true' ? 'Yes' : 'No'}
+                                    </CTableDataCell>
+                                    <CTableDataCell className="text-capitalize">
+                                        {item.status.replace('_', ' ')}
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                        <CButton
+                                            className="btn btn-primary"
+                                            onClick={(e) =>
+                                                navigate(`/documents/${item.tracking_number}`)
+                                            }
+                                        >
+                                            Upload
+                                        </CButton>
+                                    </CTableDataCell>
+                                </CTableRow>
+                            ))}
+                        </CTableBody>
+                    </CTable>
 
-            {totalPages > 1 && (
-                <AppPagination
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    totalPages={totalPages}
-                    setTotalPages={setTotalPages}
-                    className="mb-3"
-                />
-            )}
+                    {totalPages > 1 && (
+                        <AppPagination
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            totalPages={totalPages}
+                            setTotalPages={setTotalPages}
+                            className="mb-3"
+                        />
+                    )}
+                </CCardBody>
+            </CCard>
         </div>
     )
 }
