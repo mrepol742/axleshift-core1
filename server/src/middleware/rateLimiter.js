@@ -26,6 +26,8 @@ export const exteralRequestRoute = [
     '/api/v1/invoices/:id',
     '/api/v1/addresses/',
     '/api/v1/addresses/:id',
+    '/api/v1/documents/',
+    '/api/v1/documents/:id'
 ]
 
 const rateLimiter = (req, res, next) => {
