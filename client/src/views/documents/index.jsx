@@ -33,7 +33,7 @@ const Documents = () => {
 
     const fetchData = async (page) => {
         axios
-            .post(`/freight`, { page })
+            .post(`/documents`, { page })
             .then((response) => {
                 setData(response.data.data)
                 setTotalPages(response.data.totalPages)
@@ -60,42 +60,17 @@ const Documents = () => {
             </div>
         )
 
-    if (data.length == 0)
+    if (data.length === 0)
         return (
-            <>
-                <div className="shipment-bg position-absolute top-0 start-0 w-100 h-100" />
-                <CRow className="justify-content-center my-5">
-                    <CCol md={7}>
-                        <div className="text-center">
-                            <h1 className="display-4 fw-bold">
-                                Welcome to
-                                <span className="text-primary d-block">Your Documents</span>
-                            </h1>
-                            <p className="lead">
-                                It looks like you haven&apos;t created any shipments yet. Let&apos;s
-                                get started!
-                            </p>
-                            <AppSearch className="mb-3" />
-                        </div>
-                        <CRow xs={{ cols: 1 }} sm={{ cols: 3 }}>
-                            <CCol onClick={(e) => navigate('/book-now')} className="mb-3">
-                                <h4>Ship Right Now</h4>
-                                <p>Create a new shipment and get started with our services.</p>
-                            </CCol>
-                            <CCol onClick={(e) => navigate('/support')} className="mb-3">
-                                <h4>Customer Support</h4>
-                                <p>
-                                    Get help with your shipments or learn more about our services.
-                                </p>
-                            </CCol>
-                            <CCol onClick={(e) => navigate('/learn-more')} className="mb-3">
-                                <h4>Learn More</h4>
-                                <p>Find out more about our services and how we can help you.</p>
-                            </CCol>
-                        </CRow>
-                    </CCol>
-                </CRow>
-            </>
+            <CRow className="justify-content-center my-5">
+                <CCol md={6}>
+                    <div className="clearfix">
+                        <h1 className="float-start display-3 me-4 text-danger">OOPS</h1>
+                        <h4>There was no documents yet.</h4>
+                        <p>Check it out later</p>
+                    </div>
+                </CCol>
+            </CRow>
         )
 
     return (
