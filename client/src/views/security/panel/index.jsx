@@ -1,5 +1,4 @@
 import Activity from './Activity'
-import Dashboard from './Dashboard'
 import Dependabot from './Dependabot'
 import Maintenance from './Maintenance'
 import Sentry from './Sentry'
@@ -7,4 +6,4 @@ import Sessions from './Sessions'
 import IPFiltering from './IPFiltering'
 import GEO from './GEO'
 
-export { Activity, Dashboard, Dependabot, Maintenance, Sentry, Sessions, IPFiltering, GEO }
+export { Activity, Dependabot, Maintenance, Sentry, Sessions, IPFiltering, GEO }

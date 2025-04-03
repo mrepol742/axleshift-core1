@@ -14,11 +14,11 @@ const upload = multer({
 
 const uploadToS3 = async (file, ref) => {
     const fileExtension = file.originalname.split('.').pop()
-    const fileName = `files/${ref}.${fileExtension}`
+    const fileName = `${ref}.${fileExtension}`
 
     const uploadParams = {
         Bucket: AWS_BUCKET_NAME,
-        Key: fileName,
+        Key: `files/${fileName}`,
         Body: file.buffer,
         ContentType: file.mimetype,
     }
@@ -28,8 +28,8 @@ const uploadToS3 = async (file, ref) => {
         params: uploadParams,
     })
 
-    const result = await upload.done()
-    return result.Location
+    await upload.done()
+    return { ref, file: file.originalname }
 }
 
 export { upload, uploadToS3 }

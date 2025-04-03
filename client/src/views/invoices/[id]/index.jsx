@@ -29,6 +29,7 @@ const Receipt = () => {
     const [data, setData] = useState(null)
     const invoiceRef = React.useRef()
     const pdfRef = React.useRef()
+
     const generatePDF = () => {
         pdfRef.current.style.display = 'none'
         const bgColor = getComputedStyle(document.body).backgroundColor

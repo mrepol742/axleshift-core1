@@ -103,7 +103,7 @@ const Track = () => {
                                 aria-describedby="basic-addon"
                                 value={trackingNumber}
                                 onChange={(e) => setTrackingNumber(e.target.value)}
-                                placeholder="XX-XXXXXX"
+                                placeholder="AX-17XXXXXXXXXX"
                             />
                             <CInputGroupText id="basic-addon" onClick={handleSubmit}>
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />

@@ -143,9 +143,9 @@ const API = () => {
                             <div className="d-flex justify-content-between align-items-center mb-2">
                                 <h3 className="text-primary text-truncate">{token.note}</h3>
                                 <CButton
-                                    color="outline-danger"
+                                    color="danger"
                                     onClick={(e) => handleDelete(token._id)}
-                                    className="border-danger ms-auto"
+                                    className="ms-auto"
                                 >
                                     Delete
                                 </CButton>

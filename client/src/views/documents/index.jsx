@@ -33,7 +33,7 @@ const Documents = () => {
 
     const fetchData = async (page) => {
         axios
-            .post(`/freight`, { page })
+            .post(`/documents`, { page })
             .then((response) => {
                 setData(response.data.data)
                 setTotalPages(response.data.totalPages)
@@ -60,42 +60,17 @@ const Documents = () => {
             </div>
         )
 
-    if (data.length == 0)
+    if (data.length === 0)
         return (
-            <>
-                <div className="shipment-bg position-absolute top-0 start-0 w-100 h-100" />
-                <CRow className="justify-content-center my-5">
-                    <CCol md={7}>
-                        <div className="text-center">
-                            <h1 className="display-4 fw-bold">
-                                Welcome to
-                                <span className="text-primary d-block">Your Documents</span>
-                            </h1>
-                            <p className="lead">
-                                It looks like you haven&apos;t created any shipments yet. Let&apos;s
-                                get started!
-                            </p>
-                            <AppSearch className="mb-3" />
-                        </div>
-                        <CRow xs={{ cols: 1 }} sm={{ cols: 3 }}>
-                            <CCol onClick={(e) => navigate('/book-now')} className="mb-3">
-                                <h4>Ship Right Now</h4>
-                                <p>Create a new shipment and get started with our services.</p>
-                            </CCol>
-                            <CCol onClick={(e) => navigate('/support')} className="mb-3">
-                                <h4>Customer Support</h4>
-                                <p>
-                                    Get help with your shipments or learn more about our services.
-                                </p>
-                            </CCol>
-                            <CCol onClick={(e) => navigate('/learn-more')} className="mb-3">
-                                <h4>Learn More</h4>
-                                <p>Find out more about our services and how we can help you.</p>
-                            </CCol>
-                        </CRow>
-                    </CCol>
-                </CRow>
-            </>
+            <CRow className="justify-content-center my-5">
+                <CCol md={6}>
+                    <div className="clearfix">
+                        <h1 className="float-start display-3 me-4 text-danger">OOPS</h1>
+                        <h4>There was no documents yet.</h4>
+                        <p>Check it out later</p>
+                    </div>
+                </CCol>
+            </CRow>
         )
 
     return (
@@ -103,26 +78,17 @@ const Documents = () => {
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Shipment Documents</CCardTitle>
-                    <CTable stripedColumns hover responsive>
+                    <CTable stripedColumns hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Tracking Number
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Type
-                                </CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Items
-                                </CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Import
-                                </CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Danger Goods
-                                </CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Status
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                    Documents
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"></CTableHeaderCell>
                             </CTableRow>
@@ -130,28 +96,35 @@ const Documents = () => {
                         <CTableBody>
                             {data.map((item, index) => (
                                 <CTableRow key={index}>
-                                    <CTableDataCell>{item.tracking_number}</CTableDataCell>
-                                    <CTableDataCell className="text-capitalize">
-                                        {item.type}
+                                    <CTableDataCell>{item.freight_tracking_number}</CTableDataCell>
+                                    <CTableDataCell className="text-uppercase">
+                                        <span
+                                            className={`badge bg-${item.status === 'approved' ? 'success' : item.status === 'rejected' ? 'danger' : 'warning'}`}
+                                        >
+                                            {item.status}
+                                        </span>
                                     </CTableDataCell>
-                                    <CTableDataCell>{item.number_of_items}</CTableDataCell>
                                     <CTableDataCell>
-                                        {item.is_import === 'true' ? 'Yes' : 'No'}
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                        {item.contains_danger_goods === 'true' ? 'Yes' : 'No'}
-                                    </CTableDataCell>
-                                    <CTableDataCell className="text-capitalize">
-                                        {item.status.replace('_', ' ')}
+                                        {item.documents && item.documents.length > 0 ? (
+                                            item.documents.map((doc, docIndex) => (
+                                                <span key={docIndex} className="d-block">
+                                                    {doc.name}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span>No documents available</span>
+                                        )}
                                     </CTableDataCell>
                                     <CTableDataCell>
                                         <CButton
                                             className="btn btn-primary"
                                             onClick={(e) =>
-                                                navigate(`/documents/${item.tracking_number}`)
+                                                navigate(
+                                                    `/documents/${item.freight_tracking_number}`,
+                                                )
                                             }
                                         >
-                                            Upload
+                                            View
                                         </CButton>
                                     </CTableDataCell>
                                 </CTableRow>

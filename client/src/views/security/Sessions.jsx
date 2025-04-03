@@ -124,8 +124,8 @@ const Sessions = () => {
                                     {session.user_agent}
                                 </h3>
                                 <CButton
-                                    color="outline-danger"
-                                    className="border-danger ms-auto"
+                                    color="danger"
+                                    className="ms-auto"
                                     onClick={(e) => handleLogout(session._id)}
                                 >
                                     Logout
