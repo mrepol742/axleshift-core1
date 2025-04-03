@@ -78,7 +78,7 @@ const Documents = () => {
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Shipment Documents</CCardTitle>
-                    <CTable stripedColumns hover responsive>
+                    <CTable stripedColumns hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
@@ -97,19 +97,25 @@ const Documents = () => {
                             {data.map((item, index) => (
                                 <CTableRow key={index}>
                                     <CTableDataCell>{item.freight_tracking_number}</CTableDataCell>
+                                    <CTableDataCell className="text-uppercase">
+                                        <span
+                                            className={`badge bg-${item.status === 'approved' ? 'success' : item.status === 'rejected' ? 'danger' : 'warning'}`}
+                                        >
+                                            {item.status}
+                                        </span>
+                                    </CTableDataCell>
                                     <CTableDataCell>
                                         {item.documents.length === 0
                                             ? 'No documents found'
                                             : JSON.stringify(documents)}
                                     </CTableDataCell>
-                                    <CTableDataCell className="text-uppercase">
-                                        {item.status}
-                                    </CTableDataCell>
                                     <CTableDataCell>
                                         <CButton
                                             className="btn btn-primary"
                                             onClick={(e) =>
-                                                navigate(`/documents/${item.tracking_number}`)
+                                                navigate(
+                                                    `/documents/${item.freight_tracking_number}`,
+                                                )
                                             }
                                         >
                                             View

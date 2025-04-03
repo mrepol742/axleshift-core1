@@ -75,19 +75,19 @@ const Invoices = () => {
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Transactions</CCardTitle>
-                    <CTable hover responsive className="table-even-width">
+                    <CTable stripedColumns hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>
-                                <CTableHeaderCell className="text-muted poppins-regular">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Ref Number
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Amount
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Status
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-muted poppins-regular">
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Action
                                 </CTableHeaderCell>
                             </CTableRow>
@@ -102,7 +102,13 @@ const Invoices = () => {
                                             currency: invoice.currency,
                                         }).format(invoice.amount)}
                                     </CTableDataCell>
-                                    <CTableDataCell>{invoice.status}</CTableDataCell>
+                                    <CTableDataCell>
+                                        <span
+                                            className={`badge bg-${invoice.status === 'PAID' ? 'success' : invoice.status === 'EXPIRED' ? 'danger' : 'warning'}`}
+                                        >
+                                            {invoice.status}
+                                        </span>
+                                    </CTableDataCell>
                                     <CTableDataCell>
                                         {invoice.status !== 'EXPIRED' && (
                                             <CButton
