@@ -22,7 +22,7 @@ const ShipmentCard = ({ shipment }) => {
     const getCardColor = (status) => {
         if (status === 'cancelled') return 'danger'
         if (status === 'received') return 'primary'
-        if (status === 'to_receive' || status === 'to_ship') return 'info'
+        if (status === 'to_receive' || status === 'to_ship') return 'success'
         // for to_pay
         return ''
     }

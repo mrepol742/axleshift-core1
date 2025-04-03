@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { CRow, CCol, CCard, CCardText, CSpinner } from '@coreui/react'
+import { CRow, CCol, CCard, CCardText, CSpinner, CButton } from '@coreui/react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { VITE_APP_GOOGLE_MAP } from '../../../config'
 
 const TrackInfo = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
-    const [responseData, setResponseData] = useState({
-        events: [],
-        origin: '',
-        destination: '',
-        status: '',
-        markerPositions: [],
-    })
+    const [responseData, setResponseData] = useState({})
     const { id } = useParams()
     const navigate = useNavigate()
 
     const fetchData = async () => {
         axios
             .get(`/track/${id}`)
-            .then((response) => setResponseData(response.data))
+            .then((response) => {
+                setResponseData(response.data)
+            })
             .catch((error) => setError(true))
             .finally(() => setLoading(false))
     }
@@ -64,35 +60,69 @@ const TrackInfo = () => {
                 <CCol>
                     <div className="mb-4">
                         <CCard className="mb-3 bg-dark text-white p-3">
-                            <CCardText>
-                                <span className="fw-bold">{id}</span>{' '}
-                                {getStatus(responseData.status)}
-                            </CCardText>
-                            <span className="d-block">{responseData.destination}</span>
+                            <p className="lead">{getStatus(responseData.status)}</p>
+                            <div className="mb-2">
+                                <span className="d-block">Courier Name</span>
+                                <span className="text-muted">{id}</span>
+                            </div>
+                            Address
+                            <span className="d-block text-muted mb-2">
+                                {responseData.destination[0].address}
+                                {', '}
+                                {responseData.destination[0].city}
+                                {', '}
+                                {responseData.destination[0].country}{' '}
+                                {responseData.destination[0].zip_code}
+                            </span>
+                            {responseData.to[0].name}
+                            <span className="d-block text-muted mb-2">
+                                {responseData.to[0].phone_number}
+                                <br />
+                                {responseData.to[0].email}
+                            </span>
+                            <div className="d-flex">
+                                <CButton
+                                    className="bg-body-secondary me-2 rounded"
+                                    onClick={(e) => navigate(`/invoices/${id}`)}
+                                >
+                                    Invoice
+                                </CButton>
+                                {responseData.documents_id && (
+                                    <CButton
+                                        className="bg-body-secondary me-2 rounded"
+                                        onClick={(e) => navigate(`/documents/${id}`)}
+                                    >
+                                        Documents
+                                    </CButton>
+                                )}
+                            </div>
                         </CCard>
-                        <LoadScript googleMapsApiKey={VITE_APP_GOOGLE_MAP}>
+                        {/* <LoadScript googleMapsApiKey={VITE_APP_GOOGLE_MAP}>
                             <GoogleMap
-                                mapContainerStyle={{
-                                    height: '400px',
-                                    width: '100%',
-                                }}
-                                center={responseData.markerPositions[0]}
+                                mapContainerStyle={{ height: '400px', width: '100%' }}
+                                center={mapCenter}
                                 zoom={10}
                             >
-                                {responseData.markerPositions.map((position, index) => (
-                                    <Marker key={index} position={position} />
-                                ))}
+                                <Marker position={markerPosition} />
                             </GoogleMap>
-                        </LoadScript>
+                        </LoadScript> */}
                     </div>
                 </CCol>
                 <CCol>
                     <div className="timeline">
                         {responseData.events.map((event, index) => (
                             <div className="timeline-event" key={index}>
-                                <div className="text-primary px-4">{event.date}</div>
+                                <div className="text-primary px-4">
+                                    {new Date(event.date).toLocaleString('en-GB', {
+                                        day: '2-digit',
+                                        month: 'long',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false,
+                                    })}
+                                </div>
                                 <div className="px-4 py-1 mb-2">
-                                    <p>{event.description}</p>
+                                    <p>{event.event}</p>
                                 </div>
                             </div>
                         ))}
