@@ -10,6 +10,8 @@ import recaptcha from '../../../middleware/recaptcha.js'
 import { NODE_ENV } from '../../../config.js'
 import activity from '../../../components/activity.js'
 import documents from '../../../middleware/documents.js'
+import { upload, uploadToS3 } from '../../../components/s3/documents.js'
+import crypto from 'crypto'
 
 const router = express.Router()
 const limit = 20
@@ -61,11 +63,65 @@ router.get('/:id', [auth, documents], async (req, res) => res.status(200).json(r
 /**
  * Upload a document
  */
-router.post('/upload', [recaptcha, auth], async (req, res) => {
-    try {
-    } catch (err) {
-        logger.error(err)
-    }
-    res.status(500).json({ error: 'Internal server error' })
-})
+router.post(
+    '/:id/upload',
+    [auth, documents, upload.fields([{ name: 'exportLicense' }, { name: 'certificateOfOrigin' }])],
+    async (req, res) => {
+        try {
+            const { files } = req
+            if (!files || !files.exportLicense || !files.certificateOfOrigin)
+                return res.status(400).json({ error: 'Invalid request' })
+
+            const exportLicenseFile = files.exportLicense[0]
+            const certificateOfOriginFile = files.certificateOfOrigin[0]
+
+            const [exportLicenseUrl, certificateOfOriginUrl] = await Promise.all([
+                uploadToS3(
+                    exportLicenseFile,
+                    req.documents.documents && req.documents.documents[0].file
+                        ? req.documents.documents[0].file
+                        : crypto.randomBytes(6).toString('hex'),
+                ),
+                uploadToS3(
+                    certificateOfOriginFile,
+                    req.documents.documents && req.documents.documents[1].file
+                        ? req.documents.documents[1].file
+                        : crypto.randomBytes(6).toString('hex'),
+                ),
+            ])
+
+            const db = await database()
+            const documentsCollection = db.collection('documents')
+            await documentsCollection.updateOne(
+                { _id: new ObjectId(req.documents._id) },
+                {
+                    $set: {
+                        documents: [
+                            {
+                                name: 'Export License',
+                                type: 'Permit & License',
+                                status: 'Under Review',
+                                file: exportLicenseUrl,
+                            },
+                            {
+                                name: 'Certificate of Origin',
+                                type: 'Regulatory Certificate',
+                                status: 'Under Review',
+                                file: certificateOfOriginUrl,
+                            },
+                        ],
+                        updated_at: Date.now(),
+                    },
+                },
+            )
+
+            return res.status(200).json({
+                message: 'Files uploaded successfully',
+            })
+        } catch (err) {
+            logger.error(err)
+            res.status(500).json({ error: 'Internal server error' })
+        }
+    },
+)
 export default router

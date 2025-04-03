@@ -74,9 +74,8 @@ const MyAddresses = () => {
                 ))}
             {result &&
                 result.map((address, index) => (
-                    <>
+                    <div key={index}>
                         <CCard
-                            key={index}
                             className="mb-3"
                             title="Tap to view"
                             onClick={(e) => navigate(`/my-addresses/view`, { state: { address } })}
@@ -120,7 +119,7 @@ const MyAddresses = () => {
                                 setTotalPages={setTotalPages}
                             />
                         )}
-                    </>
+                    </div>
                 ))}
         </div>
     )

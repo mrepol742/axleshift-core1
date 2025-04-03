@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     CCard,
     CButton,
@@ -10,31 +10,118 @@ import {
     CTableBody,
     CTableDataCell,
     CCardBody,
+    CRow,
+    CCol,
+    CSpinner,
+    CForm,
 } from '@coreui/react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
+import ReCAPTCHA from 'react-google-recaptcha'
+import { useToast } from '../../../components/AppToastProvider'
+import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config.js'
 
 const Document = () => {
     const { id } = useParams()
+    const [loading, setLoading] = useState(true)
+    const { addToast } = useToast()
+    const recaptchaRef = React.useRef()
     const [documents, setDocuments] = useState([
-        { name: 'Commercial Invoice', type: 'Customs Document', status: 'Pending' },
-        { name: 'Packing List', type: 'Customs Document', status: 'Pending' },
         { name: 'Export License', type: 'Permit & License', status: 'Pending' },
         { name: 'Certificate of Origin', type: 'Regulatory Certificate', status: 'Pending' },
     ])
+    const [exportLicense, setExportLicense] = useState(null)
+    const [certificateOfOrigin, setCertificateOfOrigin] = useState(null)
 
     const handleFileUpload = (event, index) => {
-        const newDocs = [...documents]
-        newDocs[index].status = 'Under Review'
-        setDocuments(newDocs)
+        const file = event.target.files[0]
+        if (file) {
+            const newDocs = [...documents]
+            newDocs[index] = { ...newDocs[index], status: 'Under Review' }
+            setDocuments(newDocs)
+            if (index === 0) setExportLicense(file)
+            if (index === 1) setCertificateOfOrigin(file)
+        }
     }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
+        const formData = new FormData()
+        formData.append('exportLicense', exportLicense)
+        formData.append('certificateOfOrigin', certificateOfOrigin)
+        formData.append('recaptcha_ref', recaptcha)
+
+        axios
+            .post(`/documents/${id}/upload`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then((response) => {
+                addToast('Documents uploaded successfully!', 'success')
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error ||
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
+                addToast(message, 'danger')
+            })
+            .finally(() => setLoading(false))
+    }
+
+    const fetchDocuments = async () => {
+        axios
+            .get(`/documents/${id}`)
+            .then((response) => {
+                if (response.data.documents.length !== 0) {
+                    setDocuments(response.data.documents)
+                }
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error ||
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
+    }
+
+    useEffect(() => {
+        fetchDocuments()
+    }, [])
+
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
+    if (!documents)
+        return (
+            <CRow className="justify-content-center my-5">
+                <CCol md={6}>
+                    <div className="clearfix">
+                        <h1 className="float-start display-3 me-4 text-danger">OOPS</h1>
+                        <h4>There was no shipment documents found.</h4>
+                        <p>Double check tracking number for any mistake.</p>
+                    </div>
+                </CCol>
+            </CRow>
+        )
 
     return (
         <>
             <Helmet>
                 <title>{id} - Documents | Axleshift</title>
             </Helmet>
-            <div>
+            <CForm onSubmit={handleSubmit}>
                 <h2>Upload Documents</h2>
                 <span className="text-muted">{id}</span>
                 <CCard className="mt-2 mb-3">
@@ -61,18 +148,27 @@ const Document = () => {
                                     <CTableRow key={index}>
                                         <CTableDataCell>{doc.name}</CTableDataCell>
                                         <CTableDataCell>{doc.type}</CTableDataCell>
-                                        <CTableDataCell>
+                                        <CTableDataCell className="text-capitalize">
                                             <span
-                                                className={`badge bg-${doc.status === 'Approved' ? 'success' : doc.status === 'Rejected' ? 'danger' : 'warning'}`}
+                                                className={`badge bg-${doc.status === 'approved' ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}`}
                                             >
                                                 {doc.status}
                                             </span>
                                         </CTableDataCell>
                                         <CTableDataCell>
-                                            <CFormInput
-                                                type="file"
-                                                onChange={(e) => handleFileUpload(e, index)}
-                                            />
+                                            {!doc.file.file || doc.status === 'rejected' ? (
+                                                <>
+                                                    <CFormInput
+                                                        type="file"
+                                                        onChange={(e) => handleFileUpload(e, index)}
+                                                    />
+                                                    <span className="text-danger text-decoration-line-through">
+                                                        {doc.file.file}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                doc.file.file
+                                            )}
                                         </CTableDataCell>
                                     </CTableRow>
                                 ))}
@@ -83,10 +179,17 @@ const Document = () => {
                             counterfeit. Uploading fraudulent documents may result in legal
                             consequences.
                         </span>
-                        <CButton color="primary">Submit Documents</CButton>
+                        <CButton color="primary" type="submit">
+                            Submit Documents
+                        </CButton>
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            size="invisible"
+                            sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                        />
                     </CCardBody>
                 </CCard>
-            </div>
+            </CForm>
         </>
     )
 }
