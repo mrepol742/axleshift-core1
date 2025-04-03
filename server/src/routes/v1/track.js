@@ -15,56 +15,38 @@ router.get('/:id', [auth, freight], async (req, res, next) => {
     try {
         const freight = req.freight
 
-        const events = []
-        events.push({
-            date: freight.created_at,
-            description: 'Freight is placed',
-        })
-        if (freight.created_at !== freight.updated_at)
-            events.push({
-                data: freight.updated_at,
-                description: 'Freight info was updated',
-            })
-
-        /*-----------------------------------*/
-        /*   THIS IS A TEST                  */
-        /*-----------------------------------*/
-        events.push({
-            date: freight.created_at,
-            description: 'We are preparing to ship your shipment',
-        })
-        events.push({
-            date: freight.created_at,
-            description: 'Freight has arrived on our ports in China',
-        })
-
-        const markerPositions = [
-            // very big bridge?
-            { lat: 37.7749, lng: -122.4194 },
-            // lost angles
-            { lat: 34.0522, lng: -118.2437 },
-            // the concrete jungle hehe
-            { lat: 40.7128, lng: -74.006 },
-        ]
-
-        const _origins = {
-            sea: 'shipping_loading_port',
-            air: 'shipping_origin_airport',
-            land: 'shipping_origin_addresss',
-        }
-
-        const _destinations = {
-            sea: 'shipping_discharge_port',
-            air: 'shipping_destination_airport',
-            land: 'shipping_destination_addresss',
-        }
-
         return res.status(200).json({
-            events: events,
-            origin: freight.data.shipping[_origins[freight.type]],
-            destination: freight.data.shipping[_destinations[freight.type]],
-            status: 'on route',
-            markerPositions: markerPositions,
+            events: [
+                {
+                    date: freight.created_at,
+                   event: "Shipment is placed"
+                },
+                // all other tracking info will be here
+           ],
+            to: [
+                {
+                    'name': freight.to[0].name,
+                    'phone_number': freight.to[0].phone_number,
+                    'email': freight.to[0].email,
+                }
+            ],
+            origin: [
+                {
+                    'address': freight.from[0].address,
+                    'city': freight.from[0].city,
+                    'country': freight.from[0].country,
+                    'zip_code': freight.from[0].zip_code,
+                },
+            ],
+            destination: [
+                {
+                    'address': freight.to[0].address,
+                    'city': freight.to[0].city,
+                    'country': freight.to[0].country,
+                    'zip_code': freight.to[0].zip_code,
+                },
+            ],
+            status: freight.status,
         })
     } catch (e) {
         logger.error(e)

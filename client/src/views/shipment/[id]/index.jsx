@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { QRCodeSVG } from 'qrcode.react'
 import html2canvas from 'html2canvas'
+import { Helmet } from 'react-helmet'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
@@ -97,28 +98,30 @@ const FreightInfo = () => {
     // i tried to resuse them like how she re--use u
     return (
         <div>
-            {showQR && (
-                <CModal
-                    visible={true}
-                    onClose={() => setShowQR(false)}
-                    alignment="center"
-                    scrollable
-                >
-                    <CModalHeader closeButton></CModalHeader>
-                    <CModalBody>
-                        <div className="d-flex justify-content-center align-items-center">
-                            <div ref={svgRef} className="d-inline-block">
-                                <QRCodeSVG value={id} />
-                            </div>
+            <Helmet>
+                <title>{id} - Shipment | Axleshift</title>
+            </Helmet>
+            <CModal visible={showQR} onClose={() => setShowQR(false)} alignment="center" scrollable>
+                <CModalBody>
+                    <div className="text-center small">
+                        <span>{id}</span>
+                    </div>
+                    <div className="d-flex justify-content-center align-items-center">
+                        <div ref={svgRef} className="d-inline-block">
+                            <QRCodeSVG
+                                value={id}
+                                className="rounded-3 border border-3"
+                                size={200}
+                            />
                         </div>
-                    </CModalBody>
-                    <CModalFooter className="d-flex justify-content-center align-items-center">
-                        <CButton color="primary" onClick={handleQRDownload}>
-                            Download
+                    </div>
+                    <div className="d-flex justify-content-center align-items-center">
+                        <CButton onClick={handleQRDownload} className="px-5 mt-3 bg-body-secondary">
+                            Save
                         </CButton>
-                    </CModalFooter>
-                </CModal>
-            )}
+                    </div>
+                </CModalBody>
+            </CModal>
             <div className="d-flex flex-row justify-content-between align-items-center mb-4">
                 <span className="d-block">
                     <span className="text-primary fw-bold small">Tracking Number:</span>
@@ -127,12 +130,27 @@ const FreightInfo = () => {
                 </span>
                 <CButtonGroup className="mb-2 mb-sm-0">
                     <CButton
-                        color="primary"
-                        className="me-2 rounded"
+                        className="bg-body-secondary me-2 rounded"
                         onClick={(e) => setShowQR(true)}
                     >
                         <FontAwesomeIcon icon={faQrcode} />
                     </CButton>
+                    {form.invoice_id && (
+                        <CButton
+                            className="bg-body-secondary me-2 rounded"
+                            onClick={(e) => navigate(`/invoices/${id}`)}
+                        >
+                            Invoice
+                        </CButton>
+                    )}
+                    {form.documents_id && (
+                        <CButton
+                            className="bg-body-secondary me-2 rounded"
+                            onClick={(e) => navigate(`/documents/${id}`)}
+                        >
+                            Documents
+                        </CButton>
+                    )}
                 </CButtonGroup>
             </div>
 

@@ -14,6 +14,7 @@ import invoices from './invoices.js'
 import notifications from './notifications.js'
 import addresses from './addresses.js'
 import document from './freight/documents.js'
+import mail from './mail.js'
 
 const router = express.Router()
 router.use('/auth', auth)
@@ -36,5 +37,7 @@ router.use('/newsletter', newsletter)
 
 router.use('/invoices', invoices)
 router.use('/addresses', addresses)
+
+router.use('/mail', mail)
 
 export default router

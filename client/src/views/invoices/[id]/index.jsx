@@ -14,9 +14,11 @@ import {
     CCardBody,
     CCardTitle,
     CButton,
+    CImage,
 } from '@coreui/react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import { Helmet } from 'react-helmet'
 import { useToast } from '../../../components/AppToastProvider'
 
 const Receipt = () => {
@@ -100,58 +102,81 @@ const Receipt = () => {
 
     return (
         <div ref={invoiceRef}>
-            <CCard className="mb-4">
-                <CCardBody>
-                    <h3>Shipment Receipt</h3>
-                    <CTable>
-                        <CTableBody>
-                            <CTableRow>
-                                <CTableDataCell>Tracking Number</CTableDataCell>
-                                <CTableDataCell>{data.freight_tracking_number}</CTableDataCell>
-                            </CTableRow>
-                            <CTableRow>
-                                <CTableDataCell>Reference Number</CTableDataCell>
-                                <CTableDataCell>{data.invoice_id.slice(-8)}</CTableDataCell>
-                            </CTableRow>
-                            <CTableRow>
-                                <CTableDataCell>User ID</CTableDataCell>
-                                <CTableDataCell>{data.user_id}</CTableDataCell>
-                            </CTableRow>
-                            <CTableRow>
-                                <CTableDataCell>Amount</CTableDataCell>
-                                <CTableDataCell>
-                                    {new Intl.NumberFormat('en-US', {
-                                        style: 'currency',
-                                        currency: data.currency,
-                                    }).format(data.amount)}
-                                </CTableDataCell>
-                            </CTableRow>
-                            <CTableRow>
-                                <CTableDataCell>Status</CTableDataCell>
-                                <CTableDataCell>{data.status}</CTableDataCell>
-                            </CTableRow>
-                            <CTableRow>
-                                <CTableDataCell>Date</CTableDataCell>
-                                <CTableDataCell>
-                                    {new Date(data.created_at).toLocaleString()}
-                                </CTableDataCell>
-                            </CTableRow>
-                            <CTableRow>
-                                <CTableDataCell>Last update</CTableDataCell>
-                                <CTableDataCell>
-                                    {new Date(data.created_at).toLocaleString()}
-                                </CTableDataCell>
-                            </CTableRow>
-                        </CTableBody>
-                    </CTable>
-                    <div className="small text-center">
-                        https://core1.axleshift.com/invoices/{id}
-                    </div>
-                    <CButton className="btn btn-primary px-4" ref={pdfRef} onClick={generatePDF}>
-                        Print
+            <Helmet>
+                <title>{id} - Invoice | Axleshift</title>
+            </Helmet>
+            <h1 className="text-uppercase fw-bold text-center">Axleshift</h1>
+            <p className="text-center">4108 IM Bestlink College of the Phillippines</p>
+            <div className="bg-body-secondary p-2 mb-1">
+                <span className="d-block">Invoice ID: {data.invoice_id}</span>
+                <span className="d-block">Tracking Number: {data.freight_tracking_number}</span>
+                {data.freight_details.is_import === true ? (
+                    <span>Name: {data.freight_details.to[0].name}</span>
+                ) : (
+                    <span>Name: {data.freight_details.from[0].name}</span>
+                )}
+                <br />
+                <br />
+                {data.freight_details.is_import === true ? (
+                    <>
+                        <span className="d-block">{data.freight_details.to[0].address}</span>
+                        <span className="d-block">
+                            {data.freight_details.to[0].city} {data.freight_details.to[0].zip_code}
+                        </span>
+                        <span>{data.freight_details.to[0].country}</span>
+                    </>
+                ) : (
+                    <>
+                        <span className="d-block">{data.freight_details.from[0].address}</span>
+                        <span className="d-block">
+                            {data.freight_details.from[0].city}{' '}
+                            {data.freight_details.from[0].zip_code}
+                        </span>
+                        <span>{data.freight_details.from[0].country}</span>
+                    </>
+                )}
+                <div className="mb-4" />
+                {data.status === 'PAID' && (
+                    <>
+                        <div className="d-flex justify-content-between">
+                            <span>Date Paid</span>
+                            <span>{new Date(data.updated_at).toLocaleString()}</span>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                            <span>Payment Method</span>
+                            <span>{data.payment_method}</span>
+                        </div>
+                    </>
+                )}
+                <div className="d-flex justify-content-between">
+                    <span>Amount Due</span>
+                    <span>
+                        {' '}
+                        {new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: data.currency,
+                        }).format(data.amount)}
+                    </span>
+                </div>
+            </div>
+            <div className="bg-body-secondary p-2 small mb-2">
+                https://core1.axleshift.com/invoices/{id}
+            </div>
+            <div className="d-flex">
+                {data.status === 'PENDING' && (
+                    <CButton
+                        className="btn btn-primary px-4 mb-3 me-2"
+                        onClick={(e) =>
+                            (window.location.href = `https://checkout-staging.xendit.co/web/${data.invoice_id}`)
+                        }
+                    >
+                        PAY NOW
                     </CButton>
-                </CCardBody>
-            </CCard>
+                )}
+                <CButton className="btn btn-primary px-4 mb-3" ref={pdfRef} onClick={generatePDF}>
+                    PDF
+                </CButton>
+            </div>
         </div>
     )
 }

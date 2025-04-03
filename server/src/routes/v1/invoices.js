@@ -72,7 +72,26 @@ router.get('/:id', [auth], async (req, res) => {
     try {
         const db = await database()
         const invoicesCollection = db.collection('invoices')
-        const invoice = await invoicesCollection.findOne({ freight_tracking_number: id })
+        const invoice = await invoicesCollection
+            .aggregate([
+                {
+                    $match: {
+                        freight_tracking_number: id,
+                        status: { $ne: 'EXPIRED' },
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'freight',
+                        localField: 'freight_tracking_number',
+                        foreignField: 'tracking_number',
+                        as: 'freight_details',
+                    },
+                },
+                { $unwind: { path: '$freight_details', preserveNullAndEmptyArrays: true } },
+            ])
+            .next()
+
         if (!invoice)
             return res
                 .status(404)

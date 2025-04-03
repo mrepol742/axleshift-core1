@@ -95,13 +95,7 @@ const Invoices = () => {
                         <CTableBody>
                             {data.map((invoice, index) => (
                                 <CTableRow key={index}>
-                                    <CTableDataCell
-                                        onClick={(e) =>
-                                            (window.location.href = `https://checkout-staging.xendit.co/web/${invoice.invoice_id}`)
-                                        }
-                                    >
-                                        {invoice.invoice_id.slice(-8)}
-                                    </CTableDataCell>
+                                    <CTableDataCell>{invoice.invoice_id.slice(-8)}</CTableDataCell>
                                     <CTableDataCell>
                                         {new Intl.NumberFormat('en-US', {
                                             style: 'currency',
@@ -110,16 +104,18 @@ const Invoices = () => {
                                     </CTableDataCell>
                                     <CTableDataCell>{invoice.status}</CTableDataCell>
                                     <CTableDataCell>
-                                        <CButton
-                                            className="btn btn-primary"
-                                            onClick={(e) =>
-                                                navigate(
-                                                    `/invoices/${invoice.freight_tracking_number}`,
-                                                )
-                                            }
-                                        >
-                                            View
-                                        </CButton>
+                                        {invoice.status !== 'EXPIRED' && (
+                                            <CButton
+                                                className="btn btn-primary"
+                                                onClick={(e) =>
+                                                    navigate(
+                                                        `/invoices/${invoice.freight_tracking_number}`,
+                                                    )
+                                                }
+                                            >
+                                                View
+                                            </CButton>
+                                        )}
                                     </CTableDataCell>
                                 </CTableRow>
                             ))}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CForm, CFormSelect, CSpinner, CRow, CCol } from '@coreui/react'
 import Masonry from 'react-masonry-css'
+import { Helmet } from 'react-helmet'
 import { useToast } from '../../components/AppToastProvider'
 import AppSearch from '../../components/AppSearch'
 import ShipmentCard from '../shipment/ShipmentCard'
@@ -48,20 +49,28 @@ const Search = () => {
 
     if (data.length == 0)
         return (
-            <CRow className="justify-content-center my-5">
-                <CCol md={6}>
-                    <h1 className="text-truncate text-center">`{query}`</h1>
-                    <div className="clearfix">
-                        <h1 className="float-start display-3 me-4 text-danger">OOPS</h1>
-                        <h4>There was no shipment found.</h4>
-                        <p>Double check your search query.</p>
-                    </div>
-                </CCol>
-            </CRow>
+            <>
+                <Helmet>
+                    <title>{query} - Search | Axleshift</title>
+                </Helmet>
+                <CRow className="justify-content-center my-5">
+                    <CCol md={6}>
+                        <h1 className="text-truncate text-center">`{query}`</h1>
+                        <div className="clearfix">
+                            <h1 className="float-start display-3 me-4 text-danger">OOPS</h1>
+                            <h4>There was no shipment found.</h4>
+                            <p>Double check your search query.</p>
+                        </div>
+                    </CCol>
+                </CRow>
+            </>
         )
 
     return (
         <div>
+            <Helmet>
+                <title>{query} - Search | Axleshift</title>
+            </Helmet>
             <Masonry
                 breakpointCols={{
                     default: 4,

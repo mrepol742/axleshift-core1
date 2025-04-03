@@ -26,17 +26,23 @@ const mail = async () => {
     return mailInstance
 }
 
-export const send = (options, name) => {
+export const send = (options, name, isNotSystem = false) => {
     options.from = MAIL_FROM_ADDRESS
     options.subject = `[Axleshift] ${options.subject}`
-    options.html = body(`[Axleshift] ${options.subject}`, options.to, name, options.text)
+    options.html = body(
+        `[Axleshift] ${options.subject}`,
+        options.to,
+        name,
+        options.text,
+        isNotSystem,
+    )
 
     mailInstance.sendMail(options, (error, info) => {
         if (error) return logger.error(error)
     })
 }
 
-const body = (subject, email, name, message) => {
+const body = (subject, email, name, message, isNotSystem) => {
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -97,11 +103,11 @@ const body = (subject, email, name, message) => {
         </div>
          <div class="body">
     <div class="content">
-        <h1>Hi ${name},</h1>
+        ${isNotSystem === false ? `<h1>Hi ${name},</h1>` : '<h1>Hi,</h1>'}
         <p>${message}</p>
         <hr>
         <p class="text-center small">
-This email was intended for ${email}. This is a system generated message, please do not reply to this email.</p>
+This email was intended for ${email}. ${isNotSystem === false ? `This is a system generated message, please do not reply to this email.` : ''} </p>
     </div>
     <div class="footer">
         <p>&copy; 2025 Axleshift. All rights reserved.</p>

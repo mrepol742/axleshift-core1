@@ -57,8 +57,6 @@ const AppHeaderDropdown = () => {
                             src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
                             className="rounded mb-2"
                             fluid
-                            width="70px"
-                            height="70px"
                             loading="lazy"
                         />
                     ) : (

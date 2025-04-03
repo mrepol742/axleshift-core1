@@ -29,6 +29,7 @@ const Schedules = auth(lazy(() => import('./views/schedules')))
 
 const SupportCustomerService = auth(lazy(() => import('./views/support/customer-service')))
 const Faq = auth(lazy(() => import('./views/support/Faq')))
+const SendEmail = auth(lazy(() => import('./views/support/Email')))
 
 const Account = auth(lazy(() => import('./views/account')))
 const _Security = auth(lazy(() => import('./views/account/Security')))
@@ -85,6 +86,7 @@ const routes = [
 
     { path: '/customer', name: 'Customer Service', element: SupportCustomerService },
     { path: '/faq', name: 'Frequently Ask Question', element: Faq },
+    { path: '/send-email', name: 'Send Email', element: SendEmail },
 
     { path: '/account', name: 'Account', element: Account },
     { path: '/account/security', name: 'Security', element: _Security },
