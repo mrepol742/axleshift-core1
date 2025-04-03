@@ -24,7 +24,7 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
 
         // redirect to orignal invoice if it exists
         // if its expired itll create new one
-        if (invoice.status === 'PENDING' || invoice.status === 'PAID')
+        if (invoice?.status === 'PENDING' || invoice?.status === 'PAID')
             return res
                 .status(200)
                 .send({ r_url: `https://checkout-staging.xendit.co/web/${invoice.invoice_id}` })
