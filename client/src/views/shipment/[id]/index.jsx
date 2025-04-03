@@ -126,12 +126,27 @@ const FreightInfo = () => {
                 </span>
                 <CButtonGroup className="mb-2 mb-sm-0">
                     <CButton
-                        color="primary"
-                        className="me-2 rounded"
+                        className="bg-body-secondary me-2 rounded"
                         onClick={(e) => setShowQR(true)}
                     >
                         <FontAwesomeIcon icon={faQrcode} />
                     </CButton>
+                    {form.invoice_id && (
+                        <CButton
+                            className="bg-body-secondary me-2 rounded"
+                            onClick={(e) => navigate(`/invoice/${id}`)}
+                        >
+                            Invoice
+                        </CButton>
+                    )}
+                    {form.documents_id && (
+                        <CButton
+                            className="bg-body-secondary me-2 rounded"
+                            onClick={(e) => navigate(`/documents/${id}`)}
+                        >
+                            Documents
+                        </CButton>
+                    )}
                 </CButtonGroup>
             </div>
 
