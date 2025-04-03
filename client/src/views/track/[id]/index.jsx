@@ -25,6 +25,15 @@ const TrackInfo = () => {
             .finally(() => setLoading(false))
     }
 
+    const getStatus = (status) => {
+        if (status === 'cancelled') return 'Cancelled'
+        if (status === 'received') return 'Received'
+        if (status === 'to_receive') return 'To Receive'
+        if (status === 'to_ship') return 'To Ship'
+        // for to_pay
+        return 'To Pay'
+    }
+
     useEffect(() => {
         fetchData()
     }, [])
@@ -55,18 +64,11 @@ const TrackInfo = () => {
                 <CCol>
                     <div className="mb-4">
                         <CCard className="mb-3 bg-dark text-white p-3">
-                            <CCardText> #{id}</CCardText>
-                            <div className="small">
-                                <b>From</b>: {responseData.origin} <br />
-                                <b>To</b>: {responseData.destination} <br />
-                                <b>Status</b>: {responseData.status}
-                            </div>
-                            <div
-                                className="d-flex justify-content-end align-items-center text-primary"
-                                onClick={(e) => navigate(`/shipment/${id}`)}
-                            >
-                                View shipment information
-                            </div>
+                            <CCardText>
+                                <span className="fw-bold">{id}</span>{' '}
+                                {getStatus(responseData.status)}
+                            </CCardText>
+                            <span className="d-block">{responseData.destination}</span>
                         </CCard>
                         <LoadScript googleMapsApiKey={VITE_APP_GOOGLE_MAP}>
                             <GoogleMap

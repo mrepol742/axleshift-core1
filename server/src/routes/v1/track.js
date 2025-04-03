@@ -47,23 +47,11 @@ router.get('/:id', [auth, freight], async (req, res, next) => {
             { lat: 40.7128, lng: -74.006 },
         ]
 
-        const _origins = {
-            sea: 'shipping_loading_port',
-            air: 'shipping_origin_airport',
-            land: 'shipping_origin_addresss',
-        }
-
-        const _destinations = {
-            sea: 'shipping_discharge_port',
-            air: 'shipping_destination_airport',
-            land: 'shipping_destination_addresss',
-        }
-
         return res.status(200).json({
             events: events,
-            origin: freight.data.shipping[_origins[freight.type]],
-            destination: freight.data.shipping[_destinations[freight.type]],
-            status: 'on route',
+            origin: `${freight.from[0].address} ${freight.from[0].city}, ${freight.from[0].country} ${freight.from[0].zip_code}`,
+            destination: `${freight.to[0].address} ${freight.to[0].city}, ${freight.to[0].country} ${freight.to[0].zip_code}`,
+            status: freight.status,
             markerPositions: markerPositions,
         })
     } catch (e) {

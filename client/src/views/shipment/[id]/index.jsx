@@ -134,7 +134,7 @@ const FreightInfo = () => {
                     {form.invoice_id && (
                         <CButton
                             className="bg-body-secondary me-2 rounded"
-                            onClick={(e) => navigate(`/invoice/${id}`)}
+                            onClick={(e) => navigate(`/invoices/${id}`)}
                         >
                             Invoice
                         </CButton>
