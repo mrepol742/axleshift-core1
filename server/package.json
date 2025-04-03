@@ -21,7 +21,8 @@
         "prompt": "[ ! -f .prompt.json ] && cp .prompt.example.json .prompt.json",
         "pm2": "pm2 start ecosystem.config.cjs",
         "pm2:restart": "pm2 restart all --update-env",
-        "db:seed": "node src/models/seeders/DatabaseSeeders.js"
+        "db:seed": "node src/models/seeders/DatabaseSeeders.js",
+        "db:wipe": "node src/models/migration/DatabaseWipe.js"
     },
     "author": "The Freight Capstone Core 1",
     "license": "MIT",

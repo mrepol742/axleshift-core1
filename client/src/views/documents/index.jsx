@@ -85,19 +85,10 @@ const Documents = () => {
                                     Tracking Number
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Type
-                                </CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Items
-                                </CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Import
-                                </CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Danger Goods
-                                </CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Status
+                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                    Documents
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"></CTableHeaderCell>
                             </CTableRow>
@@ -105,19 +96,14 @@ const Documents = () => {
                         <CTableBody>
                             {data.map((item, index) => (
                                 <CTableRow key={index}>
-                                    <CTableDataCell>{item.tracking_number}</CTableDataCell>
-                                    <CTableDataCell className="text-capitalize">
-                                        {item.type}
-                                    </CTableDataCell>
-                                    <CTableDataCell>{item.number_of_items}</CTableDataCell>
+                                    <CTableDataCell>{item.freight_tracking_number}</CTableDataCell>
                                     <CTableDataCell>
-                                        {item.is_import === 'true' ? 'Yes' : 'No'}
+                                        {item.documents.length === 0
+                                            ? 'No documents found'
+                                            : JSON.stringify(documents)}
                                     </CTableDataCell>
-                                    <CTableDataCell>
-                                        {item.contains_danger_goods === 'true' ? 'Yes' : 'No'}
-                                    </CTableDataCell>
-                                    <CTableDataCell className="text-capitalize">
-                                        {item.status.replace('_', ' ')}
+                                    <CTableDataCell className="text-uppercase">
+                                        {item.status}
                                     </CTableDataCell>
                                     <CTableDataCell>
                                         <CButton
@@ -126,7 +112,7 @@ const Documents = () => {
                                                 navigate(`/documents/${item.tracking_number}`)
                                             }
                                         >
-                                            Upload
+                                            View
                                         </CButton>
                                     </CTableDataCell>
                                 </CTableRow>

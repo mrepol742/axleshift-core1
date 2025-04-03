@@ -35,9 +35,11 @@ router.post('/', async (req, res) => {
 
                     const result = await db.collection('documents').insertOne({
                         user_id: freight.user_id,
+                        freight_id: freight._id,
                         freight_tracking_number: freight.tracking_number,
                         session_id: freight.session_id,
                         documents: [],
+                        status: 'pending',
                         created_at: dateNow,
                         updated_at: dateNow,
                     })
