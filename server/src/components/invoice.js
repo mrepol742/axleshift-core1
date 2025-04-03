@@ -13,29 +13,34 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
     try {
         const db = await database()
         const freightCollection = db.collection('freight')
-        const freight = await freightCollection.findOne({ tracking_number })
-        if (!freight) return res.status(404).json({ error: 'Shipment not found' })
-        req.freight = freight
-
         const invoiceCollection = db.collection('invoices')
-        const invoice = await invoiceCollection.findOne({ freight_id: freight._id })
-        if (invoice)
+
+        const [freight, invoice] = await Promise.all([
+            freightCollection.findOne({ tracking_number }),
+            invoiceCollection.findOne({ freight_tracking_number: tracking_number }),
+        ])
+
+        if (!freight) return res.status(404).json({ error: 'Shipment not found' })
+
+        // redirect to orignal invoice if it exists
+        // if its expired itll create new one
+        if (invoice.status === 'PENDING' || invoice.status === 'PAID')
             return res
                 .status(200)
                 .send({ r_url: `https://checkout-staging.xendit.co/web/${invoice.invoice_id}` })
 
         const redirectUrl =
             NODE_ENV !== 'production'
-                ? `http://localhost:3000/shipment/${req.freight.tracking_number}`
-                : `https://core1.axleshift.com/shipment/${req.freight.tracking_number}`
+                ? `http://localhost:3000/shipment/${freight.tracking_number}`
+                : `https://core1.axleshift.com/shipment/${freight.tracking_number}`
 
         const xenditInvoice = await Invoice.createInvoice({
             data: {
-                amount: req.freight.amount.value,
+                amount: freight.amount.value,
                 payerEmail: req.user.email,
                 invoiceDuration: 172800,
-                externalId: `core1-axleshift-${Date.now()}`,
-                description: `Shipment #${req.freight.tracking_number}`,
+                externalId: `axleshift-${Date.now()}`,
+                description: `Shipment #${freight.tracking_number}`,
                 currency: 'PHP',
                 reminderTime: 1,
                 shouldSendEmail: true,
@@ -45,29 +50,29 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
         })
 
         const dateNow = Date.now()
-        const _invoice = await invoiceCollection.insertOne({
-            user_id: req.user._id,
-            freight_id: req.freight._id,
-            freight_tracking_number: req.freight.tracking_number,
-            invoice_id: xenditInvoice.id,
-            invoice_external_id: xenditInvoice.externalId,
-            amount: xenditInvoice.amount,
-            status: xenditInvoice.status,
-            currency: xenditInvoice.currency,
-            session_id: req.session._id,
-            created_at: dateNow,
-            updated_at: dateNow,
-        })
-
-        await freightCollection.updateOne(
-            { _id: new ObjectId(req.freight._id) },
-            {
-                $set: {
-                    invoice_id: _invoice._id,
-                    updated_at: dateNow,
+        await Promise.all([
+            invoiceCollection.insertOne({
+                user_id: req.user._id,
+                freight_tracking_number: freight.tracking_number,
+                invoice_id: xenditInvoice.id,
+                invoice_external_id: xenditInvoice.externalId,
+                amount: xenditInvoice.amount,
+                status: xenditInvoice.status,
+                currency: xenditInvoice.currency,
+                session_id: req.session._id,
+                created_at: dateNow,
+                updated_at: dateNow,
+            }),
+            freightCollection.updateOne(
+                { _id: new ObjectId(freight._id) },
+                {
+                    $set: {
+                        invoice_id: xenditInvoice.id,
+                        updated_at: dateNow,
+                    },
                 },
-            },
-        )
+            ),
+        ])
         return res.status(200).send({ r_url: xenditInvoice.invoiceUrl })
     } catch (err) {
         logger.error(err)
