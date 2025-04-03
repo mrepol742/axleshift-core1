@@ -97,28 +97,27 @@ const FreightInfo = () => {
     // i tried to resuse them like how she re--use u
     return (
         <div>
-            {showQR && (
-                <CModal
-                    visible={true}
-                    onClose={() => setShowQR(false)}
-                    alignment="center"
-                    scrollable
-                >
-                    <CModalHeader closeButton></CModalHeader>
-                    <CModalBody>
-                        <div className="d-flex justify-content-center align-items-center">
-                            <div ref={svgRef} className="d-inline-block">
-                                <QRCodeSVG value={id} />
-                            </div>
+            <CModal visible={showQR} onClose={() => setShowQR(false)} alignment="center" scrollable>
+                <CModalBody>
+                    <div className="text-center small">
+                        <span>{id}</span>
+                    </div>
+                    <div className="d-flex justify-content-center align-items-center">
+                        <div ref={svgRef} className="d-inline-block">
+                            <QRCodeSVG
+                                value={id}
+                                className="rounded-3 border border-3"
+                                size={200}
+                            />
                         </div>
-                    </CModalBody>
-                    <CModalFooter className="d-flex justify-content-center align-items-center">
-                        <CButton color="primary" onClick={handleQRDownload}>
-                            Download
+                    </div>
+                    <div className="d-flex justify-content-center align-items-center">
+                        <CButton onClick={handleQRDownload} className="px-5 mt-3 bg-body-secondary">
+                            Save
                         </CButton>
-                    </CModalFooter>
-                </CModal>
-            )}
+                    </div>
+                </CModalBody>
+            </CModal>
             <div className="d-flex flex-row justify-content-between align-items-center mb-4">
                 <span className="d-block">
                     <span className="text-primary fw-bold small">Tracking Number:</span>
