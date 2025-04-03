@@ -34,7 +34,7 @@ const AppSidebar = () => {
                         fluid
                         src="/images/logo.png"
                         className="sidebar-brand-full"
-                        height={30}
+                        width={150}
                         loading="lazy"
                     />
                     <CImage

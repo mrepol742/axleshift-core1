@@ -105,9 +105,15 @@ const Documents = () => {
                                         </span>
                                     </CTableDataCell>
                                     <CTableDataCell>
-                                        {item.documents.length === 0
-                                            ? 'No documents found'
-                                            : JSON.stringify(documents)}
+                                        {item.documents && item.documents.length > 0 ? (
+                                            item.documents.map((doc, docIndex) => (
+                                                <span key={docIndex} className="d-block">
+                                                    {doc.name}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span>No documents available</span>
+                                        )}
                                     </CTableDataCell>
                                     <CTableDataCell>
                                         <CButton

@@ -156,7 +156,7 @@ const Document = () => {
                                             </span>
                                         </CTableDataCell>
                                         <CTableDataCell>
-                                            {!doc.file.file || doc.status === 'rejected' ? (
+                                            {!doc.file.file || doc.status !== 'rejected' ? (
                                                 <>
                                                     <CFormInput
                                                         type="file"

@@ -38,7 +38,7 @@ router.use((req, res, next) => {
     next()
 })
 
-router.get('/prometheus', auth, async (req, res) => {
+router.get('/', auth, async (req, res) => {
     try {
         const metrics = await registry.metrics()
 
