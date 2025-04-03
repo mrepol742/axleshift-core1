@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { Container, Row, Col, Card, Button, Table, Form } from 'react-bootstrap'
+import { Helmet } from 'react-helmet'
+import { useParams } from 'react-router-dom'
 
 const Document = () => {
+    const { id } = useParams()
     const [documents, setDocuments] = useState([
         { name: 'Commercial Invoice', type: 'Customs Document', status: 'Pending' },
         { name: 'Packing List', type: 'Customs Document', status: 'Approved' },
@@ -17,6 +20,9 @@ const Document = () => {
 
     return (
         <>
+            <Helmet>
+                <title>{id} - Documents | Axleshift</title>
+            </Helmet>
             <Container className="mt-4">
                 <h2>Upload Documents</h2>
                 <p>

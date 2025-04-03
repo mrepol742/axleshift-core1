@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { CRow, CCol, CCard, CCardText, CSpinner, CButton } from '@coreui/react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import { Helmet } from 'react-helmet'
 import { VITE_APP_GOOGLE_MAP } from '../../../config'
 
 const TrackInfo = () => {
@@ -56,6 +57,9 @@ const TrackInfo = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>{id} - Track | Axleshift</title>
+            </Helmet>
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol>
                     <div className="mb-4">

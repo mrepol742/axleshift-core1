@@ -18,6 +18,7 @@ import {
 } from '@coreui/react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import { Helmet } from 'react-helmet'
 import { useToast } from '../../../components/AppToastProvider'
 
 const Receipt = () => {
@@ -101,6 +102,9 @@ const Receipt = () => {
 
     return (
         <div ref={invoiceRef}>
+            <Helmet>
+                <title>{id} - Invoice | Axleshift</title>
+            </Helmet>
             <h1 className="text-uppercase fw-bold text-center">Axleshift</h1>
             <p className="text-center">4108 IM Bestlink College of the Phillippines</p>
             <div className="bg-body-secondary p-2 mb-1">

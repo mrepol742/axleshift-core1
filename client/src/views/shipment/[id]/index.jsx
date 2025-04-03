@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { QRCodeSVG } from 'qrcode.react'
 import html2canvas from 'html2canvas'
+import { Helmet } from 'react-helmet'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
@@ -97,6 +98,9 @@ const FreightInfo = () => {
     // i tried to resuse them like how she re--use u
     return (
         <div>
+            <Helmet>
+                <title>{id} - Shipment | Axleshift</title>
+            </Helmet>
             <CModal visible={showQR} onClose={() => setShowQR(false)} alignment="center" scrollable>
                 <CModalBody>
                     <div className="text-center small">
