@@ -108,7 +108,8 @@ const GEO = () => {
 
             <CAlert color="warning" className="small">
                 <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> Block or allow
-                specific set of geolocation on who can access this platform.
+                specific set of coordinates on who can access this platform via login or
+                registration.
             </CAlert>
 
             <CRow className="align-items-center mb-2">
