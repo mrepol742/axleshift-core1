@@ -7,10 +7,13 @@ import auth from '../../../middleware/auth.js'
 import freight from '../../../middleware/freight.js'
 import invoices from '../../../middleware/invoices.js'
 import recaptcha from '../../../middleware/recaptcha.js'
-import { NODE_ENV } from '../../../config.js'
+import { NODE_ENV, AWS_BUCKET_NAME } from '../../../config.js'
 import activity from '../../../components/activity.js'
 import documents from '../../../middleware/documents.js'
 import { upload, uploadToS3 } from '../../../components/s3/documents.js'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import s3 from '../../../models/s3.js'
+import { GetObjectCommand } from '@aws-sdk/client-s3'
 import crypto from 'crypto'
 
 const router = express.Router()
@@ -116,6 +119,20 @@ router.post(
             )
 
             return res.status(200).json({
+                data: [
+                            {
+                                name: 'Export License',
+                                type: 'Permit & License',
+                                status: 'Under Review',
+                                file: exportLicenseUrl,
+                            },
+                            {
+                                name: 'Certificate of Origin',
+                                type: 'Regulatory Certificate',
+                                status: 'Under Review',
+                                file: certificateOfOriginUrl,
+                            },
+                        ],
                 message: 'Files uploaded successfully',
             })
         } catch (err) {
@@ -133,13 +150,16 @@ router.post('/file/:id', [auth, documents], async (req, res) => {
         const { file } = req.body
         if (!file) return res.status(400).json({ error: 'Invalid request' })
         
-        req.documents.documents.forEach((document) => {
-            logger.info(document.file)
-            if (document.file && document.file.includes(file)) {
-                logger.info(`File requested: ${document.file}`)
-                return res.status(200).send()
+        for (const document of req.documents.documents) {
+            if (document.file && document.file.file === file) {
+                const fileFormat = document.file.file.split('.').pop();
+                const url = await getSignedUrl(s3, new GetObjectCommand({
+                    Bucket: AWS_BUCKET_NAME,
+                    Key: `files/${document.file.ref}.${fileFormat}`,
+                }), { expiresIn: 60 * 5 })
+                return res.status(200).json({ url, fileFormat, file: document.file.file })
             }
-        })
+        }
         return res.status(404).json({ error: 'File not found' })
     } catch (err) {
         logger.error(err)

@@ -15,10 +15,15 @@ import {
     CSpinner,
     CForm,
     CModal,
+    CModalBody,
+    CModalHeader,
+    CModalTitle,
 } from '@coreui/react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFile } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../../components/AppToastProvider'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config.js'
 
@@ -31,6 +36,7 @@ const Document = () => {
     const [exportLicense, setExportLicense] = useState(null)
     const [certificateOfOrigin, setCertificateOfOrigin] = useState(null)
     const [isActionVisible, setIsActionVisible] = useState(false)
+    const [preview, setPreview] = useState(null)
 
     const handleFileUpload = (event, index) => {
         const file = event.target.files[0]
@@ -59,6 +65,7 @@ const Document = () => {
                 },
             })
             .then((response) => {
+                setDocuments(response.data)
                 addToast('Documents uploaded successfully!', 'success')
             })
             .catch((error) => {
@@ -80,16 +87,14 @@ const Document = () => {
     }
 
     const previewDocument = (id, file) => {
-        alert(JSON.stringify(file))
-        // setIsActionVisible(true)
+        setIsActionVisible(true)
         axios
             .post(`/documents/file/${id}`, {
                 file: file,
             })
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
-                const url = response.data.url
-                alert(url)
+                setPreview(response.data)
             })
             .catch((error) => {
                 const message =
@@ -99,7 +104,7 @@ const Document = () => {
                         : error.message)
                 addToast(message)
             })
-        // .finally(() => setLoading(false))
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {
@@ -151,13 +156,23 @@ const Document = () => {
                                     <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                         Upload
                                     </CTableHeaderCell>
-                                    <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"></CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
                                 {documents.map((doc, index) => (
                                     <CTableRow key={index}>
-                                        <CTableDataCell>{doc.name}</CTableDataCell>
+                                        <CTableDataCell>
+                                            <span className="d-block">{doc.name}</span>
+                                            <CButton
+                                                color="primary"
+                                                size="sm"
+                                                variant="ghost"
+                                                onClick={(e) => previewDocument(id, doc.file.file)}
+                                            >
+                                                <FontAwesomeIcon icon={faFile} className="me-1" />{' '}
+                                                Open File
+                                            </CButton>
+                                        </CTableDataCell>
                                         <CTableDataCell>{doc.type}</CTableDataCell>
                                         <CTableDataCell className="text-capitalize">
                                             <span
@@ -167,32 +182,22 @@ const Document = () => {
                                             </span>
                                         </CTableDataCell>
                                         <CTableDataCell>
-                                            {!doc.file.file || doc.status === 'rejected' ? (
+                                            {!doc.file || doc.status === 'rejected' ? (
                                                 <>
                                                     <CFormInput
                                                         type="file"
                                                         onChange={(e) => handleFileUpload(e, index)}
                                                     />
-                                                    <span className="text-danger text-decoration-line-through">
-                                                        {doc.file.file}
-                                                    </span>
+                                                    {doc.file && (
+                                                        <span className="text-danger text-decoration-line-through">
+                                                            {doc.file.file}
+                                                        </span>
+                                                    )}
                                                 </>
                                             ) : (
                                                 doc.file.file
                                             )}
                                         </CTableDataCell>
-                                        {doc.file.file && (
-                                            <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                                <CButton
-                                                    className="btn btn-primary"
-                                                    onClick={(e) =>
-                                                        previewDocument(id, doc.file.file)
-                                                    }
-                                                >
-                                                    View
-                                                </CButton>
-                                            </CTableHeaderCell>
-                                        )}
                                     </CTableRow>
                                 ))}
                             </CTableBody>
@@ -216,10 +221,28 @@ const Document = () => {
             <CModal
                 alignment="center"
                 scrollable
+                fullscreen="sm"
                 visible={isActionVisible}
                 onClose={() => setIsActionVisible(false)}
                 aria-labelledby="M"
-            ></CModal>
+            >
+                <CModalHeader>
+                    <CModalTitle>{preview?.file}</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    {preview?.fileFormat === 'docx' ? (
+                        <iframe
+                            src={`https://view.officeapps.live.com/op/embed.aspx?src=${preview.url}`}
+                            style={{ width: '100%', height: '400px', border: 'none' }}
+                        ></iframe>
+                    ) : (
+                        <iframe
+                            src={preview.url}
+                            style={{ width: '100%', height: '400px', border: 'none' }}
+                        ></iframe>
+                    )}
+                </CModalBody>
+            </CModal>
         </>
     )
 }
