@@ -2,6 +2,7 @@ import { ObjectId } from 'mongodb'
 import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import Xendit from '../models/xendit.js'
+import { NODE_ENV } from '../config.js'
 
 const InvoiceGenerator = async (res, req, tracking_number) => {
     try {

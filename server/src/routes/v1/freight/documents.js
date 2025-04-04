@@ -124,4 +124,27 @@ router.post(
         }
     },
 )
+
+/**
+ * Get file for preview
+ */
+router.post('/file/:id', [auth, documents], async (req, res) => {
+    try {
+        const { file } = req.body
+        if (!file) return res.status(400).json({ error: 'Invalid request' })
+        
+        req.documents.documents.forEach((document) => {
+            logger.info(document.file)
+            if (document.file && document.file.includes(file)) {
+                logger.info(`File requested: ${document.file}`)
+                return res.status(200).send()
+            }
+        })
+        return res.status(404).json({ error: 'File not found' })
+    } catch (err) {
+        logger.error(err)
+        res.status(500).json({ error: 'Internal server error' })
+    }
+})
+
 export default router

@@ -14,6 +14,7 @@ import {
     CCol,
     CSpinner,
     CForm,
+    CModal,
 } from '@coreui/react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
@@ -26,12 +27,10 @@ const Document = () => {
     const [loading, setLoading] = useState(true)
     const { addToast } = useToast()
     const recaptchaRef = React.useRef()
-    const [documents, setDocuments] = useState([
-        { name: 'Export License', type: 'Permit & License', status: 'Pending' },
-        { name: 'Certificate of Origin', type: 'Regulatory Certificate', status: 'Pending' },
-    ])
+    const [documents, setDocuments] = useState(null)
     const [exportLicense, setExportLicense] = useState(null)
     const [certificateOfOrigin, setCertificateOfOrigin] = useState(null)
+    const [isActionVisible, setIsActionVisible] = useState(false)
 
     const handleFileUpload = (event, index) => {
         const file = event.target.files[0]
@@ -76,10 +75,21 @@ const Document = () => {
     const fetchDocuments = async () => {
         axios
             .get(`/documents/${id}`)
+            .then((response) => setDocuments(response.data.documents))
+            .finally(() => setLoading(false))
+    }
+
+    const previewDocument = (id, file) => {
+        alert(JSON.stringify(file))
+        // setIsActionVisible(true)
+        axios
+            .post(`/documents/file/${id}`, {
+                file: file,
+            })
             .then((response) => {
-                if (response.data.documents.length !== 0) {
-                    setDocuments(response.data.documents)
-                }
+                if (response.data.error) return addToast(response.data.error)
+                const url = response.data.url
+                alert(url)
             })
             .catch((error) => {
                 const message =
@@ -89,7 +99,7 @@ const Document = () => {
                         : error.message)
                 addToast(message)
             })
-            .finally(() => setLoading(false))
+        // .finally(() => setLoading(false))
     }
 
     useEffect(() => {
@@ -126,7 +136,7 @@ const Document = () => {
                 <span className="text-muted">{id}</span>
                 <CCard className="mt-2 mb-3">
                     <CCardBody>
-                        <CTable stripedColumns hover responsive>
+                        <CTable stripedColumns hover responsive className="table-even-width">
                             <CTableHead>
                                 <CTableRow>
                                     <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
@@ -141,6 +151,7 @@ const Document = () => {
                                     <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                         Upload
                                     </CTableHeaderCell>
+                                    <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"></CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
@@ -156,7 +167,7 @@ const Document = () => {
                                             </span>
                                         </CTableDataCell>
                                         <CTableDataCell>
-                                            {!doc.file.file || doc.status !== 'rejected' ? (
+                                            {!doc.file.file || doc.status === 'rejected' ? (
                                                 <>
                                                     <CFormInput
                                                         type="file"
@@ -170,6 +181,18 @@ const Document = () => {
                                                 doc.file.file
                                             )}
                                         </CTableDataCell>
+                                        {doc.file.file && (
+                                            <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                                <CButton
+                                                    className="btn btn-primary"
+                                                    onClick={(e) =>
+                                                        previewDocument(id, doc.file.file)
+                                                    }
+                                                >
+                                                    View
+                                                </CButton>
+                                            </CTableHeaderCell>
+                                        )}
                                     </CTableRow>
                                 ))}
                             </CTableBody>
@@ -190,6 +213,13 @@ const Document = () => {
                     </CCardBody>
                 </CCard>
             </CForm>
+            <CModal
+                alignment="center"
+                scrollable
+                visible={isActionVisible}
+                onClose={() => setIsActionVisible(false)}
+                aria-labelledby="M"
+            ></CModal>
         </>
     )
 }

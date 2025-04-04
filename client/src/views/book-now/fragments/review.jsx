@@ -179,14 +179,6 @@ const Review = ({ data, shipmentRef }) => {
                         selected_address: address._id,
                     })
             })
-            .catch((error) => {
-                const message =
-                    error.response?.data?.error ||
-                    (error.message === 'network error'
-                        ? 'Server is offline or restarting please wait'
-                        : error.message)
-                addToast(message)
-            })
             .finally(() => setLoading(false))
     }
 

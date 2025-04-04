@@ -447,7 +447,9 @@ const Dashboard = () => {
                                                         {item.to[0].address}, {item.to[0].city},{' '}
                                                         {item.to[0].country} {item.to[0].zip_code}
                                                     </p>
-                                                    <small className="text-muted">{item.to[0].name}</small>
+                                                    <small className="text-muted">
+                                                        {item.to[0].name}
+                                                    </small>
                                                 </div>
                                             )}
                                             {item.freight_tracking_number && (
