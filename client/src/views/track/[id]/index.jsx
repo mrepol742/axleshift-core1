@@ -63,7 +63,7 @@ const TrackInfo = () => {
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol>
                     <div className="mb-4">
-                        <CCard className="mb-3 bg-dark text-white p-3">
+                        <CCard className="mb-3 p-3">
                             <p className="lead">{getStatus(responseData.status)}</p>
                             <div className="mb-2">
                                 <span className="d-block">Courier Name</span>

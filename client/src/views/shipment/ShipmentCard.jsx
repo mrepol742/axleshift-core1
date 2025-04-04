@@ -38,8 +38,7 @@ const ShipmentCard = ({ shipment }) => {
 
     return (
         <CCard
-            color={getCardColor(shipment.status)}
-            className="mb-3"
+            className={`mb-3 border-${getCardColor(shipment.status)}`}
             key={shipment.tracking_number}
             onClick={() => navigate(`/shipment/${shipment.tracking_number}`)}
             style={{ cursor: 'pointer' }}
@@ -75,7 +74,7 @@ const ShipmentCard = ({ shipment }) => {
                     }).format(shipment.amount.value)}
                 </div>
             </CCardBody>
-            <CCardFooter>
+            <CCardFooter className={`bg-${getCardColor(shipment.status)} rounded-top`}>
                 <div className="d-flex justify-content-between">
                     <div>
                         <small className="text-muted d-block">Status</small>
