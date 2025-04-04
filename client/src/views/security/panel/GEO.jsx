@@ -42,7 +42,10 @@ const GEO = () => {
     const fetchData = async () => {
         axios
             .get(`/sec/management/geo`)
-            .then((response) => setResult(response.data))
+            .then((response) => {
+                setState(response.data.filter_mode)
+                setGeoLocationList(response.data.geo.map((geo) => ({ geo, checked: false })))
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
@@ -58,8 +61,15 @@ const GEO = () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
-            .post(`/sec/management/geo-filtering`, { recaptcha_ref: recaptcha, geoLocationList })
-            .then((response) => addToast('Changes saved successfully', 'Success'))
+            .post(`/sec/management/geo`, {
+                recaptcha_ref: recaptcha,
+                filter_mode: state,
+                geo: geoLocationList,
+            })
+            .then((response) => {
+                if (response.data.error) return addToast(response.data.error)
+                addToast('Changes saved successfully', 'Success')
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
@@ -76,12 +86,15 @@ const GEO = () => {
     }, [])
 
     const handleAddGeo = () => {
-        setGeoLocationList([...geoLocationList, { ip: '', checked: false }])
+        setGeoLocationList([...geoLocationList, { geo: [], checked: false }])
     }
 
-    const handleGeoChange = (index, value) => {
+    const handleGeoChange = (index, value, type) => {
         const newgeoLocationList = [...geoLocationList]
-        newgeoLocationList[index].ip = value
+        newgeoLocationList[index].geo = {
+            ...newgeoLocationList[index].geo,
+            [type]: value,
+        }
         setGeoLocationList(newgeoLocationList)
     }
 
@@ -108,7 +121,8 @@ const GEO = () => {
 
             <CAlert color="warning" className="small">
                 <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> Block or allow
-                specific set of geolocation on who can access this platform.
+                specific set of coordinates on who can access this platform via login or
+                registration.
             </CAlert>
 
             <CRow className="align-items-center mb-2">
@@ -130,10 +144,11 @@ const GEO = () => {
                     <CFormSelect
                         aria-label="Select whitelist or blacklist"
                         onChange={(e) => setState(e.target.value)}
+                        value={state}
                         className="w-auto"
                     >
-                        <option value="0">Whitelist</option>
-                        <option value="1">Blacklist</option>
+                        <option value="whitelist">Whitelist</option>
+                        <option value="blacklist">Blacklist</option>
                     </CFormSelect>
                 </CCol>
             </CRow>
@@ -147,14 +162,14 @@ const GEO = () => {
                     />
                     <CFormInput
                         type="text"
-                        value={item.latitude}
+                        value={item.geo.latitude}
                         onChange={(e) => handleGeoChange(index, e.target.value, 'latitude')}
                         placeholder="Enter Latitude"
                         className="me-2"
                     />
                     <CFormInput
                         type="text"
-                        value={item.longitude}
+                        value={item.geo.longitude}
                         onChange={(e) => handleGeoChange(index, e.target.value, 'longitude')}
                         placeholder="Enter Longitude"
                     />

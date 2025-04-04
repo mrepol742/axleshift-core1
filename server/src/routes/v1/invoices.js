@@ -13,10 +13,6 @@ import cache from '../../middleware/cache.js'
 import { setCache } from '../../models/redis.js'
 import { send } from '../../components/mail.js'
 
-const { Invoice } = new Xendit({
-    secretKey: XENDIT_API_KEY,
-    xenditURL: XENDIT_API_GATEWAY_URL,
-})
 const router = express.Router()
 const limit = 20
 

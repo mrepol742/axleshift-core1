@@ -66,14 +66,6 @@ const Receipt = () => {
         axios
             .get(`/invoices/${id}`)
             .then((response) => setData(response.data))
-            .catch((error) => {
-                const message =
-                    error.response?.data?.error ||
-                    (error.message === 'network error'
-                        ? 'Server is offline or restarting please wait'
-                        : error.message)
-                addToast(message)
-            })
             .finally(() => setLoading(false))
     }
 

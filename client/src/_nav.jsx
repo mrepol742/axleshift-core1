@@ -68,6 +68,18 @@ const _nav = [
     },
     {
         component: CNavTitle,
+        name: 'Payments',
+        role_exclude: [],
+    },
+    {
+        component: CNavItem,
+        name: 'Invoices',
+        to: '/invoices',
+        role_exclude: [],
+        icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
+    },
+    {
+        component: CNavTitle,
         name: 'Security',
         role_exclude: ['staff'],
     },
@@ -87,6 +99,18 @@ const _nav = [
     },
     {
         component: CNavItem,
+        name: 'Sessions',
+        to: '/security/sessions',
+        role_exclude: [],
+        icon: <FontAwesomeIcon icon={faTowerBroadcast} className="nav-icon" />,
+    },
+    {
+        component: CNavTitle,
+        name: 'API',
+        role_exclude: ['user', 'staff'],
+    },
+    {
+        component: CNavItem,
         name: 'Access Token',
         to: '/security/access-token',
         role_exclude: ['staff', 'user'],
@@ -98,25 +122,6 @@ const _nav = [
         to: '/security/webhooks',
         role_exclude: ['staff', 'user'],
         icon: <FontAwesomeIcon icon={faGlobe} className="nav-icon" />,
-    },
-    {
-        component: CNavItem,
-        name: 'Sessions',
-        to: '/security/sessions',
-        role_exclude: [],
-        icon: <FontAwesomeIcon icon={faTowerBroadcast} className="nav-icon" />,
-    },
-    {
-        component: CNavTitle,
-        name: 'Payments',
-        role_exclude: [],
-    },
-    {
-        component: CNavItem,
-        name: 'Invoices',
-        to: '/invoices',
-        role_exclude: [],
-        icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
     },
     {
         component: CNavTitle,

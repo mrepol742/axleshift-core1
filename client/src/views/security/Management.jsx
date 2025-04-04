@@ -44,7 +44,7 @@ const SecurityManagement = () => {
     }
 
     useEffect(() => {
-        if (!tab && tab.length == 0) handleTabChange(0, 'dashboard')
+        if (!tab && tab.length == 0) handleTabChange(0, 'sessions')
         switch (tab) {
             case 'sessions':
                 setActiveItemKey(0)

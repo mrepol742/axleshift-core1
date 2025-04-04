@@ -16,6 +16,8 @@ import addresses from './addresses.js'
 import document from './freight/documents.js'
 import mail from './mail.js'
 import mongodb from './metrics/mongodb.js'
+import redis from './metrics/redis.js'
+import insightsModal from './insights/modal.js'
 
 const router = express.Router()
 router.use('/auth', auth)
@@ -32,9 +34,13 @@ router.use('/sec/sessions', securitySessions)
 
 router.use('/metrics/prometheus', prometheus)
 router.use('/metrics/mongodb', mongodb)
+router.use('/metrics/redis', redis)
+
 router.use('/notifications', notifications)
 
 router.use('/insights', insights)
+router.use('/insights/modal', insightsModal)
+
 router.use('/newsletter', newsletter)
 
 router.use('/invoices', invoices)

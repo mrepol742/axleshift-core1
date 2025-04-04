@@ -14,17 +14,26 @@ import {
     CModalHeader,
     CModalTitle,
     CModalBody,
+    CSpinner,
+    CListGroup,
+    CListGroupItem,
 } from '@coreui/react'
 import { getStyle } from '@coreui/utils'
 import { CChartLine } from '@coreui/react-chartjs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical, faChartPie } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom'
+import parseTimestamp from '../../utils/Timestamp'
 
 const Dashboard = () => {
+    const navigate = useNavigate()
     const widgetChartRef1 = useRef(null)
     const widgetChartRef2 = useRef(null)
     const widgetChartRef3 = useRef(null)
     const widgetChartRef4 = useRef(null)
+    const [isActionVisible, setIsActionVisible] = useState(false)
+    const [modalUrl, setModalUrl] = useState('')
+    const [formData, setFormData] = useState(null)
     const [insights, setInsights] = useState({
         smallDetailWidgets: {
             cancelled: [0, '0%'],
@@ -54,6 +63,7 @@ const Dashboard = () => {
             pointColor: getStyle('--cui-primary'),
             labels: insights.shipmetOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.shipmetOvertime?.data || [0, 0, 0, 0, 0, 0],
+            url: '/shipments',
         },
         {
             color: 'info',
@@ -63,6 +73,7 @@ const Dashboard = () => {
             pointColor: getStyle('--cui-info'),
             labels: insights.costOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.costOvertime?.data || [0, 0, 0, 0, 0, 0],
+            url: '/avarage-cost',
         },
         {
             color: 'warning',
@@ -72,6 +83,7 @@ const Dashboard = () => {
             pointColor: getStyle('--cui-warning'),
             labels: insights.itemsOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.itemsOvertime?.data || [0, 0, 0, 0, 0, 0],
+            url: '/items',
         },
         {
             color: 'danger',
@@ -81,6 +93,7 @@ const Dashboard = () => {
             pointColor: getStyle('--cui-danger'),
             labels: insights.weightOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.weightOvertime?.data || [0, 0, 0, 0, 0, 0],
+            url: '/weight',
         },
     ]
 
@@ -172,7 +185,37 @@ const Dashboard = () => {
         })
     }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, widgetChartRef4])
 
-    const [visible, setVisible] = useState(false)
+    const renderDashboardWidgets = async (url) => {
+        try {
+            setIsActionVisible(true)
+            const response = await axios.get(`/insights/modal${url}`)
+            const data = response.data
+            setFormData({ url, data })
+        } catch (error) {
+            console.error('Error fetching dashboard widgets:', error)
+        }
+    }
+
+    const getHeaderTitle = (url) => {
+        switch (url) {
+            case '/cancelled':
+                return 'Cancelled Shipments'
+            case '/to_pay':
+                return 'Waiting For Payments'
+            case '/to_ship':
+                return 'Waiting For Pickup'
+            case '/to_receive':
+                return 'On the Way'
+            case '/received':
+                return 'Completed Shipments'
+            case '/PAID':
+                return 'Successful Invoices'
+            case '/EXPIRED':
+                return 'Expired Invoices'
+            default:
+                return ''
+        }
+    }
 
     return (
         <>
@@ -185,7 +228,10 @@ const Dashboard = () => {
                             value={widget.value}
                             title={widget.title}
                             action={
-                                <CButton className="btn" onClick={() => setVisible(true)}>
+                                <CButton
+                                    className="btn"
+                                    onClick={() => renderDashboardWidgets(widget.url)}
+                                >
                                     <FontAwesomeIcon
                                         icon={faEllipsisVertical}
                                         size="lg"
@@ -259,8 +305,9 @@ const Dashboard = () => {
                 ))}
             </CRow>
             <CRow>
-                <CCol xs={6} md={4}>
+                <CCol xs={12} md={4}>
                     <CWidgetStatsF
+                        onClick={() => renderDashboardWidgets('/cancelled')}
                         data-aos="fade-up"
                         data-aos-delay="200"
                         icon={<FontAwesomeIcon icon={faChartPie} />}
@@ -270,8 +317,9 @@ const Dashboard = () => {
                         value={insights.smallDetailWidgets.cancelled[1]}
                     />
                 </CCol>
-                <CCol xs={6} md={4}>
+                <CCol xs={12} md={4}>
                     <CWidgetStatsF
+                        onClick={() => renderDashboardWidgets('/to_pay')}
                         data-aos="fade-up"
                         data-aos-delay="300"
                         icon={<FontAwesomeIcon icon={faChartPie} />}
@@ -281,8 +329,9 @@ const Dashboard = () => {
                         value={insights.smallDetailWidgets.toPay[1]}
                     />
                 </CCol>
-                <CCol xs={6} md={4}>
+                <CCol xs={12} md={4}>
                     <CWidgetStatsF
+                        onClick={() => renderDashboardWidgets('/to_ship')}
                         data-aos="fade-up"
                         data-aos-delay="400"
                         icon={<FontAwesomeIcon icon={faChartPie} />}
@@ -292,8 +341,9 @@ const Dashboard = () => {
                         value={insights.smallDetailWidgets.toShip[1]}
                     />
                 </CCol>
-                <CCol xs={6} md={4}>
+                <CCol xs={12} md={4}>
                     <CWidgetStatsF
+                        onClick={() => renderDashboardWidgets('/to_receive')}
                         data-aos="fade-up"
                         data-aos-delay="500"
                         icon={<FontAwesomeIcon icon={faChartPie} />}
@@ -303,8 +353,9 @@ const Dashboard = () => {
                         value={insights.smallDetailWidgets.toReceive[1]}
                     />
                 </CCol>
-                <CCol xs={6} md={4}>
+                <CCol xs={12} md={4}>
                     <CWidgetStatsF
+                        onClick={() => renderDashboardWidgets('/received')}
                         data-aos="fade-up"
                         data-aos-delay="600"
                         icon={<FontAwesomeIcon icon={faChartPie} />}
@@ -317,8 +368,9 @@ const Dashboard = () => {
             </CRow>
             <h5>Invoices</h5>
             <CRow>
-                <CCol xs={6}>
+                <CCol xs={12} md={6}>
                     <CWidgetStatsC
+                        onClick={() => renderDashboardWidgets('/PAID')}
                         data-aos="fade-up"
                         data-aos-delay="700"
                         className="mb-3"
@@ -331,8 +383,9 @@ const Dashboard = () => {
                         value={insights.invoicesInfoWidgets.success[1]}
                     />
                 </CCol>
-                <CCol xs={6}>
+                <CCol xs={12} md={6}>
                     <CWidgetStatsC
+                        onClick={() => renderDashboardWidgets('/EXPIRED')}
                         data-aos="fade-up"
                         data-aos-delay="800"
                         className="mb-3"
@@ -346,18 +399,73 @@ const Dashboard = () => {
                     />
                 </CCol>
             </CRow>
-
             <CModal
                 alignment="center"
                 scrollable
-                visible={visible}
-                onClose={() => setVisible(false)}
-                aria-labelledby=""
+                visible={isActionVisible}
+                onClose={() => setIsActionVisible(false)}
+                aria-labelledby="M"
             >
-                <CModalHeader>
-                    <CModalTitle id="">Test</CModalTitle>
-                </CModalHeader>
-                <CModalBody>Hello World</CModalBody>
+                <div>
+                    {!formData?.data ? (
+                        <div className="d-flex justify-content-center">
+                            <CSpinner color="primary" />
+                        </div>
+                    ) : (
+                        <>
+                            <CModalHeader>{getHeaderTitle(formData.url)}</CModalHeader>
+                            <CListGroup className="px-3 mb-3">
+                                {formData.data.length === 0 && (
+                                    <div className="d-flex justify-content-center">
+                                        <p className="mb-3">No data available</p>
+                                    </div>
+                                )}
+
+                                {/* Shipment and Invoice  */}
+                                {formData.data.length > 0 &&
+                                    formData.data.map((item, index) => (
+                                        <CListGroupItem
+                                            key={index}
+                                            className="p-3"
+                                            onClick={(e) =>
+                                                navigate(
+                                                    `/shipment/${item.tracking_number ? item.tracking_number : item.freight_tracking_number}`,
+                                                )
+                                            }
+                                        >
+                                            <div className="d-flex w-100 justify-content-between">
+                                                <h5 className="mb-1">
+                                                    {item.tracking_number
+                                                        ? item.tracking_number
+                                                        : item.freight_tracking_number}
+                                                </h5>
+                                                <small>{parseTimestamp(item.created_at)}</small>
+                                            </div>
+                                            {item.to && (
+                                                <div>
+                                                    <p className="mb-1 text-muted">
+                                                        {item.to[0].address}, {item.to[0].city},{' '}
+                                                        {item.to[0].country} {item.to[0].zip_code}
+                                                    </p>
+                                                    <small className="text-muted">
+                                                        {item.to[0].name}
+                                                    </small>
+                                                </div>
+                                            )}
+                                            {item.freight_tracking_number && (
+                                                <p className="mb-1">
+                                                    {new Intl.NumberFormat('en-US', {
+                                                        style: 'currency',
+                                                        currency: item.currency,
+                                                    }).format(item.amount)}
+                                                </p>
+                                            )}
+                                        </CListGroupItem>
+                                    ))}
+                            </CListGroup>
+                        </>
+                    )}
+                </div>
             </CModal>
         </>
     )

@@ -1,13 +1,8 @@
 import { ObjectId } from 'mongodb'
-import { Xendit } from 'xendit-node'
 import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
-import { XENDIT_API_GATEWAY_URL, XENDIT_API_KEY, NODE_ENV } from '../config.js'
-
-const { Invoice } = new Xendit({
-    secretKey: XENDIT_API_KEY,
-    xenditURL: XENDIT_API_GATEWAY_URL,
-})
+import Xendit from '../models/xendit.js'
+import { NODE_ENV } from '../config.js'
 
 const InvoiceGenerator = async (res, req, tracking_number) => {
     try {
@@ -34,6 +29,7 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
                 ? `http://localhost:3000/shipment/${freight.tracking_number}`
                 : `https://core1.axleshift.com/shipment/${freight.tracking_number}`
 
+        const Invoice = await Xendit()
         const xenditInvoice = await Invoice.createInvoice({
             data: {
                 amount: freight.amount.value,

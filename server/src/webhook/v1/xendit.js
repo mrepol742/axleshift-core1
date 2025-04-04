@@ -37,7 +37,10 @@ router.post('/', async (req, res) => {
                         user_id: freight.user_id,
                         freight_tracking_number: freight.tracking_number,
                         session_id: freight.session_id,
-                        documents: [],
+                        documents: [
+                            { name: 'Export License', type: 'Permit & License', status: 'Pending' },
+                            { name: 'Certificate of Origin', type: 'Regulatory Certificate', status: 'Pending' },
+                        ],
                         status: 'pending',
                         created_at: dateNow,
                         updated_at: dateNow,
