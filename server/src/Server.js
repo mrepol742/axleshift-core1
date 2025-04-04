@@ -51,11 +51,10 @@ app.get('/', (req, res) => {
     const systemInfo = `
         ${Quotes.getRandomQuote()} <br><br>
         Platform: ${os.platform()}
-        Commit Hash: ${branchName} ${commitHash}
+        Commit: ${branchName} ${commitHash}
         Architecture: ${os.arch()}
         CPU Count: ${os.cpus().length}
-        Free Memory: ${(os.freemem() / 1024 / 1024).toFixed(2)} MB
-        Total Memory: ${(os.totalmem() / 1024 / 1024).toFixed(2)} MB
+        Free Memory: ${(os.freemem() / 1024 / 1024).toFixed(2)}/${(os.totalmem() / 1024 / 1024).toFixed(2)} MB
         Uptime: ${(os.uptime() / 60).toFixed(2)} minutes
         User Agent: ${req.headers['user-agent']}
         Cookie: ${req.headers.cookie}
