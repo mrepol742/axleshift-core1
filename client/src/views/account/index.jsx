@@ -133,7 +133,8 @@ const Account = () => {
                                     <CImage
                                         crossOrigin="Anonymous"
                                         src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
-                                        className="rounded-5 mb-3"
+                                        className="rounded-pill p-1 border mb-3"
+                                        width="100px"
                                         fluid
                                         loading="lazy"
                                     />

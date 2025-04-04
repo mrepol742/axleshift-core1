@@ -34,7 +34,7 @@ const AppHeaderDropdown = () => {
                     <CImage
                         crossOrigin="Anonymous"
                         src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
-                        className="rounded-5 rounded-pill border border-primary"
+                        className="rounded-5 rounded-pill border p-1"
                         fluid
                         width="40px"
                         height="40px"
@@ -55,7 +55,8 @@ const AppHeaderDropdown = () => {
                         <CImage
                             crossOrigin="Anonymous"
                             src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
-                            className="rounded mb-2"
+                            className="rounded-pill border p-1 mb-2"
+                            width="60px"
                             fluid
                             loading="lazy"
                         />

@@ -23,6 +23,7 @@ import { CChartLine } from '@coreui/react-chartjs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical, faChartPie } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
+import parseTimestamp from '../../utils/Timestamp'
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -413,17 +414,19 @@ const Dashboard = () => {
                     ) : (
                         <>
                             <CModalHeader>{getHeaderTitle(formData.url)}</CModalHeader>
-                            <CListGroup>
+                            <CListGroup className="px-3 mb-3">
                                 {formData.data.length === 0 && (
                                     <div className="d-flex justify-content-center">
                                         <p className="mb-3">No data available</p>
                                     </div>
                                 )}
 
+                                {/* Shipment and Invoice  */}
                                 {formData.data.length > 0 &&
                                     formData.data.map((item, index) => (
                                         <CListGroupItem
                                             key={index}
+                                            className="p-3"
                                             onClick={(e) =>
                                                 navigate(
                                                     `/shipment/${item.tracking_number ? item.tracking_number : item.freight_tracking_number}`,
@@ -436,16 +439,24 @@ const Dashboard = () => {
                                                         ? item.tracking_number
                                                         : item.freight_tracking_number}
                                                 </h5>
-                                                <small>3 days ago</small>
+                                                <small>{parseTimestamp(item.created_at)}</small>
                                             </div>
                                             {item.to && (
-                                                <>
-                                                    <p className="mb-1">
+                                                <div>
+                                                    <p className="mb-1 text-muted">
                                                         {item.to[0].address}, {item.to[0].city},{' '}
                                                         {item.to[0].country} {item.to[0].zip_code}
                                                     </p>
-                                                    <small>{item.to[0].name}</small>
-                                                </>
+                                                    <small className="text-muted">{item.to[0].name}</small>
+                                                </div>
+                                            )}
+                                            {item.freight_tracking_number && (
+                                                <p className="mb-1">
+                                                    {new Intl.NumberFormat('en-US', {
+                                                        style: 'currency',
+                                                        currency: item.currency,
+                                                    }).format(item.amount)}
+                                                </p>
                                             )}
                                         </CListGroupItem>
                                     ))}
