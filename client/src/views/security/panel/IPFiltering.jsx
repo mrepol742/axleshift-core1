@@ -36,13 +36,16 @@ const IPFiltering = () => {
     const [query, setQuery] = useState('')
     const [order, setOrder] = useState(0)
     const [priority, setPriority] = useState(0)
-    const [state, setState] = useState(0)
+    const [state, setState] = useState('whitelist')
     const [ipList, setIpList] = useState([])
 
     const fetchData = async () => {
         axios
             .get(`/sec/management/ip-filtering`)
-            .then((response) => setResult(response.data))
+            .then((response) => {
+                setState(response.data.filter_mode)
+                setIpList(response.data.ip.map((ip) => ({ ip, checked: false })))
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
@@ -58,8 +61,15 @@ const IPFiltering = () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
-            .post(`/sec/management/ip-filtering`, { recaptcha_ref: recaptcha, ipList })
-            .then((response) => addToast('Changes saved successfully', 'Success'))
+            .post(`/sec/management/ip-filtering`, {
+                recaptcha_ref: recaptcha,
+                filter_mode: state,
+                ip: ipList,
+            })
+            .then((response) => {
+                if (response.data.error) return addToast(response.data.error)
+                addToast('Changes saved successfully', 'Success')
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
@@ -130,10 +140,11 @@ const IPFiltering = () => {
                     <CFormSelect
                         aria-label="Select whitelist or blacklist"
                         onChange={(e) => setState(e.target.value)}
+                        value={state}
                         className="w-auto"
                     >
-                        <option value="0">Whitelist</option>
-                        <option value="1">Blacklist</option>
+                        <option value="whitelist">Whitelist</option>
+                        <option value="blacklist">Blacklist</option>
                     </CFormSelect>
                 </CCol>
             </CRow>

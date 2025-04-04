@@ -7,7 +7,7 @@ import dependabot from '../../../components/dependabot.js'
 import sentry from '../../../components/sentry.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
-import redis, { clearRedisCache, setCache, remCache } from '../../../models/redis.js'
+import redis, { clearRedisCache, setCache, remCache, getCache } from '../../../models/redis.js'
 
 const router = express.Router()
 const limit = 20
@@ -135,7 +135,66 @@ router.post('/activity', auth, async (req, res, next) => {
 })
 
 router.get('/maintenance', auth, async (req, res, next) => res.status(200).send())
-router.get('/ip-filtering', auth, async (req, res, next) => res.status(200).send())
+
+router.get('/ip-filtering', auth, async (req, res, next) => {
+    try {
+        const ipFiltering = await getCache(`ip-filtering`)
+        return res.status(200).json(ipFiltering ? ipFiltering : [])
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
+
+router.post('/ip-filtering', [recaptcha, auth], async (req, res, next) => {
+    try {
+        const { filter_mode, ip } = req.body
+        if (!filter_mode || !ip || !Array.isArray(ip))
+            return res.status(400).json({ error: 'Invalid request' })
+        if (!['whitelist', 'blacklist'].includes(filter_mode))
+            return res.status(400).json({ error: 'Invalid request' })
+
+        let allowedIp = ip
+        let ipAddress = []
+
+        if (allowedIp.length > 0 && allowedIp[0] !== '[]') {
+            for (let i = 0; i < allowedIp.length; i++) {
+                // verify ip
+                if (!/^(\d{1,3}\.){3}\d{1,3}(:\d{1,5})?$/.test(allowedIp[i].ip)) {
+                    // verify if its IPv6
+                    if (
+                        /^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})(:\d{1,5})?$|^::([0-9a-fA-F]{1,4}:){0,6}([0-9a-fA-F]{1,4})?(:\d{1,5})?$|^([0-9a-fA-F]{1,4}:){1,7}:(:\d{1,5})?$/.test(
+                            allowedIp[i].ip,
+                        )
+                    )
+                        return res
+                            .status(200)
+                            .json({ error: `IPv6 is not allowed: '${allowedIp[i].ip}'` })
+                    // verify if its not range ipv4
+                    if (
+                        !/^(\d{1,3}\.){3}\d{1,3}(:\d{1,5})?-(\d{1,3}\.){3}\d{1,3}(:\d{1,5})?$/.test(
+                            allowedIp[i].ip,
+                        )
+                    )
+                        return res
+                            .status(200)
+                            .json({ error: `Invalid IP Address '${allowedIp[i].ip}'` })
+                }
+                ipAddress.push(allowedIp[i].ip)
+            }
+        }
+
+        await setCache(`ip-filtering`, {
+            filter_mode: filter_mode,
+            ip: ipAddress,
+        })
+
+        return res.status(200).json()
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
 router.get('/geo', auth, async (req, res, next) => res.status(200).send())
 
 export default router
