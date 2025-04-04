@@ -207,6 +207,10 @@ const Dashboard = () => {
                 return 'On the Way'
             case '/received':
                 return 'Completed Shipments'
+            case '/PAID':
+                return 'Successful Invoices'
+            case '/EXPIRED':
+                return 'Expired Invoices'
             default:
                 return ''
         }
@@ -365,6 +369,7 @@ const Dashboard = () => {
             <CRow>
                 <CCol xs={12} md={6}>
                     <CWidgetStatsC
+                        onClick={() => renderDashboardWidgets('/PAID')}
                         data-aos="fade-up"
                         data-aos-delay="700"
                         className="mb-3"
@@ -379,6 +384,7 @@ const Dashboard = () => {
                 </CCol>
                 <CCol xs={12} md={6}>
                     <CWidgetStatsC
+                        onClick={() => renderDashboardWidgets('/EXPIRED')}
                         data-aos="fade-up"
                         data-aos-delay="800"
                         className="mb-3"
@@ -419,18 +425,28 @@ const Dashboard = () => {
                                         <CListGroupItem
                                             key={index}
                                             onClick={(e) =>
-                                                navigate(`/shipment/${item.tracking_number}`)
+                                                navigate(
+                                                    `/shipment/${item.tracking_number ? item.tracking_number : item.freight_tracking_number}`,
+                                                )
                                             }
                                         >
                                             <div className="d-flex w-100 justify-content-between">
-                                                <h5 className="mb-1">{item.tracking_number}</h5>
+                                                <h5 className="mb-1">
+                                                    {item.tracking_number
+                                                        ? item.tracking_number
+                                                        : item.freight_tracking_number}
+                                                </h5>
                                                 <small>3 days ago</small>
                                             </div>
-                                            <p className="mb-1">
-                                                {item.to[0].address}, {item.to[0].city},{' '}
-                                                {item.to[0].country} {item.to[0].zip_code}
-                                            </p>
-                                            <small>{item.to[0].name}</small>
+                                            {item.to && (
+                                                <>
+                                                    <p className="mb-1">
+                                                        {item.to[0].address}, {item.to[0].city},{' '}
+                                                        {item.to[0].country} {item.to[0].zip_code}
+                                                    </p>
+                                                    <small>{item.to[0].name}</small>
+                                                </>
+                                            )}
                                         </CListGroupItem>
                                     ))}
                             </CListGroup>

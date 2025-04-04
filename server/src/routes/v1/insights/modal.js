@@ -7,26 +7,26 @@ const router = express.Router()
 
 router.get('/:type', auth, async (req, res) => {
     const { type } = req.params
-    if (!type || !['cancelled', 'to_pay', 'to_ship', 'to_receive', 'received'].includes(type)) return res.status(400).json({ error: 'Invalid request' })
+    if (!type || !['cancelled', 'to_pay', 'to_ship', 'to_receive', 'received', 'PAID'].includes(type)) return res.status(400).json({ error: 'Invalid request' })
 
     const db = await database()
-    const freightCollection = db.collection('freight')
+    const collection = db.collection(type === 'PAID' ? 'invoices' : 'freight')
 
     try {
         const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
         const filter = isUser ? { user_id: req.user._id } : {}
 
-        const shipments = await freightCollection
+        const data = await collection
             .find(
                 { ...filter, status: type },
-                { projection: { _id: 0, tracking_number: 1, created_at: 1, to: 1 } },
+                { projection: { _id: 0, freight_tracking_number: 1, tracking_number: 1, created_at: 1, to: 1, amount: 1 } },
             )
             .sort({ created_at: -1 })
             .toArray()
 
-        if (!shipments) return res.status(404).json({ error: 'No shipments found' })
+        if (!data) return res.status(404).json([])
 
-        return res.status(200).json(shipments)
+        return res.status(200).json(data)
     } catch (error) {
         logger.error(error)
         res.status(500).json({ error: 'Internal Server Error' })
