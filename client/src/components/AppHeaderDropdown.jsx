@@ -34,7 +34,7 @@ const AppHeaderDropdown = () => {
                     <CImage
                         crossOrigin="Anonymous"
                         src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
-                        className="rounded-5"
+                        className="rounded-5 rounded-pill border border-primary"
                         fluid
                         width="40px"
                         height="40px"

@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { CRow, CCol, CWidgetStatsF } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisVertical, faChartPie } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsisVertical, faChartPie, faCircleNodes } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../components/AppToastProvider'
+import parseTimestamp from '../../utils/Timestamp'
 import Widgets from './Widgets'
 
 const Dashboard = () => {
-    const [formData, setFormData] = useState(null)
+    const [mongodb, setMongoDb] = useState({
+        connections: [{ current: 0, available: 0 }],
+        oplog: [{ getMoreOps: 0, networkBytes: 0 }],
+        operations: [{ insert: 0, query: 0, update: 0, delete: 0, getmore: 0, command: 0 }],
+    })
+    const [redis, setRedis] = useState(null)
     const [loading, setLoading] = useState(true)
     const { addToast } = useToast()
     const [cpuUsageData, setCpuUsageData] = useState([])
@@ -53,7 +59,20 @@ const Dashboard = () => {
         axios
             .get(`/metrics/mongodb`)
             .then((response) => {
-                setFormData(response.data)
+                setMongoDb(response.data)
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error ||
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
+                addToast(message)
+            })
+        axios
+            .get(`/metrics/redis`)
+            .then((response) => {
+                setRedis(response.data)
             })
             .catch((error) => {
                 const message =
@@ -64,6 +83,22 @@ const Dashboard = () => {
                 addToast(message)
             })
             .finally(() => setLoading(false))
+    }
+
+    function formatTTL(ms) {
+        if (ms <= 0 || isNaN(ms)) return '0 ms'
+
+        const seconds = Math.floor((ms / 1000) % 60)
+        const minutes = Math.floor((ms / (1000 * 60)) % 60)
+        const hours = Math.floor(ms / (1000 * 60 * 60))
+
+        const parts = []
+        if (hours) parts.push(`${hours} hour${hours !== 1 ? 's' : ''}`)
+        if (minutes) parts.push(`${minutes} minute${minutes !== 1 ? 's' : ''}`)
+        if (seconds || (!hours && !minutes))
+            parts.push(`${seconds} second${seconds !== 1 ? 's' : ''}`)
+
+        return parts.join(' ')
     }
 
     useEffect(() => {
@@ -99,17 +134,19 @@ const Dashboard = () => {
                     />
                 </CCol>
             </CRow>
-            <h4 className="mt-3">Database</h4>
+            <h4 className="mt-3">Atlas</h4>
             <CRow>
                 <CCol xs={4}>
                     <CWidgetStatsF
-                        className="mb-3 bg-body-secondary"
-                        icon={<FontAwesomeIcon icon={faChartPie} />}
-                        title={`${formData.connections[0].current} Connections`}
+                        padding={false}
+                        color="primary"
+                        className="mb-3"
+                        icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
+                        title={`${mongodb.connections[0].current.toLocaleString()} Connections`}
                         value={
                             (
-                                (formData.connections[0].current /
-                                    formData.connections[0].available) *
+                                (mongodb.connections[0].current /
+                                    mongodb.connections[0].available) *
                                 100
                             ).toFixed(2) + '%'
                         }
@@ -117,36 +154,77 @@ const Dashboard = () => {
                 </CCol>
                 <CCol xs={4}>
                     <CWidgetStatsF
-                        className="mb-3 bg-body-secondary"
-                        icon={<FontAwesomeIcon icon={faChartPie} />}
-                        title={`${formData.oplog[0].getMoreOps} per second`}
-                        value={formData.oplog[0].networkBytes + ' bytes'}
+                        padding={false}
+                        color="secondary"
+                        className="mb-3"
+                        icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
+                        title={`${mongodb.oplog[0].getMoreOps.toLocaleString()} per second`}
+                        value={`${mongodb.oplog[0].networkBytes.toLocaleString()} bytes`}
                     />
                 </CCol>
                 <CCol xs={4}>
                     <CWidgetStatsF
-                        className="mb-3 bg-body-secondary"
-                        icon={<FontAwesomeIcon icon={faChartPie} />}
-                        title={`${formData.operations[0].insert} insertions`}
-                        value={formData.operations[0].query + ' queries'}
+                        padding={false}
+                        color="warning"
+                        className="mb-3"
+                        icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
+                        title={`${mongodb.operations[0].insert.toLocaleString()} insertions`}
+                        value={`${mongodb.operations[0].query.toLocaleString()} queries`}
                     />
                 </CCol>
             </CRow>
             <CRow>
                 <CCol xs={4}>
                     <CWidgetStatsF
-                        className="mb-3 bg-body-secondary"
-                        icon={<FontAwesomeIcon icon={faChartPie} />}
-                        title={`${formData.operations[0].update} updates`}
-                        value={formData.operations[0].delete + ' deletes'}
+                        padding={false}
+                        color="info"
+                        className="mb-3"
+                        icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
+                        title={`${mongodb.operations[0].update.toLocaleString()} updates`}
+                        value={`${mongodb.operations[0].delete.toLocaleString()} deletes`}
                     />
                 </CCol>
                 <CCol xs={4}>
                     <CWidgetStatsF
-                        className="mb-3 bg-body-secondary"
-                        icon={<FontAwesomeIcon icon={faChartPie} />}
-                        title={`${formData.operations[0].getmore} getMore operations`}
-                        value={formData.operations[0].command + ' commands'}
+                        padding={false}
+                        color="danger"
+                        className="mb-3"
+                        icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
+                        title={`${mongodb.operations[0].getmore.toLocaleString()} getMore operations`}
+                        value={`${mongodb.operations[0].command.toLocaleString()} commands`}
+                    />
+                </CCol>
+            </CRow>
+            <h4 className="mt-3">Redis</h4>
+            <CRow>
+                <CCol xs={4}>
+                    <CWidgetStatsF
+                        padding={false}
+                        color="info"
+                        className="mb-3"
+                        icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
+                        title={`${redis.totalKeys.toLocaleString()} Total Keys`}
+                        value={`${redis.keysWithExpiry.toLocaleString()} Keys Expiring`}
+                    />
+                </CCol>
+                <CCol xs={4}>
+                    <CWidgetStatsF
+                        padding={false}
+                        color="warning"
+                        className="mb-3"
+                        icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
+                        title={`${formatTTL(redis.avgTTLms)} Average TTL`}
+                        value={`${redis.usedMemory.toLocaleString()} Used Memory`}
+                    />
+                </CCol>
+                <CCol xs={4}>
+                    <CWidgetStatsF
+                        padding={false}
+                        color="primary"
+                        className="mb-3"
+                        icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
+                        title={`${redis.totalCommandsProcessed.toLocaleString()} Commands Processed`}
+                        value={`${redis.opsPerSec.toLocaleString()} Ops per second`}
                     />
                 </CCol>
             </CRow>
