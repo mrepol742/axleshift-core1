@@ -173,7 +173,6 @@ const IPFiltering = () => {
                 Examples:
                 <ul>
                     <li>Single IP: 192.168.100.1</li>
-                    <li>Prefix IP: 192.168.100.1/24</li>
                     <li>IP Range: 192.168.100.1-192.168.100.200</li>
                 </ul>
             </div>

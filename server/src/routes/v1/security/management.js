@@ -139,7 +139,16 @@ router.get('/maintenance', auth, async (req, res, next) => res.status(200).send(
 router.get('/ip-filtering', auth, async (req, res, next) => {
     try {
         const ipFiltering = await getCache(`ip-filtering`)
-        return res.status(200).json(ipFiltering ? ipFiltering : [])
+        return res.status(200).json(
+            ipFiltering
+                ? ipFiltering
+                : [
+                      {
+                          filter_mode: 'whitelist',
+                          ip: [],
+                      },
+                  ],
+        )
     } catch (e) {
         logger.error(e)
     }
@@ -195,6 +204,64 @@ router.post('/ip-filtering', [recaptcha, auth], async (req, res, next) => {
     }
     res.status(500).json({ error: 'Internal server error' })
 })
-router.get('/geo', auth, async (req, res, next) => res.status(200).send())
 
+router.get('/geo', auth, async (req, res, next) => {
+    try {
+        const geoFiltering = await getCache(`geo`)
+        return res.status(200).json(
+            geoFiltering
+                ? geoFiltering
+                : {
+                      filter_mode: 'whitelist',
+                      geo: [],
+                  },
+        )
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
+
+router.post('/geo', [recaptcha, auth], async (req, res, next) => {
+    try {
+        const { filter_mode, geo } = req.body
+        if (!filter_mode || !geo || !Array.isArray(geo))
+            return res.status(400).json({ error: 'Invalid request' })
+        if (!['whitelist', 'blacklist'].includes(filter_mode))
+            return res.status(400).json({ error: 'Invalid request' })
+
+        let allowedGeo = geo
+        let geoLocation = []
+
+        if (allowedGeo.length > 0 && allowedGeo[0] !== '[]') {
+            for (let i = 0; i < allowedGeo.length; i++) {
+                if (!/[-+]?(90(\.0+)?|[1-8]?\d(\.\d+)?)/.test(allowedGeo[i].geo.latitude))
+                    return res
+                        .status(200)
+                        .json({ error: `Invalid latitude '${allowedGeo[i].geo.latitude}'` })
+
+                if (
+                    !/[-+]?(180(\.0+)?|1[0-7]\d(\.\d+)?|[1-9]?\d(\.\d+)?)/.test(
+                        allowedGeo[i].geo.longitude,
+                    )
+                )
+                    return res
+                        .status(200)
+                        .json({ error: `Invalid longitude '${allowedGeo[i].geo.longitude}'` })
+
+                geoLocation.push(allowedGeo[i].geo)
+            }
+        }
+
+        await setCache(`geo`, {
+            filter_mode: filter_mode,
+            geo: geoLocation,
+        })
+
+        return res.status(200).json()
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
 export default router
