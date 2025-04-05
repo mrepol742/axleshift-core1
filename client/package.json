@@ -37,7 +37,7 @@
         "@react-oauth/google": "^0.12.1",
         "@sentry/react": "^8.33.1",
         "aos": "^2.3.4",
-        "axios": "^1.8.2",
+        "axios": "^1.8.4",
         "boolean-pro": "^1.0.0",
         "chart.js": "^4.4.3",
         "core-js": "^3.37.1",
@@ -96,7 +96,7 @@
         "vite-plugin-html-minifier": "^1.0.5"
     },
     "engines": {
-        "node": ">=20.x"
+        "node": ">=22.x"
     },
     "private": true
 }

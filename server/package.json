@@ -34,7 +34,7 @@
         "@google/generative-ai": "^0.21.0",
         "@sentry/node": "^8.52.0",
         "@sentry/profiling-node": "^8.55.0",
-        "axios": "^1.7.7",
+        "axios": "^1.8.4",
         "boolean-pro": "^1.0.0",
         "compression": "^1.7.4",
         "concurrently": "^9.0.1",
