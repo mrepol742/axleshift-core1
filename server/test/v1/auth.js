@@ -1,6 +1,7 @@
 import request from 'supertest'
 import { expect } from 'chai'
 import app from '../../src/Server.js'
+import Newsletter from '../../../client/src/components/landing/Newsletter.jsx'
 
 const TOKEN = 'af1b6864fa4280ec8f70ac01e5533e39b457c26fcef2b4e9ff53b240b451b94a'
 
@@ -8,6 +9,17 @@ const auth = () => {
     it('POST /api/v1/auth/register', (done) => {
         request(app)
             .post('/api/v1/auth/register')
+            .send({
+                username: 'test',
+                email: 'test@example.com',
+                first_name: 'test',
+                last_name: 'test',
+                password: 'test',
+                repeat_password: 'test',
+                newsletter: true,
+                type: 'form',
+                recaptcha_ref: 'test',
+            })
             .expect(403)
             .end((err, res) => {
                 if (err) return done(err)

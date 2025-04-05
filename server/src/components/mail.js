@@ -107,7 +107,7 @@ const body = (subject, email, name, message, isNotSystem) => {
             <p>${message}</p>
             <hr>
             <p class="text-center small">
-                This email was intended for ${email}. ${isNotSystem === false ? `This is a system generated message, please do not reply to this email.` : 'You received this email because you\'re a registered user of Axleshift.'}
+                This email was intended for ${email}. ${isNotSystem === false ? `This is a system generated message, please do not reply to this email.` : "You received this email because you're a registered user of Axleshift."}
             </p>
         </div>
         <div class="footer">
