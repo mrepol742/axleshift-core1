@@ -26,9 +26,9 @@ const Messages = ({ float, isOpen }) => {
             snapshot.docs.forEach((doc) => {
                 const msg = { id: doc.id, ...doc.data() }
 
-                if (!thread.includes(msg.ref)) {
-                    latestMessagesMap.set(msg.ref, msg)
-                    thread.push(msg.ref)
+                if (!thread.includes(msg.sender_id)) {
+                    latestMessagesMap.set(msg.sender_id, msg)
+                    thread.push(msg.sender_id)
                 }
             })
 
