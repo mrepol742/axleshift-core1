@@ -227,13 +227,10 @@ const Review = ({ data, shipmentRef }) => {
                             <div>
                                 {!form.selected_address ? (
                                     <div className="text-center">
-                                        <span className="d-block text-danger">
-                                            Unable to find a shipment address base on above address.{' '}
-                                        </span>
                                         <span className="d-block text-muted small">
                                             {' '}
-                                            Click &quot;Choose&quot; to select an address from the
-                                            list.
+                                            Click &quot;Choose&quot; to select an form from the
+                                            addressess.
                                         </span>
                                         <CButton
                                             size="sm"
@@ -442,36 +439,32 @@ const Review = ({ data, shipmentRef }) => {
                                 >
                                     <CCardBody>
                                         <div className="mb-2">
+                                            <span className="fw-bold small">
+                                                Address #{index + 1}
+                                            </span>
                                             <div className="mb-2 mb-sm-0">
                                                 <div className="mb-2">
                                                     <h5 className="text-truncate">
-                                                        {' '}
-                                                        <span className="text-primary fw-medium text-uppercase me-1">
-                                                            From
-                                                        </span>{' '}
                                                         {address.from.name}
                                                     </h5>
-                                                    <span className="text-muted text-truncate">
+                                                    <p className="text-muted text-wrap">
                                                         {address.from.phone_number} •{' '}
                                                         {address.from.address}
                                                         {', '}
                                                         {address.from.country}
-                                                    </span>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div>
                                                 <div className="mb-2">
                                                     <h5 className="text-truncate">
-                                                        <span className="text-primary fw-medium text-uppercase me-1">
-                                                            To
-                                                        </span>
                                                         {address.to.name}
                                                     </h5>
-                                                    <span className="text-muted text-truncate">
+                                                    <p className="text-muted text-wrap">
                                                         {address.to.phone_number} •{' '}
                                                         {address.to.address} {', '}{' '}
                                                         {address.to.country}
-                                                    </span>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
