@@ -99,8 +99,7 @@ const Email = () => {
             <CFormTextarea
                 id="messageInput"
                 name="message"
-                floatingClassName="mb-3"
-                floatingLabel="Message"
+                className="mb-3"
                 maxLength={500}
                 placeholder="Enter your message here"
                 rows={5}

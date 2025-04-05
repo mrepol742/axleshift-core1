@@ -57,6 +57,7 @@ const Security = () => {
                         error: true,
                         message: response.data.error,
                     })
+                window.location.reload()
             })
             .catch((error) => {
                 const message =

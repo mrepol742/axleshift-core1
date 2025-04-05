@@ -33,7 +33,6 @@ router.post('/send', [recaptcha, auth], async (req, res) => {
                 .find(query, { projection: { email: 1, _id: 0 } })
                 .toArray()
             const userEmails = users.map((user) => user.email)
-            console.log('User Emails:', userEmails)
 
             for (const userEmail of userEmails) {
                 new Promise((resolve) => setTimeout(resolve, Math.random() * (10000 - 5000) + 5000))
