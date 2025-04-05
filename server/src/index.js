@@ -33,7 +33,7 @@ const startServer = async () => {
         }
     })
 
-    app.listen(config.EXPRESS_PORT, async (err) => {
+    app.listen(config.EXPRESS_PORT, '::1', async (err) => {
         if (err) return logger.error(err)
         logger.info(`server running on port ${config.EXPRESS_PORT}`)
         await Promise.all([db(), mail(), cron(), redis()])
