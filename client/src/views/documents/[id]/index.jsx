@@ -232,12 +232,12 @@ const Document = () => {
                 <CModalBody>
                     {preview?.fileFormat === 'docx' ? (
                         <iframe
-                            src={`https://view.officeapps.live.com/op/embed.aspx?src=${preview.url}`}
+                            src={`https://view.officeapps.live.com/op/embed.aspx?src=${preview?.url}`}
                             style={{ width: '100%', height: '400px', border: 'none' }}
                         ></iframe>
                     ) : (
                         <iframe
-                            src={preview.url}
+                            src={preview?.url}
                             style={{ width: '100%', height: '400px', border: 'none' }}
                         ></iframe>
                     )}
