@@ -39,9 +39,9 @@ const knownClients = [
  */
 
 const loopback = [
-  '127.0.0.1',        // IPv4
-  '::1',              // IPv6
-  '::ffff:127.0.0.1', // IPv4-mapped IPv6
+    '127.0.0.1', // IPv4
+    '::1', // IPv6
+    '::ffff:127.0.0.1', // IPv4-mapped IPv6
 ]
 
 const internal = async (req, res, next) => {

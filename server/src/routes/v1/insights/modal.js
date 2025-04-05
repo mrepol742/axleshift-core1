@@ -7,7 +7,13 @@ const router = express.Router()
 
 router.get('/:type', auth, async (req, res) => {
     const { type } = req.params
-    if (!type || !['cancelled', 'to_pay', 'to_ship', 'to_receive', 'received', 'PAID', 'EXPIRED'].includes(type)) return res.status(400).json({ error: 'Invalid request' })
+    if (
+        !type ||
+        !['cancelled', 'to_pay', 'to_ship', 'to_receive', 'received', 'PAID', 'EXPIRED'].includes(
+            type,
+        )
+    )
+        return res.status(400).json({ error: 'Invalid request' })
 
     const db = await database()
     const collection = db.collection(type === 'PAID' ? 'invoices' : 'freight')
@@ -19,7 +25,17 @@ router.get('/:type', auth, async (req, res) => {
         const data = await collection
             .find(
                 { ...filter, status: type },
-                { projection: { _id: 0, freight_tracking_number: 1, tracking_number: 1, created_at: 1, to: 1, amount: 1, currency: 1 } },
+                {
+                    projection: {
+                        _id: 0,
+                        freight_tracking_number: 1,
+                        tracking_number: 1,
+                        created_at: 1,
+                        to: 1,
+                        amount: 1,
+                        currency: 1,
+                    },
+                },
             )
             .sort({ created_at: -1 })
             .toArray()

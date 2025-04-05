@@ -28,8 +28,9 @@ router.post('/send', [recaptcha, auth], async (req, res) => {
                 return res.status(400).json({ error: 'Invalid user role' })
             const db = await database()
             const usersCollection = db.collection('users')
+            const query = email === 'all' ? {} : { role: email }
             const users = await usersCollection
-                .find({ role: email !== 'all' ? email : {} }, { projection: { email: 1, _id: 0 } })
+                .find(query, { projection: { email: 1, _id: 0 } })
                 .toArray()
             const userEmails = users.map((user) => user.email)
             console.log('User Emails:', userEmails)
