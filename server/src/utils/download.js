@@ -5,7 +5,11 @@ import logger from './logger.js'
 import { uploadToS3 } from '../components/s3/profile.js'
 
 const download = (url, ref) => {
-    const savePath = path.join(process.cwd(), 'temp', `${ref}.png`)
+    const tempDir = path.join(process.cwd(), 'temp')
+    if (!fs.existsSync(tempDir))
+        fs.mkdirSync(tempDir, { recursive: true })
+
+    const savePath = path.join(tempDir, `${ref}.png`)
     downloadImage(url, savePath)
         .then(() => {
             logger.info('Finished downloading user avatar.')
