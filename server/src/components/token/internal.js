@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import logger from '../../utils/logger.js'
 import { getUser, getSession, removeSession } from '../sessions.js'
 import database from '../../models/mongodb.js'
-import { REACT_APP_ORIGIN } from '../../config.js'
+import { REACT_APP_ORIGIN, NODE_ENV } from '../../config.js'
 import { setCache } from '../../models/redis.js'
 import sendOTP from '../otp.js'
 import { getCache } from '../../models/redis.js'
@@ -38,6 +38,12 @@ const knownClients = [
  * otp - for otp value
  */
 
+const loopback = [
+    '127.0.0.1', // IPv4
+    '::1', // IPv6
+    '::ffff:127.0.0.1', // IPv4-mapped IPv6
+]
+
 const internal = async (req, res, next) => {
     // validate us and headers
     const userAgent = req.headers['user-agent'] || ''
@@ -48,7 +54,8 @@ const internal = async (req, res, next) => {
         knownClients.some((bot) => userAgent.includes(bot)) ||
         !accept.includes('application/json') ||
         !secFetch ||
-        REACT_APP_ORIGIN !== req.socket.remoteAddress
+        (NODE_ENV === 'production' && REACT_APP_ORIGIN !== req.socket.remoteAddress) ||
+        (NODE_ENV !== 'production' && !loopback.includes(req.socket.remoteAddress))
     )
         return res.status(401).json({ error: 'Unauthorized' })
 

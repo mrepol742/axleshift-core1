@@ -43,7 +43,19 @@ const ShipmentCard = ({ shipment }) => {
             onClick={() => navigate(`/shipment/${shipment.tracking_number}`)}
             style={{ cursor: 'pointer' }}
         >
-            <CCardBody>
+            <div className={`bg-${getCardColor(shipment.status)} rounded p-3 m-2`}>
+                <div className="d-flex justify-content-between text-white">
+                    <div>
+                        <small className="d-block fw-bold">Status</small>
+                        {getStatus(shipment.status)}
+                    </div>
+                    <div>
+                        <small className="d-block fw-bold">Update</small>
+                        {parseTimestamp(shipment.updated_at)}
+                    </div>
+                </div>
+            </div>
+            <div className="px-2 mx-1">
                 {shipment.courier !== 'none' && (
                     <div className="mb-2">
                         <small className="text-muted d-block">Courier</small>
@@ -73,19 +85,7 @@ const ShipmentCard = ({ shipment }) => {
                         currency: shipment.amount.currency,
                     }).format(shipment.amount.value)}
                 </div>
-            </CCardBody>
-            <CCardFooter className={`bg-${getCardColor(shipment.status)} rounded-top`}>
-                <div className="d-flex justify-content-between">
-                    <div>
-                        <small className="text-muted d-block">Status</small>
-                        {getStatus(shipment.status)}
-                    </div>
-                    <div>
-                        <small className="text-muted d-block">Update</small>
-                        {parseTimestamp(shipment.updated_at)}
-                    </div>
-                </div>
-            </CCardFooter>
+            </div>
         </CCard>
     )
 }

@@ -158,7 +158,7 @@ const MessageBox = ({
                                 }}
                             >
                                 <div
-                                    className={`${role(msg) ? 'bg-primary' : 'bg-body-secondary'} text-white rounded p-2`}
+                                    className={`${role(msg) ? 'bg-primary' : 'bg-secondary'} text-white rounded p-2`}
                                     style={{
                                         display: 'inline-block',
                                         maxWidth: isMobile ? '85%' : '80%',

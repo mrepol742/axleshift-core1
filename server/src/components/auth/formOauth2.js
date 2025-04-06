@@ -23,10 +23,11 @@ const FormOauth2 = async (req, res) => {
             ],
         })
 
-        if (NODE_ENV === 'production')
+         if (NODE_ENV === 'production' && theUser.role === 'user')
             res.status(200).json({
-                error: 'You have no permission to continue. Please contact the admin.',
+                error: 'You have successfully registered. We will send an email to you once everything is ready.',
             })
+        
 
         // login
         if (theUser) {

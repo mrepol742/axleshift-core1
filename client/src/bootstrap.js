@@ -4,7 +4,6 @@ import pako from 'pako'
 import DOMPurify from 'dompurify'
 import { VITE_APP_API_URL, VITE_APP_SESSION } from './config.js'
 
-const token = cookies.get(VITE_APP_SESSION)
 const _axios = axios.create({
     baseURL: `${VITE_APP_API_URL}/api/v1`,
     headers: {
@@ -29,7 +28,7 @@ _axios.interceptors.request.use(
             config.headers['Content-Encoding'] = 'gzip'
             config.headers['Content-Type'] = 'application/json'
         }
-        config.headers['Authorization'] = `Bearer ${token}`
+        config.headers['Authorization'] = `Bearer ${cookies.get(VITE_APP_SESSION)}`
         return config
     },
     (error) => {

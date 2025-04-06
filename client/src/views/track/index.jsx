@@ -84,7 +84,7 @@ const Track = () => {
                 </div>
             )}
 
-            <CRow>
+            <CRow className="mb-3">
                 <CCol xs={4} className="image-container d-none d-md-flex">
                     <CImage
                         fluid

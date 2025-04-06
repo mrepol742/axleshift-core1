@@ -17,8 +17,11 @@ import {
     CImage,
 } from '@coreui/react'
 import jsPDF from 'jspdf'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope, faPhone, faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import html2canvas from 'html2canvas'
 import { Helmet } from 'react-helmet'
+import { VITE_APP_NODE_ENV } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 
 const Receipt = () => {
@@ -98,9 +101,16 @@ const Receipt = () => {
             <Helmet>
                 <title>{id} - Invoice | Axleshift</title>
             </Helmet>
-            <h1 className="text-uppercase fw-bold text-center">Axleshift</h1>
-            <p className="text-center">4108 IM Bestlink College of the Phillippines</p>
-            <div className="bg-body-secondary p-2 mb-1">
+            <h1 className="text-uppercase fw-bold text-center font-monospace">Axleshift</h1>
+            <p className="text-center">
+                <FontAwesomeIcon icon={faLocationDot} className="me-1" /> 4108 IM Bestlink College
+                of the Phillippines
+                <br />
+                <FontAwesomeIcon icon={faEnvelope} className="me-1" /> axleshift@gmail.com
+                <br />
+                <FontAwesomeIcon icon={faPhone} className="me-1" /> +63 912 345 6789
+            </p>
+            <div className="bg-body-secondary p-4 mb-1">
                 <span className="d-block">Invoice ID: {data.invoice_id}</span>
                 <span className="d-block">Tracking Number: {data.freight_tracking_number}</span>
                 {data.freight_details.is_import === true ? (
@@ -133,18 +143,20 @@ const Receipt = () => {
                     <>
                         <div className="d-flex justify-content-between">
                             <span>Date Paid</span>
+                            <span className="flex-grow-1 mx-3 border-bottom border-secondary mb-2 border-opacity-25"></span>
                             <span>{new Date(data.updated_at).toLocaleString()}</span>
                         </div>
                         <div className="d-flex justify-content-between">
                             <span>Payment Method</span>
+                            <span className="flex-grow-1 mx-3 border-bottom border-secondary mb-2 border-opacity-25"></span>
                             <span>{data.payment_method}</span>
                         </div>
                     </>
                 )}
                 <div className="d-flex justify-content-between">
                     <span>Amount Due</span>
+                    <span className="flex-grow-1 mx-3 border-bottom border-secondary mb-2 border-opacity-25"></span>
                     <span>
-                        {' '}
                         {new Intl.NumberFormat('en-US', {
                             style: 'currency',
                             currency: data.currency,
@@ -152,8 +164,17 @@ const Receipt = () => {
                     </span>
                 </div>
             </div>
-            <div className="bg-body-secondary p-2 small mb-2">
-                https://core1.axleshift.com/invoices/{id}
+            <div className="text-center p-2 small mb-2">
+                <small className="d-block">
+                    This invoice has been issued to userEmail
+                    <br />
+                    in reference to shipment #
+                    <br />
+                    {VITE_APP_NODE_ENV === 'production'
+                        ? 'https://core1.axleshift.com'
+                        : 'http://localhost:3000'}
+                    /invoices/{id}
+                </small>
             </div>
             <div className="d-flex">
                 {data.status === 'PENDING' && (
@@ -167,7 +188,7 @@ const Receipt = () => {
                     </CButton>
                 )}
                 <CButton className="btn btn-primary px-4 mb-3" ref={pdfRef} onClick={generatePDF}>
-                    PDF
+                    Download PDF
                 </CButton>
             </div>
         </div>

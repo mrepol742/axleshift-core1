@@ -23,6 +23,19 @@ import AppPagination from '../../components/AppPagination'
 import { useToast } from '../../components/AppToastProvider'
 import AppSearch from '../../components/AppSearch'
 
+// - Generated
+//   The system handles the documents automatically and generates the documents
+// - Not Applicable
+//   The document is not applicable to the shipment
+// - Pending
+//   The user has not yet uploaded the document
+// - Under Review
+//   The user has uploaded the document and is under review
+// - Approved
+//   The document has been approved
+// - Rejected
+// The document has been rejected
+
 const Documents = () => {
     const [data, setData] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -98,11 +111,18 @@ const Documents = () => {
                                 <CTableRow key={index}>
                                     <CTableDataCell>{item.freight_tracking_number}</CTableDataCell>
                                     <CTableDataCell className="text-uppercase">
-                                        <span
-                                            className={`badge bg-${item.status === 'approved' ? 'success' : item.status === 'rejected' ? 'danger' : 'warning'}`}
-                                        >
-                                            {item.status}
-                                        </span>
+                                        {item.documents && item.documents.length > 0 ? (
+                                            item.documents.map((doc, docIndex) => (
+                                                <span
+                                                    key={docIndex}
+                                                    className={`me-2 badge bg-${['approved', 'generated'].includes(doc.status) ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}`}
+                                                >
+                                                    {doc.status}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span>No documents available</span>
+                                        )}
                                     </CTableDataCell>
                                     <CTableDataCell>
                                         {item.documents && item.documents.length > 0 ? (

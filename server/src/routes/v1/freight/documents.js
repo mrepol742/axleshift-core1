@@ -120,19 +120,19 @@ router.post(
 
             return res.status(200).json({
                 data: [
-                            {
-                                name: 'Export License',
-                                type: 'Permit & License',
-                                status: 'Under Review',
-                                file: exportLicenseUrl,
-                            },
-                            {
-                                name: 'Certificate of Origin',
-                                type: 'Regulatory Certificate',
-                                status: 'Under Review',
-                                file: certificateOfOriginUrl,
-                            },
-                        ],
+                    {
+                        name: 'Export License',
+                        type: 'Permit & License',
+                        status: 'Under Review',
+                        file: exportLicenseUrl,
+                    },
+                    {
+                        name: 'Certificate of Origin',
+                        type: 'Regulatory Certificate',
+                        status: 'Under Review',
+                        file: certificateOfOriginUrl,
+                    },
+                ],
                 message: 'Files uploaded successfully',
             })
         } catch (err) {
@@ -149,14 +149,18 @@ router.post('/file/:id', [auth, documents], async (req, res) => {
     try {
         const { file } = req.body
         if (!file) return res.status(400).json({ error: 'Invalid request' })
-        
+
         for (const document of req.documents.documents) {
             if (document.file && document.file.file === file) {
-                const fileFormat = document.file.file.split('.').pop();
-                const url = await getSignedUrl(s3, new GetObjectCommand({
-                    Bucket: AWS_BUCKET_NAME,
-                    Key: `files/${document.file.ref}.${fileFormat}`,
-                }), { expiresIn: 60 * 5 })
+                const fileFormat = document.file.file.split('.').pop()
+                const url = await getSignedUrl(
+                    s3,
+                    new GetObjectCommand({
+                        Bucket: AWS_BUCKET_NAME,
+                        Key: `files/${document.file.ref}.${fileFormat}`,
+                    }),
+                    { expiresIn: 60 * 5 },
+                )
                 return res.status(200).json({ url, fileFormat, file: document.file.file })
             }
         }

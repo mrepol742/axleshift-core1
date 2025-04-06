@@ -95,7 +95,7 @@ const Invoices = () => {
                         <CTableBody>
                             {data.map((invoice, index) => (
                                 <CTableRow key={index}>
-                                    <CTableDataCell>{invoice.invoice_id.slice(-8)}</CTableDataCell>
+                                    <CTableDataCell>{invoice.invoice_id}</CTableDataCell>
                                     <CTableDataCell>
                                         {new Intl.NumberFormat('en-US', {
                                             style: 'currency',

@@ -8,6 +8,7 @@ const auth = () => {
     it('POST /api/v1/auth/register', (done) => {
         request(app)
             .post('/api/v1/auth/register')
+            .send({ email: 'test@example.com', password: 'test', recaptcha_ref: 'test' })
             .expect(403)
             .end((err, res) => {
                 if (err) return done(err)

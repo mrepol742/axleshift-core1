@@ -40,6 +40,11 @@ const Document = () => {
 
     const handleFileUpload = (event, index) => {
         const file = event.target.files[0]
+        if (file && file.size > 25 * 1024 * 1024) {
+            addToast('File size exceeds 25MB limit. Please upload a smaller file.')
+            e.target.value = null
+            return
+        }
         if (file) {
             const newDocs = [...documents]
             newDocs[index] = { ...newDocs[index], status: 'Under Review' }
@@ -163,20 +168,27 @@ const Document = () => {
                                     <CTableRow key={index}>
                                         <CTableDataCell>
                                             <span className="d-block">{doc.name}</span>
-                                            <CButton
-                                                color="primary"
-                                                size="sm"
-                                                variant="ghost"
-                                                onClick={(e) => previewDocument(id, doc.file.file)}
-                                            >
-                                                <FontAwesomeIcon icon={faFile} className="me-1" />{' '}
-                                                Open File
-                                            </CButton>
+                                            {doc.file && (
+                                                <CButton
+                                                    color="primary"
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    onClick={(e) =>
+                                                        previewDocument(id, doc.file.file)
+                                                    }
+                                                >
+                                                    <FontAwesomeIcon
+                                                        icon={faFile}
+                                                        className="me-1"
+                                                    />{' '}
+                                                    Open File
+                                                </CButton>
+                                            )}
                                         </CTableDataCell>
                                         <CTableDataCell>{doc.type}</CTableDataCell>
                                         <CTableDataCell className="text-capitalize">
                                             <span
-                                                className={`badge bg-${doc.status === 'approved' ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}`}
+                                                className={`badge bg-${['approved', 'generated'].includes(doc.status) ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}`}
                                             >
                                                 {doc.status}
                                             </span>
@@ -186,6 +198,7 @@ const Document = () => {
                                                 <>
                                                     <CFormInput
                                                         type="file"
+                                                        accept=".docx,.pdf"
                                                         onChange={(e) => handleFileUpload(e, index)}
                                                     />
                                                     {doc.file && (
@@ -203,18 +216,24 @@ const Document = () => {
                             </CTableBody>
                         </CTable>
                         <span className="d-block mb-2 small">
-                            Please ensure that the documents you upload are authentic and not
-                            counterfeit. Uploading fraudulent documents may result in legal
+                            Please ensure that the documents you upload are accurate and comply with
+                            all applicable laws and regulations.
+                            <br />
+                            Submitting false or fraudulent documents may result in legal
                             consequences.
                         </span>
-                        <CButton color="primary" type="submit">
-                            Submit Documents
-                        </CButton>
-                        <ReCAPTCHA
-                            ref={recaptchaRef}
-                            size="invisible"
-                            sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                        />
+                        {['pending', 'rejected'].includes(documents.status) && (
+                            <>
+                                <CButton color="primary" type="submit">
+                                    Submit Documents
+                                </CButton>
+                                <ReCAPTCHA
+                                    ref={recaptchaRef}
+                                    size="invisible"
+                                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                                />
+                            </>
+                        )}
                     </CCardBody>
                 </CCard>
             </CForm>
@@ -232,12 +251,12 @@ const Document = () => {
                 <CModalBody>
                     {preview?.fileFormat === 'docx' ? (
                         <iframe
-                            src={`https://view.officeapps.live.com/op/embed.aspx?src=${preview.url}`}
+                            src={`https://view.officeapps.live.com/op/embed.aspx?src=${preview?.url}`}
                             style={{ width: '100%', height: '400px', border: 'none' }}
                         ></iframe>
                     ) : (
                         <iframe
-                            src={preview.url}
+                            src={preview?.url}
                             style={{ width: '100%', height: '400px', border: 'none' }}
                         ></iframe>
                     )}

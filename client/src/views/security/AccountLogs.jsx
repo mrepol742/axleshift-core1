@@ -10,6 +10,9 @@ import {
     CCard,
     CCardBody,
     CCardTitle,
+    CContainer,
+    CRow,
+    CCol,
 } from '@coreui/react'
 import { useToast } from '../../components/AppToastProvider'
 
@@ -64,7 +67,7 @@ const AccountLogs = () => {
                                     Event
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Location
+                                    IP Address
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Device
@@ -81,7 +84,7 @@ const AccountLogs = () => {
                                     <CTableDataCell>
                                         {log.ip_address === '::1' ||
                                         log.ip_address === '::ffff:127.0.0.1'
-                                            ? 'localhost'
+                                            ? 'Localhost'
                                             : log.ip_address}
                                     </CTableDataCell>
                                     <CTableDataCell>{log.user_agent}</CTableDataCell>

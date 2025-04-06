@@ -32,7 +32,7 @@ const FormLogin = async (req, res) => {
 
         if (NODE_ENV === 'production' && theUser.role === 'user')
             res.status(200).json({
-                error: 'You have no permission to continue. Please contact the admin to allow non user login.',
+                error: 'You have successfully registered. We will send an email to you once everything is ready.',
             })
 
         const session_token = crypto.randomBytes(16).toString('hex')

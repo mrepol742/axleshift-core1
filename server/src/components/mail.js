@@ -98,22 +98,22 @@ const body = (subject, email, name, message, isNotSystem) => {
 </head>
 <body>
     <div class="container">
-     <div class="header">
-        <img src="https://core1.axleshift.com/images/banner.png" alt="Banner" class="logo">
+        <div class="header">
+            <img src="https://core1.axleshift.com/images/banner.png" alt="Banner" class="logo">
         </div>
-         <div class="body">
-    <div class="content">
-        ${isNotSystem === false ? `<h1>Hi ${name},</h1>` : '<h1>Hi,</h1>'}
-        <p>${message}</p>
-        <hr>
-        <p class="text-center small">
-This email was intended for ${email}. ${isNotSystem === false ? `This is a system generated message, please do not reply to this email.` : ''} </p>
-    </div>
-    <div class="footer">
-        <p>&copy; 2025 Axleshift. All rights reserved.</p>
-    </div>
-    </div>
+        <div class="body">
+            <div class="content">
+            ${isNotSystem === false ? `<h1>Hi ${name},</h1>` : '<h1>Hi,</h1>'}
+            <p>${message}</p>
+            <hr>
+            <p class="text-center small">
+                This email was intended for ${email}. ${isNotSystem === false ? `This is a system generated message, please do not reply to this email.` : "You received this email because you're a registered user of Axleshift."}
+            </p>
         </div>
+        <div class="footer">
+            <p>&copy; 2025 Axleshift. All rights reserved.</p>
+        </div>
+    </div>
 </body>
 </html>
     `

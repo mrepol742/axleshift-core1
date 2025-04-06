@@ -120,16 +120,28 @@ const Webhooks = () => {
                     <CFormInput
                         type="text"
                         value={item.url}
+                        floatingLabel="Webhook URL"
                         onChange={(e) => handleWebhooksChange(index, e.target.value, 'url')}
-                        placeholder="https://"
                         className="me-2"
                     />
                     <CFormInput
                         type="text"
+                        floatingLabel="Webhook Token"
+                        value={item.url}
+                        onChange={(e) => handleWebhooksChange(index, e.target.value, 'url')}
+                        className="me-2"
+                    />
+                    <CFormSelect
                         value={item.action}
                         onChange={(e) => handleWebhooksChange(index, e.target.value, 'action')}
-                        placeholder="Action"
-                    />
+                        className="me-2"
+                    >
+                        <option value="">Select Action</option>
+                        <option value="all">All</option>
+                        <option value="invoice">Invoice</option>
+                        <option value="shipment">Shipment</option>
+                        <option value="documents">Documents</option>
+                    </CFormSelect>
                 </div>
             ))}
             {WebhooksLocationList.length != 0 && (

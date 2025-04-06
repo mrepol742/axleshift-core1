@@ -107,7 +107,7 @@ const Sessions = () => {
                                     User ID
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Location
+                                    IP Address
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Device
@@ -127,7 +127,7 @@ const Sessions = () => {
                                     <CTableDataCell>
                                         {session.ip_address === '::1' ||
                                         session.ip_address === '::ffff:127.0.0.1'
-                                            ? 'localhost'
+                                            ? 'Localhost'
                                             : session.ip_address}
                                     </CTableDataCell>
                                     <CTableDataCell>{session.user_agent}</CTableDataCell>
