@@ -101,74 +101,85 @@ const Receipt = () => {
             <Helmet>
                 <title>{id} - Invoice | Axleshift</title>
             </Helmet>
-            <h1 className="text-uppercase fw-bold text-center font-monospace">Axleshift</h1>
-            <p className="text-center">
-                <FontAwesomeIcon icon={faLocationDot} className="me-1" /> 4108 IM Bestlink College
-                of the Phillippines
-                <br />
-                <FontAwesomeIcon icon={faEnvelope} className="me-1" /> axleshift@gmail.com
-                <br />
-                <FontAwesomeIcon icon={faPhone} className="me-1" /> +63 912 345 6789
-            </p>
-            <div className="bg-body-secondary p-4 mb-1">
-                <span className="d-block">Invoice ID: {data.invoice_id}</span>
-                <span className="d-block">Tracking Number: {data.freight_tracking_number}</span>
-                {data.freight_details.is_import === true ? (
-                    <span>Name: {data.freight_details.to[0].name}</span>
-                ) : (
-                    <span>Name: {data.freight_details.from[0].name}</span>
-                )}
-                <br />
-                <br />
-                {data.freight_details.is_import === true ? (
-                    <>
-                        <span className="d-block">{data.freight_details.to[0].address}</span>
-                        <span className="d-block">
-                            {data.freight_details.to[0].city} {data.freight_details.to[0].zip_code}
-                        </span>
-                        <span>{data.freight_details.to[0].country}</span>
-                    </>
-                ) : (
-                    <>
-                        <span className="d-block">{data.freight_details.from[0].address}</span>
-                        <span className="d-block">
-                            {data.freight_details.from[0].city}{' '}
-                            {data.freight_details.from[0].zip_code}
-                        </span>
-                        <span>{data.freight_details.from[0].country}</span>
-                    </>
-                )}
-                <div className="mb-4" />
-                {data.status === 'PAID' && (
-                    <>
-                        <div className="d-flex justify-content-between">
-                            <span>Date Paid</span>
-                            <span className="flex-grow-1 mx-3 border-bottom border-secondary mb-2 border-opacity-25"></span>
-                            <span>{new Date(data.updated_at).toLocaleString()}</span>
-                        </div>
-                        <div className="d-flex justify-content-between">
-                            <span>Payment Method</span>
-                            <span className="flex-grow-1 mx-3 border-bottom border-secondary mb-2 border-opacity-25"></span>
-                            <span>{data.payment_method}</span>
-                        </div>
-                    </>
-                )}
-                <div className="d-flex justify-content-between">
-                    <span>Amount Due</span>
-                    <span className="flex-grow-1 mx-3 border-bottom border-secondary mb-2 border-opacity-25"></span>
-                    <span>
-                        {new Intl.NumberFormat('en-US', {
-                            style: 'currency',
-                            currency: data.currency,
-                        }).format(data.amount)}
+            <div className="font-monospace">
+                <h1 className="text-uppercase fw-bold text-center">Axleshift</h1>
+                <p className="text-center">
+                    <FontAwesomeIcon icon={faLocationDot} className="me-1" /> 4108 IM Bestlink
+                    College of the Phillippines
+                    <br />
+                    <FontAwesomeIcon icon={faEnvelope} className="me-1" /> axleshift@gmail.com
+                    <br />
+                    <FontAwesomeIcon icon={faPhone} className="me-1" /> +63 912 345 6789
+                </p>
+                <div className="bg-body-secondary p-4 mb-1">
+                    <span className="d-block">
+                        <strong>Invoice ID</strong>: {data.invoice_id}
                     </span>
+                    <span className="d-block">
+                        <strong>Tracking Number</strong>: {data.freight_tracking_number}
+                    </span>
+                    {data.freight_details.is_import === true ? (
+                        <span>
+                            <strong>Name</strong>: {data.freight_details.to[0].name}
+                        </span>
+                    ) : (
+                        <span>
+                            <strong>Name</strong>: {data.freight_details.from[0].name}
+                        </span>
+                    )}
+                    <br />
+                    <br />
+                    {data.freight_details.is_import === true ? (
+                        <>
+                            <span className="d-block">{data.freight_details.to[0].address}</span>
+                            <span className="d-block">
+                                {data.freight_details.to[0].city}{' '}
+                                {data.freight_details.to[0].zip_code}
+                            </span>
+                            <span>{data.freight_details.to[0].country}</span>
+                        </>
+                    ) : (
+                        <>
+                            <span className="d-block">{data.freight_details.from[0].address}</span>
+                            <span className="d-block">
+                                {data.freight_details.from[0].city}{' '}
+                                {data.freight_details.from[0].zip_code}
+                            </span>
+                            <span>{data.freight_details.from[0].country}</span>
+                        </>
+                    )}
+                    <div className="mb-4" />
+                    {data.status === 'PAID' && (
+                        <>
+                            <div className="d-flex justify-content-between">
+                                <strong>Date Paid</strong>
+                                <span className="flex-grow-1 mx-3 border-bottom border-secondary mb-2 border-opacity-25"></span>
+                                <span>{new Date(data.updated_at).toLocaleString()}</span>
+                            </div>
+                            <div className="d-flex justify-content-between">
+                                <strong>Payment Method</strong>
+                                <span className="flex-grow-1 mx-3 border-bottom border-secondary mb-2 border-opacity-25"></span>
+                                <span>{data.payment_method}</span>
+                            </div>
+                        </>
+                    )}
+                    <div className="d-flex justify-content-between">
+                        <strong>Amount Due</strong>
+                        <span className="flex-grow-1 mx-3 border-bottom border-secondary mb-2 border-opacity-25"></span>
+                        <span>
+                            {new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: data.currency,
+                            }).format(data.amount)}
+                        </span>
+                    </div>
                 </div>
             </div>
             <div className="text-center p-2 small mb-2">
                 <small className="d-block">
                     This invoice has been issued to userEmail
                     <br />
-                    in reference to shipment #
+                    in reference to shipment {id}.
                     <br />
                     {VITE_APP_NODE_ENV === 'production'
                         ? 'https://core1.axleshift.com'

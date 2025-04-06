@@ -38,6 +38,7 @@ const BookNow = auth(lazy(() => import('./views/book-now')))
 
 const Documents = auth(lazy(() => import('./views/documents')))
 const Document = auth(lazy(() => import('./views/documents/[id]')))
+const BillOfLading = auth(lazy(() => import('./views/documents/[id]/bill-of-lading')))
 
 const Address = auth(lazy(() => import('./views/my-addresses')))
 const NewAddress = auth(lazy(() => import('./views/my-addresses/New')))
@@ -82,8 +83,11 @@ const routes = [
     { path: '/shipment/:id', name: 'Shipment Info', element: ShipmentInfo },
 
     { path: '/search', name: 'Search Shipment', element: Search },
+
     { path: '/documents', name: 'Documents', element: Documents },
     { path: '/documents/:id', name: 'Documents', element: Document },
+    { path: '/documents/:id/bill-of-lading', name: 'Bill of Lading', element: BillOfLading },
+
     { path: '/schedules', name: 'Schedules', element: Schedules },
 
     { path: '/customer', name: 'Customer Service', element: SupportCustomerService },
@@ -92,8 +96,6 @@ const routes = [
 
     { path: '/account', name: 'Account', element: Account },
     { path: '/account/security', name: 'Security', element: _Security },
-
-    // { path: '/documents', name: 'Freight Documents', element: Err500 },
 
     { path: '/book-now', name: 'Ship Now', element: BookNow },
 

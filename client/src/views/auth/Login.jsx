@@ -141,6 +141,10 @@ const Login = () => {
 
     const login = async (e, type, credential, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setError({
+            error: false,
+            message: '',
+        })
         setLoading(true)
         const formData = {}
         if (type === 'form') {

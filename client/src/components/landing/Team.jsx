@@ -33,20 +33,24 @@ const Team = () => {
     return (
         <CContainer fluid className="h-100 p-5">
             <div className="mt-5 text-center mb-5" data-aos="fade-down">
-                <span>TEAM</span>
+                <span>CORE 1</span>
                 <h2 className="text-primary">Our Tech-savy Team</h2>
             </div>
             <CRow>
                 {teamMembers.map((member, index) => (
-                    <CCol key={index} xs={12} md={4} className="mb-4" data-aos="fade-up ">
+                    <CCol key={index} xs={12} md={4} className="mb-4">
                         <div className="text-center d-flex flex-column justify-content-center">
                             <CImage
                                 src={member.image}
-                                className="rounded-pill mx-auto mb-2 border border-primary p-1"
+                                className="rounded-pill mx-auto mb-2 border border-secondary shadow"
                                 style={{ width: '100px', height: '100px' }}
                                 loading="lazy"
+                                data-aos="fade-up"
                             />
-                            <div className="d-flex flex-column align-items-center">
+                            <div
+                                className="d-flex flex-column align-items-center"
+                                data-aos="fade-up"
+                            >
                                 <h4>{member.name}</h4>
                                 <span>{member.major}</span>
                             </div>
