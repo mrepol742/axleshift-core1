@@ -1,13 +1,54 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
-import { CSpinner, CCard, CCardBody, CCardTitle, CCardHeader, CRow, CCol } from '@coreui/react'
+import {
+    CSpinner,
+    CCard,
+    CCardBody,
+    CCardTitle,
+    CCardHeader,
+    CRow,
+    CCol,
+    CButtonGroup,
+    CButton,
+} from '@coreui/react'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 const BillOfLading = () => {
     const navigate = useNavigate()
     const { id } = useParams()
     const [loading, setLoading] = useState(true)
     const [formData, setFormData] = useState(null)
+    const billofLadingRef = React.useRef()
+
+    const generatePDF = () => {
+        const bgColor = getComputedStyle(document.body).backgroundColor
+
+        html2canvas(billofLadingRef.current, {
+            scale: 2,
+            backgroundColor: bgColor,
+        })
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/png')
+                const pdf = new jsPDF('p', 'mm', 'a4')
+                const imgWidth = 210
+                const imgHeight = (canvas.height * imgWidth) / canvas.width
+
+                pdf.setFillColor(bgColor)
+                pdf.rect(
+                    0,
+                    0,
+                    pdf.internal.pageSize.getWidth(),
+                    pdf.internal.pageSize.getHeight(),
+                    'F',
+                )
+
+                pdf.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight)
+                pdf.save(`Bill-Of-Lading-${id}.pdf`)
+            })
+            .catch((error) => console.error('Error generating PDF:', error))
+    }
 
     const fetchData = async () => {
         try {
@@ -50,7 +91,18 @@ const BillOfLading = () => {
             <Helmet>
                 <title>{id} - Bill of Lading - Documents | Axleshift</title>
             </Helmet>
-            <div className="mb-3 font-monospace">
+            <div className="d-flex flex-row justify-content-between align-items-center mb-4">
+                <span className="d-block"></span>
+                <CButtonGroup className="mb-2 mb-sm-0">
+                    <CButton
+                        className="bg-body-secondary me-2 rounded"
+                        onClick={generatePDF}
+                    >
+                        Download PDF
+                    </CButton>
+                </CButtonGroup>
+            </div>
+            <div className="mb-3 font-monospace" ref={billofLadingRef}>
                 <CCard>
                     <CCardHeader className="text-center">
                         <CCardTitle className="text-uppercase fw-bold fs-3">
