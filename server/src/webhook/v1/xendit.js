@@ -38,14 +38,26 @@ router.post('/', async (req, res) => {
                         freight_tracking_number: freight.tracking_number,
                         session_id: freight.session_id,
                         documents: [
-                            { name: 'Export License', type: 'Permit & License', status: 'Pending' },
+                            {
+                                name: 'Bill of Lading',
+                                type: 'Shipping Document',
+                                status: 'generated',
+                                file: {
+                                    ref: freight.tracking_number,
+                                    file: `bill-of-landing-${freight.tracking_number}.pdf`,
+                                }
+                            },
+                            { 
+                                name: 'Export License', 
+                                type: 'Permit & License', 
+                                status: 'not_applicable' 
+                            },
                             {
                                 name: 'Certificate of Origin',
                                 type: 'Regulatory Certificate',
-                                status: 'Pending',
+                                status: 'not_applicable',
                             },
                         ],
-                        status: 'pending',
                         created_at: dateNow,
                         updated_at: dateNow,
                     })

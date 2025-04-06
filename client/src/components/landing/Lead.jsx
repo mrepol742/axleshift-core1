@@ -22,7 +22,7 @@ const Lead = () => {
                         <span className="text-primary d-block">Our Platform</span>
                     </h1>
                     <p className="text-white fs-5" data-aos="fade-right">
-                        Connecting businesses with smarter, faster, and more secure shipping. From
+                        Connecting everyone with smarter, faster, and more secure shipping. From
                         first mile to last, we move your world forward.
                     </p>
                     <CButton

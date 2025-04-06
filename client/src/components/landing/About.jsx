@@ -12,16 +12,15 @@ const About = () => {
                     <span className="text-white" data-aos="zoom-out-up">
                         ABOUT US
                     </span>
-                    <h1 className="text-white" data-aos="zoom-out-up">
-                        Axleshift
+                    <h1 className="text-white font-monospace" data-aos="zoom-out-up">
+                        At Axleshift
                     </h1>
                     <p className="lead text-white" data-aos="zoom-out-up">
-                        We focus on enhancing the safety and efficiency of freight management
-                        systems. Our innovative solutions integrate advanced cybersecurity measures
-                        to protect sensitive data while providing efficient and better freight
-                        services. By leveraging cutting-edge technology, we ensure that businesses
-                        can confidently manage their freight operations in an increasingly complex
-                        digital landscape.
+                        We focus on enhancing the safety and efficiency of Axleshift. Our innovative
+                        solutions integrate advanced cybersecurity measures to protect sensitive
+                        data while providing efficient and better freight services. By leveraging
+                        cutting-edge technology, we ensure that everyone can confidently manage
+                        their freight operations in an increasingly complex digital landscape.
                     </p>
                 </CCol>
             </CRow>

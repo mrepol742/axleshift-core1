@@ -43,14 +43,14 @@ const ShipmentCard = ({ shipment }) => {
             onClick={() => navigate(`/shipment/${shipment.tracking_number}`)}
             style={{ cursor: 'pointer' }}
         >
-            <div className={`bg-${getCardColor(shipment.status)} rounded p-2 m-2`}>
-                <div className="d-flex justify-content-between">
+            <div className={`bg-${getCardColor(shipment.status)} rounded p-3 m-2`}>
+                <div className="d-flex justify-content-between text-white">
                     <div>
-                        <small className="text-muted d-block">Status</small>
+                        <small className="d-block fw-bold">Status</small>
                         {getStatus(shipment.status)}
                     </div>
                     <div>
-                        <small className="text-muted d-block">Update</small>
+                        <small className="d-block fw-bold">Update</small>
                         {parseTimestamp(shipment.updated_at)}
                     </div>
                 </div>
