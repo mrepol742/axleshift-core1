@@ -40,6 +40,7 @@ const Schedules = () => {
                 </div>
             )}
             <Calendar
+                className="mb-3"
                 events={result}
                 localizer={localizer}
                 startAccessor="start"

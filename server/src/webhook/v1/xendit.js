@@ -45,12 +45,12 @@ router.post('/', async (req, res) => {
                                 file: {
                                     ref: freight.tracking_number,
                                     file: `bill-of-landing-${freight.tracking_number}.pdf`,
-                                }
+                                },
                             },
-                            { 
-                                name: 'Export License', 
-                                type: 'Permit & License', 
-                                status: 'not_applicable' 
+                            {
+                                name: 'Export License',
+                                type: 'Permit & License',
+                                status: 'not_applicable',
                             },
                             {
                                 name: 'Certificate of Origin',

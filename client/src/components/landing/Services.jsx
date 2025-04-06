@@ -21,61 +21,85 @@ const Services = () => {
                 </CCol>
                 <CCol xs={12} lg={7} className="order-md-2 mb-4">
                     <CRow xs={{ cols: 1, gutter: 4 }} md={{ cols: 2 }}>
-                        <CCol xs data-aos="fade-up" data-aos-delay="500">
-                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
+                        <CCol xs>
+                            <div
+                                className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3"
+                                data-aos="fade-up"
+                                data-aos-delay="200"
+                            >
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
                                     icon={faShip}
                                     className="fa-2x text-primary"
                                 />
                             </div>
-                            <h3>Freight Management</h3>
-                            <p>
+                            <h3 data-aos="fade-up" data-aos-delay="500">
+                                Freight Management
+                            </h3>
+                            <p data-aos="fade-up" data-aos-delay="1000">
                                 Optimize your logistics with our comprehensive freight management
                                 solutions, ensuring timely and cost-effective deliveries. Monitor
                                 shipments in real-time to enhance visibility and efficiency.
                             </p>
                         </CCol>
-                        <CCol xs data-aos="fade-up" data-aos-delay="700">
-                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
+                        <CCol xs>
+                            <div
+                                className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3"
+                                data-aos="fade-up"
+                                data-aos-delay="200"
+                            >
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
                                     icon={faRoute}
                                     className="fa-2x text-primary"
                                 />
                             </div>
-                            <h3>AI Powered Route</h3>
-                            <p>
+                            <h3 data-aos="fade-up" data-aos-delay="500">
+                                AI Powered Route
+                            </h3>
+                            <p data-aos="fade-up" data-aos-delay="1000">
                                 Leverage AI algorithms to determine the most efficient routes,
                                 reducing travel time and fuel costs. Our system continuously adapts
                                 to real-time conditions for optimal performance.
                             </p>
                         </CCol>
-                        <CCol xs data-aos="fade-up" data-aos-delay="900">
-                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
+                        <CCol xs>
+                            <div
+                                className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3"
+                                data-aos="fade-up"
+                                data-aos-delay="200"
+                            >
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
                                     icon={faUser}
                                     className="fa-2x text-primary"
                                 />
                             </div>
-                            <h3>Real Time Customer Service</h3>
-                            <p>
+                            <h3 data-aos="fade-up" data-aos-delay="500">
+                                Real Time Customer Service
+                            </h3>
+                            <p data-aos="fade-up" data-aos-delay="1000">
                                 Experience unparalleled support with our real-time customer service,
                                 available 24/7 to address inquiries and resolve issues. Enhance
                                 customer satisfaction through prompt and efficient communication.
                             </p>
                         </CCol>
-                        <CCol xs data-aos="fade-up" data-aos-delay="1000">
-                            <div className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3">
+                        <CCol xs>
+                            <div
+                                className="mb-2 d-inline-block rounded-pill bg-primary bg-opacity-25 p-3"
+                                data-aos="fade-up"
+                                data-aos-delay="200"
+                            >
                                 <FontAwesomeIcon
                                     style={{ width: '40px', height: '40px' }}
                                     icon={faUserShield}
                                     className="fa-2x text-primary"
                                 />
                             </div>
-                            <h3>Advanced Cybersecurity Measures</h3>
-                            <p>
+                            <h3 data-aos="fade-up" data-aos-delay="500">
+                                Advanced Cybersecurity Measures
+                            </h3>
+                            <p data-aos="fade-up" data-aos-delay="1000">
                                 Protect your data with state-of-the-art cybersecurity solutions
                                 designed to safeguard your information against evolving threats. Our
                                 proactive approach ensures compliance and minimizes risks.

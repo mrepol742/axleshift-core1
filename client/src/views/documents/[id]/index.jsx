@@ -20,7 +20,7 @@ import {
     CModalTitle,
 } from '@coreui/react'
 import { Helmet } from 'react-helmet'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
@@ -29,6 +29,7 @@ import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config.js'
 
 const Document = () => {
     const { id } = useParams()
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
     const { addToast } = useToast()
     const recaptchaRef = React.useRef()
@@ -92,6 +93,7 @@ const Document = () => {
     }
 
     const previewDocument = (id, file) => {
+        if (/bill-of-lading-AX-[0-9]/.test(file)) return navigate(`/documents/${id}/bill-of-lading`)
         setIsActionVisible(true)
         axios
             .post(`/documents/file/${id}`, {

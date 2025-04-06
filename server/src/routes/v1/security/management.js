@@ -7,7 +7,13 @@ import dependabot from '../../../components/dependabot.js'
 import sentry from '../../../components/sentry.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
-import redis, { clearRedisCache, setCache, remCache, getCache } from '../../../models/redis.js'
+import redis, {
+    clearRedisCache,
+    setCache,
+    remCache,
+    getCache,
+    decrypt,
+} from '../../../models/redis.js'
 
 const router = express.Router()
 const limit = 20
@@ -29,8 +35,8 @@ router.post('/sessions', auth, async (req, res, next) => {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach((key, index) => {
-                    const value = JSON.parse(values[index])
+                keys.forEach(async (key, index) => {
+                    const value = JSON.parse(await decrypt(values[index]))
                     if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
                         const agent = useragent.parse(value.user_agent)
                         value.user_agent = `${agent.os.family} ${agent.family}`
@@ -68,7 +74,7 @@ router.post('/sessions/logout', [recaptcha, auth], async (req, res, next) => {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
                 keys.forEach(async (key, index) => {
-                    const value = JSON.parse(values[index])
+                    const value = JSON.parse(await decrypt(values[index]))
                     if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
                         await remCache(`internal-${value.token}`)
                     }

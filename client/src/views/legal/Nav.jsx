@@ -15,8 +15,13 @@ const Nav = () => {
     const [visible, setVisible] = useState(false)
 
     return (
-        <CContainer fluid>
-            <CNavbar expand="md">
+        <div>
+            <CNavbar
+                expand="md"
+                style={{
+                    background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0))',
+                }}
+            >
                 <CContainer fluid>
                     <CNavbarBrand href="/">
                         <CImage
@@ -47,7 +52,7 @@ const Nav = () => {
                     </CCollapse>
                 </CContainer>
             </CNavbar>
-        </CContainer>
+        </div>
     )
 }
 

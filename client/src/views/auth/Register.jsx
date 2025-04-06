@@ -124,6 +124,10 @@ const Register = () => {
 
     const register = async (e, type, credential, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setError({
+            error: false,
+            message: '',
+        })
         setLoading(true)
         const formDataToSend = {}
         if (type === 'form') {

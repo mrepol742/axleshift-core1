@@ -73,6 +73,10 @@ const OTP = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setError({
+            error: false,
+            message: '',
+        })
         setLoading(true)
         axios
             .post(`/auth/verify/otp`, {
@@ -106,6 +110,10 @@ const OTP = () => {
 
     const handleResend = async () => {
         const recaptcha = await recaptchaRef.current.executeAsync()
+        setError({
+            error: false,
+            message: '',
+        })
         setLoading(true)
         axios
             .post(`/auth/verify/otp/new`, {
