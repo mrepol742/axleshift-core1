@@ -65,7 +65,7 @@ const Terms = () => {
                             <div className="mb-3">
                                 <h3> Contact Information</h3>
                                 For any questions about these Terms, please contact us at
-                                mrepol742@gmail.com.
+                                axleshift@gmail.com.
                             </div>
                         </CCol>
                     </CRow>
