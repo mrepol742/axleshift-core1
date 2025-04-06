@@ -11,9 +11,7 @@ const BillOfLading = () => {
 
     const fetchData = async () => {
         try {
-            const [freightResponse] = await Promise.all([
-                axios.get(`/freight/${id}`),
-            ])
+            const [freightResponse] = await Promise.all([axios.get(`/freight/${id}`)])
             setFormData(freightResponse.data)
         } catch (error) {
             console.error(error)
@@ -55,7 +53,7 @@ const BillOfLading = () => {
             <div className="mb-3 font-monospace">
                 <CCard>
                     <CCardHeader className="text-center">
-                        <CCardTitle className="text-uppercase font-monospace fw-bold fs-3">
+                        <CCardTitle className="text-uppercase fw-bold fs-3">
                             Bill of Lading
                         </CCardTitle>
                     </CCardHeader>
