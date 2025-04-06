@@ -11,6 +11,12 @@ import {
     CCol,
     CButtonGroup,
     CButton,
+    CTable,
+    CTableRow,
+    CTableHeaderCell,
+    CTableBody,
+    CTableDataCell,
+    CTableHead,
 } from '@coreui/react'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
@@ -94,10 +100,7 @@ const BillOfLading = () => {
             <div className="d-flex flex-row justify-content-between align-items-center mb-4">
                 <span className="d-block"></span>
                 <CButtonGroup className="mb-2 mb-sm-0">
-                    <CButton
-                        className="bg-body-secondary me-2 rounded"
-                        onClick={generatePDF}
-                    >
+                    <CButton className="bg-body-secondary me-2 rounded" onClick={generatePDF}>
                         Download PDF
                     </CButton>
                 </CButtonGroup>
@@ -177,28 +180,44 @@ const BillOfLading = () => {
                         <CRow className="row mt-4">
                             <CCol md={12}>
                                 <h6>Item Details</h6>
-                                <table className="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Height</th>
-                                            <th>Width</th>
-                                            <th>Length</th>
-                                            <th>Weight</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                <CTable
+                                    stripedColumns
+                                    bordered
+                                    hover
+                                    responsive
+                                    className="table-even-width"
+                                >
+                                    <CTableHead>
+                                        <CTableRow>
+                                            <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                                #
+                                            </CTableHeaderCell>
+                                            <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                                Height
+                                            </CTableHeaderCell>
+                                            <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                                Width
+                                            </CTableHeaderCell>
+                                            <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                                Length
+                                            </CTableHeaderCell>
+                                            <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                                Weight
+                                            </CTableHeaderCell>
+                                        </CTableRow>
+                                    </CTableHead>
+                                    <CTableBody>
                                         {formData.items.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>{item.height} cm</td>
-                                                <td>{item.width} cm</td>
-                                                <td>{item.length} cm</td>
-                                                <td>{item.weight} kg</td>
-                                            </tr>
+                                            <CTableRow key={index}>
+                                                <CTableDataCell>{index + 1}</CTableDataCell>
+                                                <CTableDataCell>{item.height} cm</CTableDataCell>
+                                                <CTableDataCell>{item.width} cm</CTableDataCell>
+                                                <CTableDataCell>{item.length} cm</CTableDataCell>
+                                                <CTableDataCell>{item.weight} kg</CTableDataCell>
+                                            </CTableRow>
                                         ))}
-                                    </tbody>
-                                </table>
+                                    </CTableBody>
+                                </CTable>
                             </CCol>
                         </CRow>
                         <p>

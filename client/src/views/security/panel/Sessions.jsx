@@ -79,8 +79,6 @@ const Sessions = () => {
 
     return (
         <div>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-
             <h4>Logout all sessions</h4>
             <CCard className="mb-3">
                 <CCardBody>
@@ -151,6 +149,7 @@ const Sessions = () => {
                     setTotalPages={setTotalPages}
                 />
             )}
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }

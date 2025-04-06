@@ -4,53 +4,15 @@ import { useSelector } from 'react-redux'
 import AOS from 'aos'
 import { CSpinner, useColorModes } from '@coreui/react'
 import ReactGA from 'react-ga4'
-import PropTypes from 'prop-types'
-import { CContainer } from '@coreui/react'
 import { VITE_APP_NODE_ENV, VITE_APP_GOOGLE_ANALYTICS } from './config'
 import './scss/style.scss'
+import AppErrorBoundary from './components/AppErrorBoundary'
 import DocumentTitle from './components/middleware/DocumentTitle'
 import IdleTimeout from './components/middleware/IdleTimeout'
 import routes from './routes'
 import './bootstrap'
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
-
-class ErrorBoundary extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = { hasError: false, error: null, errorInfo: null }
-    }
-
-    static getDerivedStateFromError(error) {
-        return { hasError: true }
-    }
-
-    componentDidCatch(error, errorInfo) {
-        console.error('Error caught by ErrorBoundary: ', error, errorInfo)
-        this.setState({ error, errorInfo })
-    }
-
-    render() {
-        if (this.state.hasError) {
-            return (
-                <CContainer className="border-2 border border-danger m-5 rounded-3">
-                    <h1 className="mt-4">Something went wrong.</h1>
-                    {this.state.errorInfo && <code>{this.state.errorInfo.componentStack}</code>}
-                    <p className="text-muted small mt-5">
-                        Report issues at{' '}
-                        <a href="mailto:mrepol742@gmail.com">mrepol742@gmail.com</a>
-                    </p>
-                </CContainer>
-            )
-        }
-
-        return this.props.children
-    }
-}
-
-ErrorBoundary.propTypes = {
-    children: PropTypes.node,
-}
 
 const App = () => {
     AOS.init()
@@ -80,7 +42,7 @@ const App = () => {
                     </div>
                 }
             >
-                <ErrorBoundary>
+                <AppErrorBoundary>
                     <DocumentTitle>
                         <IdleTimeout>
                             <Routes>
@@ -101,7 +63,7 @@ const App = () => {
                             </Routes>
                         </IdleTimeout>
                     </DocumentTitle>
-                </ErrorBoundary>
+                </AppErrorBoundary>
             </Suspense>
         </Router>
     )
