@@ -6,8 +6,7 @@ import { uploadToS3 } from '../components/s3/profile.js'
 
 const download = (url, ref) => {
     const tempDir = path.join(process.cwd(), 'temp')
-    if (!fs.existsSync(tempDir))
-        fs.mkdirSync(tempDir, { recursive: true })
+    if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true })
 
     const savePath = path.join(tempDir, `${ref}.png`)
     downloadImage(url, savePath)

@@ -1,8 +1,11 @@
 import Redis from 'ioredis'
+import crypto from 'crypto'
 import logger from '../utils/logger.js'
+import { APP_KEY } from '../config.js'
 
 let redisInstance = null
 const DEFAULT_SESSION_TTL = 7 * 24 * 60 * 60 * 1000
+const key = crypto.createHash('sha256').update(APP_KEY).digest()
 
 const redis = async () => {
     if (redisInstance) return redisInstance
@@ -26,6 +29,36 @@ const redis = async () => {
     return redisInstance
 }
 
+export const encrypt = async (plaintext) => {
+    const iv = crypto.randomBytes(12)
+    const cipher = crypto.createCipheriv('aes-256-gcm', key, iv)
+
+    const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()])
+    const tag = cipher.getAuthTag()
+
+    return JSON.stringify({
+        iv: iv.toString('hex'),
+        ciphertext: encrypted.toString('hex'),
+        tag: tag.toString('hex'),
+    })
+}
+
+export const decrypt = async (encryptedData) => {
+    const { iv, ciphertext, tag } = JSON.parse(encryptedData)
+    if (!iv || !ciphertext || !tag) return encryptedData
+
+    const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(iv, 'hex'))
+
+    decipher.setAuthTag(Buffer.from(tag, 'hex'))
+
+    const decrypted = Buffer.concat([
+        decipher.update(Buffer.from(ciphertext, 'hex')),
+        decipher.final(),
+    ])
+
+    return decrypted.toString('utf8')
+}
+
 export const clearRedisCache = async () => {
     try {
         const redisClient = await redis()
@@ -39,7 +72,7 @@ export const getCache = async (key) => {
     try {
         const redisClient = await redis()
         const cache = await redisClient.get(key)
-        if (cache) return JSON.parse(cache)
+        if (cache) return JSON.parse(await decrypt(cache))
     } catch (e) {
         logger.error(e)
     }
@@ -50,11 +83,11 @@ export const setCache = async (key, value, SESSION_TTL) => {
     try {
         const redisClient = await redis()
         if (SESSION_TTL === 'none') {
-            await redisClient.set(key, JSON.stringify(value))
+            await redisClient.set(key, await encrypt(JSON.stringify(value)))
         } else {
             await redisClient.set(
                 key,
-                JSON.stringify(value),
+                await encrypt(JSON.stringify(value)),
                 'EX',
                 SESSION_TTL ? SESSION_TTL : DEFAULT_SESSION_TTL,
             )

@@ -6,7 +6,7 @@ import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
 import activity from '../../../components/activity.js'
 import sendOTP from '../../../components/otp.js'
-import redis, { getCache, setCache, remCache } from '../../../models/redis.js'
+import redis, { getCache, setCache, remCache, decrypt } from '../../../models/redis.js'
 
 const router = express.Router()
 const ten = 10 * 60 * 1000
@@ -29,8 +29,8 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach((key, index) => {
-                    const value = JSON.parse(values[index])
+                keys.forEach(async (key, index) => {
+                    const value = JSON.parse(await decrypt(values[index]))
                     if (
                         value &&
                         /^axleshift-core1:otp-[a-f0-9]{24}$/.test(key) &&

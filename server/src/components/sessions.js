@@ -3,7 +3,7 @@ import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import activity from './activity.js'
 import { send } from './mail.js'
-import redis, { getCache, setCache, remCache } from '../models/redis.js'
+import redis, { getCache, setCache, remCache, decrypt } from '../models/redis.js'
 import { getClientIp } from './ip.js'
 
 const SESSION_TTL = 7 * 24 * 60 * 60 * 1000
@@ -118,8 +118,8 @@ export const isNewIP = async (ip, theUser) => {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach((key, index) => {
-                    const value = JSON.parse(values[index])
+                keys.forEach(async (key, index) => {
+                    const value = JSON.parse(await decrypt(values[index]))
                     if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
                         if (value.user_id === theUser._id.toString()) {
                             IP.push(value.ip_address)

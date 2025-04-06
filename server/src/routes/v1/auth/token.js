@@ -6,7 +6,7 @@ import logger from '../../../utils/logger.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
 import activity from '../../../components/activity.js'
-import redis, { getCache, setCache, remCache } from '../../../models/redis.js'
+import redis, { getCache, setCache, remCache, decrypt } from '../../../models/redis.js'
 
 const router = express.Router()
 const limit = 20
@@ -26,8 +26,8 @@ router.post('/', auth, async function (req, res, next) {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach((key, index) => {
-                    const value = JSON.parse(values[index])
+                keys.forEach(async (key, index) => {
+                    const value = JSON.parse(await decrypt(values[index]))
                     if (value && /^axleshift-core1:external-core1_[0-9a-f]{16}$/.test(key)) {
                         if (value.active == true) {
                             value.token = null
@@ -114,9 +114,9 @@ router.post('/delete', [recaptcha, auth], async function (req, res, next) {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach((key, index) => {
+                keys.forEach(async (key, index) => {
                     if (/^axleshift-core1:external-core1_[0-9a-f]{16}$/.test(key)) {
-                        const value = JSON.parse(values[index])
+                        const value = JSON.parse(await decrypt(values[index]))
                         if (value && value._id === id) {
                             sessionData = value
                         }

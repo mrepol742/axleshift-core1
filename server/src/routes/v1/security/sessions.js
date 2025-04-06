@@ -5,7 +5,7 @@ import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
-import redis, { setCache, remCache } from '../../../models/redis.js'
+import redis, { setCache, remCache, decrypt } from '../../../models/redis.js'
 
 const router = express.Router()
 const limit = 20
@@ -26,8 +26,8 @@ router.post('/', auth, async (req, res) => {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach((key, index) => {
-                    const value = JSON.parse(values[index])
+                keys.forEach(async (key, index) => {
+                    const value = JSON.parse(await decrypt(values[index]))
                     // validate its internal token
                     if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
                         const agent = useragent.parse(value.user_agent)
@@ -80,7 +80,7 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
                 const values = await redisClient.mget(filteredKeys)
                 keys.forEach(async (key, index) => {
                     if (/^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
-                        const value = JSON.parse(values[index])
+                        const value = JSON.parse(await decrypt(values[index]))
                         if (value && value._id === session_id) {
                             sessionData = value
                         }
