@@ -11,7 +11,7 @@
         "url": "git@github.com:freight-capstone/core1.git"
     },
     "scripts": {
-        "start": "node src/index"
+        "start": "nodemon src/index"
     },
     "author": "The Freight Capstone Core 1",
     "license": "MIT",
@@ -25,5 +25,8 @@
     "engines": {
         "node": ">=22.x"
     },
-    "private": true
+    "private": true,
+    "devDependencies": {
+        "nodemon": "^3.1.9"
+    }
 }
