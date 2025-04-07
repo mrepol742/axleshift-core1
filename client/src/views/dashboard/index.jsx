@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useTour } from '@reactour/tour'
 import PropTypes from 'prop-types'
 import {
     CRow,
@@ -26,6 +27,7 @@ import { useNavigate } from 'react-router-dom'
 import parseTimestamp from '../../utils/Timestamp'
 
 const Dashboard = () => {
+    const { setIsOpen } = useTour()
     const navigate = useNavigate()
     const widgetChartRef1 = useRef(null)
     const widgetChartRef2 = useRef(null)
@@ -252,6 +254,23 @@ const Dashboard = () => {
 
     return (
         <>
+            <div className="d-flex justify-content-between">
+                <div></div>
+                <CButton
+                    color="primary"
+                    className="mb-4"
+                    style={{
+                        borderRadius: '20px',
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                    }}
+                    onClick={() => setIsOpen(true)}
+                >
+                    🚀 Start Tour
+                </CButton>
+            </div>
             <CRow className="mb-4" xs={{ gutter: 4 }}>
                 {widgetData.map((widget, index) => (
                     <CCol key={index} sm={6} xl={4}>
