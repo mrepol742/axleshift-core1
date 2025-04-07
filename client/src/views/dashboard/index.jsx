@@ -47,6 +47,39 @@ const Dashboard = () => {
             expired: [0, '0%'],
         },
     })
+    const scales = {
+        x: {
+            border: {
+                display: false,
+            },
+            grid: {
+                display: false,
+            },
+            ticks: {
+                display: false,
+            },
+        },
+        y: {
+            display: false,
+            grid: {
+                display: false,
+            },
+            ticks: {
+                display: false,
+            },
+        },
+    }
+    const elements = {
+        line: {
+            borderWidth: 1,
+            tension: 0.4,
+        },
+        point: {
+            radius: 4,
+            hitRadius: 10,
+            hoverRadius: 4,
+        },
+    }
 
     const calculateAverage = (data) => {
         if (!data || data.length === 0) return 0
@@ -68,12 +101,12 @@ const Dashboard = () => {
         {
             color: 'info',
             value: <>{calculateAverage(insights.costOvertime?.data)}</>,
-            title: 'Average Cost',
+            title: 'Cost',
             chartRef: widgetChartRef2,
             pointColor: getStyle('--cui-info'),
             labels: insights.costOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.costOvertime?.data || [0, 0, 0, 0, 0, 0],
-            url: '/avarage-cost',
+            url: '/cost',
         },
         {
             color: 'warning',
@@ -263,40 +296,8 @@ const Dashboard = () => {
                                             },
                                         },
                                         maintainAspectRatio: false,
-                                        scales: {
-                                            x: {
-                                                border: {
-                                                    display: false,
-                                                },
-                                                grid: {
-                                                    display: false,
-                                                    drawBorder: false,
-                                                },
-                                                ticks: {
-                                                    display: false,
-                                                },
-                                            },
-                                            y: {
-                                                display: false,
-                                                grid: {
-                                                    display: false,
-                                                },
-                                                ticks: {
-                                                    display: false,
-                                                },
-                                            },
-                                        },
-                                        elements: {
-                                            line: {
-                                                borderWidth: 2,
-                                                tension: 0.4,
-                                            },
-                                            point: {
-                                                radius: 6,
-                                                hitRadius: 10,
-                                                hoverRadius: 4,
-                                            },
-                                        },
+                                        scales: scales,
+                                        elements: elements,
                                     }}
                                 />
                             }
