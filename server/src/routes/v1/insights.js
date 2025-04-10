@@ -11,7 +11,7 @@ router.get('/shipment-overtime', auth, async (req, res) => {
 
     try {
         const now = new Date()
-        const startDate = new Date(now.getFullYear(), now.getMonth() - 5, 1)
+        const startDate = new Date(now.getFullYear() - 1, now.getMonth() + 1, 1)
         const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
         const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
 
@@ -48,9 +48,12 @@ router.get('/shipment-overtime', auth, async (req, res) => {
         const labels = []
         const data = []
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 12; i++) {
             const currentMonth = new Date(startDate.getFullYear(), startDate.getMonth() + i)
-            const label = currentMonth.toLocaleString('default', { month: 'long' })
+            let label = currentMonth.toLocaleString('default', { month: 'long' })
+            if (currentMonth.getFullYear() !== now.getFullYear()) {
+                label += ` ${currentMonth.getFullYear()}`
+            }
             labels.push(label)
 
             const monthData = shipmentsOverTime.find((item) => {
@@ -77,7 +80,7 @@ router.get('/cost-overtime', auth, async (req, res) => {
 
     try {
         const now = new Date()
-        const startDate = new Date(now.getFullYear(), now.getMonth() - 5, 1)
+        const startDate = new Date(now.getFullYear() - 1, now.getMonth() + 1, 1)
         const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
         const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
 
@@ -114,9 +117,12 @@ router.get('/cost-overtime', auth, async (req, res) => {
         const labels = []
         const data = []
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 12; i++) {
             const currentMonth = new Date(startDate.getFullYear(), startDate.getMonth() + i)
-            const label = currentMonth.toLocaleString('default', { month: 'long' })
+            let label = currentMonth.toLocaleString('default', { month: 'long' })
+            if (currentMonth.getFullYear() !== now.getFullYear()) {
+                label += ` ${currentMonth.getFullYear()}`
+            }
             labels.push(label)
 
             const monthData = costsOverTime.find((item) => {
@@ -143,7 +149,7 @@ router.get('/items-overtime', auth, async (req, res) => {
 
     try {
         const now = new Date()
-        const startDate = new Date(now.getFullYear(), now.getMonth() - 5, 1)
+        const startDate = new Date(now.getFullYear() - 1, now.getMonth() + 1, 1)
         const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
         const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
 
@@ -180,9 +186,12 @@ router.get('/items-overtime', auth, async (req, res) => {
         const labels = []
         const data = []
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 12; i++) {
             const currentMonth = new Date(startDate.getFullYear(), startDate.getMonth() + i)
-            const label = currentMonth.toLocaleString('default', { month: 'long' })
+            let label = currentMonth.toLocaleString('default', { month: 'long' })
+            if (currentMonth.getFullYear() !== now.getFullYear()) {
+                label += ` ${currentMonth.getFullYear()}`
+            }
             labels.push(label)
 
             const monthData = costsOverTime.find((item) => {
@@ -209,7 +218,7 @@ router.get('/weight-overtime', auth, async (req, res) => {
 
     try {
         const now = new Date()
-        const startDate = new Date(now.getFullYear(), now.getMonth() - 5, 1)
+        const startDate = new Date(now.getFullYear() - 1, now.getMonth() + 1, 1)
         const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
         const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
 
@@ -246,9 +255,12 @@ router.get('/weight-overtime', auth, async (req, res) => {
         const labels = []
         const data = []
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 12; i++) {
             const currentMonth = new Date(startDate.getFullYear(), startDate.getMonth() + i)
-            const label = currentMonth.toLocaleString('default', { month: 'long' })
+            let label = currentMonth.toLocaleString('default', { month: 'long' })
+            if (currentMonth.getFullYear() !== now.getFullYear()) {
+                label += ` ${currentMonth.getFullYear()}`
+            }
             labels.push(label)
 
             const monthData = costsOverTime.find((item) => {

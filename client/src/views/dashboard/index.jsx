@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useTour } from '@reactour/tour'
 import PropTypes from 'prop-types'
 import {
     CRow,
@@ -26,6 +27,7 @@ import { useNavigate } from 'react-router-dom'
 import parseTimestamp from '../../utils/Timestamp'
 
 const Dashboard = () => {
+    const { setIsOpen } = useTour()
     const navigate = useNavigate()
     const widgetChartRef1 = useRef(null)
     const widgetChartRef2 = useRef(null)
@@ -47,6 +49,39 @@ const Dashboard = () => {
             expired: [0, '0%'],
         },
     })
+    const scales = {
+        x: {
+            border: {
+                display: false,
+            },
+            grid: {
+                display: false,
+            },
+            ticks: {
+                display: false,
+            },
+        },
+        y: {
+            display: false,
+            grid: {
+                display: false,
+            },
+            ticks: {
+                display: false,
+            },
+        },
+    }
+    const elements = {
+        line: {
+            borderWidth: 1,
+            tension: 0.4,
+        },
+        point: {
+            radius: 4,
+            hitRadius: 10,
+            hoverRadius: 4,
+        },
+    }
 
     const calculateAverage = (data) => {
         if (!data || data.length === 0) return 0
@@ -68,12 +103,12 @@ const Dashboard = () => {
         {
             color: 'info',
             value: <>{calculateAverage(insights.costOvertime?.data)}</>,
-            title: 'Average Cost',
+            title: 'Cost',
             chartRef: widgetChartRef2,
             pointColor: getStyle('--cui-info'),
             labels: insights.costOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.costOvertime?.data || [0, 0, 0, 0, 0, 0],
-            url: '/avarage-cost',
+            url: '/cost',
         },
         {
             color: 'warning',
@@ -219,6 +254,23 @@ const Dashboard = () => {
 
     return (
         <>
+            <div className="d-flex justify-content-between">
+                <div></div>
+                <CButton
+                    color="primary"
+                    className="mb-4"
+                    style={{
+                        borderRadius: '20px',
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                    }}
+                    onClick={() => setIsOpen(true)}
+                >
+                    🚀 Start Tour
+                </CButton>
+            </div>
             <CRow className="mb-4" xs={{ gutter: 4 }}>
                 {widgetData.map((widget, index) => (
                     <CCol key={index} sm={6} xl={4}>
@@ -263,40 +315,8 @@ const Dashboard = () => {
                                             },
                                         },
                                         maintainAspectRatio: false,
-                                        scales: {
-                                            x: {
-                                                border: {
-                                                    display: false,
-                                                },
-                                                grid: {
-                                                    display: false,
-                                                    drawBorder: false,
-                                                },
-                                                ticks: {
-                                                    display: false,
-                                                },
-                                            },
-                                            y: {
-                                                display: false,
-                                                grid: {
-                                                    display: false,
-                                                },
-                                                ticks: {
-                                                    display: false,
-                                                },
-                                            },
-                                        },
-                                        elements: {
-                                            line: {
-                                                borderWidth: 2,
-                                                tension: 0.4,
-                                            },
-                                            point: {
-                                                radius: 6,
-                                                hitRadius: 10,
-                                                hoverRadius: 4,
-                                            },
-                                        },
+                                        scales: scales,
+                                        elements: elements,
                                     }}
                                 />
                             }

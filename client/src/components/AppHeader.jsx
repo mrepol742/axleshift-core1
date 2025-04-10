@@ -62,15 +62,18 @@ const AppHeader = () => {
                     <FontAwesomeIcon icon={faBars} />
                 </CHeaderToggler>
                 <CHeaderNav>
-                    <CNavItem>
+                    <CNavItem className="schedules-calendar">
                         <CButton onClick={(e) => navigate('/schedules')}>
                             <FontAwesomeIcon icon={faCalendarDays} />
                         </CButton>
                     </CNavItem>
                 </CHeaderNav>
                 <CHeaderNav className="ms-auto px-2">
-                    <AppSearch className="mx-auto d-none d-md-flex me-2" />
-                    <div onClick={(e) => setModalVisible(true)} className="d-block d-md-none me-2">
+                    <AppSearch className="mx-auto d-none d-md-flex me-2 search-shipment" />
+                    <div
+                        onClick={(e) => setModalVisible(true)}
+                        className="d-block d-md-none me-2 search-shipment"
+                    >
                         <FontAwesomeIcon icon={faSearch} />
                     </div>
                     <AppNotifcationDropdown />
@@ -116,7 +119,7 @@ const AppHeader = () => {
                             </CDropdownItem>
                         </CDropdownMenu>
                     </CDropdown>
-                    <AppHeaderDropdown />
+                    <AppHeaderDropdown className="app-header-dropdown" />
                 </CHeaderNav>
             </CContainer>
             <CContainer className="px-4" fluid>

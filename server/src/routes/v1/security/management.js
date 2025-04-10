@@ -7,13 +7,7 @@ import dependabot from '../../../components/dependabot.js'
 import sentry from '../../../components/sentry.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
-import redis, {
-    clearRedisCache,
-    setCache,
-    remCache,
-    getCache,
-    decrypt,
-} from '../../../models/redis.js'
+import redis, { setCache, remCache, getCache, decrypt } from '../../../models/redis.js'
 
 const router = express.Router()
 const limit = 20

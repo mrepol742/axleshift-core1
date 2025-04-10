@@ -15,6 +15,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import s3 from '../../../models/s3.js'
 import { GetObjectCommand } from '@aws-sdk/client-s3'
 import crypto from 'crypto'
+import sendWebhook from '../../../utils/webhook.js'
 
 const router = express.Router()
 const limit = 20
@@ -95,6 +96,7 @@ router.post(
 
             const db = await database()
             const documentsCollection = db.collection('documents')
+
             await documentsCollection.updateOne(
                 { _id: new ObjectId(req.documents._id) },
                 {
@@ -117,6 +119,15 @@ router.post(
                     },
                 },
             )
+
+            Promise.all([
+                (async () => {
+                    const documents = documentsCollection.findOne({
+                        _id: new ObjectId(req.documents._id),
+                    })
+                    if (documents) sendWebhook('documents', documents)
+                })(),
+            ])
 
             return res.status(200).json({
                 data: [

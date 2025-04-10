@@ -28,7 +28,7 @@ const AppHeaderDropdown = () => {
     }
 
     return (
-        <CDropdown variant="nav-item">
+        <CDropdown variant="nav-item" className="app-header-dropdown">
             <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
                 {user.avatar ? (
                     <CImage

@@ -136,7 +136,7 @@ const Dashboard = () => {
             </CRow>
             <h4 className="mt-3">Atlas</h4>
             <CRow>
-                <CCol xs={4}>
+                <CCol md={6}>
                     <CWidgetStatsF
                         padding={false}
                         color="primary"
@@ -152,29 +152,29 @@ const Dashboard = () => {
                         }
                     />
                 </CCol>
-                <CCol xs={4}>
+                <CCol md={6}>
                     <CWidgetStatsF
                         padding={false}
                         color="secondary"
                         className="mb-3"
                         icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
-                        title={`${mongodb.oplog[0].getMoreOps.toLocaleString()} per second`}
-                        value={`${mongodb.oplog[0].networkBytes.toLocaleString()} bytes`}
+                        value={`${mongodb.oplog[0].getMoreOps.toLocaleString()} GetMore Ops`}
+                        title={`${mongodb.oplog[0].networkBytes.toLocaleString()} Network Bytes`}
                     />
                 </CCol>
-                <CCol xs={4}>
+            </CRow>
+            <CRow>
+                <CCol md={6}>
                     <CWidgetStatsF
                         padding={false}
                         color="warning"
                         className="mb-3"
                         icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
-                        title={`${mongodb.operations[0].insert.toLocaleString()} insertions`}
-                        value={`${mongodb.operations[0].query.toLocaleString()} queries`}
+                        value={`${mongodb.operations[0].insert.toLocaleString()} insertions`}
+                        title={`${mongodb.operations[0].query.toLocaleString()} queries`}
                     />
                 </CCol>
-            </CRow>
-            <CRow>
-                <CCol xs={4}>
+                <CCol md={6}>
                     <CWidgetStatsF
                         padding={false}
                         color="info"
@@ -184,20 +184,22 @@ const Dashboard = () => {
                         value={`${mongodb.operations[0].delete.toLocaleString()} deletes`}
                     />
                 </CCol>
-                <CCol xs={4}>
+            </CRow>
+            <CRow>
+                <CCol md={6}>
                     <CWidgetStatsF
                         padding={false}
                         color="danger"
                         className="mb-3"
                         icon={<FontAwesomeIcon icon={faChartPie} className="fa-3x" />}
-                        title={`${mongodb.operations[0].getmore.toLocaleString()} getMore operations`}
-                        value={`${mongodb.operations[0].command.toLocaleString()} commands`}
+                        value={`${mongodb.operations[0].getmore.toLocaleString()} operations`}
+                        title={`${mongodb.operations[0].command.toLocaleString()} commands`}
                     />
                 </CCol>
             </CRow>
             <h4 className="mt-3">Redis</h4>
             <CRow>
-                <CCol xs={4}>
+                <CCol md={6}>
                     <CWidgetStatsF
                         padding={false}
                         color="info"
@@ -207,7 +209,7 @@ const Dashboard = () => {
                         value={`${redis.keysWithExpiry.toLocaleString()} Keys Expiring`}
                     />
                 </CCol>
-                <CCol xs={4}>
+                <CCol md={6}>
                     <CWidgetStatsF
                         padding={false}
                         color="warning"
@@ -217,7 +219,9 @@ const Dashboard = () => {
                         value={`${redis.usedMemory.toLocaleString()} Used Memory`}
                     />
                 </CCol>
-                <CCol xs={4}>
+            </CRow>
+            <CRow>
+                <CCol md={6}>
                     <CWidgetStatsF
                         padding={false}
                         color="primary"

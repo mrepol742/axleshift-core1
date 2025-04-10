@@ -14,6 +14,7 @@ import { GOOGLE_MAP } from '../../config.js'
 import cache from '../../middleware/cache.js'
 import { setCache } from '../../models/redis.js'
 import InvoiceGenerator from '../../components/invoice.js'
+import sendWebhook from '../../utils/webhook.js'
 
 const router = express.Router()
 const limit = 20
@@ -150,7 +151,7 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
         // and draw a estimated route
         const expectedDelivery = new Date(dateNow + 3 * 24 * 60 * 60 * 1000)
 
-        const [freightObject, mail, log, notif, invoice] = await Promise.all([
+        await Promise.all([
             db.collection('freight').insertOne({
                 user_id: req.user._id,
                 is_import: is_import,
@@ -190,8 +191,10 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
                 title: 'Shipment Created',
                 message: `Shipment has been created with tracking number ${trackingNumber}.`,
             }),
-            InvoiceGenerator(res, req, trackingNumber),
         ])
+
+        const invoice = await InvoiceGenerator(res, req, trackingNumber)
+        if (!invoice) return res.status(200).json({ error: 'Unable to find shipment invoice' })
         return invoice
     } catch (e) {
         logger.error(e)

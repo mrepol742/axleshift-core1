@@ -18,6 +18,7 @@ import mail from './mail.js'
 import mongodb from './metrics/mongodb.js'
 import redis from './metrics/redis.js'
 import insightsModal from './insights/modal.js'
+import webhooks from './security/webhooks.js'
 
 const router = express.Router()
 router.use('/auth', auth)
@@ -28,13 +29,18 @@ router.use('/freight', freight)
 router.use('/documents', document)
 router.use('/track', track)
 
+// **** ADMIN & SUPER ADMIN
 router.use('/sec/management', securityManagement)
+router.use('/sec/webhooks', webhooks)
+// ****
 router.use('/sec/activity', securityActivity)
 router.use('/sec/sessions', securitySessions)
 
+// **** ADMIN & SUPER ADMIN
 router.use('/metrics/prometheus', prometheus)
 router.use('/metrics/mongodb', mongodb)
 router.use('/metrics/redis', redis)
+// ****
 
 router.use('/notifications', notifications)
 
