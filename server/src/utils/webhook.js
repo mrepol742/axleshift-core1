@@ -6,13 +6,16 @@ const sendWebhook = async (action, data) => {
     const webhooks = await getCache('webhooks')
     if (!webhooks) return
 
-    const getWebhooks = webhooks.find((webhook) => webhook.action === action)
+    const getWebhooks = webhooks.filter(
+        (webhook) => webhook.action === action || webhook.action === 'all'
+    )
     if (!getWebhooks) return
- 
-    for (const webhook of getWebhooks.urls) {
-        const { url, token } = webhook;
+
+    for (const webhook of getWebhooks) {
+        const { url, token } = webhook
         const payload = {
-           token, data
+            token,
+            data,
         }
 
         try {
@@ -20,9 +23,9 @@ const sendWebhook = async (action, data) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            });
+            })
 
-            if (response.status < 200 || response.status >= 300) 
+            if (response.status < 200 || response.status >= 300)
                 logger.info('Failed sending webhook' + response.status + ' ' + response.statusText)
         } catch (error) {
             logger.error(error)

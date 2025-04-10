@@ -4,6 +4,7 @@ import logger from '../../utils/logger.js'
 import { XENDIT_WEBHOOK_VERIFICATION_TOKEN } from '../../config.js'
 import { run } from '../../utils/cmd.js'
 import { send } from '../../components/mail.js'
+import sendWebhook from '../../utils/webhook.js'
 
 const router = express.Router()
 
@@ -15,16 +16,17 @@ router.post('/', async (req, res) => {
             return res.status(401).json({ error: 'Unauthorized' })
 
         const db = await database()
+        const payload = {
+            status: req.body.status,
+            payment_method: req.body.payment_method,
+            adjusted_amount: req.body.adjusted_received_amount,
+            updated_at: Date.now(),
+        }
         Promise.all([
             db.collection('invoices').updateOne(
                 { invoice_id: req.body.id },
                 {
-                    $set: {
-                        status: req.body.status,
-                        payment_method: req.body.payment_method,
-                        adjusted_amount: req.body.adjusted_received_amount,
-                        updated_at: Date.now(),
-                    },
+                    $set: payload,
                 },
             ),
             (async () => {
@@ -74,7 +76,9 @@ router.post('/', async (req, res) => {
                     )
                 }
             })(),
+            sendWebhook('invoices', { invoice_id: req.body.id, ...payload }),
         ])
+
         return res.status(200).send()
     } catch (err) {
         logger.error(err)
