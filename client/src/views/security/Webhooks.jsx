@@ -24,7 +24,11 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
+import {
+    faMagnifyingGlass,
+    faCircleExclamation,
+    faArrowAltCircleRight,
+} from '@fortawesome/free-solid-svg-icons'
 import parseTimestamp from '../../utils/Timestamp'
 import { useToast } from '../../components/AppToastProvider'
 
@@ -36,29 +40,36 @@ const Webhooks = () => {
     const [WebhooksLocationList, setWebhooksLocationList] = useState([])
 
     const fetchData = async () => {
-        // axios
-        //     .get(`/sec/Webhooks`)
-        //     .then((response) => setResult(response.data))
-        //     .catch((error) => {
-        //         const message =
-        //             error.response?.data?.error || error.message || 'Server is offline or restarting please wait'
-        //         addToast(message)
-        //     })
-        //     .finally(() => setLoading(false))
+        axios
+            .get(`/sec/webhooks`)
+            .then((response) => setWebhooksLocationList(response.data))
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error ||
+                    error.message ||
+                    'Server is offline or restarting please wait'
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
     }
 
     const saveData = async () => {
-        // const recaptcha = await recaptchaRef.current.executeAsync()
-        // setLoading(true)
-        // axios
-        //     .post(`/sec/webhooks`, { recaptcha_ref: recaptcha, WebhooksLocationList })
-        //     .then((response) => addToast('Changes saved successfully', 'Success'))
-        //     .catch((error) => {
-        //         const message =
-        //             error.response?.data?.error || error.message || 'Server is offline or restarting please wait'
-        //         addToast(message)
-        //     })
-        //     .finally(() => setLoading(false))
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
+        axios
+            .post(`/sec/webhooks`, { recaptcha_ref: recaptcha, WebhooksLocationList })
+            .then((response) => {
+                if (response.data.error) return addToast(response.data.error)
+                addToast('Webhooks updated successfully')
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error ||
+                    error.message ||
+                    'Server is offline or restarting please wait'
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {
@@ -69,9 +80,9 @@ const Webhooks = () => {
         setWebhooksLocationList([...WebhooksLocationList, { url: '', checked: false }])
     }
 
-    const handleWebhooksChange = (index, value) => {
+    const handleWebhooksChange = (index, value, type) => {
         const newWebhooksLocationList = [...WebhooksLocationList]
-        newWebhooksLocationList[index].ip = value
+        newWebhooksLocationList[index][type] = value
         setWebhooksLocationList(newWebhooksLocationList)
     }
 
@@ -127,8 +138,8 @@ const Webhooks = () => {
                     <CFormInput
                         type="text"
                         floatingLabel="Webhook Token"
-                        value={item.url}
-                        onChange={(e) => handleWebhooksChange(index, e.target.value, 'url')}
+                        value={item.token}
+                        onChange={(e) => handleWebhooksChange(index, e.target.value, 'token')}
                         className="me-2"
                     />
                     <CFormSelect
@@ -138,8 +149,8 @@ const Webhooks = () => {
                     >
                         <option value="">Select Action</option>
                         <option value="all">All</option>
-                        <option value="invoice">Invoice</option>
-                        <option value="shipment">Shipment</option>
+                        <option value="invoices">Invoices</option>
+                        <option value="shipments">Shipments</option>
                         <option value="documents">Documents</option>
                     </CFormSelect>
                 </div>
