@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { CFormInput, CFormSelect, CRow, CCol, CSpinner, CButton, CContainer } from '@coreui/react'
+import {
+    CFormInput,
+    CFormSelect,
+    CRow,
+    CCol,
+    CSpinner,
+    CButton,
+    CContainer,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalTitle,
+    CModalFooter,
+} from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
@@ -10,6 +23,7 @@ const Webhooks = () => {
     const [loading, setLoading] = useState(false)
     const [WebhooksLocationList, setWebhooksLocationList] = useState([])
     const [WebhooksLocationListCopy, setWebhooksLocationListCopy] = useState([])
+    const [modal, setModal] = useState(false)
 
     const fetchData = async () => {
         axios
@@ -68,10 +82,15 @@ const Webhooks = () => {
         setWebhooksLocationList(newWebhooksLocationList)
     }
 
-    const handleDeleteWebhooks = () => {
+    const promptDeleteModal = () => {
         const selectedItems = WebhooksLocationList.filter((item) => item.checked)
         if (selectedItems.length === 0)
             return addToast('Please select at least one Webhook to delete.')
+        setModal(true)
+    }
+
+    const handleDeleteWebhooks = () => {
+        setModal(false)
         setWebhooksLocationList(WebhooksLocationList.filter((item) => !item.checked))
     }
 
@@ -94,7 +113,7 @@ const Webhooks = () => {
                     <CButton color="primary" onClick={handleAddWebhooks}>
                         New
                     </CButton>
-                    <CButton color="danger" onClick={handleDeleteWebhooks} className="ms-2">
+                    <CButton color="danger" onClick={promptDeleteModal} className="ms-2">
                         Delete
                     </CButton>
                 </CCol>
@@ -137,6 +156,7 @@ const Webhooks = () => {
                         onChange={(e) => handleWebhooksChange(index, e.target.value, 'action')}
                         className="me-2"
                     >
+                        <option value="">Choose</option>
                         <option value="all">All</option>
                         <option value="invoices">Invoices</option>
                         <option value="shipments">Shipments</option>
@@ -154,6 +174,40 @@ const Webhooks = () => {
             >
                 Apply all changes
             </CButton>
+            <CModal
+                alignment="center"
+                scrollable
+                visible={modal}
+                onClose={() => setModal(false)}
+                aria-labelledby="M"
+            >
+                <CModalHeader>
+                    <CModalTitle>Confirm Delete?</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <ul>
+                        {WebhooksLocationList.filter((item) => item.checked).map((item, index) => (
+                            <li key={index}>{item.url}</li>
+                        ))}
+                    </ul>
+                    Are you sure you want to delete the selected Webhooks? This action cannot be
+                    undone.
+                </CModalBody>
+                <CModalFooter className="d-flex justify-content-end">
+                    <CButton color="secondary" onClick={handleDeleteWebhooks}>
+                        Delete
+                    </CButton>
+                    <CButton
+                        color="primary"
+                        onClick={() => {
+                            setModal(false)
+                        }}
+                        className="ms-2"
+                    >
+                        Cancel
+                    </CButton>
+                </CModalFooter>
+            </CModal>
         </div>
     )
 }

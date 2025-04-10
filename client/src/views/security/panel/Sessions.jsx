@@ -11,6 +11,11 @@ import {
     CTableDataCell,
     CTableBody,
     CTableHeaderCell,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalTitle,
+    CModalFooter,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,7 +23,6 @@ import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import parseTimestamp from '../../../utils/Timestamp'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
-
 import AppPagination from '../../../components/AppPagination'
 
 const Sessions = () => {
@@ -28,8 +32,10 @@ const Sessions = () => {
     const [result, setResult] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
+    const [modal, setModal] = useState(false)
 
     const handleLogout = async () => {
+        setModal(false)
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
@@ -87,7 +93,7 @@ const Sessions = () => {
                         type="submit"
                         color="danger"
                         className="mt-4 d-block me-2 rounded"
-                        onClick={handleLogout}
+                        onClick={(e) => setModal(true)}
                     >
                         <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> Logout all
                         sessions
@@ -149,6 +155,34 @@ const Sessions = () => {
                     setTotalPages={setTotalPages}
                 />
             )}
+            <CModal
+                alignment="center"
+                scrollable
+                visible={modal}
+                onClose={() => setModal(false)}
+                aria-labelledby="M"
+            >
+                <CModalHeader>
+                    <CModalTitle>Confirm Logout?</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    Are you sure you want to logout all sessions? This action cannot be undone.
+                </CModalBody>
+                <CModalFooter className="d-flex justify-content-end">
+                    <CButton color="secondary" onClick={handleLogout}>
+                        Delete
+                    </CButton>
+                    <CButton
+                        color="primary"
+                        onClick={() => {
+                            setModal(false)
+                        }}
+                        className="ms-2"
+                    >
+                        Cancel
+                    </CButton>
+                </CModalFooter>
+            </CModal>
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )

@@ -8,6 +8,11 @@ import {
     CButton,
     CAlert,
     CContainer,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalTitle,
+    CModalFooter,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
@@ -22,6 +27,7 @@ const GEO = () => {
     const [state, setState] = useState(0)
     const [geoLocationList, setGeoLocationList] = useState([])
     const [geoLocationListCopy, setGeoLocationListCopy] = useState([])
+    const [modal, setModal] = useState(false)
 
     const fetchData = async () => {
         axios
@@ -90,10 +96,15 @@ const GEO = () => {
         setGeoLocationList(newgeoLocationList)
     }
 
-    const handleDeleteGeo = () => {
+    const promptDeleteModal = () => {
         const selectedItems = geoLocationList.filter((item) => item.checked)
         if (selectedItems.length === 0)
             return addToast('Please select at least one GEO Location to delete.')
+        setModal(true)
+    }
+
+    const handleDeleteGeo = () => {
+        setModal(false)
         setGeoLocationList(geoLocationList.filter((item) => !item.checked))
     }
 
@@ -122,7 +133,7 @@ const GEO = () => {
                     <CButton color="primary" onClick={handleAddGeo}>
                         New
                     </CButton>
-                    <CButton color="danger" onClick={handleDeleteGeo} className="ms-2">
+                    <CButton color="danger" onClick={promptDeleteModal} className="ms-2">
                         Delete
                     </CButton>
                 </CCol>
@@ -182,6 +193,44 @@ const GEO = () => {
             >
                 Apply all changes
             </CButton>
+            <CModal
+                alignment="center"
+                scrollable
+                visible={modal}
+                onClose={() => setModal(false)}
+                aria-labelledby="M"
+            >
+                <CModalHeader>
+                    <CModalTitle>Confirm Delete?</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <ul>
+                        {geoLocationList
+                            .filter((item) => item.checked)
+                            .map((item, index) => (
+                                <li key={index}>
+                                    {item.geo.latitude} - {item.geo.longitude}
+                                </li>
+                            ))}
+                    </ul>
+                    Are you sure you want to delete the selected GEO Location? This action cannot be
+                    undone.
+                </CModalBody>
+                <CModalFooter className="d-flex justify-content-end">
+                    <CButton color="secondary" onClick={handleDeleteGeo}>
+                        Delete
+                    </CButton>
+                    <CButton
+                        color="primary"
+                        onClick={() => {
+                            setModal(false)
+                        }}
+                        className="ms-2"
+                    >
+                        Cancel
+                    </CButton>
+                </CModalFooter>
+            </CModal>
         </div>
     )
 }

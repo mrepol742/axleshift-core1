@@ -8,6 +8,11 @@ import {
     CButton,
     CAlert,
     CContainer,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalTitle,
+    CModalFooter,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
@@ -22,6 +27,7 @@ const IPFiltering = () => {
     const [state, setState] = useState('whitelist')
     const [ipList, setIpList] = useState([])
     const [ipListCopy, setIpListCopy] = useState([])
+    const [modal, setModal] = useState(false)
 
     const fetchData = async () => {
         axios
@@ -87,9 +93,14 @@ const IPFiltering = () => {
         setIpList(newIpList)
     }
 
-    const handleDeleteIp = () => {
+    const promptDeleteModal = () => {
         const selectedItems = ipList.filter((item) => item.checked)
         if (selectedItems.length === 0) return addToast('Please select at least one IP to delete.')
+        setModal(true)
+    }
+
+    const handleDeleteIp = () => {
+        setModal(false)
         setIpList(ipList.filter((item) => !item.checked))
     }
 
@@ -117,7 +128,7 @@ const IPFiltering = () => {
                     <CButton color="primary" onClick={handleAddIp}>
                         New
                     </CButton>
-                    <CButton color="danger" onClick={handleDeleteIp} className="ms-2">
+                    <CButton color="danger" onClick={promptDeleteModal} className="ms-2">
                         Delete
                     </CButton>
                 </CCol>
@@ -177,6 +188,42 @@ const IPFiltering = () => {
                     <li>IP Range: 192.168.100.1-192.168.100.200</li>
                 </ul>
             </div>
+            <CModal
+                alignment="center"
+                scrollable
+                visible={modal}
+                onClose={() => setModal(false)}
+                aria-labelledby="M"
+            >
+                <CModalHeader>
+                    <CModalTitle>Confirm Delete?</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <ul>
+                        {ipList
+                            .filter((item) => item.checked)
+                            .map((item, index) => (
+                                <li key={index}>{item.ip}</li>
+                            ))}
+                    </ul>
+                    Are you sure you want to delete the selected IP Address? This action cannot be
+                    undone.
+                </CModalBody>
+                <CModalFooter className="d-flex justify-content-end">
+                    <CButton color="secondary" onClick={handleDeleteIp}>
+                        Delete
+                    </CButton>
+                    <CButton
+                        color="primary"
+                        onClick={() => {
+                            setModal(false)
+                        }}
+                        className="ms-2"
+                    >
+                        Cancel
+                    </CButton>
+                </CModalFooter>
+            </CModal>
         </div>
     )
 }
