@@ -251,6 +251,7 @@ const Document = () => {
                     <CModalTitle>{preview?.file}</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
+                    {preview?.fileFormat}
                     {preview?.fileFormat === 'docx' ? (
                         <iframe
                             src={`https://view.officeapps.live.com/op/embed.aspx?src=${preview?.url}`}
@@ -260,6 +261,7 @@ const Document = () => {
                         <iframe
                             src={preview?.url}
                             style={{ width: '100%', height: '400px', border: 'none' }}
+                            title="Document Preview"
                         ></iframe>
                     )}
                 </CModalBody>
