@@ -53,6 +53,15 @@ const App = () => {
                     setCurrentStep((s) => (s === steps.length - 1 ? 0 : s + 1))
                 }
             }}
+            styles={{
+                popover: (base) => ({
+                    ...base,
+                    color: 'var(--cui-body-color)',
+                    backgroundColor: 'var(--cui-body-bg)',
+                    boxShadow: 'var(--cui-box-shadow-lg)',
+                    borderRadius: 'var(--cui-border-radius)',
+                }),
+            }}
         >
             <Router>
                 <Suspense
