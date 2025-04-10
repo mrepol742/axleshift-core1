@@ -8,6 +8,7 @@ import {
     CSidebarFooter,
     CSidebarHeader,
     CSidebarToggler,
+    useColorModes,
 } from '@coreui/react'
 import { AppSidebarNav } from './AppSidebarNav'
 import navigation from '../_nav'
@@ -16,10 +17,10 @@ const AppSidebar = () => {
     const dispatch = useDispatch()
     const unfoldable = useSelector((state) => state.sidebarUnfoldable)
     const sidebarShow = useSelector((state) => state.sidebarShow)
+    const { colorMode } = useColorModes('theme')
 
     return (
         <CSidebar
-            colorScheme="dark"
             className="border-end sidebar"
             position="fixed"
             unfoldable={unfoldable}
@@ -32,13 +33,17 @@ const AppSidebar = () => {
                 <CSidebarBrand to="/">
                     <CImage
                         fluid
-                        src="/images/logo.png"
+                        src={colorMode === 'light' ? '/images/logo-dark.png' : '/images/logo.png'}
                         className="sidebar-brand-full"
                         width={150}
                         loading="lazy"
                     />
                     <CImage
-                        src="/images/favicon.png"
+                        src={
+                            colorMode === 'light'
+                                ? '/images/favicon-dark.png'
+                                : '/images/favicon.png'
+                        }
                         className="sidebar-brand-narrow"
                         height={30}
                         loading="lazy"
@@ -46,7 +51,6 @@ const AppSidebar = () => {
                 </CSidebarBrand>
                 <CCloseButton
                     className="d-lg-none"
-                    dark
                     onClick={() => dispatch({ type: 'set', sidebarShow: false })}
                 />
             </CSidebarHeader>
