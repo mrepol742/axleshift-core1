@@ -1,20 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTour } from '@reactour/tour'
-import PropTypes from 'prop-types'
 import {
     CRow,
     CCol,
-    CDropdown,
-    CDropdownToggle,
     CWidgetStatsA,
-    CWidgetStatsB,
     CWidgetStatsC,
     CWidgetStatsF,
     CButton,
     CModal,
     CModalHeader,
-    CModalTitle,
-    CModalBody,
     CSpinner,
     CListGroup,
     CListGroupItem,
@@ -29,12 +23,7 @@ import parseTimestamp from '../../utils/Timestamp'
 const Dashboard = () => {
     const { setIsOpen } = useTour()
     const navigate = useNavigate()
-    const widgetChartRef1 = useRef(null)
-    const widgetChartRef2 = useRef(null)
-    const widgetChartRef3 = useRef(null)
-    const widgetChartRef4 = useRef(null)
     const [isActionVisible, setIsActionVisible] = useState(false)
-    const [modalUrl, setModalUrl] = useState('')
     const [formData, setFormData] = useState(null)
     const [insights, setInsights] = useState({
         smallDetailWidgets: {
@@ -94,7 +83,6 @@ const Dashboard = () => {
             color: 'primary',
             value: <>{calculateAverage(insights.shipmetOvertime?.data)}</>,
             title: 'Shipments',
-            chartRef: widgetChartRef1,
             pointColor: getStyle('--cui-primary'),
             labels: insights.shipmetOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.shipmetOvertime?.data || [0, 0, 0, 0, 0, 0],
@@ -104,7 +92,6 @@ const Dashboard = () => {
             color: 'info',
             value: <>{calculateAverage(insights.costOvertime?.data)}</>,
             title: 'Cost',
-            chartRef: widgetChartRef2,
             pointColor: getStyle('--cui-info'),
             labels: insights.costOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.costOvertime?.data || [0, 0, 0, 0, 0, 0],
@@ -114,7 +101,6 @@ const Dashboard = () => {
             color: 'warning',
             value: <>{calculateAverage(insights.itemsOvertime?.data)}</>,
             title: 'Items',
-            chartRef: widgetChartRef3,
             pointColor: getStyle('--cui-warning'),
             labels: insights.itemsOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.itemsOvertime?.data || [0, 0, 0, 0, 0, 0],
@@ -124,7 +110,6 @@ const Dashboard = () => {
             color: 'danger',
             value: <>{calculateAverage(insights.weightOvertime?.data)}</>,
             title: 'Weight',
-            chartRef: widgetChartRef4,
             pointColor: getStyle('--cui-danger'),
             labels: insights.weightOvertime?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             data: insights.weightOvertime?.data || [0, 0, 0, 0, 0, 0],
@@ -183,42 +168,6 @@ const Dashboard = () => {
     useEffect(() => {
         fetchInsights()
     }, [])
-
-    useEffect(() => {
-        document.documentElement.addEventListener('ColorSchemeChange', () => {
-            if (widgetChartRef1.current) {
-                setTimeout(() => {
-                    widgetChartRef1.current.data.datasets[0].pointBackgroundColor =
-                        getStyle('--cui-primary')
-                    widgetChartRef1.current.update()
-                })
-            }
-
-            if (widgetChartRef2.current) {
-                setTimeout(() => {
-                    widgetChartRef2.current.data.datasets[0].pointBackgroundColor =
-                        getStyle('--cui-info')
-                    widgetChartRef2.current.update()
-                })
-            }
-
-            if (widgetChartRef3.current) {
-                setTimeout(() => {
-                    widgetChartRef3.current.data.datasets[0].pointBackgroundColor =
-                        getStyle('--cui-info')
-                    widgetChartRef3.current.update()
-                })
-            }
-
-            if (widgetChartRef4.current) {
-                setTimeout(() => {
-                    widgetChartRef4.current.data.datasets[0].pointBackgroundColor =
-                        getStyle('--cui-info')
-                    widgetChartRef4.current.update()
-                })
-            }
-        })
-    }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, widgetChartRef4])
 
     const renderDashboardWidgets = async (url) => {
         try {
@@ -293,7 +242,6 @@ const Dashboard = () => {
                             }
                             chart={
                                 <CChartLine
-                                    ref={widget.chartRef}
                                     className="mt-3 mx-3"
                                     style={{ height: '70px' }}
                                     data={{
