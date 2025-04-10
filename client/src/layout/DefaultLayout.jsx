@@ -18,8 +18,6 @@ import { useModal } from '../components/AppModalProvider'
 import { useNotif } from '../components/AppNotificationProvider'
 import { useUserProvider } from '../components/UserProvider'
 import parseTimestamp from '../utils/Timestamp'
-import database from '../firebase'
-import { collection, addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
 import FloatingChat from '../components/FloatingChat'
 
 const DefaultLayout = () => {
@@ -28,12 +26,6 @@ const DefaultLayout = () => {
     const { addNotif } = useNotif()
     const [visibleModals, setVisibleModals] = useState({})
     const { user } = useUserProvider()
-    const messagesRef = collection(database, 'messages')
-    const [messages, setMessages] = useState([])
-
-    const handleOpen = (id) => {
-        setVisibleModals((prev) => ({ ...prev, [id]: true }))
-    }
 
     const handleClose = (id) => {
         setVisibleModals((prev) => ({ ...prev, [id]: false }))
@@ -55,14 +47,6 @@ const DefaultLayout = () => {
             if (permission !== 'granted')
                 addToast('Please allow notifications to receive updates', 'Notification')
         })
-
-        // const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
-        //     const msgs = snapshot.docs
-        //         .map((doc) => ({ id: doc.id, ...doc.data() }))
-        //         .filter((msg) => msg.ref === user._id)
-        //     setMessages(msgs)
-        // })
-        // return () => unsubscribe()
     }, [user])
 
     return (

@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, lazy } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import AOS from 'aos'
 import { CSpinner, useColorModes } from '@coreui/react'
 import ReactGA from 'react-ga4'
@@ -19,24 +19,28 @@ const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
 const App = () => {
     AOS.init()
-    const { isColorModeSet, setColorMode } = useColorModes('theme')
+    const { colorMode, isColorModeSet, setColorMode } = useColorModes('theme')
     const storedTheme = useSelector((state) => state.theme)
+    const dispatch = useDispatch()
     if (VITE_APP_NODE_ENV === 'production') ReactGA.initialize(VITE_APP_GOOGLE_ANALYTICS)
     const disableBody = (target) => disableBodyScroll(target)
     const enableBody = (target) => enableBodyScroll(target)
     const [disableKeyboardNavigation] = ['esc']
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.href.split('?')[1])
-        const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
-        if (theme) setColorMode(theme)
-
-        if (isColorModeSet()) return
-
-        setColorMode(storedTheme)
-
         if (VITE_APP_NODE_ENV === 'production')
             ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
+
+        const urlParams = new URLSearchParams(window.location.href.split('?')[1])
+        const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
+        if (theme) {
+            dispatch({ type: 'set', theme: theme })
+            setColorMode(theme)
+        }
+
+        if (isColorModeSet()) return dispatch({ type: 'set', theme: colorMode })
+
+        setColorMode(storedTheme)
     }, [])
 
     return (

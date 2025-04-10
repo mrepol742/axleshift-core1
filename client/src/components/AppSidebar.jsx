@@ -8,7 +8,6 @@ import {
     CSidebarFooter,
     CSidebarHeader,
     CSidebarToggler,
-    useColorModes,
 } from '@coreui/react'
 import { AppSidebarNav } from './AppSidebarNav'
 import navigation from '../_nav'
@@ -17,7 +16,7 @@ const AppSidebar = () => {
     const dispatch = useDispatch()
     const unfoldable = useSelector((state) => state.sidebarUnfoldable)
     const sidebarShow = useSelector((state) => state.sidebarShow)
-    const { colorMode } = useColorModes('theme')
+    const storedTheme = useSelector((state) => state.theme)
 
     return (
         <CSidebar
@@ -33,14 +32,14 @@ const AppSidebar = () => {
                 <CSidebarBrand to="/">
                     <CImage
                         fluid
-                        src={colorMode === 'light' ? '/images/logo-dark.png' : '/images/logo.png'}
+                        src={storedTheme === 'light' ? '/images/logo-dark.png' : '/images/logo.png'}
                         className="sidebar-brand-full"
                         width={150}
                         loading="lazy"
                     />
                     <CImage
                         src={
-                            colorMode === 'light'
+                            storedTheme === 'light'
                                 ? '/images/favicon-dark.png'
                                 : '/images/favicon.png'
                         }

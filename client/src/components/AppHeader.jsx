@@ -39,6 +39,7 @@ const AppHeader = () => {
     const dispatch = useDispatch()
     const sidebarShow = useSelector((state) => state.sidebarShow)
     const navigate = useNavigate()
+    const [modalVisible, setModalVisible] = useState(false)
 
     useEffect(() => {
         document.addEventListener('scroll', () => {
@@ -50,7 +51,10 @@ const AppHeader = () => {
         })
     }, [])
 
-    const [modalVisible, setModalVisible] = useState(false)
+    const setTheme = (theme) => {
+        dispatch({ type: 'set', theme: theme })
+        setColorMode(theme)
+    }
 
     return (
         <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
@@ -95,7 +99,7 @@ const AppHeader = () => {
                                 className="d-flex align-items-center"
                                 as="button"
                                 type="button"
-                                onClick={() => setColorMode('light')}
+                                onClick={() => setTheme('light')}
                             >
                                 <FontAwesomeIcon className="me-2" icon={faSun} /> Light
                             </CDropdownItem>
@@ -104,7 +108,7 @@ const AppHeader = () => {
                                 className="d-flex align-items-center"
                                 as="button"
                                 type="button"
-                                onClick={() => setColorMode('dark')}
+                                onClick={() => setTheme('dark')}
                             >
                                 <FontAwesomeIcon className="me-2" icon={faMoon} size="lg" /> Dark
                             </CDropdownItem>
@@ -113,7 +117,7 @@ const AppHeader = () => {
                                 className="d-flex align-items-center"
                                 as="button"
                                 type="button"
-                                onClick={() => setColorMode('auto')}
+                                onClick={() => setTheme('auto')}
                             >
                                 <FontAwesomeIcon className="me-2" icon={faCircleHalfStroke} /> Auto
                             </CDropdownItem>
