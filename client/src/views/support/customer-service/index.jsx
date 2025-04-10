@@ -100,7 +100,10 @@ const Messages = ({ float, isOpen }) => {
                             />
                         )}
 
-                    {(user?.role === 'user' || !isMobile || (isMobile && !showUserList)) && (
+                    {(user?.role === 'user' ||
+                        !isMobile ||
+                        (isMobile && !showUserList) ||
+                        isOpen) && (
                         <MessageBox
                             isOpen={isOpen}
                             messagesRef={messagesRef}

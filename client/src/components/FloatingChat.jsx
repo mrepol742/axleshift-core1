@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faComments } from '@fortawesome/free-solid-svg-icons'
 import Support from '../views/support/customer-service/index'
 
 const FloatingChat = () => {
@@ -7,15 +9,12 @@ const FloatingChat = () => {
     return (
         <div>
             <button className="btn btn-primary" onClick={() => setIsOpen(!isOpen)}>
-                Support
+                <FontAwesomeIcon icon={faComments} className="me-1" /> Support
             </button>
 
             {isOpen && (
-                <div
-                    className="position-fixed bottom-0 translate-middle-y start-50 bg-white shadow rounded p-3"
-                    style={{ width: '380px', height: '400px' }}
-                >
-                    <Support float="true" isOpen={isOpen} />
+                <div className="position-fixed bottom-0 end-0 mb-5 me-3" style={{ zIndex: 1000 }}>
+                    <Support float={true} isOpen={isOpen} />
                 </div>
             )}
         </div>
