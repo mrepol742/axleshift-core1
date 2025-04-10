@@ -1,43 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import {
-    CInputGroup,
     CFormInput,
-    CInputGroupText,
-    CForm,
     CFormSelect,
     CRow,
     CCol,
-    CCard,
-    CCardTitle,
     CSpinner,
-    CCardBody,
-    CTable,
-    CTableHead,
-    CTableRow,
-    CTableDataCell,
-    CTableBody,
-    CTableHeaderCell,
-    CFormSwitch,
     CButton,
     CAlert,
+    CContainer,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
-import parseTimestamp from '../../../utils/Timestamp'
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../../components/AppToastProvider'
 
 const GEO = () => {
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
-    const [result, setResult] = useState([])
-    const [query, setQuery] = useState('')
-    const [order, setOrder] = useState(0)
-    const [priority, setPriority] = useState(0)
     const [state, setState] = useState(0)
     const [geoLocationList, setGeoLocationList] = useState([])
+    const [geoLocationListCopy, setGeoLocationListCopy] = useState([])
 
     const fetchData = async () => {
         axios
@@ -45,6 +29,7 @@ const GEO = () => {
             .then((response) => {
                 setState(response.data.filter_mode)
                 setGeoLocationList(response.data.geo.map((geo) => ({ geo, checked: false })))
+                setGeoLocationListCopy(response.data.geo.map((geo) => ({ geo, checked: false })))
             })
             .catch((error) => {
                 const message =
@@ -69,6 +54,7 @@ const GEO = () => {
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
                 addToast('Changes saved successfully', 'Success')
+                setGeoLocationListCopy(geoLocationList)
             })
             .catch((error) => {
                 const message =
@@ -105,6 +91,9 @@ const GEO = () => {
     }
 
     const handleDeleteGeo = () => {
+        const selectedItems = geoLocationList.filter((item) => item.checked)
+        if (selectedItems.length === 0)
+            return addToast('Please select at least one GEO Location to delete.')
         setGeoLocationList(geoLocationList.filter((item) => !item.checked))
     }
 
@@ -152,6 +141,16 @@ const GEO = () => {
                     </CFormSelect>
                 </CCol>
             </CRow>
+            {geoLocationList.length === 0 && geoLocationListCopy.length === 0 && (
+                <CContainer className="my-5">
+                    <div className="text-center">
+                        <div className="text-body-secondary">
+                            <h1 className="d-block text-danger">No GEO Location added yet.</h1>
+                            <span>Please click &quot;New&quot; to add a GEO Location.</span>
+                        </div>
+                    </div>
+                </CContainer>
+            )}
             {geoLocationList.map((item, index) => (
                 <div key={index} className="d-flex mb-2">
                     <input
@@ -175,11 +174,14 @@ const GEO = () => {
                     />
                 </div>
             ))}
-            {geoLocationList.length != 0 && (
-                <CButton color="primary" onClick={saveData} className="mb-4">
-                    Apply all changes
-                </CButton>
-            )}
+            <CButton
+                color="primary"
+                onClick={saveData}
+                className="mb-4"
+                disabled={geoLocationList.length === 0 && geoLocationListCopy.length === 0}
+            >
+                Apply all changes
+            </CButton>
         </div>
     )
 }

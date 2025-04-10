@@ -122,18 +122,15 @@ const API = () => {
             </div>
             {!result ||
                 (result.length == 0 && (
-                    <CContainer className="mt-5">
-                        <CRow className="justify-content-center">
-                            <CCol md={6}>
-                                <div className="clearfix">
-                                    <h1 className="float-start display-3 me-4 text-danger">404</h1>
-                                    <h4>Oops! No Access Tokens Found</h4>
-                                    <p className="text-body-secondary float-start">
-                                        You have not generated any access tokens yet.
-                                    </p>
-                                </div>
-                            </CCol>
-                        </CRow>
+                    <CContainer className="my-5">
+                        <div className="text-center">
+                            <div className="text-body-secondary">
+                                <h1 className="d-block text-danger">No Access Tokens added yet.</h1>
+                                <span>
+                                    Please click &quot;Generate New Token&quot; to create a Token.
+                                </span>
+                            </div>
+                        </div>
                     </CContainer>
                 ))}
             {result &&

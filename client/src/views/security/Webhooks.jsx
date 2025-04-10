@@ -1,48 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import {
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CForm,
-    CFormSelect,
-    CRow,
-    CCol,
-    CCard,
-    CCardTitle,
-    CSpinner,
-    CCardBody,
-    CTable,
-    CTableHead,
-    CTableRow,
-    CTableDataCell,
-    CTableBody,
-    CTableHeaderCell,
-    CFormSwitch,
-    CButton,
-    CAlert,
-} from '@coreui/react'
+import { CFormInput, CFormSelect, CRow, CCol, CSpinner, CButton, CContainer } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faMagnifyingGlass,
-    faCircleExclamation,
-    faArrowAltCircleRight,
-} from '@fortawesome/free-solid-svg-icons'
-import parseTimestamp from '../../utils/Timestamp'
 import { useToast } from '../../components/AppToastProvider'
 
 const Webhooks = () => {
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(false)
-    const [result, setResult] = useState([])
     const [WebhooksLocationList, setWebhooksLocationList] = useState([])
+    const [WebhooksLocationListCopy, setWebhooksLocationListCopy] = useState([])
 
     const fetchData = async () => {
         axios
             .get(`/sec/webhooks`)
-            .then((response) => setWebhooksLocationList(response.data))
+            .then((response) => {
+                setWebhooksLocationList(response.data)
+                setWebhooksLocationListCopy(response.data)
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
@@ -61,6 +36,7 @@ const Webhooks = () => {
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
                 addToast('Webhooks updated successfully')
+                setWebhooksLocationListCopy(WebhooksLocationList)
             })
             .catch((error) => {
                 const message =
@@ -93,6 +69,9 @@ const Webhooks = () => {
     }
 
     const handleDeleteWebhooks = () => {
+        const selectedItems = WebhooksLocationList.filter((item) => item.checked)
+        if (selectedItems.length === 0)
+            return addToast('Please select at least one Webhook to delete.')
         setWebhooksLocationList(WebhooksLocationList.filter((item) => !item.checked))
     }
 
@@ -120,6 +99,16 @@ const Webhooks = () => {
                     </CButton>
                 </CCol>
             </CRow>
+            {WebhooksLocationList.length === 0 && WebhooksLocationListCopy.length === 0 && (
+                <CContainer className="my-5">
+                    <div className="text-center">
+                        <div className="text-body-secondary">
+                            <h1 className="d-block text-danger">No Webhooks added yet.</h1>
+                            <span>Please click &quot;New&quot; to add a Webhook.</span>
+                        </div>
+                    </div>
+                </CContainer>
+            )}
             {WebhooksLocationList.map((item, index) => (
                 <div key={index} className="d-flex mb-2">
                     <input
@@ -131,23 +120,23 @@ const Webhooks = () => {
                     <CFormInput
                         type="text"
                         value={item.url}
-                        floatingLabel="Webhook URL"
+                        floatingLabel="URL"
                         onChange={(e) => handleWebhooksChange(index, e.target.value, 'url')}
                         className="me-2"
                     />
                     <CFormInput
                         type="text"
-                        floatingLabel="Webhook Token"
+                        floatingLabel="Token"
                         value={item.token}
                         onChange={(e) => handleWebhooksChange(index, e.target.value, 'token')}
                         className="me-2"
                     />
                     <CFormSelect
                         value={item.action}
+                        floatingLabel="Action"
                         onChange={(e) => handleWebhooksChange(index, e.target.value, 'action')}
                         className="me-2"
                     >
-                        <option value="">Select Action</option>
                         <option value="all">All</option>
                         <option value="invoices">Invoices</option>
                         <option value="shipments">Shipments</option>
@@ -155,11 +144,16 @@ const Webhooks = () => {
                     </CFormSelect>
                 </div>
             ))}
-            {WebhooksLocationList.length != 0 && (
-                <CButton color="primary" onClick={saveData} className="mb-4">
-                    Apply all changes
-                </CButton>
-            )}
+            <CButton
+                color="primary"
+                onClick={saveData}
+                className="mb-4"
+                disabled={
+                    WebhooksLocationList.length === 0 && WebhooksLocationListCopy.length === 0
+                }
+            >
+                Apply all changes
+            </CButton>
         </div>
     )
 }

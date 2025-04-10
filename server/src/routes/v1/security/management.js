@@ -142,12 +142,10 @@ router.get('/ip-filtering', auth, async (req, res, next) => {
         return res.status(200).json(
             ipFiltering
                 ? ipFiltering
-                : [
-                      {
-                          filter_mode: 'whitelist',
-                          ip: [],
-                      },
-                  ],
+                : {
+                      filter_mode: 'whitelist',
+                      ip: [],
+                  },
         )
     } catch (e) {
         logger.error(e)

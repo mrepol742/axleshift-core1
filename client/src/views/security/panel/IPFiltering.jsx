@@ -1,43 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import {
-    CInputGroup,
     CFormInput,
-    CInputGroupText,
-    CForm,
     CFormSelect,
     CRow,
     CCol,
-    CCard,
-    CCardTitle,
     CSpinner,
-    CCardBody,
-    CTable,
-    CTableHead,
-    CTableRow,
-    CTableDataCell,
-    CTableBody,
-    CTableHeaderCell,
-    CFormSwitch,
     CButton,
     CAlert,
+    CContainer,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
-import parseTimestamp from '../../../utils/Timestamp'
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../../components/AppToastProvider'
 
 const IPFiltering = () => {
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
-    const [result, setResult] = useState([])
-    const [query, setQuery] = useState('')
-    const [order, setOrder] = useState(0)
-    const [priority, setPriority] = useState(0)
     const [state, setState] = useState('whitelist')
     const [ipList, setIpList] = useState([])
+    const [ipListCopy, setIpListCopy] = useState([])
 
     const fetchData = async () => {
         axios
@@ -45,6 +29,7 @@ const IPFiltering = () => {
             .then((response) => {
                 setState(response.data.filter_mode)
                 setIpList(response.data.ip.map((ip) => ({ ip, checked: false })))
+                setIpListCopy(response.data.ip.map((ip) => ({ ip, checked: false })))
             })
             .catch((error) => {
                 const message =
@@ -69,6 +54,7 @@ const IPFiltering = () => {
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
                 addToast('Changes saved successfully', 'Success')
+                setIpListCopy(ipList)
             })
             .catch((error) => {
                 const message =
@@ -102,6 +88,8 @@ const IPFiltering = () => {
     }
 
     const handleDeleteIp = () => {
+        const selectedItems = ipList.filter((item) => item.checked)
+        if (selectedItems.length === 0) return addToast('Please select at least one IP to delete.')
         setIpList(ipList.filter((item) => !item.checked))
     }
 
@@ -148,6 +136,16 @@ const IPFiltering = () => {
                     </CFormSelect>
                 </CCol>
             </CRow>
+            {ipList.length === 0 && ipListCopy.length === 0 && (
+                <CContainer className="my-5">
+                    <div className="text-center">
+                        <div className="text-body-secondary">
+                            <h1 className="d-block text-danger">No IP addresses added yet.</h1>
+                            <span>Please click &quot;New&quot; to add a IP address.</span>
+                        </div>
+                    </div>
+                </CContainer>
+            )}
             {ipList.map((item, index) => (
                 <div key={index} className="d-flex mb-2">
                     <input
@@ -164,11 +162,14 @@ const IPFiltering = () => {
                     />
                 </div>
             ))}
-            {ipList.length != 0 && (
-                <CButton color="primary" onClick={saveData} className="mb-4">
-                    Apply all changes
-                </CButton>
-            )}
+            <CButton
+                color="primary"
+                onClick={saveData}
+                className="mb-4"
+                disabled={ipList.length === 0 && ipListCopy.length === 0}
+            >
+                Apply all changes
+            </CButton>
             <div className="text-muted">
                 Examples:
                 <ul>
