@@ -38,7 +38,7 @@ app.use(express.json())
 app.use(mongoSanitize())
 app.use(compression())
 app.use(rateLimiter)
-app.use(GeoLocationFilter)
+//app.use(GeoLocationFilter)
 app.use(IPAddressFilter)
 app.use(pinoHttp({ logger }))
 

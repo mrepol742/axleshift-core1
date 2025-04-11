@@ -20,6 +20,7 @@ import {
 } from '@coreui/react'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import { PDFDocument } from 'pdf-lib'
 
 const BillOfLading = () => {
     const navigate = useNavigate()
@@ -35,7 +36,7 @@ const BillOfLading = () => {
             scale: 2,
             backgroundColor: bgColor,
         })
-            .then((canvas) => {
+            .then(async (canvas) => {
                 const imgData = canvas.toDataURL('image/png')
                 const pdf = new jsPDF('p', 'mm', 'a4')
                 const imgWidth = 210
@@ -51,7 +52,28 @@ const BillOfLading = () => {
                 )
 
                 pdf.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight)
-                pdf.save(`Bill-Of-Lading-${id}.pdf`)
+                // pdf.save(`Bill-Of-Lading-${id}.pdf`)
+
+                const pdfData = pdf.output('arraybuffer')
+
+                const pdfDoc = await PDFDocument.load(pdfData)
+                pdfDoc.setTitle(`Bill-Of-Lading-${id}`)
+                pdfDoc.setAuthor('Axleshift (https://core1.axleshift.com)')
+                pdfDoc.setSubject(`Bill of Lading for shipment #${id}`)
+                pdfDoc.setProducer('Axleshift Automated PDF Generator')
+                pdfDoc.setCreator(
+                    `Axleshift (https://core1.axleshift.com/documents/${id}/bill-of-lading)`,
+                )
+                const pdfBytes = await pdfDoc.save()
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' })
+                const url = URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.href = url
+                link.download = `Bill-Of-Lading-${id}.pdf`
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+                URL.revokeObjectURL(url)
             })
             .catch((error) => console.error('Error generating PDF:', error))
     }
