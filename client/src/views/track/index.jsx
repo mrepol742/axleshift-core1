@@ -34,6 +34,7 @@ const Track = () => {
                 setImage(reader.result)
             }
             reader.readAsDataURL(file)
+            handleScan()
         }
     }
 
@@ -112,33 +113,26 @@ const Track = () => {
                     </CForm>
                     <div>
                         <CCard
-                            className="d-inline-block p-5 text-center border border-2"
+                            className="d-inline-block text-center border border-2"
                             {...getRootProps()}
                         >
                             <CFormInput {...getInputProps()} />
                             {!image && (
-                                <>
+                                <div className="p-5">
                                     <CCardTitle>Drag & Drop QRCode</CCardTitle>
                                     <p>or click to select an image</p>
-                                </>
+                                </div>
                             )}
 
                             {image && (
                                 <CImage
                                     src={image}
                                     alt="QRCode"
-                                    style={{
-                                        width: '128px',
-                                        maxHeight: '128px',
-                                        objectFit: 'cover',
-                                    }}
+                                    className="img-fluid"
                                     loading="lazy"
                                 />
                             )}
                         </CCard>
-                        <CButton color="primary" className="d-block my-2 px-5" onClick={handleScan}>
-                            Scan
-                        </CButton>
                     </div>
                 </CCol>
             </CRow>
