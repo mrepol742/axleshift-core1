@@ -192,7 +192,7 @@ const Document = () => {
                                             <span
                                                 className={`badge bg-${['approved', 'generated'].includes(doc.status) ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}`}
                                             >
-                                                {doc.status}
+                                                {doc.status.replace('_', ' ')}
                                             </span>
                                         </CTableDataCell>
                                         <CTableDataCell>
@@ -202,6 +202,10 @@ const Document = () => {
                                                         type="file"
                                                         accept=".docx,.pdf"
                                                         onChange={(e) => handleFileUpload(e, index)}
+                                                        disabled={[
+                                                            'approved',
+                                                            'not_applicable',
+                                                        ].includes(doc.status)}
                                                     />
                                                     {doc.file && (
                                                         <span className="text-danger text-decoration-line-through">
@@ -251,7 +255,6 @@ const Document = () => {
                     <CModalTitle>{preview?.file}</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    {preview?.fileFormat}
                     {preview?.fileFormat === 'docx' ? (
                         <iframe
                             src={`https://view.officeapps.live.com/op/embed.aspx?src=${preview?.url}`}
