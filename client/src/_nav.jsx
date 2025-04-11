@@ -67,15 +67,29 @@ const _nav = [
         icon: <FontAwesomeIcon icon={faFolder} className="nav-icon" />,
     },
     {
-        component: CNavTitle,
-        name: 'Payments',
-        role_exclude: [],
-    },
-    {
         component: CNavItem,
         name: 'Invoices',
         to: '/invoices',
         role_exclude: [],
+        icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
+    },
+    {
+        component: CNavTitle,
+        name: 'Management',
+        role_exclude: ['staff', 'user'],
+    },
+    {
+        component: CNavItem,
+        name: 'Manage Documents',
+        to: '/management/documents',
+        role_exclude: ['staff', 'user'],
+        icon: <FontAwesomeIcon icon={faFolder} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Manage Invoices',
+        to: '/management/invoices',
+        role_exclude: ['staff', 'user'],
         icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
     },
     {

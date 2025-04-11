@@ -43,7 +43,6 @@
         "express": "^4.21.2",
         "express-mongo-sanitize": "^2.2.0",
         "helmet": "^8.0.0",
-        "http-proxy-middleware": "^3.0.3",
         "inspirational-quotes": "^2.0.1",
         "ioredis": "^5.6.0",
         "is-spaghetti-code": "^1.0.0",

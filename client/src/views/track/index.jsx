@@ -153,9 +153,24 @@ const Track = () => {
                                         const captureFrame = () => {
                                             canvas.width = video.videoWidth
                                             canvas.height = video.videoHeight
-                                            context.drawImage(video, 0, 0, canvas.width, canvas.height)
-                                            const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
-                                            const qrCode = jsqr(imageData.data, canvas.width, canvas.height)
+                                            context.drawImage(
+                                                video,
+                                                0,
+                                                0,
+                                                canvas.width,
+                                                canvas.height,
+                                            )
+                                            const imageData = context.getImageData(
+                                                0,
+                                                0,
+                                                canvas.width,
+                                                canvas.height,
+                                            )
+                                            const qrCode = jsqr(
+                                                imageData.data,
+                                                canvas.width,
+                                                canvas.height,
+                                            )
 
                                             if (qrCode) {
                                                 stream.getTracks().forEach((track) => track.stop())
