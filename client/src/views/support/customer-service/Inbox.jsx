@@ -12,9 +12,10 @@ const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
                 height: isMobile ? '100%' : 'auto',
             }}
         >
-            {threadsID.map((thread) => (
+            <h2 className="mx-3 my-2">Inbox</h2>
+            {threadsID.map((thread, index) => (
                 <div
-                    key={thread.sender_id}
+                    key={index}
                     onClick={() => handleSelectUser(thread)}
                     className={`${selectedUser?.sender_id === thread.sender_id && 'bg-body-secondary'} d-flex align-items-center px-3 py-2 border-bottom`}
                     style={{

@@ -193,7 +193,7 @@ const API = () => {
                 aria-labelledby="M"
             >
                 <CModalHeader>
-                    <CModalTitle>Confirm Delete {deleteToken.note}?</CModalTitle>
+                    <CModalTitle>Confirm Delete {deleteToken?.note}?</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
                     Are you sure you want to delete the selected Token? This action cannot be

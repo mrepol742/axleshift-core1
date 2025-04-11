@@ -27,7 +27,7 @@ const App = () => {
     const enableBody = (target) => enableBodyScroll(target)
     const [disableKeyboardNavigation] = ['esc']
 
-    useEffect(() => {
+    const init = () => {
         if (VITE_APP_NODE_ENV === 'production')
             ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
 
@@ -36,11 +36,15 @@ const App = () => {
         if (theme) {
             dispatch({ type: 'set', theme: theme })
             setColorMode(theme)
+            return
         }
 
         if (isColorModeSet()) return dispatch({ type: 'set', theme: colorMode })
-
         setColorMode(storedTheme)
+    }
+
+    useEffect(() => {
+        init()
     }, [])
 
     return (
