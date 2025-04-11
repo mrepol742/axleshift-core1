@@ -7,6 +7,7 @@ import { faEnvelope, faPhone, faLocationDot } from '@fortawesome/free-solid-svg-
 import html2canvas from 'html2canvas'
 import { Helmet } from 'react-helmet'
 import { PDFDocument } from 'pdf-lib'
+import { QRCodeSVG } from 'qrcode.react'
 import { VITE_APP_NODE_ENV } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 
@@ -178,7 +179,7 @@ const Receipt = () => {
                     </div>
                 </div>
             </div>
-            <div className="text-center p-2 small mb-2">
+            <div className="d-flex justify-content-between p-2 small mb-2">
                 <small className="d-block">
                     This invoice has been issued to userEmail
                     <br />
@@ -189,6 +190,7 @@ const Receipt = () => {
                         : 'http://localhost:3000'}
                     /invoices/{id}
                 </small>
+                <QRCodeSVG value={id} className="rounded-3 m-1" size={100} />
             </div>
             <div className="d-flex">
                 {data.status === 'PENDING' && (

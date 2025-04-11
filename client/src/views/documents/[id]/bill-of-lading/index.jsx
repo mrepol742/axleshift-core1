@@ -21,6 +21,7 @@ import {
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import { PDFDocument } from 'pdf-lib'
+import { QRCodeSVG } from 'qrcode.react'
 
 const BillOfLading = () => {
     const navigate = useNavigate()
@@ -137,9 +138,19 @@ const BillOfLading = () => {
                     <CCardBody>
                         <CRow>
                             <CCol md={6}>
-                                <p>
-                                    <strong>Shipment Number:</strong> {id}
-                                </p>
+                                <CRow>
+                                    <CCol md={3}>
+                                        <strong>Shipment Number:</strong>
+                                    </CCol>
+                                    <CCol>
+                                        <QRCodeSVG
+                                            value={id}
+                                            className="rounded-3 m-1"
+                                            size={100}
+                                        />
+                                        <span className="d-block">{id}</span>
+                                    </CCol>
+                                </CRow>
                                 <CRow>
                                     <CCol md={3}>
                                         <strong>Shipper:</strong>
