@@ -12,7 +12,7 @@ const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
                 height: isMobile ? '100%' : 'auto',
             }}
         >
-            <h2 className="mx-3 my-2">Inbox</h2>
+            <h2 className="mx-3 my-2">Messages</h2>
             {threadsID.map((thread, index) => (
                 <div
                     key={index}

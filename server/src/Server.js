@@ -16,6 +16,7 @@ import Webhookv1 from './webhook/v1/index.js'
 import os from 'os'
 import { execSync } from 'child_process'
 import { getClientIp } from './components/ip.js'
+import IPAddressFilter from './middleware/ip.js'
 
 const app = express()
 const upload = multer()
@@ -36,6 +37,7 @@ app.use(express.json())
 app.use(mongoSanitize())
 app.use(compression())
 app.use(rateLimiter)
+app.use(IPAddressFilter)
 app.use(pinoHttp({ logger }))
 
 app.get('/', (req, res) => {
