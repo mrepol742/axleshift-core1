@@ -5,7 +5,7 @@ import routes from '../routes'
 
 const AppContent = () => {
     return (
-        <div className="px-4">
+        <div className="px-2 px-md-4">
             <Suspense
                 fallback={
                     <div className="loading-overlay">

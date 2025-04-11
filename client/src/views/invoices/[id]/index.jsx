@@ -1,26 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import {
-    CTable,
-    CTableHead,
-    CTableRow,
-    CTableHeaderCell,
-    CTableBody,
-    CTableDataCell,
-    CSpinner,
-    CRow,
-    CCol,
-    CCard,
-    CCardBody,
-    CCardTitle,
-    CButton,
-    CImage,
-} from '@coreui/react'
+import { CSpinner, CRow, CCol, CButton } from '@coreui/react'
 import jsPDF from 'jspdf'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faPhone, faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import html2canvas from 'html2canvas'
 import { Helmet } from 'react-helmet'
+import { PDFDocument } from 'pdf-lib'
+import { QRCodeSVG } from 'qrcode.react'
 import { VITE_APP_NODE_ENV } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 
@@ -41,7 +28,7 @@ const Receipt = () => {
             scale: 2,
             backgroundColor: bgColor,
         })
-            .then((canvas) => {
+            .then(async (canvas) => {
                 const imgData = canvas.toDataURL('image/png')
                 const pdf = new jsPDF('p', 'mm', 'a4')
                 const imgWidth = 210
@@ -55,9 +42,26 @@ const Receipt = () => {
                     pdf.internal.pageSize.getHeight(),
                     'F',
                 )
-
                 pdf.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight)
-                pdf.save(`Invoice-${id}.pdf`)
+                // pdf.save(`Invoice-${id}.pdf`)
+                const pdfData = pdf.output('arraybuffer')
+
+                const pdfDoc = await PDFDocument.load(pdfData)
+                pdfDoc.setTitle(`Invoice-${id}`)
+                pdfDoc.setAuthor('Axleshift (https://core1.axleshift.com)')
+                pdfDoc.setSubject(`Invoice for shipment #${id}`)
+                pdfDoc.setProducer('Axleshift Automated PDF Generator')
+                pdfDoc.setCreator(`Axleshift (https://core1.axleshift.com/invioces/${id})`)
+                const pdfBytes = await pdfDoc.save()
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' })
+                const url = URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.href = url
+                link.download = `Invoice-${id}.pdf`
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+                URL.revokeObjectURL(url)
             })
             .catch((error) => console.error('Error generating PDF:', error))
             .finally(() => {
@@ -175,7 +179,7 @@ const Receipt = () => {
                     </div>
                 </div>
             </div>
-            <div className="text-center p-2 small mb-2">
+            <div className="d-flex justify-content-between p-2 small mb-2">
                 <small className="d-block">
                     This invoice has been issued to userEmail
                     <br />
@@ -186,6 +190,7 @@ const Receipt = () => {
                         : 'http://localhost:3000'}
                     /invoices/{id}
                 </small>
+                <QRCodeSVG value={id} className="rounded-3 m-1" size={100} />
             </div>
             <div className="d-flex">
                 {data.status === 'PENDING' && (

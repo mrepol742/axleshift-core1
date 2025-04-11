@@ -47,19 +47,20 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
         })
 
         const dateNow = Date.now()
+        const payload = {
+            user_id: req.user._id,
+            freight_tracking_number: freight.tracking_number,
+            invoice_id: xenditInvoice.id,
+            invoice_external_id: xenditInvoice.externalId,
+            amount: xenditInvoice.amount,
+            status: xenditInvoice.status,
+            currency: xenditInvoice.currency,
+            session_id: req.session._id,
+            created_at: dateNow,
+            updated_at: dateNow,
+        }
         await Promise.all([
-            invoiceCollection.insertOne({
-                user_id: req.user._id,
-                freight_tracking_number: freight.tracking_number,
-                invoice_id: xenditInvoice.id,
-                invoice_external_id: xenditInvoice.externalId,
-                amount: xenditInvoice.amount,
-                status: xenditInvoice.status,
-                currency: xenditInvoice.currency,
-                session_id: req.session._id,
-                created_at: dateNow,
-                updated_at: dateNow,
-            }),
+            invoiceCollection.insertOne(payload),
             freightCollection.updateOne(
                 { _id: new ObjectId(freight._id) },
                 {
@@ -70,6 +71,7 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
                 },
             ),
             sendWebhook('shipments', freight),
+            sendWebhook('invoices', payload),
         ])
         return res.status(200).send({ r_url: xenditInvoice.invoiceUrl })
     } catch (err) {

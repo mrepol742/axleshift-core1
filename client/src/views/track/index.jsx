@@ -32,8 +32,10 @@ const Track = () => {
             const reader = new FileReader()
             reader.onloadend = () => {
                 setImage(reader.result)
+                handleScan(reader.result)
             }
             reader.readAsDataURL(file)
+            handleScan()
         }
     }
 
@@ -46,7 +48,7 @@ const Track = () => {
         addToast('Invalid Tracking ID Number.')
     }
 
-    const handleScan = () => {
+    const handleScan = (image) => {
         if (!image) return
 
         const imgElement = document.createElement('img')
@@ -73,9 +75,10 @@ const Track = () => {
                 if (/^[A-Z]{2}-\d+$/.test(_trackinNumber))
                     return navigate(`/track/${_trackinNumber}`)
                 addToast('Invalid Tracking ID Number.')
-            }, 2000)
+            }, 1000)
         }
     }
+
     return (
         <div>
             {loading && (
@@ -112,32 +115,66 @@ const Track = () => {
                     </CForm>
                     <div>
                         <CCard
-                            className="d-inline-block p-5 text-center border border-2"
+                            className="d-inline-block text-center border border-2"
                             {...getRootProps()}
                         >
-                            <CFormInput {...getInputProps()} />
+                            <CFormInput {...getInputProps()} accept=".png,.jpg" />
                             {!image && (
-                                <>
+                                <div className="p-5">
                                     <CCardTitle>Drag & Drop QRCode</CCardTitle>
                                     <p>or click to select an image</p>
-                                </>
+                                </div>
                             )}
 
                             {image && (
                                 <CImage
                                     src={image}
                                     alt="QRCode"
-                                    style={{
-                                        width: '128px',
-                                        maxHeight: '128px',
-                                        objectFit: 'cover',
-                                    }}
+                                    className="img-fluid"
                                     loading="lazy"
                                 />
                             )}
                         </CCard>
-                        <CButton color="primary" className="d-block my-2 px-5" onClick={handleScan}>
-                            Scan
+                    </div>
+                    <div className="mt-3">
+                        <CButton
+                            color="primary"
+                            onClick={() => {
+                                const video = document.createElement('video')
+                                const canvas = document.createElement('canvas')
+                                const context = canvas.getContext('2d')
+
+                                navigator.mediaDevices
+                                    .getUserMedia({ video: { facingMode: 'environment' } })
+                                    .then((stream) => {
+                                        video.srcObject = stream
+                                        video.play()
+
+                                        const captureFrame = () => {
+                                            canvas.width = video.videoWidth
+                                            canvas.height = video.videoHeight
+                                            context.drawImage(video, 0, 0, canvas.width, canvas.height)
+                                            const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+                                            const qrCode = jsqr(imageData.data, canvas.width, canvas.height)
+
+                                            if (qrCode) {
+                                                stream.getTracks().forEach((track) => track.stop())
+                                                setTrackingNumber(qrCode.data)
+                                                // handleScan()
+                                            } else {
+                                                requestAnimationFrame(captureFrame)
+                                            }
+                                        }
+
+                                        captureFrame()
+                                    })
+                                    .catch((e) => {
+                                        addToast('Unable to access camera.')
+                                        console.error('Error accessing camera:', e)
+                                    })
+                            }}
+                        >
+                            <FontAwesomeIcon icon="camera" /> Open Camera
                         </CButton>
                     </div>
                 </CCol>

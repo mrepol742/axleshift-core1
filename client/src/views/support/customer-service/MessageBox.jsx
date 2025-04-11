@@ -109,7 +109,7 @@ const MessageBox = ({
             {selectedUser ? (
                 <div className="d-flex flex-column justify-content-between h-100">
                     <div className="d-flex align-items-center px-2 py-1 m-1 rounded bg-body-secondary">
-                        {showBackButton && (
+                        {showBackButton && !isOpen && (
                             <Button variant="link" onClick={handleBackToList}>
                                 <FontAwesomeIcon icon={faArrowLeft} />
                             </Button>

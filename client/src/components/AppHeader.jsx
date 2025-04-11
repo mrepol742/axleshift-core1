@@ -39,6 +39,7 @@ const AppHeader = () => {
     const dispatch = useDispatch()
     const sidebarShow = useSelector((state) => state.sidebarShow)
     const navigate = useNavigate()
+    const [modalVisible, setModalVisible] = useState(false)
 
     useEffect(() => {
         document.addEventListener('scroll', () => {
@@ -50,11 +51,14 @@ const AppHeader = () => {
         })
     }, [])
 
-    const [modalVisible, setModalVisible] = useState(false)
+    const setTheme = (theme) => {
+        dispatch({ type: 'set', theme: theme })
+        setColorMode(theme)
+    }
 
     return (
         <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
-            <CContainer className="border-bottom px-4" fluid>
+            <CContainer className="border-bottom px-3 px-md-4" fluid>
                 <CHeaderToggler
                     onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
                     style={{ marginInlineStart: '-14px' }}
@@ -95,7 +99,7 @@ const AppHeader = () => {
                                 className="d-flex align-items-center"
                                 as="button"
                                 type="button"
-                                onClick={() => setColorMode('light')}
+                                onClick={() => setTheme('light')}
                             >
                                 <FontAwesomeIcon className="me-2" icon={faSun} /> Light
                             </CDropdownItem>
@@ -104,7 +108,7 @@ const AppHeader = () => {
                                 className="d-flex align-items-center"
                                 as="button"
                                 type="button"
-                                onClick={() => setColorMode('dark')}
+                                onClick={() => setTheme('dark')}
                             >
                                 <FontAwesomeIcon className="me-2" icon={faMoon} size="lg" /> Dark
                             </CDropdownItem>
@@ -113,7 +117,7 @@ const AppHeader = () => {
                                 className="d-flex align-items-center"
                                 as="button"
                                 type="button"
-                                onClick={() => setColorMode('auto')}
+                                onClick={() => setTheme('auto')}
                             >
                                 <FontAwesomeIcon className="me-2" icon={faCircleHalfStroke} /> Auto
                             </CDropdownItem>
@@ -122,7 +126,7 @@ const AppHeader = () => {
                     <AppHeaderDropdown className="app-header-dropdown" />
                 </CHeaderNav>
             </CContainer>
-            <CContainer className="px-4" fluid>
+            <CContainer className="px-3 px-md-4" fluid>
                 <AppBreadcrumb />
             </CContainer>
 

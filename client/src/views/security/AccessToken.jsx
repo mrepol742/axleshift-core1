@@ -1,27 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import {
-    CFormInput,
-    CForm,
-    CRow,
-    CCol,
     CCard,
     CButton,
     CSpinner,
     CCardBody,
     CContainer,
     CAlert,
+    CModal,
+    CModalHeader,
+    CModalBody,
+    CModalTitle,
+    CModalFooter,
 } from '@coreui/react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faCopy,
-    faEye,
-    faEyeSlash,
-    faPlus,
-    faTrash,
-    faCircleExclamation,
-} from '@fortawesome/free-solid-svg-icons'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 import AppPagination from '../../components/AppPagination'
@@ -35,6 +29,8 @@ const API = () => {
     const [result, setResult] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
+    const [deleteToken, setDeleteToken] = useState(null)
+    const [modal, setModal] = useState(false)
     const location = useLocation()
     const token = location.state?.token
 
@@ -56,11 +52,17 @@ const API = () => {
             .finally(() => setLoading(false))
     }
 
-    const handleDelete = async (id) => {
+    const deleteModal = (token) => {
+        setDeleteToken(token)
+        setModal(true)
+    }
+
+    const handleDelete = async () => {
+        setModal(false)
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
-            .post(`/auth/token/delete`, { id, recaptcha_ref: recaptcha })
+            .post(`/auth/token/delete`, { id: deleteToken._id, recaptcha_ref: recaptcha })
             .then((response) => fetchData(1))
             .catch((error) => {
                 const message =
@@ -122,18 +124,15 @@ const API = () => {
             </div>
             {!result ||
                 (result.length == 0 && (
-                    <CContainer className="mt-5">
-                        <CRow className="justify-content-center">
-                            <CCol md={6}>
-                                <div className="clearfix">
-                                    <h1 className="float-start display-3 me-4 text-danger">404</h1>
-                                    <h4>Oops! No Access Tokens Found</h4>
-                                    <p className="text-body-secondary float-start">
-                                        You have not generated any access tokens yet.
-                                    </p>
-                                </div>
-                            </CCol>
-                        </CRow>
+                    <CContainer className="my-5">
+                        <div className="text-center">
+                            <div className="text-body-secondary">
+                                <h1 className="d-block text-danger">No Access Tokens added yet.</h1>
+                                <span>
+                                    Please click &quot;Generate New Token&quot; to create a Token.
+                                </span>
+                            </div>
+                        </div>
                     </CContainer>
                 ))}
             {result &&
@@ -144,7 +143,7 @@ const API = () => {
                                 <h3 className="text-primary text-truncate">{token.note}</h3>
                                 <CButton
                                     color="danger"
-                                    onClick={(e) => handleDelete(token._id)}
+                                    onClick={(e) => deleteModal(token)}
                                     className="ms-auto"
                                 >
                                     Delete
@@ -186,6 +185,35 @@ const API = () => {
                     setTotalPages={setTotalPages}
                 />
             )}
+            <CModal
+                alignment="center"
+                scrollable
+                visible={modal}
+                onClose={() => setModal(false)}
+                aria-labelledby="M"
+            >
+                <CModalHeader>
+                    <CModalTitle>Confirm Delete {deleteToken?.note}?</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    Are you sure you want to delete the selected Token? This action cannot be
+                    undone.
+                </CModalBody>
+                <CModalFooter className="d-flex justify-content-end">
+                    <CButton color="secondary" onClick={handleDelete}>
+                        Delete
+                    </CButton>
+                    <CButton
+                        color="primary"
+                        onClick={() => {
+                            setModal(false)
+                        }}
+                        className="ms-2"
+                    >
+                        Cancel
+                    </CButton>
+                </CModalFooter>
+            </CModal>
         </div>
     )
 }

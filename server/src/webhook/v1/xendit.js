@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
                                 status: 'generated',
                                 file: {
                                     ref: freight.tracking_number,
-                                    file: `bill-of-landing-${freight.tracking_number}.pdf`,
+                                    file: `bill-of-lading-${freight.tracking_number}.pdf`,
                                 },
                             },
                             {

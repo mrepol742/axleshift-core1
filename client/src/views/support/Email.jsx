@@ -65,7 +65,7 @@ const Email = () => {
         )
 
     return (
-        <CForm onSubmit={handleSubmit} className="w-50 mx-auto p-4">
+        <CForm onSubmit={handleSubmit} className="mx-auto p-4">
             <h1 className="text-center mb-4">Send an Email</h1>
             <CFormInput
                 type="text"

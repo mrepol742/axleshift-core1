@@ -64,7 +64,7 @@ const FreightInfo = () => {
 
             const link = document.createElement('a')
             link.href = imageURL
-            link.download = 'qrcode.png'
+            link.download = `Shipment ${id}.png`
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)

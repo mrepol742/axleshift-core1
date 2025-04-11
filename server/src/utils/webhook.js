@@ -7,7 +7,7 @@ const sendWebhook = async (action, data) => {
     if (!webhooks) return
 
     const getWebhooks = webhooks.filter(
-        (webhook) => webhook.action === action || webhook.action === 'all'
+        (webhook) => webhook.action === action || webhook.action === 'all',
     )
     if (!getWebhooks) return
 
