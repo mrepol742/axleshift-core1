@@ -1,19 +1,19 @@
 {
-    "name": "@freight-capstone/core1-server-tests",
+    "name": "@axleshift/core1-server-tests",
     "version": "1.0.0",
     "main": "src/index.js",
     "type": "module",
     "bugs": {
-        "url": "https://github.com/freight-capstone/core1/issues"
+        "url": "https://github.com/axleshift/core1/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git@github.com:freight-capstone/core1.git"
+        "url": "git@github.com:axleshift/core1.git"
     },
     "scripts": {
         "start": "nodemon src/index"
     },
-    "author": "The Freight Capstone Core 1",
+    "author": "Axleshift Core 1",
     "license": "MIT",
     "description": "",
     "dependencies": {

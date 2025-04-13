@@ -11,7 +11,7 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
-    if: github.repository == 'freight-capstone/core1'
+    if: github.repository == 'axleshift/core1'
 
     steps:
       - uses: actions/first-interaction@v1

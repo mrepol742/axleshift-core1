@@ -9,7 +9,7 @@ on:
 jobs:
   check-status-and-merge:
     runs-on: 'ubuntu-latest'
-    if: github.repository == 'freight-capstone/core1'
+    if: github.repository == 'axleshift/core1'
     steps:
       - name: Check All Workflows Status
         uses: actions/github-script@v7

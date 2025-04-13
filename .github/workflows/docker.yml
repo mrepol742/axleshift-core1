@@ -9,7 +9,7 @@ on:
 jobs:
   docker:
     runs-on: 'ubuntu-latest'
-    if: github.repository == 'freight-capstone/core1'
+    if: github.repository == 'axleshift/core1'
     
     steps:
       - name: Clone repository
