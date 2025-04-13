@@ -10,7 +10,7 @@ jobs:
   build:
 
     runs-on: 'ubuntu-latest'
-    if: github.repository == 'mrepol742/freight-ms-core1'
+    if: github.repository == 'mrepol742/axleshift-core1'
     
     steps:
       - name: Clone repository
@@ -87,7 +87,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: client/build
-          destination-github-username: 'freight-capstone'
+          destination-github-username: 'axleshift'
           destination-repository-name: 'core1'
           user-name: github-actions[bot]
           user-email: github-actions[bot]@users.noreply.github.com
@@ -101,7 +101,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: server/
-          destination-github-username: 'freight-capstone'
+          destination-github-username: 'axleshift'
           destination-repository-name: 'core1'
           user-name: github-actions[bot]
           user-email: github-actions[bot]@users.noreply.github.com

@@ -12,6 +12,7 @@ import activity from '../../components/activity.js'
 import { APP_KEY } from '../../config.js'
 import { remCache } from '../../models/redis.js'
 import { upload, uploadToS3 } from '../../components/s3/profile.js'
+import GeoLocationFilter from '../../middleware/geo.js'
 
 const router = express.Router()
 const thirtyDays = 30 * 24 * 60 * 60 * 1000
@@ -19,7 +20,7 @@ const thirtyDays = 30 * 24 * 60 * 60 * 1000
 /**
  * Account registration
  */
-router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
+router.post('/register', [GeoLocationFilter, ipwhitelist, recaptcha], async (req, res) => {
     try {
         const {
             username,
@@ -92,7 +93,7 @@ router.post('/register', [ipwhitelist, recaptcha], async (req, res) => {
 /**
  * Login portal
  */
-router.post('/login', [ipwhitelist, recaptcha], async (req, res) => {
+router.post('/login', [GeoLocationFilter, ipwhitelist, recaptcha], async (req, res) => {
     try {
         const { email, password, credential, type, code, location } = req.body
         if (!type || !location || !['form', 'google', 'github'].includes(type))

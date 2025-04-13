@@ -1,22 +1,16 @@
-// If you want to override variables do it here
+@import '@fontsource/poppins';
 @import 'variables';
-@import 'poppins';
 
-// Import styles
 @import '@coreui/coreui/scss/coreui';
 @import '@coreui/chartjs/scss/coreui-chartjs';
 
 @import 'simplebar-react/dist/simplebar.min.css';
 @import 'aos/dist/aos.css';
 
-// Vendors
 @import 'vendors/simplebar';
 
-// Custom styles for this theme
 @import 'theme';
 
-// If you want to add custom CSS you can put it here
 @import 'custom';
-
 @import 'calendar';
 @import 'react-big-calendar/lib/sass/styles';

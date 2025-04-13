@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import AOS from 'aos'
 import { CSpinner, useColorModes } from '@coreui/react'
-import ReactGA from 'react-ga4'
 import { TourProvider } from '@reactour/tour'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import { VITE_APP_NODE_ENV, VITE_APP_GOOGLE_ANALYTICS } from './config'
+import { initGA, trackPageview } from './analytics'
 import './scss/style.scss'
 import AppErrorBoundary from './components/AppErrorBoundary'
+import Analytics from './components/middleware/Analytics'
 import DocumentTitle from './components/middleware/DocumentTitle'
 import IdleTimeout from './components/middleware/IdleTimeout'
 import routes from './routes'
@@ -22,15 +23,11 @@ const App = () => {
     const { colorMode, isColorModeSet, setColorMode } = useColorModes('theme')
     const storedTheme = useSelector((state) => state.theme)
     const dispatch = useDispatch()
-    if (VITE_APP_NODE_ENV === 'production') ReactGA.initialize(VITE_APP_GOOGLE_ANALYTICS)
     const disableBody = (target) => disableBodyScroll(target)
     const enableBody = (target) => enableBodyScroll(target)
     const [disableKeyboardNavigation] = ['esc']
 
     const init = () => {
-        if (VITE_APP_NODE_ENV === 'production')
-            ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
-
         const urlParams = new URLSearchParams(window.location.href.split('?')[1])
         const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
         if (theme) {
@@ -79,28 +76,30 @@ const App = () => {
                         </div>
                     }
                 >
-                    <AppErrorBoundary>
-                        <DocumentTitle>
-                            <IdleTimeout>
-                                <Routes>
-                                    {routes.map((route, idx) => {
-                                        return (
-                                            route.external && (
-                                                <Route
-                                                    key={idx}
-                                                    path={route.path}
-                                                    exact={route.exact}
-                                                    name={route.name}
-                                                    element={<route.element />}
-                                                />
+                    <Analytics>
+                        <AppErrorBoundary>
+                            <DocumentTitle>
+                                <IdleTimeout>
+                                    <Routes>
+                                        {routes.map((route, idx) => {
+                                            return (
+                                                route.external && (
+                                                    <Route
+                                                        key={idx}
+                                                        path={route.path}
+                                                        exact={route.exact}
+                                                        name={route.name}
+                                                        element={<route.element />}
+                                                    />
+                                                )
                                             )
-                                        )
-                                    })}
-                                    <Route path="*" element={<DefaultLayout />} />
-                                </Routes>
-                            </IdleTimeout>
-                        </DocumentTitle>
-                    </AppErrorBoundary>
+                                        })}
+                                        <Route path="*" element={<DefaultLayout />} />
+                                    </Routes>
+                                </IdleTimeout>
+                            </DocumentTitle>
+                        </AppErrorBoundary>
+                    </Analytics>
                 </Suspense>
             </Router>
         </TourProvider>

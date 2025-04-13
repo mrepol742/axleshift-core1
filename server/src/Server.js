@@ -5,7 +5,6 @@ import pinoHttp from 'pino-http'
 import mongoSanitize from 'express-mongo-sanitize'
 import helmet from 'helmet'
 import compression from 'compression'
-import Quotes from 'inspirational-quotes'
 import { NODE_ENV } from './config.js'
 import rateLimiter from './middleware/rateLimiter.js'
 import logger from './utils/logger.js'
@@ -15,26 +14,15 @@ import os from 'os'
 import { execSync } from 'child_process'
 import { getClientIp } from './components/ip.js'
 import IPAddressFilter from './middleware/ip.js'
-import GeoLocationFilter from './middleware/geo.js'
 
 const app = express()
 
-app.use(
-    helmet({
-        contentSecurityPolicy: {
-            directives: {
-                defaultSrc: ["'self'"],
-                imgSrc: ["'self'", 'https://memes.memedrop.io'],
-            },
-        },
-    }),
-)
+app.use(helmet())
 app.use(cors())
 app.use(express.json())
 app.use(mongoSanitize())
 app.use(compression())
 app.use(rateLimiter)
-app.use(GeoLocationFilter)
 app.use(IPAddressFilter)
 app.use(pinoHttp({ logger }))
 
@@ -49,7 +37,6 @@ app.get('/', (req, res) => {
     }
 
     const systemInfo = `
-        ${Quotes.getRandomQuote()} <br><br>
         Platform: ${os.platform()}
         Commit: ${branchName} ${commitHash}
         Architecture: ${os.arch()}
@@ -60,8 +47,6 @@ app.get('/', (req, res) => {
         Cookie: ${req.headers.cookie}
         IP Address: ${getClientIp(req)}
         Authorization: ${req.headers['authorization']}
-
-        <img src="https://memes.memedrop.io/production/RX41ZZXD1oJ2/source.gif" alt="funny smile" width="400" height="200">
     `
     res.send(`<pre>${systemInfo}</pre>`)
 })

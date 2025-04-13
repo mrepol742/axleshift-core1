@@ -1,8 +1,8 @@
-# Freight Core 1
-[![Build CI](https://github.com/mrepol742/core1/actions/workflows/build.yml/badge.svg)](https://github.com/mrepol742/core1/actions/workflows/build.yml)
-[![Docker CI](https://github.com/freight-capstone/core1/actions/workflows/docker.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/docker.yml)
-[![Dependabot Updates](https://github.com/freight-capstone/core1/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/dependabot/dependabot-updates)
-[![Terraform CI](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml/badge.svg)](https://github.com/freight-capstone/core1/actions/workflows/terraform.yml)
+# Axleshift Core 1
+[![Build CI](https://github.com/mrepol742/axleshift-core1/actions/workflows/build.yml/badge.svg)](https://github.com/mrepol742/axleshift-core1/actions/workflows/build.yml)
+[![Docker CI](https://github.com/axleshift/core1/actions/workflows/docker.yml/badge.svg)](https://github.com/axleshift/core1/actions/workflows/docker.yml)
+[![Dependabot Updates](https://github.com/axleshift/core1/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/axleshift/core1/actions/workflows/dependabot/dependabot-updates)
+[![Terraform CI](https://github.com/axleshift/core1/actions/workflows/terraform.yml/badge.svg)](https://github.com/axleshift/core1/actions/workflows/terraform.yml)
 
 ## Pre-requisites
 - Node.js v23.^
@@ -50,11 +50,6 @@
 - **Run Tests in Production Mode**  
   ```sh
   npm run post:production
-  ```
-
-- **Run Mobile App**  
-  ```sh
-  npm run app
   ```
 
 ---
@@ -127,3 +122,7 @@ This project is licensed under the **MIT License with Commons Clause**.
 - **Commercial Use Restriction**: You may not use the software for commercial purposes, as defined in the [LICENSE](LICENSE) file. Commercial use includes using the software as part of any service offered for a fee or any use that generates revenue either directly or indirectly.
 
 See the full [LICENSE](LICENSE) file for more details.
+
+## Disclaimer
+
+This repository was previously part of the "Freight Capstone" GitHub organization. It has since been migrated to the "Axleshift" GitHub organization. Any references to "Freight Capstone" in the codebase, documentation, or related materials should now be understood as referring to "Axleshift."
