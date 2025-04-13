@@ -42,7 +42,7 @@ jobs:
               zricethezav/gitleaks:latest detect \
               --source=/src/$repo \
               --config=/src/.gitleaks.toml \
-              --report=/src/scan-results/$repo-report.json || true
+              --report-path=/src/scan-results/$repo-report.json || true
             rm -rf $repo
           done
 
