@@ -7,7 +7,9 @@ on:
 
 jobs:
   scanner:
+    
     runs-on: ubuntu-latest
+    if: github.repository == 'mrepol742/axleshift-core1'
 
     steps:
       - name: Checkout this repo

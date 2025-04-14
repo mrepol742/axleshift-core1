@@ -13,6 +13,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -86,7 +87,6 @@ public class WebViewFragment extends Fragment {
         } else {
             webView.loadUrl("https://core1.axleshift.com");
         }
-
         return root;
     }
 
@@ -99,6 +99,7 @@ public class WebViewFragment extends Fragment {
     private void checkCookieAndShowDrawer(String url) {
         CookieManager cookieManager = CookieManager.getInstance();
         String cookies = cookieManager.getCookie(url);
+        Toast.makeText(requireActivity(), cookies, Toast.LENGTH_SHORT).show();
 
         if (cookies != null) {
             if (cookies.contains("RCTSESSION1")) {
