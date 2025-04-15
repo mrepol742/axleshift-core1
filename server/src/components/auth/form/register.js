@@ -4,12 +4,14 @@ import logger from '../../../utils/logger.js'
 import { send } from '../../mail.js'
 import activity, { sendNotification } from '../../activity.js'
 import { APP_KEY, NODE_ENV } from '../../../config.js'
+import addToNewsletter from '../../../components/newsletter.js'
 
 const FormRegister = async (req, res) => {
     try {
         const { username, email, first_name, last_name, password, newsletter } = req.body
         const db = await database()
         const usersCollection = db.collection('users')
+
         const existingUser = await usersCollection.findOne({
             $or: [
                 { [`oauth2.google.email`]: email },
@@ -40,6 +42,7 @@ const FormRegister = async (req, res) => {
         const dateNow = Date.now()
 
         await Promise.all([
+            addToNewsletter(email),
             usersCollection.insertOne({
                 email: email,
                 first_name: first_name,
