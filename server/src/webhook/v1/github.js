@@ -9,13 +9,13 @@ import { execSync } from 'child_process'
 
 const router = express.Router()
 
-const notify = async () => {
+const notify = async (deploymentStatus) => {
     const db = await database()
     const admins = await db
         .collection('users')
         .find({ role: 'super_admin' }, { projection: { email: 1 } })
         .toArray()
-    if (!admins) return
+    if (!admins || admins.length === 0) return
     let commitHash = 'N/A'
     let branchName = 'N/A'
     try {
@@ -26,11 +26,16 @@ const notify = async () => {
     }
 
     for (const admin of admins) {
+        new Promise((resolve) => setTimeout(resolve, Math.random() * (10000 - 5000) + 5000))
         send(
             {
                 to: admin.email,
-                subject: 'Successfully deployed Axleshift',
-                text: `The following commit has been deployed <br>Branch: ${branchName} Commit: ${commitHash}.`,
+                subject: deploymentStatus
+                    ? 'Successfully deployed Axleshift'
+                    : 'Failed to deploy Axleshift',
+                text: deploymentStatus
+                    ? `The following commit has been deployed <br>Branch: ${branchName} Commit: ${commitHash}.`
+                    : `The following commit has failed to be deployed <br>Branch: ${branchName} Commit: ${commitHash}.`,
             },
             admin.email,
             true,
@@ -53,8 +58,8 @@ router.post('/', async (req, res) => {
 
         if (req.body.ref === 'refs/heads/core1-backend')
             run('git pull origin core1-backend && npm i && npm run pm2:restart')
-                .then((output) => notify())
-                .catch((error) => logger.error(error))
+                .then((output) => notify(true))
+                .catch((error) => notify(false))
 
         return res.status(200).send()
     } catch (err) {
