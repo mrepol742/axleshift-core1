@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLocker {
         NavigationView navigationView = binding.navView;
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home)
+                R.id.nav_dashboard, R.id.nav_book_now, R.id.nav_shipment, R.id.nav_track, R.id.nav_documents, R.id.nav_invoices, R.id.nav_account_logs, R.id.nav_sessions, R.id.nav_customer_service, R.id.nav_faq)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);

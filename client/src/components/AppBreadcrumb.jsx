@@ -14,11 +14,19 @@ const AppBreadcrumb = () => {
         return currentRoute ? currentRoute.name : pathname.split('/').pop()
     }
 
+    const toPascalCase = (s) => {
+        return s.replace(/\w+/g, function (w) {
+            return w[0].toUpperCase() + w.slice(1).toLowerCase()
+        })
+    }
+
     const getBreadcrumbs = (location) => {
         const breadcrumbs = []
         location.split('/').reduce((prev, curr, index, array) => {
             const currentPathname = `${prev}/${curr}`
-            const routeName = getRouteName(currentPathname, routes)
+            const routeName = toPascalCase(
+                getRouteName(currentPathname, routes).replaceAll('-', ' '),
+            )
             routeName &&
                 breadcrumbs.push({
                     pathname: currentPathname,

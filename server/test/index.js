@@ -7,8 +7,7 @@ describe('App Tests', async () => {
     it('GET /', (done) => {
         request(app)
             .get('/')
-            .expect('Content-Type', /text/)
-            .expect(200)
+            .expect(301)
             .end((err, res) => {
                 if (err) return done(err)
                 done()

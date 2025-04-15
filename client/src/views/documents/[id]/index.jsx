@@ -48,7 +48,7 @@ const Document = () => {
         }
         if (file) {
             const newDocs = [...documents]
-            newDocs[index] = { ...newDocs[index], status: 'Under Review' }
+            newDocs[index] = { ...newDocs[index], status: 'under_review' }
             setDocuments(newDocs)
             if (index === 0) setExportLicense(file)
             if (index === 1) setCertificateOfOrigin(file)
@@ -71,7 +71,7 @@ const Document = () => {
                 },
             })
             .then((response) => {
-                setDocuments(response.data)
+                setDocuments(response.data.data)
                 addToast('Documents uploaded successfully!', 'success')
             })
             .catch((error) => {
@@ -228,18 +228,18 @@ const Document = () => {
                             Submitting false or fraudulent documents may result in legal
                             consequences.
                         </span>
-                        {['pending', 'rejected'].includes(documents.status) && (
-                            <>
-                                <CButton color="primary" type="submit">
-                                    Submit Documents
-                                </CButton>
-                                <ReCAPTCHA
-                                    ref={recaptchaRef}
-                                    size="invisible"
-                                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                                />
-                            </>
-                        )}
+                        <CButton
+                            color="primary"
+                            type="submit"
+                            disabled={!exportLicense && !certificateOfOrigin}
+                        >
+                            Submit Documents
+                        </CButton>
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            size="invisible"
+                            sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                        />
                     </CCardBody>
                 </CCard>
             </CForm>

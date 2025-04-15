@@ -101,22 +101,18 @@ router.post(
                 { _id: new ObjectId(req.documents._id) },
                 {
                     $set: {
-                        documents: [
-                            {
-                                name: 'Export License',
-                                type: 'Permit & License',
-                                status: 'Under Review',
-                                file: exportLicenseUrl,
-                            },
-                            {
-                                name: 'Certificate of Origin',
-                                type: 'Regulatory Certificate',
-                                status: 'Under Review',
-                                file: certificateOfOriginUrl,
-                            },
-                        ],
+                        'documents.$[exportLicense].file': exportLicenseUrl,
+                        'documents.$[exportLicense].status': 'under_review',
+                        'documents.$[certificateOfOrigin].file': certificateOfOriginUrl,
+                        'documents.$[certificateOfOrigin].status': 'under_review',
                         updated_at: Date.now(),
                     },
+                },
+                {
+                    arrayFilters: [
+                        { 'exportLicense.name': 'Export License' },
+                        { 'certificateOfOrigin.name': 'Certificate of Origin' },
+                    ],
                 },
             )
 
@@ -134,15 +130,24 @@ router.post(
                     {
                         name: 'Export License',
                         type: 'Permit & License',
-                        status: 'Under Review',
+                        status: 'under_review',
                         file: exportLicenseUrl,
                     },
                     {
                         name: 'Certificate of Origin',
                         type: 'Regulatory Certificate',
-                        status: 'Under Review',
+                        status: 'under_review',
                         file: certificateOfOriginUrl,
                     },
+                    {
+                                name: 'Bill of Lading',
+                                type: 'Shipping Document',
+                                status: 'generated',
+                                file: {
+                                    ref: req.documents.freight_tracking_number,
+                                    file: `bill-of-lading-${req.documents.freight_tracking_number}.pdf`,
+                                },
+                            },
                 ],
                 message: 'Files uploaded successfully',
             })

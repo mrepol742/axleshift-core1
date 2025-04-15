@@ -8,12 +8,10 @@ const GeoLocationFilter = async (req, res, next) => {
         if (!location) return next()
         const geoFilter = await getCache('geo')
         if (!geoFilter) return next()
-        logger.info(geoFilter)
         location = JSON.parse(location)
         const { filter_mode, geo } = geoFilter
-        const { latitude, longitude } = location[0]
+        const { latitude, longitude } = location
         if (!latitude || !longitude) return next()
-        logger.info(geo)
         const isAllowed = filter_mode === 'whitelist' ? true : false
         for (const { latitude: lat, longitude: lon } of geo) {
             logger.info(`Latitude: ${lat}, Longitude: ${lon}`)

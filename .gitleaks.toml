@@ -1,0 +1,5 @@
+[[rules]]
+id = "core-1-access-token"
+description = ""
+regex = '''core1_[0-9a-f]{16}'''
+tags = ["access-token"]

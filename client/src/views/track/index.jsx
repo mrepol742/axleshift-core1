@@ -16,7 +16,7 @@ import {
 import { useDropzone } from 'react-dropzone'
 import jsqr from 'jsqr'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faCamera } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../components/AppToastProvider'
 
 const Track = () => {
@@ -35,17 +35,69 @@ const Track = () => {
                 handleScan(reader.result)
             }
             reader.readAsDataURL(file)
-            handleScan()
         }
     }
 
-    const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' })
+    const { getRootProps, getInputProps } = useDropzone({ onDrop })
 
     const handleSubmit = (e) => {
         e.preventDefault()
         if (!trackingNumber || trackingNumber.trim().length === 0) return null
         if (/^[A-Z]{2}-\d+$/.test(trackingNumber)) return navigate(`/track/${trackingNumber}`)
         addToast('Invalid Tracking ID Number.')
+    }
+
+    const loadTrackingNumber = (_trackinNumber) => {
+        setTrackingNumber(_trackinNumber)
+        setLoading(true)
+        setTimeout(() => {
+            setLoading(false)
+            if (!_trackinNumber || _trackinNumber.trim().length === 0) return null
+            if (/^[A-Z]{2}-\d+$/.test(_trackinNumber)) return navigate(`/track/${_trackinNumber}`)
+            addToast('Invalid Tracking ID Number.')
+        }, 1000)
+    }
+
+    const handleCamera = () => {
+        const video = document.createElement('video')
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d')
+
+        navigator.mediaDevices
+            .getUserMedia({ video: { facingMode: 'environment' } })
+            .then((stream) => {
+                video.srcObject = stream
+                video.setAttribute(
+                    'style',
+                    'position: absolute; top: 0; left: 0; width: 100%; height: auto; z-index: 50000;',
+                )
+                document.body.appendChild(video)
+                video.addEventListener('loadedmetadata', () => {
+                    video.play()
+
+                    const captureFrame = () => {
+                        canvas.width = video.videoWidth
+                        canvas.height = video.videoHeight
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height)
+                        const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+                        const qrCode = jsqr(imageData.data, canvas.width, canvas.height)
+
+                        if (qrCode) {
+                            stream.getTracks().forEach((track) => track.stop())
+                            video.remove()
+                            loadTrackingNumber(qrCode.data)
+                        } else {
+                            requestAnimationFrame(captureFrame)
+                        }
+                    }
+
+                    captureFrame()
+                })
+            })
+            .catch((e) => {
+                addToast('Unable to access camera.')
+                console.error('Error accessing camera:', e)
+            })
     }
 
     const handleScan = (image) => {
@@ -65,17 +117,7 @@ const Track = () => {
             const trackingNumber = jsqr(imageData.data, canvas.width, canvas.height)
 
             if (!trackingNumber) return addToast('No QR code found.')
-
-            const _trackinNumber = trackingNumber.data
-            setTrackingNumber(_trackinNumber)
-            setLoading(true)
-            setTimeout(() => {
-                setLoading(false)
-                if (!_trackinNumber || _trackinNumber.trim().length === 0) return null
-                if (/^[A-Z]{2}-\d+$/.test(_trackinNumber))
-                    return navigate(`/track/${_trackinNumber}`)
-                addToast('Invalid Tracking ID Number.')
-            }, 1000)
+            loadTrackingNumber(trackingNumber.data)
         }
     }
 
@@ -137,59 +179,8 @@ const Track = () => {
                         </CCard>
                     </div>
                     <div className="mt-3">
-                        <CButton
-                            color="primary"
-                            onClick={() => {
-                                const video = document.createElement('video')
-                                const canvas = document.createElement('canvas')
-                                const context = canvas.getContext('2d')
-
-                                navigator.mediaDevices
-                                    .getUserMedia({ video: { facingMode: 'environment' } })
-                                    .then((stream) => {
-                                        video.srcObject = stream
-                                        video.play()
-
-                                        const captureFrame = () => {
-                                            canvas.width = video.videoWidth
-                                            canvas.height = video.videoHeight
-                                            context.drawImage(
-                                                video,
-                                                0,
-                                                0,
-                                                canvas.width,
-                                                canvas.height,
-                                            )
-                                            const imageData = context.getImageData(
-                                                0,
-                                                0,
-                                                canvas.width,
-                                                canvas.height,
-                                            )
-                                            const qrCode = jsqr(
-                                                imageData.data,
-                                                canvas.width,
-                                                canvas.height,
-                                            )
-
-                                            if (qrCode) {
-                                                stream.getTracks().forEach((track) => track.stop())
-                                                setTrackingNumber(qrCode.data)
-                                                // handleScan()
-                                            } else {
-                                                requestAnimationFrame(captureFrame)
-                                            }
-                                        }
-
-                                        captureFrame()
-                                    })
-                                    .catch((e) => {
-                                        addToast('Unable to access camera.')
-                                        console.error('Error accessing camera:', e)
-                                    })
-                            }}
-                        >
-                            <FontAwesomeIcon icon="camera" /> Open Camera
+                        <CButton color="primary" onClick={() => handleCamera()}>
+                            <FontAwesomeIcon icon={faCamera} className="me-2" /> Open Camera
                         </CButton>
                     </div>
                 </CCol>

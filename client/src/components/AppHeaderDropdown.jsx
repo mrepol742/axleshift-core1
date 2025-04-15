@@ -17,7 +17,7 @@ import {
     faAddressBook,
 } from '@fortawesome/free-solid-svg-icons'
 import { useUserProvider } from '../components/UserProvider'
-import { VITE_APP_API_URL } from '../config.js'
+import { VITE_APP_AWS_S3 } from '../config.js'
 
 const AppHeaderDropdown = () => {
     const navigate = useNavigate()
@@ -33,7 +33,7 @@ const AppHeaderDropdown = () => {
                 {user.avatar ? (
                     <CImage
                         crossOrigin="Anonymous"
-                        src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
+                        src={`${VITE_APP_AWS_S3}/images/${user.avatar}.png`}
                         className="rounded-5 rounded-pill border p-1"
                         fluid
                         width="40px"
@@ -54,7 +54,7 @@ const AppHeaderDropdown = () => {
                     {user.avatar ? (
                         <CImage
                             crossOrigin="Anonymous"
-                            src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
+                            src={`${VITE_APP_AWS_S3}/images/${user.avatar}.png`}
                             className="rounded-pill border p-1 mb-2"
                             width="60px"
                             fluid

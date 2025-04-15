@@ -39,7 +39,8 @@
     "prom": "sudo systemctl start prometheus",
     "prom:restart": "sudo systemctl restart prometheus",
     "graf": "sudo systemctl start grafana",
-    "graf:restart": "sudo systemctl restart grafana"
+    "graf:restart": "sudo systemctl restart grafana",
+    "gitleaks": "docker run --rm -v $(pwd):/src zricethezav/gitleaks:latest detect --source=/src --config=/src/.gitleaks.toml --report-path=/src/gitleaks-report.json"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"

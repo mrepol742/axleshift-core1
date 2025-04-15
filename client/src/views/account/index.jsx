@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faUser, faClock } from '@fortawesome/free-solid-svg-icons'
 import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL } from '../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_AWS_S3 } from '../../config'
 import { useUserProvider } from '../../components/UserProvider'
 import { useToast } from '../../components/AppToastProvider'
 
@@ -132,7 +132,7 @@ const Account = () => {
                                 {user.avatar ? (
                                     <CImage
                                         crossOrigin="Anonymous"
-                                        src={`https://axleshift.s3.ap-southeast-2.amazonaws.com/images/${user.avatar}.png`}
+                                        src={`${VITE_APP_AWS_S3}/images/${user.avatar}.png`}
                                         className="rounded-pill p-1 border mb-3"
                                         width="100px"
                                         fluid

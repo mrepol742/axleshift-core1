@@ -9,6 +9,7 @@ const EXPRESS_PORT = process.env.EXPRESS_PORT ?? 5051
 const EXT_EXPRESS_PORT = process.env.EXT_EXPRESS_PORT ?? 7000
 const EXT_EXPRESS_PORT_1 = process.env.EXT_EXPRESS_PORT_1 ?? 7001
 const REACT_APP_ORIGIN = process.env.REACT_APP_ORIGIN ?? '::1'
+const REACT_APP_URL = process.env.REACT_APP_URL ?? 'http://localhost:3000'
 const REACT_APP_MAINTENANCE = process.env.REACT_APP_MAINTENANCE ?? false
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET ?? ''
 
@@ -61,6 +62,7 @@ export {
     EXT_EXPRESS_PORT,
     EXT_EXPRESS_PORT_1,
     REACT_APP_ORIGIN,
+    REACT_APP_URL,
     REACT_APP_MAINTENANCE,
     RECAPTCHA_SECRET,
     GOOGLE_MAP,
