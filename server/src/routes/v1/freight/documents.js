@@ -140,14 +140,14 @@ router.post(
                         file: certificateOfOriginUrl,
                     },
                     {
-                                name: 'Bill of Lading',
-                                type: 'Shipping Document',
-                                status: 'generated',
-                                file: {
-                                    ref: req.documents.freight_tracking_number,
-                                    file: `bill-of-lading-${req.documents.freight_tracking_number}.pdf`,
-                                },
-                            },
+                        name: 'Bill of Lading',
+                        type: 'Shipping Document',
+                        status: 'generated',
+                        file: {
+                            ref: req.documents.freight_tracking_number,
+                            file: `bill-of-lading-${req.documents.freight_tracking_number}.pdf`,
+                        },
+                    },
                 ],
                 message: 'Files uploaded successfully',
             })

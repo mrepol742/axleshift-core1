@@ -21,7 +21,9 @@ router.post('/', [ipwhitelist, recaptcha], async (req, res, next) => {
 
         const isAlreadySubcribe = await newsletter(email)
         if (isAlreadySubcribe)
-            return res.status(200).json({ message: 'The email is already subcribe to our newsletter' })
+            return res
+                .status(200)
+                .json({ message: 'The email is already subcribe to our newsletter' })
         return res.status(200).json({ message: 'If you can see this message means it work' })
     } catch (e) {
         logger.error(e)

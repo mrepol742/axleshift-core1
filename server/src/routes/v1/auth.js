@@ -38,12 +38,7 @@ router.post('/register', [GeoLocationFilter, ipwhitelist, recaptcha], async (req
             return res.status(400).json({ error: 'Invalid request' })
         if (
             type === 'form' &&
-            (!username ||
-                !email ||
-                !first_name ||
-                !last_name ||
-                !password ||
-                !repeat_password)
+            (!username || !email || !first_name || !last_name || !password || !repeat_password)
         )
             return res.status(400).json({ error: 'Invalid request' })
         if (type === 'google' && !credential)

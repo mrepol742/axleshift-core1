@@ -11,8 +11,11 @@ const router = express.Router()
 
 const notify = async () => {
     const db = await database()
-    const admins = await db.collection('users').find({ role: 'super_admin' }, { projection: { email: 1 } }).toArray()
-    if (!admins) return;
+    const admins = await db
+        .collection('users')
+        .find({ role: 'super_admin' }, { projection: { email: 1 } })
+        .toArray()
+    if (!admins) return
     let commitHash = 'N/A'
     let branchName = 'N/A'
     try {
@@ -26,7 +29,7 @@ const notify = async () => {
         send(
             {
                 to: admin.email,
-                subject: "Successfully deployed Axleshift",
+                subject: 'Successfully deployed Axleshift',
                 text: `The following commit has been deployed <br>Branch: ${branchName} Commit: ${commitHash}.`,
             },
             admin.email,
