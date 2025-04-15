@@ -81,6 +81,9 @@ const Register = () => {
             ...prev,
             [id]: value,
         }))
+        if (id === 'password') {
+            setRequirementsStatus(checkRequirements(value))
+        }
     }
 
     const handleSubmit = async (e, type, credential) => {
@@ -175,6 +178,37 @@ const Register = () => {
             })
             .finally(() => setLoading(false))
     }
+
+    const passwordRequirements = [
+        { id: 1, text: 'At least 8 characters', test: (password) => password.length >= 8 },
+        {
+            id: 2,
+            text: 'At least one uppercase letter',
+            test: (password) => /[A-Z]/.test(password),
+        },
+        {
+            id: 3,
+            text: 'At least one lowercase letter',
+            test: (password) => /[a-z]/.test(password),
+        },
+        { id: 4, text: 'At least one number', test: (password) => /[0-9]/.test(password) },
+        {
+            id: 5,
+            text: 'At least one special character',
+            test: (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password),
+        },
+    ]
+
+    const checkRequirements = (password) => {
+        return passwordRequirements.map((req) => ({
+            ...req,
+            passed: req.test(password),
+        }))
+    }
+
+    const [requirementsStatus, setRequirementsStatus] = useState(
+        checkRequirements(formData.password),
+    )
 
     return (
         <div className="bg-dark min-vh-100 d-flex flex-row align-items-center">
@@ -303,6 +337,18 @@ const Register = () => {
                                             </span>
                                         </CInputGroupText>
                                     </CInputGroup>
+                                    {formData.password.length > 0 && (
+                                        <ul>
+                                            {requirementsStatus.map((req) => (
+                                                <li
+                                                    key={req.id}
+                                                    className={`${req.passed ? 'd-none' : 'text-small text-danger'}`}
+                                                >
+                                                    {req.text}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
                                             <FontAwesomeIcon icon={faLock} />

@@ -192,18 +192,18 @@ const Security = () => {
                                         </span>
                                     </CInputGroupText>
                                 </CInputGroup>
-                                <ul>
-                                    {requirementsStatus.map((req) => (
-                                        <li
-                                            key={req.id}
-                                            style={{
-                                                color: req.passed ? 'green' : 'red',
-                                            }}
-                                        >
-                                            {req.text}
-                                        </li>
-                                    ))}
-                                </ul>
+                                {formData.new_password.length > 0 && (
+                                    <ul>
+                                        {requirementsStatus.map((req) => (
+                                            <li
+                                                key={req.id}
+                                                className={`text-${req.passed ? 'success' : 'danger'}`}
+                                            >
+                                                {req.text}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                                 <CInputGroup className="mb-3">
                                     <CInputGroupText>
                                         <FontAwesomeIcon icon={faLock} />
