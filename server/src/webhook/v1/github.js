@@ -7,6 +7,32 @@ import { run } from '../../utils/cmd.js'
 
 const router = express.Router()
 
+const notify = async () => {
+    const db = await database()
+    const admins = await db.collection('users').find({ role: 'super_admin' }, { projection: { email: 1 } })
+    if (!admins) return;
+    let commitHash = 'N/A'
+    let branchName = 'N/A'
+    try {
+        commitHash = execSync('git rev-parse HEAD').toString().trim()
+        branchName = execSync('git rev-parse --abbrev-ref HEAD').toString().trim()
+    } catch (error) {
+        logger.error('Failed to get latest commit hash or branch name', error)
+    }
+
+    for (const admin of admins) {
+        send(
+            {
+                to: admin.email,
+                subject: "Successfully deployed Axleshift",
+                text: `The following commit has been deployed <br>Branch: ${branchName} Commit: ${commitHash}.`,
+            },
+            admin.email,
+            true,
+        )
+    }
+}
+
 router.post('/', async (req, res) => {
     try {
         const github_signature = req.headers['x-hub-signature-256']
@@ -22,7 +48,7 @@ router.post('/', async (req, res) => {
 
         if (req.body.ref === 'refs/heads/core1-backend')
             run('git pull origin core1-backend && npm i && npm run pm2:restart')
-                .then((output) => console.log(output))
+                .then((output) => notify())
                 .catch((error) => logger.error(error))
 
         return res.status(200).send()

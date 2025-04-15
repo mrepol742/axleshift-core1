@@ -1,18 +1,14 @@
 import express from 'express'
 import cors from 'cors'
-import path from 'path'
 import pinoHttp from 'pino-http'
 import mongoSanitize from 'express-mongo-sanitize'
 import helmet from 'helmet'
 import compression from 'compression'
-import { NODE_ENV } from './config.js'
+import { NODE_ENV, REACT_APP_URL } from './config.js'
 import rateLimiter from './middleware/rateLimiter.js'
 import logger from './utils/logger.js'
 import APIv1 from './routes/v1/index.js'
 import Webhookv1 from './webhook/v1/index.js'
-import os from 'os'
-import { execSync } from 'child_process'
-import { getClientIp } from './components/ip.js'
 import IPAddressFilter from './middleware/ip.js'
 
 const app = express()
@@ -26,42 +22,11 @@ app.use(rateLimiter)
 app.use(IPAddressFilter)
 app.use(pinoHttp({ logger }))
 
-app.get('/', (req, res) => {
-    let commitHash = 'N/A'
-    let branchName = 'N/A'
-    try {
-        commitHash = execSync('git rev-parse HEAD').toString().trim()
-        branchName = execSync('git rev-parse --abbrev-ref HEAD').toString().trim()
-    } catch (error) {
-        logger.error('Failed to get latest commit hash or branch name', error)
-    }
-
-    const systemInfo = `
-        Platform: ${os.platform()}
-        Commit: ${branchName} ${commitHash}
-        Architecture: ${os.arch()}
-        CPU Count: ${os.cpus().length}
-        Free Memory: ${(os.freemem() / 1024 / 1024).toFixed(2)}/${(os.totalmem() / 1024 / 1024).toFixed(2)} MB
-        Uptime: ${(os.uptime() / 60).toFixed(2)} minutes
-        User Agent: ${req.headers['user-agent']}
-        Cookie: ${req.headers.cookie}
-        IP Address: ${getClientIp(req)}
-        Authorization: ${req.headers['authorization']}
-    `
-    res.send(`<pre>${systemInfo}</pre>`)
-})
+app.get('/', (req, res) => res.redirect(301, REACT_APP_URL))
 // refer to /routes/v1/index
 app.use('/api/v1/', APIv1)
 // refer to /webhook/v1/index
 app.use('/webhook/v1/', Webhookv1)
-
-app.use(
-    express.static(path.join(process.cwd(), 'public'), {
-        setHeaders: function (res, filePath) {
-            res.setHeader('Cache-Control', 'public, max-age=1296000')
-        },
-    }),
-)
 
 app.use((err, req, res, next) => res.status(500).json({ error: 'Internal server error' }))
 
