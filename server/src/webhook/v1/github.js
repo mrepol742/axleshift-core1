@@ -25,7 +25,8 @@ const notify = async (deploymentStatus) => {
         logger.error('Failed to get latest commit hash or branch name', error)
     }
 
-    for (const admin of admins) {
+    for (let i = 0; i < admins.length; i++) {
+        const admin = admins[i];
         new Promise((resolve) => setTimeout(resolve, Math.random() * (10000 - 5000) + 5000))
         send(
             {
