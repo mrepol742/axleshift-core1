@@ -148,40 +148,41 @@ const Track = () => {
                                     .getUserMedia({ video: { facingMode: 'environment' } })
                                     .then((stream) => {
                                         video.srcObject = stream
-                                        video.play()
+                                        video.addEventListener('loadedmetadata', () => {
+                                            video.play()
 
-                                        const captureFrame = () => {
-                                            canvas.width = video.videoWidth
-                                            canvas.height = video.videoHeight
-                                            context.drawImage(
-                                                video,
-                                                0,
-                                                0,
-                                                canvas.width,
-                                                canvas.height,
-                                            )
-                                            const imageData = context.getImageData(
-                                                0,
-                                                0,
-                                                canvas.width,
-                                                canvas.height,
-                                            )
-                                            const qrCode = jsqr(
-                                                imageData.data,
-                                                canvas.width,
-                                                canvas.height,
-                                            )
+                                            const captureFrame = () => {
+                                                canvas.width = video.videoWidth
+                                                canvas.height = video.videoHeight
+                                                context.drawImage(
+                                                    video,
+                                                    0,
+                                                    0,
+                                                    canvas.width,
+                                                    canvas.height,
+                                                )
+                                                const imageData = context.getImageData(
+                                                    0,
+                                                    0,
+                                                    canvas.width,
+                                                    canvas.height,
+                                                )
+                                                const qrCode = jsqr(
+                                                    imageData.data,
+                                                    canvas.width,
+                                                    canvas.height,
+                                                )
 
-                                            if (qrCode) {
-                                                stream.getTracks().forEach((track) => track.stop())
-                                                setTrackingNumber(qrCode.data)
-                                                // handleScan()
-                                            } else {
-                                                requestAnimationFrame(captureFrame)
+                                                if (qrCode) {
+                                                    stream.getTracks().forEach((track) => track.stop())
+                                                    setTrackingNumber(qrCode.data)
+                                                } else {
+                                                    requestAnimationFrame(captureFrame)
+                                                }
                                             }
-                                        }
 
-                                        captureFrame()
+                                            captureFrame()
+                                        })
                                     })
                                     .catch((e) => {
                                         addToast('Unable to access camera.')
