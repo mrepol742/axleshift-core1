@@ -69,11 +69,7 @@ const FormOauth2 = async (req, res) => {
 
         await Promise.all([
             usersCollection.insertOne({
-                username: crypto
-                    .createHash('sha256')
-                    .update(credential.email)
-                    .digest('hex')
-                    .slice(0, 8),
+                username: 'axleshift-' + ref,
                 email: credential.email,
                 first_name: credential.given_name,
                 last_name: credential.family_name,

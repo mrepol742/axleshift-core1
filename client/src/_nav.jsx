@@ -166,7 +166,7 @@ const _nav = [
     {
         component: CNavTitle,
         name: 'System',
-        role_exclude: [],
+        role_exclude: ['user', 'staff'],
     },
     {
         component: CNavItem,
