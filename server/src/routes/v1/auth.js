@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
 import crypto from 'crypto'
+import zxcvbn from 'zxcvbn'
 import database from '../../models/mongodb.js'
 import logger from '../../utils/logger.js'
 import { removeSession } from '../../components/sessions.js'
@@ -38,12 +39,7 @@ router.post('/register', [GeoLocationFilter, ipwhitelist, recaptcha], async (req
             return res.status(400).json({ error: 'Invalid request' })
         if (
             type === 'form' &&
-            (!username ||
-                !email ||
-                !first_name ||
-                !last_name ||
-                !password ||
-                !repeat_password)
+            (!username || !email || !first_name || !last_name || !password || !repeat_password)
         )
             return res.status(400).json({ error: 'Invalid request' })
         if (type === 'google' && !credential)
@@ -81,6 +77,12 @@ router.post('/register', [GeoLocationFilter, ipwhitelist, recaptcha], async (req
             })
         if (password != repeat_password)
             return res.status(200).json({ error: 'Password does not match' })
+
+        const passwordStrength = zxcvbn(password)
+        if (passwordStrength.score < 2)
+            return res
+                .status(200)
+                .json({ error: 'Your password is too weak. Please try other combination.' })
 
         return await FormRegister(req, res)
     } catch (e) {
@@ -282,6 +284,12 @@ router.post('/password', [recaptcha, auth], async (req, res, next) => {
 
         if (new_password != repeat_password)
             return res.status(200).json({ error: 'Password does not match' })
+
+        const passwordStrength = zxcvbn(new_password)
+        if (passwordStrength.score < 2)
+            return res
+                .status(200)
+                .json({ error: 'Your password is too weak. Please try other combination.' })
 
         const newPasswordHash = crypto
             .createHmac('sha256', new_password)

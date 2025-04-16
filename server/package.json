@@ -56,7 +56,8 @@
         "ratelimit-header-parser": "^0.1.0",
         "ua-parser-js": "^1.0.39",
         "useragent": "^2.3.0",
-        "xendit-node": "^6.0.0"
+        "xendit-node": "^6.0.0",
+        "zxcvbn": "^4.4.2"
     },
     "devDependencies": {
         "chai": "^5.1.1",

@@ -4,6 +4,7 @@ import database from '../../models/mongodb.js'
 import logger from '../../utils/logger.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import ipwhitelist from '../../middleware/ipwhitelist.js'
+import newsletter from '../../components/newsletter.js'
 
 const router = express.Router()
 
@@ -18,22 +19,11 @@ router.post('/', [ipwhitelist, recaptcha], async (req, res, next) => {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             return res.status(200).json({ message: 'Invalid email address' })
 
-        const db = await database()
-        const newsletterCollection = db.collection('newsletter')
-        const existingSubscriber = await newsletterCollection.findOne({ email: email })
-        if (existingSubscriber)
+        const isAlreadySubcribe = await newsletter(email)
+        if (isAlreadySubcribe)
             return res
                 .status(200)
                 .json({ message: 'The email is already subcribe to our newsletter' })
-
-        const dateNow = Date.now()
-        await newsletterCollection.insertOne({
-            email: email,
-            is_subsribe: true,
-            created_at: dateNow,
-            updated_at: dateNow,
-        })
-
         return res.status(200).json({ message: 'If you can see this message means it work' })
     } catch (e) {
         logger.error(e)

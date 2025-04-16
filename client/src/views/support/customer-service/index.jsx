@@ -7,8 +7,8 @@ import { useUserProvider } from '../../../components/UserProvider'
 import Inbox from './Inbox'
 import MessageBox from './MessageBox'
 
-const Messages = ({ float, isOpen }) => {
-    const [loading, setLoading] = useState(true)
+const Messages = ({ float, isOpen, setIsOpen }) => {
+    const [loading, setLoading] = useState(false)
     const [selectedUser, setselectedUser] = useState(null)
     const [isMobile, setIsMobile] = useState(false)
     const [showUserList, setshowUserList] = useState(true)
@@ -18,7 +18,9 @@ const Messages = ({ float, isOpen }) => {
 
     useEffect(() => {
         if (!user._id) return
-        if (user && !selectedUser && float) setselectedUser({ sender_id: user.ref })
+        if (user && !selectedUser && user.role === 'user')
+            return setselectedUser({ sender_id: user.ref })
+        setLoading(true)
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const latestMessagesMap = new Map()
             let thread = []
@@ -106,10 +108,9 @@ const Messages = ({ float, isOpen }) => {
                         isOpen) && (
                         <MessageBox
                             isOpen={isOpen}
+                            setIsOpen={setIsOpen}
                             messagesRef={messagesRef}
-                            selectedUser={
-                                selectedUser ? selectedUser : user.role === 'user' ? user : null
-                            }
+                            selectedUser={selectedUser}
                             handleBackToList={handleBackToList}
                             isMobile={isMobile}
                             showBackButton={isMobile && user?.role !== 'user'}
@@ -126,4 +127,5 @@ export default Messages
 Messages.propTypes = {
     float: PropTypes.bool,
     isOpen: PropTypes.bool,
+    setIsOpen: PropTypes.func,
 }

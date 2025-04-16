@@ -10,6 +10,7 @@ import logger from './utils/logger.js'
 import APIv1 from './routes/v1/index.js'
 import Webhookv1 from './webhook/v1/index.js'
 import IPAddressFilter from './middleware/ip.js'
+import gzip from './middleware/gzip.js'
 
 const app = express()
 
@@ -20,6 +21,7 @@ app.use(mongoSanitize())
 app.use(compression())
 app.use(rateLimiter)
 app.use(IPAddressFilter)
+app.use(gzip)
 app.use(pinoHttp({ logger }))
 
 app.get('/', (req, res) => res.redirect(301, REACT_APP_URL))

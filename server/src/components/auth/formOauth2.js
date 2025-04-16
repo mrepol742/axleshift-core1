@@ -23,10 +23,10 @@ const FormOauth2 = async (req, res) => {
             ],
         })
 
-        if (NODE_ENV === 'production' && theUser.role === 'user')
-            res.status(200).json({
-                error: 'You have successfully registered. We will send an email to you once everything is ready.',
-            })
+        // if (NODE_ENV === 'production' && theUser.role === 'user')
+        //     res.status(200).json({
+        //         error: 'You have successfully registered. We will send an email to you once everything is ready.',
+        //     })
 
         // login
         if (theUser) {
@@ -69,11 +69,7 @@ const FormOauth2 = async (req, res) => {
 
         await Promise.all([
             usersCollection.insertOne({
-                username: crypto
-                    .createHash('sha256')
-                    .update(credential.email)
-                    .digest('hex')
-                    .slice(0, 8),
+                username: 'axleshift-' + ref,
                 email: credential.email,
                 first_name: credential.given_name,
                 last_name: credential.family_name,

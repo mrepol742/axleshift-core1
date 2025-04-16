@@ -10,11 +10,16 @@ const download = (url, ref) => {
 
     const savePath = path.join(tempDir, `${ref}.png`)
     downloadImage(url, savePath)
-        .then(() => {
+        .then(async () => {
             logger.info('Finished downloading user avatar.')
-            return uploadToS3(savePath, ref)
-        })
-        .then(() => {
+            const fileBuffer = fs.readFileSync(savePath)
+            const file = {
+                buffer: fileBuffer,
+                originalname: `${ref}.png`,
+                mimetype: 'image/png',
+            }
+            const location = await uploadToS3(file, ref)
+            if (!location) return
             logger.info('Uploaded user avatar to S3.')
             fs.unlink(savePath, (err) => {
                 if (err) {

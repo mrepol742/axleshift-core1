@@ -52,15 +52,24 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
             remCache(`otp-${theOtp.user_id}`),
             (async () => {
                 try {
+                    if (req.user.email_verify_at) return
                     const db = await database()
+                    const date = Date.now()
+
                     await db.collection('users').updateOne(
                         { _id: new ObjectId(req.user._id) },
                         {
                             $set: {
-                                email_verify_at: Date.now(),
-                                updated_at: Date.now(),
+                                email_verify_at: date,
+                                updated_at: date,
                             },
                         },
+                    )
+                    req.user.email_verify_at = date
+                    await setCache(
+                        `user-id-${req.user._id.toString()}`,
+                        req.user,
+                        24 * 60 * 60 * 1000,
                     )
                 } catch (e) {
                     logger.error(e)

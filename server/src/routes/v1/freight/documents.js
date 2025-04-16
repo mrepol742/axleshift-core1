@@ -46,13 +46,11 @@ router.post('/', auth, async (req, res) => {
                 .toArray(),
         ])
 
-        const data = {
+        return res.sendGzipped(200, {
             data: items,
             totalPages: Math.ceil(totalItems / limit),
             currentPage: current_page,
-        }
-
-        return res.status(200).json(data)
+        })
     } catch (e) {
         logger.error(e)
     }
@@ -140,14 +138,14 @@ router.post(
                         file: certificateOfOriginUrl,
                     },
                     {
-                                name: 'Bill of Lading',
-                                type: 'Shipping Document',
-                                status: 'generated',
-                                file: {
-                                    ref: req.documents.freight_tracking_number,
-                                    file: `bill-of-lading-${req.documents.freight_tracking_number}.pdf`,
-                                },
-                            },
+                        name: 'Bill of Lading',
+                        type: 'Shipping Document',
+                        status: 'generated',
+                        file: {
+                            ref: req.documents.freight_tracking_number,
+                            file: `bill-of-lading-${req.documents.freight_tracking_number}.pdf`,
+                        },
+                    },
                 ],
                 message: 'Files uploaded successfully',
             })

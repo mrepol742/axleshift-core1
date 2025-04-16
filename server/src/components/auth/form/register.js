@@ -4,12 +4,24 @@ import logger from '../../../utils/logger.js'
 import { send } from '../../mail.js'
 import activity, { sendNotification } from '../../activity.js'
 import { APP_KEY, NODE_ENV } from '../../../config.js'
+import addToNewsletter from '../../../components/newsletter.js'
 
 const FormRegister = async (req, res) => {
     try {
         const { username, email, first_name, last_name, password, newsletter } = req.body
         const db = await database()
         const usersCollection = db.collection('users')
+
+        if (
+            /^[a-zA-Z0-9._%+-]+@(?!.*(tempmail|mailinator|10minutemail|guerrillamail)).*$/.test(
+                email,
+            ) ||
+            /^(?!(?:[0-9]{6,}|[a-z]{10,}|[a-z0-9]{15,})).+$/.test(email)
+        )
+            return res.status(200).json({
+                error: 'Email address is not allowed',
+            })
+
         const existingUser = await usersCollection.findOne({
             $or: [
                 { [`oauth2.google.email`]: email },
@@ -30,16 +42,17 @@ const FormRegister = async (req, res) => {
             })
         }
 
-        if (NODE_ENV === 'production')
-            res.status(200).json({
-                error: 'You have no permission to continue. Please contact the admin to allow registration.',
-            })
+        // if (NODE_ENV === 'production')
+        //     res.status(200).json({
+        //         error: 'You have no permission to continue. Please contact the admin to allow registration.',
+        //     })
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         const ref = crypto.randomBytes(4).toString('hex')
         const dateNow = Date.now()
 
         await Promise.all([
+            addToNewsletter(email),
             usersCollection.insertOne({
                 email: email,
                 first_name: first_name,

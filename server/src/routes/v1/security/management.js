@@ -46,7 +46,7 @@ router.post('/sessions', auth, async (req, res, next) => {
         )
         const paginatedData = sortedAllData.slice(skip, skip + limit)
 
-        return res.status(200).json({
+        return res.sendGzipped(200, {
             data: paginatedData,
             totalPages: Math.ceil(allDataCount / limit),
             currentPage: current_page,
@@ -123,7 +123,7 @@ router.post('/activity', auth, async (req, res, next) => {
             activityLog[i].user_agent = `${agent.os.family} ${agent.family}`
         }
 
-        return res.status(200).json({
+        return res.sendGzipped(200, {
             data: activityLog,
             totalPages: Math.ceil(totalItems / limit),
             currentPage: current_page,
