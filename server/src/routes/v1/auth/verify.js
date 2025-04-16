@@ -66,7 +66,11 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
                         },
                     )
                     req.user.email_verify_at = date
-                    await setCache(`user-id-${req.user._id.toString()}`, req.user, 24 * 60 * 60 * 1000)
+                    await setCache(
+                        `user-id-${req.user._id.toString()}`,
+                        req.user,
+                        24 * 60 * 60 * 1000,
+                    )
                 } catch (e) {
                     logger.error(e)
                 }

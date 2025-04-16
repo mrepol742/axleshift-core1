@@ -45,7 +45,7 @@ router.post('/', auth, async (req, res) => {
                 .limit(limit)
                 .toArray(),
         ])
-        
+
         return res.sendGzipped(200, {
             data: items,
             totalPages: Math.ceil(totalItems / limit),

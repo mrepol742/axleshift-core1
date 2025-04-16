@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react'
+import { CAlert } from '@coreui/react'
 import { Button, InputGroup, FormControl, OverlayTrigger, Popover } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane, faPlusCircle, faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons'
+import {
+    faPaperPlane,
+    faPlusCircle,
+    faArrowLeft,
+    faUser,
+    faUpRightAndDownLeftFromCenter,
+    faWindowMinimize,
+} from '@fortawesome/free-solid-svg-icons'
 import { addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
 import PropTypes from 'prop-types'
 import { Filter } from 'bad-words'
@@ -10,12 +19,14 @@ import parseTimestamp from '../../../utils/Timestamp'
 
 const MessageBox = ({
     isOpen,
+    setIsOpen,
     messagesRef,
     selectedUser,
     handleBackToList,
     isMobile,
     showBackButton,
 }) => {
+    const navigate = useNavigate()
     const filter = new Filter()
     const [messagesNew, setMessagesNew] = useState([])
     const [newMessage, setNewMessage] = useState('')
@@ -64,9 +75,16 @@ const MessageBox = ({
                 message: filter.clean(newMessage),
                 role: user.role,
                 timestamp: Date.now(),
-                sender_id: selectedUser.sender_id || selectedUser.ref,
+                sender_id: selectedUser.sender_id,
             })
             setNewMessage('')
+        }
+    }
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault()
+            handleSendMessage()
         }
     }
 
@@ -111,137 +129,177 @@ const MessageBox = ({
             }}
         >
             {selectedUser ? (
-                <div className="d-flex flex-column justify-content-between h-100">
-                    <div className="d-flex align-items-center px-2 py-1 m-1 rounded bg-body-secondary">
-                        {showBackButton && !isOpen && (
-                            <Button variant="link" onClick={handleBackToList}>
-                                <FontAwesomeIcon icon={faArrowLeft} />
-                            </Button>
-                        )}
-                        <div
-                            className="bg-primary fw-bold rounded-pill me-2 d-flex justify-content-center align-items-center text-white"
-                            style={{
-                                width: '40px',
-                                height: '40px',
-                            }}
-                        >
-                            {selectedUser.sender_id
-                                ? selectedUser.sender_id.slice(0, 1).toUpperCase()
-                                : selectedUser.ref.slice(0, 1).toUpperCase()}
-                        </div>
-                        <div>
-                            <h4
-                                style={{
-                                    margin: 0,
-                                    fontSize: isMobile ? '16px' : '18px',
-                                }}
-                            >
-                                {selectedUser.sender_id
-                                    ? selectedUser.sender_id.slice(0, 6).toUpperCase()
-                                    : selectedUser.ref}
-                            </h4>
-                            <div
-                                className="text-muted"
-                                style={{
-                                    fontSize: '13px',
-                                }}
-                            >
-                                {selectedUser.sender_id ? selectedUser.sender_id : selectedUser.ref}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        className="flex-grow-1 p-3"
-                        style={{
-                            overflowY: 'auto',
-                        }}
-                    >
-                        {messagesNew.map((msg, index) => (
-                            <div
-                                key={index}
-                                style={{
-                                    textAlign: role(msg) ? 'right' : 'left',
-                                    marginBottom: '12px',
-                                }}
-                            >
+                <>
+                    <div className="d-flex flex-column justify-content-between h-100">
+                        <div className="d-flex justify-content-between px-2 py-1 m-1 rounded bg-body-secondary">
+                            <div className="d-flex align-items-center">
+                                {showBackButton && !isOpen && (
+                                    <Button variant="link" onClick={handleBackToList}>
+                                        <FontAwesomeIcon icon={faArrowLeft} />
+                                    </Button>
+                                )}
                                 <div
-                                    className={`${role(msg) ? 'bg-primary' : 'bg-secondary'} text-white rounded p-2`}
+                                    className="bg-primary fw-bold rounded-pill me-2 d-flex justify-content-center align-items-center text-white"
                                     style={{
-                                        display: 'inline-block',
-                                        maxWidth: isMobile ? '85%' : '80%',
-                                        boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
-                                        position: 'relative',
-                                        wordBreak: 'break-word',
+                                        width: '40px',
+                                        height: '40px',
                                     }}
                                 >
-                                    <div style={{ fontSize: isMobile ? '13px' : '14px' }}>
-                                        {msg.message}
-                                    </div>
+                                    {selectedUser.sender_id.slice(0, 1).toUpperCase()}
                                 </div>
-                                <div
-                                    style={{
-                                        fontSize: '11px',
-                                        color: 'gray',
-                                        marginTop: '4px',
-                                        textAlign: role(msg) ? 'right' : 'left',
-                                        paddingLeft: role(msg) ? '0' : '12px',
-                                        paddingRight: role(msg) ? '12px' : '0',
-                                    }}
-                                >
-                                    {parseTimestamp(msg.timestamp)}
-                                </div>
-                            </div>
-                        ))}
-                        <div ref={messageA} />
-                    </div>
-
-                    <div className="mt-2">
-                        <InputGroup className="mt-2">
-                            <FormControl
-                                as="textarea"
-                                placeholder="Type a message..."
-                                value={newMessage}
-                                className="border-primary border"
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                style={{
-                                    padding: '10px',
-                                    resize: 'none',
-                                    minHeight: '45px',
-                                    maxHeight: isMobile ? '45px' : '45px',
-                                    overflowY: 'auto',
-                                    fontSize: '12px',
-                                }}
-                            />
-
-                            {user.role === 'user' && (
-                                <OverlayTrigger
-                                    trigger="click"
-                                    placement="top"
-                                    overlay={presetsPopover}
-                                    rootClose
-                                >
-                                    <Button
+                                <div>
+                                    <h4
                                         style={{
-                                            height: isMobile ? '45px' : '45px',
+                                            margin: 0,
+                                            fontSize: isMobile ? '16px' : '18px',
                                         }}
                                     >
-                                        <FontAwesomeIcon icon={faPlusCircle} />
-                                    </Button>
-                                </OverlayTrigger>
+                                        {user.ref === selectedUser.sender_id
+                                            ? 'You'
+                                            : selectedUser.sender_id.slice(0, 6).toUpperCase()}
+                                    </h4>
+                                    <div
+                                        className="text-muted"
+                                        style={{
+                                            fontSize: '13px',
+                                        }}
+                                    >
+                                        {selectedUser.sender_id}
+                                    </div>
+                                </div>
+                            </div>
+                            {isOpen && (
+                                <div className="d-flex align-items-center">
+                                    <div className=" btn" onClick={() => navigate('/customer')}>
+                                        <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter} />
+                                    </div>
+                                    <div className="btn" onClick={() => setIsOpen(false)}>
+                                        <FontAwesomeIcon icon={faWindowMinimize} />
+                                    </div>
+                                </div>
                             )}
+                        </div>
+                        <div
+                            className="flex-grow-1 p-3"
+                            style={{
+                                overflowY: 'auto',
+                            }}
+                        >
+                            {!isOpen ? (
+                                <div className="d-flex justify-content-center">
+                                    <CAlert color="warning" className="mb-3 mt-3 small">
+                                        <strong>Warning: </strong>Always chat and complete
+                                        transactions within Axleshift to protect yourself from
+                                        scams. Axleshift will never ask you to send money or share
+                                        personal information outside of the platform. <br />
+                                        If you receive any suspicious messages or requests, please
+                                        report them immediately. Your safety is our priority.
+                                    </CAlert>
+                                </div>
+                            ) : (
+                                <div className="d-flex justify-content-center">
+                                    <CAlert color="warning" className="mb-3 mt-3 small">
+                                        <strong>Warning: </strong>Always chat and complete
+                                        <br />
+                                        transactions within Axleshift <br />
+                                        to protect yourself from scams. Axleshift will never ask you{' '}
+                                        <br />
+                                        to send money or share personal information <br />
+                                        outside of the platform. <br />
+                                        If you receive any <br />
+                                        suspicious messages or requests, <br />
+                                        please report them immediately. <br />
+                                        Your safety is our priority.
+                                    </CAlert>
+                                </div>
+                            )}
+                            {messagesNew.map((msg, index) => (
+                                <div
+                                    key={index}
+                                    style={{
+                                        textAlign: role(msg) ? 'right' : 'left',
+                                        marginBottom: '12px',
+                                    }}
+                                >
+                                    <div
+                                        className={`${role(msg) ? 'bg-primary' : 'bg-secondary'} text-white rounded p-2`}
+                                        style={{
+                                            display: 'inline-block',
+                                            maxWidth: isMobile ? '85%' : '80%',
+                                            boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                                            position: 'relative',
+                                            wordBreak: 'break-word',
+                                        }}
+                                    >
+                                        <div style={{ fontSize: isMobile ? '13px' : '14px' }}>
+                                            {msg.message}
+                                        </div>
+                                    </div>
+                                    <div
+                                        style={{
+                                            fontSize: '11px',
+                                            color: 'gray',
+                                            marginTop: '4px',
+                                            textAlign: role(msg) ? 'right' : 'left',
+                                            paddingLeft: role(msg) ? '0' : '12px',
+                                            paddingRight: role(msg) ? '12px' : '0',
+                                        }}
+                                    >
+                                        {parseTimestamp(msg.timestamp)}
+                                    </div>
+                                </div>
+                            ))}
+                            <div ref={messageA} />
+                        </div>
 
-                            <Button
-                                style={{
-                                    height: isMobile ? '45px' : '45px',
-                                }}
-                                onClick={handleSendMessage}
-                            >
-                                <FontAwesomeIcon icon={faPaperPlane} />
-                            </Button>
-                        </InputGroup>
+                        <div className="mt-2">
+                            <InputGroup className="mt-2">
+                                <FormControl
+                                    as="textarea"
+                                    placeholder="Type a message..."
+                                    value={newMessage}
+                                    className="border-primary border"
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    style={{
+                                        padding: '10px',
+                                        resize: 'none',
+                                        minHeight: '45px',
+                                        maxHeight: isMobile ? '45px' : '45px',
+                                        overflowY: 'auto',
+                                        fontSize: '12px',
+                                    }}
+                                />
+
+                                {user.role === 'user' && (
+                                    <OverlayTrigger
+                                        trigger="click"
+                                        placement="top"
+                                        overlay={presetsPopover}
+                                        rootClose
+                                    >
+                                        <Button
+                                            style={{
+                                                height: isMobile ? '45px' : '45px',
+                                            }}
+                                        >
+                                            <FontAwesomeIcon icon={faPlusCircle} />
+                                        </Button>
+                                    </OverlayTrigger>
+                                )}
+
+                                <Button
+                                    style={{
+                                        height: isMobile ? '45px' : '45px',
+                                    }}
+                                    onClick={handleSendMessage}
+                                >
+                                    <FontAwesomeIcon icon={faPaperPlane} />
+                                </Button>
+                            </InputGroup>
+                        </div>
                     </div>
-                </div>
+                </>
             ) : (
                 <div className="d-flex justify-content-center align-items-center h-100 flex-column">
                     <div
@@ -264,6 +322,7 @@ export default MessageBox
 
 MessageBox.propTypes = {
     isOpen: PropTypes.bool,
+    setIsOpen: PropTypes.func,
     messagesRef: PropTypes.object.isRequired,
     selectedUser: PropTypes.shape({
         sender_id: PropTypes.string,

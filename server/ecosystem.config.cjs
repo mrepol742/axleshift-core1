@@ -6,7 +6,7 @@ module.exports = {
             instances: 3,
             exec_mode: 'cluster',
             sticky: true,
-            node_args: "--max-old-space-size=1024",
+            node_args: '--max-old-space-size=1024',
             env: {
                 NODE_ENV: 'production',
             },
