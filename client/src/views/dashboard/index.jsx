@@ -230,7 +230,7 @@ const Dashboard = () => {
             </div>
             <CRow className="mb-4" xs={{ gutter: 4 }}>
                 {widgetData.map((widget, index) => (
-                    <CCol key={index} sm={6} xl={4}>
+                    <CCol key={index} sm={6} xl={3}>
                         <CWidgetStatsA
                             data-aos="fade-up"
                             color={widget.color}
@@ -343,7 +343,7 @@ const Dashboard = () => {
                 </CCol>
             </CRow>
             <CRow>
-                <CCol xs={12} md={6}>
+                <CCol xs={12} md={4}>
                     <CWidgetStatsC
                         onClick={() => renderDashboardWidgets('/PAID')}
                         data-aos="fade-up"
@@ -358,7 +358,7 @@ const Dashboard = () => {
                         value={insights.invoicesInfoWidgets.success[1]}
                     />
                 </CCol>
-                <CCol xs={12} md={6}>
+                <CCol xs={12} md={4}>
                     <CWidgetStatsC
                         onClick={() => renderDashboardWidgets('/EXPIRED')}
                         data-aos="fade-up"

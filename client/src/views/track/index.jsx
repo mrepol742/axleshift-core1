@@ -214,6 +214,7 @@ const Track = () => {
                     </CModalHeader>
                     <CModalBody className="vh-100">
                         <div id="video" className="h-50"></div>
+                        Instructions:
                         <ul>
                             <li>Ensure the QR code is well-lit and clearly visible.</li>
                             <li>Hold the QR code steady in front of the camera.</li>

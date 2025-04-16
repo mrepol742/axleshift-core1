@@ -170,6 +170,8 @@ const Schedules = () => {
                                                                   `/shipment/${shipment.tracking_number}`,
                                                               )
                                                           }
+                                                          data-aos="fade-in"
+                                                          data-aos-delay={`${index * 100}`}
                                                       >
                                                           <div className="d-flex justify-content-between">
                                                               <div className="mb-2">
