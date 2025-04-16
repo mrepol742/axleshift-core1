@@ -123,7 +123,9 @@ const MessageBox = ({
                                 height: '40px',
                             }}
                         >
-                            {selectedUser.sender_id.slice(0, 1).toUpperCase()}
+                            {selectedUser.sender_id
+                                ? selectedUser.sender_id.slice(0, 1).toUpperCase()
+                                : selectedUser.ref.slice(0, 1).toUpperCase()}
                         </div>
                         <div>
                             <h4
@@ -132,7 +134,9 @@ const MessageBox = ({
                                     fontSize: isMobile ? '16px' : '18px',
                                 }}
                             >
-                                {selectedUser.sender_id.slice(0, 6).toUpperCase()}
+                                {selectedUser.sender_id
+                                    ? selectedUser.sender_id.slice(0, 6).toUpperCase()
+                                    : selectedUser.ref}
                             </h4>
                             <div
                                 className="text-muted"
@@ -140,7 +144,7 @@ const MessageBox = ({
                                     fontSize: '13px',
                                 }}
                             >
-                                {selectedUser.sender_id}
+                                {selectedUser.sender_id ? selectedUser.sender_id : selectedUser.ref}
                             </div>
                         </div>
                     </div>
@@ -260,7 +264,8 @@ MessageBox.propTypes = {
     isOpen: PropTypes.bool,
     messagesRef: PropTypes.object.isRequired,
     selectedUser: PropTypes.shape({
-        sender_id: PropTypes.string.isRequired,
+        sender_id: PropTypes.string,
+        ref: PropTypes.string,
     }),
     handleBackToList: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,
