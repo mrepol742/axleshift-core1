@@ -122,7 +122,6 @@ const Account = () => {
                 </div>
             )}
 
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol>
                     <h4>Account details</h4>
@@ -318,6 +317,7 @@ const Account = () => {
                     </CCard>
                 </>
             )}
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }
