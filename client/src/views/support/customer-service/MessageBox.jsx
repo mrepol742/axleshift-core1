@@ -28,7 +28,9 @@ const MessageBox = ({
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
             const msgs = snapshot.docs
                 .map((doc) => ({ id: doc.id, ...doc.data() }))
-                .filter((msg) => msg.sender_id === selectedUser.sender_id)
+                .filter(
+                    (msg) => msg.sender_id === selectedUser.sender_id || msg.sender_id === user.ref,
+                )
             setMessagesNew(msgs)
         })
         return () => unsubscribe()
@@ -62,7 +64,7 @@ const MessageBox = ({
                 message: filter.clean(newMessage),
                 role: user.role,
                 timestamp: Date.now(),
-                sender_id: selectedUser.sender_id,
+                sender_id: selectedUser.sender_id || selectedUser.ref,
             })
             setNewMessage('')
         }
@@ -74,7 +76,7 @@ const MessageBox = ({
     }
 
     const presetsPopover = (
-        <Popover id="popover-basic" style={{ maxWidth: '300px' }}>
+        <Popover id="popover-basic" style={{ maxWidth: '300px', zIndex: 9999 }}>
             <Popover.Header as="h3">Quick Messages</Popover.Header>
             <Popover.Body>
                 <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
