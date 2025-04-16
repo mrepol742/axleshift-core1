@@ -167,6 +167,12 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchInsights()
+
+        const intervalId = setInterval(() => {
+            fetchInsights()
+        }, 5000)
+
+        return () => clearInterval(intervalId)
     }, [])
 
     const renderDashboardWidgets = async (url) => {
@@ -204,7 +210,9 @@ const Dashboard = () => {
     return (
         <>
             <div className="d-flex justify-content-between">
-                <div></div>
+                <div>
+                    <h1>Dashboard</h1>
+                </div>
                 <CButton
                     color="primary"
                     className="mb-4"
@@ -334,7 +342,6 @@ const Dashboard = () => {
                     />
                 </CCol>
             </CRow>
-            <h5>Invoices</h5>
             <CRow>
                 <CCol xs={12} md={6}>
                     <CWidgetStatsC
@@ -347,7 +354,7 @@ const Dashboard = () => {
                             color: 'success',
                             value: insights.invoicesInfoWidgets.success[0],
                         }}
-                        title="Successful"
+                        title="Paid Invoices"
                         value={insights.invoicesInfoWidgets.success[1]}
                     />
                 </CCol>
@@ -362,7 +369,7 @@ const Dashboard = () => {
                             color: 'danger',
                             value: insights.invoicesInfoWidgets.expired[0],
                         }}
-                        title="Expired"
+                        title="Expired Invoices"
                         value={insights.invoicesInfoWidgets.expired[1]}
                     />
                 </CCol>
