@@ -24,7 +24,7 @@ const ShipmentCard = ({ shipment }) => {
         if (status === 'received') return 'primary'
         if (status === 'to_receive' || status === 'to_ship') return 'success'
         // for to_pay
-        return ''
+        return 'info'
     }
 
     const getStatus = (status) => {

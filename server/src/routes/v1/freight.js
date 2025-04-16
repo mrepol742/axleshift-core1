@@ -96,22 +96,18 @@ router.get('/calendar', auth, async (req, res) => {
                     created_at: 1,
                     expected_delivery_date: 1,
                     status: 1,
+                    total_weight: 1,
+                    number_of_items: 1,
                     type: 1,
+                    amount: 1,
+                    courier: 1,
+                    country: 1,
                 },
             })
             .sort({ created_at: -1 })
             .toArray()
 
-        const events = []
-
-        for (let i = 0; i < freight.length; i++) {
-            events.push({
-                title: freight[i].tracking_number,
-                start: freight[i].created_at,
-                end: freight[i].expected_delivery_date,
-            })
-        }
-        return res.sendGzipped(200, events)
+        return res.sendGzipped(200, freight)
     } catch (e) {
         logger.error(e)
     }
