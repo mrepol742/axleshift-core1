@@ -46,7 +46,7 @@ router.post('/', auth, async (req, res) => {
             currentPage: current_page,
         }
 
-        return res.status(200).json(data)
+        return res.sendGzipped(200, data)
     } catch (e) {
         logger.error(e)
     }

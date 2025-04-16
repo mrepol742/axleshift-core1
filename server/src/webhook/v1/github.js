@@ -26,7 +26,7 @@ const notify = async (deploymentStatus) => {
     }
 
     for (let i = 0; i < admins.length; i++) {
-        const admin = admins[i];
+        const admin = admins[i]
         new Promise((resolve) => setTimeout(resolve, Math.random() * (10000 - 5000) + 5000))
         send(
             {

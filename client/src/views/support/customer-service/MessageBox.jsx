@@ -3,9 +3,10 @@ import { Button, InputGroup, FormControl, OverlayTrigger, Popover } from 'react-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faPlusCircle, faArrowLeft, faUser } from '@fortawesome/free-solid-svg-icons'
 import { addDoc, onSnapshot, orderBy, query } from 'firebase/firestore'
+import PropTypes from 'prop-types'
+import { Filter } from 'bad-words'
 import { useUserProvider } from '../../../components/UserProvider'
 import parseTimestamp from '../../../utils/Timestamp'
-import PropTypes from 'prop-types'
 
 const MessageBox = ({
     isOpen,
@@ -15,6 +16,7 @@ const MessageBox = ({
     isMobile,
     showBackButton,
 }) => {
+    const filter = new Filter()
     const [messagesNew, setMessagesNew] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [showPresets, setShowPresets] = useState(false)
@@ -57,7 +59,7 @@ const MessageBox = ({
     const handleSendMessage = async () => {
         if (newMessage.trim() !== '' && selectedUser) {
             await addDoc(messagesRef, {
-                message: newMessage,
+                message: filter.clean(newMessage),
                 role: user.role,
                 timestamp: Date.now(),
                 sender_id: selectedUser.sender_id,

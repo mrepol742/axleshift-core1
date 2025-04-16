@@ -69,7 +69,7 @@ router.post('/', [auth, cache], async (req, res, next) => {
         }
 
         if (req.cacheKey) setCache(req.cacheKey, data, 30 * 60 * 1000)
-        return res.status(200).json(data)
+        return res.sendGzipped(200, data)
     } catch (e) {
         logger.error(e)
     }
@@ -111,7 +111,7 @@ router.get('/calendar', auth, async (req, res) => {
                 end: freight[i].expected_delivery_date,
             })
         }
-        return res.status(200).json(events)
+        return res.sendGzipped(200, events)
     } catch (e) {
         logger.error(e)
     }

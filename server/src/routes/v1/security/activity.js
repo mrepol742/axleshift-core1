@@ -33,7 +33,7 @@ router.post('/', auth, async (req, res) => {
             activityLog[i].user_agent = `${agent.os.family} ${agent.family}`
         }
 
-        return res.status(200).json({
+        return res.sendGzipped(200, {
             data: activityLog,
             totalPages: Math.ceil(totalItems / limit),
             currentPage: current_page,

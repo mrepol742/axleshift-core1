@@ -45,14 +45,12 @@ router.post('/', auth, async (req, res) => {
                 .limit(limit)
                 .toArray(),
         ])
-
-        const data = {
+        
+        return res.sendGzipped(200, {
             data: items,
             totalPages: Math.ceil(totalItems / limit),
             currentPage: current_page,
-        }
-
-        return res.status(200).json(data)
+        })
     } catch (e) {
         logger.error(e)
     }

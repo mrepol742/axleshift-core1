@@ -40,6 +40,7 @@
         "@sentry/react": "^8.33.1",
         "aos": "^2.3.4",
         "axios": "^1.8.4",
+        "bad-words": "^4.0.0",
         "body-scroll-lock": "^4.0.0-beta.0",
         "boolean-pro": "^1.0.0",
         "chart.js": "^4.4.3",

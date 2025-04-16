@@ -10,10 +10,12 @@ import {
     CSpinner,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { Filter } from 'bad-words'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 
 const Email = () => {
+    const filter = new Filter()
     const [formData, setFormData] = useState({
         email: '',
         subject: '',
@@ -53,7 +55,7 @@ const Email = () => {
         const { name, value } = e.target
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value,
+            [name]: name === 'email' ? value : filter.clean(value),
         }))
     }
 
