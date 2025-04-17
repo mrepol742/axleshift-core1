@@ -27,6 +27,9 @@ const Schedules = () => {
     const [showHolidays, setShowHolidays] = useState(
         cookies.get('showHolidays') === 'true' || cookies.get('showHolidays') === undefined,
     )
+    const [showDaysOfWeek, setShowDaysOfWeek] = useState(
+        cookies.get('showDaysOfWeek') === 'true' || cookies.get('showDaysOfWeek') === undefined,
+    )
 
     const fetchData = async () => {
         axios
@@ -64,7 +67,7 @@ const Schedules = () => {
                 currentDate
                     .clone()
                     .add(i - 1, 'days')
-                    .format('MMMM DD'),
+                    .format(`${showDaysOfWeek ? 'dddd' : ''} MMMM DD`),
             )
         }
         return headers
@@ -157,6 +160,15 @@ const Schedules = () => {
                             }}
                             label="Show Holidays"
                         />
+                        <CFormCheck
+                            className="me-3"
+                            checked={showDaysOfWeek}
+                            onChange={() => {
+                                setShowDaysOfWeek(!showDaysOfWeek)
+                                cookies.set('showDaysOfWeek', !showDaysOfWeek)
+                            }}
+                            label="Show Days of Week"
+                        />
                     </div>
                 </div>
                 <div>
@@ -210,9 +222,11 @@ const Schedules = () => {
                                 .map((header, index) => (
                                     <CTableHeaderCell
                                         key={index}
-                                        className=" text-center text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"
+                                        className="text-center text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"
                                     >
-                                        {header}
+                                        <span className="badge bg-body-secondary p-2 px-4">
+                                            {header}
+                                        </span>
                                     </CTableHeaderCell>
                                 ))}
                         </CTableRow>
