@@ -122,6 +122,8 @@ const Sessions = () => {
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Last Accessed
                                 </CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
+                                </CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
@@ -140,6 +142,16 @@ const Sessions = () => {
                                     </CTableDataCell>
                                     <CTableDataCell>
                                         {parseTimestamp(session.last_accessed)}
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                        <CButton
+                                        size="sm"
+                                            color="danger"
+                                            className="ms-auto"
+                                            onClick={(e) => handleLogout(session._id)}
+                                        >
+                                            Logout
+                                        </CButton>
                                     </CTableDataCell>
                                 </CTableRow>
                             ))}

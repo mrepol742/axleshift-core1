@@ -145,6 +145,7 @@ const Documents = () => {
                                     </CTableDataCell>
                                     <CTableDataCell>
                                         <CButton
+                                            size="sm"
                                             className="btn btn-primary"
                                             onClick={(e) =>
                                                 navigate(
@@ -152,7 +153,7 @@ const Documents = () => {
                                                 )
                                             }
                                         >
-                                            View
+                                            Open Documents
                                         </CButton>
                                     </CTableDataCell>
                                 </CTableRow>

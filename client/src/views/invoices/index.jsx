@@ -88,7 +88,6 @@ const Invoices = () => {
                                     Status
                                 </CTableHeaderCell>
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                    Action
                                 </CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
@@ -112,6 +111,7 @@ const Invoices = () => {
                                     <CTableDataCell>
                                         {invoice.status !== 'EXPIRED' && (
                                             <CButton
+                                            size="sm"
                                                 className="btn btn-primary"
                                                 onClick={(e) =>
                                                     navigate(
@@ -119,7 +119,7 @@ const Invoices = () => {
                                                     )
                                                 }
                                             >
-                                                View
+                                                Open Invoice
                                             </CButton>
                                         )}
                                     </CTableDataCell>

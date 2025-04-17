@@ -176,49 +176,6 @@
 }
 
 /*
- * calendar
- */
-.rbc-off-range-bg {
-    background-color: rgb(50, 58, 73) !important;
-}
-
-.rbc-off-range-bg,
-.rbc-today {
-    border-radius: 10px !important;
-    margin: 1px;
-}
-
-.rbc-toolbar button:active,
-.rbc-toolbar button.rbc-active {
-    background-color: #4285f4 !important;
-    color: white !important;
-    font-weight: 600 !important;
-}
-
-.rbc-toolbar button {
-    background-color: #6d7d9c !important;
-    color: #fff !important;
-    border: none !important;
-}
-
-.rbc-btn-group>button:first-child:not(:last-child) {
-    border-top-left-radius: 20px !important;
-    border-bottom-left-radius: 20px !important;
-}
-
-.rbc-btn-group>button:last-child:not(:first-child) {
-    border-top-right-radius: 20px !important;
-    border-bottom-right-radius: 20px !important;
-}
-
-.rbc-month-view,
-.rbc-month-row,
-.rbc-day-bg+.rbc-day-bg,
-.rbc-header {
-    border: none !important;
-}
-
-/*
  * shipment background
  */
 .shipment-bg {
