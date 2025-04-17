@@ -186,7 +186,7 @@ const Sessions = () => {
                 </CModalBody>
                 <CModalFooter className="d-flex justify-content-end">
                     <CButton color="secondary" onClick={handleLogout}>
-                        Delete
+                        Okay
                     </CButton>
                     <CButton
                         color="primary"

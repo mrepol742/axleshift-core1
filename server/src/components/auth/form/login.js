@@ -38,7 +38,6 @@ const FormLogin = async (req, res) => {
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'
         const ip = getClientIp(req)
-
         addSession(theUser, session_token, ip, userAgent, location)
         isNewIP(ip, theUser)
 
