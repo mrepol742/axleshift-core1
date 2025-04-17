@@ -129,7 +129,7 @@ const Webhooks = () => {
                 </CContainer>
             )}
             {WebhooksLocationList.map((item, index) => (
-                <div key={index} className="d-flex mb-2">
+                <div key={index} className="d-block d-md-flex mb-2 gap-2">
                     <input
                         className="me-3"
                         type="checkbox"
@@ -141,20 +141,20 @@ const Webhooks = () => {
                         value={item.url}
                         floatingLabel="URL"
                         onChange={(e) => handleWebhooksChange(index, e.target.value, 'url')}
-                        className="me-2"
+                        className="me-2 mb-2 mb-md-0"
                     />
                     <CFormInput
                         type="text"
                         floatingLabel="Token"
                         value={item.token}
                         onChange={(e) => handleWebhooksChange(index, e.target.value, 'token')}
-                        className="me-2"
+                        className="me-2 mb-2 mb-md-0"
                     />
                     <CFormSelect
                         value={item.action}
                         floatingLabel="Action"
                         onChange={(e) => handleWebhooksChange(index, e.target.value, 'action')}
-                        className="me-2"
+                        className="me-2 mb-2 mb-md-0"
                     >
                         <option value="">Choose</option>
                         <option value="all">All</option>

@@ -11,6 +11,8 @@ import {
     CModalBody,
     CModalTitle,
     CModalFooter,
+    CRow,
+    CCol,
 } from '@coreui/react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
@@ -111,17 +113,21 @@ const API = () => {
                 </div>
             )}
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-            <div className="d-block d-sm-flex justify-content-between align-items-center mb-3">
-                <h4>Access token</h4>
-                <CButton
-                    color="primary"
-                    size="sm"
-                    onClick={(e) => navigate('/security/access-token/new')}
-                    className="ms-auto"
-                >
-                    Generate new token
-                </CButton>
-            </div>
+            <CRow className="align-items-center mb-2">
+                <CCol>
+                    <h4 className="mb-0">Access Token</h4>
+                </CCol>
+                <CCol className="text-right d-flex justify-content-end">
+                    <CButton
+                        color="primary"
+                        size="sm"
+                        onClick={(e) => navigate('/security/access-token/new')}
+                        className="text-right d-flex justify-content-end"
+                    >
+                        Generate new token
+                    </CButton>
+                </CCol>
+            </CRow>
             {!result ||
                 (result.length == 0 && (
                     <CContainer className="my-5">
