@@ -167,57 +167,63 @@ const Document = () => {
                             </CTableHead>
                             <CTableBody>
                                 {documents.map((doc, index) => (
-                                    <CTableRow key={index}>
-                                        <CTableDataCell>
-                                            <span className="d-block">{doc.name}</span>
-                                            {doc.file && (
-                                                <CButton
-                                                    color="primary"
-                                                    size="sm"
-                                                    variant="ghost"
-                                                    onClick={(e) =>
-                                                        previewDocument(id, doc.file.file)
-                                                    }
-                                                >
-                                                    <FontAwesomeIcon
-                                                        icon={faFile}
-                                                        className="me-1"
-                                                    />{' '}
-                                                    Open File
-                                                </CButton>
-                                            )}
-                                        </CTableDataCell>
-                                        <CTableDataCell>{doc.type}</CTableDataCell>
-                                        <CTableDataCell className="text-capitalize">
-                                            <span
-                                                className={`badge bg-${['approved', 'generated'].includes(doc.status) ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}`}
-                                            >
-                                                {doc.status.replace('_', ' ')}
-                                            </span>
-                                        </CTableDataCell>
-                                        <CTableDataCell>
-                                            {!doc.file || doc.status === 'rejected' ? (
-                                                <>
-                                                    <CFormInput
-                                                        type="file"
-                                                        accept=".docx,.pdf"
-                                                        onChange={(e) => handleFileUpload(e, index)}
-                                                        disabled={[
-                                                            'approved',
-                                                            'not_applicable',
-                                                        ].includes(doc.status)}
-                                                    />
+                                    <>
+                                        {doc.status !== 'not_applicable' && (
+                                            <CTableRow key={index}>
+                                                <CTableDataCell>
+                                                    <span className="d-block">{doc.name}</span>
                                                     {doc.file && (
-                                                        <span className="text-danger text-decoration-line-through">
-                                                            {doc.file.file}
-                                                        </span>
+                                                        <CButton
+                                                            color="primary"
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            onClick={(e) =>
+                                                                previewDocument(id, doc.file.file)
+                                                            }
+                                                        >
+                                                            <FontAwesomeIcon
+                                                                icon={faFile}
+                                                                className="me-1"
+                                                            />{' '}
+                                                            Open File
+                                                        </CButton>
                                                     )}
-                                                </>
-                                            ) : (
-                                                doc.file.file
-                                            )}
-                                        </CTableDataCell>
-                                    </CTableRow>
+                                                </CTableDataCell>
+                                                <CTableDataCell>{doc.type}</CTableDataCell>
+                                                <CTableDataCell className="text-capitalize">
+                                                    <span
+                                                        className={`badge bg-${['approved', 'generated'].includes(doc.status) ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}`}
+                                                    >
+                                                        {doc.status.replace('_', ' ')}
+                                                    </span>
+                                                </CTableDataCell>
+                                                <CTableDataCell>
+                                                    {!doc.file || doc.status === 'rejected' ? (
+                                                        <>
+                                                            <CFormInput
+                                                                type="file"
+                                                                accept=".docx,.pdf"
+                                                                onChange={(e) =>
+                                                                    handleFileUpload(e, index)
+                                                                }
+                                                                disabled={[
+                                                                    'approved',
+                                                                    'not_applicable',
+                                                                ].includes(doc.status)}
+                                                            />
+                                                            {doc.file && (
+                                                                <span className="text-danger text-decoration-line-through">
+                                                                    {doc.file.file}
+                                                                </span>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        doc.file.file
+                                                    )}
+                                                </CTableDataCell>
+                                            </CTableRow>
+                                        )}
+                                    </>
                                 ))}
                             </CTableBody>
                         </CTable>

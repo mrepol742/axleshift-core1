@@ -10,6 +10,7 @@ import {
     CCard,
     CFormInput,
     CFormCheck,
+    CBadge,
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
@@ -222,11 +223,11 @@ const Schedules = () => {
                                 .map((header, index) => (
                                     <CTableHeaderCell
                                         key={index}
-                                        className="text-center text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"
+                                        className="text-center text-uppercase fw-bold poppins-regular table-header-cell-no-wrap"
                                     >
-                                        <span className="badge bg-body-secondary p-2 px-4">
+                                        <CBadge color="secondary" className="p-2 px-4">
                                             {header}
-                                        </span>
+                                        </CBadge>
                                     </CTableHeaderCell>
                                 ))}
                         </CTableRow>
