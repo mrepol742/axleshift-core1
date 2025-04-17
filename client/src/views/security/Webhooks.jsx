@@ -12,6 +12,7 @@ import {
     CModalBody,
     CModalTitle,
     CModalFooter,
+    CFormCheck,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
@@ -130,9 +131,8 @@ const Webhooks = () => {
             )}
             {WebhooksLocationList.map((item, index) => (
                 <div key={index} className="d-block d-md-flex mb-2 gap-2">
-                    <input
+                    <CFormCheck
                         className="me-3"
-                        type="checkbox"
                         checked={item.checked}
                         onChange={(e) => handleCheckboxChange(index, e.target.checked)}
                     />
