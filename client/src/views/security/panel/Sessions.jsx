@@ -34,15 +34,20 @@ const Sessions = () => {
     const [totalPages, setTotalPages] = useState(0)
     const [modal, setModal] = useState(false)
 
-    const handleLogout = async () => {
+    const handleLogout = async (id) => {
         setModal(false)
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
         axios
-            .post(`/sec/management/sessions/logout`, {
+            .post(`/sec/management/sessions/logout/${id}`, {
                 recaptcha_ref: recaptcha,
             })
-            .then((response) => (window.location.href = '/logout'))
+            .then((response) => {
+                if (!id || response.data.logout) window.location.href = '/logout'
+                if (response.data.error) return addToast(response.data.error)
+                addToast(response.data.message)
+                setResult((prevResult) => prevResult.filter((session) => session._id !== id))
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
@@ -122,8 +127,7 @@ const Sessions = () => {
                                 <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
                                     Last Accessed
                                 </CTableHeaderCell>
-                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap">
-                                </CTableHeaderCell>
+                                <CTableHeaderCell className="text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"></CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
@@ -145,7 +149,7 @@ const Sessions = () => {
                                     </CTableDataCell>
                                     <CTableDataCell>
                                         <CButton
-                                        size="sm"
+                                            size="sm"
                                             color="danger"
                                             className="ms-auto"
                                             onClick={(e) => handleLogout(session._id)}
