@@ -8,21 +8,25 @@ import {
     CTableHeaderCell,
     CTableDataCell,
     CCard,
+    CFormInput,
+    CFormCheck,
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
-import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import { useToast } from '../../components/AppToastProvider'
-
-import parseTimestamp from '../../utils/Timestamp'
-
-const localizer = momentLocalizer(moment)
+import Holidays from 'date-holidays'
 
 const Schedules = () => {
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
     const [result, setResult] = useState([])
     const navigate = useNavigate()
+    const locale = navigator.language || 'en-US'
+    const countryCode = locale.split('-')[1] || 'US'
+    const hd = new Holidays(countryCode)
+    const [showHolidays, setShowHolidays] = useState(
+        cookies.get('showHolidays') === 'true' || cookies.get('showHolidays') === undefined,
+    )
 
     const fetchData = async () => {
         axios
@@ -56,7 +60,12 @@ const Schedules = () => {
     const generateTableHeaders = () => {
         const headers = []
         for (let i = 0; i < 4; i++) {
-            headers.push(currentDate.clone().add(i, 'days').format('MMMM DD'))
+            headers.push(
+                currentDate
+                    .clone()
+                    .add(i - 1, 'days')
+                    .format('MMMM DD'),
+            )
         }
         return headers
     }
@@ -99,6 +108,24 @@ const Schedules = () => {
         return 'To Pay'
     }
 
+    const getHolidays = (index) => {
+        const holidays = hd.isHoliday(currentDate.clone().add(index, 'days').format('YYYY-MM-DD'))
+        if (!holidays) return
+        for (const holiday of holidays) {
+            if (holiday) {
+                return (
+                    <p
+                        className="badge bg-info p-3"
+                        data-aos="fade-in"
+                        data-aos-delay={`${index * 100}`}
+                    >
+                        {holiday.name}
+                    </p>
+                )
+            }
+        }
+    }
+
     useEffect(() => {
         const handleResize = () => {
             setCurrentDate((prevDate) => prevDate.clone())
@@ -116,6 +143,33 @@ const Schedules = () => {
 
     return (
         <div>
+            <div className="d-flex justify-content-between mb-3">
+                <div>
+                    <h2>Schedules</h2>
+                    <strong>Locale:</strong> {locale}
+                    <div>
+                        <CFormCheck
+                            className="me-3"
+                            checked={showHolidays}
+                            onChange={() => {
+                                setShowHolidays(!showHolidays)
+                                cookies.set('showHolidays', !showHolidays)
+                            }}
+                            label="Show Holidays"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <CFormInput
+                        type="date"
+                        className="form-control w-auto"
+                        value={currentDate.format('YYYY-MM-DD')}
+                        min="2025-01-01"
+                        onChange={(e) => setCurrentDate(moment(e.target.value))}
+                        required
+                    />
+                </div>
+            </div>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <button
                     className="btn btn-primary"
@@ -124,14 +178,6 @@ const Schedules = () => {
                 >
                     &lt; Previous
                 </button>
-                <input
-                    type="date"
-                    className="form-control w-auto"
-                    value={currentDate.format('YYYY-MM-DD')}
-                    min="2025-01-01"
-                    onChange={(e) => setCurrentDate(moment(e.target.value))}
-                    required
-                />
                 <button
                     className="btn btn-primary"
                     onClick={handleNext}
@@ -178,6 +224,7 @@ const Schedules = () => {
                                 .map((data, index) => (
                                     <CTableDataCell key={index}>
                                         <div className="d-block text-center">
+                                            {showHolidays && <div>{getHolidays(index)}</div>}
                                             {data
                                                 ? data.map((shipment, index) => {
                                                       return (
