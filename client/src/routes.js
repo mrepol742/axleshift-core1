@@ -60,9 +60,6 @@ const InvoiceInfo = auth(lazy(() => import('./views/invoices/[id]')))
 
 const Performance = auth(lazy(() => import('./views/performance')))
 
-const ManagementDocuments = auth(lazy(() => import('./views/management/documents')))
-const ManagementInvoices = auth(lazy(() => import('./views/management/invoices')))
-
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 
 const routes = [
@@ -121,9 +118,6 @@ const routes = [
     { path: '/track/:id', name: 'Track', element: TrackInfo },
 
     { path: '/performance', name: 'Performance', element: Performance },
-
-    { path: '/management/documents', name: 'Manage Documents', element: ManagementDocuments },
-    { path: '/management/invoices', name: 'Manage Invoices', element: ManagementInvoices },
 
     { path: '*', name: '404', element: Err404 },
 ]
