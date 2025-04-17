@@ -107,13 +107,20 @@ const Schedules = () => {
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
+    if (loading)
+        return (
+            <div className="loading-overlay">
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <button
                     className="btn btn-primary"
                     onClick={handlePrevious}
-                    disabled={currentDate.isBefore(moment('2025-01-01'))}
+                    disabled={currentDate.isBefore(moment('2025-01-01')) || isNaN(currentDate)}
                 >
                     &lt; Previous
                 </button>
@@ -123,115 +130,130 @@ const Schedules = () => {
                     value={currentDate.format('YYYY-MM-DD')}
                     min="2025-01-01"
                     onChange={(e) => setCurrentDate(moment(e.target.value))}
+                    required
                 />
-                <button className="btn btn-primary" onClick={handleNext}>
+                <button
+                    className="btn btn-primary"
+                    onClick={handleNext}
+                    disabled={isNaN(currentDate)}
+                >
                     Next &gt;
                 </button>
             </div>
 
-            <CTable
-                responsive
-                className="table-even-width"
-                style={{
-                    '--cui-table-bg': 'transparent',
-                    '--cui-table-border-color': 'transparent',
-                }}
-            >
-                <CTableHead>
-                    <CTableRow>
-                        {generateTableHeaders()
-                            .slice(0, getColumnCount())
-                            .map((header, index) => (
-                                <CTableHeaderCell
-                                    key={index}
-                                    className=" text-center text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"
-                                >
-                                    {header}
-                                </CTableHeaderCell>
-                            ))}
-                    </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                    <CTableRow>
-                        {generateTableData()
-                            .slice(0, getColumnCount())
-                            .map((data, index) => (
-                                <CTableDataCell key={index}>
-                                    <div className="d-block text-center">
-                                        {data
-                                            ? data.map((shipment, index) => {
-                                                  return (
-                                                      <CCard
-                                                          body
-                                                          key={index}
-                                                          className={`bg-${getCardColor(shipment.status)} rounded p-3 m-2 text-start text-white`}
-                                                          onClick={() =>
-                                                              navigate(
-                                                                  `/shipment/${shipment.tracking_number}`,
-                                                              )
-                                                          }
-                                                          data-aos="fade-in"
-                                                          data-aos-delay={`${index * 100}`}
-                                                      >
-                                                          <div className="d-flex justify-content-between">
+            {isNaN(currentDate) ? (
+                <div className="text-center">
+                    <div className="text-body-secondary">
+                        <h1 className="d-block text-danger">Invalid Date</h1>
+                        <span>Please select a date to view the schedule.</span>
+                    </div>
+                </div>
+            ) : (
+                <CTable
+                    responsive
+                    className="table-even-width"
+                    style={{
+                        '--cui-table-bg': 'transparent',
+                        '--cui-table-border-color': 'transparent',
+                    }}
+                >
+                    <CTableHead>
+                        <CTableRow>
+                            {generateTableHeaders()
+                                .slice(0, getColumnCount())
+                                .map((header, index) => (
+                                    <CTableHeaderCell
+                                        key={index}
+                                        className=" text-center text-uppercase fw-bold text-muted poppins-regular table-header-cell-no-wrap"
+                                    >
+                                        {header}
+                                    </CTableHeaderCell>
+                                ))}
+                        </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
+                        <CTableRow>
+                            {generateTableData()
+                                .slice(0, getColumnCount())
+                                .map((data, index) => (
+                                    <CTableDataCell key={index}>
+                                        <div className="d-block text-center">
+                                            {data
+                                                ? data.map((shipment, index) => {
+                                                      return (
+                                                          <CCard
+                                                              body
+                                                              key={index}
+                                                              className={`bg-${getCardColor(shipment.status)} rounded p-3 m-2 text-start text-white`}
+                                                              onClick={() =>
+                                                                  navigate(
+                                                                      `/shipment/${shipment.tracking_number}`,
+                                                                  )
+                                                              }
+                                                              data-aos="fade-in"
+                                                              data-aos-delay={`${index * 100}`}
+                                                          >
+                                                              <div className="d-flex justify-content-between">
+                                                                  <div className="mb-2">
+                                                                      <small className="text-muted d-block">
+                                                                          Tracing number
+                                                                      </small>
+                                                                      {shipment.tracking_number}
+                                                                  </div>
+                                                                  <div>
+                                                                      <small className="text-muted d-block">
+                                                                          Status
+                                                                      </small>
+                                                                      {getStatus(shipment.status)}
+                                                                  </div>
+                                                              </div>
+
+                                                              {shipment.courier !== 'none' && (
+                                                                  <div className="mb-2">
+                                                                      <small className="text-muted d-block">
+                                                                          Courier
+                                                                      </small>
+                                                                      {shipment.courier}
+                                                                  </div>
+                                                              )}
+
                                                               <div className="mb-2">
                                                                   <small className="text-muted d-block">
-                                                                      Tracing number
+                                                                      To Country
                                                                   </small>
-                                                                  {shipment.tracking_number}
+                                                                  {shipment.country}
                                                               </div>
-                                                              <div>
-                                                                  <small className="text-muted d-block">
-                                                                      Status
-                                                                  </small>
-                                                                  {getStatus(shipment.status)}
-                                                              </div>
-                                                          </div>
 
-                                                          {shipment.courier !== 'none' && (
                                                               <div className="mb-2">
                                                                   <small className="text-muted d-block">
-                                                                      Courier
+                                                                      Items/Weight
                                                                   </small>
-                                                                  {shipment.courier}
+                                                                  {shipment.number_of_items +
+                                                                      ' items'}{' '}
+                                                                  {shipment.total_weight + 'kg '}
                                                               </div>
-                                                          )}
 
-                                                          <div className="mb-2">
-                                                              <small className="text-muted d-block">
-                                                                  To Country
-                                                              </small>
-                                                              {shipment.country}
-                                                          </div>
-
-                                                          <div className="mb-2">
-                                                              <small className="text-muted d-block">
-                                                                  Items/Weight
-                                                              </small>
-                                                              {shipment.number_of_items + ' items'}{' '}
-                                                              {shipment.total_weight + 'kg '}
-                                                          </div>
-
-                                                          <div className="mb-2">
-                                                              <small className="text-muted d-block">
-                                                                  Amount
-                                                              </small>
-                                                              {new Intl.NumberFormat('en-US', {
-                                                                  style: 'currency',
-                                                                  currency:
-                                                                      shipment.amount.currency,
-                                                              }).format(shipment.amount.value)}
-                                                          </div>
-                                                      </CCard>
-                                                  )
-                                              })
-                                            : 'No Shipment'}
-                                    </div>
-                                </CTableDataCell>
-                            ))}
-                    </CTableRow>
-                </CTableBody>
-            </CTable>
+                                                              <div className="mb-2">
+                                                                  <small className="text-muted d-block">
+                                                                      Amount
+                                                                  </small>
+                                                                  {new Intl.NumberFormat('en-US', {
+                                                                      style: 'currency',
+                                                                      currency:
+                                                                          shipment.amount.currency,
+                                                                  }).format(shipment.amount.value)}
+                                                              </div>
+                                                          </CCard>
+                                                      )
+                                                  })
+                                                : 'No Shipment'}
+                                        </div>
+                                    </CTableDataCell>
+                                ))}
+                        </CTableRow>
+                    </CTableBody>
+                </CTable>
+            )}
         </div>
     )
 }
