@@ -250,32 +250,30 @@ const Account = () => {
                                         ))}
                                     </datalist>
                                 </CInputGroup>
-                                {user.role === 'user' && (
-                                    <div className="mb-3">
-                                        <CButton
-                                            color="secondary"
-                                            className="mb-1 me-2 rounded"
-                                            size="sm"
-                                            disabled
-                                        >
-                                            <FontAwesomeIcon icon={faGoogle} />{' '}
-                                            {user.oauth2 && user.oauth2.google
-                                                ? user.oauth2.google.email
-                                                : 'Connect Google'}
-                                        </CButton>
-                                        <CButton
-                                            color="secondary"
-                                            className="mb-1 me-2 rounded"
-                                            size="sm"
-                                            disabled
-                                        >
-                                            <FontAwesomeIcon icon={faGithub} />{' '}
-                                            {user.oauth2 && user.oauth2.github
-                                                ? user.oauth2.github.email
-                                                : 'Connect Github'}
-                                        </CButton>
-                                    </div>
-                                )}
+                                <div className="mb-3">
+                                    <CButton
+                                        color="secondary"
+                                        className="mb-1 me-2 rounded"
+                                        size="sm"
+                                        disabled
+                                    >
+                                        <FontAwesomeIcon icon={faGoogle} />{' '}
+                                        {user.oauth2 && user.oauth2.google
+                                            ? user.oauth2.google.email
+                                            : 'Connect Google'}
+                                    </CButton>
+                                    <CButton
+                                        color="secondary"
+                                        className="mb-1 me-2 rounded"
+                                        size="sm"
+                                        disabled
+                                    >
+                                        <FontAwesomeIcon icon={faGithub} />{' '}
+                                        {user.oauth2 && user.oauth2.github
+                                            ? user.oauth2.github.email
+                                            : 'Connect Github'}
+                                    </CButton>
+                                </div>
                                 <CButton
                                     type="submit"
                                     color="primary"
