@@ -33,7 +33,6 @@ const Faq = auth(lazy(() => import('./views/support/Faq')))
 const SendEmail = auth(lazy(() => import('./views/support/Email')))
 
 const Account = auth(lazy(() => import('./views/account')))
-const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const BookNow = auth(lazy(() => import('./views/book-now')))
 
@@ -102,7 +101,6 @@ const routes = [
     { path: '/send-email', name: 'Send Email', element: SendEmail },
 
     { path: '/account', name: 'Account', element: Account },
-    { path: '/account/security', name: 'Security', element: _Security },
 
     { path: '/book-now', name: 'Ship Now', element: BookNow },
 

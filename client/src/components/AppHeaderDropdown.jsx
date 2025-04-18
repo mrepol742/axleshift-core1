@@ -79,10 +79,6 @@ const AppHeaderDropdown = () => {
                     <FontAwesomeIcon icon={faCircleUser} className="me-2" />
                     Account
                 </CDropdownItem>
-                <CDropdownItem onClick={() => navigate('/account/security')}>
-                    <FontAwesomeIcon icon={faShield} className="me-2" />
-                    Security
-                </CDropdownItem>
                 <CDropdownItem onClick={() => navigate('/my-addresses')}>
                     <FontAwesomeIcon icon={faAddressBook} className="me-2" />
                     My Addresses

@@ -119,118 +119,107 @@ const Security = () => {
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )}
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-            <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
-                <CCol>
-                    <h4>{user.password === 'OK' ? 'Change' : 'Set'} Password</h4>
-                    <CCard className="mb-3">
-                        <CCardBody>
-                            {error.error && (
-                                <CAlert color="danger" className="d-flex align-items-center">
-                                    <FontAwesomeIcon
-                                        className="flex-shrink-0 me-2"
-                                        icon={faXmark}
-                                        size="xl"
-                                    />
-                                    <div>{error.message}</div>
-                                </CAlert>
-                            )}
-                            <CForm onSubmit={handleSubmit}>
-                                {user.password === 'OK' && (
-                                    <CInputGroup className="mb-3">
-                                        <CInputGroupText>
-                                            <FontAwesomeIcon icon={faLock} />
-                                        </CInputGroupText>
-                                        <CFormInput
-                                            id="password"
-                                            type={showPassword ? 'text' : 'password'}
-                                            placeholder="Password"
-                                            autoComplete="current-password"
-                                            value={formData.password}
-                                            onChange={(e) => handleInputChange(e)}
-                                            required
+            <h4>{user.password === 'OK' ? 'Change' : 'Set'} Password</h4>
+            <CCard className="mb-3">
+                <CCardBody>
+                    {error.error && (
+                        <CAlert color="danger" className="d-flex align-items-center">
+                            <FontAwesomeIcon
+                                className="flex-shrink-0 me-2"
+                                icon={faXmark}
+                                size="xl"
+                            />
+                            <div>{error.message}</div>
+                        </CAlert>
+                    )}
+                    <CForm onSubmit={handleSubmit}>
+                        {user.password === 'OK' && (
+                            <CInputGroup className="mb-3">
+                                <CInputGroupText>
+                                    <FontAwesomeIcon icon={faLock} />
+                                </CInputGroupText>
+                                <CFormInput
+                                    id="password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder="Password"
+                                    autoComplete="current-password"
+                                    value={formData.password}
+                                    onChange={(e) => handleInputChange(e)}
+                                    required
+                                />
+                                <CInputGroupText>
+                                    <span
+                                        onClick={(e) => setShowPassword(!showPassword)}
+                                        aria-label={
+                                            showPassword ? 'Hide password' : 'Show password'
+                                        }
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={showPassword ? faEyeSlash : faEye}
+                                            onClick={(e) => setShowPassword(!showPassword)}
                                         />
-                                        <CInputGroupText>
-                                            <span
-                                                onClick={(e) => setShowPassword(!showPassword)}
-                                                aria-label={
-                                                    showPassword ? 'Hide password' : 'Show password'
-                                                }
-                                            >
-                                                <FontAwesomeIcon
-                                                    icon={showPassword ? faEyeSlash : faEye}
-                                                    onClick={(e) => setShowPassword(!showPassword)}
-                                                />
-                                            </span>
-                                        </CInputGroupText>
-                                    </CInputGroup>
-                                )}
-                                <CInputGroup className="mb-3">
-                                    <CInputGroupText>
-                                        <FontAwesomeIcon icon={faLock} />
-                                    </CInputGroupText>
-                                    <CFormInput
-                                        id="new_password"
-                                        type={showPassword1 ? 'text' : 'password'}
-                                        placeholder="New Password"
-                                        autoComplete="new-password"
-                                        value={formData.new_password}
-                                        onChange={(e) => handlePasswordChange(e)}
-                                        required
-                                    />
-                                    <CInputGroupText>
-                                        <span
-                                            onClick={(e) => setShowPassword1(!showPassword1)}
-                                            aria-label={
-                                                showPassword1 ? 'Hide password' : 'Show password'
-                                            }
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={showPassword1 ? faEyeSlash : faEye}
-                                                onClick={(e) => setShowPassword1(!showPassword1)}
-                                            />
-                                        </span>
-                                    </CInputGroupText>
-                                </CInputGroup>
-                                {formData.new_password.length > 0 && (
-                                    <ul>
-                                        {requirementsStatus.map((req) => (
-                                            <li
-                                                key={req.id}
-                                                className={`text-${req.passed ? 'success' : 'danger'}`}
-                                            >
-                                                {req.text}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                                <CInputGroup className="mb-3">
-                                    <CInputGroupText>
-                                        <FontAwesomeIcon icon={faLock} />
-                                    </CInputGroupText>
-                                    <CFormInput
-                                        id="repeat_password"
-                                        type="password"
-                                        placeholder="Repeat password"
-                                        autoComplete="new-password"
-                                        value={formData.repeat_password}
-                                        onChange={(e) => handleInputChange(e)}
-                                        required
-                                    />
-                                </CInputGroup>
-                                <CButton
-                                    type="submit"
-                                    color="primary"
-                                    className="d-block me-2 rounded"
+                                    </span>
+                                </CInputGroupText>
+                            </CInputGroup>
+                        )}
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <FontAwesomeIcon icon={faLock} />
+                            </CInputGroupText>
+                            <CFormInput
+                                id="new_password"
+                                type={showPassword1 ? 'text' : 'password'}
+                                placeholder="New Password"
+                                autoComplete="new-password"
+                                value={formData.new_password}
+                                onChange={(e) => handlePasswordChange(e)}
+                                required
+                            />
+                            <CInputGroupText>
+                                <span
+                                    onClick={(e) => setShowPassword1(!showPassword1)}
+                                    aria-label={showPassword1 ? 'Hide password' : 'Show password'}
                                 >
-                                    Save changes
-                                </CButton>
-                            </CForm>
-                        </CCardBody>
-                    </CCard>
-                </CCol>
-                <CCol></CCol>
-            </CRow>
+                                    <FontAwesomeIcon
+                                        icon={showPassword1 ? faEyeSlash : faEye}
+                                        onClick={(e) => setShowPassword1(!showPassword1)}
+                                    />
+                                </span>
+                            </CInputGroupText>
+                        </CInputGroup>
+                        {formData.new_password.length > 0 && (
+                            <ul>
+                                {requirementsStatus.map((req) => (
+                                    <li
+                                        key={req.id}
+                                        className={`text-${req.passed ? 'success' : 'danger'}`}
+                                    >
+                                        {req.text}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        <CInputGroup className="mb-3">
+                            <CInputGroupText>
+                                <FontAwesomeIcon icon={faLock} />
+                            </CInputGroupText>
+                            <CFormInput
+                                id="repeat_password"
+                                type="password"
+                                placeholder="Repeat password"
+                                autoComplete="new-password"
+                                value={formData.repeat_password}
+                                onChange={(e) => handleInputChange(e)}
+                                required
+                            />
+                        </CInputGroup>
+                        <CButton type="submit" color="primary" className="d-block me-2 rounded">
+                            Save changes
+                        </CButton>
+                    </CForm>
+                </CCardBody>
+            </CCard>
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }
