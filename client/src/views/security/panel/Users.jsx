@@ -12,6 +12,7 @@ import {
     CCard,
     CCardBody,
     CCardTitle,
+    CButton,
 } from '@coreui/react'
 import { VITE_APP_AWS_S3 } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
@@ -94,12 +95,20 @@ const Users = () => {
                                         <span className="me-2">
                                             {user.first_name} {user.last_name}
                                         </span>{' '}
-                                        <CBadge color="primary" className="text-capitalize">
+                                        <CBadge color="secondary" className="text-capitalize">
                                             {user.role.replace('_', ' ')}
                                         </CBadge>
                                     </div>
                                 </CAccordionHeader>
                                 <CAccordionBody>
+                                    <CRow>
+                                        <CCol>
+                                            <strong>First name:</strong> {user.first_name}
+                                        </CCol>
+                                        <CCol>
+                                            <strong>Last name:</strong> {user.last_name}
+                                        </CCol>
+                                    </CRow>
                                     <CRow>
                                         <CCol>
                                             <strong>Username:</strong> {user.username}
@@ -128,15 +137,85 @@ const Users = () => {
                                             {user.oauth2 ? user.oauth2.github?.email : 'No'}
                                         </CCol>
                                     </CRow>
-                                    <CRow className="mb-4">
+                                    <CRow>
                                         <CCol>
                                             <strong>Microsoft:</strong>{' '}
                                             {user.oauth2 ? user.oauth2.microsoft?.email : 'No'}
                                         </CCol>
                                     </CRow>
+                                    <CRow>
+                                        <CCol>
+                                            <strong>Last Password Changed:</strong>{' '}
+                                            {user.password_changed_on
+                                                ? new Date(
+                                                      user.password_changed_on,
+                                                  ).toLocaleDateString()
+                                                : 'NaN'}
+                                        </CCol>
+                                        <CCol>
+                                            <strong>Last Username Changed:</strong>{' '}
+                                            {user.username_last_updated_at
+                                                ? new Date(
+                                                      user.username_last_updated_at,
+                                                  ).toLocaleDateString()
+                                                : 'NaN'}
+                                        </CCol>
+                                    </CRow>
+                                    <CRow>
+                                        <CCol>
+                                            <strong>Last Email Changed:</strong>{' '}
+                                            {user.email_changed_on
+                                                ? new Date(
+                                                      user.email_changed_on,
+                                                  ).toLocaleDateString()
+                                                : 'NaN'}
+                                        </CCol>
+                                    </CRow>
+                                    <CRow>
+                                        <CCol>
+                                            <strong>User ID:</strong> {user._id}
+                                        </CCol>
+                                        <CCol>
+                                            <strong>User Reference:</strong> {user.ref}
+                                        </CCol>
+                                    </CRow>
+                                    <CRow className="mb-4">
+                                        <CCol>
+                                            <strong>User Role:</strong>{' '}
+                                            <span className="text-capitalize">
+                                                {user.role.replace('_', ' ')}
+                                            </span>
+                                        </CCol>
+                                    </CRow>
                                     <small>
                                         Updated at {new Date(user.updated_at).toLocaleDateString()}
                                     </small>
+                                    <div className="d-flex">
+                                        <CButton
+                                            color="primary"
+                                            size="sm"
+                                            className="me-2"
+                                            onClick={() => {}}
+                                        >
+                                            Email
+                                        </CButton>
+                                        <CButton
+                                            color="success"
+                                            size="sm"
+                                            className="me-2"
+                                            onClick={() => {}}
+                                        >
+                                            Message
+                                        </CButton>
+                                        <CButton
+                                            color="danger"
+                                            size="sm"
+                                            className="me-2"
+                                            onClick={() => {}}
+                                        >
+                                            Delete User
+                                        </CButton>
+                                    </div>
                                 </CAccordionBody>
                             </CAccordionItem>
                         ))}
