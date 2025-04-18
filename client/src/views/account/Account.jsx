@@ -15,7 +15,7 @@ import {
     CButtonGroup,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faUser, faClock } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faUser, faClock, faCamera, faC } from '@fortawesome/free-solid-svg-icons'
 import { faGoogle, faGithub, faMicrosoft } from '@fortawesome/free-brands-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_API_URL, VITE_APP_AWS_S3 } from '../../config'
@@ -126,15 +126,25 @@ const Account = () => {
             <CCard className="mb-3">
                 <CCardBody>
                     <CForm onSubmit={(e) => handleSubmit(e)}>
-                        {user.avatar ? (
+                        {profilePic ? (
                             <CImage
-                                crossOrigin="Anonymous"
-                                src={`${VITE_APP_AWS_S3}/images/${user.avatar}.png`}
+                                src={URL.createObjectURL(profilePic)}
                                 className="rounded-pill p-1 border mb-3"
                                 width="100px"
                                 fluid
                                 loading="lazy"
                             />
+                        ) : user.avatar ? (
+                            <>
+                                <CImage
+                                    crossOrigin="Anonymous"
+                                    src={`${VITE_APP_AWS_S3}/images/${user.avatar}.png`}
+                                    className="rounded-pill p-1 border mb-3"
+                                    width="100px"
+                                    fluid
+                                    loading="lazy"
+                                />
+                            </>
                         ) : (
                             <div
                                 className="rounded-pill bg-primary d-flex align-items-center justify-content-center mb-3 fs-4"
@@ -143,25 +153,41 @@ const Account = () => {
                                 {getInitials(user.first_name)}
                             </div>
                         )}
-                        <CInputGroup className="mb-3">
+                        <FontAwesomeIcon
+                            id="faCamera"
+                            icon={faCamera}
+                            className="position-absolute bg-secondary p-2 rounded-pill bg-opacity-50"
+                            style={{ top: '50px', left: '50px', cursor: 'pointer' }}
+                            onClick={() => {
+                                const fileInput = document.querySelector(
+                                    'input[name="profile_pic"]',
+                                )
+                                fileInput.click()
+                            }}
+                        />
+                        <CInputGroup className="mb-2">
                             <CFormInput
+                                className="d-none"
                                 name="profile_pic"
                                 type="file"
+                                accept="image/*"
                                 onChange={(e) => {
                                     setProfilePic(e.target.files[0])
                                     const uploadButton = document.getElementById('upload-button')
+                                    const faCamera = document.getElementById('faCamera')
                                     if (e.target.files.length > 0) {
                                         uploadButton.style.display = 'inline-block'
+                                        faCamera.style.display = 'none'
                                     } else {
                                         uploadButton.style.display = 'none'
+                                        faCamera.style.display = 'inline-block'
                                     }
                                 }}
                             />
                             <CButton
                                 id="upload-button"
                                 color="primary"
-                                className="ms-2 rounded"
-                                style={{ display: 'none' }}
+                                className="ms-2 rounded d-none"
                                 onClick={(e) => {
                                     if (profilePic) {
                                         uploadProfile(e)
