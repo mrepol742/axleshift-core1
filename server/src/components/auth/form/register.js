@@ -43,11 +43,6 @@ const FormRegister = async (req, res) => {
             })
         }
 
-        // if (NODE_ENV === 'production')
-        //     res.status(200).json({
-        //         error: 'You have no permission to continue. Please contact the admin to allow registration.',
-        //     })
-
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         const ref = crypto.randomBytes(4).toString('hex')
         const dateNow = Date.now()

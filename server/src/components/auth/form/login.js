@@ -31,11 +31,6 @@ const FormLogin = async (req, res) => {
         if (passwordHash !== theUser.password)
             return res.status(401).json({ error: "The password you've entered is incorrect." })
 
-        // if (NODE_ENV === 'production' && theUser.role === 'user')
-        //     res.status(200).json({
-        //         error: 'You have successfully registered. We will send an email to you once everything is ready.',
-        //     })
-
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'
         const ip = getClientIp(req)
