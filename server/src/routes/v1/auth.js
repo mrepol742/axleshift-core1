@@ -226,6 +226,7 @@ router.post('/user', [recaptcha, auth], async (req, res, next) => {
 
         return res.status(200).json({
             _id: req.user._id,
+            avatar: req.user.avatar,
             username: set.username ? set.username : req.user.username,
             username_last_updated_at: set.username_last_updated_at
                 ? set.username_last_updated_at
