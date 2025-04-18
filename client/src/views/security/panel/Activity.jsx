@@ -12,7 +12,6 @@ import {
     CCardTitle,
 } from '@coreui/react'
 import { useToast } from '../../../components/AppToastProvider'
-
 import parseTimestamp from '../../../utils/Timestamp'
 import AppPagination from '../../../components/AppPagination'
 
@@ -56,7 +55,7 @@ const Activity = () => {
         <div>
             <CCard className="mb-4">
                 <CCardBody>
-                    <CCardTitle>Activity Logs</CCardTitle>
+                    <CCardTitle>Account Logs</CCardTitle>
                     <CTable stripedColumns hover responsive className="table-even-width">
                         <CTableHead>
                             <CTableRow>

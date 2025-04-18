@@ -14,6 +14,32 @@ const limit = 20
 
 router.get('/', auth, async (req, res, next) => res.status(301).send())
 
+router.post('/users', auth, async (req, res, next) => {
+    try {
+        const { page } = req.body
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
+        const current_page = parseInt(page) || 1
+        const skip = (current_page - 1) * limit
+
+        const db = await database()
+        const usersCollection = db.collection('users')
+
+        const [totalItems, users] = await Promise.all([
+            usersCollection.countDocuments({}),
+            usersCollection.find().sort({ time: -1 }).skip(skip).limit(limit).toArray(),
+        ])
+
+        return res.sendGzipped(200, {
+            data: users,
+            totalPages: Math.ceil(totalItems / limit),
+            currentPage: current_page,
+        })
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
+
 router.post('/sessions', auth, async (req, res, next) => {
     try {
         const { page } = req.body
