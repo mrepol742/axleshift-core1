@@ -59,3 +59,42 @@ _axios.interceptors.response.use(
 
 window.axios = _axios
 window.cookies = cookies
+
+const styleTitle = `
+    font-size: 48px;
+    font-weight: bold;
+    color: red;
+    text-shadow: 2px 2px 0 black;
+  `
+const styleMessage = `
+    font-size: 16px;
+    color: black;
+    font-weight: bold;
+    background: yellow;
+    padding: 4px 8px;
+    display: block;
+    border: 2px dashed red;
+  `
+
+console.log('%cSTOP!', styleTitle)
+console.log(
+    `%cThis browser feature is intended for developers.\nIf someone told you to copy and paste something here, it could be a scam. Never paste code you don’t understand.`,
+    styleMessage,
+)
+
+let devtoolsOpen = false
+const element = new Image()
+Object.defineProperty(element, 'id', {
+    get() {
+        devtoolsOpen = true
+        setTimeout(() => {
+            if (devtoolsOpen) {
+                console.clear()
+                console.log('%cSTOP!', styleTitle)
+                console.log(`%cThis feature is for developers. Be careful!`, styleMessage)
+            }
+        }, 100)
+    },
+})
+
+console.log('%c', element)
