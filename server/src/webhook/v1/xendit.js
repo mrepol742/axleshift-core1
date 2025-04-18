@@ -76,7 +76,7 @@ router.post('/', async (req, res) => {
                     )
                 }
             })(),
-            sendWebhook('invoices', { invoice_id: req.body.id, ...payload }),
+            sendWebhook('invoices', { action: 'update', invoice_id: req.body.id, ...payload }),
         ])
 
         return res.status(200).send()

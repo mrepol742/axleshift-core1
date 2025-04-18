@@ -75,25 +75,6 @@ const _nav = [
     },
     {
         component: CNavTitle,
-        name: 'Management',
-        role_exclude: ['staff', 'user'],
-    },
-    {
-        component: CNavItem,
-        name: 'Manage Documents',
-        to: '/management/documents',
-        role_exclude: ['staff', 'user'],
-        icon: <FontAwesomeIcon icon={faFolder} className="nav-icon" />,
-    },
-    {
-        component: CNavItem,
-        name: 'Manage Invoices',
-        to: '/management/invoices',
-        role_exclude: ['staff', 'user'],
-        icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
-    },
-    {
-        component: CNavTitle,
         name: 'Security',
         role_exclude: ['staff'],
     },

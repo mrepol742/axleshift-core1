@@ -14,6 +14,7 @@ const FormLogin = async (req, res) => {
             $or: [
                 { [`oauth2.google.email`]: email },
                 { [`oauth2.github.email`]: email },
+                { [`oauth2.microsoft.email`]: credential.email },
                 { email: email },
                 { username: email },
             ],
@@ -38,7 +39,6 @@ const FormLogin = async (req, res) => {
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'
         const ip = getClientIp(req)
-
         addSession(theUser, session_token, ip, userAgent, location)
         isNewIP(ip, theUser)
 

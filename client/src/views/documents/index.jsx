@@ -110,15 +110,19 @@ const Documents = () => {
                             {data.map((item, index) => (
                                 <CTableRow key={index}>
                                     <CTableDataCell>{item.freight_tracking_number}</CTableDataCell>
-                                    <CTableDataCell className="text-uppercase">
+                                    <CTableDataCell className="text-capitalize">
                                         {item.documents && item.documents.length > 0 ? (
                                             item.documents.map((doc, docIndex) => (
-                                                <span
-                                                    key={docIndex}
-                                                    className={`me-2 badge bg-${['approved', 'generated'].includes(doc.status) ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}`}
-                                                >
-                                                    {doc.status}
-                                                </span>
+                                                <>
+                                                    {doc.status !== 'not_applicable' && (
+                                                        <span
+                                                            key={docIndex}
+                                                            className={`me-2 badge bg-${['approved', 'generated'].includes(doc.status) ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}`}
+                                                        >
+                                                            {doc.status.replace('_', ' ')}
+                                                        </span>
+                                                    )}
+                                                </>
                                             ))
                                         ) : (
                                             <span>No documents available</span>
@@ -127,9 +131,13 @@ const Documents = () => {
                                     <CTableDataCell>
                                         {item.documents && item.documents.length > 0 ? (
                                             item.documents.map((doc, docIndex) => (
-                                                <span key={docIndex} className="d-block">
-                                                    {doc.name}
-                                                </span>
+                                                <>
+                                                    {doc.status !== 'not_applicable' && (
+                                                        <span key={docIndex} className="d-block">
+                                                            {doc.name}
+                                                        </span>
+                                                    )}
+                                                </>
                                             ))
                                         ) : (
                                             <span>No documents available</span>
@@ -137,6 +145,7 @@ const Documents = () => {
                                     </CTableDataCell>
                                     <CTableDataCell>
                                         <CButton
+                                            size="sm"
                                             className="btn btn-primary"
                                             onClick={(e) =>
                                                 navigate(
@@ -144,7 +153,7 @@ const Documents = () => {
                                                 )
                                             }
                                         >
-                                            View
+                                            Open Documents
                                         </CButton>
                                     </CTableDataCell>
                                 </CTableRow>

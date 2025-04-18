@@ -70,8 +70,8 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
                     },
                 },
             ),
-            sendWebhook('shipments', freight),
-            sendWebhook('invoices', payload),
+            sendWebhook('shipments', { action: 'create', ...freight }),
+            sendWebhook('invoices', { action: 'create', ...payload }),
         ])
         return res.status(200).send({ r_url: xenditInvoice.invoiceUrl })
     } catch (err) {

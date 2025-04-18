@@ -6,6 +6,7 @@ import auth from './components/middleware/Auth'
  */
 const OTP = lazy(() => import('./views/auth/OTP'))
 const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
+const MicrosoftCallback = lazy(() => import('./views/auth/microsoft/Callback'))
 const Logout = lazy(() => import('./views/auth/Logout'))
 
 /*
@@ -32,7 +33,6 @@ const Faq = auth(lazy(() => import('./views/support/Faq')))
 const SendEmail = auth(lazy(() => import('./views/support/Email')))
 
 const Account = auth(lazy(() => import('./views/account')))
-const _Security = auth(lazy(() => import('./views/account/Security')))
 
 const BookNow = auth(lazy(() => import('./views/book-now')))
 
@@ -60,9 +60,6 @@ const InvoiceInfo = auth(lazy(() => import('./views/invoices/[id]')))
 
 const Performance = auth(lazy(() => import('./views/performance')))
 
-const ManagementDocuments = auth(lazy(() => import('./views/management/documents')))
-const ManagementInvoices = auth(lazy(() => import('./views/management/invoices')))
-
 const Err404 = auth(lazy(() => import('./views/errors/404')))
 
 const routes = [
@@ -78,6 +75,12 @@ const routes = [
         external: true,
         name: 'Github Callback',
         element: GithubCallback,
+    },
+    {
+        path: '/auth/microsoft/callback',
+        external: true,
+        name: 'Microsoft Callback',
+        element: MicrosoftCallback,
     },
     { path: '/forgot-password', external: true, name: 'Forgot Password', element: ForgotPassword },
 
@@ -98,7 +101,6 @@ const routes = [
     { path: '/send-email', name: 'Send Email', element: SendEmail },
 
     { path: '/account', name: 'Account', element: Account },
-    { path: '/account/security', name: 'Security', element: _Security },
 
     { path: '/book-now', name: 'Ship Now', element: BookNow },
 
@@ -121,9 +123,6 @@ const routes = [
     { path: '/track/:id', name: 'Track', element: TrackInfo },
 
     { path: '/performance', name: 'Performance', element: Performance },
-
-    { path: '/management/documents', name: 'Manage Documents', element: ManagementDocuments },
-    { path: '/management/invoices', name: 'Manage Invoices', element: ManagementInvoices },
 
     { path: '*', name: '404', element: Err404 },
 ]

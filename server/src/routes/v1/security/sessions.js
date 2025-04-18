@@ -52,10 +52,7 @@ router.post('/', auth, async (req, res) => {
         return res.status(200).json({
             data: {
                 sessions: paginatedData,
-                current_session: {
-                    ip_address: currentSession.ip_address,
-                    user_agent: currentSession.user_agent,
-                },
+                current_session: currentSession,
                 logout: !(allDataCount > 0),
             },
             totalPages: Math.ceil(allDataCount / limit),

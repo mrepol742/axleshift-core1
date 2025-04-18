@@ -57,24 +57,33 @@ router.post('/sessions', auth, async (req, res, next) => {
     res.status(500).json({ error: 'Internal server error' })
 })
 
-router.post('/sessions/logout', [recaptcha, auth], async (req, res, next) => {
+router.post(`/sessions/logout/:id`, [recaptcha, auth], async (req, res, next) => {
     try {
         const redisClient = await redis()
         const stream = redisClient.scanStream()
-        let sessionData = null
+        const selectedId = req.params.id
+        let isLogout = false
+        let isSameSession = false
 
         for await (const keys of stream) {
             if (keys.length > 0) {
                 const filteredKeys = keys.map((key) => key.replace('axleshift-core1:', ''))
                 const values = await redisClient.mget(filteredKeys)
-                keys.forEach(async (key, index) => {
+                for await (const [index, key] of keys.entries()) {
                     const value = JSON.parse(await decrypt(values[index]))
                     if (value && /^axleshift-core1:internal-[0-9a-f]{32}$/.test(key)) {
-                        await remCache(`internal-${value.token}`)
+                        if ((selectedId && value._id === selectedId) || !selectedId) {
+                            await remCache(`internal-${value.token}`)
+                            if (selectedId) isLogout = true
+                            if (req.session._id === selectedId) isSameSession = true
+                        }
                     }
-                })
+                }
             }
         }
+        if (isSameSession) return res.status(200).json({ logout: true })
+        if (isLogout) return res.status(200).json({ message: 'Session has been logged out' })
+        if (selectedId && !isLogout) return res.status(200).json({ error: 'Session not found' })
         return res.status(200).json({ message: 'All sessions have been logged out' })
     } catch (e) {
         logger.error(e)
@@ -134,7 +143,32 @@ router.post('/activity', auth, async (req, res, next) => {
     res.status(500).json({ error: 'Internal server error' })
 })
 
-router.get('/maintenance', auth, async (req, res, next) => res.status(200).send())
+router.get('/maintenance', auth, async (req, res, next) => {
+    try {
+        const maintenance = await getCache(`maintenance`)
+        return res.status(200).json({
+            mode: maintenance ? maintenance : 'off',
+        })
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
+
+router.post('/maintenance', [recaptcha, auth], async (req, res, next) => {
+    try {
+        const { mode } = req.body
+        if (!mode) return res.status(400).json({ error: 'Invalid request' })
+        if (!['on', 'off'].includes(mode)) return res.status(400).json({ error: 'Invalid request' })
+
+        await setCache(`maintenance`, mode)
+
+        return res.status(200).json({ mode })
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
 
 router.get('/ip-filtering', auth, async (req, res, next) => {
     try {

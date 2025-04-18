@@ -4,6 +4,7 @@ import { getClientIp } from '../ip.js'
 
 const Token = (theUser, req) => {
     // const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 })
+    const { location } = req.body
     const session_token = crypto.randomBytes(16).toString('hex')
     const clientIp = getClientIp(req)
     const userAgent = req.headers['user-agent'] || 'unknown'
@@ -11,7 +12,7 @@ const Token = (theUser, req) => {
     //     publicKey: btoa(publicKey.export({ type: 'pkcs1', format: 'pem' })),
     //     privateKey: btoa(privateKey.export({ type: 'pkcs1', format: 'pem' })),
     // }
-    addSession(theUser, session_token, clientIp, userAgent, null)
+    addSession(theUser, session_token, clientIp, userAgent, location)
     isNewIP(clientIp, theUser)
     return {
         token: session_token,

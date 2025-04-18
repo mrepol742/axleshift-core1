@@ -13,6 +13,7 @@ import {
     CModalBody,
     CModalTitle,
     CModalFooter,
+    CFormCheck,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
@@ -159,15 +160,14 @@ const IPFiltering = () => {
             )}
             {ipList.map((item, index) => (
                 <div key={index} className="d-flex mb-2">
-                    <input
-                        className="me-3"
-                        type="checkbox"
+                    <CFormCheck
                         checked={item.checked}
                         onChange={(e) => handleCheckboxChange(index, e.target.checked)}
                     />
                     <CFormInput
                         type="text"
                         value={item.ip}
+                        className="ms-2"
                         onChange={(e) => handleIpChange(index, e.target.value)}
                         placeholder="Enter IP address"
                     />

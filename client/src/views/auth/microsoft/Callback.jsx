@@ -19,7 +19,7 @@ const Callback = () => {
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                github(code, {
+                microsoft(code, {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                 })
@@ -48,11 +48,11 @@ const Callback = () => {
         )
     }
 
-    const github = async (code, location) => {
+    const microsoft = async (code, location) => {
         const recaptcha = await recaptchaRef.current.executeAsync()
         axios
             .post(`/auth/login`, {
-                type: 'github',
+                type: 'microsoft',
                 code,
                 location: JSON.stringify(location),
                 recaptcha_ref: recaptcha,

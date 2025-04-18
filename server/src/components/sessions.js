@@ -6,8 +6,6 @@ import { send } from './mail.js'
 import redis, { getCache, setCache, remCache, decrypt } from '../models/redis.js'
 import { getClientIp } from './ip.js'
 
-const SESSION_TTL = 7 * 24 * 60 * 60 * 1000
-
 export const addSession = async (theUser, sessionToken, ip, userAgent, location) => {
     try {
         const data = {

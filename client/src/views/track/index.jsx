@@ -12,6 +12,10 @@ import {
     CCardTitle,
     CButton,
     CSpinner,
+    CModal,
+    CModalTitle,
+    CModalHeader,
+    CModalBody,
 } from '@coreui/react'
 import { useDropzone } from 'react-dropzone'
 import jsqr from 'jsqr'
@@ -24,6 +28,7 @@ const Track = () => {
     const [trackingNumber, setTrackingNumber] = useState('')
     const [image, setImage] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [showModal, setShowModal] = useState(false)
     const navigate = useNavigate()
 
     const onDrop = (acceptedFiles) => {
@@ -48,6 +53,7 @@ const Track = () => {
     }
 
     const loadTrackingNumber = (_trackinNumber) => {
+        setShowModal(false)
         setTrackingNumber(_trackinNumber)
         setLoading(true)
         setTimeout(() => {
@@ -59,6 +65,7 @@ const Track = () => {
     }
 
     const handleCamera = () => {
+        setShowModal(true)
         const video = document.createElement('video')
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
@@ -71,7 +78,7 @@ const Track = () => {
                     'style',
                     'position: absolute; top: 0; left: 0; width: 100%; height: auto; z-index: 50000;',
                 )
-                document.body.appendChild(video)
+                document.getElementById('video').appendChild(video)
                 video.addEventListener('loadedmetadata', () => {
                     video.play()
 
@@ -98,6 +105,12 @@ const Track = () => {
                 addToast('Unable to access camera.')
                 console.error('Error accessing camera:', e)
             })
+    }
+
+    const closeModa = () => {
+        setShowModal(false)
+        const videoElement = document.querySelector('video')
+        if (videoElement) videoElement.remove()
     }
 
     const handleScan = (image) => {
@@ -185,6 +198,36 @@ const Track = () => {
                     </div>
                 </CCol>
             </CRow>
+            {showModal && (
+                <CModal
+                    alignment="center"
+                    fullscreen="sm"
+                    scrollable
+                    backdrop="static"
+                    keyboard={false}
+                    visible={showModal}
+                    onClose={() => closeModa()}
+                    aria-labelledby="ScheduleShipment"
+                >
+                    <CModalHeader>
+                        <CModalTitle>QRCode Scanner</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody className="vh-100">
+                        <div id="video" className="h-50"></div>
+                        Instructions:
+                        <ul>
+                            <li>Ensure the QR code is well-lit and clearly visible.</li>
+                            <li>Hold the QR code steady in front of the camera.</li>
+                            <li>
+                                Position the QR code within the camera&apos;s frame for better
+                                detection.
+                            </li>
+                            <li>Avoid reflections or glare on the QR code surface.</li>
+                            <li>Keep the camera lens clean for optimal scanning.</li>
+                        </ul>
+                    </CModalBody>
+                </CModal>
+            )}
         </div>
     )
 }

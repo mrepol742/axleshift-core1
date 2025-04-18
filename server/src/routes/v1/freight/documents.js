@@ -119,7 +119,7 @@ router.post(
                     const documents = documentsCollection.findOne({
                         _id: new ObjectId(req.documents._id),
                     })
-                    if (documents) sendWebhook('documents', documents)
+                    if (documents) sendWebhook('documents', { action: 'update', ...documents })
                 })(),
             ])
 

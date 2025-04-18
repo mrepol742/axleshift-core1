@@ -13,6 +13,7 @@ import {
     CModalBody,
     CModalTitle,
     CModalFooter,
+    CFormCheck,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
@@ -163,10 +164,8 @@ const GEO = () => {
                 </CContainer>
             )}
             {geoLocationList.map((item, index) => (
-                <div key={index} className="d-flex mb-2">
-                    <input
-                        className="me-3"
-                        type="checkbox"
+                <div key={index} className="d-block d-md-flex mb-2">
+                    <CFormCheck
                         checked={item.checked}
                         onChange={(e) => handleCheckboxChange(index, e.target.checked)}
                     />
@@ -175,7 +174,7 @@ const GEO = () => {
                         value={item.geo.latitude}
                         onChange={(e) => handleGeoChange(index, e.target.value, 'latitude')}
                         placeholder="Enter Latitude"
-                        className="me-2"
+                        className="me-2 ms-0 ms-md-2 mb-2 mb-md-0"
                     />
                     <CFormInput
                         type="text"

@@ -14,7 +14,6 @@ const GeoLocationFilter = async (req, res, next) => {
         if (!latitude || !longitude) return next()
         const isAllowed = filter_mode === 'whitelist' ? true : false
         for (const { latitude: lat, longitude: lon } of geo) {
-            logger.info(`Latitude: ${lat}, Longitude: ${lon}`)
             if (haversineDistance(latitude, longitude, lat, lon) <= 10) {
                 if (isAllowed) return next()
                 return res
