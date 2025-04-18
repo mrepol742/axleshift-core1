@@ -8,7 +8,14 @@ import { removeSession } from '../../components/sessions.js'
 import auth from '../../middleware/auth.js'
 import recaptcha from '../../middleware/recaptcha.js'
 import ipwhitelist from '../../middleware/ipwhitelist.js'
-import { Github, Google, FormLogin, FormRegister, FormOauth2 } from '../../components/auth/index.js'
+import {
+    Github,
+    Google,
+    Microsoft,
+    FormLogin,
+    FormRegister,
+    FormOauth2,
+} from '../../components/auth/index.js'
 import activity from '../../components/activity.js'
 import { APP_KEY } from '../../config.js'
 import { remCache } from '../../models/redis.js'
@@ -35,7 +42,7 @@ router.post('/register', [GeoLocationFilter, ipwhitelist, recaptcha], async (req
             credential,
             code,
         } = req.body
-        if (!type || !['form', 'google', 'github'].includes(type))
+        if (!type || !['form', 'google', 'github', 'microsoft'].includes(type))
             return res.status(400).json({ error: 'Invalid request' })
         if (
             type === 'form' &&
@@ -44,12 +51,14 @@ router.post('/register', [GeoLocationFilter, ipwhitelist, recaptcha], async (req
             return res.status(400).json({ error: 'Invalid request' })
         if (type === 'google' && !credential)
             return res.status(400).json({ error: 'Invalid request' })
-        if (type === 'github' && !code) return res.status(400).json({ error: 'Invalid request' })
+        if ((type === 'github' || type === 'microsoft') && !code)
+            return res.status(400).json({ error: 'Invalid request' })
 
         // hehe i need to save a bit of line of code here
         // its getting quite bit complex
         if (type === 'google') return await Google(req, res)
         if (type === 'github') return await Github(req, res)
+        if (type === 'microsoft') return await Microsoft(req, res)
 
         if (!/^[a-zA-Z0-9]+$/.test(username))
             return res.status(200).json({ error: 'Username must only contain letters and numbers' })
@@ -97,16 +106,18 @@ router.post('/register', [GeoLocationFilter, ipwhitelist, recaptcha], async (req
 router.post('/login', [GeoLocationFilter, ipwhitelist, recaptcha], async (req, res) => {
     try {
         const { email, password, credential, type, code, location } = req.body
-        if (!type || !location || !['form', 'google', 'github'].includes(type))
+        if (!type || !location || !['form', 'google', 'github', 'microsoft'].includes(type))
             return res.status(400).json({ error: 'Invalid request' })
         if (type === 'form' && (!email || !password))
             return res.status(400).json({ error: 'Invalid request' })
         if (type === 'google' && !credential)
             return res.status(400).json({ error: 'Invalid request' })
-        if (type === 'github' && !code) return res.status(400).json({ error: 'Invalid request' })
+        if ((type === 'github' || type === 'microsoft') && !code)
+            return res.status(400).json({ error: 'Invalid request' })
 
         if (type === 'google') return await Google(req, res)
         if (type === 'github') return await Github(req, res)
+        if (type === 'microsoft') return await Microsoft(req, res)
 
         // finally the end :(
         return await FormLogin(req, res)
@@ -180,6 +191,7 @@ router.post('/user', [recaptcha, auth], async (req, res, next) => {
                         $or: [
                             { [`oauth2.google.email`]: email },
                             { [`oauth2.github.email`]: email },
+                            { [`oauth2.microsoft.email`]: credential.email },
                             { email: email },
                         ],
                     })

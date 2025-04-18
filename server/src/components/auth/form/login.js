@@ -14,6 +14,7 @@ const FormLogin = async (req, res) => {
             $or: [
                 { [`oauth2.google.email`]: email },
                 { [`oauth2.github.email`]: email },
+                { [`oauth2.microsoft.email`]: credential.email },
                 { email: email },
                 { username: email },
             ],

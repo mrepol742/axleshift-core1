@@ -6,6 +6,7 @@ import auth from './components/middleware/Auth'
  */
 const OTP = lazy(() => import('./views/auth/OTP'))
 const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
+const MicrosoftCallback = lazy(() => import('./views/auth/microsoft/Callback'))
 const Logout = lazy(() => import('./views/auth/Logout'))
 
 /*
@@ -75,6 +76,12 @@ const routes = [
         external: true,
         name: 'Github Callback',
         element: GithubCallback,
+    },
+    {
+        path: '/auth/microsoft/callback',
+        external: true,
+        name: 'Microsoft Callback',
+        element: MicrosoftCallback,
     },
     { path: '/forgot-password', external: true, name: 'Forgot Password', element: ForgotPassword },
 

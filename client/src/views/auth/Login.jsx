@@ -36,6 +36,7 @@ import {
     VITE_APP_RECAPTCHA_SITE_KEY,
     VITE_APP_SESSION,
     VITE_APP_GITHUB_OAUTH_CLIENT_ID,
+    VITE_APP_MICROSOFT_OAUTH_CLIENT_ID,
 } from '../../config'
 
 const Login = () => {
@@ -69,6 +70,16 @@ const Login = () => {
             })
         },
     })
+
+    const handleGithubLogin = () => {
+        setLoading(true)
+        window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`
+    }
+
+    const handleMicrosoftLogin = () => {
+        setLoading(true)
+        window.location.href = `https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?client_id=${VITE_APP_MICROSOFT_OAUTH_CLIENT_ID}&response_type=code&redirect_uri=http://localhost:3000/auth/microsoft/callback&response_mode=query&scope=openid%20profile%20email%20User.Read&state=12345`
+    }
 
     useEffect(() => {
         if (cookies.get(VITE_APP_SESSION) !== undefined) return (window.location.href = url)
@@ -338,13 +349,15 @@ const Login = () => {
                                     <CButton
                                         color="outline-primary"
                                         className="me-2"
-                                        onClick={() =>
-                                            (window.location.href = `https://github.com/login/oauth/authorize?client_id=${VITE_APP_GITHUB_OAUTH_CLIENT_ID}`)
-                                        }
+                                        onClick={handleGithubLogin}
                                     >
                                         <FontAwesomeIcon icon={faGithub} />
                                     </CButton>
-                                    <CButton color="outline-primary" className="me-2" disabled>
+                                    <CButton
+                                        color="outline-primary"
+                                        className="me-2"
+                                        onClick={handleMicrosoftLogin}
+                                    >
                                         <FontAwesomeIcon icon={faMicrosoft} />
                                     </CButton>
                                     <div className="d-flex justify-content-end small">

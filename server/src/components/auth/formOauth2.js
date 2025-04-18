@@ -11,7 +11,7 @@ import { upload, uploadToS3 } from '../../components/s3/profile.js'
 const FormOauth2 = async (req, res) => {
     try {
         const credential = req.body.credential
-        const provider = credential.request_type ? 'github' : 'google'
+        const provider = req.body.type
 
         const db = await database()
         const usersCollection = db.collection('users')
@@ -19,6 +19,7 @@ const FormOauth2 = async (req, res) => {
             $or: [
                 { [`oauth2.google.email`]: credential.email },
                 { [`oauth2.github.email`]: credential.email },
+                { [`oauth2.microsoft.email`]: credential.email },
                 { email: credential.email },
             ],
         })
