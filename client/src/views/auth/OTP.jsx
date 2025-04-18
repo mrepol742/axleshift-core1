@@ -38,6 +38,18 @@ const OTP = () => {
                 if (!response.data.otp) return navigate('/dashboard')
                 setEmail(response.data.email)
             })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error ||
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
+
+                setError({
+                    error: true,
+                    message,
+                })
+            })
             .finally(() => setLoading(false))
     }
 
@@ -151,7 +163,9 @@ const OTP = () => {
         <div className="bg-dark min-vh-100 d-flex flex-row align-items-center">
             <div className="auth-bg" />
             <CContainer>
-                {!email && <p className="text-center">Processing...</p>}
+                {!email && (
+                    <h1 className="text-center">{error ? error.message : 'Processing...'}</h1>
+                )}
                 {email && (
                     <CRow className="justify-content-center">
                         <CCol md={8} lg={6} xl={5}>

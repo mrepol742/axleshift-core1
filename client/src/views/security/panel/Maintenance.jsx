@@ -10,12 +10,36 @@ const Maintenance = () => {
     const recaptchaRef = React.useRef()
     const { addToast } = useToast()
     const [loading, setLoading] = useState(true)
-    const [maintenance, setMaintenance] = useState(false)
+    const [maintenance, setMaintenance] = useState('off')
 
     const fetchData = async () => {
         axios
             .get(`/sec/management/maintenance`)
-            .then((response) => setMaintenance(response.data.maintenance || 'a'))
+            .then((response) => setMaintenance(response.data.mode))
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error ||
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
+    }
+
+    const saveData = async () => {
+        const recaptcha = await recaptchaRef.current.executeAsync()
+        setLoading(true)
+        axios
+            .post(`/sec/management/maintenance`, {
+                recaptcha_ref: recaptcha,
+                mode: maintenance === 'on' ? 'off' : 'on',
+            })
+            .then((response) => {
+                if (response.data.error) return addToast(response.data.error)
+                addToast('Changes saved successfully', 'Success')
+                setMaintenance(response.data.mode)
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
@@ -42,7 +66,7 @@ const Maintenance = () => {
         <div>
             <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
 
-            <h4>Enable maintenance</h4>
+            <h4>Maintenance notice</h4>
             <CCard>
                 <CCardBody>
                     <p>
@@ -53,10 +77,19 @@ const Maintenance = () => {
                         type="submit"
                         color="danger"
                         className="mt-4 d-block me-2 rounded"
-                        disabled={maintenance}
+                        onClick={saveData}
                     >
-                        <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> Enable
-                        maintenance
+                        {maintenance === 'on' ? (
+                            <>
+                                <FontAwesomeIcon icon={faCircleExclamation} className="me-2" />{' '}
+                                Disable maintenance
+                            </>
+                        ) : (
+                            <>
+                                <FontAwesomeIcon icon={faCircleExclamation} className="me-2" />{' '}
+                                Enable maintenance
+                            </>
+                        )}
                     </CButton>
                 </CCardBody>
             </CCard>

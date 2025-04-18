@@ -68,9 +68,6 @@ const Callback = () => {
                         ? 'Server is offline or restarting please wait'
                         : error.message)
                 setError(message)
-                setTimeout(() => {
-                    navigate(`/login`)
-                }, 1500)
             })
             .finally(() => setLoading(false))
     }

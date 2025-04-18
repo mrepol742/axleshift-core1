@@ -85,6 +85,13 @@ const internal = async (req, res, next) => {
     req.user = theUser
     req.session = session
 
+    if (!['admin', 'super_admin'].includes(theUser.role)) {
+        const maintenance = await getCache('maintenance')
+        if (maintenance && maintenance === 'on') {
+            return res.status(503).json({ error: 'Service Unavailable' })
+        }
+    }
+
     if (session.active !== true || !theUser.email_verify_at) {
         if (req.path === '/otp' || req.path === '/otp/new') return next()
         const theOtp = await getCache(`otp-${req.user._id.toString()}`)

@@ -143,7 +143,32 @@ router.post('/activity', auth, async (req, res, next) => {
     res.status(500).json({ error: 'Internal server error' })
 })
 
-router.get('/maintenance', auth, async (req, res, next) => res.status(200).send())
+router.get('/maintenance', auth, async (req, res, next) => {
+    try {
+        const maintenance = await getCache(`maintenance`)
+        return res.status(200).json({
+            mode: maintenance ? maintenance : 'off',
+        })
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
+
+router.post('/maintenance', [recaptcha, auth], async (req, res, next) => {
+    try {
+        const { mode } = req.body
+        if (!mode) return res.status(400).json({ error: 'Invalid request' })
+        if (!['on', 'off'].includes(mode)) return res.status(400).json({ error: 'Invalid request' })
+
+        await setCache(`maintenance`, mode)
+
+        return res.status(200).json({ mode })
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
 
 router.get('/ip-filtering', auth, async (req, res, next) => {
     try {
