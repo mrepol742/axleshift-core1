@@ -59,7 +59,20 @@ const Sessions = () => {
                 session_id: id,
                 recaptcha_ref: recaptcha,
             })
-            .then((response) => addToast(response.data.message))
+            .then((response) => {
+                addToast(response.data.message)
+                if (id) {
+                    setResult((prevResult) => ({
+                        ...prevResult,
+                        sessions: prevResult.sessions.filter((session) => session._id !== id),
+                    }))
+                } else {
+                    setResult((prevResult) => ({
+                        ...prevResult,
+                        sessions: [],
+                    }))
+                }
+            })
             .catch((error) => {
                 const message =
                     error.response?.data?.error ||
@@ -68,7 +81,7 @@ const Sessions = () => {
                         : error.message)
                 addToast(message)
             })
-            .finally(() => fetchData())
+            .finally(() => setLoading(false))
     }
 
     const fetchData = async (page) => {
