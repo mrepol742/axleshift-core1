@@ -22,6 +22,12 @@ const excludedPaths = [
 
 _axios.interceptors.request.use(
     async (config) => {
+        if (config.data) {
+            const honeypotField = config.data.phoneNumber
+            if (honeypotField && honeypotField.trim() !== '') {
+                return Promise.reject(new Error('Spam detected'))
+            }
+        }
         if (config.data && !(config.data instanceof FormData)) {
             const sanitizedData = DOMPurify.sanitize(JSON.stringify(config.data))
             config.data = pako.gzip(sanitizedData, { to: 'string' })

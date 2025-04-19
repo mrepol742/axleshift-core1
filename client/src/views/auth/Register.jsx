@@ -43,6 +43,7 @@ const Register = () => {
         first_name: '',
         last_name: '',
         password: '',
+        phoneNumber: '',
         repeat_password: '',
     })
     const [loading, setLoading] = useState(true)
@@ -248,10 +249,14 @@ const Register = () => {
                                 <CForm onSubmit={(e) => handleSubmit(e, 'form', null)}>
                                     <h1>Axleshift</h1>
                                     <p className="text-body-secondary">Create your account</p>
-                                    <ReCAPTCHA
-                                        ref={recaptchaRef}
-                                        size="invisible"
-                                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                                    <CFormInput
+                                        type="text"
+                                        name="axle_pot"
+                                        id="phoneNumber"
+                                        className="axle_pot"
+                                        placeholder="Phone number"
+                                        value={formData.phoneNumber}
+                                        onChange={(e) => handleInputChange(e)}
                                     />
                                     <CRow>
                                         <CCol md={6} className="mb-3">
@@ -450,6 +455,7 @@ const Register = () => {
                     </CCol>
                 </CRow>
             </CContainer>
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }
