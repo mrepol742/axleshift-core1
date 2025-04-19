@@ -18,6 +18,7 @@ import { VITE_APP_AWS_S3 } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import parseTimestamp from '../../../utils/Timestamp'
 import AppPagination from '../../../components/AppPagination'
+import { useNavigate } from 'react-router-dom'
 
 const Users = () => {
     const { addToast } = useToast()
@@ -25,6 +26,7 @@ const Users = () => {
     const [result, setResult] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
+    const navigate = useNavigate()
 
     const fetchData = async (page) => {
         axios
@@ -195,7 +197,9 @@ const Users = () => {
                                             color="primary"
                                             size="sm"
                                             className="me-2"
-                                            onClick={() => {}}
+                                            onClick={() =>
+                                                navigate(`/send-email?email=${user.email}`)
+                                            }
                                         >
                                             Email
                                         </CButton>

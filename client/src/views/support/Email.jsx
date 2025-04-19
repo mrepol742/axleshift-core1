@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     CForm,
     CFormInput,
@@ -58,6 +58,17 @@ const Email = () => {
             [name]: name === 'email' ? value : filter.clean(value),
         }))
     }
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const email = urlParams.get('email')
+        if (email)
+            setFormData({
+                email: email,
+                subject: '',
+                message: '',
+            })
+    }, [])
 
     if (loading)
         return (

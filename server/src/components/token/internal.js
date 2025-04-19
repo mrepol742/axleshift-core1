@@ -68,10 +68,7 @@ const internal = async (req, res, next) => {
     if (!session) return res.status(401).json({ error: 'Unauthorized' })
 
     const theUser = await getUser(session)
-    if (
-        !theUser ||
-        (adminRoute.includes(path) && !['super_admin', 'admin'].includes(theUser.role))
-    )
+    if (!theUser || (adminRoute.includes(path) && !['super_admin', 'admin'].includes(theUser.role)))
         return res.status(401).json({ error: 'Unauthorized' })
 
     // const encryptedData = req.body.data
