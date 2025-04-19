@@ -6,14 +6,10 @@ const Logout = () => {
     const [loading, setLoading] = useState(true)
 
     const logout = async () => {
-        axios
-            .post(`/auth/logout`)
-            .then((response) => {
-                cookies.remove(VITE_APP_SESSION)
-                window.location.href = '/'
-            })
-            .catch((error) => (window.location.href = '/'))
-            .finally(() => setLoading(false))
+        axios.post(`/auth/logout`).finally(() => {
+            cookies.remove(VITE_APP_SESSION)
+            window.location.href = '/'
+        })
     }
 
     useEffect(() => {
