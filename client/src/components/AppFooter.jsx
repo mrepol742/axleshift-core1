@@ -11,9 +11,11 @@ import {
     CButton,
     CModalTitle,
 } from '@coreui/react'
+import { useNavigate } from 'react-router-dom'
 
 const AppFooter = () => {
     const [modal, setModal] = useState(false)
+    const navigate = useNavigate()
 
     const toggleModal = () => {
         setModal(!modal)
@@ -24,22 +26,30 @@ const AppFooter = () => {
             <CFooter className="small">
                 <CNav className="justify-content-center">
                     <CNavItem>
-                        <CNavLink href="/privacy-policy" className="px-2 text-body-secondary">
+                        <CNavLink href="/" className="px-2 text-body-secondary">
                             &copy; {new Date().getFullYear()} Axleshift
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>
-                        <CNavLink href="/privacy-policy" className="px-2 text-body-secondary">
+                        <CNavLink
+                            onClick={(e) => navigate('/privacy-policy')}
+                            className="px-2 text-body-secondary"
+                        >
                             Privacy
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>
-                        <CNavLink href="/terms-of-service" className="px-2 text-body-secondary">
+                        <CNavLink
+                            onClick={(e) => navigate('/terms-of-service')}
+                            className="px-2 text-body-secondary"
+                        >
                             Terms
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>
                         <CNavLink
+                            target="_blank"
+                            rel="noopener noreferrer"
                             href="https://stats.uptimerobot.com/5l58Mua0Wi"
                             className="px-2 text-body-secondary"
                         >
