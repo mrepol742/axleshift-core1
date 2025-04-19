@@ -6,7 +6,7 @@ import DeleteDownload from './DeleteDownload'
 import { useUserProvider } from '../../components/UserProvider'
 
 const Account = () => {
-     const { user } = useUserProvider()
+    const { user } = useUserProvider()
 
     return (
         <div className="d-flex flex-column">
