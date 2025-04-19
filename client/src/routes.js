@@ -22,6 +22,7 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
  */
 const Privacy = auth(lazy(() => import('./views/legal/PrivacyPolicy')))
 const Terms = auth(lazy(() => import('./views/legal/Terms')))
+const Refund = auth(lazy(() => import('./views/legal/RefundPolicy')))
 
 const Dashboard = auth(lazy(() => import('./views/dashboard')))
 const Shipment = auth(lazy(() => import('./views/shipment')))
@@ -85,6 +86,7 @@ const routes = [
 
     { path: '/privacy-policy', name: 'Privacy Policy', element: Privacy },
     { path: '/terms-of-service', name: 'Terms of Service', element: Terms },
+    { path: '/refund-policy', name: 'Refund Policy', element: Refund },
 
     { path: '/dashboard', name: 'Dashboard', element: Dashboard },
     { path: '/shipment', name: 'Shipment', element: Shipment },

@@ -48,6 +48,14 @@ const AppFooter = () => {
                     </CNavItem>
                     <CNavItem>
                         <CNavLink
+                            onClick={(e) => navigate('/refund-policy')}
+                            className="px-2 text-body-secondary"
+                        >
+                            Refund Policy
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem>
+                        <CNavLink
                             target="_blank"
                             rel="noopener noreferrer"
                             href="https://stats.uptimerobot.com/5l58Mua0Wi"
