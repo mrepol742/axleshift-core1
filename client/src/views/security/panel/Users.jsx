@@ -207,7 +207,7 @@ const Users = () => {
                                             color="success"
                                             size="sm"
                                             className="me-2"
-                                            onClick={() => {}}
+                                            onClick={() => navigate(`/customer?ref=${user.ref}`)}
                                         >
                                             Message
                                         </CButton>
