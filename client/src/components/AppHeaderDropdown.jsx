@@ -39,6 +39,7 @@ const AppHeaderDropdown = () => {
                         width="40px"
                         height="40px"
                         loading="lazy"
+                        alt="User Avatar"
                     />
                 ) : (
                     <div
@@ -57,8 +58,10 @@ const AppHeaderDropdown = () => {
                             src={`${VITE_APP_AWS_S3}/images/${user.avatar}.png`}
                             className="rounded-pill border p-1 mb-2"
                             width="60px"
+                            height="60px"
                             fluid
                             loading="lazy"
+                            alt="User Avatar"
                         />
                     ) : (
                         <div

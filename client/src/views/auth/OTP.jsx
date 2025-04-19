@@ -24,6 +24,7 @@ const OTP = () => {
         error: false,
         message: '',
     })
+    const [phoneNumber, setPhoneNumber] = useState('')
     const [otp, setOtp] = useState(['', '', '', '', '', ''])
     const token = cookies.get(VITE_APP_SESSION)
     const navigate = useNavigate()
@@ -92,6 +93,7 @@ const OTP = () => {
         setLoading(true)
         axios
             .post(`/auth/verify/otp`, {
+                phoneNumber: phoneNumber,
                 otp: otp,
                 recaptcha_ref: recaptcha,
             })
@@ -185,11 +187,6 @@ const OTP = () => {
                                         </CAlert>
                                     )}
                                     <CForm onSubmit={handleSubmit}>
-                                        <ReCAPTCHA
-                                            ref={recaptchaRef}
-                                            size="invisible"
-                                            sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                                        />
                                         <div className="text-center">
                                             <h1>Verify Your Account</h1>
                                             <p className="text-body-secondary small">
@@ -197,6 +194,14 @@ const OTP = () => {
                                                 <b>{email}</b>.
                                             </p>
                                         </div>
+                                        <CFormInput
+                                            type="text"
+                                            name="axle_pot"
+                                            className="axle_pot"
+                                            placeholder="Phone number"
+                                            value={phoneNumber}
+                                            onChange={(e) => setPhoneNumber(e.target.value)}
+                                        />
                                         <div className="d-flex justify-content-center gap-2 mb-3">
                                             {otp.map((digit, index) => (
                                                 <CFormInput
@@ -239,6 +244,7 @@ const OTP = () => {
                     </CRow>
                 )}
             </CContainer>
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }

@@ -26,7 +26,7 @@ const FormRegister = async (req, res) => {
             $or: [
                 { [`oauth2.google.email`]: email },
                 { [`oauth2.github.email`]: email },
-                { [`oauth2.microsoft.email`]: credential.email },
+                { [`oauth2.microsoft.email`]: email },
                 { email: email },
                 { username: username },
             ],

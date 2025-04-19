@@ -35,6 +35,8 @@ const AppSidebar = () => {
                         src={storedTheme === 'light' ? '/images/logo-dark.png' : '/images/logo.png'}
                         className="sidebar-brand-full"
                         width={150}
+                        alt="Logo"
+                        height={30}
                         loading="lazy"
                     />
                     <CImage
@@ -45,6 +47,8 @@ const AppSidebar = () => {
                         }
                         className="sidebar-brand-narrow"
                         height={30}
+                        alt="Logo"
+                        width={30}
                         loading="lazy"
                     />
                 </CSidebarBrand>
