@@ -135,6 +135,9 @@ router.post('/user', [recaptcha, auth], async (req, res, next) => {
         const { username, email, first_name, last_name, timezone } = req.body
         const set = {}
 
+        if ((first_name && first_name.trim() === '') || (last_name && last_name.trim() === ''))
+            return res.status(200).json({ error: 'Fields cannot be empty' })
+
         if (first_name && req.user.first_name !== first_name) set.first_name = first_name
         if (last_name && req.user.last_name !== last_name) set.last_name = last_name
         if (timezone && req.user.timezone !== timezone) set.timezone = timezone
@@ -191,7 +194,7 @@ router.post('/user', [recaptcha, auth], async (req, res, next) => {
                         $or: [
                             { [`oauth2.google.email`]: email },
                             { [`oauth2.github.email`]: email },
-                            { [`oauth2.microsoft.email`]: credential.email },
+                            { [`oauth2.microsoft.email`]: email },
                             { email: email },
                         ],
                     })

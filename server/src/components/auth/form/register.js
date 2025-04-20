@@ -26,7 +26,7 @@ const FormRegister = async (req, res) => {
             $or: [
                 { [`oauth2.google.email`]: email },
                 { [`oauth2.github.email`]: email },
-                { [`oauth2.microsoft.email`]: credential.email },
+                { [`oauth2.microsoft.email`]: email },
                 { email: email },
                 { username: username },
             ],
@@ -42,11 +42,6 @@ const FormRegister = async (req, res) => {
                 error: 'Email address already registered',
             })
         }
-
-        // if (NODE_ENV === 'production')
-        //     res.status(200).json({
-        //         error: 'You have no permission to continue. Please contact the admin to allow registration.',
-        //     })
 
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         const ref = crypto.randomBytes(4).toString('hex')

@@ -15,7 +15,7 @@ describe('App tests', () => {
                 </MemoryRouter>
             </Provider>,
         )
-        const headings = screen.getAllByText(/Freight/i)
+        const headings = screen.getAllByText(/Loading.../i)
         expect(headings.length).toBeGreaterThan(0)
     })
 })

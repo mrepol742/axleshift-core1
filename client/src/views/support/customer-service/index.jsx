@@ -17,22 +17,37 @@ const Messages = ({ float, isOpen, setIsOpen }) => {
     const messagesRef = collection(database, 'messages')
 
     useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const ref = urlParams.get('ref')
         if (!user._id) return
         if (user && !selectedUser && user.role === 'user')
             return setselectedUser({ sender_id: user.ref })
         setLoading(true)
+        if (ref) setselectedUser({ sender_id: ref })
         const unsubscribe = onSnapshot(query(messagesRef, orderBy('timestamp')), (snapshot) => {
-            const latestMessagesMap = new Map()
+            let latestMessagesMap = new Map()
             let thread = []
 
-            snapshot.docs.forEach((doc) => {
+            snapshot.docs.reverse().forEach((doc) => {
                 const msg = { id: doc.id, ...doc.data() }
 
-                if (!thread.includes(msg.sender_id)) {
+                if (!thread.includes(msg.sender_id) || (ref && msg.sender_id === ref)) {
                     latestMessagesMap.set(msg.sender_id, msg)
                     thread.push(msg.sender_id)
                 }
             })
+
+            if (ref && !thread.includes(ref)) {
+                const addition = new Map()
+                addition.set(ref, {
+                    id: ref,
+                    sender_id: ref,
+                    message: '',
+                    role: 'user',
+                    timestamp: Date.now(),
+                })
+                latestMessagesMap = new Map([...addition, ...latestMessagesMap])
+            }
 
             // i need coffeeeeeeeeee
             const latestMessagesArray = Array.from(latestMessagesMap.values())

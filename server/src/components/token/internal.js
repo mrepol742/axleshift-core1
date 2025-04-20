@@ -46,6 +46,7 @@ const loopback = [
 
 const internal = async (req, res, next) => {
     // validate us and headers
+    const path = req.originalUrl
     const userAgent = req.headers['user-agent'] || ''
     const accept = req.headers['accept'] || ''
     const secFetch = req.headers['sec-fetch-mode'] || ''
@@ -67,10 +68,7 @@ const internal = async (req, res, next) => {
     if (!session) return res.status(401).json({ error: 'Unauthorized' })
 
     const theUser = await getUser(session)
-    if (
-        !theUser ||
-        (adminRoute.includes(req.path) && !['super_admin', 'admin'].includes(theUser.role))
-    )
+    if (!theUser || (adminRoute.includes(path) && !['super_admin', 'admin'].includes(theUser.role)))
         return res.status(401).json({ error: 'Unauthorized' })
 
     // const encryptedData = req.body.data
@@ -87,9 +85,9 @@ const internal = async (req, res, next) => {
 
     if (!['admin', 'super_admin'].includes(theUser.role)) {
         const maintenance = await getCache('maintenance')
-        if (maintenance && maintenance === 'on') {
+        logger.info(path + ' ' + maintenance)
+        if (maintenance && maintenance === 'on' && path !== '/api/v1/auth/verify')
             return res.status(503).json({ error: 'Service Unavailable' })
-        }
     }
 
     if (session.active !== true || !theUser.email_verify_at) {

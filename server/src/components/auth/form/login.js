@@ -14,7 +14,7 @@ const FormLogin = async (req, res) => {
             $or: [
                 { [`oauth2.google.email`]: email },
                 { [`oauth2.github.email`]: email },
-                { [`oauth2.microsoft.email`]: credential.email },
+                { [`oauth2.microsoft.email`]: email },
                 { email: email },
                 { username: email },
             ],
@@ -30,11 +30,6 @@ const FormLogin = async (req, res) => {
         const passwordHash = crypto.createHmac('sha256', password).update(APP_KEY).digest('hex')
         if (passwordHash !== theUser.password)
             return res.status(401).json({ error: "The password you've entered is incorrect." })
-
-        // if (NODE_ENV === 'production' && theUser.role === 'user')
-        //     res.status(200).json({
-        //         error: 'You have successfully registered. We will send an email to you once everything is ready.',
-        //     })
 
         const session_token = crypto.randomBytes(16).toString('hex')
         const userAgent = req.headers['user-agent'] || 'unknown'

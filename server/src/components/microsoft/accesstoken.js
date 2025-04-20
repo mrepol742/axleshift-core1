@@ -10,8 +10,8 @@ const MicrosoftAccessToken = async (code) => {
             qs.stringify({
                 client_id: MICROSOFT_OAUTH_CLIENT_ID,
                 scope: 'openid profile email User.Read',
-                code,
-                redirect_uri: 'https://core1.axleshift.com/login',
+                code: code,
+                redirect_uri: 'http://localhost:3000/auth/microsoft/callback',
                 grant_type: 'authorization_code',
                 client_secret: MICROSOFT_OAUTH_SECRET_ID,
             }),
@@ -20,9 +20,9 @@ const MicrosoftAccessToken = async (code) => {
             },
         )
 
-        logger.info(response.data)
         if (response.data.access_token) return response.data.access_token
     } catch (err) {
+        // logger.error(err.response?.data || err.message)
         logger.error(err)
     }
     return null

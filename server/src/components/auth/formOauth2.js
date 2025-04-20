@@ -7,6 +7,7 @@ import Download from '../../utils/download.js'
 import activity from '../activity.js'
 import { NODE_ENV } from '../../config.js'
 import { upload, uploadToS3 } from '../../components/s3/profile.js'
+import { remCache } from '../../models/redis.js'
 
 const FormOauth2 = async (req, res) => {
     try {
@@ -24,11 +25,6 @@ const FormOauth2 = async (req, res) => {
             ],
         })
 
-        // if (NODE_ENV === 'production' && theUser.role === 'user')
-        //     res.status(200).json({
-        //         error: 'You have successfully registered. We will send an email to you once everything is ready.',
-        //     })
-
         // login
         if (theUser) {
             if (
@@ -40,6 +36,7 @@ const FormOauth2 = async (req, res) => {
                 return res.status(200).json(token)
             } else {
                 await Promise.all([
+                    remCache(`user-id-${theUser._id}`),
                     usersCollection.updateOne(
                         { _id: theUser._id },
                         {
@@ -76,7 +73,7 @@ const FormOauth2 = async (req, res) => {
                 last_name: credential.family_name,
                 role: 'user',
                 registration_type: provider,
-                avatar: ref,
+                avatar: credential.picture ? ref : null,
                 oauth2: {
                     [provider]: {
                         email: credential.email,

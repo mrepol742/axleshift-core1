@@ -232,7 +232,36 @@ const MessageBox = ({
                                         }}
                                     >
                                         <div style={{ fontSize: isMobile ? '13px' : '14px' }}>
-                                            {msg.message}
+                                            {msg.message
+                                                .split(
+                                                    /(https?:\/\/[^\s]*axleshift\.com[^\s]*|\b(?:\w+\.)?axleshift\.com[^\s]*)/g,
+                                                )
+                                                .map((part, i) => {
+                                                    if (
+                                                        /(https?:\/\/[^\s]*axleshift\.com[^\s]*|\b(?:\w+\.)?axleshift\.com[^\s]*)/.test(
+                                                            part,
+                                                        )
+                                                    ) {
+                                                        const url = part.startsWith('http')
+                                                            ? part
+                                                            : `https://${part}`
+                                                        return (
+                                                            <a
+                                                                key={i}
+                                                                href={url}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                style={{
+                                                                    color: 'lightblue',
+                                                                    textDecoration: 'underline',
+                                                                }}
+                                                            >
+                                                                {part}
+                                                            </a>
+                                                        )
+                                                    }
+                                                    return part
+                                                })}
                                         </div>
                                     </div>
                                     <div

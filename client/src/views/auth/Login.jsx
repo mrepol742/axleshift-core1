@@ -44,6 +44,7 @@ const Login = () => {
     const recaptchaRef = React.useRef()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
     const [loading, setLoading] = useState(true)
     const [showQR, setShowQR] = useState(false)
     const [error, setError] = useState({
@@ -161,6 +162,7 @@ const Login = () => {
         if (type === 'form') {
             formData.email = email
             formData.password = password
+            formData.phoneNumber = phoneNumber
         } else if (type === 'google') {
             formData.credential = credential
         } else {
@@ -253,10 +255,13 @@ const Login = () => {
                                 <CForm onSubmit={(e) => handleSubmit(e, 'form', null)}>
                                     <h1>Axleshift</h1>
                                     <p className="text-body-secondary">Sign In to your account</p>
-                                    <ReCAPTCHA
-                                        ref={recaptchaRef}
-                                        size="invisible"
-                                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                                    <CFormInput
+                                        type="text"
+                                        name="axle_pot"
+                                        className="axle_pot"
+                                        placeholder="Phone number"
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
                                     />
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
@@ -375,6 +380,7 @@ const Login = () => {
                     </CCol>
                 </CRow>
             </CContainer>
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }

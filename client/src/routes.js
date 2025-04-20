@@ -13,8 +13,6 @@ const Logout = lazy(() => import('./views/auth/Logout'))
  * EXTERNAL ROUTE
  */
 const Landing = lazy(() => import('./views/landing'))
-const Privacy = lazy(() => import('./views/legal/PrivacyPolicy'))
-const Terms = lazy(() => import('./views/legal/Terms'))
 const Login = lazy(() => import('./views/auth/Login'))
 const Register = lazy(() => import('./views/auth/Register'))
 const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
@@ -22,6 +20,10 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
 /*
  * INTERNAL ROUTE
  */
+const Privacy = auth(lazy(() => import('./views/legal/PrivacyPolicy')))
+const Terms = auth(lazy(() => import('./views/legal/Terms')))
+const Refund = auth(lazy(() => import('./views/legal/RefundPolicy')))
+
 const Dashboard = auth(lazy(() => import('./views/dashboard')))
 const Shipment = auth(lazy(() => import('./views/shipment')))
 const ShipmentInfo = auth(lazy(() => import('./views/shipment/[id]/')))
@@ -64,8 +66,6 @@ const Err404 = auth(lazy(() => import('./views/errors/404')))
 
 const routes = [
     { path: '/', external: true, name: '', element: Landing },
-    { path: '/privacy-policy', external: true, name: 'Privacy Policy', element: Privacy },
-    { path: '/terms-of-service', external: true, name: 'Terms of Service', element: Terms },
     { path: '/login', external: true, name: 'Login', element: Login },
     { path: '/register', external: true, name: 'Register', element: Register },
     { path: '/logout', external: true, name: 'Logout', element: Logout },
@@ -83,6 +83,10 @@ const routes = [
         element: MicrosoftCallback,
     },
     { path: '/forgot-password', external: true, name: 'Forgot Password', element: ForgotPassword },
+
+    { path: '/privacy-policy', name: 'Privacy Policy', element: Privacy },
+    { path: '/terms-of-service', name: 'Terms of Service', element: Terms },
+    { path: '/refund-policy', name: 'Refund Policy', element: Refund },
 
     { path: '/dashboard', name: 'Dashboard', element: Dashboard },
     { path: '/shipment', name: 'Shipment', element: Shipment },

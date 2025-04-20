@@ -40,7 +40,8 @@ const Inbox = ({ threadsID, selectedUser, handleSelectUser, isMobile }) => {
                             {thread.sender_id.slice(0, 6).toUpperCase()}
                         </div>
                         <div style={{ fontSize: '11px' }} className="text-muted">
-                            {parseTimestamp(thread.timestamp)}
+                            {parseTimestamp(thread.timestamp)} &#183;{' '}
+                            {thread.message.slice(0, 30) + '...'}
                         </div>
                     </div>
                 </div>

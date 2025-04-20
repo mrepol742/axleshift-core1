@@ -189,3 +189,12 @@
     bottom: 0;
     opacity: 0.2;
 }
+
+.axle_pot {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
