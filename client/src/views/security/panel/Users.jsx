@@ -78,6 +78,7 @@ const Users = () => {
                                                     src={`${VITE_APP_AWS_S3}/images/${user.avatar}.png`}
                                                     className="rounded-pill p-1 border me-2"
                                                     width="25px"
+                                                    height="25px"
                                                     fluid
                                                     loading="lazy"
                                                 />

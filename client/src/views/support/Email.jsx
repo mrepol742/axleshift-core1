@@ -29,8 +29,14 @@ const Email = () => {
         e.preventDefault()
         const recaptcha = await recaptchaRef.current.executeAsync()
         setLoading(true)
+        const { email, subject, message } = formData
         axios
-            .post(`/mail/send`, { ...formData, recaptcha_ref: recaptcha })
+            .post(`/mail/send`, {
+                email,
+                subject: filter.clean(subject),
+                message: filter.clean(message),
+                recaptcha_ref: recaptcha,
+            })
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
                 addToast(response.data.message)
@@ -55,7 +61,7 @@ const Email = () => {
         const { name, value } = e.target
         setFormData((prevData) => ({
             ...prevData,
-            [name]: name === 'email' ? value : filter.clean(value),
+            [name]: value,
         }))
     }
 
