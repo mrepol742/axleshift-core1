@@ -53,6 +53,7 @@ const AccessToken = auth(lazy(() => import('./views/security/AccessToken')))
 const NewAccessToken = auth(lazy(() => import('./views/security/access-token/New')))
 const Webhooks = auth(lazy(() => import('./views/security/Webhooks')))
 const ActivityLogs = auth(lazy(() => import('./views/security/AccountLogs')))
+const LogManagement = auth(lazy(() => import('./views/security/panel/LogManagement')))
 
 const Track = auth(lazy(() => import('./views/track')))
 const TrackInfo = auth(lazy(() => import('./views/track/[id]')))
@@ -122,6 +123,7 @@ const routes = [
     { path: '/security/access-token', name: 'Access Token', element: AccessToken },
     { path: '/security/access-token/new', name: 'New Access Token', element: NewAccessToken },
     { path: '/security/webhooks', name: 'Webhooks', element: Webhooks },
+    { path: '/security/log-management', name: 'Log Management', element: LogManagement },
 
     { path: '/track', name: 'Track', element: Track },
     { path: '/track/:id', name: 'Track', element: TrackInfo },

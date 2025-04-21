@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
 import useragent from 'useragent'
+import path from 'path'
 import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
 import dependabot from '../../../components/dependabot.js'
@@ -8,6 +9,7 @@ import sentry from '../../../components/sentry.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
 import redis, { setCache, remCache, getCache, decrypt } from '../../../models/redis.js'
+import fs from 'fs'
 
 const router = express.Router()
 const limit = 20
@@ -322,4 +324,16 @@ router.post('/geo', [recaptcha, auth], async (req, res, next) => {
     }
     res.status(500).json({ error: 'Internal server error' })
 })
+
+router.get('/server-logs', auth, async (req, res) => {
+    try {
+        const logFile = path.resolve('./logs/app.log')
+        const data = await fs.promises.readFile(logFile, 'utf-8')
+        res.status(200).send(data)
+    } catch (err) {
+        logger.error(err)
+        res.status(500).json({ error: 'Failed to read server logs' })
+    }
+})
+
 export default router

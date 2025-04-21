@@ -30,7 +30,7 @@ app.use('/api/v1/', APIv1)
 // refer to /webhook/v1/index
 app.use('/webhook/v1/', Webhookv1)
 
-app.use((err, req, res, next) => res.status(500).json({ error: 'Internal server error' }))
+app.use((err, req, res, next) => res.status(500).json({ error: 'Internal server erroraa' }))
 
 if (NODE_ENV !== 'production')
     app.get('/debug-sentry', (req, res) => {
