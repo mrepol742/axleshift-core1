@@ -3,6 +3,7 @@ import { CCard, CCardBody, CButton, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Helmet } from 'react-helmet'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 

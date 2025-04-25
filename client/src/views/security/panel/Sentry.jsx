@@ -66,7 +66,7 @@ const Sentry = () => {
             <Helmet>
                 <title>Maintenance - Management | Axleshift</title>
             </Helmet>
-            <CCard>
+            <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Error Reports</CCardTitle>
                     <CTable stripedColumns hover responsive className="table-even-width">

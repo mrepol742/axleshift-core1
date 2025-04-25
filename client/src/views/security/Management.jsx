@@ -25,7 +25,7 @@ import {
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
     Users,
-    Activity,
+    LogManagement,
     Dependabot,
     Maintenance,
     Sentry,
@@ -147,7 +147,7 @@ const SecurityManagement = () => {
                 {activeItemKey === 1 && <Sessions />}
                 {activeItemKey === 2 && <Dependabot />}
                 {activeItemKey === 3 && <Sentry />}
-                {activeItemKey === 4 && <Activity />}
+                {activeItemKey === 4 && <LogManagement />}
                 {activeItemKey === 5 && <Maintenance />}
                 {activeItemKey === 6 && <IPFiltering />}
                 {activeItemKey === 7 && <GEO />}

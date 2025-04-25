@@ -66,7 +66,7 @@ const Dependabot = () => {
             <Helmet>
                 <title>Dependabot - Management | Axleshift</title>
             </Helmet>
-            <CCard>
+            <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Vulnerability Alerts</CCardTitle>
                     <CTable stripedColumns hover responsive className="table-even-width">
