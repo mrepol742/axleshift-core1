@@ -10,6 +10,7 @@ import {
     CNavItem,
     CNavLink,
     CNavbarNav,
+    CButton,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -43,30 +44,22 @@ const LogManagement = () => {
 
     return (
         <div>
-            <CNavbarNav className="mb-4">
-                <div className="d-flex overflow-auto">
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 0 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(0, 'users')}
-                        >
-                            <FontAwesomeIcon icon={faUser} className="me-1" /> Servers
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 1 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(1, 'sessions')}
-                        >
-                            <FontAwesomeIcon icon={faTowerBroadcast} className="me-1" /> Accounts
-                        </CNavLink>
-                    </CNavItem>
-                </div>
-                <div className="tab-content mt-4">
-                    {activeItemKey === 0 && <Servers />}
-                    {activeItemKey === 1 && <Activity />}
-                </div>
-            </CNavbarNav>
+            <CButton
+                className={`${activeItemKey === 0 ? 'btn-primary' : ''} text-nowrap me-1`}
+                onClick={() => handleTabChange(0, 'users')}
+            >
+                <FontAwesomeIcon icon={faUser} className="me-1" /> Servers
+            </CButton>
+            <CButton
+                className={`${activeItemKey === 1 ? 'btn-primary' : ''} text-nowrap me-1`}
+                onClick={() => handleTabChange(1, 'sessions')}
+            >
+                <FontAwesomeIcon icon={faTowerBroadcast} className="me-1" /> Accounts
+            </CButton>
+            <div className="tab-content mt-2">
+                {activeItemKey === 0 && <Servers />}
+                {activeItemKey === 1 && <Activity />}
+            </div>
         </div>
     )
 }

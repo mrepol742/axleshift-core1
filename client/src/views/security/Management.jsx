@@ -124,7 +124,7 @@ const SecurityManagement = () => {
                             className={`${activeItemKey === 4 ? 'active' : ''} text-nowrap me-3`}
                             onClick={() => handleTabChange(4, 'accountLogs')}
                         >
-                            <FontAwesomeIcon icon={faList} className="me-1" /> Account Logs
+                            <FontAwesomeIcon icon={faList} className="me-1" /> Logs
                         </CNavLink>
                     </CNavItem>
                     <CNavItem>
