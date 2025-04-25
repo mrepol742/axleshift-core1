@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     CForm,
@@ -199,10 +199,10 @@ const Item = ({ index, form, setForm, removeItem }) => {
 const Shipment = ({ data, shipmentRef }) => {
     const { form, setForm, loading, setLoading } = data
     const navigate = useNavigate()
-    const [items, setItems] = React.useState([{}])
-    const formRef = React.useRef(null)
+    const [items, setItems] = useState(form.items.length > 0 ? form.items : [{}])
+    const formRef = useRef(null)
     const [shipping, setShipping] = useState(form.internal)
-    const recaptchaRef = React.useRef()
+    const recaptchaRef = useRef()
     const { addToast } = useToast()
 
     const addItem = () => {
