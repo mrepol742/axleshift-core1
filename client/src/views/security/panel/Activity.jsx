@@ -45,13 +45,13 @@ const LogManagement = () => {
     return (
         <div>
             <CButton
-                className={`${activeItemKey === 0 ? 'btn-primary' : ''} text-nowrap me-1`}
+                className={`${activeItemKey === 0 ? 'text-primary' : ''} text-nowrap me-1`}
                 onClick={() => handleTabChange(0, 'users')}
             >
                 <FontAwesomeIcon icon={faUser} className="me-1" /> Servers
             </CButton>
             <CButton
-                className={`${activeItemKey === 1 ? 'btn-primary' : ''} text-nowrap me-1`}
+                className={`${activeItemKey === 1 ? 'text-primary' : ''} text-nowrap me-1`}
                 onClick={() => handleTabChange(1, 'sessions')}
             >
                 <FontAwesomeIcon icon={faTowerBroadcast} className="me-1" /> Accounts

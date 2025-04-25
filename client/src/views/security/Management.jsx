@@ -8,7 +8,7 @@ import {
     CTabPanel,
     CSpinner,
     CNavItem,
-    CNavLink,
+    CButton,
     CNavbarNav,
 } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -85,84 +85,73 @@ const SecurityManagement = () => {
 
     return (
         <div>
-            <CNavbarNav className="mb-4">
-                <div className="d-flex overflow-auto">
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 0 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(0, 'users')}
-                        >
-                            <FontAwesomeIcon icon={faUser} className="me-1" /> Users
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 1 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(1, 'sessions')}
-                        >
-                            <FontAwesomeIcon icon={faTowerBroadcast} className="me-1" /> Sessions
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 2 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(2, 'dependabot')}
-                        >
-                            <FontAwesomeIcon icon={faGithub} className="me-1" /> Dependabot
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 3 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(3, 'sentry')}
-                        >
-                            <FontAwesomeIcon icon={faBug} className="me-1" /> Sentry
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 4 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(4, 'accountLogs')}
-                        >
-                            <FontAwesomeIcon icon={faList} className="me-1" /> Logs
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 5 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(5, 'maintenance')}
-                        >
-                            <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> Maintenance
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 6 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(6, 'ip-filtering')}
-                        >
-                            <FontAwesomeIcon icon={faGlobe} className="me-1" /> IP Filtering
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink
-                            className={`${activeItemKey === 7 ? 'active' : ''} text-nowrap me-3`}
-                            onClick={() => handleTabChange(7, 'geo')}
-                        >
-                            <FontAwesomeIcon icon={faGlobe} className="me-1" /> Geo
-                        </CNavLink>
-                    </CNavItem>
-                </div>
-                <div className="tab-content mt-4">
-                    {activeItemKey === 0 && <Users />}
-                    {activeItemKey === 1 && <Sessions />}
-                    {activeItemKey === 2 && <Dependabot />}
-                    {activeItemKey === 3 && <Sentry />}
-                    {activeItemKey === 4 && <Activity />}
-                    {activeItemKey === 5 && <Maintenance />}
-                    {activeItemKey === 6 && <IPFiltering />}
-                    {activeItemKey === 7 && <GEO />}
-                </div>
-            </CNavbarNav>
+            <div className="d-flex overflow-auto mb-2">
+                <CButton
+                    className={`${activeItemKey === 0 ? 'btn-primary' : ''} text-nowrap me-1`}
+                    onClick={() => handleTabChange(0, 'users')}
+                >
+                    <FontAwesomeIcon icon={faUser} className="me-1" /> Users
+                </CButton>
+
+                <CButton
+                    className={`${activeItemKey === 1 ? 'btn-primary' : ''} text-nowrap me-1`}
+                    onClick={() => handleTabChange(1, 'sessions')}
+                >
+                    <FontAwesomeIcon icon={faTowerBroadcast} className="me-1" /> Sessions
+                </CButton>
+
+                <CButton
+                    className={`${activeItemKey === 2 ? 'btn-primary' : ''} text-nowrap me-1`}
+                    onClick={() => handleTabChange(2, 'dependabot')}
+                >
+                    <FontAwesomeIcon icon={faGithub} className="me-1" /> Dependabot
+                </CButton>
+
+                <CButton
+                    className={`${activeItemKey === 3 ? 'btn-primary' : ''} text-nowrap me-1`}
+                    onClick={() => handleTabChange(3, 'sentry')}
+                >
+                    <FontAwesomeIcon icon={faBug} className="me-1" /> Sentry
+                </CButton>
+
+                <CButton
+                    className={`${activeItemKey === 4 ? 'btn-primary' : ''} text-nowrap me-1`}
+                    onClick={() => handleTabChange(4, 'accountLogs')}
+                >
+                    <FontAwesomeIcon icon={faList} className="me-1" /> Logs
+                </CButton>
+
+                <CButton
+                    className={`${activeItemKey === 5 ? 'btn-primary' : ''} text-nowrap me-1`}
+                    onClick={() => handleTabChange(5, 'maintenance')}
+                >
+                    <FontAwesomeIcon icon={faPersonDigging} className="me-1" /> Maintenance
+                </CButton>
+
+                <CButton
+                    className={`${activeItemKey === 6 ? 'btn-primary' : ''} text-nowrap me-1`}
+                    onClick={() => handleTabChange(6, 'ip-filtering')}
+                >
+                    <FontAwesomeIcon icon={faGlobe} className="me-1" /> IP Filtering
+                </CButton>
+
+                <CButton
+                    className={`${activeItemKey === 7 ? 'btn-primary' : ''} text-nowrap me-1`}
+                    onClick={() => handleTabChange(7, 'geo')}
+                >
+                    <FontAwesomeIcon icon={faGlobe} className="me-1" /> Geo
+                </CButton>
+            </div>
+            <div className="tab-content">
+                {activeItemKey === 0 && <Users />}
+                {activeItemKey === 1 && <Sessions />}
+                {activeItemKey === 2 && <Dependabot />}
+                {activeItemKey === 3 && <Sentry />}
+                {activeItemKey === 4 && <Activity />}
+                {activeItemKey === 5 && <Maintenance />}
+                {activeItemKey === 6 && <IPFiltering />}
+                {activeItemKey === 7 && <GEO />}
+            </div>
         </div>
     )
 }
