@@ -325,11 +325,25 @@ router.post('/geo', [recaptcha, auth], async (req, res, next) => {
     res.status(500).json({ error: 'Internal server error' })
 })
 
-router.get('/server-logs', auth, async (req, res) => {
+router.post('/server-logs', auth, async (req, res) => {
+    const { page } = req.body
+    if (!page) return res.status(400).json({ error: 'Invalid request' })
+    const limit = 10
+    const current_page = parseInt(page) || 1
+    const skip = (current_page - 1) * limit
+    const logFile = path.resolve('./logs/app.log')
+
     try {
-        const logFile = path.resolve('./logs/app.log')
         const data = await fs.promises.readFile(logFile, 'utf-8')
-        res.status(200).send(data)
+        const lines = data.trim().split('\n').reverse()
+
+        const paginatedLines = lines.slice(skip, skip + limit)
+
+        res.status(200).json({
+            data: paginatedLines,
+            totalPages: Math.ceil(lines.length / limit),
+            currentPage: current_page,
+        })
     } catch (err) {
         logger.error(err)
         res.status(500).json({ error: 'Failed to read server logs' })
