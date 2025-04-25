@@ -181,7 +181,10 @@ const Receipt = () => {
             </div>
             <div className="d-flex justify-content-between p-2 small mb-2">
                 <small className="d-block">
-                    This invoice has been issued to userEmail
+                    This invoice has been issued to{' '}
+                    {data.freight_details.is_import === true
+                        ? data.freight_details.to[0].email
+                        : data.freight_details.from[0].email}
                     <br />
                     in reference to shipment {id}.
                     <br />

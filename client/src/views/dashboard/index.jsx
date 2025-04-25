@@ -275,7 +275,7 @@ const Dashboard = () => {
                         data-aos="fade-up"
                         data-aos-delay="200"
                         icon={<FontAwesomeIcon icon={faChartPie} />}
-                alertssName="mb-3"
+                        className="mb-3"
                         color="danger"
                         title="Cancelled Shipments"
                         value={insights.smallDetailWidgets.cancelled[1]}
