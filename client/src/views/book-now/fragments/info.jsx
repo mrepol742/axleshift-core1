@@ -26,7 +26,7 @@ const Form = ({ data, type, shipmentRef }) => {
     const [shipment, setShipment] = useState(form.internal)
 
     const handleSwitchChange = (e) => {
-        setForm({ ...form, isImport: e.target.checked })
+        setForm({ ...form, is_import: e.target.checked })
     }
 
     const handleInputChange = (e, field) => {
@@ -92,12 +92,12 @@ const Form = ({ data, type, shipmentRef }) => {
                 <div className="d-flex justify-content-end">
                     <CFormSwitch
                         label="Import Statement"
-                        checked={form.isImport}
+                        checked={form.is_import}
                         onChange={handleSwitchChange}
                         disabled={form.status !== 'to_pay'}
                     />
                 </div>
-                {form.isImport ? (
+                {form.is_import ? (
                     <>
                         <span className="fw-bold">To</span>
                         {renderLocationFields('to')}

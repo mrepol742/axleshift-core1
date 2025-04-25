@@ -30,11 +30,13 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
                 ? `http://localhost:3000/shipment/${freight.tracking_number}`
                 : `https://core1.axleshift.com/shipment/${freight.tracking_number}`
 
+        const payerEmail = freight.is_import ? freight.to[0].email : freight.from[0].email
+
         const Invoice = await Xendit()
         const xenditInvoice = await Invoice.createInvoice({
             data: {
                 amount: freight.amount.value,
-                payerEmail: req.user.email,
+                payerEmail: payerEmail,
                 invoiceDuration: 172800,
                 externalId: `axleshift-${Date.now()}`,
                 description: `Shipment #${freight.tracking_number}`,
@@ -73,6 +75,11 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
             sendWebhook('shipments', { action: 'create', ...freight }),
             sendWebhook('invoices', { action: 'create', ...payload }),
         ])
+        
+        logger.info(freight.is_import ? 'Import' : 'Export')
+        logger.info(payerEmail)
+        if (freight.is_import)
+            return res.status(200).send({ r_url: redirectUrl })
         return res.status(200).send({ r_url: xenditInvoice.invoiceUrl })
     } catch (err) {
         logger.error(err)
