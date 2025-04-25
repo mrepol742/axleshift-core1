@@ -16,6 +16,7 @@ import {
     CTabPanel,
     CTabs,
 } from '@coreui/react'
+import { Helmet } from 'react-helmet'
 import { useToast } from '../../../../components/AppToastProvider'
 import parseTimestamp from '../../../../utils/Timestamp'
 import AppPagination from '../../../../components/AppPagination'
@@ -58,6 +59,9 @@ const Activity = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Account Logs - Management | Axleshift</title>
+            </Helmet>
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Account Logs</CCardTitle>

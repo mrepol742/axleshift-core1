@@ -16,6 +16,7 @@ import {
     CFormCheck,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { Helmet } from 'react-helmet'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
@@ -118,8 +119,9 @@ const GEO = () => {
 
     return (
         <div>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-
+            <Helmet>
+                <title>GeoLocation Filter - Management | Axleshift</title>
+            </Helmet>
             <CAlert color="warning" className="small">
                 <FontAwesomeIcon icon={faCircleExclamation} className="me-2" /> Block or allow
                 specific set of coordinates on who can access this platform via login or
@@ -230,6 +232,7 @@ const GEO = () => {
                     </CButton>
                 </CModalFooter>
             </CModal>
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }

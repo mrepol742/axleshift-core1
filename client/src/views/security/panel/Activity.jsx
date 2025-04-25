@@ -1,29 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-    CTabs,
-    CTabList,
-    CTab,
-    CTabContent,
-    CTabPanel,
-    CSpinner,
-    CNavItem,
-    CNavLink,
-    CNavbarNav,
-    CButton,
-} from '@coreui/react'
+import { CSpinner, CButton } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faChartLine,
-    faTowerBroadcast,
-    faBug,
-    faKey,
-    faList,
-    faPersonDigging,
-    faUser,
-    faGlobe,
-} from '@fortawesome/free-solid-svg-icons'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faTowerBroadcast, faUser } from '@fortawesome/free-solid-svg-icons'
 import Activity from './log-management/Activity'
 import Servers from './log-management/Servers'
 

@@ -14,6 +14,7 @@ import {
     CCardTitle,
     CButton,
 } from '@coreui/react'
+import { Helmet } from 'react-helmet'
 import { VITE_APP_AWS_S3 } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import parseTimestamp from '../../../utils/Timestamp'
@@ -63,6 +64,9 @@ const Users = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Users - Management | Axleshift</title>
+            </Helmet>
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Axleshift Users</CCardTitle>

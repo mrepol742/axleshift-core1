@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 
 const Server = () => {
     const [logs, setLogs] = useState('')
@@ -18,6 +19,9 @@ const Server = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Server Logs - Management | Axleshift</title>
+            </Helmet>
             <pre className="bg-body-secondary" style={{ whiteSpace: 'pre-wrap', padding: '10px' }}>
                 {logs}
             </pre>
