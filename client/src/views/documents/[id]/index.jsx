@@ -26,10 +26,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../../components/AppToastProvider'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config.js'
+import { useUserProvider } from '../../../components/UserProvider.jsx'
 
 const Document = () => {
     const { id } = useParams()
     const navigate = useNavigate()
+    const user = useUserProvider
     const [loading, setLoading] = useState(true)
     const { addToast } = useToast()
     const recaptchaRef = React.useRef()
@@ -38,6 +40,7 @@ const Document = () => {
     const [certificateOfOrigin, setCertificateOfOrigin] = useState(null)
     const [isActionVisible, setIsActionVisible] = useState(false)
     const [preview, setPreview] = useState(null)
+    const [file, setFile] = useState([])
 
     const handleFileUpload = (event, index) => {
         const file = event.target.files[0]
@@ -72,6 +75,7 @@ const Document = () => {
             })
             .then((response) => {
                 setDocuments(response.data.data)
+                setFile(response.data.data.documents.filter((doc) => doc.status !== 'generated'))
                 addToast('Documents uploaded successfully!', 'success')
             })
             .catch((error) => {
@@ -88,7 +92,10 @@ const Document = () => {
     const fetchDocuments = async () => {
         axios
             .get(`/documents/${id}`)
-            .then((response) => setDocuments(response.data.documents))
+            .then((response) => {
+                setDocuments(response.data.documents)
+                setFile(response.data.documents.filter((doc) => doc.status !== 'generated'))
+            })
             .finally(() => setLoading(false))
     }
 
@@ -102,6 +109,30 @@ const Document = () => {
             .then((response) => {
                 if (response.data.error) return addToast(response.data.error)
                 setPreview(response.data)
+            })
+            .catch((error) => {
+                const message =
+                    error.response?.data?.error ||
+                    (error.message === 'network error'
+                        ? 'Server is offline or restarting please wait'
+                        : error.message)
+                addToast(message)
+            })
+            .finally(() => setLoading(false))
+    }
+
+    const handleRequireCOOEL = async () => {
+        setLoading(true)
+        axios
+            .post(`/documents/cooel/${id}`, { is_enabled: file.length > 0 ? false : true })
+            .then((response) => {
+                if (response.data.error) return addToast(response.data.error)
+                setDocuments(response.data.data)
+                setFile(response.data.data.filter((doc) => doc.status !== 'generated'))
+                addToast(
+                    file.length > 0 ? 'Documents has been removed' : 'Documents has been added',
+                    'success',
+                )
             })
             .catch((error) => {
                 const message =
@@ -144,8 +175,22 @@ const Document = () => {
                 <title>{id} - Documents | Axleshift</title>
             </Helmet>
             <CForm onSubmit={handleSubmit}>
-                <h2>Upload Documents</h2>
-                <span className="text-muted">{id}</span>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h2>Upload Documents</h2>
+                        <span className="text-muted">{id}</span>
+                    </div>
+                    {['super_admin', 'admin'].includes(user.role) && (
+                        <CButton
+                            size="sm"
+                            color="info"
+                            disabled={file.length < 0}
+                            onClick={(e) => handleRequireCOOEL()}
+                        >
+                            {file.length > 0 ? 'Remove COO/EL' : 'Require COO/EL'}
+                        </CButton>
+                    )}
+                </div>
                 <CCard className="mt-2 mb-3">
                     <CCardBody>
                         <CTable stripedColumns hover responsive className="table-even-width">

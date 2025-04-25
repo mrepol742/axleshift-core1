@@ -73,7 +73,8 @@
         "react-router-dom": "^6.23.1",
         "redux": "^5.0.1",
         "redux-persist": "^6.0.0",
-        "simplebar-react": "^3.2.5"
+        "simplebar-react": "^3.2.5",
+        "socket.io-client": "^4.8.1"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.25.8",

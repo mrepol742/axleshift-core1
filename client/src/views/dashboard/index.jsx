@@ -236,18 +236,6 @@ const Dashboard = () => {
                             color={widget.color}
                             value={widget.value}
                             title={widget.title}
-                            action={
-                                <CButton
-                                    className="btn"
-                                    onClick={() => renderDashboardWidgets(widget.url)}
-                                >
-                                    <FontAwesomeIcon
-                                        icon={faEllipsisVertical}
-                                        size="lg"
-                                        className="text-white"
-                                    />
-                                </CButton>
-                            }
                             chart={
                                 <CChartLine
                                     className="mt-3 mx-3"
@@ -389,7 +377,7 @@ const Dashboard = () => {
                     ) : (
                         <>
                             <CModalHeader>{getHeaderTitle(formData.url)}</CModalHeader>
-                            <CListGroup className="px-3 mb-3">
+                            <CListGroup className="px-3 mb-3 overflow-auto">
                                 {formData.data.length === 0 && (
                                     <div className="d-flex justify-content-center">
                                         <p className="mb-3">No data available</p>

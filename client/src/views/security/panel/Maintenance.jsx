@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { CCard, CCardBody, CButton, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { Helmet } from 'react-helmet'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
@@ -64,8 +65,9 @@ const Maintenance = () => {
 
     return (
         <div>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
-
+            <Helmet>
+                <title>Maintenance - Management | Axleshift</title>
+            </Helmet>
             <h4>Maintenance notice</h4>
             <CCard>
                 <CCardBody>
@@ -93,6 +95,7 @@ const Maintenance = () => {
                     </CButton>
                 </CCardBody>
             </CCard>
+            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
         </div>
     )
 }

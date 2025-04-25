@@ -14,6 +14,7 @@ import {
     CCardTitle,
     CButton,
 } from '@coreui/react'
+import { Helmet } from 'react-helmet'
 import { VITE_APP_AWS_S3 } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import parseTimestamp from '../../../utils/Timestamp'
@@ -63,6 +64,9 @@ const Users = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Users - Management | Axleshift</title>
+            </Helmet>
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Axleshift Users</CCardTitle>
@@ -79,7 +83,6 @@ const Users = () => {
                                                     className="rounded-pill p-1 border me-2"
                                                     width="25px"
                                                     height="25px"
-                                                    fluid
                                                     loading="lazy"
                                                 />
                                             </>
@@ -95,104 +98,93 @@ const Users = () => {
                                                 {getInitials(user.first_name)}
                                             </div>
                                         )}
-                                        <span className="me-2">
+                                        <span
+                                            className={`me-2 ${['admin', 'super_admin'].includes(user.role) && 'text-primary fw-bold'}`}
+                                        >
                                             {user.first_name} {user.last_name}
-                                        </span>{' '}
-                                        <CBadge color="secondary" className="text-capitalize">
-                                            {user.role.replace('_', ' ')}
-                                        </CBadge>
+                                        </span>
                                     </div>
                                 </CAccordionHeader>
                                 <CAccordionBody>
-                                    <CRow>
-                                        <CCol>
+                                    <ul className="list-unstyled mb-3">
+                                        <li className="border-bottom mb-2">
                                             <strong>First name:</strong> {user.first_name}
-                                        </CCol>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Last name:</strong> {user.last_name}
-                                        </CCol>
-                                    </CRow>
-                                    <CRow>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Username:</strong> {user.username}
-                                        </CCol>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Email:</strong> {user.email}
-                                        </CCol>
-                                    </CRow>
-                                    <CRow>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
+                                            <strong>Role:</strong> {user.role}
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Registration Type:</strong>{' '}
                                             {user.registration_type}
-                                        </CCol>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Registration Date:</strong>{' '}
                                             {new Date(user.created_at).toLocaleDateString()}
-                                        </CCol>
-                                    </CRow>
-                                    <CRow>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Google:</strong>{' '}
                                             {user.oauth2 ? user.oauth2.google?.email : 'No'}
-                                        </CCol>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Github:</strong>{' '}
                                             {user.oauth2 ? user.oauth2.github?.email : 'No'}
-                                        </CCol>
-                                    </CRow>
-                                    <CRow>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Microsoft:</strong>{' '}
                                             {user.oauth2 ? user.oauth2.microsoft?.email : 'No'}
-                                        </CCol>
-                                    </CRow>
-                                    <CRow>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Last Password Changed:</strong>{' '}
                                             {user.password_changed_on
                                                 ? new Date(
                                                       user.password_changed_on,
                                                   ).toLocaleDateString()
                                                 : 'NaN'}
-                                        </CCol>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Last Username Changed:</strong>{' '}
                                             {user.username_last_updated_at
                                                 ? new Date(
                                                       user.username_last_updated_at,
                                                   ).toLocaleDateString()
                                                 : 'NaN'}
-                                        </CCol>
-                                    </CRow>
-                                    <CRow>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>Last Email Changed:</strong>{' '}
                                             {user.email_changed_on
                                                 ? new Date(
                                                       user.email_changed_on,
                                                   ).toLocaleDateString()
                                                 : 'NaN'}
-                                        </CCol>
-                                    </CRow>
-                                    <CRow>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>User ID:</strong> {user._id}
-                                        </CCol>
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>User Reference:</strong> {user.ref}
-                                        </CCol>
-                                    </CRow>
-                                    <CRow className="mb-4">
-                                        <CCol>
+                                        </li>
+                                        <li className="border-bottom mb-2">
                                             <strong>User Role:</strong>{' '}
                                             <span className="text-capitalize">
                                                 {user.role.replace('_', ' ')}
                                             </span>
-                                        </CCol>
-                                    </CRow>
-                                    <small>
-                                        Updated at {new Date(user.updated_at).toLocaleDateString()}
-                                    </small>
+                                        </li>
+                                        <li className="border-bottom mb-2">
+                                            <strong>Last Update:</strong>{' '}
+                                            <span className="text-capitalize">
+                                                {new Date(user.updated_at).toLocaleDateString()}
+                                            </span>
+                                        </li>
+                                    </ul>
                                     <div className="d-flex">
                                         <CButton
                                             color="primary"

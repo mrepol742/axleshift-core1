@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb'
 import express from 'express'
 import useragent from 'useragent'
+import path from 'path'
 import database from '../../../models/mongodb.js'
 import logger from '../../../utils/logger.js'
 import dependabot from '../../../components/dependabot.js'
@@ -8,6 +9,7 @@ import sentry from '../../../components/sentry.js'
 import auth from '../../../middleware/auth.js'
 import recaptcha from '../../../middleware/recaptcha.js'
 import redis, { setCache, remCache, getCache, decrypt } from '../../../models/redis.js'
+import fs from 'fs'
 
 const router = express.Router()
 const limit = 20
@@ -322,4 +324,30 @@ router.post('/geo', [recaptcha, auth], async (req, res, next) => {
     }
     res.status(500).json({ error: 'Internal server error' })
 })
+
+router.post('/server-logs', auth, async (req, res) => {
+    const { page } = req.body
+    if (!page) return res.status(400).json({ error: 'Invalid request' })
+    const limit = 10
+    const current_page = parseInt(page) || 1
+    const skip = (current_page - 1) * limit
+    const logFile = path.resolve('./logs/app.log')
+
+    try {
+        const data = await fs.promises.readFile(logFile, 'utf-8')
+        const lines = data.trim().split('\n').reverse()
+
+        const paginatedLines = lines.slice(skip, skip + limit)
+
+        res.status(200).json({
+            data: paginatedLines,
+            totalPages: Math.ceil(lines.length / limit),
+            currentPage: current_page,
+        })
+    } catch (err) {
+        logger.error(err)
+        res.status(500).json({ error: 'Failed to read server logs' })
+    }
+})
+
 export default router

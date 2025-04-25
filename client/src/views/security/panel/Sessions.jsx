@@ -17,6 +17,7 @@ import {
     CModalTitle,
     CModalFooter,
 } from '@coreui/react'
+import { Helmet } from 'react-helmet'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
@@ -90,6 +91,9 @@ const Sessions = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Sessions - Management | Axleshift</title>
+            </Helmet>
             <h4>Logout all sessions</h4>
             <CCard className="mb-3">
                 <CCardBody>

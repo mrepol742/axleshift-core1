@@ -12,6 +12,10 @@ import activity from '../../components/activity.js'
 import cache from '../../middleware/cache.js'
 import { setCache } from '../../models/redis.js'
 import { send } from '../../components/mail.js'
+// import path from 'path'
+// import fs from 'fs'
+// import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
+// import archiver from 'archiver-zip-encrypted'
 
 const router = express.Router()
 const limit = 20
@@ -53,6 +57,79 @@ router.post('/', [auth, cache], async (req, res) => {
     }
     res.status(500).json({ error: 'Internal server error' })
 })
+
+// router.get('/download-invoice', async (req, res) => {
+//   try {
+//     const pdfDoc = await PDFDocument.create();
+//     const page = pdfDoc.addPage([600, 400]);
+//     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+//     const drawText = (text, x, y, size = 12) => {
+//       page.drawText(text, {
+//         x,
+//         y,
+//         size,
+//         font,
+//         color: rgb(1, 1, 1),
+//       });
+//     };
+
+//     // Background color
+//     page.drawRectangle({
+//       x: 0,
+//       y: 0,
+//       width: 600,
+//       height: 400,
+//       color: rgb(0.1, 0.12, 0.18),
+//     });
+
+//     // Invoice Content
+//     drawText('AXLESHIFT', 250, 370, 20);
+//     drawText('Invoice ID: 680b7bde652ef41a15438554', 30, 330);
+//     drawText('Tracking Number: AX-1745583068115', 30, 310);
+//     drawText('Name: Richard Anderson', 30, 290);
+//     drawText('1600 Amphitheatre Parkway, Mountain View', 30, 270);
+//     drawText('California 94043', 30, 255);
+//     drawText('USA', 30, 240);
+//     drawText('Date Paid: 4/25/2025, 8:12:15 PM', 30, 210);
+//     drawText('Payment Method: EWALLET', 30, 190);
+//     drawText('Amount Due: PHP 69,768.00', 30, 170, 14);
+
+//     // Footer
+//     drawText('This invoice has been issued to userEmail', 30, 60, 8);
+//     drawText('In reference to shipment AX-1745583068115.', 30, 50, 8);
+//     drawText('http://localhost:3000/invoices/AX-1745583068115', 30, 40, 8);
+
+//     const passwordProtectedPdf = await pdfDoc.save();
+
+//     await fs.promises.writeFile('./temp/invoice-protected.pdf', passwordProtectedPdf);
+
+//     const filePath = path.resolve('./temp/invoice-protected.pdf')
+
+//     const output = fs.createWriteStream(filePath);
+
+//     const archive = archiver( {
+//       zlib: { level: 9 },
+//       encryptionMethod: 'aes256',
+//       password: 'invoice2025', // Set ZIP password here
+//     });
+
+//     output.on('close', () => {
+//       res.download(filePath, 'invoice.zip', (err) => {
+//         if (err) console.error('Download error:', err);
+
+//       });
+//     });
+
+//     archive.pipe(output);
+//     archive.file(filePath, { name: 'invoice.pdf' });
+//     archive.finalize();
+//     res.download(filePath, 'invoice.zip');
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Failed to generate invoice.');
+//   }
+// });
 
 /**
  * Get Invoice by tracking number

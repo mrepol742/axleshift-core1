@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import {
-    CInputGroup,
-    CFormInput,
-    CInputGroupText,
-    CForm,
-    CFormSelect,
     CRow,
     CCol,
     CCard,
@@ -18,8 +13,7 @@ import {
     CTableBody,
     CTableHeaderCell,
 } from '@coreui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { Helmet } from 'react-helmet'
 import parseTimestamp from '../../../utils/Timestamp'
 import { useToast } from '../../../components/AppToastProvider'
 
@@ -69,7 +63,10 @@ const Dependabot = () => {
 
     return (
         <div>
-            <CCard>
+            <Helmet>
+                <title>Dependabot - Management | Axleshift</title>
+            </Helmet>
+            <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Vulnerability Alerts</CCardTitle>
                     <CTable stripedColumns hover responsive className="table-even-width">

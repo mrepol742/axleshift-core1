@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { CRow, CCol, CCard, CCardText, CSpinner, CButton } from '@coreui/react'
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api'
 import { Helmet } from 'react-helmet'
 import { VITE_APP_GOOGLE_MAP } from '../../../config'
 
 const TrackInfo = () => {
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: VITE_APP_GOOGLE_MAP,
+    })
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
     const [responseData, setResponseData] = useState({})
@@ -62,6 +66,17 @@ const TrackInfo = () => {
             </Helmet>
             <CRow xs={{ cols: 1 }} sm={{ cols: 2 }}>
                 <CCol>
+                    {isLoaded && (
+                        <div className="mb-4">
+                            <GoogleMap
+                                mapContainerStyle={{
+                                    height: '400px',
+                                    width: 'auto',
+                                }}
+                                zoom={18}
+                            ></GoogleMap>
+                        </div>
+                    )}
                     <div className="mb-4">
                         <CCard className="mb-3 p-3">
                             <p className="lead">{getStatus(responseData.status)}</p>
@@ -101,15 +116,6 @@ const TrackInfo = () => {
                                 )}
                             </div>
                         </CCard>
-                        {/* <LoadScript googleMapsApiKey={VITE_APP_GOOGLE_MAP}>
-                            <GoogleMap
-                                mapContainerStyle={{ height: '400px', width: '100%' }}
-                                center={mapCenter}
-                                zoom={10}
-                            >
-                                <Marker position={markerPosition} />
-                            </GoogleMap>
-                        </LoadScript> */}
                     </div>
                 </CCol>
                 <CCol>

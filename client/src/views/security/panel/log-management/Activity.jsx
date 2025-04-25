@@ -10,10 +10,16 @@ import {
     CCard,
     CCardBody,
     CCardTitle,
+    CTab,
+    CTabContent,
+    CTabList,
+    CTabPanel,
+    CTabs,
 } from '@coreui/react'
-import { useToast } from '../../../components/AppToastProvider'
-import parseTimestamp from '../../../utils/Timestamp'
-import AppPagination from '../../../components/AppPagination'
+import { Helmet } from 'react-helmet'
+import { useToast } from '../../../../components/AppToastProvider'
+import parseTimestamp from '../../../../utils/Timestamp'
+import AppPagination from '../../../../components/AppPagination'
 
 const Activity = () => {
     const { addToast } = useToast()
@@ -53,6 +59,9 @@ const Activity = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Account Logs - Management | Axleshift</title>
+            </Helmet>
             <CCard className="mb-4">
                 <CCardBody>
                     <CCardTitle>Account Logs</CCardTitle>

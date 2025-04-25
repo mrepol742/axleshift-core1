@@ -27,7 +27,13 @@ import PropTypes from 'prop-types'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faPrint, faCopy } from '@fortawesome/free-solid-svg-icons'
+import {
+    faEnvelope,
+    faPrint,
+    faCopy,
+    faRotate,
+    faAddressBook,
+} from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import AppPagination from '../../../components/AppPagination'
@@ -101,7 +107,6 @@ const Review = ({ data, shipmentRef }) => {
                         : error.message)
                 addToast(message)
             })
-            .finally(() => setLoading(false))
     }
 
     const totalWeight = (items) => {
@@ -151,6 +156,7 @@ const Review = ({ data, shipmentRef }) => {
     }
 
     const handleShippingForm = async (address) => {
+        setViewForm(false)
         if (form.selected_address !== address._id)
             setForm({
                 ...form,
@@ -237,14 +243,23 @@ const Review = ({ data, shipmentRef }) => {
                                             className="btn btn-primary mt-2 me-2 rounded"
                                             onClick={() => fetchAutoFill()}
                                         >
-                                            Refresh
+                                            <FontAwesomeIcon icon={faRotate} /> Reload
+                                        </CButton>
+                                        <CButton
+                                            size="sm"
+                                            className="btn btn-primary mt-2 me-2 rounded"
+                                            onClick={() =>
+                                                window.open('/my-addresses/new', '_blank')
+                                            }
+                                        >
+                                            <FontAwesomeIcon icon={faCopy} /> New
                                         </CButton>
                                         <CButton
                                             size="sm"
                                             className="btn btn-primary mt-2 rounded"
                                             onClick={() => setShowModal(true)}
                                         >
-                                            Choose
+                                            <FontAwesomeIcon icon={faAddressBook} /> Choose
                                         </CButton>
                                     </div>
                                 ) : (
@@ -366,8 +381,9 @@ const Review = ({ data, shipmentRef }) => {
                                     size="sm"
                                     className="btn btn-primary rounded px-4"
                                     onClick={handleModalConfirm}
+                                    disabled={loading || !form.selected_address}
                                 >
-                                    Ship Now
+                                    {loading ? 'Loading...' : 'Ship Now'}
                                 </CButton>
                             )}
                         </div>

@@ -135,69 +135,36 @@ const Track = () => {
     }
 
     return (
-        <div>
+        <div className="d-flex flex-column align-items-center">
             {loading && (
                 <div className="loading-overlay">
                     <CSpinner color="primary" variant="grow" />
                 </div>
             )}
+            <h1 className="text-center">
+                <span className="text-primary">Your</span> Shipment <br />
+                Our <span className="text-primary">Platform</span>
+            </h1>
+            <div>
+                <CCard className="d-inline-block text-center border border-2" {...getRootProps()}>
+                    <CFormInput {...getInputProps()} accept=".png,.jpg" />
+                    {!image && (
+                        <div className="p-5">
+                            <CCardTitle>Drag & Drop QRCode</CCardTitle>
+                            <p>or click to select an image</p>
+                        </div>
+                    )}
 
-            <CRow className="mb-3">
-                <CCol xs={4} className="image-container d-none d-md-flex">
-                    <CImage
-                        fluid
-                        rounded
-                        src="/images/freight-track.jpg"
-                        className="custom-image"
-                        loading="lazy"
-                    />
-                </CCol>
-                <CCol md={7} className="mb-4">
-                    <h1>Tracking Number</h1>
-                    <CForm className="mb-3" onSubmit={handleSubmit}>
-                        <CInputGroup>
-                            <CFormInput
-                                aria-label="Track shipment"
-                                aria-describedby="basic-addon"
-                                value={trackingNumber}
-                                onChange={(e) => setTrackingNumber(e.target.value)}
-                                placeholder="AX-17XXXXXXXXXX"
-                            />
-                            <CInputGroupText id="basic-addon" onClick={handleSubmit}>
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                            </CInputGroupText>
-                        </CInputGroup>
-                    </CForm>
-                    <div>
-                        <CCard
-                            className="d-inline-block text-center border border-2"
-                            {...getRootProps()}
-                        >
-                            <CFormInput {...getInputProps()} accept=".png,.jpg" />
-                            {!image && (
-                                <div className="p-5">
-                                    <CCardTitle>Drag & Drop QRCode</CCardTitle>
-                                    <p>or click to select an image</p>
-                                </div>
-                            )}
-
-                            {image && (
-                                <CImage
-                                    src={image}
-                                    alt="QRCode"
-                                    className="img-fluid"
-                                    loading="lazy"
-                                />
-                            )}
-                        </CCard>
-                    </div>
-                    <div className="mt-3">
-                        <CButton color="primary" onClick={() => handleCamera()}>
-                            <FontAwesomeIcon icon={faCamera} className="me-2" /> Open Camera
-                        </CButton>
-                    </div>
-                </CCol>
-            </CRow>
+                    {image && (
+                        <CImage src={image} alt="QRCode" className="img-fluid" loading="lazy" />
+                    )}
+                </CCard>
+            </div>
+            <div className="mt-3">
+                <CButton color="primary" onClick={() => handleCamera()}>
+                    <FontAwesomeIcon icon={faCamera} className="me-2" /> Open Camera
+                </CButton>
+            </div>
             {showModal && (
                 <CModal
                     alignment="center"

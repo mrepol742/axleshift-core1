@@ -307,15 +307,32 @@ const Login = () => {
                                             By continuing, you agree to our
                                             <a
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                                onClick={() => navigate('/privacy-policy')}
+                                                onClick={() =>
+                                                    (window.location.href =
+                                                        'https://axleshift.com/privacy-policy')
+                                                }
                                             >
                                                 {' '}
-                                                Privacy Policy{' '}
+                                                Privacy Policy
+                                            </a>
+                                            ,
+                                            <a
+                                                className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                                                onClick={() =>
+                                                    (window.location.href =
+                                                        'https://axleshift.com/refund-policy')
+                                                }
+                                            >
+                                                {' '}
+                                                Refund Policy{' '}
                                             </a>
                                             and
                                             <a
                                                 className="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                                                onClick={() => navigate('/terms-of-service')}
+                                                onClick={() =>
+                                                    (window.location.href =
+                                                        'https://axleshift.com/terms-of-service')
+                                                }
                                             >
                                                 {' '}
                                                 Terms of Service
