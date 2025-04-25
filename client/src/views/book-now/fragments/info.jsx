@@ -114,7 +114,7 @@ const Form = ({ data, type, shipmentRef }) => {
                 )}
 
                 {!shipment && (
-                    <div className="d-flex justify-content-center mb-4">
+                    <div className="d-flex justify-content-center mb-4 mt-3">
                         <CButton
                             className="btn btn-primary px-5"
                             onClick={() => {
