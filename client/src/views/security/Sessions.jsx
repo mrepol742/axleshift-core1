@@ -264,17 +264,24 @@ const Sessions = () => {
                 <CModalBody>
                     <strong>IP Address:</strong> {selectedSession?.ip_address}
                     <div className="mb-2 border-bottom" />
-                    <strong>Latitude:</strong> {JSON.parse(selectedSession?.location)[0].latitude}
+                    <strong>Latitude:</strong>{' '}
+                    {selectedSession?.location
+                        ? JSON.parse(selectedSession?.location)[0].latitude
+                        : 0}
                     <div className="mb-2 border-bottom" />
                     <strong>Longtitude:</strong>{' '}
-                    {JSON.parse(selectedSession?.location)[0].longitude}
+                    {JSON.parse(
+                        selectedSession?.location
+                            ? JSON.parse(selectedSession?.location)[0].longitude
+                            : 0,
+                    )}
                     <div className="mb-4 border-bottom" />
                     {isLoaded && (
                         <>
                             <GoogleMap
                                 mapContainerStyle={{
                                     height: '400px',
-                                    width: '400px',
+                                    width: 'auto',
                                 }}
                                 center={{
                                     lat: selectedSession?.location
