@@ -184,5 +184,50 @@ router.post('/file/:id', [auth, documents], async (req, res) => {
         res.status(500).json({ error: 'Internal server error' })
     }
 })
+router.post('/cooel/:id', [auth, documents], async (req, res) => {
+    try {
+        const { is_enabled } = req.body
+        let data = req.documents.documents || []
+
+        if (is_enabled) {
+            const newDocuments = [
+                {
+                    name: 'Export License',
+                    type: 'Permit & License',
+                    status: 'pending',
+                },
+                {
+                    name: 'Certificate of Origin',
+                    type: 'Regulatory Certificate',
+                    status: 'pending',
+                },
+            ]
+            data = [...newDocuments, ...data]
+        } else {
+            data = data.filter(
+                (doc) =>
+                    doc.name !== 'Export License' &&
+                    doc.name !== 'Certificate of Origin'
+            )
+        }
+
+        const db = await database()
+        const documentsCollection = db.collection('documents')
+        await documentsCollection.updateOne(
+            { _id: new ObjectId(req.documents._id) },
+            {
+                $set: {
+                    documents: data,
+                    updated_at: Date.now(),
+                },
+            },
+        )
+
+        return res.status(200).json({ data, message: 'Documents updated successfully' })
+    } catch (err) {
+        logger.error(err)
+        res.status(500).json({ error: 'Internal server error' })
+    }
+})
 
 export default router

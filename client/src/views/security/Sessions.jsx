@@ -262,8 +262,13 @@ const Sessions = () => {
                     <CModalTitle>{selectedSession?.user_agent}</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                    Last Accessed: {selectedSession?.last_accessed} IP Address:{' '}
-                    {selectedSession?.ip_address} Verified: {selectedSession?.active ? 'Yes' : 'No'}
+                    <strong>IP Address:</strong> {selectedSession?.ip_address}
+                    <div className="mb-2 border-bottom" />
+                    <strong>Latitude:</strong> {JSON.parse(selectedSession?.location)[0].latitude}
+                    <div className="mb-2 border-bottom" />
+                    <strong>Longtitude:</strong>{' '}
+                    {JSON.parse(selectedSession?.location)[0].longitude}
+                    <div className="mb-4 border-bottom" />
                     {isLoaded && (
                         <>
                             <GoogleMap
