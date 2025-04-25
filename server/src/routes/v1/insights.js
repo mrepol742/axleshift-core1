@@ -341,15 +341,19 @@ router.get('/invoices-info-widgets', auth, async (req, res) => {
         const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
         const filter = isUser ? { user_id: req.user._id } : {}
 
-        const totalInvoices = await invoicesCollection.countDocuments(filter)
-        const expiredInvoices = await invoicesCollection.countDocuments({
-            ...filter,
-            status: 'EXPIRED',
-        })
-        const successfullInvoices = totalInvoices - expiredInvoices
+        const [totalInvoices, paidInvoices, expiredInvoices] = await Promise.all([
+            invoicesCollection.countDocuments(filter),
+            invoicesCollection.countDocuments({
+                ...filter,
+                status: 'PAID',
+            }),
+            invoicesCollection.countDocuments({
+                ...filter,
+                status: 'EXPIRED',
+            }),
+        ])
 
-        const successfulPercentage =
-            totalInvoices > 0 ? (successfullInvoices / totalInvoices) * 100 : 0
+        const successfulPercentage = totalInvoices > 0 ? (paidInvoices / totalInvoices) * 100 : 0
         const expiredPercentage = totalInvoices > 0 ? (expiredInvoices / totalInvoices) * 100 : 0
 
         res.status(200).json({
