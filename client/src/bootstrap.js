@@ -9,7 +9,7 @@ const _axios = axios.create({
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
     },
-    timeout: 15000,
+    timeout: 200000,
 })
 
 const excludedPaths = [
