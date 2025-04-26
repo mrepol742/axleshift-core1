@@ -265,49 +265,54 @@ const Sessions = () => {
                     <strong>IP Address:</strong> {selectedSession?.ip_address}
                     <div className="mb-2 border-bottom" />
                     <strong>Latitude:</strong>{' '}
-                    {selectedSession?.location
-                        ? JSON.parse(selectedSession?.location)[0].latitude
-                        : 0}
-                    <div className="mb-2 border-bottom" />
-                    <strong>Longtitude:</strong>{' '}
-                    {JSON.parse(
-                        selectedSession?.location
-                            ? JSON.parse(selectedSession?.location)[0].longitude
-                            : 0,
-                    )}
+                    {(() => {
+    const locationArray = selectedSession?.location
+        ? JSON.parse(selectedSession.location)
+        : null;
+
+    return (
+        <>
+            <strong>Latitude:</strong>{' '}
+            {locationArray ? locationArray[0].latitude : 0}
+            <div className="mb-2 border-bottom" />
+            <strong>Longitude:</strong>{' '}
+            {locationArray ? locationArray[0].longitude : 0}
+        </>
+    );
+})()}
+
                     <div className="mb-4 border-bottom" />
                     {isLoaded && (
                         <>
-                            <GoogleMap
-                                mapContainerStyle={{
-                                    height: '400px',
-                                    width: 'auto',
-                                }}
-                                center={{
-                                    lat: selectedSession?.location
-                                        ? JSON.parse(selectedSession?.location)[0].latitude
-                                        : 0,
-                                    lng: selectedSession?.location
-                                        ? JSON.parse(selectedSession?.location)[0].longitude
-                                        : 0,
-                                }}
-                                zoom={18}
-                            >
-                                <Marker
-                                    position={{
-                                        lat: selectedSession?.location
-                                            ? JSON.parse(selectedSession?.location)[0].latitude
-                                            : 0,
-                                        lng: selectedSession?.location
-                                            ? JSON.parse(selectedSession?.location)[0].longitude
-                                            : 0,
-                                    }}
-                                />
-                            </GoogleMap>
-                            <p className="text-muted mt-2">
-                                Note: GPS accuracy may vary significantly on desktop or laptop
-                                devices compared to mobile phones.
-                            </p>
+                           {(() => {
+    const locationArray = selectedSession?.location
+        ? JSON.parse(selectedSession.location)
+        : null;
+
+    const center = locationArray
+        ? { lat: locationArray[0].latitude, lng: locationArray[0].longitude }
+        : { lat: 0, lng: 0 };
+
+    return (
+        <>
+            <GoogleMap
+                mapContainerStyle={{
+                    height: '400px',
+                    width: 'auto',
+                }}
+                center={center}
+                zoom={18}
+            >
+                <Marker position={center} />
+            </GoogleMap>
+            <p className="text-muted mt-2">
+                Note: GPS accuracy may vary significantly on desktop or laptop
+                devices compared to mobile phones.
+            </p>
+        </>
+    );
+})()}
+
                         </>
                     )}
                 </CModalBody>
