@@ -11,7 +11,7 @@ const MicrosoftAccessToken = async (code) => {
                 client_id: MICROSOFT_OAUTH_CLIENT_ID,
                 scope: 'openid profile email User.Read',
                 code: code,
-                redirect_uri: 'http://localhost:3000/auth/microsoft/callback',
+                redirect_uri: 'https://core1.axleshift.com/auth/microsoft/callback',
                 grant_type: 'authorization_code',
                 client_secret: MICROSOFT_OAUTH_SECRET_ID,
             }),
