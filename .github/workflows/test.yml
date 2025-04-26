@@ -48,6 +48,7 @@ jobs:
           echo "VITE_APP_FIREBASE_APP_ID=${{ secrets.APP_FIREBASE_APP_ID }}" >> .env
           echo "VITE_APP_FIREBASE_MEASUREMENT_ID=${{ secrets.APP_FIREBASE_MEASUREMENT_ID }}" >> .env
           echo "VITE_APP_AWS_S3=${{ secrets.APP_AWS_S3 }}" >> .env
+          echo "VITE_APP_MICROSOFT_OAUTH_CLIENT_ID=${{ secrets.APP_MICROSOFT_OAUTH_CLIENT_ID }}" >> .env
           cd ../server
           echo "MONGO_DB=core1" >> .env
           echo "MONGO_URL=mongodb://localhost:27017" >> .env
