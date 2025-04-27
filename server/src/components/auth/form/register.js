@@ -15,8 +15,7 @@ const FormRegister = async (req, res) => {
         if (
             /^[a-zA-Z0-9._%+-]+@(?!.*(tempmail|mailinator|10minutemail|guerrillamail)).*$/.test(
                 email,
-            ) ||
-            /^(?!(?:[0-9]{6,}|[a-z]{10,}|[a-z0-9]{15,})).+$/.test(email)
+            )
         )
             return res.status(200).json({
                 error: 'Email address is not allowed',

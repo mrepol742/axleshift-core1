@@ -31,7 +31,7 @@ import { useUserProvider } from '../../../components/UserProvider.jsx'
 const Document = () => {
     const { id } = useParams()
     const navigate = useNavigate()
-    const user = useUserProvider
+    const { user } = useUserProvider()
     const [loading, setLoading] = useState(true)
     const { addToast } = useToast()
     const recaptchaRef = React.useRef()
@@ -177,7 +177,7 @@ const Document = () => {
             <CForm onSubmit={handleSubmit}>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                        <h2>Upload Documents</h2>
+                        <h2>Documents</h2>
                         <span className="text-muted">{id}</span>
                     </div>
                     {['super_admin', 'admin'].includes(user.role) && (
