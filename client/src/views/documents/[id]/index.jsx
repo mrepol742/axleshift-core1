@@ -251,10 +251,13 @@ const Document = () => {
                                                                 onChange={(e) =>
                                                                     handleFileUpload(e, index)
                                                                 }
-                                                                disabled={[
-                                                                    'approved',
-                                                                    'not_applicable',
-                                                                ].includes(doc.status)}
+                                                                disabled={
+                                                                    [
+                                                                        'approved',
+                                                                        'not_applicable',
+                                                                    ].includes(doc.status) ||
+                                                                    user.role === 'admin'
+                                                                }
                                                             />
                                                             {doc.file && (
                                                                 <span className="text-danger text-decoration-line-through">
