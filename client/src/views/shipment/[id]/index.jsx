@@ -135,7 +135,7 @@ const FreightInfo = () => {
                     >
                         <FontAwesomeIcon icon={faQrcode} />
                     </CButton>
-                    {form.invoice_id && (
+                    {form.invoice_id && form.status !== 'to_pay' && (
                         <CButton
                             className="bg-body-secondary me-2 rounded"
                             onClick={(e) => navigate(`/invoices/${id}`)}
