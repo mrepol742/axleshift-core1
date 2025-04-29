@@ -17,7 +17,7 @@ const totalDimensions = (items) => {
 }
 
 const price = (items) => {
-    let amount = totalWeight(items) * totalDimensions(items) * 57
+    let amount = totalWeight(items) * totalDimensions(items) + 50
     if (!amount) return 0
     return amount
 }
