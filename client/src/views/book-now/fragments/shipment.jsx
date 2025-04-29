@@ -24,7 +24,6 @@ import Review from './review'
 
 const Item = ({ setShipping, index, form, setForm, removeItem }) => {
     const sizes = {
-
         // max dimensions 120cm x 80cm x 80cm
         // can only ship one item at a time
         private: [

@@ -75,11 +75,10 @@ const InvoiceGenerator = async (res, req, tracking_number) => {
             sendWebhook('shipments', { action: 'create', ...freight }),
             sendWebhook('invoices', { action: 'create', ...payload }),
         ])
-        
+
         logger.info(freight.is_import ? 'Import' : 'Export')
         logger.info(payerEmail)
-        if (freight.is_import)
-            return res.status(200).send({ r_url: redirectUrl })
+        if (freight.is_import) return res.status(200).send({ r_url: redirectUrl })
         return res.status(200).send({ r_url: xenditInvoice.invoiceUrl })
     } catch (err) {
         logger.error(err)

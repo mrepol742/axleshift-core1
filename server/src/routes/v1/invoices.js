@@ -37,11 +37,11 @@ router.post('/', [auth, cache], async (req, res) => {
         const [totalItems, items] = await Promise.all([
             invoicesCollection.countDocuments({ ...filter, status: { $in: ['PAID', 'EXPIRED'] } }),
             invoicesCollection
-            .find({ ...filter, status: { $in: ['PAID', 'EXPIRED'] } })
-            .sort({ updated_at: -1 })
-            .skip(skip)
-            .limit(limit)
-            .toArray(),
+                .find({ ...filter, status: { $in: ['PAID', 'EXPIRED'] } })
+                .sort({ updated_at: -1 })
+                .skip(skip)
+                .limit(limit)
+                .toArray(),
         ])
 
         const data = {
@@ -146,21 +146,21 @@ router.get('/:id', [auth], async (req, res) => {
         const invoicesCollection = db.collection('invoices')
         const invoice = await invoicesCollection
             .aggregate([
-            {
-                $match: {
-                freight_tracking_number: id,
-                status: 'PAID',
+                {
+                    $match: {
+                        freight_tracking_number: id,
+                        status: 'PAID',
+                    },
                 },
-            },
-            {
-                $lookup: {
-                from: 'freight',
-                localField: 'freight_tracking_number',
-                foreignField: 'tracking_number',
-                as: 'freight_details',
+                {
+                    $lookup: {
+                        from: 'freight',
+                        localField: 'freight_tracking_number',
+                        foreignField: 'tracking_number',
+                        as: 'freight_details',
+                    },
                 },
-            },
-            { $unwind: { path: '$freight_details', preserveNullAndEmptyArrays: true } },
+                { $unwind: { path: '$freight_details', preserveNullAndEmptyArrays: true } },
             ])
             .next()
 

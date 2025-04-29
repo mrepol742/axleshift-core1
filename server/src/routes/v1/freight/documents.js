@@ -205,9 +205,7 @@ router.post('/cooel/:id', [auth, documents], async (req, res) => {
             data = [...newDocuments, ...data]
         } else {
             data = data.filter(
-                (doc) =>
-                    doc.name !== 'Export License' &&
-                    doc.name !== 'Certificate of Origin'
+                (doc) => doc.name !== 'Export License' && doc.name !== 'Certificate of Origin',
             )
         }
 
