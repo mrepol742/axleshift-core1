@@ -148,12 +148,6 @@ const ShippingAs = ({ data }) => {
 
     return (
         <div ref={shipmentRef}>
-            {!form.internal && (
-                <>
-                    <h3 className="text-primary">Ship Now</h3>
-                    <p>You are a</p>
-                </>
-            )}
             <CTabs
                 activeItemKey={form.internal ? (form.type === 'private' ? 1 : 2) : 1}
                 className="mb-2"

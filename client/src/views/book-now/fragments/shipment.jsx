@@ -24,7 +24,7 @@ import Review from './review'
 
 const Item = ({ setShipping, index, form, setForm, removeItem }) => {
     const sizes = {
-        // max weight 70kg
+
         // max dimensions 120cm x 80cm x 80cm
         // can only ship one item at a time
         private: [
@@ -45,7 +45,7 @@ const Item = ({ setShipping, index, form, setForm, removeItem }) => {
                 label: 'Moving box',
             },
         ],
-        // max weight 2500kg
+
         // max dimensions 302cm x 223cm x 220cm
         // can only ship dangerous goods
         business: [
@@ -220,11 +220,13 @@ const Shipment = ({ data, shipmentRef }) => {
 
     const addItem = () => {
         if (items.length < 5) {
+            setShipping(false)
             setItems([...items, {}])
         }
     }
 
     const removeItem = (index) => {
+        setShipping(false)
         setItems(items.filter((_, i) => i !== index))
         const updatedItems = form.items.filter((_, i) => i !== index)
         setForm({ ...form, items: updatedItems })
@@ -337,6 +339,7 @@ Shipment.propTypes = {
 }
 
 Item.propTypes = {
+    setShipping: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     form: PropTypes.object.isRequired,
     setForm: PropTypes.func.isRequired,
