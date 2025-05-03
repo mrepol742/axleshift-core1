@@ -32,11 +32,12 @@ const Reports = () => {
     const [data, setData] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const { addToast } = useToast()
     const navigate = useNavigate()
 
     const fetchData = async (page, export_type = null) => {
+        setLoading(true)
         axios
             .post(`/freight/deep-search`, { page, ...filters, export_type })
             .then((response) => {
@@ -72,13 +73,6 @@ const Reports = () => {
         fetchData(currentPage)
     }, [currentPage])
 
-    if (loading)
-        return (
-            <div className="loading-overlay">
-                <CSpinner color="primary" variant="grow" />
-            </div>
-        )
-
     const handleFilterChange = (key, value) => {
         setFilters((prev) => ({ ...prev, [key]: value }))
     }
@@ -97,6 +91,11 @@ const Reports = () => {
             <Helmet>
                 <title>Reports | Axleshift</title>
             </Helmet>
+            {loading && (
+                <div className="loading-overlay">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            )}
             <div style={{ marginBottom: '20px', display: 'flex', gap: '6px', overflowY: 'auto' }}>
                 <CFormLabel>Start Date:</CFormLabel>
                 <CFormInput
@@ -195,18 +194,7 @@ const Reports = () => {
                         </CTableHeaderCell>
                     </CTableRow>
                 </CTableHead>
-                {data.length === 0 ? (
-                    <CRow className="justify-content-center my-5">
-                        <CCol md={6}>
-                            <h1 className="text-truncate text-center">`{filters.query}`</h1>
-                            <div className="clearfix">
-                                <h1 className="float-start display-3 me-4 text-danger">OOPS</h1>
-                                <h4>There was no shipment found.</h4>
-                                <p>Double check your search query.</p>
-                            </div>
-                        </CCol>
-                    </CRow>
-                ) : (
+                {data.length !== 0 && (
                     <CTableBody>
                         {data.map((item, index) => (
                             <CTableRow key={index}>
@@ -255,6 +243,18 @@ const Reports = () => {
                     </CTableBody>
                 )}
             </CTable>
+            {data.length === 0 && (
+                <CRow className="justify-content-center my-5">
+                    <CCol md={6}>
+                        <h1 className="text-truncate text-center">{filters.query}</h1>
+                        <div className="clearfix">
+                            <h1 className="float-start display-3 me-4 text-danger">OOPS</h1>
+                            <h4>There was no shipment found.</h4>
+                            <p>Double check your search query.</p>
+                        </div>
+                    </CCol>
+                </CRow>
+            )}
         </div>
     )
 }
