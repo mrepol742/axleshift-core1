@@ -77,6 +77,127 @@ router.post('/', [auth, cache], async (req, res, next) => {
 })
 
 /**
+ * Deep searching in freight by different fields
+ */
+router.post('/deep-search', [auth, cache], async (req, res, next) => {
+    try {
+        const { page, endDate, startDate, status, type, weight, query, export_type } = req.body
+        if (!page) return res.status(400).json({ error: 'Invalid request' })
+        const current_page = parseInt(page) || 1
+        const skip = (current_page - 1) * limit
+        const isUser = req.user ? !['super_admin', 'admin', 'staff'].includes(req.user.role) : null
+
+        let filter
+        const deep_filter = {}
+        if (query) deep_filter.tracking_number = { $regex: query, $options: 'i' }
+        if (status && ['to_pay', 'to_ship', 'to_receive', 'recieved', 'cancelled'].includes(status))
+            deep_filter.status = status
+        if (type && ['private', 'business'].includes(type)) deep_filter.type = type
+        if (weight) {
+            const weightValue = parseInt(weight)
+            if (weightValue === 1) deep_filter.total_weight = { $lte: 1 }
+            else if (weightValue === 71) deep_filter.total_weight = { $gte: 71 }
+            else deep_filter.total_weight = { $lte: weightValue }
+        }
+        if (startDate || endDate) {
+            deep_filter.created_at = {}
+            if (startDate) deep_filter.created_at.$gte = new Date(startDate).getTime()
+            if (endDate) deep_filter.created_at.$lte = new Date(endDate).getTime()
+        }
+
+        filter = isUser ? { user_id: req.user._id, ...deep_filter } : { ...deep_filter }
+
+        const db = await database()
+        const freightCollection = db.collection('freight')
+        const userCollection = db.collection('users')
+        const paymentCollection = db.collection('invoices')
+
+        const [totalItems, items] = await Promise.all([
+            freightCollection.countDocuments(filter),
+            freightCollection
+                .find(filter, { projection: { from: 0, to: 0, items: 0 } })
+                .sort({ created_at: -1 })
+                .skip(export_type ? 0 : skip)
+                .limit(export_type ? 0 : limit)
+                .toArray(),
+        ])
+
+        const userIds = items.map((item) => item.user_id)
+        const users = await userCollection
+            .find({ _id: { $in: userIds.map((id) => new ObjectId(id)) } })
+            .toArray()
+        const userMap = users.reduce((acc, user) => {
+            acc[user._id.toString()] = user
+            return acc
+        }, {})
+
+        const paymentIds = items.map((item) => item.invoice_id)
+        const payments = await paymentCollection.find({ invoice_id: { $in: paymentIds } }).toArray()
+        const paymentMap = payments.reduce((acc, payment) => {
+            acc[payment.invoice_id] = payment
+            return acc
+        }, {})
+
+        const enrichedItems = items.map((item) => ({
+            ...item,
+            user: userMap[item.user_id.toString()] || null,
+            invoice: item.invoice_id ? paymentMap[item.invoice_id.toString()] || null : null,
+        }))
+
+        if (export_type) {
+            const header =
+                'Tracking Number, Customer, Status, Type, Amount, Payment, Date, Weight\n'
+            const csvData = enrichedItems
+                .map((item) => {
+                    return [
+                        `"${item.tracking_number}"`,
+                        `"${item.user.first_name} ${item.user.last_name}"`,
+                        `"${item.status}"`,
+                        `"${item.type}"`,
+                        `"${new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: item.amount.currency,
+                        }).format(item.amount.value)}"`,
+                        `"${
+                            item.invoice
+                                ? item.invoice.status === 'PAID'
+                                    ? `${item.invoice.status} via ${item.invoice.payment_method}`
+                                    : item.invoice.status
+                                : 'NaN'
+                        }"`,
+                        `"${new Date(item.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        })}"`,
+                        `"${item.total_weight}KG"`,
+                    ].join(',')
+                })
+                .join('\n')
+            const csvContent = header + csvData
+            const csvBuffer = Buffer.from(csvContent, 'utf-8')
+            res.setHeader('Content-Type', 'text/csv')
+            res.setHeader('Content-Disposition', `attachment; filename=freight_${Date.now()}.csv`)
+            res.setHeader('Content-Length', csvBuffer.length)
+            res.send(csvBuffer)
+            return
+        }
+
+        const data = {
+            data: enrichedItems,
+            totalPages: Math.ceil(totalItems / limit),
+            currentPage: current_page,
+        }
+
+        if (req.cacheKey) setCache(req.cacheKey, data, 30 * 60 * 1000)
+        return res.sendGzipped(200, data)
+    } catch (e) {
+        logger.error(e)
+    }
+    res.status(500).json({ error: 'Internal server error' })
+})
+
+/**
  * Get Freight schedules
  */
 router.get('/calendar', auth, async (req, res) => {

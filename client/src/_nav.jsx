@@ -23,6 +23,7 @@ import {
     faFolder,
     faEnvelope,
     faGauge,
+    faMagnifyingGlassChart,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -72,6 +73,13 @@ const _nav = [
         to: '/invoices',
         role_exclude: [],
         icon: <FontAwesomeIcon icon={faFileInvoice} className="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Reports',
+        to: '/reports',
+        role_exclude: [],
+        icon: <FontAwesomeIcon icon={faMagnifyingGlassChart} className="nav-icon" />,
     },
     {
         component: CNavTitle,
