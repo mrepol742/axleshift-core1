@@ -266,53 +266,54 @@ const Sessions = () => {
                     <div className="mb-2 border-bottom" />
                     <strong>Latitude:</strong>{' '}
                     {(() => {
-    const locationArray = selectedSession?.location
-        ? JSON.parse(selectedSession.location)
-        : null;
+                        const locationArray = selectedSession?.location
+                            ? JSON.parse(selectedSession.location)
+                            : null
 
-    return (
-        <>
-            <strong>Latitude:</strong>{' '}
-            {locationArray ? locationArray[0].latitude : 0}
-            <div className="mb-2 border-bottom" />
-            <strong>Longitude:</strong>{' '}
-            {locationArray ? locationArray[0].longitude : 0}
-        </>
-    );
-})()}
-
+                        return (
+                            <>
+                                <strong>Latitude:</strong>{' '}
+                                {locationArray ? locationArray[0].latitude : 0}
+                                <div className="mb-2 border-bottom" />
+                                <strong>Longitude:</strong>{' '}
+                                {locationArray ? locationArray[0].longitude : 0}
+                            </>
+                        )
+                    })()}
                     <div className="mb-4 border-bottom" />
                     {isLoaded && (
                         <>
-                           {(() => {
-    const locationArray = selectedSession?.location
-        ? JSON.parse(selectedSession.location)
-        : null;
+                            {(() => {
+                                const locationArray = selectedSession?.location
+                                    ? JSON.parse(selectedSession.location)
+                                    : null
 
-    const center = locationArray
-        ? { lat: locationArray[0].latitude, lng: locationArray[0].longitude }
-        : { lat: 0, lng: 0 };
+                                const center = locationArray
+                                    ? {
+                                          lat: locationArray[0].latitude,
+                                          lng: locationArray[0].longitude,
+                                      }
+                                    : { lat: 0, lng: 0 }
 
-    return (
-        <>
-            <GoogleMap
-                mapContainerStyle={{
-                    height: '400px',
-                    width: 'auto',
-                }}
-                center={center}
-                zoom={18}
-            >
-                <Marker position={center} />
-            </GoogleMap>
-            <p className="text-muted mt-2">
-                Note: GPS accuracy may vary significantly on desktop or laptop
-                devices compared to mobile phones.
-            </p>
-        </>
-    );
-})()}
-
+                                return (
+                                    <>
+                                        <GoogleMap
+                                            mapContainerStyle={{
+                                                height: '400px',
+                                                width: 'auto',
+                                            }}
+                                            center={center}
+                                            zoom={18}
+                                        >
+                                            <Marker position={center} />
+                                        </GoogleMap>
+                                        <p className="text-muted mt-2">
+                                            Note: GPS accuracy may vary significantly on desktop or
+                                            laptop devices compared to mobile phones.
+                                        </p>
+                                    </>
+                                )
+                            })()}
                         </>
                     )}
                 </CModalBody>

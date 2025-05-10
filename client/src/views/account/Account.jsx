@@ -35,7 +35,6 @@ const Account = () => {
         timezone: user.timezone,
     })
     const [loading, setLoading] = useState(false)
-    const [profilePic, setProfilePic] = useState(null)
 
     const getInitials = (name) => {
         return name ? name.charAt(0).toUpperCase() : ''
@@ -90,7 +89,7 @@ const Account = () => {
         setLoading(true)
 
         const formData = new FormData()
-        formData.append('profile_pic', profilePic)
+        formData.append('profile_pic', e.target.files[0])
         formData.append('recaptcha_ref', recaptcha)
 
         axios
@@ -126,22 +125,14 @@ const Account = () => {
             <CCard className="mb-3">
                 <CCardBody>
                     <CForm onSubmit={(e) => handleSubmit(e)}>
-                        {profilePic ? (
-                            <CImage
-                                src={URL.createObjectURL(profilePic)}
-                                className="rounded-pill p-1 border mb-3"
-                                width="100px"
-                                fluid
-                                loading="lazy"
-                            />
-                        ) : user.avatar ? (
+                        {user.avatar ? (
                             <>
                                 <CImage
                                     crossOrigin="Anonymous"
                                     src={`${VITE_APP_AWS_S3}/images/${user.avatar}.png`}
                                     className="rounded-pill p-1 border mb-3"
                                     width="100px"
-                                    fluid
+                                    height="100px"
                                     loading="lazy"
                                 />
                             </>
@@ -165,38 +156,15 @@ const Account = () => {
                                 fileInput.click()
                             }}
                         />
-                        <CInputGroup className="mb-2">
-                            <CFormInput
-                                className="d-none"
-                                name="profile_pic"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    setProfilePic(e.target.files[0])
-                                    const uploadButton = document.getElementById('upload-button')
-                                    const faCamera = document.getElementById('faCamera')
-                                    if (e.target.files.length > 0) {
-                                        uploadButton.style.display = 'inline-block'
-                                        faCamera.style.display = 'none'
-                                    } else {
-                                        uploadButton.style.display = 'none'
-                                        faCamera.style.display = 'inline-block'
-                                    }
-                                }}
-                            />
-                            <CButton
-                                id="upload-button"
-                                color="primary"
-                                className="ms-2 rounded d-none"
-                                onClick={(e) => {
-                                    if (profilePic) {
-                                        uploadProfile(e)
-                                    }
-                                }}
-                            >
-                                Upload
-                            </CButton>
-                        </CInputGroup>
+                        <CFormInput
+                            className="d-none"
+                            name="profile_pic"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                uploadProfile(e)
+                            }}
+                        />
                         <CInputGroup className="mb-3">
                             <CInputGroupText>
                                 <FontAwesomeIcon icon={faUser} />

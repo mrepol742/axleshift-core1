@@ -123,20 +123,23 @@ const FreightInfo = () => {
                 </CModalBody>
             </CModal>
             <div className="d-flex flex-row justify-content-between align-items-center mb-4">
-                <span className="d-block">
-                    <span className="text-primary fw-bold small">Tracking Number:</span>
-                    <br />
-                    {id}
-                </span>
-                <CButtonGroup className="mb-2 mb-sm-0">
-                    <CButton
-                        className="bg-body-secondary me-2 rounded"
-                        onClick={(e) => setShowQR(true)}
-                    >
-                        <FontAwesomeIcon icon={faQrcode} />
+                <div className="d-flex">
+                    <CButton size="sm" className=" rounded" onClick={(e) => setShowQR(true)}>
+                        <FontAwesomeIcon
+                            className="bg-body-secondary rounded p-2"
+                            icon={faQrcode}
+                        />
                     </CButton>
-                    {form.invoice_id && (
+                    <span className="d-block">
+                        <span className="text-primary fw-bold small">Tracking Number:</span>
+                        <br />
+                        {id}
+                    </span>
+                </div>
+                <CButtonGroup className="mb-2 mb-sm-0">
+                    {form.invoice_id && form.status !== 'to_pay' && (
                         <CButton
+                            size="sm"
                             className="bg-body-secondary me-2 rounded"
                             onClick={(e) => navigate(`/invoices/${id}`)}
                         >
@@ -145,6 +148,7 @@ const FreightInfo = () => {
                     )}
                     {form.documents_id && (
                         <CButton
+                            size="sm"
                             className="bg-body-secondary me-2 rounded"
                             onClick={(e) => navigate(`/documents/${id}`)}
                         >

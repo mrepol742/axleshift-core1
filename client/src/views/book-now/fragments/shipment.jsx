@@ -22,9 +22,8 @@ import PropTypes from 'prop-types'
 import { useToast } from '../../../components/AppToastProvider'
 import Review from './review'
 
-const Item = ({ index, form, setForm, removeItem }) => {
+const Item = ({ setShipping, index, form, setForm, removeItem }) => {
     const sizes = {
-        // max weight 70kg
         // max dimensions 120cm x 80cm x 80cm
         // can only ship one item at a time
         private: [
@@ -45,7 +44,7 @@ const Item = ({ index, form, setForm, removeItem }) => {
                 label: 'Moving box',
             },
         ],
-        // max weight 2500kg
+
         // max dimensions 302cm x 223cm x 220cm
         // can only ship dangerous goods
         business: [
@@ -69,21 +68,34 @@ const Item = ({ index, form, setForm, removeItem }) => {
     }
 
     const handleInputChange = (e, field) => {
+        setShipping(false)
         const updatedItems = [...form.items]
         updatedItems[index] = { ...updatedItems[index], [field]: e.target.value }
         setForm({ ...form, items: updatedItems })
     }
 
     const handleSizeClick = (size) => {
+        setShipping(false)
         const updatedItems = [...form.items]
         updatedItems[index] = {
             ...updatedItems[index],
+            weight: 1,
             length: size[0],
             width: size[1],
             height: size[2] || '',
         }
         setForm({ ...form, items: updatedItems })
     }
+
+    const calculateMaxWeight = (length, width, height) => {
+        return Math.floor((length * width * height) / 139)
+    }
+
+    const maxWeight = calculateMaxWeight(
+        form.items[index]?.length || 0,
+        form.items[index]?.width || 0,
+        form.items[index]?.height || 0,
+    )
 
     return (
         <CCard className="mb-3 p-3">
@@ -111,7 +123,7 @@ const Item = ({ index, form, setForm, removeItem }) => {
                         className="mb-2"
                         value={form.items[index]?.weight || ''}
                         onChange={(e) => handleInputChange(e, 'weight')}
-                        max={form.type === 'business' ? 2500 : 70}
+                        max={maxWeight}
                         min={1}
                         disabled={form.status !== 'to_pay'}
                     />
@@ -207,11 +219,13 @@ const Shipment = ({ data, shipmentRef }) => {
 
     const addItem = () => {
         if (items.length < 5) {
+            setShipping(false)
             setItems([...items, {}])
         }
     }
 
     const removeItem = (index) => {
+        setShipping(false)
         setItems(items.filter((_, i) => i !== index))
         const updatedItems = form.items.filter((_, i) => i !== index)
         setForm({ ...form, items: updatedItems })
@@ -229,6 +243,7 @@ const Shipment = ({ data, shipmentRef }) => {
                 </h3>
                 {items.map((item, index) => (
                     <Item
+                        setShipping={setShipping}
                         key={index}
                         index={index}
                         form={form}
@@ -323,6 +338,7 @@ Shipment.propTypes = {
 }
 
 Item.propTypes = {
+    setShipping: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     form: PropTypes.object.isRequired,
     setForm: PropTypes.func.isRequired,

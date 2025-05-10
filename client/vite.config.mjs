@@ -13,11 +13,6 @@ export default defineConfig(() => {
             chunkSizeWarningLimit: 800,
             minify: 'terser',
             sourcemap: false,
-            terserOptions: {
-                compress: {
-                    drop_console: true,
-                },
-            },
             rollupOptions: {
                 onwarn(warning, warn) {
                     if (warning.plugin === 'vite:esbuild') {

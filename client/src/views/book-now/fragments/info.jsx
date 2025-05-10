@@ -20,10 +20,9 @@ import PropTypes from 'prop-types'
 import Shipment from './shipment'
 import countries from './countries'
 
-const Form = ({ data, type, shipmentRef }) => {
+const Form = ({ shipment, setShipment, data, type, shipmentRef }) => {
     const { form, setForm, loading, setLoading } = data
     const formRef = React.useRef(null)
-    const [shipment, setShipment] = useState(form.internal)
 
     const handleSwitchChange = (e) => {
         setForm({ ...form, is_import: e.target.checked })
@@ -144,16 +143,11 @@ const Form = ({ data, type, shipmentRef }) => {
 
 const ShippingAs = ({ data }) => {
     const { form, setForm, loading, setLoading } = data
+    const [shipment, setShipment] = useState(form.internal)
     const shipmentRef = React.useRef()
 
     return (
         <div ref={shipmentRef}>
-            {!form.internal && (
-                <>
-                    <h3 className="text-primary">Ship Now</h3>
-                    <p>You are a</p>
-                </>
-            )}
             <CTabs
                 activeItemKey={form.internal ? (form.type === 'private' ? 1 : 2) : 1}
                 className="mb-2"
@@ -163,7 +157,19 @@ const ShippingAs = ({ data }) => {
                         aria-controls="private-tab-pane"
                         itemKey={1}
                         disabled={form.internal}
-                        onClick={(e) => setForm({ ...form, type: 'private' })}
+                        onClick={(e) => {
+                            if (form.items.length > 1) {
+                                const confirmSwitch = window.confirm(
+                                    'Switching tabs will clear the shipment items. Do you want to continue?',
+                                )
+                                if (!confirmSwitch) {
+                                    e.preventDefault()
+                                    return
+                                }
+                            }
+                            setForm({ ...form, type: 'private', items: [] })
+                            setShipment(false)
+                        }}
                     >
                         Private Person
                     </CTab>
@@ -171,17 +177,41 @@ const ShippingAs = ({ data }) => {
                         aria-controls="business-tab-pane"
                         itemKey={2}
                         disabled={form.internal}
-                        onClick={(e) => setForm({ ...form, type: 'business' })}
+                        onClick={(e) => {
+                            if (form.items.length > 1) {
+                                const confirmSwitch = window.confirm(
+                                    'Switching tabs will clear the shipment items. Do you want to continue?',
+                                )
+                                if (!confirmSwitch) {
+                                    e.preventDefault()
+                                    return
+                                }
+                            }
+                            setForm({ ...form, type: 'business', items: [] })
+                            setShipment(false)
+                        }}
                     >
                         Business
                     </CTab>
                 </CTabList>
                 <CTabContent>
                     <CTabPanel className="p-2" aria-labelledby="private-tab-pane" itemKey={1}>
-                        <Form data={data} shipmentRef={shipmentRef} type="private" />
+                        <Form
+                            shipment={shipment}
+                            setShipment={setShipment}
+                            data={data}
+                            shipmentRef={shipmentRef}
+                            type="private"
+                        />
                     </CTabPanel>
                     <CTabPanel className="p-2" aria-labelledby="business-tab-pane" itemKey={2}>
-                        <Form data={data} shipmentRef={shipmentRef} type="business" />
+                        <Form
+                            shipment={shipment}
+                            setShipment={setShipment}
+                            data={data}
+                            shipmentRef={shipmentRef}
+                            type="business"
+                        />
                     </CTabPanel>
                 </CTabContent>
             </CTabs>
@@ -196,6 +226,8 @@ ShippingAs.propTypes = {
 }
 
 Form.propTypes = {
+    shipment: PropTypes.bool.isRequired,
+    setShipment: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
     shipmentRef: PropTypes.object.isRequired,

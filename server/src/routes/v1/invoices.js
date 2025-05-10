@@ -34,11 +34,10 @@ router.post('/', [auth, cache], async (req, res) => {
         const db = await database()
         const invoicesCollection = await db.collection('invoices')
         const filter = isUser ? { user_id: req.user._id } : {}
-
         const [totalItems, items] = await Promise.all([
-            invoicesCollection.countDocuments(filter),
+            invoicesCollection.countDocuments({ ...filter, status: { $in: ['PAID', 'EXPIRED'] } }),
             invoicesCollection
-                .find(filter)
+                .find({ ...filter, status: { $in: ['PAID', 'EXPIRED'] } })
                 .sort({ updated_at: -1 })
                 .skip(skip)
                 .limit(limit)
@@ -150,7 +149,7 @@ router.get('/:id', [auth], async (req, res) => {
                 {
                     $match: {
                         freight_tracking_number: id,
-                        status: { $ne: 'EXPIRED' },
+                        status: 'PAID',
                     },
                 },
                 {

@@ -121,7 +121,7 @@ const Review = ({ data, shipmentRef }) => {
     }
 
     const price = (form) => {
-        let amount = totalWeight(form.items) * totalDimensions(form.items) * 57
+        let amount = totalWeight(form.items) * totalDimensions(form.items) + 50
         if (!amount) return '$0'
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
