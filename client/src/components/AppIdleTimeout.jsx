@@ -13,9 +13,9 @@ import {
     CModalBody,
     CModalFooter,
 } from '@coreui/react'
-import { useUserProvider } from '../UserProvider'
+import { useUserProvider } from './UserProvider'
 
-const IdleTimeout = ({ children }) => {
+const AppIdleTimeout = ({ children }) => {
     const { user } = useUserProvider()
     const IDLE_TIMEOUT = 10 * 60 * 1000
     const COUNTDOWN_TIME = 30
@@ -108,8 +108,8 @@ const IdleTimeout = ({ children }) => {
     )
 }
 
-export default React.memo(IdleTimeout)
+export default React.memo(AppIdleTimeout)
 
-IdleTimeout.propTypes = {
+AppIdleTimeout.propTypes = {
     children: PropTypes.node.isRequired,
 }

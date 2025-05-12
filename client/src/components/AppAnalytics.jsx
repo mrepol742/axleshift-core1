@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { initGA, trackPageview } from '../../analytics'
-import { VITE_APP_NODE_ENV } from '../../config'
+import { initGA, trackPageview } from '../analytics'
+import { VITE_APP_NODE_ENV } from '../config'
 
-const Analytics = ({ children }) => {
+const AppAnalytics = ({ children }) => {
     const location = useLocation()
 
     useEffect(() => {
@@ -18,8 +18,8 @@ const Analytics = ({ children }) => {
     return <>{children}</>
 }
 
-export default React.memo(Analytics)
+export default React.memo(AppAnalytics)
 
-Analytics.propTypes = {
+AppAnalytics.propTypes = {
     children: PropTypes.node.isRequired,
 }

@@ -1,5 +1,5 @@
 import React, { lazy } from 'react'
-import auth from './components/middleware/Auth'
+import auth from './components/AppAuth'
 
 /*
  * GLOBAL ROUTE

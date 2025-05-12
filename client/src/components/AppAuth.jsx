@@ -2,14 +2,14 @@ import React, { useState, useEffect, Children } from 'react'
 import { Navigate, useNavigate, useLocation, Outlet } from 'react-router-dom'
 import { CSpinner } from '@coreui/react'
 import ReactGA from 'react-ga4'
-import { VITE_APP_SESSION, VITE_APP_NODE_ENV } from '../../config'
-import Err403 from '../../views/errors/403'
-import Err500 from '../../views/errors/500'
-import Err503 from '../../views/errors/503'
-import { useUserProvider } from '../UserProvider'
-import _nav from '../../_nav'
+import { VITE_APP_SESSION, VITE_APP_NODE_ENV } from '../config'
+import Err403 from '../views/errors/403'
+import Err500 from '../views/errors/500'
+import Err503 from '../views/errors/503'
+import { useUserProvider } from './UserProvider'
+import _nav from '../_nav'
 
-const Auth = () => {
+const AppAuth = () => {
     const blocked = [
         { role: 'admin', path: '/book-now' },
         { role: 'admin', path: '/my-addresses' },
@@ -73,4 +73,4 @@ const Auth = () => {
     return <Outlet />
 }
 
-export default Auth
+export default AppAuth

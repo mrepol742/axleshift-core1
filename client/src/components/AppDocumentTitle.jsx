@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import routes from '../../routes'
+import routes from '../routes'
 
-const DocumentTitle = ({ children }) => {
+const AppDocumentTitle = ({ children }) => {
     let currentLocation = useLocation().pathname
     if (currentLocation != '/') currentLocation = currentLocation.replace(/\/$/, '')
 
@@ -20,8 +20,8 @@ const DocumentTitle = ({ children }) => {
     return <>{children}</>
 }
 
-export default React.memo(DocumentTitle)
+export default React.memo(AppDocumentTitle)
 
-DocumentTitle.propTypes = {
+AppDocumentTitle.propTypes = {
     children: PropTypes.node.isRequired,
 }
