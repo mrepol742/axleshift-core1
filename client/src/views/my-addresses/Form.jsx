@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     CSpinner,
     CForm,
@@ -27,6 +27,21 @@ const FormAddress = ({ data, callback }) => {
     const { addToast } = useToast()
     const [loading, setLoading] = useState(false)
     const [modal, setModal] = useState(false)
+    const form = useState(formData)
+
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            if (JSON.stringify(form) !== JSON.stringify(formData)) {
+                event.preventDefault()
+                event.returnValue = 'You have unsaved changes. Do you really want to leave?'
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
+    }, [formData])
 
     const handleChange = (section, e) => {
         const { name, value } = e.target

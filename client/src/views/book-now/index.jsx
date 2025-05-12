@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CSpinner } from '@coreui/react'
 import Masonry from 'react-masonry-css'
@@ -9,7 +9,7 @@ import Info from './fragments/info'
 const ShipNow = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    const [form, setForm] = useState({
+    const shipment = {
         is_import: false,
         is_residential_address: false,
         contains_danger_goods: false,
@@ -49,7 +49,22 @@ const ShipNow = () => {
         type: 'private',
         items: [],
         status: 'to_pay',
-    })
+    }
+    const [form, setForm] = useState(shipment)
+
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            if (JSON.stringify(shipment) !== JSON.stringify(form)) {
+                event.preventDefault()
+                event.returnValue = 'You have unsaved changes. Do you really want to leave?'
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
+    }, [form])
 
     return (
         <div>
