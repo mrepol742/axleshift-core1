@@ -12,6 +12,7 @@ import AppErrorBoundary from './components/AppErrorBoundary'
 import Analytics from './components/middleware/Analytics'
 import DocumentTitle from './components/middleware/DocumentTitle'
 import IdleTimeout from './components/middleware/IdleTimeout'
+import Auth from './components/middleware/Auth'
 import routes from './routes'
 import steps from './steps'
 import './bootstrap'
@@ -94,7 +95,9 @@ const App = () => {
                                                 )
                                             )
                                         })}
-                                        <Route path="*" element={<DefaultLayout />} />
+                                        <Route element={<Auth />}>
+                                            <Route path="*" element={<DefaultLayout />} />
+                                        </Route>
                                     </Routes>
                                 </IdleTimeout>
                             </DocumentTitle>

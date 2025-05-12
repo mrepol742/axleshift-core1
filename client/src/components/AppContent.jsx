@@ -2,8 +2,11 @@ import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { CSpinner } from '@coreui/react'
 import routes from '../routes'
+import { useUserProvider } from '../components/UserProvider'
 
 const AppContent = () => {
+    const { user } = useUserProvider()
+
     return (
         <div className="px-2 px-md-4">
             <Suspense
@@ -16,7 +19,8 @@ const AppContent = () => {
                 <Routes>
                     {routes.map((route, idx) => {
                         return (
-                            !route.external && (
+                            !route.external &&
+                            !route.roles.includes(user.role) && (
                                 <Route
                                     key={idx}
                                     path={route.path}

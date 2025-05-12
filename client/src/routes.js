@@ -20,59 +20,59 @@ const ForgotPassword = lazy(() => import('./views/auth/ForgotPassword'))
 /*
  * INTERNAL ROUTE
  */
-const Privacy = auth(lazy(() => import('./views/legal/PrivacyPolicy')))
-const Terms = auth(lazy(() => import('./views/legal/Terms')))
-const Refund = auth(lazy(() => import('./views/legal/RefundPolicy')))
+const Privacy = lazy(() => import('./views/legal/PrivacyPolicy'))
+const Terms = lazy(() => import('./views/legal/Terms'))
+const Refund = lazy(() => import('./views/legal/RefundPolicy'))
 
-const Dashboard = auth(lazy(() => import('./views/dashboard')))
-const Shipment = auth(lazy(() => import('./views/shipment')))
-const ShipmentInfo = auth(lazy(() => import('./views/shipment/[id]/')))
-const Search = auth(lazy(() => import('./views/search')))
-const Schedules = auth(lazy(() => import('./views/schedules')))
+const Dashboard = lazy(() => import('./views/dashboard'))
+const Shipment = lazy(() => import('./views/shipment'))
+const ShipmentInfo = lazy(() => import('./views/shipment/[id]/'))
+const Search = lazy(() => import('./views/search'))
+const Schedules = lazy(() => import('./views/schedules'))
 
-const SupportCustomerService = auth(lazy(() => import('./views/support/customer-service')))
-const Faq = auth(lazy(() => import('./views/support/Faq')))
-const SendEmail = auth(lazy(() => import('./views/support/Email')))
+const SupportCustomerService = lazy(() => import('./views/support/customer-service'))
+const Faq = lazy(() => import('./views/support/Faq'))
+const SendEmail = lazy(() => import('./views/support/Email'))
 
-const Account = auth(lazy(() => import('./views/account')))
+const Account = lazy(() => import('./views/account'))
 
-const BookNow = auth(lazy(() => import('./views/book-now')))
+const BookNow = lazy(() => import('./views/book-now'))
 
-const Documents = auth(lazy(() => import('./views/documents')))
-const Document = auth(lazy(() => import('./views/documents/[id]')))
-const BillOfLading = auth(lazy(() => import('./views/documents/[id]/bill-of-lading')))
+const Documents = lazy(() => import('./views/documents'))
+const Document = lazy(() => import('./views/documents/[id]'))
+const BillOfLading = lazy(() => import('./views/documents/[id]/bill-of-lading'))
 
-const Address = auth(lazy(() => import('./views/my-addresses')))
-const NewAddress = auth(lazy(() => import('./views/my-addresses/New')))
-const ViewAddress = auth(lazy(() => import('./views/my-addresses/View')))
+const Address = lazy(() => import('./views/my-addresses'))
+const NewAddress = lazy(() => import('./views/my-addresses/New'))
+const ViewAddress = lazy(() => import('./views/my-addresses/View'))
 
-const Security = auth(lazy(() => import('./views/security')))
-const Management = auth(lazy(() => import('./views/security/Management')))
-const Sessions = auth(lazy(() => import('./views/security/Sessions')))
-const AccessToken = auth(lazy(() => import('./views/security/AccessToken')))
-const NewAccessToken = auth(lazy(() => import('./views/security/access-token/New')))
-const Webhooks = auth(lazy(() => import('./views/security/Webhooks')))
-const ActivityLogs = auth(lazy(() => import('./views/security/AccountLogs')))
-const LogManagement = auth(lazy(() => import('./views/security/panel/LogManagement')))
+const Security = lazy(() => import('./views/security'))
+const Management = lazy(() => import('./views/security/Management'))
+const Sessions = lazy(() => import('./views/security/Sessions'))
+const AccessToken = lazy(() => import('./views/security/AccessToken'))
+const NewAccessToken = lazy(() => import('./views/security/access-token/New'))
+const Webhooks = lazy(() => import('./views/security/Webhooks'))
+const ActivityLogs = lazy(() => import('./views/security/AccountLogs'))
+const LogManagement = lazy(() => import('./views/security/panel/LogManagement'))
 
-const Track = auth(lazy(() => import('./views/track')))
-const TrackInfo = auth(lazy(() => import('./views/track/[id]')))
+const Track = lazy(() => import('./views/track'))
+const TrackInfo = lazy(() => import('./views/track/[id]'))
 
-const Invoices = auth(lazy(() => import('./views/invoices')))
-const InvoiceInfo = auth(lazy(() => import('./views/invoices/[id]')))
+const Invoices = lazy(() => import('./views/invoices'))
+const InvoiceInfo = lazy(() => import('./views/invoices/[id]'))
 
-const Reports = auth(lazy(() => import('./views/reports')))
+const Reports = lazy(() => import('./views/reports'))
 
-const Performance = auth(lazy(() => import('./views/performance')))
+const Performance = lazy(() => import('./views/performance'))
 
-const Err404 = auth(lazy(() => import('./views/errors/404')))
+const Err404 = lazy(() => import('./views/errors/404'))
 
 const routes = [
-    { path: '/', external: true, name: '', element: Landing },
-    { path: '/login', external: true, name: 'Login', element: Login },
-    { path: '/register', external: true, name: 'Register', element: Register },
-    { path: '/logout', external: true, name: 'Logout', element: Logout },
-    { path: '/auth/verify', external: true, name: 'Verify Account', element: OTP },
+    { path: '/', external: true, name: '', roles: [], element: Landing },
+    { path: '/login', external: true, name: 'Login', roles: [], element: Login },
+    { path: '/register', external: true, name: 'Register', roles: [], element: Register },
+    { path: '/logout', external: true, name: 'Logout', roles: [], element: Logout },
+    { path: '/auth/verify', external: true, name: 'Verify Account', roles: [], element: OTP },
     {
         path: '/auth/github/callback',
         external: true,
@@ -85,56 +85,71 @@ const routes = [
         name: 'Microsoft Callback',
         element: MicrosoftCallback,
     },
-    { path: '/forgot-password', external: true, name: 'Forgot Password', element: ForgotPassword },
+    {
+        path: '/forgot-password',
+        external: true,
+        name: 'Forgot Password',
+        roles: [],
+        element: ForgotPassword,
+    },
 
-    { path: '/privacy-policy', name: 'Privacy Policy', element: Privacy },
-    { path: '/terms-of-service', name: 'Terms of Service', element: Terms },
-    { path: '/refund-policy', name: 'Refund Policy', element: Refund },
+    { path: '/privacy-policy', name: 'Privacy Policy', roles: [], element: Privacy },
+    { path: '/terms-of-service', name: 'Terms of Service', roles: [], element: Terms },
+    { path: '/refund-policy', name: 'Refund Policy', roles: [], element: Refund },
 
-    { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-    { path: '/shipment', name: 'Shipment', element: Shipment },
-    { path: '/shipment/:id', name: 'Shipment Info', element: ShipmentInfo },
+    { path: '/dashboard', name: 'Dashboard', roles: [], element: Dashboard },
+    { path: '/shipment', name: 'Shipment', roles: [], element: Shipment },
+    { path: '/shipment/:id', name: 'Shipment Info', roles: [], element: ShipmentInfo },
 
-    { path: '/search', name: 'Search Shipment', element: Search },
+    { path: '/search', name: 'Search Shipment', roles: [], element: Search },
 
-    { path: '/documents', name: 'Documents', element: Documents },
-    { path: '/documents/:id', name: 'Documents', element: Document },
-    { path: '/documents/:id/bill-of-lading', name: 'Bill of Lading', element: BillOfLading },
+    { path: '/documents', name: 'Documents', roles: [], element: Documents },
+    { path: '/documents/:id', name: 'Documents', roles: [], element: Document },
+    {
+        path: '/documents/:id/bill-of-lading',
+        name: 'Bill of Lading',
+        roles: [],
+        element: BillOfLading,
+    },
 
-    { path: '/schedules', name: 'Schedules', element: Schedules },
+    { path: '/schedules', name: 'Schedules', roles: [], element: Schedules },
 
-    { path: '/customer', name: 'Customer Service', element: SupportCustomerService },
-    { path: '/faq', name: 'Frequently Ask Question', element: Faq },
-    { path: '/send-email', name: 'Send Email', element: SendEmail },
+    { path: '/customer', name: 'Customer Service', roles: [], element: SupportCustomerService },
+    { path: '/faq', name: 'Frequently Ask Question', roles: [], element: Faq },
+    { path: '/send-email', name: 'Send Email', roles: ['user'], element: SendEmail },
 
-    { path: '/account', name: 'Account', element: Account },
+    { path: '/account', name: 'Account', roles: [], element: Account },
 
-    { path: '/book-now', name: 'Ship Now', element: BookNow },
+    { path: '/book-now', name: 'Ship Now', roles: ['admin'], element: BookNow },
 
-    { path: '/invoices', name: 'Invoices', element: Invoices },
-    { path: '/invoices/:id', name: 'Invoice', element: InvoiceInfo },
+    { path: '/invoices', name: 'Invoices', roles: [], element: Invoices },
+    { path: '/invoices/:id', name: 'Invoice', roles: [], element: InvoiceInfo },
 
-    { path: '/my-addresses', name: 'My Addresses', element: Address },
-    { path: '/my-addresses/new', name: 'New Address', element: NewAddress },
-    { path: '/my-addresses/view', name: 'Address', element: ViewAddress },
+    { path: '/my-addresses', name: 'My Addresses', roles: ['admin'], element: Address },
+    { path: '/my-addresses/new', name: 'New Address', roles: ['admin'], element: NewAddress },
+    { path: '/my-addresses/view', name: 'Address', roles: ['admin'], element: ViewAddress },
 
-    { path: '/security', name: 'Security', element: Security },
-    { path: '/security/management', name: 'Management', element: Management },
-    { path: '/security/account-logs', name: 'Account Logs', element: ActivityLogs },
-    { path: '/security/sessions', name: 'Sessions', element: Sessions },
-    { path: '/security/access-token', name: 'Access Token', element: AccessToken },
-    { path: '/security/access-token/new', name: 'New Access Token', element: NewAccessToken },
-    { path: '/security/webhooks', name: 'Webhooks', element: Webhooks },
-    { path: '/security/log-management', name: 'Log Management', element: LogManagement },
+    { path: '/security', name: 'Security', roles: [], element: Security },
+    { path: '/security/management', name: 'Management', roles: ['user'], element: Management },
+    { path: '/security/account-logs', name: 'Account Logs', roles: [], element: ActivityLogs },
+    { path: '/security/sessions', name: 'Sessions', roles: [], element: Sessions },
+    { path: '/security/access-token', name: 'Access Token', roles: ['user'], element: AccessToken },
+    {
+        path: '/security/access-token/new',
+        name: 'New Access Token',
+        roles: ['user'],
+        element: NewAccessToken,
+    },
+    { path: '/security/webhooks', name: 'Webhooks', roles: ['user'], element: Webhooks },
 
-    { path: '/track', name: 'Track', element: Track },
-    { path: '/track/:id', name: 'Track', element: TrackInfo },
+    { path: '/track', name: 'Track', roles: [], element: Track },
+    { path: '/track/:id', name: 'Track', roles: [], element: TrackInfo },
 
-    { path: '/performance', name: 'Performance', element: Performance },
+    { path: '/performance', name: 'Performance', roles: [], element: Performance },
 
-    { path: '/reports', name: 'Reports', element: Reports },
+    { path: '/reports', name: 'Reports', roles: [], element: Reports },
 
-    { path: '*', name: '404', element: Err404 },
+    { path: '*', name: '404', roles: [], element: Err404 },
 ]
 
 export default routes

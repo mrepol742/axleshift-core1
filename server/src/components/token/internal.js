@@ -8,14 +8,26 @@ import { setCache } from '../../models/redis.js'
 import sendOTP from '../otp.js'
 import { getCache } from '../../models/redis.js'
 
+// this defines restrictions in accessing internal api by roles
+// super_admin can access everything
+// admin can access everything except in route that creates or generates data
+// user can access only their own data
+
 const adminRoute = [
-    '/metrics/v1/prometheus',
+    '/api/v1/metrics/prometheus',
     '/api/v1/sec/management',
-    '/auth/token',
-    '/auth/token/new',
-    '/auth/token/delete',
-    '/mail/send',
+    '/api/v1/auth/token',
+    '/api/v1/auth/token/new',
+    '/api/v1/auth/token/delete',
+    '/api/v1/mail/send',
 ]
+
+const userRoute = [
+    '/api/v1/freight/book',
+    '/api/v1/freight/update',
+
+]
+
 const knownClients = [
     'PostmanRuntime',
     'axios',
@@ -78,6 +90,8 @@ const internal = async (req, res, next) => {
     const theUser = await getUser(session)
     if (!theUser || (adminRoute.includes(path) && !['super_admin', 'admin'].includes(theUser.role)))
         return res.status(401).json({ error: 'Unauthorized' })
+    if (!theUser || (userRoute.includes(path) && ['admin'].includes(theUser.role)))
+        return res.status(401).json({ error: 'Unauthorized' })
 
     // const encryptedData = req.body.data
     // const decryptedData = crypto.privateDecrypt({
@@ -94,7 +108,7 @@ const internal = async (req, res, next) => {
     if (!['admin', 'super_admin'].includes(theUser.role)) {
         const maintenance = await getCache('maintenance')
         if (maintenance && maintenance === 'on' && path !== '/api/v1/auth/verify')
-            return res.status(503).json({ error: 'Service Unavailable' })
+            return res.status(503).json({ error: 'This site is currently under maintenance' })
     }
 
     if (session.active !== true || !theUser.email_verify_at) {

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Navigate, useNavigate, useLocation } from 'react-router-dom'
+import React, { useState, useEffect, Children } from 'react'
+import { Navigate, useNavigate, useLocation, Outlet } from 'react-router-dom'
 import { CSpinner } from '@coreui/react'
 import ReactGA from 'react-ga4'
 import { VITE_APP_SESSION, VITE_APP_NODE_ENV } from '../../config'
@@ -9,54 +9,68 @@ import Err503 from '../../views/errors/503'
 import { useUserProvider } from '../UserProvider'
 import _nav from '../../_nav'
 
-const Auth = (WrappedComponent) => {
-    const AuthComponent = (props) => {
-        const token = cookies.get(VITE_APP_SESSION)
-        const { user, setUser } = useUserProvider()
-        const [isAuth, setIsAuth] = useState(null)
-        const [maintenance, setMaintenance] = useState(false)
-        const [serverErr, setServerErr] = useState(false)
+const Auth = () => {
+    const blocked = [
+        { role: 'admin', path: '/book-now' },
+        { role: 'admin', path: '/my-addresses' },
+        { role: 'admin', path: '/my-addresses/new' },
+        { role: 'admin', path: '/my-addresses/view' },
 
-        let loc = `/login`
-        if (window.location.pathname != '/')
-            loc = `/login?n=${window.location.pathname}${window.location.search}`
+        { role: 'user', path: '/send-mail' },
+        { role: 'user', path: '/security/management' },
+        { role: 'user', path: '/security/access-token' },
+        { role: 'user', path: '/security/access-token/new' },
+        { role: 'user', path: '/security/webhooks' },
+        { role: 'user', path: '/security/log-management' },
+    ]
+    const token = cookies.get(VITE_APP_SESSION)
+    const { user, setUser } = useUserProvider()
+    const [isAuth, setIsAuth] = useState(null)
+    const [maintenance, setMaintenance] = useState(false)
+    const [serverErr, setServerErr] = useState(false)
+    const [forbidden, setForbidden] = useState(false)
 
-        const checkAuthentication = async () => {
-            if (VITE_APP_NODE_ENV === 'production')
-                ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
-            if (!token) return setIsAuth(false)
-            if (user && Object.keys(user).length > 0) return setIsAuth(true)
+    let loc = `/login`
+    if (window.location.pathname != '/')
+        loc = `/login?n=${window.location.pathname}${window.location.search}`
 
-            axios
-                .post(`/auth/verify`, null)
-                .then((response) => setUser(response.data))
-                .catch((err) => {
-                    if (err.status == 503) return setMaintenance(true)
-                    if (!err.response) return setServerErr(true)
-                    window.location.href = loc
-                })
-                .finally(() => setIsAuth(true))
-        }
+    const checkAuthentication = async () => {
+        if (VITE_APP_NODE_ENV === 'production')
+            ReactGA.send({ hitType: 'pageview', page: window.location.pathname })
+        if (!token) return setIsAuth(false)
+        if (user && Object.keys(user).length > 0) return setIsAuth(true)
 
-        useEffect(() => {
-            checkAuthentication()
-        }, [])
-
-        if (isAuth === null)
-            return (
-                <div className={`loading-overlay ${token ? '' : 'bg-dark'}`}>
-                    <CSpinner color="primary" variant="grow" />
-                </div>
-            )
-
-        if (!isAuth) return <Navigate to={loc} />
-        if (maintenance) return <Err503 />
-        if (serverErr) return <Err500 />
-
-        return <WrappedComponent {...props} />
+        axios
+            .post(`/auth/verify`, null)
+            .then((response) => {
+                setUser(response.data)
+            })
+            .catch((err) => {
+                if (err.status == 403) return setForbidden(true)
+                if (err.status == 503) return setMaintenance(true)
+                if (!err.response) return setServerErr(true)
+                window.location.href = loc
+            })
+            .finally(() => setIsAuth(true))
     }
 
-    return AuthComponent
+    useEffect(() => {
+        checkAuthentication()
+    }, [])
+
+    if (isAuth === null)
+        return (
+            <div className={`loading-overlay ${token ? '' : 'bg-dark'}`}>
+                <CSpinner color="primary" variant="grow" />
+            </div>
+        )
+
+    if (!isAuth) return <Navigate to={loc} />
+    if (maintenance) return <Err503 />
+    if (serverErr) return <Err500 />
+    if (forbidden) return <Err403 />
+
+    return <Outlet />
 }
 
 export default Auth
