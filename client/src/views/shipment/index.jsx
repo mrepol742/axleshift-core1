@@ -105,7 +105,7 @@ const Dashboard = () => {
                 columnClassName="my-masonry-grid_column"
             >
                 {data.map((item, index) => (
-                    <div key={index} data-aos="fade-up" data-aos-delay={`${index * 100}`}>
+                    <div key={index}>
                         <ShipmentCard shipment={item} />
                     </div>
                 ))}
