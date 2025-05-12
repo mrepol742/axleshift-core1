@@ -80,12 +80,14 @@ const AppHeaderDropdown = () => {
                 </CDropdownHeader>
                 <CDropdownItem onClick={() => navigate('/account')}>
                     <FontAwesomeIcon icon={faCircleUser} className="me-2" />
-                    Account
+                    My Account
                 </CDropdownItem>
-                <CDropdownItem onClick={() => navigate('/my-addresses')}>
-                    <FontAwesomeIcon icon={faAddressBook} className="me-2" />
-                    My Addresses
-                </CDropdownItem>
+                {['user', 'super_admin'].includes(user.role) && (
+                    <CDropdownItem onClick={() => navigate('/my-addresses')}>
+                        <FontAwesomeIcon icon={faAddressBook} className="me-2" />
+                        My Addresses
+                    </CDropdownItem>
+                )}
                 <CDropdownDivider />
                 <CDropdownItem onClick={() => navigate('/logout')}>
                     <FontAwesomeIcon icon={faArrowRightFromBracket} className="me-2" />

@@ -93,7 +93,6 @@ const internal = async (req, res, next) => {
 
     if (!['admin', 'super_admin'].includes(theUser.role)) {
         const maintenance = await getCache('maintenance')
-        logger.info(path + ' ' + maintenance)
         if (maintenance && maintenance === 'on' && path !== '/api/v1/auth/verify')
             return res.status(503).json({ error: 'Service Unavailable' })
     }
