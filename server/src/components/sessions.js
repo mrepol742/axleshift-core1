@@ -6,6 +6,15 @@ import { send } from './mail.js'
 import redis, { getCache, setCache, remCache, decrypt } from '../models/redis.js'
 import { getClientIp } from './ip.js'
 
+/**
+ * Creates a new session.
+ * 
+ * @param {Object} theUser 
+ * @param {String} sessionToken 
+ * @param {String} ip 
+ * @param {String} userAgent 
+ * @param {Object} location 
+ */
 export const addSession = async (theUser, sessionToken, ip, userAgent, location) => {
     try {
         const data = {
@@ -37,6 +46,12 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
     }
 }
 
+/**
+ * Fetch the user from cache or database.
+ * 
+ * @param {Object} cachedSession 
+ * @return {Promise<Object>}
+ */
 export const getUser = async (cachedSession) => {
     try {
         const cachedUser = await getCache(`user-id-${cachedSession.user_id}`)
@@ -75,6 +90,11 @@ export const getUser = async (cachedSession) => {
     return null
 }
 
+/**
+ * Remove a session.
+ * 
+ * @param {String} sessionToken 
+ */
 export const removeSession = async (sessionToken) => {
     try {
         remCache(`internal-${sessionToken}`)
@@ -83,6 +103,13 @@ export const removeSession = async (sessionToken) => {
     }
 }
 
+/**
+ * Get the session from cache, database if return null the user is logged out.
+ * 
+ * @param {Object} req 
+ * @param {String} sessionToken 
+ * @return {Promise<Object>}
+ */
 export const getSession = async (req, sessionToken) => {
     try {
         const cachedSession = await getCache(`internal-${sessionToken}`)
@@ -106,6 +133,13 @@ export const getSession = async (req, sessionToken) => {
     return null
 }
 
+/**
+ * Check if the IP is new and send an email to the user.
+ * 
+ * @param {String} ip 
+ * @param {Object} theUser 
+ * @return {Promise<void>}
+ */
 export const isNewIP = async (ip, theUser) => {
     try {
         const redisClient = await redis()

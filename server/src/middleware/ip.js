@@ -1,6 +1,14 @@
 import { getCache } from '../models/redis.js'
 import logger from '../utils/logger.js'
 
+/**
+ * Filter requests, whitelist or blacklist based on IP address.
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next
+ * @return {Promise<void>}
+ */
 const IPAddressFilter = async (req, res, next) => {
     try {
         const clientIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress

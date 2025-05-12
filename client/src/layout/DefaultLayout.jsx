@@ -19,6 +19,7 @@ import { useNotif } from '../components/AppNotificationProvider'
 import { useUserProvider } from '../components/UserProvider'
 import parseTimestamp from '../utils/Timestamp'
 import FloatingChat from '../components/FloatingChat'
+import AppNetwork from '../components/AppNetwork'
 
 const DefaultLayout = () => {
     const { toasts, addToast } = useToast()
@@ -53,6 +54,7 @@ const DefaultLayout = () => {
         <div>
             <AppSidebar />
             <div className="wrapper d-flex flex-column min-vh-100">
+                <AppNetwork />
                 <AppHeader />
                 <div className="body flex-grow-1">
                     <AppContent />

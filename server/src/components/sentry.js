@@ -5,6 +5,11 @@ import logger from '../utils/logger.js'
 let last_fetch
 let res = []
 
+/**
+ * Returns issues from last fetch or fetches new issues if the last fetch was more than 5 minutes ago.
+ * 
+ * @returns {Promise<Array>}
+ */
 const sentry = async () => {
     if (!last_fetch || res.length === 0) return await fetch()
 
@@ -15,6 +20,11 @@ const sentry = async () => {
     return await fetch()
 }
 
+/**
+ * Fetches the latest project issues from the Sentry API.
+ * 
+ * @returns {Promise<Array>}
+ */
 const fetch = async () => {
     try {
         const response = await axios.get(

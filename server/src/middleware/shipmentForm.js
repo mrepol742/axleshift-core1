@@ -2,6 +2,14 @@ import axios from 'axios'
 import logger from '../utils/logger.js'
 import database from '../models/mongodb.js'
 
+/**
+ * Validate the shipment form.
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next
+ * @return {Promise<void>}
+ */
 const ShipmentForm = async (req, res, next) => {
     const {
         _id,

@@ -2,6 +2,13 @@ import crypto from 'crypto'
 import { addSession, isNewIP } from '../sessions.js'
 import { getClientIp } from '../ip.js'
 
+/**
+ * Generates a session token for the user and stores session information.
+ * 
+ * @param {Object} theUser 
+ * @param {Object} req
+ * @return {Object}
+ */
 const Token = (theUser, req) => {
     // const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 })
     const { location } = req.body

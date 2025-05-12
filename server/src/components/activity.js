@@ -3,6 +3,13 @@ import database from '../models/mongodb.js'
 import logger from '../utils/logger.js'
 import { getClientIp } from './ip.js'
 
+/**
+ * Logs user activity to the database.
+ * 
+ * @param {Object} req
+ * @param {string} event
+ * @return {Promise<void>}
+ */
 const activity = async (req, event) => {
     try {
         Promise.all([
@@ -24,6 +31,13 @@ const activity = async (req, event) => {
     }
 }
 
+/**
+ * Sends a notification to the user.
+ * 
+ * @param {Object} req
+ * @param {string} event
+ * @return {Promise<void>}
+ */
 export const sendNotification = async (req, event) => {
     try {
         Promise.all([

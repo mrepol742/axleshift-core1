@@ -3,6 +3,12 @@ import qs from 'qs'
 import logger from '../../utils/logger.js'
 import { MICROSOFT_OAUTH_CLIENT_ID, MICROSOFT_OAUTH_SECRET_ID } from '../../config.js'
 
+/**
+ * Verifies the Microsoft OAuth2 code and retrieves the access token.
+ * 
+ * @param {String} code 
+ * @return {Promise<String|null>}
+ */
 const MicrosoftAccessToken = async (code) => {
     try {
         const response = await axios.post(

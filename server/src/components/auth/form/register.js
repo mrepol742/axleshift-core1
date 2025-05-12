@@ -6,6 +6,13 @@ import activity, { sendNotification } from '../../activity.js'
 import { APP_KEY, NODE_ENV } from '../../../config.js'
 import addToNewsletter from '../../../components/newsletter.js'
 
+/**
+ * Handles the regiter form submission.
+ * 
+ * @param {Object} req
+ * @param {Object} res
+ * @return {Promise<void>}
+ */
 const FormRegister = async (req, res) => {
     try {
         const { username, email, first_name, last_name, password, newsletter } = req.body

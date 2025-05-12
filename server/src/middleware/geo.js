@@ -2,6 +2,14 @@ import { getCache } from '../models/redis.js'
 import logger from '../utils/logger.js'
 import haversineDistance from '../utils/haversineDistance.js'
 
+/**
+ * Filter requests, whitelist or blacklist based on geolocation.
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next
+ * @return {Promise<void>}
+ */
 const GeoLocationFilter = async (req, res, next) => {
     try {
         let { location } = req.body

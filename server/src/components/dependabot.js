@@ -6,6 +6,11 @@ import logger from '../utils/logger.js'
 let last_fetch
 let res = []
 
+/**
+ * Returns alerts from last fetch or fetches new alerts if the last fetch was more than 5 minutes ago.
+ * 
+ * @returns {Promise<Array>}
+ */
 const dependabot = async () => {
     if (!last_fetch || res.length === 0) return await fetch()
 
@@ -16,6 +21,11 @@ const dependabot = async () => {
     return await fetch()
 }
 
+/**
+ * Fetches the latest project alerts from the GitHub API.
+ * 
+ * @returns {Promise<Array>}
+ */
 const fetch = async () => {
     try {
         const response = await axios.get(

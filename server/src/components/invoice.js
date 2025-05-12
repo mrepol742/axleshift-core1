@@ -5,6 +5,14 @@ import Xendit from '../models/xendit.js'
 import sendWebhook from '../utils/webhook.js'
 import { NODE_ENV } from '../config.js'
 
+/**
+ * Generates an invoice for a shipment.
+ *
+ * @param {Object} res
+ * @param {Object} req
+ * @param {string} tracking_number
+ * @return {Promise<void>}
+ */
 const InvoiceGenerator = async (res, req, tracking_number) => {
     try {
         const db = await database()

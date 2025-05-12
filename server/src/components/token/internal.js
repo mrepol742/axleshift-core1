@@ -44,6 +44,14 @@ const loopback = [
     '::ffff:127.0.0.1', // IPv4-mapped IPv6
 ]
 
+/**
+ * Handles internal API token authentication.
+ * 
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ * @return {Promise<void>}
+ */
 const internal = async (req, res, next) => {
     // validate us and headers
     const path = req.originalUrl

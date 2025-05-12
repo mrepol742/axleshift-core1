@@ -31,6 +31,14 @@ export const exteralRequestRoute = [
     '/api/v1/documents/file/:id',
 ]
 
+/**
+ * Rate limiter middleware to limit the number of requests from a client.
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next
+ * @return {Promise<void>}
+ */
 const rateLimiter = (req, res, next) => {
     const path = req.originalUrl
     if (
@@ -68,6 +76,12 @@ const rateLimiter = (req, res, next) => {
     next()
 }
 
+/**
+ * Get the rate limit for the request based on the path and authorization header.
+ * 
+ * @param {Object} req 
+ * @return {number}
+ */
 const getRateLimit = (req) => {
     let path = req.originalUrl
     path = path.endsWith('/') ? path.slice(0, -1) : path

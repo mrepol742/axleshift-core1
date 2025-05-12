@@ -9,6 +9,13 @@ import { NODE_ENV } from '../../config.js'
 import { upload, uploadToS3 } from '../../components/s3/profile.js'
 import { remCache } from '../../models/redis.js'
 
+/**
+ * Handles the OAuth2 form login and registration.
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @return {Promise<void>}
+ */
 const FormOauth2 = async (req, res) => {
     try {
         const credential = req.body.credential

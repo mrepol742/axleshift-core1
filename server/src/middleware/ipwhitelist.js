@@ -6,6 +6,14 @@ const loopback = [
     '::ffff:127.0.0.1', // IPv4-mapped IPv6
 ]
 
+/**
+ * Whitelist remote address for internal requests.
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next
+ * @return {Promise<void>}
+ */
 const ipwhitelist = async (req, res, next) => {
     if (
         (NODE_ENV === 'production' && REACT_APP_ORIGIN !== req.socket.remoteAddress) ||

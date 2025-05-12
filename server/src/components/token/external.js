@@ -5,6 +5,14 @@ import { getClientIp } from '../ip.js'
 import { getCache, setCache } from '../../models/redis.js'
 import { exteralRequestRoute } from '../../middleware/rateLimiter.js'
 
+/**
+ * Handles external API token authentication.
+ * 
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ * @return {Promise<void>}
+ */
 const external = async (req, res, next) => {
     const authHeader = req.headers['authorization']
     const token = authHeader.split(' ')[1]

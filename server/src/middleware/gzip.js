@@ -1,6 +1,14 @@
 import zlib from 'zlib'
 import logger from '../utils/logger.js'
 
+/**
+ * Compress the response using gzip if the client supports it.
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next
+ * @return {Promise<void>}
+ */
 const gzip = (req, res, next) => {
     const originalSend = res.send.bind(res)
 

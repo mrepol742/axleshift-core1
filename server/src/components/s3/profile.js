@@ -15,6 +15,13 @@ const upload = multer({
     },
 })
 
+/**
+ * Uploads a file to S3 and return a location.
+ * 
+ * @param {Object} file
+ * @param {String} ref
+ * @return {Promise<Object>}
+ */
 const uploadToS3 = async (file, ref) => {
     const fileName = `images/${ref}.png`
 

@@ -6,6 +6,9 @@ import crypto from 'crypto'
 import { setCache, getCache } from '../models/redis.js'
 import { getClientIp } from '../components/ip.js'
 
+// this is an experimental middleware in order to
+// speed up the response time of the server
+// by caching the response of the request
 const cache = async (req, res, next) => {
     if (req.request_type === 'internal') return next()
     // THIS IS EXPERIMENTAL AND NOT YET IMPLEMENTED

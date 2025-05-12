@@ -2,6 +2,13 @@ import axios from 'axios'
 import logger from '../../utils/logger.js'
 import FormOauth2 from './formOauth2.js'
 
+/**
+ * Verifies the Google OAuth2 token and retrieves user information.
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @return {Promise<void>}
+ */
 const Google = async (req, res) => {
     try {
         const access_token = req.body.credential

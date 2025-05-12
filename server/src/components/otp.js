@@ -3,6 +3,12 @@ import { setCache } from '../models/redis.js'
 
 const ten = 10 * 60 * 1000
 
+/**
+ * Generates a one-time password (OTP) and sends it to the user's email.
+ * 
+ * @param {Object} req 
+ * @param {} otpType 
+ */
 const OneTimePassword = (req, otpType) => {
     const otp = Math.floor(100000 + Math.random() * 900000)
     const dateNow = Date.now()

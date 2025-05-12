@@ -12,6 +12,13 @@ const upload = multer({
     },
 })
 
+/**
+ * Uploads a file to S3 and returns the reference and file name.
+ * 
+ * @param {Object} file
+ * @param {String} ref
+ * @return {Promise<Object>}
+ */
 const uploadToS3 = async (file, ref) => {
     const fileExtension = file.originalname.split('.').pop()
     const fileName = `${ref}.${fileExtension}`
