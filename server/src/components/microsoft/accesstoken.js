@@ -5,8 +5,8 @@ import { MICROSOFT_OAUTH_CLIENT_ID, MICROSOFT_OAUTH_SECRET_ID } from '../../conf
 
 /**
  * Verifies the Microsoft OAuth2 code and retrieves the access token.
- * 
- * @param {String} code 
+ *
+ * @param {String} code
  * @return {Promise<String|null>}
  */
 const MicrosoftAccessToken = async (code) => {

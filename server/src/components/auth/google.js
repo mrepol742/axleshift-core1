@@ -4,9 +4,9 @@ import FormOauth2 from './formOauth2.js'
 
 /**
  * Verifies the Google OAuth2 token and retrieves user information.
- * 
- * @param {Object} req 
- * @param {Object} res 
+ *
+ * @param {Object} req
+ * @param {Object} res
  * @return {Promise<void>}
  */
 const Google = async (req, res) => {

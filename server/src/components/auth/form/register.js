@@ -8,7 +8,7 @@ import addToNewsletter from '../../../components/newsletter.js'
 
 /**
  * Handles the regiter form submission.
- * 
+ *
  * @param {Object} req
  * @param {Object} res
  * @return {Promise<void>}

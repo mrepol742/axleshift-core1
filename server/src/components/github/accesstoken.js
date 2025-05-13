@@ -4,8 +4,8 @@ import { GITHUB_OAUTH_CLIENT_ID, GITHUB_OAUTH_SECRET_ID } from '../../config.js'
 
 /**
  * Verifies the Github OAuth2 code and retrieves the access token.
- * 
- * @param {String} code 
+ *
+ * @param {String} code
  * @return {Promise<String|null>}
  */
 const GithubAccessToken = async (code) => {

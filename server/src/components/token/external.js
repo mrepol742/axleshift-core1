@@ -7,7 +7,7 @@ import { exteralRequestRoute } from '../../middleware/rateLimiter.js'
 
 /**
  * Handles external API token authentication.
- * 
+ *
  * @param {Object} req
  * @param {Object} res
  * @param {Function} next

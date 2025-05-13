@@ -5,10 +5,10 @@ import logger from '../utils/logger.js'
 
 /**
  * Authenticate every request both external and internal.
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {Function} next 
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
  * @return {Promise<void>}
  */
 const auth = async (req, res, next) => {

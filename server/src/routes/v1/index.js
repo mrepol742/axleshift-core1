@@ -2,6 +2,7 @@ import express from 'express'
 import auth from './auth.js'
 import authToken from './auth/token.js'
 import authVerify from './auth/verify.js'
+import authForgotPassword from './auth/forgotPassword.js'
 import freight from './freight.js'
 import track from './track.js'
 import securityManagement from './security/management.js'
@@ -24,6 +25,7 @@ const router = express.Router()
 router.use('/auth', auth)
 router.use('/auth/token', authToken)
 router.use('/auth/verify', authVerify)
+router.use('/auth/forgot-password', authForgotPassword)
 
 router.use('/freight', freight)
 router.use('/documents', document)

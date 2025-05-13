@@ -11,9 +11,9 @@ import { remCache } from '../../models/redis.js'
 
 /**
  * Handles the OAuth2 form login and registration.
- * 
- * @param {Object} req 
- * @param {Object} res 
+ *
+ * @param {Object} req
+ * @param {Object} res
  * @return {Promise<void>}
  */
 const FormOauth2 = async (req, res) => {

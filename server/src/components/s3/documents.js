@@ -14,7 +14,7 @@ const upload = multer({
 
 /**
  * Uploads a file to S3 and returns the reference and file name.
- * 
+ *
  * @param {Object} file
  * @param {String} ref
  * @return {Promise<Object>}

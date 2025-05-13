@@ -8,9 +8,9 @@ const loopback = [
 
 /**
  * Whitelist remote address for internal requests.
- * 
- * @param {Object} req 
- * @param {Object} res 
+ *
+ * @param {Object} req
+ * @param {Object} res
  * @param {Function} next
  * @return {Promise<void>}
  */

@@ -4,9 +4,9 @@ import { RECAPTCHA_SECRET } from '../config.js'
 
 /**
  * Verify if the recaptcha is valid.
- * 
- * @param {Object} req 
- * @param {Object} res 
+ *
+ * @param {Object} req
+ * @param {Object} res
  * @param {Function} next
  * @return {Promise<void>}
  */

@@ -4,9 +4,9 @@ import database from '../models/mongodb.js'
 
 /**
  * Verify if the supply shipment id exists.
- * 
- * @param {Object} req 
- * @param {Object} res 
+ *
+ * @param {Object} req
+ * @param {Object} res
  * @param {Function} next
  * @return {Promise<void>}
  */

@@ -8,7 +8,7 @@ let res = []
 
 /**
  * Returns alerts from last fetch or fetches new alerts if the last fetch was more than 5 minutes ago.
- * 
+ *
  * @returns {Promise<Array>}
  */
 const dependabot = async () => {
@@ -23,7 +23,7 @@ const dependabot = async () => {
 
 /**
  * Fetches the latest project alerts from the GitHub API.
- * 
+ *
  * @returns {Promise<Array>}
  */
 const fetch = async () => {

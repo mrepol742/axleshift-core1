@@ -7,7 +7,7 @@ let res = []
 
 /**
  * Returns issues from last fetch or fetches new issues if the last fetch was more than 5 minutes ago.
- * 
+ *
  * @returns {Promise<Array>}
  */
 const sentry = async () => {
@@ -22,7 +22,7 @@ const sentry = async () => {
 
 /**
  * Fetches the latest project issues from the Sentry API.
- * 
+ *
  * @returns {Promise<Array>}
  */
 const fetch = async () => {

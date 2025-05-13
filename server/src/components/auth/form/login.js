@@ -8,7 +8,7 @@ import { APP_KEY, NODE_ENV } from '../../../config.js'
 
 /**
  * Handles the login form submission.
- * 
+ *
  * @param {Object} req
  * @param {Object} res
  * @return {Promise<void>}

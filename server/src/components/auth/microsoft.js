@@ -6,9 +6,9 @@ import FormOauth2 from './formOauth2.js'
 // 2025
 /**
  * Verifies the Microsoft OAuth2 token and retrieves user information.
- * 
- * @param {Object} req 
- * @param {Object} res 
+ *
+ * @param {Object} req
+ * @param {Object} res
  * @return {Promise<void>}
  */
 const Microsoft = async (req, res) => {

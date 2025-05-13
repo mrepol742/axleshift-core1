@@ -3,9 +3,9 @@ import logger from '../utils/logger.js'
 
 /**
  * Compress the response using gzip if the client supports it.
- * 
- * @param {Object} req 
- * @param {Object} res 
+ *
+ * @param {Object} req
+ * @param {Object} res
  * @param {Function} next
  * @return {Promise<void>}
  */

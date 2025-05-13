@@ -4,9 +4,9 @@ import database from '../models/mongodb.js'
 
 /**
  * Validate the shipment form.
- * 
- * @param {Object} req 
- * @param {Object} res 
+ *
+ * @param {Object} req
+ * @param {Object} res
  * @param {Function} next
  * @return {Promise<void>}
  */

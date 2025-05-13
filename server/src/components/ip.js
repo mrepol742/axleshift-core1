@@ -1,7 +1,7 @@
 /**
  * Retrieves the client's IP address from the request object.
- * 
- * @param {Object} req 
+ *
+ * @param {Object} req
  * @return {string}
  */
 export const getClientIp = (req) => {

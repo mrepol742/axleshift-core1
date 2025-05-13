@@ -8,12 +8,12 @@ import { getClientIp } from './ip.js'
 
 /**
  * Creates a new session.
- * 
- * @param {Object} theUser 
- * @param {String} sessionToken 
- * @param {String} ip 
- * @param {String} userAgent 
- * @param {Object} location 
+ *
+ * @param {Object} theUser
+ * @param {String} sessionToken
+ * @param {String} ip
+ * @param {String} userAgent
+ * @param {Object} location
  */
 export const addSession = async (theUser, sessionToken, ip, userAgent, location) => {
     try {
@@ -48,8 +48,8 @@ export const addSession = async (theUser, sessionToken, ip, userAgent, location)
 
 /**
  * Fetch the user from cache or database.
- * 
- * @param {Object} cachedSession 
+ *
+ * @param {Object} cachedSession
  * @return {Promise<Object>}
  */
 export const getUser = async (cachedSession) => {
@@ -92,8 +92,8 @@ export const getUser = async (cachedSession) => {
 
 /**
  * Remove a session.
- * 
- * @param {String} sessionToken 
+ *
+ * @param {String} sessionToken
  */
 export const removeSession = async (sessionToken) => {
     try {
@@ -105,9 +105,9 @@ export const removeSession = async (sessionToken) => {
 
 /**
  * Get the session from cache, database if return null the user is logged out.
- * 
- * @param {Object} req 
- * @param {String} sessionToken 
+ *
+ * @param {Object} req
+ * @param {String} sessionToken
  * @return {Promise<Object>}
  */
 export const getSession = async (req, sessionToken) => {
@@ -135,9 +135,9 @@ export const getSession = async (req, sessionToken) => {
 
 /**
  * Check if the IP is new and send an email to the user.
- * 
- * @param {String} ip 
- * @param {Object} theUser 
+ *
+ * @param {String} ip
+ * @param {Object} theUser
  * @return {Promise<void>}
  */
 export const isNewIP = async (ip, theUser) => {

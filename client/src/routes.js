@@ -5,6 +5,7 @@ import auth from './components/AppAuth'
  * GLOBAL ROUTE
  */
 const OTP = lazy(() => import('./views/auth/OTP'))
+const OTL = lazy(() => import('./views/auth/password-reset/[id]'))
 const GithubCallback = lazy(() => import('./views/auth/github/Callback'))
 const MicrosoftCallback = lazy(() => import('./views/auth/microsoft/Callback'))
 const Logout = lazy(() => import('./views/auth/Logout'))
@@ -73,6 +74,13 @@ const routes = [
     { path: '/register', external: true, name: 'Register', roles: [], element: Register },
     { path: '/logout', external: true, name: 'Logout', roles: [], element: Logout },
     { path: '/auth/verify', external: true, name: 'Verify Account', roles: [], element: OTP },
+    {
+        path: '/auth/password-reset/:id',
+        external: true,
+        name: 'Password Reset',
+        roles: [],
+        element: OTL,
+    },
     {
         path: '/auth/github/callback',
         external: true,

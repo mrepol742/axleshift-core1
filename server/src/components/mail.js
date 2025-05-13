@@ -6,7 +6,7 @@ let mailInstance = null
 
 /**
  * Creates a mail instance using nodemailer.
- * 
+ *
  * @return {Promise<nodemailer.Transporter>}
  */
 const mail = async () => {
@@ -33,8 +33,8 @@ const mail = async () => {
 
 /**
  * Sends an email using the mail instance.
- * @param {Object} options 
- * @param {String} name 
+ * @param {Object} options
+ * @param {String} name
  * @param {Boolean} isNotSystem
  * @return {Promise<void>}
  */
@@ -56,12 +56,12 @@ export const send = (options, name, isNotSystem = false) => {
 
 /**
  * Generates the HTML body for the email.
- * 
- * @param {String} subject 
- * @param {String} email 
- * @param {String} name 
- * @param {String} message 
- * @param {Boolean} isNotSystem 
+ *
+ * @param {String} subject
+ * @param {String} email
+ * @param {String} name
+ * @param {String} message
+ * @param {Boolean} isNotSystem
  * @return {String}
  */
 const body = (subject, email, name, message, isNotSystem) => {

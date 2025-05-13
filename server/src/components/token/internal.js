@@ -22,11 +22,7 @@ const adminRoute = [
     '/api/v1/mail/send',
 ]
 
-const userRoute = [
-    '/api/v1/freight/book',
-    '/api/v1/freight/update',
-
-]
+const userRoute = ['/api/v1/freight/book', '/api/v1/freight/update']
 
 const knownClients = [
     'PostmanRuntime',
@@ -58,7 +54,7 @@ const loopback = [
 
 /**
  * Handles internal API token authentication.
- * 
+ *
  * @param {Object} req
  * @param {Object} res
  * @param {Function} next

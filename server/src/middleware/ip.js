@@ -3,9 +3,9 @@ import logger from '../utils/logger.js'
 
 /**
  * Filter requests, whitelist or blacklist based on IP address.
- * 
- * @param {Object} req 
- * @param {Object} res 
+ *
+ * @param {Object} req
+ * @param {Object} res
  * @param {Function} next
  * @return {Promise<void>}
  */

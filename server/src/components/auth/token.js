@@ -4,8 +4,8 @@ import { getClientIp } from '../ip.js'
 
 /**
  * Generates a session token for the user and stores session information.
- * 
- * @param {Object} theUser 
+ *
+ * @param {Object} theUser
  * @param {Object} req
  * @return {Object}
  */

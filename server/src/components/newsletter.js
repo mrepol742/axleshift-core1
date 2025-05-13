@@ -2,8 +2,8 @@ import database from '../models/mongodb.js'
 
 /**
  * Adds a new subscriber to the newsletter collection if they don't already exist.
- * 
- * @param {String} email 
+ *
+ * @param {String} email
  * @return {Promise<Boolean>}
  */
 const newsletter = async (email) => {
