@@ -30,25 +30,36 @@ const redis = async () => {
 }
 
 export const encrypt = async (plaintext) => {
-    const iv = crypto.randomBytes(12)
-    const cipher = crypto.createCipheriv('aes-256-gcm', key, iv)
+    try {
+        const iv = crypto.randomBytes(12)
+        const cipher = crypto.createCipheriv('aes-256-gcm', key, iv)
 
-    const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()])
-    const tag = cipher.getAuthTag()
+        const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()])
+        const tag = cipher.getAuthTag()
 
-    return JSON.stringify({
-        iv: iv.toString('hex'),
-        ciphertext: encrypted.toString('hex'),
-        tag: tag.toString('hex'),
-    })
+        return JSON.stringify({
+            iv: iv.toString('hex'),
+            ciphertext: encrypted.toString('hex'),
+            tag: tag.toString('hex'),
+        })
+    } catch (e) {
+        logger.error(e)
+        return plaintext
+    }
 }
 
 export const decrypt = async (encryptedData) => {
-    const { iv, ciphertext, tag } = JSON.parse(encryptedData)
+    let parsed
+    try {
+        parsed = JSON.parse(encryptedData)
+    } catch (e) {
+        return encryptedData
+    }
+
+    const { iv, ciphertext, tag } = parsed
     if (!iv || !ciphertext || !tag) return encryptedData
 
     const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(iv, 'hex'))
-
     decipher.setAuthTag(Buffer.from(tag, 'hex'))
 
     const decrypted = Buffer.concat([
@@ -72,7 +83,15 @@ export const getCache = async (key) => {
     try {
         const redisClient = await redis()
         const cache = await redisClient.get(key)
-        if (cache) return JSON.parse(await decrypt(cache))
+        if (cache) {
+            const decrypted = await decrypt(cache)
+            try {
+                return JSON.parse(decrypted)
+            } catch (e) {
+                logger.error('Failed to parse decrypted cache:', e)
+                return decrypted
+            }
+        }
     } catch (e) {
         logger.error(e)
     }

@@ -15,6 +15,7 @@ import cache from '../../middleware/cache.js'
 import { setCache } from '../../models/redis.js'
 import InvoiceGenerator from '../../components/invoice.js'
 import sendWebhook from '../../utils/webhook.js'
+import XLSX from 'xlsx'
 
 const router = express.Router()
 const limit = 20
@@ -175,11 +176,34 @@ router.post('/deep-search', [auth, cache], async (req, res, next) => {
                 })
                 .join('\n')
             const csvContent = header + csvData
-            const csvBuffer = Buffer.from(csvContent, 'utf-8')
-            res.setHeader('Content-Type', 'text/csv')
-            res.setHeader('Content-Disposition', `attachment; filename=freight_${Date.now()}.csv`)
-            res.setHeader('Content-Length', csvBuffer.length)
-            res.send(csvBuffer)
+
+            if (export_type === 'excel') {
+                const workbook = XLSX.utils.book_new()
+                const rows = csvContent.split('\n').map((row) => row.split(','))
+                const worksheet = XLSX.utils.sheet_add_aoa(XLSX.utils.aoa_to_sheet([]), rows)
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
+
+                const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
+                res.setHeader(
+                    'Content-Type',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                )
+                res.setHeader(
+                    'Content-Disposition',
+                    `attachment; filename=freight_${Date.now()}.xlsx`,
+                )
+                res.setHeader('Content-Length', excelBuffer.length)
+                res.send(excelBuffer)
+            } else {
+                const csvBuffer = Buffer.from(csvContent, 'utf-8')
+                res.setHeader('Content-Type', 'text/csv')
+                res.setHeader(
+                    'Content-Disposition',
+                    `attachment; filename=freight_${Date.now()}.csv`,
+                )
+                res.setHeader('Content-Length', csvBuffer.length)
+                res.send(csvBuffer)
+            }
             return
         }
 

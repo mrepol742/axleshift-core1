@@ -13,6 +13,10 @@ import {
     CSpinner,
     CRow,
     CCol,
+    CDropdown,
+    CDropdownToggle,
+    CDropdownMenu,
+    CDropdownItem,
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
@@ -25,6 +29,7 @@ const Reports = () => {
         endDate: '',
         startDate: '',
         status: '',
+        invoiceStatus: '',
         type: '',
         query: '',
         weight: '',
@@ -41,19 +46,31 @@ const Reports = () => {
         axios
             .post(`/freight/deep-search`, { page, ...filters, export_type })
             .then((response) => {
-                if (response.headers['content-type'] === 'text/csv') {
-                    const blob = new Blob([response.data], { type: 'text/csv' })
+                const contentType = response.headers['content-type']
+                if (
+                    [
+                        'text/csv',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    ].includes(contentType)
+                ) {
+                    const blob = new Blob([response.data], { type: contentType })
                     const url = window.URL.createObjectURL(blob)
                     const a = document.createElement('a')
                     a.href = url
-                    a.download = 'freight_report' + Date.now() + '.csv'
+                    a.download =
+                        new Date().toDateString() +
+                        ' Freight Report' +
+                        '.' +
+                        (contentType === 'text/csv' ? 'csv' : 'xlsx')
                     document.body.appendChild(a)
                     a.click()
                     document.body.removeChild(a)
                     return
                 }
-                const filteredData = filters.type
-                    ? response.data.data.filter((item) => item.invoice?.status === filters.type)
+                const filteredData = filters.invoiceStatus
+                    ? response.data.data.filter(
+                          (item) => item.invoice?.status === filters.invoiceStatus,
+                      )
                     : response.data.data
                 setData(filteredData)
                 setTotalPages(Math.ceil(filteredData.length / response.data.pageSize))
@@ -84,6 +101,28 @@ const Reports = () => {
         if (status === 'to_ship') return 'To Ship'
         // for to_pay
         return 'To Pay'
+    }
+
+    const uniqueCustomers = () => {
+        const ids = new Set()
+        for (let i = 0; i < data.length; i++) {
+            const item = data[i]
+            if (item.user) {
+                ids.add(item.user.first_name + ' ' + item.user.last_name)
+            }
+        }
+        return ids.size
+    }
+
+    const hasFilters = () => {
+        return (
+            (filters.startDate ||
+                filters.endDate ||
+                filters.status ||
+                filters.type ||
+                filters.query ||
+                filters.weight) !== ''
+        )
     }
 
     return (
@@ -123,7 +162,10 @@ const Reports = () => {
                         handleFilterChange('endDate', endDate)
                     }}
                 />
-                <CFormSelect onChange={(e) => handleFilterChange('status', e.target.value)}>
+                <CFormSelect
+                    style={{ minWidth: '140px' }}
+                    onChange={(e) => handleFilterChange('status', e.target.value)}
+                >
                     <option value="">All</option>
                     <option value="to_pay">To Pay</option>
                     <option value="to_ship">To Ship</option>
@@ -131,17 +173,26 @@ const Reports = () => {
                     <option value="received">Received</option>
                     <option value="cancelled">Cancelled</option>
                 </CFormSelect>
-                <CFormSelect onChange={(e) => handleFilterChange('type', e.target.value)}>
+                <CFormSelect
+                    style={{ minWidth: '120px' }}
+                    onChange={(e) => handleFilterChange('type', e.target.value)}
+                >
                     <option value="">All</option>
                     <option value="private">Private</option>
                     <option value="business">Business</option>
                 </CFormSelect>
-                <CFormSelect onChange={(e) => handleFilterChange('type', e.target.value)}>
+                <CFormSelect
+                    style={{ minWidth: '110px' }}
+                    onChange={(e) => handleFilterChange('invoiceStatus', e.target.value)}
+                >
                     <option value="">All</option>
                     <option value="PAID">Paid</option>
                     <option value="EXPIRED">Expired</option>
                 </CFormSelect>
-                <CFormSelect onChange={(e) => handleFilterChange('weight', e.target.value)}>
+                <CFormSelect
+                    style={{ minWidth: '100px' }}
+                    onChange={(e) => handleFilterChange('weight', e.target.value)}
+                >
                     <option value="">All</option>
                     <option value="1">&lt; 1 KG</option>
                     <option value="5">&lt; 5KG </option>
@@ -153,16 +204,74 @@ const Reports = () => {
                     <option value="71">&gt; 71KG </option>
                 </CFormSelect>
                 <CFormInput
+                    style={{ minWidth: '200px' }}
                     placeholder="Tracking number"
                     onChange={(e) => handleFilterChange('query', e.target.value)}
                 />
                 <CButton color="primary" onClick={(e) => fetchData(currentPage)}>
                     Apply Filters
                 </CButton>
-                <CButton color="secondary" onClick={(e) => fetchData(currentPage, 'csv')}>
-                    Export
-                </CButton>
             </div>
+            <h4 className="text-muted">Summary</h4>
+            <div className="d-block d-md-flex justify-content-between mb-2">
+                <div>
+                    <h5>
+                        Shipments: {data.length} &#183;{' '}
+                        {['super_admin', 'admin'].includes(user.role) && (
+                            <>Customers: {uniqueCustomers()}</>
+                        )}{' '}
+                        &#183; Amount:{' '}
+                        {new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'PHP',
+                        }).format(data.reduce((acc, item) => acc + item.amount.value, 0))}{' '}
+                        &#183; Weight: {data.reduce((acc, item) => acc + item.total_weight, 0)} KG
+                    </h5>
+                </div>
+                <div>
+                    <CButton
+                        className="me-2"
+                        color="primary"
+                        onClick={() => {
+                            setFilters({
+                                endDate: '',
+                                startDate: '',
+                                status: '',
+                                invoiceStatus: '',
+                                type: '',
+                                query: '',
+                                weight: '',
+                            })
+                            fetchData(currentPage)
+                        }}
+                        disabled={!hasFilters()}
+                    >
+                        Clear Filters
+                    </CButton>
+                    <CDropdown className="bg-primary">
+                        <CDropdownToggle caret={false}>Export</CDropdownToggle>
+                        <CDropdownMenu>
+                            <CDropdownItem
+                                className="d-flex align-items-center"
+                                as="button"
+                                type="button"
+                                onClick={(e) => fetchData(currentPage, 'csv')}
+                            >
+                                CSV
+                            </CDropdownItem>
+                            <CDropdownItem
+                                className="d-flex align-items-center"
+                                as="button"
+                                type="button"
+                                onClick={(e) => fetchData(currentPage, 'excel')}
+                            >
+                                Excel
+                            </CDropdownItem>
+                        </CDropdownMenu>
+                    </CDropdown>
+                </div>
+            </div>
+
             <CTable stripedColumns hover responsive className="table-even-width">
                 <CTableHead>
                     <CTableRow>
