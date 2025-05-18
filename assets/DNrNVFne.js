@@ -1,0 +1,5 @@
+/**
+ * © 2025 Melvin Jones Repol & its contributors . All rights reserved.
+ * This project is licensed under the MIT License with Commons Clause.
+*/
+import{R as s,r as a,j as e}from"./CbKKHx2O.js";import{P as r}from"./z-cSZRUs.js";import{F as t,W as i}from"./ru3Q0AV5.js";import{d as o}from"./D_eMUV-T.js";import{T as n,V as c,U as m,W as l}from"./BCoDuBWI.js";const d=({className:s})=>{const r=new URLSearchParams(window.location.search),d=r.get("q")?r.get("q"):"",[p,h]=a.useState(d),j=o(),f=async s=>(s.preventDefault(),p&&0!==p.trim().length?/^[a-fA-F0-9]{24}$/.test(p)?j(`/track/${p}`):void j(`/search?q=${p}`):null);return a.useEffect((()=>{h(d)}),[d]),e.jsx(n,{onSubmit:f,className:s,children:e.jsxs(c,{children:[e.jsx(m,{"aria-label":"query",name:"q",value:p,placeholder:"Find & track shipment...",onChange:s=>h(s.target.value),"aria-describedby":"basic-addon",style:{height:"40px",fontSize:"0.9em"}}),e.jsx(l,{id:"basic-addon",onClick:f,className:"px-3",children:e.jsx(t,{icon:i})})]})})},p=s.memo(d);d.propTypes={className:r.string.isRequired};export{p as A};

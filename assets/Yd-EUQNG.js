@@ -1,0 +1,5 @@
+/**
+ * © 2025 Melvin Jones Repol & its contributors . All rights reserved.
+ * This project is licensed under the MIT License with Commons Clause.
+*/
+import{c as e,g as n}from"./D9QqU1Un.js";import{r as t}from"./b9_HJCYW.js";var r,a={exports:{}};const o=n(function(){if(r)return a.exports;r=1;for(var n=t(),o="undefined"==typeof window?e:window,c=["moz","webkit"],l="AnimationFrame",i=o["request"+l],s=o["cancel"+l]||o["cancelRequest"+l],u=0;!i&&u<c.length;u++)i=o[c[u]+"Request"+l],s=o[c[u]+"Cancel"+l]||o[c[u]+"CancelRequest"+l];if(!i||!s){var f=0,m=0,p=[],h=1e3/60;i=function(e){if(0===p.length){var t=n(),r=Math.max(0,h-(t-f));f=r+t,setTimeout((function(){var e=p.slice(0);p.length=0;for(var n=0;n<e.length;n++)if(!e[n].cancelled)try{e[n].callback(f)}catch(t){setTimeout((function(){throw t}),0)}}),Math.round(r))}return p.push({handle:++m,callback:e,cancelled:!1}),m},s=function(e){for(var n=0;n<p.length;n++)p[n].handle===e&&(p[n].cancelled=!0)}}return a.exports=function(e){return i.call(o,e)},a.exports.cancel=function(){s.apply(o,arguments)},a.exports.polyfill=function(e){e||(e=o),e.requestAnimationFrame=i,e.cancelAnimationFrame=s},a.exports}());export{o as r};
