@@ -82,6 +82,7 @@ export const getUser = async (cachedSession) => {
                 },
             },
         )
+        if (!user) return null
         await setCache(`user-id-${user._id.toString()}`, user, 24 * 60 * 60 * 1000)
         return user
     } catch (e) {

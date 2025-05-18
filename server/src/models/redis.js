@@ -56,6 +56,8 @@ export const decrypt = async (encryptedData) => {
         return encryptedData
     }
 
+    if (!parsed || typeof parsed !== 'object') return encryptedData
+
     const { iv, ciphertext, tag } = parsed
     if (!iv || !ciphertext || !tag) return encryptedData
 
