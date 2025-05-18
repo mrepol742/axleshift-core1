@@ -1,56 +1,78 @@
 {
-  "name": "@axleshift/core1",
-  "version": "1.0.0",
-  "description": "",
-  "bugs": {
-    "url": "https://github.com/axleshift/core1/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:axleshift/core1.git"
-  },
-  "license": "MIT",
-  "author": "Axleshift Core 1",
-  "scripts": {
-    "echo": "echo \"im just lazy\"",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm run start",
-    "setup": "concurrently \"npm run server:install\" \"npm run client:install\"",
-    "server:install": "cd server && npm i",
-    "client:install": "cd client && npm i",
-    "setup:env": "concurrently \"npm run server:env\" \"npm run client:env\"",
-    "server:env": "cd server && concurrently \"npm run env\" \"npm run gemini\" \"npm run prompt\"",
-    "client:env": "cd client && [ ! -f .env ] && cp .env.example .env",
-    "post:production": "concurrently \"cd server && npm run production\" \"npm run client:post\"",
-    "client:post": "cd client && npm run build && cd build && python3 -m http.server",
-    "prettier": "concurrently \"npm run server:pretty\" \"npm run client:pretty\"",
-    "server:pretty": "cd server && npm run pretty",
-    "client:pretty": "cd client && npm run pretty",
-    "test": "concurrently \"npm run server:test\" \"npm run client:test\"",
-    "server:test": "cd server && npm run test",
-    "client:test": "cd client && npm run test",
-    "docker": "cd server && docker build -t core1-server .",
-    "docker:run": "cd server && docker run -p 5051:5051 --env-file .env core1-server:latest",
-    "terraform": "cd server && terraform init && terraform plan -out=tfplan && terraform apply -auto-approve tfplan",
-    "pm2": "cd server && npm run pm2",
-    "pm2:restart": "pm2 restart all --update-env",
-    "spellcheck": "npx --yes cspell --show-context --show-suggestions '**/*.*'",
-    "prom": "sudo systemctl start prometheus",
-    "prom:restart": "sudo systemctl restart prometheus",
-    "graf": "sudo systemctl start grafana",
-    "graf:restart": "sudo systemctl restart grafana",
-    "gitleaks": "docker run --rm -v $(pwd):/src zricethezav/gitleaks:latest detect --source=/src --config=/src/.gitleaks.toml --report-path=/src/gitleaks-report.json"
-  },
-  "devDependencies": {
-    "concurrently": "^9.0.1"
-  },
-  "engines": {
-    "node": ">=22.x"
-  },
-  "private": true,
-  "dependencies": {
-    "request": "^2.88.2",
-    "yamlparser": "^0.0.2"
-  }
+    "name": "@axleshift/core1-server",
+    "version": "1.0.0",
+    "main": "src/index.js",
+    "type": "module",
+    "bugs": {
+        "url": "https://github.com/axleshift/core1/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:axleshift/core1.git"
+    },
+    "scripts": {
+        "production": "concurrently \"npm run env\" \"npm run gemini\" \"npm run prompt\" \"npm run start\"",
+        "start": "node src/index",
+        "test": "mocha --timeout 10000 --exit",
+        "dev": "nodemon --ext js --ignore '*.json' --trace-deprecation --trace-warnings src/index",
+        "pretty": "prettier --write .",
+        "env": "[ ! -f .env ] && cp .env.example .env",
+        "gemini": "[ ! -f .gemini.json ] && cp .gemini.example.json .gemini.json",
+        "prompt": "[ ! -f .prompt.json ] && cp .prompt.example.json .prompt.json",
+        "pm2": "pm2 start ecosystem.config.cjs",
+        "pm2:restart": "pm2 restart all --update-env",
+        "db:seed": "node src/models/seeders/DatabaseSeeders.js",
+        "db:wipe": "node src/models/migration/DatabaseWipe.js"
+    },
+    "author": "Axleshift Core 1",
+    "license": "MIT",
+    "description": "",
+    "dependencies": {
+        "@aws-sdk/client-s3": "^3.758.0",
+        "@aws-sdk/lib-storage": "^3.779.0",
+        "@aws-sdk/s3-request-presigner": "^3.779.0",
+        "@google/generative-ai": "^0.21.0",
+        "@sentry/node": "^8.52.0",
+        "@sentry/profiling-node": "^8.55.0",
+        "archiver-zip-encrypted": "^2.0.0",
+        "axios": "^1.8.4",
+        "boolean-pro": "^1.0.0",
+        "compression": "^1.7.4",
+        "concurrently": "^9.0.1",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "express-mongo-sanitize": "^2.2.0",
+        "helmet": "^8.0.0",
+        "ioredis": "^5.6.0",
+        "is-spaghetti-code": "^1.0.0",
+        "mongodb": "^6.15.0",
+        "multer": "^1.4.5-lts.1",
+        "node-cron": "^3.0.3",
+        "nodemailer": "^6.9.15",
+        "pdf-lib": "^1.17.1",
+        "pino": "^9.3.2",
+        "pino-http": "^10.3.0",
+        "pino-pretty": "^11.2.2",
+        "prom-client": "^15.1.3",
+        "qs": "^6.14.0",
+        "ratelimit-header-parser": "^0.1.0",
+        "ua-parser-js": "^1.0.39",
+        "useragent": "^2.3.0",
+        "xendit-node": "^6.0.0",
+        "xlsx": "^0.18.5",
+        "zxcvbn": "^4.4.2"
+    },
+    "devDependencies": {
+        "chai": "^5.1.1",
+        "jsdom": "^26.0.0",
+        "mocha": "^10.7.3",
+        "nodemon": "^3.1.4",
+        "prettier": "^3.3.3",
+        "supertest": "^7.0.0"
+    },
+    "engines": {
+        "node": ">=22.x"
+    },
+    "private": true
 }
