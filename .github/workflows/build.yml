@@ -10,7 +10,6 @@ jobs:
   build:
 
     runs-on: 'ubuntu-latest'
-    if: github.repository == 'mrepol742/axleshift-core1'
     
     steps:
       - name: Clone repository
@@ -89,8 +88,8 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: client/build
-          destination-github-username: 'axleshift'
-          destination-repository-name: 'core1'
+          destination-github-username: 'mrepol742'
+          destination-repository-name: 'axleshift-core1'
           user-name: github-actions[bot]
           user-email: github-actions[bot]@users.noreply.github.com
           commit-message: "Build from ${{ env.COMMIT_URL }}"
@@ -103,8 +102,8 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-directory: server/
-          destination-github-username: 'axleshift'
-          destination-repository-name: 'core1'
+          destination-github-username: 'mrepol742'
+          destination-repository-name: 'axleshift-core1'
           user-name: github-actions[bot]
           user-email: github-actions[bot]@users.noreply.github.com
           commit-message: "Build from ${{ env.COMMIT_URL }}"

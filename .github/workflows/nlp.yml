@@ -10,7 +10,6 @@ jobs:
   build:
 
     runs-on: 'ubuntu-latest'
-    if: github.repository == 'mrepol742/axleshift-core1'
     
     steps:
       - name: Clone repository

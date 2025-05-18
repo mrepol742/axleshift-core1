@@ -13,7 +13,6 @@ jobs:
   terraform:
     runs-on: 'ubuntu-latest'
     needs: [ docker ]
-    if: github.repository == 'axleshift/core1'
     
     steps:
       - name: Checkout code
