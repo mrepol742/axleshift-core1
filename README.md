@@ -1,8 +1,8 @@
 # Axleshift Core 1
 [![Build CI](https://github.com/mrepol742/axleshift-core1/actions/workflows/build.yml/badge.svg)](https://github.com/mrepol742/axleshift-core1/actions/workflows/build.yml)
-[![Docker CI](https://github.com/axleshift/core1/actions/workflows/docker.yml/badge.svg)](https://github.com/axleshift/core1/actions/workflows/docker.yml)
-[![Dependabot Updates](https://github.com/axleshift/core1/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/axleshift/core1/actions/workflows/dependabot/dependabot-updates)
-[![Terraform CI](https://github.com/axleshift/core1/actions/workflows/terraform.yml/badge.svg)](https://github.com/axleshift/core1/actions/workflows/terraform.yml)
+[![Docker CI](https://github.com/mrepol742/axleshift-core1/actions/workflows/docker.yml/badge.svg)](https://github.com/mrepol742/axleshift-core1/actions/workflows/docker.yml)
+[![Dependabot Updates](https://github.com/mrepol742/axleshift-core1/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/mrepol742/axleshift-core1/actions/workflows/dependabot/dependabot-updates)
+[![Terraform CI](https://github.com/mrepol742/axleshift-core1/actions/workflows/terraform.yml/badge.svg)](https://github.com/mrepol742/axleshift-core1/actions/workflows/terraform.yml)
 
 ## Pre-requisites
 - Node.js v23.^
