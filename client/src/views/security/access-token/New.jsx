@@ -1,30 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import {
-    CFormInput,
-    CForm,
-    CRow,
-    CCol,
-    CCard,
-    CButton,
-    CSpinner,
-    CCardBody,
-    CAlert,
-} from '@coreui/react'
+import React, { useState } from 'react'
+import { CFormInput, CForm, CCard, CButton, CSpinner, CCardBody } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-    faCopy,
-    faEye,
-    faEyeSlash,
-    faPlus,
-    faTrash,
-    faCircleExclamation,
-} from '@fortawesome/free-solid-svg-icons'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
-import AppPagination from '../../../components/AppPagination'
-import parseTimestamp from '../../../utils/Timestamp'
 
 const NewAccessToken = () => {
     const navigate = useNavigate()
@@ -75,7 +56,10 @@ const NewAccessToken = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         axios
             .post(`/auth/token/new`, {
@@ -111,7 +95,14 @@ const NewAccessToken = () => {
 
     return (
         <CForm onSubmit={handleSubmit}>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
+
             <h4>New Access Token</h4>
             <p className="text-muted">This can be used to authenticate with the API via HTTPS.</p>
             <CFormInput

@@ -15,7 +15,7 @@ import {
     CFormCheck,
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 
 const Webhooks = () => {
@@ -27,7 +27,10 @@ const Webhooks = () => {
     const [modal, setModal] = useState(false)
 
     const saveData = async () => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         axios
             .post(`/sec/webhooks`, { recaptcha_ref: recaptcha, WebhooksLocationList })
@@ -104,7 +107,13 @@ const Webhooks = () => {
 
     return (
         <div>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
 
             <CRow className="align-items-center mb-2">
                 <CCol>

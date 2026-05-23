@@ -25,7 +25,11 @@ import {
     faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../../config'
+import {
+    VITE_APP_NODE_ENV,
+    VITE_APP_RECAPTCHA_SITE_KEY,
+    VITE_APP_SESSION,
+} from '../../../../config'
 
 const ForgotPassword = () => {
     const navigate = useNavigate()
@@ -98,7 +102,10 @@ const ForgotPassword = () => {
 
     useEffect(() => {
         const verifyPasswordResetToken = async () => {
-            const recaptcha = await recaptchaRef.current.executeAsync()
+            const recaptcha =
+                VITE_APP_NODE_ENV === 'production'
+                    ? await recaptchaRef.current.executeAsync()
+                    : undefined
             setError({
                 type: '',
                 error: false,
@@ -180,7 +187,10 @@ const ForgotPassword = () => {
     }
 
     const forgotPassword = async (e, location) => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         if (formData.password !== formData.repeat_password)
             return setError({
                 type: 'danger',
@@ -343,11 +353,14 @@ const ForgotPassword = () => {
                         </CCol>
                     </CRow>
                 )}
-                <ReCAPTCHA
-                    ref={recaptchaRef}
-                    size="invisible"
-                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                />
+
+                {VITE_APP_RECAPTCHA_SITE_KEY && (
+                    <ReCAPTCHA
+                        ref={recaptchaRef}
+                        size="invisible"
+                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                    />
+                )}
             </CContainer>
         </div>
     )

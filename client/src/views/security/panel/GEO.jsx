@@ -17,7 +17,7 @@ import {
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Helmet } from 'react-helmet'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../../components/AppToastProvider'
@@ -32,7 +32,10 @@ const GEO = () => {
     const [modal, setModal] = useState(false)
 
     const saveData = async () => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         axios
             .post(`/sec/management/geo`, {
@@ -233,7 +236,14 @@ const GEO = () => {
                     </CButton>
                 </CModalFooter>
             </CModal>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
         </div>
     )
 }

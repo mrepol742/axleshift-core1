@@ -35,7 +35,7 @@ import {
     faAddressBook,
 } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import AppPagination from '../../../components/AppPagination'
 import { useToast } from '../../../components/AppToastProvider'
 import Form from '../../my-addresses/Form'
@@ -89,7 +89,10 @@ const Review = ({ data, shipmentRef }) => {
     }
 
     const handleSubmit = async (action) => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         axios
             .post(action === 'book' ? `/freight/book` : `/freight/update/${form.tracking_number}`, {
@@ -148,7 +151,10 @@ const Review = ({ data, shipmentRef }) => {
     }
 
     const handleCancelButton = async () => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         axios
             .post(`/freight/cancel/${form.tracking_number}`, {
@@ -210,7 +216,10 @@ const Review = ({ data, shipmentRef }) => {
     useEffect(() => {
         const fetchAutoFill = async () => {
             if (form.selected_address) return
-            const recaptcha = await recaptchaRef.current.executeAsync()
+            const recaptcha =
+                VITE_APP_NODE_ENV === 'production'
+                    ? await recaptchaRef.current.executeAsync()
+                    : undefined
             setLoading(true)
             axios
                 .post(`/addresses/find/`, {
@@ -235,7 +244,14 @@ const Review = ({ data, shipmentRef }) => {
 
     return (
         <div ref={formRef}>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
+
             <h3 className="text-primary mt-4" id="review">
                 Review
             </h3>

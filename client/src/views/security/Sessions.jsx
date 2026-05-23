@@ -19,7 +19,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_GOOGLE_MAP } from '../../config'
+import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_GOOGLE_MAP, VITE_APP_NODE_ENV } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 import AppPagination from '../../components/AppPagination'
 import parseTimestamp from '../../utils/Timestamp'
@@ -52,7 +52,10 @@ const Sessions = () => {
     }, [])
 
     const handleLogout = async (id) => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         axios
             .post(`/sec/sessions/logout`, {
@@ -318,7 +321,14 @@ const Sessions = () => {
                     )}
                 </CModalBody>
             </CModal>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
         </div>
     )
 }

@@ -18,7 +18,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 import AppPagination from '../../components/AppPagination'
 import parseTimestamp from '../../utils/Timestamp'
@@ -43,7 +43,10 @@ const API = () => {
 
     const handleDelete = async () => {
         setModal(false)
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         axios
             .post(`/auth/token/delete`, {
@@ -115,7 +118,13 @@ const API = () => {
                     </CAlert>
                 </div>
             )}
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
             <CRow className="align-items-center mb-2">
                 <CCol>
                     <h4 className="mb-0">Access Token</h4>

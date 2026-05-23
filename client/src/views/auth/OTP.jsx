@@ -15,7 +15,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../config'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../config'
 
 const OTP = () => {
     const [loading, setLoading] = useState(true)
@@ -85,7 +85,10 @@ const OTP = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setError({
             error: false,
             message: '',
@@ -123,7 +126,10 @@ const OTP = () => {
     }
 
     const handleResend = async () => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setError({
             error: false,
             message: '',
@@ -244,7 +250,14 @@ const OTP = () => {
                     </CRow>
                 )}
             </CContainer>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
         </div>
     )
 }

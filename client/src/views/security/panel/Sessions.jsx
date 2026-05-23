@@ -22,7 +22,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 import parseTimestamp from '../../../utils/Timestamp'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config'
 import { useToast } from '../../../components/AppToastProvider'
 import AppPagination from '../../../components/AppPagination'
 
@@ -37,7 +37,10 @@ const Sessions = () => {
 
     const handleLogout = async (id) => {
         setModal(false)
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         axios
             .post(`/sec/management/sessions/logout/${id}`, {
@@ -203,7 +206,14 @@ const Sessions = () => {
                     </CButton>
                 </CModalFooter>
             </CModal>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
         </div>
     )
 }

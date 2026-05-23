@@ -1,18 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
-import {
-    CToaster,
-    CToast,
-    CToastHeader,
-    CToastBody,
-    CImage,
-    CModal,
-    CButton,
-    CModalHeader,
-    CModalTitle,
-    CModalBody,
-    CModalFooter,
-} from '@coreui/react'
+import { CModal, CButton, CModalHeader, CModalTitle, CModalBody, CModalFooter } from '@coreui/react'
 import { useUserProvider } from './UserProvider'
 
 const AppIdleTimeout = ({ children }) => {

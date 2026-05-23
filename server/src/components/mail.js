@@ -1,5 +1,12 @@
 import nodemailer from 'nodemailer'
-import { MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM_ADDRESS } from '../config.js'
+import {
+    MAIL_HOST,
+    MAIL_PORT,
+    MAIL_USERNAME,
+    MAIL_PASSWORD,
+    MAIL_FROM_ADDRESS,
+    NODE_ENV,
+} from '../config.js'
 import logger from '../utils/logger.js'
 
 let mailInstance = null
@@ -49,9 +56,12 @@ export const send = (options, name, isNotSystem = false) => {
         isNotSystem,
     )
 
-    mailInstance.sendMail(options, (error, info) => {
-        if (error) return logger.error(error)
-    })
+    if (NODE_ENV === 'production')
+        return mailInstance.sendMail(options, (error, info) => {
+            if (error) return logger.error(error)
+        })
+
+    console.log('Email options:', options)
 }
 
 /**

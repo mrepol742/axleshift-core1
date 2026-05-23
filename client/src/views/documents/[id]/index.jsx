@@ -25,7 +25,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
 import { useToast } from '../../../components/AppToastProvider'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config.js'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY } from '../../../config.js'
 import { useUserProvider } from '../../../components/UserProvider.jsx'
 
 const Document = () => {
@@ -60,7 +60,10 @@ const Document = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         const formData = new FormData()
         formData.append('exportLicense', exportLicense)
@@ -291,11 +294,14 @@ const Document = () => {
                         >
                             Submit Documents
                         </CButton>
-                        <ReCAPTCHA
-                            ref={recaptchaRef}
-                            size="invisible"
-                            sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                        />
+
+                        {VITE_APP_RECAPTCHA_SITE_KEY && (
+                            <ReCAPTCHA
+                                ref={recaptchaRef}
+                                size="invisible"
+                                sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                            />
+                        )}
                     </CCardBody>
                 </CCard>
             </CForm>

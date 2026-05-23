@@ -159,7 +159,14 @@ const FreightInfo = () => {
             </div>
 
             <ShipmentInfo data={{ form, setForm, loading, setLoading }} />
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
         </div>
     )
 }

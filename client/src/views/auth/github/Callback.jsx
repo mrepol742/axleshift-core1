@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import { VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../config'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY, VITE_APP_SESSION } from '../../../config'
 
 const Callback = () => {
     const navigate = useNavigate()
@@ -11,7 +11,10 @@ const Callback = () => {
     const [error, setError] = useState('')
 
     const github = async (code, location) => {
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         axios
             .post(`/auth/login`, {
                 type: 'github',
@@ -90,11 +93,13 @@ const Callback = () => {
                         <CSpinner color="primary" variant="grow" />
                     </div>
                 )}
-                <ReCAPTCHA
-                    ref={recaptchaRef}
-                    size="invisible"
-                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                />
+                {VITE_APP_RECAPTCHA_SITE_KEY && (
+                    <ReCAPTCHA
+                        ref={recaptchaRef}
+                        size="invisible"
+                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                    />
+                )}
                 <h1 className="text-center">{error ? error : 'Processing...'}</h1>
             </CContainer>
         </div>

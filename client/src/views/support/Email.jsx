@@ -11,7 +11,7 @@ import {
 } from '@coreui/react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { Filter } from 'bad-words'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY } from '../../config'
 import { useToast } from '../../components/AppToastProvider'
 
 const Email = () => {
@@ -27,7 +27,10 @@ const Email = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         const { email, subject, message } = formData
         axios
@@ -135,7 +138,14 @@ const Email = () => {
                     Send Email
                 </CButton>
             </div>
-            <ReCAPTCHA ref={recaptchaRef} size="invisible" sitekey={VITE_APP_RECAPTCHA_SITE_KEY} />
+
+            {VITE_APP_RECAPTCHA_SITE_KEY && (
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                />
+            )}
         </CForm>
     )
 }

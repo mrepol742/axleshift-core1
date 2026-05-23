@@ -2,9 +2,11 @@
   "private": true,
   "scripts": {
     "echo": "echo \"im just lazy\"",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "concurrently \"npm run server\" \"npm run client:build\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && npm run dev",
     "client": "cd client && npm run start",
+    "client:build": "cd client && npm run build && cd build && python3 -m http.server",
     "setup": "concurrently \"npm run server:install\" \"npm run client:install\"",
     "server:install": "cd server && npm i",
     "client:install": "cd client && npm i",

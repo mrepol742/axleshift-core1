@@ -14,6 +14,9 @@ import Auth from './components/AppAuth'
 import routes from './routes'
 import steps from './steps'
 import './bootstrap'
+import { AppToastProvider } from './components/AppToastProvider'
+import { AppModalProvider } from './components/AppModalProvider'
+import { AppNotificationProvider } from './components/AppNotificationProvider'
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'))
 
@@ -45,66 +48,75 @@ const App = () => {
     }, [colorMode, dispatch, isColorModeSet, setColorMode, storedTheme])
 
     return (
-        <TourProvider
-            steps={steps}
-            afterOpen={disableBody}
-            beforeClose={enableBody}
-            disableKeyboardNavigation={disableKeyboardNavigation}
-            onClickMask={({ setCurrentStep, currentStep, steps, setIsOpen }) => {
-                if (steps) {
-                    if (currentStep === steps.length - 1) {
-                        setIsOpen(false)
-                    }
-                    setCurrentStep((s) => (s === steps.length - 1 ? 0 : s + 1))
-                }
-            }}
-            styles={{
-                popover: (base) => ({
-                    ...base,
-                    color: 'var(--cui-body-color)',
-                    backgroundColor: 'var(--cui-body-bg)',
-                    boxShadow: 'var(--cui-box-shadow-lg)',
-                    borderRadius: 'var(--cui-border-radius)',
-                }),
-            }}
-        >
-            <Router>
-                <Suspense
-                    fallback={
-                        <div className="loading-overlay">
-                            <CSpinner color="primary" variant="grow" />
-                        </div>
-                    }
-                >
-                    <Analytics>
-                        <AppErrorBoundary>
-                            <DocumentTitle>
-                                <IdleTimeout>
-                                    <Routes>
-                                        {routes.map((route, idx) => {
-                                            return (
-                                                route.external && (
-                                                    <Route
-                                                        key={idx}
-                                                        path={route.path}
-                                                        exact={route.exact}
-                                                        name={route.name}
-                                                        element={<route.element />}
-                                                    />
-                                                )
-                                            )
-                                        })}
-                                        <Route element={<Auth />}>
-                                            <Route path="*" element={<DefaultLayout />} />
-                                        </Route>
-                                    </Routes>
-                                </IdleTimeout>
-                            </DocumentTitle>
-                        </AppErrorBoundary>
-                    </Analytics>
-                </Suspense>
-            </Router>
-        </TourProvider>
+        <AppToastProvider>
+            <AppModalProvider>
+                <AppNotificationProvider>
+                    <TourProvider
+                        steps={steps}
+                        afterOpen={disableBody}
+                        beforeClose={enableBody}
+                        disableKeyboardNavigation={disableKeyboardNavigation}
+                        onClickMask={({ setCurrentStep, currentStep, steps, setIsOpen }) => {
+                            if (steps) {
+                                if (currentStep === steps.length - 1) {
+                                    setIsOpen(false)
+                                }
+                                setCurrentStep((s) => (s === steps.length - 1 ? 0 : s + 1))
+                            }
+                        }}
+                        styles={{
+                            popover: (base) => ({
+                                ...base,
+                                color: 'var(--cui-body-color)',
+                                backgroundColor: 'var(--cui-body-bg)',
+                                boxShadow: 'var(--cui-box-shadow-lg)',
+                                borderRadius: 'var(--cui-border-radius)',
+                            }),
+                        }}
+                    >
+                        <Router>
+                            <Suspense
+                                fallback={
+                                    <div className="loading-overlay">
+                                        <CSpinner color="primary" variant="grow" />
+                                    </div>
+                                }
+                            >
+                                <Analytics>
+                                    <AppErrorBoundary>
+                                        <DocumentTitle>
+                                            <IdleTimeout>
+                                                <Routes>
+                                                    {routes.map((route, idx) => {
+                                                        return (
+                                                            route.external && (
+                                                                <Route
+                                                                    key={idx}
+                                                                    path={route.path}
+                                                                    exact={route.exact}
+                                                                    name={route.name}
+                                                                    element={<route.element />}
+                                                                />
+                                                            )
+                                                        )
+                                                    })}
+                                                    <Route element={<Auth />}>
+                                                        <Route
+                                                            path="*"
+                                                            element={<DefaultLayout />}
+                                                        />
+                                                    </Route>
+                                                </Routes>
+                                            </IdleTimeout>
+                                        </DocumentTitle>
+                                    </AppErrorBoundary>
+                                </Analytics>
+                            </Suspense>
+                        </Router>
+                    </TourProvider>
+                </AppNotificationProvider>
+            </AppModalProvider>
+        </AppToastProvider>
     )
 }
 

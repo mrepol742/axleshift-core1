@@ -9,7 +9,7 @@ const auth = () => {
         request(app)
             .post('/api/v1/auth/register')
             .send({ email: 'test@example.com', password: 'test', recaptcha_ref: 'test' })
-            .expect(403)
+            .expect(401)
             .end((err, res) => {
                 if (err) return done(err)
                 done()
@@ -20,7 +20,7 @@ const auth = () => {
         request(app)
             .post('/api/v1/auth/login')
             .send({ email: 'test@example.com', password: 'test', recaptcha_ref: 'test' })
-            .expect(403)
+            .expect(401)
             .end((err, res) => {
                 if (err) return done(err)
                 done()
@@ -111,7 +111,7 @@ const auth = () => {
             .post('/api/v1/auth/token/new')
             .set('Authorization', `Bearer ${TOKEN}`)
             .send({ recaptcha_ref: 'test' })
-            .expect(403)
+            .expect(401)
             .end((err, res) => {
                 if (err) return done(err)
                 done()

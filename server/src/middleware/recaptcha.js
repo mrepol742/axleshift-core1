@@ -1,6 +1,6 @@
 import axios from 'axios'
 import logger from '../utils/logger.js'
-import { RECAPTCHA_SECRET } from '../config.js'
+import { NODE_ENV, RECAPTCHA_SECRET } from '../config.js'
 
 /**
  * Verify if the recaptcha is valid.
@@ -11,6 +11,8 @@ import { RECAPTCHA_SECRET } from '../config.js'
  * @return {Promise<void>}
  */
 const recaptcha = async (req, res, next) => {
+    if (NODE_ENV !== 'production') return next()
+
     const { recaptcha_ref } = req.body || {}
     if (!recaptcha_ref) return res.status(400).json({ error: 'Invalid request' })
 

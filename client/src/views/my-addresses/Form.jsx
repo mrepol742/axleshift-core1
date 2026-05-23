@@ -17,7 +17,7 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../../components/AppToastProvider'
-import { VITE_APP_RECAPTCHA_SITE_KEY } from '../../config.js'
+import { VITE_APP_NODE_ENV, VITE_APP_RECAPTCHA_SITE_KEY } from '../../config.js'
 import countries from '../book-now/fragments/countries.jsx'
 
 const FormAddress = ({ data, callback }) => {
@@ -73,7 +73,10 @@ const FormAddress = ({ data, callback }) => {
     const handleSubmit = async (e) => {
         if (callback) return
         e.preventDefault()
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         const action = formData._id ? `/update/${formData._id}` : '/add'
         setLoading(true)
         axios
@@ -96,7 +99,10 @@ const FormAddress = ({ data, callback }) => {
     const handleDelete = async (e) => {
         if (callback) return
         e.preventDefault()
-        const recaptcha = await recaptchaRef.current.executeAsync()
+        const recaptcha =
+            VITE_APP_NODE_ENV === 'production'
+                ? await recaptchaRef.current.executeAsync()
+                : undefined
         setLoading(true)
         axios
             .post(`/addresses/delete/${formData._id}`, { recaptcha_ref: recaptcha })
@@ -409,11 +415,14 @@ const FormAddress = ({ data, callback }) => {
                             </CButton>
                         </CModalFooter>
                     </CModal>
-                    <ReCAPTCHA
-                        ref={recaptchaRef}
-                        size="invisible"
-                        sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
-                    />
+
+                    {VITE_APP_RECAPTCHA_SITE_KEY && (
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            size="invisible"
+                            sitekey={VITE_APP_RECAPTCHA_SITE_KEY}
+                        />
+                    )}
                 </>
             )}
         </CForm>
