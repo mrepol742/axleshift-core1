@@ -51,7 +51,7 @@ router.post('/', auth, async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/new', [recaptcha, auth], async function (req, res, next) {
@@ -99,7 +99,7 @@ router.post('/new', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/delete', [recaptcha, auth], async function (req, res, next) {
@@ -131,7 +131,7 @@ router.post('/delete', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

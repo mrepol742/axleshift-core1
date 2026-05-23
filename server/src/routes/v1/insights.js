@@ -70,7 +70,7 @@ router.get('/shipment-overtime', auth, async (req, res) => {
         res.status(200).json({ labels, data })
     } catch (error) {
         logger.error(error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        return res.status(500).json({ error: 'Internal Server Error' })
     }
 })
 
@@ -139,7 +139,7 @@ router.get('/cost-overtime', auth, async (req, res) => {
         res.status(200).json({ labels, data })
     } catch (error) {
         logger.error(error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        return res.status(500).json({ error: 'Internal Server Error' })
     }
 })
 
@@ -208,7 +208,7 @@ router.get('/items-overtime', auth, async (req, res) => {
         res.status(200).json({ labels, data })
     } catch (error) {
         logger.error(error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        return res.status(500).json({ error: 'Internal Server Error' })
     }
 })
 
@@ -277,7 +277,7 @@ router.get('/weight-overtime', auth, async (req, res) => {
         res.status(200).json({ labels, data })
     } catch (error) {
         logger.error(error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        return res.status(500).json({ error: 'Internal Server Error' })
     }
 })
 
@@ -329,7 +329,7 @@ router.get('/shipment-info-widgets', auth, async (req, res) => {
         })
     } catch (error) {
         logger.error(error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        return res.status(500).json({ error: 'Internal Server Error' })
     }
 })
 
@@ -362,7 +362,7 @@ router.get('/invoices-info-widgets', auth, async (req, res) => {
         })
     } catch (error) {
         logger.error(error)
-        res.status(500).json({ error: 'Internal Server Error' })
+        return res.status(500).json({ error: 'Internal Server Error' })
     }
 })
 

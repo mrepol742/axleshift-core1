@@ -54,7 +54,7 @@ router.post('/', [auth, cache], async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 // router.get('/download-invoice', async (req, res) => {
@@ -199,7 +199,7 @@ router.post('/cancel', [recaptcha, auth, invoices], async (req, res) => {
     } catch (err) {
         logger.error(err)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

@@ -89,7 +89,7 @@ router.post('/otp', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/otp/new', [recaptcha, auth], async function (req, res, next) {
@@ -110,7 +110,7 @@ router.post('/otp/new', [recaptcha, auth], async function (req, res, next) {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

@@ -60,7 +60,7 @@ router.post('/', [GeoLocationFilter, ipwhitelist, recaptcha], async function (re
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/verify', [ipwhitelist, recaptcha], async function (req, res, next) {
@@ -75,7 +75,7 @@ router.post('/verify', [ipwhitelist, recaptcha], async function (req, res, next)
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/reset', [GeoLocationFilter, ipwhitelist, recaptcha], async function (req, res, next) {
@@ -108,7 +108,7 @@ router.post('/reset', [GeoLocationFilter, ipwhitelist, recaptcha], async functio
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

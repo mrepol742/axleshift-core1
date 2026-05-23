@@ -39,7 +39,7 @@ router.post('/users', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/sessions', auth, async (req, res, next) => {
@@ -82,7 +82,7 @@ router.post('/sessions', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post(`/sessions/logout/:id`, [recaptcha, auth], async (req, res, next) => {
@@ -116,7 +116,7 @@ router.post(`/sessions/logout/:id`, [recaptcha, auth], async (req, res, next) =>
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.get('/dependabot', auth, async (req, res, next) => {
@@ -126,7 +126,7 @@ router.get('/dependabot', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.get('/sentry', auth, async (req, res, next) => {
@@ -136,7 +136,7 @@ router.get('/sentry', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/activity', auth, async (req, res, next) => {
@@ -168,7 +168,7 @@ router.post('/activity', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.get('/maintenance', auth, async (req, res, next) => {
@@ -180,7 +180,7 @@ router.get('/maintenance', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/maintenance', [recaptcha, auth], async (req, res, next) => {
@@ -195,7 +195,7 @@ router.post('/maintenance', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.get('/ip-filtering', auth, async (req, res, next) => {
@@ -212,7 +212,7 @@ router.get('/ip-filtering', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/ip-filtering', [recaptcha, auth], async (req, res, next) => {
@@ -262,7 +262,7 @@ router.post('/ip-filtering', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.get('/geo', auth, async (req, res, next) => {
@@ -279,7 +279,7 @@ router.get('/geo', auth, async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/geo', [recaptcha, auth], async (req, res, next) => {
@@ -322,7 +322,7 @@ router.post('/geo', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/server-logs', auth, async (req, res) => {

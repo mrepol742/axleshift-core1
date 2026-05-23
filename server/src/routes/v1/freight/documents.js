@@ -54,7 +54,7 @@ router.post('/', auth, async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -151,7 +151,7 @@ router.post(
             })
         } catch (err) {
             logger.error(err)
-            res.status(500).json({ error: 'Internal server error' })
+            return res.status(500).json({ error: 'Internal server error' })
         }
     },
 )
@@ -181,7 +181,7 @@ router.post('/file/:id', [auth, documents], async (req, res) => {
         return res.status(404).json({ error: 'File not found' })
     } catch (err) {
         logger.error(err)
-        res.status(500).json({ error: 'Internal server error' })
+        return res.status(500).json({ error: 'Internal server error' })
     }
 })
 router.post('/cooel/:id', [auth, documents], async (req, res) => {
@@ -224,7 +224,7 @@ router.post('/cooel/:id', [auth, documents], async (req, res) => {
         return res.status(200).json({ data, message: 'Documents updated successfully' })
     } catch (err) {
         logger.error(err)
-        res.status(500).json({ error: 'Internal server error' })
+        return res.status(500).json({ error: 'Internal server error' })
     }
 })
 

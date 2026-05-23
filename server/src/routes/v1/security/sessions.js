@@ -61,7 +61,7 @@ router.post('/', auth, async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/logout', [recaptcha, auth], async (req, res) => {
@@ -102,7 +102,7 @@ router.post('/logout', [recaptcha, auth], async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

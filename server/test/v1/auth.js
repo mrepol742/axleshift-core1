@@ -8,8 +8,17 @@ const auth = () => {
     it('POST /api/v1/auth/register', (done) => {
         request(app)
             .post('/api/v1/auth/register')
-            .send({ email: 'test@example.com', password: 'test', recaptcha_ref: 'test' })
-            .expect(401)
+            .send({
+                username: 'johndoe',
+                email: 'johndoe@example.com',
+                first_name: 'John',
+                last_name: 'Doe',
+                password: 'johndoe0?aA5425',
+                repeat_password: 'johndoe0?aA5425',
+                newsletter: false,
+                type: 'form',
+            })
+            .expect(201)
             .end((err, res) => {
                 if (err) return done(err)
                 done()
@@ -19,8 +28,13 @@ const auth = () => {
     it('POST /api/v1/auth/login', (done) => {
         request(app)
             .post('/api/v1/auth/login')
-            .send({ email: 'test@example.com', password: 'test', recaptcha_ref: 'test' })
-            .expect(401)
+            .send({
+                email: 'johndoe@example.com',
+                password: 'johndoe0?aA5425',
+                type: 'form',
+                location: 'internal',
+            })
+            .expect(200)
             .end((err, res) => {
                 if (err) return done(err)
                 done()
@@ -53,7 +67,7 @@ const auth = () => {
         request(app)
             .post('/api/v1/auth/user')
             .set('Authorization', `Bearer ${TOKEN}`)
-            .expect(400)
+            .expect(401)
             .end((err, res) => {
                 if (err) return done(err)
                 done()

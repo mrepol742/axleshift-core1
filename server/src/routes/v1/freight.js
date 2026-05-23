@@ -74,7 +74,7 @@ router.post('/', [auth, cache], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -218,7 +218,7 @@ router.post('/deep-search', [auth, cache], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -256,7 +256,7 @@ router.get('/calendar', auth, async (req, res) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -340,7 +340,7 @@ router.post('/book', [recaptcha, auth, shipmentForm], async (req, res, next) => 
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -419,7 +419,7 @@ router.post('/update/:id', [recaptcha, auth, freight, shipmentForm], async (req,
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -466,7 +466,7 @@ router.post('/cancel/:id', [recaptcha, auth, freight], async (req, res, next) =>
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 router.post('/optimized-route', [auth], async (req, res, next) => {
@@ -488,7 +488,7 @@ router.post('/optimized-route', [auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 export default router

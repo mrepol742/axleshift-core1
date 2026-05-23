@@ -97,7 +97,7 @@ router.post('/register', [GeoLocationFilter, ipwhitelist, recaptcha], async (req
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -124,7 +124,7 @@ router.post('/login', [GeoLocationFilter, ipwhitelist, recaptcha], async (req, r
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -248,9 +248,9 @@ router.post('/user', [recaptcha, auth], async (req, res, next) => {
             ref: req.user.ref,
         })
     } catch (e) {
-      logger.error(e)
+        logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -350,7 +350,7 @@ router.post('/password', [recaptcha, auth], async (req, res, next) => {
     } catch (e) {
         logger.error(e)
     }
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
 })
 
 /**
@@ -383,7 +383,7 @@ router.post('/upload', [auth, upload.single('profile_pic')], async (req, res) =>
         return res.status(200).json()
     } catch (e) {
         logger.error(e)
-        res.status(500).json({ error: 'Internal server error' })
+        return res.status(500).json({ error: 'Internal server error' })
     }
 })
 
