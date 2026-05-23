@@ -20,7 +20,7 @@ const FormRegister = async (req, res) => {
         const usersCollection = db.collection('users')
 
         if (
-            /^[a-zA-Z0-9._%+-]+@(?!.*(tempmail|mailinator|10minutemail|guerrillamail)).*$/.test(
+            !/^[a-zA-Z0-9._%+-]+@(?!.*(tempmail|mailinator|10minutemail|guerrillamail)).*$/.test(
                 email,
             )
         )

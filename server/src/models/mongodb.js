@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient, ServerApiVersion } from 'mongodb'
 import logger from '../utils/logger.js'
 import { MONGO_URL, MONGO_DB } from '../config.js'
 
@@ -13,7 +13,13 @@ const mongodb = async () => {
 
     connectionPromise = (async () => {
         try {
-            client = new MongoClient(MONGO_URL)
+            client = new MongoClient(MONGO_URL, {
+                serverApi: {
+                    version: ServerApiVersion.v1,
+                    strict: true,
+                    deprecationErrors: true,
+                },
+            })
 
             await client.connect()
 
